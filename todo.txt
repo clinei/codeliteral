@@ -1,0 +1,13 @@
+Bugs:
+
+Refactor:
+
+transforming should be done on step_into, need this for recursion, 
+what about order getting messed up when we expand one thing, go back, and opening up something else?
+
+
+Ideas:
+
+indent is one element in a two element flex row, content is the other element
+
+we could find the bug, fix it live, recompile, and run directly from the buggy place to check if it was fixed
