@@ -1,10 +1,7 @@
 Bugs:
 
-Refactor:
-
-transforming should be done on step_into, need this for recursion, 
-what about order getting messed up when we expand one thing, go back, and opening up something else?
-
+opassigns are completely broken
+stepping next on if needs to take returns into account
 
 Ideas:
 
