@@ -1,7 +1,6 @@
 Bugs:
 
-opassigns are completely broken
-stepping next on if needs to take returns into account
+returning is broken for the recursive factorial
 
 Ideas:
 

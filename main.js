@@ -657,7 +657,8 @@ function step_into() {
 
 		expression_stack.push(execution_cursor);
 
-		execution_cursor = execution_cursor.elements[0].expression;
+		execution_cursor = goto_next_executable_expression(execution_cursor);
+		// execution_cursor = execution_cursor.elements[0].expression;
 
 		print();	
 	}
@@ -780,6 +781,24 @@ function step_next() {
 	let last_call = call_stack[call_stack.length-1];
 
 	let last_expression = expression_stack[expression_stack.length-1];
+
+
+	if (execution_cursor.base.kind == Code_Kind.IF) {
+
+		if (run(execution_cursor.condition)) {
+
+			execution_cursor = execution_cursor.block;
+
+			step_into();
+		}
+		else {
+
+			// @Incomplete
+			// need to step onto the else otherwise
+		}
+
+		return;
+	}
 
 	run(execution_cursor);
 
