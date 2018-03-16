@@ -51,6 +51,20 @@ function document_keydown(event) {
 
 		step_out();
 	}
+
+	// press M
+	if (event.keyCode == 77) {
+
+		toggle_use_highlight();
+	}
+}
+
+let use_highlight = false;
+function toggle_use_highlight() {
+
+	use_highlight = !use_highlight;
+
+	print();
 }
 
 let Code_Kind = {
@@ -732,7 +746,9 @@ function step_out() {
 	}
 
 	// @Audit
-	if (last_expression.base.kind == Code_Kind.BINARY_OPERATION) {
+	if (last_expression.base.kind == Code_Kind.BINARY_OPERATION ||
+		last_expression.base.kind == Code_Kind.DECLARATION ||
+		last_expression.base.kind == Code_Kind.ASSIGN) {
 
 		execution_cursor = last_expression;
 	}
@@ -755,8 +771,6 @@ function step_out() {
 
 			return;
 		}
-
-		execution_cursor = last_expression;
 	}
 
 	print();
@@ -1401,7 +1415,7 @@ function transform(node) {
 
 		let binop = make_binary_operation(node.ident, node.operation_type, node.expression);
 
-		let assign = make_assign(node.ident, binop);
+		let assign = make_assign(clone(node.ident), binop);
 
 		replacement.statements.push(make_statement(assign));
 	}
@@ -1425,7 +1439,7 @@ function transform(node) {
 
 		let ident = last_call.transformed.statements[0].expression.ident;
 
-		let assign = make_assign(ident, node.expression);
+		let assign = make_assign(clone(ident), node.expression);
 
 		transform(node.expression);
 
@@ -1455,7 +1469,7 @@ function transform(node) {
 
 		let binop = make_binary_operation(node.left, node.operation_type, node.right);
 
-		let assign = make_assign(ident, binop);
+		let assign = make_assign(make_ident(ident.name, ident.declaration), binop);
 
 		replacement.statements.push(make_statement(assign));
 	}
@@ -1469,6 +1483,10 @@ function transform(node) {
 
 			ident = ident_replacement;
 		}
+
+		// @Hack
+		// for use highlighting
+		node.declaration = ident.declaration;
 
 		replacement.statements.push(make_statement(ident));
 	}
@@ -1512,6 +1530,8 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		node.transformed.base.kind == Code_Kind.BLOCK) {
 
 		print_to_dom(node.transformed, block_print_target, block_print_target, true);
+
+		print_newline(block_print_target);
 
 		if (node.base.kind == Code_Kind.PROCEDURE_CALL ||
 			node.base.kind == Code_Kind.BINARY_OPERATION ||
@@ -1586,6 +1606,9 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 				if (arg.inline) {
 
 					arg = arg.transformed.statements[0].expression.ident;
+
+					// @Audit
+					arg = clone(arg);
 				}
 
 				print_to_dom(arg, expr, block_print_target);
@@ -1608,7 +1631,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		if (node.condition.inline) {
 
-			print_to_dom(node.condition.transformed.statements[0].expression.ident, expr, block_print_target);
+			print_to_dom(clone(node.condition.transformed.statements[0].expression.ident), expr, block_print_target);
 		}
 
 		expr.appendChild(document.createTextNode(") "));
@@ -1633,7 +1656,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		if (node.condition.inline) {
 
-			print_to_dom(node.condition.transformed.statements[0].expression.ident, expr, block_print_target);
+			print_to_dom(clone(node.condition.transformed.statements[0].expression.ident), expr, block_print_target);
 		}
 
 		expr.appendChild(document.createTextNode(") "));
@@ -1688,7 +1711,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 			print_to_dom(node.left, block_print_target, block_print_target);
 
-			left_expr = node.left.transformed.statements[0].expression.ident;
+			left_expr = clone(node.left.transformed.statements[0].expression.ident);
 		}
 
 		print_to_dom(left_expr, expr, block_print_target);
@@ -1702,7 +1725,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 			print_to_dom(node.right, block_print_target, block_print_target);
 
-			right_expr = node.right.transformed.statements[0].expression.ident;
+			right_expr = clone(node.right.transformed.statements[0].expression.ident);
 		}
 
 		print_to_dom(right_expr, expr, block_print_target);
@@ -1755,7 +1778,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 				// @Copypaste
 				if (node.expression.inline) {
 
-					expression = node.expression.transformed.statements[0].expression.ident;
+					expression = clone(node.expression.transformed.statements[0].expression.ident);
 
 					print_to_dom(node.expression, block_print_target, block_print_target);
 				}
@@ -1835,11 +1858,15 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	}
 
 	// @Incomplete
-	if (Object.is(execution_cursor, node) || 
-		(execution_cursor && execution_cursor.transformed &&
-		 Object.is(execution_cursor.transformed.statements[0].expression, node))) {
+	if (Object.is(execution_cursor, node)) {
 
 		expr.classList.add("executing");
+	}
+	else if (use_highlight && execution_cursor.base.kind == Code_Kind.IDENT &&
+		     execution_cursor.declaration && node.declaration &&
+		     Object.is(execution_cursor.declaration.ident, node.declaration.ident)) {
+
+		expr.classList.add("use");
 	}
 }
 
