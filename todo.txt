@@ -2,6 +2,8 @@ Bugs:
 
 returning is broken for the recursive factorial
 
+when stepping next on an expression, we need to set that it has already been run, so things don't get run twice, because side effects
+
 Ideas:
 
 indent is one element in a two element flex row, content is the other element

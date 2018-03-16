@@ -617,6 +617,19 @@ function step_into() {
 
 		print();
 	}
+	else if (execution_cursor.base.kind == Code_Kind.OPASSIGN) {
+
+		execution_cursor.index = 1;
+		execution_cursor.elements = [execution_cursor.ident, execution_cursor.expression];
+
+		execution_cursor.settings = {...last_expression.settings};
+
+		expression_stack.push(execution_cursor);
+
+		execution_cursor = execution_cursor.elements[execution_cursor.index];
+
+		print();
+	}
 	else if (execution_cursor.base.kind == Code_Kind.RETURN) {
 
 		let transformed = execution_cursor.transformed.statements[0].expression;
@@ -632,17 +645,6 @@ function step_into() {
 		execution_cursor = execution_cursor.expression;
 
 		print();
-	}
-	else if (execution_cursor.base.kind == Code_Kind.OPASSIGN) {
-
-		execution_cursor.settings = {...last_expression.settings};
-		execution_cursor.inline = true;
-
-		expression_stack.push(execution_cursor);
-
-		execution_cursor = execution_cursor.transformed;
-
-		step_into();
 	}
 	else if (execution_cursor.base.kind == Code_Kind.BINARY_OPERATION) {
 
@@ -748,7 +750,8 @@ function step_out() {
 	// @Audit
 	if (last_expression.base.kind == Code_Kind.BINARY_OPERATION ||
 		last_expression.base.kind == Code_Kind.DECLARATION ||
-		last_expression.base.kind == Code_Kind.ASSIGN) {
+		last_expression.base.kind == Code_Kind.ASSIGN ||
+		last_expression.base.kind == Code_Kind.OPASSIGN) {
 
 		execution_cursor = last_expression;
 	}
@@ -852,8 +855,6 @@ function step_next() {
 
 	if (last_call.returned) {
 
-		last_expression = expression_stack[expression_stack.length-1];
-
 		execution_cursor = last_call;
 
 		print();
@@ -934,12 +935,31 @@ function run(target) {
 
 	let last_expression = expression_stack[expression_stack.length-1];
 
+	if (typeof target.times_executed == "undefined") {
+
+		target.times_executed = 0;
+	}
+
+	if (typeof last_expression.times_executed == "undefined") {
+
+		last_expression.times_executed = 0;
+	}
+
+	// @Audit
+	if (target.times_executed > last_expression.times_executed) {
+
+		return target.last_return;
+	}
+
+	expression_stack.push(target);
+
+	let return_value = null;
+
 	let last_call = call_stack[call_stack.length-1];
 
 	if (target.base.kind == Code_Kind.PROCEDURE_CALL) {
 
 		call_stack.push(target);
-		expression_stack.push(target);
 
 		target.returned = false;
 
@@ -949,37 +969,35 @@ function run(target) {
 
 	if (target.base.kind == Code_Kind.RETURN) {
 
-		let return_value = run(target.transformed.statements[0].expression);
+		return_value = run(target.transformed);
 
 		last_call.returned = true;
 
 		last_call.inline = false;
 
 		step_out();
-
-		return return_value;
 	}
 
 	if (target.base.kind == Code_Kind.STATEMENT) {
 
-		return run(target.expression);
+		return_value = run(target.expression);
 	}
 	else if (target.base.kind == Code_Kind.IF) {
 
 		if (run(target.condition)) {
 
-			return run(target.block);
+			return_value = run(target.block);
 		}
 		else {
 
 			let else_expr = goto_next_executable_expression(last_expression);
 
-			return run(else_expr);
+			return_value = run(else_expr);
 		}
 	}
 	else if (target.base.kind == Code_Kind.ELSE) {
 
-		return run(target.block);
+		return_value = run(target.block);
 	}
 	else if (target.base.kind == Code_Kind.WHILE) {
 
@@ -988,7 +1006,7 @@ function run(target) {
 
 		while (run(target.condition)) {
 
-			run(target.block);
+			return_value = run(target.block);
 		}
 	}
 	else if (target.base.kind == Code_Kind.ASSIGN) {
@@ -997,42 +1015,38 @@ function run(target) {
 
 		map_ident_to_value.set(target.ident.declaration.ident, expression_value);
 
-		return expression_value;
+		return_value = expression_value;
 	}
 	else if (target.base.kind == Code_Kind.DECLARATION) {
 
-		let expression = null;
+		let expression_value = null;
 
 		if (target.expression) {
 
-			expression = run(target.expression);
+			expression_value = run(target.expression);
 		}
 
-		map_ident_to_value.set(target.ident.declaration.ident, expression);
+		map_ident_to_value.set(target.ident.declaration.ident, expression_value);
 
-		return expression;
+		return_value = expression_value;
 	}
 	else if (target.base.kind == Code_Kind.IDENT) {
 
 		if (target.transformed) {
 
-			return run(target.transformed.statements[0].expression);
+			return_value = run(target.transformed.statements[0].expression);
 		}
 		else {
 
-			return map_ident_to_value.get(target);
+			return_value = map_ident_to_value.get(target);
 		}
 	}
 	else if (target.base.kind == Code_Kind.BLOCK) {
 
 		block_stack.push(target);
-		expression_stack.push(target);
 
-		// @Audit
 		target.index = 0;
 		target.elements = target.statements;
-
-		let return_value = null;
 
 		let last_call = call_stack[call_stack.length-1];
 
@@ -1050,28 +1064,30 @@ function run(target) {
 			}
 
 		} while (executing_expr)
-
-		/*
-		if (!last_call.returned) {
-
-			expression_stack.pop();
-		}
-		*/
-
-		return return_value;
 	}
-	else if (target.transformed) {
+	else if (!return_value && target.transformed) { // @Audit
 
-		return run(target.transformed);
+		return_value = run(target.transformed);
 	}
 	else if (target.base.kind == Code_Kind.BINARY_OPERATION) {
 
-		return math_solve(target);
+		return_value = math_solve(target);
 	}
 	else if (target.base.kind == Code_Kind.LITERAL) {
 
-		return math_solve(target);
+		return_value = math_solve(target);
 	}
+
+	target.last_return = return_value;
+
+	target.times_executed += 1;
+
+	if (last_call.returned !== true) {
+
+		expression_stack.pop();
+	}
+
+	return return_value;
 }
 
 function math_solve(node) {
@@ -1296,6 +1312,12 @@ function get_final_name(name) {
 
 function transform(node) {
 
+	// @Audit
+	if (node.transformed) {
+
+		return node.transformed;
+	}
+
 	let replacement = make_block();
 
 	replacement.declarations = new Array();
@@ -1412,12 +1434,6 @@ function transform(node) {
 	else if (node.base.kind == Code_Kind.OPASSIGN) {
 
 		transform(node.expression);
-
-		let binop = make_binary_operation(node.ident, node.operation_type, node.expression);
-
-		let assign = make_assign(clone(node.ident), binop);
-
-		replacement.statements.push(make_statement(assign));
 	}
 	else if (node.base.kind == Code_Kind.IF) {
 
@@ -1447,6 +1463,8 @@ function transform(node) {
 	}
 	else if (node.base.kind == Code_Kind.BINARY_OPERATION) {
 
+		/* @Disabled
+
 		// @Incomplete
 		// need dynamic type
 		let ident = make_ident(get_final_name("binop"));
@@ -1460,9 +1478,12 @@ function transform(node) {
 		last_block.declarations.push(decl);
 
 		replacement.statements.push(make_statement(decl));
-		
+		*/
+
 		transform(node.left);
 		transform(node.right);
+
+		/* @Disabled
 
 		// @Incomplete
 		// if neither the left or the right are transformed, combine declaration and assign
@@ -1472,6 +1493,8 @@ function transform(node) {
 		let assign = make_assign(make_ident(ident.name, ident.declaration), binop);
 
 		replacement.statements.push(make_statement(assign));
+
+		*/
 	}
 	else if (node.base.kind == Code_Kind.IDENT) {
 
@@ -1536,8 +1559,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		if (node.base.kind == Code_Kind.PROCEDURE_CALL ||
 			node.base.kind == Code_Kind.BINARY_OPERATION ||
 			node.base.kind == Code_Kind.RETURN ||
-			node.base.kind == Code_Kind.BLOCK ||
-			node.base.kind == Code_Kind.OPASSIGN) {
+			node.base.kind == Code_Kind.BLOCK) {
 
 			return;
 		}
@@ -1821,6 +1843,8 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		if (node.expression.inline) {
 
 			expression = node.expression.transformed.statements[0].expression.ident;
+
+			print_to_dom(node.expression, block_print_target, block_print_target);
 		}
 
 		print_to_dom(expression, expr, block_print_target);
