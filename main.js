@@ -727,6 +727,8 @@ function step_out() {
 		call_stack.pop();
 	}
 
+	let last_call = call_stack[call_stack.length-1];
+
 	if (last_expression.base.kind == Code_Kind.BLOCK) {
 
 		block_stack.pop();
@@ -742,6 +744,23 @@ function step_out() {
 		}
 	}
 
+	if (last_call.returned) {
+
+		step_out();
+
+		return;
+	}
+	else if (Object.is(last_expression, last_call.transformed)) {
+
+		// if we're stepping out of a call without returning
+
+		execution_cursor = last_call;
+
+		step_out();
+
+		return;
+	}
+
 	if (execution_cursor && execution_cursor.base.kind == Code_Kind.STATEMENT) {
 
 		execution_cursor = execution_cursor.expression;
@@ -754,15 +773,6 @@ function step_out() {
 		last_expression.base.kind == Code_Kind.OPASSIGN) {
 
 		execution_cursor = last_expression;
-	}
-
-	let last_call = call_stack[call_stack.length-1];
-
-	if (last_call.returned) {
-
-		step_out();
-
-		return;
 	}
 
 	// @Copypaste
@@ -945,15 +955,21 @@ function run(target) {
 		last_expression.times_executed = 0;
 	}
 
-	// @Audit
 	if (target.times_executed > last_expression.times_executed) {
 
-		return target.last_return;
+		// @Audit
+		// we need this for everything that modifies the value of an ident
+		if (target.base.kind != Code_Kind.DECLARATION &&
+			target.base.kind != Code_Kind.ASSIGN &&
+			target.base.kind != Code_Kind.OPASSIGN) {
+		
+			return target.last_return;
+		}
 	}
 
-	expression_stack.push(target);
-
 	let return_value = null;
+
+	expression_stack.push(target);
 
 	let last_call = call_stack[call_stack.length-1];
 
@@ -966,6 +982,10 @@ function run(target) {
 		// @Audit
 		transform(target);
 	}
+	else if (target.base.kind == Code_Kind.BLOCK) {
+
+		block_stack.push(target);
+	}
 
 	if (target.base.kind == Code_Kind.RETURN) {
 
@@ -973,7 +993,21 @@ function run(target) {
 
 		last_call.returned = true;
 
-		last_call.inline = false;
+		if (last_call.inline) {
+
+			// @Copypaste
+			if (typeof last_call.times_executed === "undefined") {
+
+				last_call.times_executed = 0;
+			}
+
+			// @Audit
+			last_call.times_executed += 1;
+
+			last_call.last_return = return_value;
+
+			last_call.inline = false;
+		}
 
 		step_out();
 	}
@@ -1011,6 +1045,8 @@ function run(target) {
 	}
 	else if (target.base.kind == Code_Kind.ASSIGN) {
 
+		// OPASSIGNs get transformed into assigns which are run here
+
 		let expression_value = run(target.expression);
 
 		map_ident_to_value.set(target.ident.declaration.ident, expression_value);
@@ -1042,8 +1078,6 @@ function run(target) {
 		}
 	}
 	else if (target.base.kind == Code_Kind.BLOCK) {
-
-		block_stack.push(target);
 
 		target.index = 0;
 		target.elements = target.statements;
@@ -1082,9 +1116,16 @@ function run(target) {
 
 	target.times_executed += 1;
 
-	if (last_call.returned !== true) {
+	// calls pop themselves when they return
+	if (target.base.kind !== Code_Kind.PROCEDURE_CALL &&
+		last_call.returned === false) {
 
 		expression_stack.pop();
+
+		if (target.base.kind === Code_Kind.BLOCK) {
+
+			block_stack.pop();
+		}
 	}
 
 	return return_value;
