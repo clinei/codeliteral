@@ -1070,7 +1070,7 @@ function run(target) {
 
 		if (target.transformed) {
 
-			return_value = run(target.transformed.statements[0].expression);
+			return_value = map_ident_to_value.get(target.transformed.statements[0].expression);
 		}
 		else {
 
