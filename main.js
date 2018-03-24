@@ -1055,8 +1055,7 @@ function get_current_executable_expression(parent) {
 	}
 
 	// @Copypaste
-	if (current.base.kind != Code_Kind.NEWLINE &&
-	    current.base.kind != Code_Kind.SETTINGS_BOX) {
+	if (current.base.kind != Code_Kind.NEWLINE) {
 
 		return current;
 	}
@@ -1084,8 +1083,7 @@ function goto_previous_executable_expression(parent) {
 				current = current.expression;
 			}
 
-			if (current.base.kind != Code_Kind.NEWLINE &&
-			    current.base.kind != Code_Kind.SETTINGS_BOX) {
+			if (current.base.kind != Code_Kind.NEWLINE) {
 
 				break;
 			}
@@ -1115,8 +1113,7 @@ function goto_next_executable_expression(parent) {
 				current = current.expression;
 			}
 
-			if (current.base.kind != Code_Kind.NEWLINE &&
-			    current.base.kind != Code_Kind.SETTINGS_BOX) {
+			if (current.base.kind != Code_Kind.NEWLINE) {
 
 				break;
 			}
@@ -2038,8 +2035,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 				if (node.expression.base.kind != Code_Kind.NEWLINE &&
 					node.expression.base.kind != Code_Kind.IF &&
 					node.expression.base.kind != Code_Kind.ELSE &&
-					node.expression.base.kind != Code_Kind.WHILE &&
-					node.expression.base.kind != Code_Kind.SETTINGS_BOX) {
+					node.expression.base.kind != Code_Kind.WHILE) {
 
 					print_semicolon(expr);
 				}
