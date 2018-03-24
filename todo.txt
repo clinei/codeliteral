@@ -1,11 +1,26 @@
 Bugs:
 
-returning is broken for the recursive factorial
 
-when stepping next on an expression, we need to set that it has already been run, so things don't get run twice, because side effects
+we can delete times_executing, everything will be executed only once, because loops are unrolled and every call is cloned
 
 Ideas:
 
+the run function could use the same code path as the step functions, to reduce potential drift
+
+we can use a colored text-shadow instead of a background-color
+
+we could scroll the cursor into view
+
+we could unroll loops into ifs to show every cycle
+
+returns being assigns too seems to cause a lot of problems, maybe we should just mark the assign as actually a return
+
 indent is one element in a two element flex row, content is the other element
+
+we should allow the user to set certain data flows to a specific color, so they can trace it more easily
+how do we extend the flow? by pressing U
+at which points can we extend the flow? every use of a value that changes flow or another value
+how do we move between the change points? step into the identifier in the flow and step next or back
+how do we set automatic breakpoints?
 
 we could find the bug, fix it live, recompile, and run directly from the buggy place to check if it was fixed

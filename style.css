@@ -5,16 +5,25 @@ body {
 	background: rgb(42, 40, 42);
 }
 
-.executing {
-	background: rgba(100, 100, 255, 0.2);
-}
-
-.use {
-	background: rgba(230, 50, 200, 0.1);
-}
-
 .wrapper {
 	white-space: pre;
+}
+
+.selected {
+	color: rgb(250, 250, 250) !important;
+	background: rgba(180, 120, 50, 0.8) !important;
+
+	z-index: 10;
+}
+
+.executing {
+	color: rgb(220, 220, 220);
+	background: rgba(80, 80, 180, 0.8);
+}
+
+::selection {
+	color: rgb(240, 240, 240);
+	background: rgb(120, 150, 120);
 }
 
 settings {
@@ -65,9 +74,4 @@ settings dropdown .false {
 }
 settings dropdown *:hover {
 	background: rgb(180, 210, 180);
-}
-
-::selection {
-	color: rgb(240, 240, 240);
-	background: rgb(120, 150, 120);
 }
