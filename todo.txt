@@ -1,26 +1,22 @@
 Bugs:
 
-
-we can delete times_executing, everything will be executed only once, because loops are unrolled and every call is cloned
+flowpoints are broken, first and last flowpoints jump between themselves
 
 Ideas:
 
-the run function could use the same code path as the step functions, to reduce potential drift
+press D to delete flowpoint
 
-we can use a colored text-shadow instead of a background-color
+values_shown only when selection cursor has not been printed yet
 
-we could scroll the cursor into view
+execution_stack should push extra on expressions that returned
 
-we could unroll loops into ifs to show every cycle
+should we have breakpoints for non-executed code?
 
-returns being assigns too seems to cause a lot of problems, maybe we should just mark the assign as actually a return
+would unordered flowpoints be useful?
+
+the run function could use the same code path as the step functions, to reduce potential drift and bugs
+running is sort of different though, further research is needed
 
 indent is one element in a two element flex row, content is the other element
-
-we should allow the user to set certain data flows to a specific color, so they can trace it more easily
-how do we extend the flow? by pressing U
-at which points can we extend the flow? every use of a value that changes flow or another value
-how do we move between the change points? step into the identifier in the flow and step next or back
-how do we set automatic breakpoints?
 
 we could find the bug, fix it live, recompile, and run directly from the buggy place to check if it was fixed

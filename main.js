@@ -28,16 +28,16 @@ function document_keydown(event) {
 	}
 	*/
 
-	// press N
-	if (event.keyCode == 78) {
-
-		step_next();
-	}
-
 	// press B
 	if (event.keyCode == 66) {
 
 		step_back();
+	}
+
+	// press N
+	if (event.keyCode == 78) {
+
+		step_next();
 	}
 
 	// press I
@@ -50,6 +50,41 @@ function document_keydown(event) {
 	if (event.keyCode == 79) {
 
 		step_out();
+	}
+
+	// press F
+	if (event.keyCode == 70) {
+
+		add_flowpoint();
+	}
+
+	// press D
+	if (event.keyCode == 68) {
+
+		delete_flowpoint();
+	}
+
+	// press C
+	if (event.keyCode == 67) {
+
+		previous_flowpoint();
+	}
+
+	// press V
+	if (event.keyCode == 86) {
+
+		next_flowpoint();
+	}
+
+	let number = event.keyCode - 48;
+
+	if (number >= 0 && number <= 9) {
+
+		active_dataflow = number;
+
+		flowpoints = dataflows[active_dataflow];
+		
+		print();
 	}
 
 	// press K
@@ -106,10 +141,99 @@ function toggle_selection() {
 
 		map_expr_to_selection_index.clear();
 
+		slider_element.value = slider_element.min;
+
 		selection_mode = false;
 	}
 
 	print();
+}
+
+function add_flowpoint() {
+
+	let selection_index = execution_stack.indexOf(selection_cursor);
+
+	let flowpoint;
+	let flowpoint_index = 0;
+
+	for (flowpoint of flowpoints) {
+
+		flowpoint_index = execution_stack.indexOf(flowpoint);
+
+		if (flowpoint_index > selection_index) {
+
+			break;
+		}
+	}
+
+	// @Incomplete
+	// what about multiple flows though?
+	if (Object.is(flowpoint, selection_cursor) == false) {
+
+		selection_cursor.dataflow = active_dataflow;
+
+		flowpoints.splice(flowpoint_index, 0, selection_cursor);
+	}
+}
+function next_flowpoint() {
+
+	if (flowpoints.length) {
+
+		let selection_index = execution_stack.indexOf(selection_cursor);
+
+		let flowpoint;
+		let flowpoint_index = 0;
+
+		for (let i = 0; i < flowpoints.length; i += 1) {
+
+			flowpoint = flowpoints[i];
+
+			flowpoint_index = execution_stack.indexOf(flowpoint);
+
+			if (flowpoint_index > selection_index) {
+
+				break;
+			}
+		}
+
+		// what if we didn't find a flowpoint and skipped til the end
+
+		selection_cursor = flowpoint;
+
+		depth_first_traverse_to_reconstruct_selection_expression_stack();
+
+		print();
+	}
+}
+function previous_flowpoint() {
+	
+	if (flowpoints.length) {
+
+		let selection_index = execution_stack.lastIndexOf(selection_cursor);
+
+		let flowpoint;
+		let flowpoint_index = 0;
+
+		for (let i = flowpoints.length-1; i >= 0; i -= 1) {
+
+			flowpoint = flowpoints[i];
+
+			flowpoint_index = execution_stack.lastIndexOf(flowpoint);
+
+			if (flowpoint_index < selection_index) {
+
+				break;
+			}
+		}
+
+		// what if we didn't find a flowpoint and skipped til the beginning
+
+		selection_cursor = flowpoint;
+
+		depth_first_traverse_to_reconstruct_selection_expression_stack();
+
+		print();
+	}
 }
 
 function map_index_get(expression) {
@@ -579,15 +703,199 @@ let execution_cursor = null;
 let call_stack = new Array();
 let block_stack = new Array();
 let expression_stack = new Array();
+let execution_stack = new Array();
 let execution_block_stack = block_stack;
 let execution_expression_stack = expression_stack;
+let idents_used = new Set();
+
 let selection_cursor = null;
 let selection_block_stack = block_stack;
 let selection_expression_stack = expression_stack;
 let map_expr_to_selection_index = new Map();
-let idents_used = new Set();
+
+let dataflows = new Array(10);
+
+dataflows[0] = new Array();
+dataflows[1] = new Array();
+dataflows[2] = new Array();
+dataflows[3] = new Array();
+dataflows[4] = new Array();
+dataflows[5] = new Array();
+dataflows[6] = new Array();
+dataflows[7] = new Array();
+dataflows[8] = new Array();
+dataflows[9] = new Array();
+
+let active_dataflow = 1;
+let flowpoints = dataflows[active_dataflow];
 
 let code_element = document.getElementById("code");
+
+code_element.scroll_options = {
+
+	behavior: "smooth",
+	block: "center",
+	inline: "center"
+};
+
+let slider_element = document.getElementById("slider");
+
+slider.addEventListener("input", slider_oninput);
+
+function slider_oninput() {
+
+	if (!selection_mode) {
+
+		toggle_selection();
+	}
+
+	selection_cursor = execution_stack[slider_element.value];
+
+	depth_first_traverse_to_reconstruct_selection_expression_stack();
+
+	print();
+}
+
+function depth_first_traverse_to_reconstruct_selection_expression_stack() {
+
+	if (!selection_mode) {
+
+		toggle_selection();
+	}
+
+	let target = selection_cursor;
+
+	selection_expression_stack = new Array();
+
+	selection_cursor = Global_Block;
+
+	selection_expression_stack.push(selection_cursor);
+
+	walk();
+
+	// @FixMe
+	// it gets stuck on main_return for some reason
+	selection_cursor = target;
+
+	function walk() {
+
+		if (Object.is(selection_cursor, target)) {
+
+			return true;
+		}
+
+		selection_expression_stack.push(selection_cursor);
+
+		if (selection_cursor.base.kind == Code_Kind.IF) {
+
+			let condition = selection_cursor.condition;
+			let block = selection_cursor.block;
+
+			selection_cursor = condition;
+
+			let should_finish = walk();
+
+			if (should_finish) {
+
+				return true;
+			}
+
+			selection_cursor = block;
+
+			should_finish = walk();
+
+			if (should_finish) {
+
+				return true;
+			}
+		}
+		else if (selection_cursor.base.kind == Code_Kind.ELSE) {
+
+			let block = selection_cursor.block;
+
+			selection_cursor = block;
+
+			let should_finish = walk();
+
+			if (should_finish) {
+
+				return true;
+			}
+		}
+		else if (selection_cursor.base.kind == Code_Kind.PROCEDURE_CALL &&
+		         selection_cursor.transformed) {
+
+			let block = selection_cursor.transformed;
+
+			selection_cursor = block;
+
+			let should_finish = walk();
+
+			if (should_finish) {
+
+				return true;
+			}
+		}
+		else if (selection_cursor.base.kind == Code_Kind.BINARY_OPERATION) {
+
+			let op = selection_cursor;
+
+			selection_cursor = op.left;
+
+			let should_finish = walk();
+
+			if (should_finish) {
+
+				return true;
+			}
+
+			selection_cursor = op.right;
+
+			should_finish = walk();
+
+			if (should_finish) {
+
+				return true;
+			}
+		}
+		else if (typeof selection_cursor.expression != "undefined" &&
+		         selection_cursor.expression !== null) {
+
+
+			selection_cursor = selection_cursor.expression;
+
+			let should_finish = walk();
+
+			if (should_finish) {
+
+				return true;
+			}
+		}
+		else if (selection_cursor.base.kind == Code_Kind.BLOCK) {
+
+			let should_finish = false;
+
+			for (let stmt of selection_cursor.statements) {
+
+				// @Incomplete
+				// what about newlines
+				selection_cursor = stmt.expression;
+
+				should_finish = walk();
+
+				if (should_finish) {
+
+					return true;
+				}
+			}
+		}
+
+		// if we didn't find the target, we step out
+		selection_expression_stack.pop();
+
+		return false;
+	}
+}
 
 function print() {
 
@@ -597,6 +905,38 @@ function print() {
 	}
 
 	print_to_dom(Global_Block.statements[0], code_element, code_element);
+
+	let cursor = null;
+
+	if (selection_mode) {
+
+		cursor = selection_cursor;
+	}
+	else {
+
+		cursor = execution_cursor;
+	}
+
+	if (cursor) {
+
+		let printed_cursor = map_expr_to_printed.get(cursor);
+
+		let position_x = printed_cursor.offsetLeft - code_element.scrollLeft;
+		let midpoint_x = code_element.clientWidth / 2;
+		let radius_x = code_element.clientWidth / 8;
+
+		let position_y = printed_cursor.offsetTop - code_element.scrollTop;
+		let midpoint_y = code_element.clientHeight / 2;
+		let radius_y = 20;
+
+		if (position_x < (midpoint_x - radius_x) ||
+			position_x > (midpoint_x + radius_x) ||
+			position_y < (midpoint_y - radius_y) ||
+			position_y > (midpoint_y + radius_y)) {
+
+			printed_cursor.scrollIntoView(code_element.scroll_options);
+		}
+	}
 }
 
 function start_debugging() {
@@ -646,7 +986,7 @@ function step_into() {
 			cursor.returned = false;
 		}
 
-		transform(cursor, true);
+		transform(cursor);
 
 		expression_stack.push(cursor);
 
@@ -818,14 +1158,6 @@ function step_into() {
 		else {
 
 			execution_cursor = cursor;
-
-			// @Copypaste
-			if (typeof execution_cursor.times_executing == "undefined") {
-
-				execution_cursor.times_executing = 0;
-			}
-
-			execution_cursor.times_executing += 1;
 		}
 
 		print();	
@@ -916,7 +1248,14 @@ function step_out() {
 		cursor = execution_cursor;
 	}
 
+	if (cursor.base.kind == Code_Kind.STATEMENT) {
+
+		cursor = cursor.expression;
+	}
+
 	let last_expression = expression_stack.pop();
+
+	let last_call = call_stack[call_stack.length-1];
 
 	if (last_expression.base.kind == Code_Kind.BLOCK) {
 
@@ -924,18 +1263,25 @@ function step_out() {
 
 		let second_last_expression = expression_stack[expression_stack.length-1];
 
-		if (second_last_expression.base.kind == Code_Kind.IF ||
-			second_last_expression.base.kind == Code_Kind.WHILE) {
+		// @Audit
+		if (second_last_expression.base.kind == Code_Kind.WHILE) {
 
 			cursor = second_last_expression.condition;
 
 			map_index_set(second_last_expression, 0);
 		}
-		else if (second_last_expression.base.kind == Code_Kind.ELSE) {
-
-			cursor = second_last_expression;
+		else if (second_last_expression.base.kind == Code_Kind.IF) {
 
 			step_out();
+
+			return;
+
+		}
+		else if (second_last_expression.base.kind == Code_Kind.ELSE) {
+
+			step_out();
+
+			return;
 		}
 
 		// selection cursor can leave things open
@@ -960,7 +1306,7 @@ function step_out() {
 
 		let last_call = call_stack[call_stack.length-1];
 
-		if (last_call.returned) {
+		if (last_call && last_call.returned) {
 
 			step_out();
 
@@ -987,11 +1333,6 @@ function step_out() {
 		step_out();
 	}
 
-	if (cursor.base.kind == Code_Kind.STATEMENT) {
-
-		cursor = cursor.expression;
-	}
-
 	// @Audit
 	if (last_expression.base.kind == Code_Kind.BINARY_OPERATION ||
 		last_expression.base.kind == Code_Kind.DECLARATION ||
@@ -1006,20 +1347,6 @@ function step_out() {
 	}
 
 	let last_index = map_index_get(last_expression);
-
-	/*
-	// @Audit
-	// @Copypaste
-	if (last_index >= last_expression.elements.length-1) {
-
-		if (last_expression.base.kind == Code_Kind.BLOCK) {
-
-			step_out();
-
-			return;
-		}
-	}
-	*/
 
 	// @Copypaste
 	if (selection_mode) {
@@ -1127,15 +1454,26 @@ function goto_next_executable_expression(parent) {
 }
 function step_next() {
 
+	if (selection_mode) {
+
+		slider_element.value = parseInt(slider_element.value) + 1;
+
+		slider_oninput();
+
+		return;
+	}
+
 	let last_call = call_stack[call_stack.length-1];
 
 	let last_block = block_stack[block_stack.length-1];
 
 	let last_expression = expression_stack[expression_stack.length-1];
 
-	if (!selection_mode) {
+	if (execution_cursor.base.kind == Code_Kind.IF) {
 
-		if (execution_cursor.base.kind == Code_Kind.IF) {
+		// @Audit
+		// @Ugly
+		if (typeof execution_cursor.loop === "undefined") {
 
 			step_into();
 
@@ -1143,28 +1481,34 @@ function step_next() {
 
 			return;
 		}
-		else if (execution_cursor.base.kind == Code_Kind.ELSE) {
+	}
+	else if (execution_cursor.base.kind == Code_Kind.ELSE) {
 
-			step_into();
+		step_into();
 
-			return;
-		}
+		return;
+	}
 
-		// we're gonna test the condition later
-		if (last_expression.base.kind != Code_Kind.IF &&
-		    last_expression.base.kind != Code_Kind.WHILE) {
+	// we're gonna test the condition later
+	if (last_expression.base.kind != Code_Kind.IF &&
+	    last_expression.base.kind != Code_Kind.WHILE) {
 
-			run(execution_cursor);
-		}
+		run(execution_cursor);
+	}
 
-		if (last_call.returned) {
+	if (typeof last_call === "undefined") {
 
-			execution_cursor = last_call;
+		// we have exited the main call and there is nothing more to do
+		return;
+	}
 
-			print();
+	if (last_call.returned) {
 
-			return;
-		}
+		execution_cursor = last_call;
+
+		print();
+
+		return;
 	}
 
 	let cursor = goto_next_executable_expression(last_expression);
@@ -1172,6 +1516,10 @@ function step_next() {
 	let index = map_index_get(last_expression);
 
 	if (index >= last_expression.elements.length) {
+
+		// @Audit
+		// :ExtraExpressions
+		// execution_stack.push(last_expression);
 
 		step_out();
 
@@ -1188,107 +1536,86 @@ function step_next() {
 		execution_cursor = cursor;
 	}
 
-	if (selection_mode) {
+	if (last_expression.base.kind == Code_Kind.IF) {
 
-		if (last_expression.base.kind == Code_Kind.IF ||
-			last_expression.base.kind == Code_Kind.WHILE) {
+		if (run(last_expression.condition)) {
 
-			selection_cursor = last_expression.block;
+			execution_cursor = last_expression.block;
 
 			step_into();
 		}
-	}
-	else {
+		else {
 
-		if (last_expression.base.kind == Code_Kind.IF) {
+			step_out();
 
-			if (run(last_expression.condition, true)) {
+			last_expression = expression_stack[expression_stack.length-1];
 
-				execution_cursor = last_expression.block;
-
-				step_into();
-			}
-			else {
-
-				step_out();
-
-				last_expression = expression_stack[expression_stack.length-1];
-
-				execution_cursor = goto_next_executable_expression(last_expression);
-
-				print();
-			}
+			execution_cursor = goto_next_executable_expression(last_expression);
 		}
-		else if (last_expression.base.kind == Code_Kind.WHILE) {
+	}
+	else if (last_expression.base.kind == Code_Kind.WHILE) {
 
-			let condition = clone(last_expression.condition);
+		let condition = clone(last_expression.condition);
+
+		// @Audit
+		// should we transform here or just clone the .transformed?
+		let block = transform(clone(last_expression.block));
+
+		let cycle = make_if(condition, block);
+
+		cycle.loop = last_expression;
+
+		let should_run = run(condition);
+
+		if (should_run) {
+
+			// @Speed
+			let while_index = last_block.statements.findIndex(
+
+				function(elem) {
+
+					return Object.is(elem.expression, last_expression);
+				}
+			);
 
 			// @Audit
-			// should we transform here or just clone the .transformed?
-			let block = transform(clone(last_expression.block));
+			last_block.statements.splice(while_index, 0, make_statement(cycle));
 
-			let cycle = make_if(condition, block);
+			let while_expr = expression_stack.pop();
 
-			let should_run = run(condition);
+			execution_cursor = cycle;
 
-			if (should_run) {
+			step_into();
+		}
+		else {
 
-				// @Speed
-				let while_index = last_block.statements.indexOf(last_expression);
+			run(last_expression.condition);
 
-				// @Audit
-				last_block.statements.splice(while_index-1, 0, cycle);
+			step_out();
 
-				let while_expr = expression_stack.pop();
+			last_expression = expression_stack[expression_stack.length-1];
 
-				execution_cursor = cycle;
-
-				step_into();
-			}
-			else {
-
-				step_out();
-
-				last_expression = expression_stack[expression_stack.length-1];
-
-				execution_cursor = goto_next_executable_expression(last_expression);
-
-				print();
-			}
+			execution_cursor = goto_next_executable_expression(last_expression);
 		}
 	}
-
-	// @Incomplete
-	// crashes when leaving main
 
 	print();
 }
 function step_back() {
 
-	let last_expression = expression_stack[expression_stack.length-1];
+	if (selection_cursor === null) {
 
-	let cursor = goto_previous_executable_expression(last_expression);
+		toggle_selection();
 
-	let index = map_index_get(last_expression);
-
-	if (index <= -1) {
-
-		step_out();
-
-		return;
+		slider_element.value = slider_element.max;
 	}
 
-	if (selection_mode) {
+	slider_element.value = parseInt(slider_element.value) - 1;
 
-		selection_cursor = cursor;
-	}
-	else {
-
-		execution_cursor = cursor;
-	}
-
-	print();
+	slider_oninput();
 }
+
+let disable_execution_recording = false;
 function run(target, force = false) {
 
 	let last_expression = expression_stack[expression_stack.length-1];
@@ -1306,20 +1633,27 @@ function run(target, force = false) {
 	}
 
 	if (target.times_executed > last_expression.times_executed && force === false) {
-
-		// @Audit
-		// we need this for everything that modifies the value of an ident
-		if (target.base.kind != Code_Kind.DECLARATION &&
-			target.base.kind != Code_Kind.ASSIGN &&
-			target.base.kind != Code_Kind.OPASSIGN) {
 		
-			return target.last_return;
-		}
+		return target.last_return;
+	}
+
+	if (typeof target.transformed_from_return === "undefined" &&
+		typeof target.transformed_from_opassign === "undefined" &&
+		target.base.kind != Code_Kind.BLOCK &&
+		disable_execution_recording == false) {
+
+		execution_stack.push(target);
+
+		slider_element.max = execution_stack.length-1;
 	}
 
 	let return_value = null;
 
-	expression_stack.push(target);
+	// :SameCodePath
+	if (target.base.kind != Code_Kind.WHILE) {
+
+		expression_stack.push(target);
+	}
 
 	let last_call = call_stack[call_stack.length-1];
 
@@ -1329,7 +1663,7 @@ function run(target, force = false) {
 
 		target.returned = false;
 
-		transform(target, true);
+		transform(target);
 	}
 	else if (target.base.kind == Code_Kind.BLOCK) {
 
@@ -1343,6 +1677,9 @@ function run(target, force = false) {
 		last_call.returned = true;
 
 		last_call.last_return = return_value;
+
+		// :ExtraExpressions
+		execution_stack.push(last_call);
 
 		step_out();
 	}
@@ -1373,18 +1710,40 @@ function run(target, force = false) {
 		// @Incomplete
 		// what about returns inside whiles?
 
-		while (run(target.condition, true)) {
+		let condition = clone(target.condition);
 
-			// @Copypaste
-			if (typeof target.times_executing == "undefined") {
+		// @MassiveHack
+		// the other approach would be to pass everything through functions, which is more messy
+		disable_execution_recording = true;
 
-				target.times_executing = 0;
-			}
+		let should_run = run(condition);
 
-			target.times_executing += 1;
+		disable_execution_recording = false;
 
-			return_value = run(target.block, true);
+		let old_execution_cursor = execution_cursor;
+
+		execution_cursor = target;
+
+		while (should_run) {
+
+			// @Ugly
+
+			step_into();
+
+			step_next();
+
+			step_out();
+
+			step_next();
+
+			disable_execution_recording = true;
+
+			should_run = run(condition, true);
+
+			disable_execution_recording = false;
 		}
+
+		execution_cursor = old_execution_cursor;
 	}
 	else if (target.base.kind == Code_Kind.ASSIGN) {
 
@@ -1458,6 +1817,10 @@ function run(target, force = false) {
 	target.last_return = return_value;
 
 	target.times_executed += 1;
+
+	// @Audit
+	// :ExtraExpressions
+	// execution_stack.push(target);
 
 	// calls pop themselves when they return
 	if (target.base.kind !== Code_Kind.PROCEDURE_CALL &&
@@ -1821,9 +2184,17 @@ function transform(node, force = false) {
 
 		transform(node.expression);
 
-		let binop = make_binary_operation(clone(node.ident), node.operation_type, node.expression);
+		let ident = clone(node.ident);
+
+		ident.transformed_from_opassign = node;
+
+		let binop = make_binary_operation(ident, node.operation_type, node.expression);
+
+		binop.transformed_from_opassign = node;
 
 		let assign = make_assign(node.ident, binop);
+
+		assign.transformed_from_opassign = node;
 
 		replacement.statements.push(assign);
 	}
@@ -1848,6 +2219,8 @@ function transform(node, force = false) {
 		let ident = last_call.transformed.statements[0].expression.ident;
 
 		let assign = make_assign(clone(ident), node.expression);
+
+		assign.transformed_from_return = node;
 
 		transform(node.expression);
 
@@ -1943,7 +2316,7 @@ function should_inline(node) {
 }
 
 let print_expression_stack = new Array();
-let print_while_stack = new Array();
+let map_expr_to_printed = new Map();
 function print_to_dom(node, print_target, block_print_target, is_transformed_block = false) {
 
 	let expr = document.createElement("expr");
@@ -1957,21 +2330,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		node.base.kind != Code_Kind.RETURN &&
 		node.base.kind != Code_Kind.OPASSIGN) {
 
-		let last_while_stack = null;
-
-		if (node.base.kind == Code_Kind.PROCEDURE_CALL) {
-
-			last_while_stack = print_while_stack;
-
-			print_while_stack = new Array();
-		}
-
 		print_to_dom(node.transformed, block_print_target, block_print_target, true);
-
-		if (last_while_stack) {
-
-			print_while_stack = last_while_stack;
-		}
 
 		print_newline(block_print_target);
 
@@ -1982,8 +2341,6 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 			return;
 		}
 	}
-
-	let last_while = print_while_stack[print_while_stack.length-1];
 
 	let last_expression = print_expression_stack[print_expression_stack.length-1];
 
@@ -2051,9 +2408,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		if (values_shown && node.last_return !== null &&
 		    typeof node.last_return !== "undefined" &&
-		    node.times_executed >= last_expression.times_executed &&
-		    (typeof last_while === "undefined" ||
-		     last_while.times_executing == node.times_executed)) {
+		    node.times_executed >= last_expression.times_executed) {
 
 			expr.appendChild(document.createTextNode(node.last_return));
 		}
@@ -2099,7 +2454,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		print_target.appendChild(expr);
 
-		print_to_dom(node.block, expr, expr);
+		print_to_dom(node.block, print_target, print_target);
 	}
 	else if (node.base.kind == Code_Kind.ELSE) {
 
@@ -2107,19 +2462,9 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		print_target.appendChild(expr);
 
-		print_to_dom(node.block, expr, expr);
+		print_to_dom(node.block, print_target, print_target);
 	}
 	else if (node.base.kind == Code_Kind.WHILE) {
-
-		if (node.cycles) {
-
-			for (let cycle of node.cycles) {
-
-				print_to_dom(cycle, block_print_target, block_print_target);
-
-				print_newline(block_print_target);
-			}
-		}
 
 		expr.appendChild(document.createTextNode("while ("));
 
@@ -2129,20 +2474,14 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		print_target.appendChild(expr);
 
-		print_while_stack.push(node);
-
-		print_to_dom(node.block, expr, expr);
-
-		print_while_stack.pop();
+		print_to_dom(node.block, print_target, print_target);
 	}
 	else if (node.base.kind == Code_Kind.BINARY_OPERATION) {
 
 		// @Audit
 		if (values_shown && should_inline(node) == false && node.last_return !== null &&
 		    typeof node.last_return !== "undefined" &&
-		    node.times_executed >= last_expression.times_executed &&
-		    (typeof last_while === "undefined" ||
-		     last_while.times_executing == node.times_executed)) {
+		    node.times_executed >= last_expression.times_executed) {
 
 			expr.appendChild(document.createTextNode(node.last_return));
 		}
@@ -2243,9 +2582,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		// @Incomplete
 		// what about `ident = ident`
 		if (values_shown && node.last_return !== null &&
-			typeof node.last_return !== "undefined" &&
-		    (typeof last_while === "undefined" ||
-		     last_while.times_executing == node.times_executed)) {
+			typeof node.last_return !== "undefined") {
 
 			text = node.last_return;
 		}
@@ -2273,6 +2610,8 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 	print_expression_stack.pop();
 
+	map_expr_to_printed.set(node, expr);
+
 	if (Object.is(node, execution_cursor)) {
 
 		expr.classList.add("executing");
@@ -2280,6 +2619,10 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	if (Object.is(node, selection_cursor)) {
 
 		expr.classList.add("selected");
+	}
+	if (flowpoints.indexOf(node) != -1) {
+
+		expr.classList.add("flow-"+ node.dataflow);
 	}
 }
 
