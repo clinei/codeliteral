@@ -4,9 +4,13 @@ flowpoints are broken, first and last flowpoints jump between themselves
 
 Ideas:
 
+we could set the execution to scroll automatically by some speed, and maybe bounce
+
 press D to delete flowpoint
 
-values_shown only when selection cursor has not been printed yet
+values shown only when selection cursor hasn't been printed yet
+
+or not shown only when on selection cursor and a mode is toggled on
 
 execution_stack should push extra on expressions that returned
 
