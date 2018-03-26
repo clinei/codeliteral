@@ -9,6 +9,15 @@ body {
 
 	color: rgb(200, 210, 200);
 	background: rgb(40, 40, 40);
+}
+
+#instructions {
+
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+
+.wrapper {
 
 	display: flex;
 
@@ -19,28 +28,28 @@ body {
 
 @media (max-width: 800px) {
 
-	body {
+	.wrapper {
 
 		width: calc(100% - 24pt);
 	}
 }
 @media (min-width: 800px) {
 
-	body {
+	.wrapper {
 
 		width: calc(800px - 24pt);
 	}
 }
 
-.wrapper {
+#code {
 
 	position: relative;
 
 	white-space: pre;
 
-	overflow: auto;
+	overflow: hidden;
 
-	height: calc(100% - 60pt);
+	height: calc(100% - 60pt - 3em);
 
 	width: 100%;
 

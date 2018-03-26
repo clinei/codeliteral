@@ -4,7 +4,7 @@ function main() {
 
 	map_keyboard();
 
-	print();
+	start_debugging();
 }
 
 function map_keyboard() {
@@ -14,11 +14,13 @@ function map_keyboard() {
 
 function document_keydown(event) {
 
+	/* disabled
 	// press R
 	if (event.keyCode == 82) {
 
 		start_debugging();
 	}
+	*/
 
 	/*
 	// press S
