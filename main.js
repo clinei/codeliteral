@@ -153,8 +153,6 @@ function toggle_selection() {
 
 function add_flowpoint() {
 
-	let selection_index = parseInt(slider_element.value);
-
 	// @Incomplete
 	// disallow duplicates
 
@@ -162,7 +160,7 @@ function add_flowpoint() {
 	let index = 0;
 	while (index < flowpoints.length) {
 
-		if (flowpoints[index] > selection_index) {
+		if (flowpoints[index] > execution_index) {
 
 			break;
 		}
@@ -170,12 +168,11 @@ function add_flowpoint() {
 		index += 1;
 	}
 
-	flowpoints.splice(index, 0, selection_index);
+	flowpoints.splice(index, 0, execution_index);
 }
 function delete_flowpoint() {
 
-	let selection_index = parseInt(slider_element.value);
-	let flowpoint_index = flowpoints.indexOf(selection_index);
+	let flowpoint_index = flowpoints.indexOf(execution_index);
 
 	if (flowpoint_index >= 0) {
 		flowpoints.splice(flowpoint_index, 1);
@@ -185,11 +182,15 @@ function next_flowpoint() {
 
 	if (flowpoints.length) {
 
-		let selection_index = parseInt(slider_element.value);
+		if (!selection_mode) {
+
+			toggle_selection();
+		}
+
 		let index = 0;
 		while (index < flowpoints.length) {
 
-			if (flowpoints[index] > selection_index) {
+			if (flowpoints[index] > execution_index) {
 
 				break;
 			}
@@ -203,8 +204,9 @@ function next_flowpoint() {
 		}
 
 		let flowpoint = flowpoints[index];
-		selection_cursor = execution_stack[flowpoint];
+		execution_index = flowpoint;
 		slider_element.value = flowpoint;
+		selection_cursor = execution_stack[flowpoint];
 
 		depth_first_traverse_to_reconstruct_selection_expression_stack();
 
@@ -215,11 +217,15 @@ function previous_flowpoint() {
 	
 	if (flowpoints.length) {
 
-		let selection_index = parseInt(slider_element.value);
+		if (!selection_mode) {
+			
+			toggle_selection();
+		}
+
 		let index = flowpoints.length-1;
 		while (index >= 0) {
 
-			if (flowpoints[index] < selection_index) {
+			if (flowpoints[index] < execution_index) {
 
 				break;
 			}
@@ -233,8 +239,9 @@ function previous_flowpoint() {
 		}
 
 		let flowpoint = flowpoints[index];
-		selection_cursor = execution_stack[flowpoint];
+		execution_index = flowpoint;
 		slider_element.value = flowpoint;
+		selection_cursor = execution_stack[flowpoint];
 
 		depth_first_traverse_to_reconstruct_selection_expression_stack();
 
@@ -706,6 +713,7 @@ let map_original_to_clone = new Map();
 
 let debugging = false;
 let execution_cursor = null;
+let execution_index = 0;
 let call_stack = new Array();
 let block_stack = new Array();
 let expression_stack = new Array();
@@ -755,19 +763,17 @@ function slider_oninput() {
 		toggle_selection();
 	}
 
-	selection_cursor = execution_stack[slider_element.value];
+	execution_index = parseInt(slider_element.value);
+
+	selection_cursor = execution_stack[execution_index];
 
 	depth_first_traverse_to_reconstruct_selection_expression_stack();
 
 	print();
 }
 
+// must be in selection_mode !
 function depth_first_traverse_to_reconstruct_selection_expression_stack() {
-
-	if (!selection_mode) {
-
-		toggle_selection();
-	}
 
 	let target = selection_cursor;
 
@@ -904,6 +910,9 @@ function depth_first_traverse_to_reconstruct_selection_expression_stack() {
 }
 
 function print() {
+
+	slider_element.max = execution_stack.length-1;
+	slider_element.value = execution_index;
 
 	while (code_element.firstChild) {
 
@@ -1462,9 +1471,13 @@ function step_next() {
 
 	if (selection_mode) {
 
-		slider_element.value = parseInt(slider_element.value) + 1;
+		execution_index += 1;
 
-		slider_oninput();
+		selection_cursor = execution_stack[execution_index];
+		
+		depth_first_traverse_to_reconstruct_selection_expression_stack();
+
+		print();
 
 		return;
 	}
@@ -1605,20 +1618,26 @@ function step_next() {
 		}
 	}
 
+	execution_index = execution_stack.length-1;
+
 	print();
 }
 function step_back() {
 
-	if (selection_cursor === null) {
+	if (!selection_mode) {
 
 		toggle_selection();
 
-		slider_element.value = slider_element.max;
+		execution_index = execution_stack.length-1;
 	}
 
-	slider_element.value = parseInt(slider_element.value) - 1;
+	execution_index -= 1;
 
-	slider_oninput();
+	selection_cursor = execution_stack[execution_index];
+
+	depth_first_traverse_to_reconstruct_selection_expression_stack();
+
+	print();
 }
 
 let disable_execution_recording = false;
@@ -1649,8 +1668,6 @@ function run(target, force = false) {
 		disable_execution_recording == false) {
 
 		execution_stack.push(target);
-
-		slider_element.max = execution_stack.length-1;
 	}
 
 	let return_value = null;
@@ -2626,11 +2643,9 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		expr.classList.add("selected");
 	}
-	let execution_index = execution_stack.indexOf(node);
 	// procedure calls show up twice in execution stack
-	let execution_index_last = execution_stack.lastIndexOf(node);
-	if (flowpoints.indexOf(execution_index) >= 0 ||
-	    flowpoints.indexOf(execution_index_last) >= 0) {
+	if (flowpoints.indexOf(execution_stack.indexOf(node)) >= 0 ||
+	    flowpoints.indexOf(execution_stack.lastIndexOf(node)) >= 0) {
 
 		expr.classList.add("flow-"+ active_dataflow);
 	}
