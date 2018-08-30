@@ -1,10 +1,10 @@
 Bugs:
 
-flowpoints are broken, first and last flowpoints jump between themselves
+don't use slider_element.value
 
 Ideas:
 
-we could set the execution to scroll automatically by some speed, and maybe bounce
+we could set the execution to scroll automatically by some speed, and maybe bounce between flowpoints
 
 press D to delete flowpoint
 
@@ -14,7 +14,7 @@ or not shown only when on selection cursor and a mode is toggled on
 
 execution_stack should push extra on expressions that returned
 
-should we have breakpoints for non-executed code?
+we should have breakpoints for non-executed code, but only once we have text editing
 
 would unordered flowpoints be useful?
 

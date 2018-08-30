@@ -153,54 +153,58 @@ function toggle_selection() {
 
 function add_flowpoint() {
 
-	let selection_index = execution_stack.indexOf(selection_cursor);
+	let selection_index = parseInt(slider_element.value);
 
-	let flowpoint;
-	let flowpoint_index = 0;
+	// @Incomplete
+	// disallow duplicates
 
-	for (flowpoint of flowpoints) {
+	// insertion sort
+	let index = 0;
+	while (index < flowpoints.length) {
 
-		flowpoint_index = execution_stack.indexOf(flowpoint);
-
-		if (flowpoint_index > selection_index) {
+		if (flowpoints[index] > selection_index) {
 
 			break;
 		}
+
+		index += 1;
 	}
 
-	// @Incomplete
-	// what about multiple flows though?
-	if (Object.is(flowpoint, selection_cursor) == false) {
+	flowpoints.splice(index, 0, selection_index);
+}
+function delete_flowpoint() {
 
-		selection_cursor.dataflow = active_dataflow;
+	let selection_index = parseInt(slider_element.value);
+	let flowpoint_index = flowpoints.indexOf(selection_index);
 
-		flowpoints.splice(flowpoint_index, 0, selection_cursor);
+	if (flowpoint_index >= 0) {
+		flowpoints.splice(flowpoint_index, 1);
 	}
 }
 function next_flowpoint() {
 
 	if (flowpoints.length) {
 
-		let selection_index = execution_stack.indexOf(selection_cursor);
+		let selection_index = parseInt(slider_element.value);
+		let index = 0;
+		while (index < flowpoints.length) {
 
-		let flowpoint;
-		let flowpoint_index = 0;
-
-		for (let i = 0; i < flowpoints.length; i += 1) {
-
-			flowpoint = flowpoints[i];
-
-			flowpoint_index = execution_stack.indexOf(flowpoint);
-
-			if (flowpoint_index > selection_index) {
+			if (flowpoints[index] > selection_index) {
 
 				break;
 			}
+
+			index += 1;
 		}
 
-		// what if we didn't find a flowpoint and skipped til the end
+		if (index >= flowpoints.length) {
 
-		selection_cursor = flowpoint;
+			index = 0;
+		}
+
+		let flowpoint = flowpoints[index];
+		selection_cursor = execution_stack[flowpoint];
+		slider_element.value = flowpoint;
 
 		depth_first_traverse_to_reconstruct_selection_expression_stack();
 
@@ -211,26 +215,26 @@ function previous_flowpoint() {
 	
 	if (flowpoints.length) {
 
-		let selection_index = execution_stack.lastIndexOf(selection_cursor);
+		let selection_index = parseInt(slider_element.value);
+		let index = flowpoints.length-1;
+		while (index >= 0) {
 
-		let flowpoint;
-		let flowpoint_index = 0;
-
-		for (let i = flowpoints.length-1; i >= 0; i -= 1) {
-
-			flowpoint = flowpoints[i];
-
-			flowpoint_index = execution_stack.lastIndexOf(flowpoint);
-
-			if (flowpoint_index < selection_index) {
+			if (flowpoints[index] < selection_index) {
 
 				break;
 			}
+
+			index -= 1;
 		}
 
-		// what if we didn't find a flowpoint and skipped til the beginning
+		if (index < 0) {
 
-		selection_cursor = flowpoint;
+			index = flowpoints.length-1;
+		}
+
+		let flowpoint = flowpoints[index];
+		selection_cursor = execution_stack[flowpoint];
+		slider_element.value = flowpoint;
 
 		depth_first_traverse_to_reconstruct_selection_expression_stack();
 
@@ -2622,9 +2626,13 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		expr.classList.add("selected");
 	}
-	if (flowpoints.indexOf(node) != -1) {
+	let execution_index = execution_stack.indexOf(node);
+	// procedure calls show up twice in execution stack
+	let execution_index_last = execution_stack.lastIndexOf(node);
+	if (flowpoints.indexOf(execution_index) >= 0 ||
+	    flowpoints.indexOf(execution_index_last) >= 0) {
 
-		expr.classList.add("flow-"+ node.dataflow);
+		expr.classList.add("flow-"+ active_dataflow);
 	}
 }
 
