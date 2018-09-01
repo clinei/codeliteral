@@ -1,12 +1,10 @@
 Bugs:
 
-don't use slider_element.value
+if a flowpoint is in a transformed block, we need to print the ancestor blocks
 
 Ideas:
 
 we could set the execution to scroll automatically by some speed, and maybe bounce between flowpoints
-
-press D to delete flowpoint
 
 values shown only when selection cursor hasn't been printed yet
 
@@ -15,8 +13,6 @@ or not shown only when on selection cursor and a mode is toggled on
 execution_stack should push extra on expressions that returned
 
 we should have breakpoints for non-executed code, but only once we have text editing
-
-would unordered flowpoints be useful?
 
 the run function could use the same code path as the step functions, to reduce potential drift and bugs
 running is sort of different though, further research is needed

@@ -5,6 +5,7 @@ function main() {
 	map_keyboard();
 
 	start_debugging();
+	print();
 }
 
 function map_keyboard() {
@@ -19,6 +20,7 @@ function document_keydown(event) {
 	if (event.keyCode == 82) {
 
 		start_debugging();
+		print();
 	}
 	*/
 
@@ -27,6 +29,7 @@ function document_keydown(event) {
 	if (event.keyCode == 83) {
 
 		stop_debugging();
+		print();
 	}
 	*/
 
@@ -34,48 +37,70 @@ function document_keydown(event) {
 	if (event.keyCode == 66) {
 
 		step_back();
+		print();
 	}
 
 	// press N
 	if (event.keyCode == 78) {
 
 		step_next();
+		print();
 	}
 
 	// press I
 	if (event.keyCode == 73) {
 
 		step_into();
+		print();
 	}
 
 	// press O
 	if (event.keyCode == 79) {
 
 		step_out();
+		print();
 	}
 
 	// press F
 	if (event.keyCode == 70) {
 
 		add_flowpoint();
+		print();
 	}
 
 	// press D
 	if (event.keyCode == 68) {
 
 		delete_flowpoint();
+		print();
 	}
 
 	// press C
 	if (event.keyCode == 67) {
 
 		previous_flowpoint();
+		print();
 	}
 
 	// press V
 	if (event.keyCode == 86) {
 
 		next_flowpoint();
+		print();
+	}
+
+	// press K
+	if (event.keyCode == 75) {
+
+		toggle_values_shown();
+		print();
+	}
+
+	// press M
+	if (event.keyCode == 77) {
+
+		toggle_selection();
+		print();
 	}
 
 	let number = event.keyCode - 48;
@@ -88,26 +113,12 @@ function document_keydown(event) {
 		
 		print();
 	}
-
-	// press K
-	if (event.keyCode == 75) {
-
-		toggle_values_shown();
-	}
-
-	// press M
-	if (event.keyCode == 77) {
-
-		toggle_selection();
-	}
 }
 
 let values_shown = false;
 function toggle_values_shown() {
 
 	values_shown = !values_shown;
-
-	print();
 }
 
 let selection_mode = false;
@@ -147,8 +158,6 @@ function toggle_selection() {
 
 		selection_mode = false;
 	}
-
-	print();
 }
 
 function add_flowpoint() {
@@ -209,8 +218,6 @@ function next_flowpoint() {
 		selection_cursor = execution_stack[flowpoint];
 
 		depth_first_traverse_to_reconstruct_selection_expression_stack();
-
-		print();
 	}
 }
 function previous_flowpoint() {
@@ -244,8 +251,6 @@ function previous_flowpoint() {
 		selection_cursor = execution_stack[flowpoint];
 
 		depth_first_traverse_to_reconstruct_selection_expression_stack();
-
-		print();
 	}
 }
 
@@ -695,7 +700,6 @@ let while_loop = make_while(while_condition, while_block);
 
 while_block.statements.push(newline);
 while_block.statements.push(make_statement(local_variable_opassign));
-
 Main_block.statements.push(make_statement(local_variable));
 Main_block.statements.push(newline);
 Main_block.statements.push(make_statement(local_variable_assign));
@@ -966,16 +970,12 @@ function start_debugging() {
 	execution_cursor = Global_Block.elements[0].expression;
 
 	debugging = true;
-
-	print();
 }
 function stop_debugging() {
 
 	execution_cursor = null;
 
 	debugging = false;
-
-	print();
 }
 function step_into() {
 
@@ -1048,8 +1048,6 @@ function step_into() {
 
 			execution_cursor = cursor;
 		}
-
-		print();
 	}
 	else if (cursor.base.kind == Code_Kind.ASSIGN) {
 
@@ -1072,8 +1070,6 @@ function step_into() {
 
 			execution_cursor = cursor;
 		}
-
-		print();
 	}
 	else if (cursor.base.kind == Code_Kind.OPASSIGN) {
 
@@ -1096,8 +1092,6 @@ function step_into() {
 
 			execution_cursor = cursor;
 		}
-
-		print();
 	}
 	else if (cursor.base.kind == Code_Kind.RETURN) {
 
@@ -1125,8 +1119,6 @@ function step_into() {
 
 			execution_cursor = cursor;
 		}
-
-		print();
 	}
 	else if (cursor.base.kind == Code_Kind.BINARY_OPERATION) {
 
@@ -1149,8 +1141,6 @@ function step_into() {
 
 			execution_cursor = cursor;
 		}
-
-		print();
 	}
 	else if (cursor.base.kind == Code_Kind.BLOCK) {
 
@@ -1174,8 +1164,6 @@ function step_into() {
 
 			execution_cursor = cursor;
 		}
-
-		print();	
 	}
 	else if (cursor.base.kind == Code_Kind.IF) {
 
@@ -1198,8 +1186,6 @@ function step_into() {
 
 			execution_cursor = cursor;
 		}
-
-		print();
 	}
 	else if (cursor.base.kind == Code_Kind.ELSE) {
 
@@ -1246,8 +1232,6 @@ function step_into() {
 
 			execution_cursor = cursor;
 		}
-
-		print();
 	}
 }
 function step_out() {
@@ -1372,8 +1356,6 @@ function step_out() {
 
 		execution_cursor = cursor;
 	}
-
-	print();
 }
 
 function get_current_executable_expression(parent) {
@@ -1477,8 +1459,6 @@ function step_next() {
 		
 		depth_first_traverse_to_reconstruct_selection_expression_stack();
 
-		print();
-
 		return;
 	}
 
@@ -1524,8 +1504,6 @@ function step_next() {
 	if (last_call.returned) {
 
 		execution_cursor = last_call;
-
-		print();
 
 		return;
 	}
@@ -1619,8 +1597,6 @@ function step_next() {
 	}
 
 	execution_index = execution_stack.length-1;
-
-	print();
 }
 function step_back() {
 
@@ -1636,8 +1612,6 @@ function step_back() {
 	selection_cursor = execution_stack[execution_index];
 
 	depth_first_traverse_to_reconstruct_selection_expression_stack();
-
-	print();
 }
 
 let disable_execution_recording = false;
@@ -2437,7 +2411,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		}
 		else {
 
-			if (should_inline_node) {
+			if (should_inline_node && node.transformed) {
 
 				let return_ident = node.transformed.statements[0].expression.ident;
 
