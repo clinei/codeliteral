@@ -1135,9 +1135,13 @@ function step_next() {
 		if (execution_index < execution_stack.length-1) {
 
 			execution_index += 1;
-		}
 
-		inspection_cursor = execution_stack[execution_index];
+			inspection_cursor = execution_stack[execution_index];
+		}
+		else {
+
+			toggle_inspection();
+		}
 
 		return;
 	}
@@ -2382,10 +2386,20 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	if (Object.is(node, execution_cursor)) {
 
 		expr.classList.add("executing");
+
+		if (!inspection_mode) {
+
+			expr.classList.add("active_cursor");
+		}
 	}
 	if (Object.is(node, inspection_cursor)) {
 
 		expr.classList.add("selected");
+
+		if (inspection_mode) {
+
+			expr.classList.add("active_cursor");
+		}
 	}
 	// procedure calls show up twice in execution stack
 	if (flowpoints.indexOf(execution_stack.indexOf(node)) >= 0 ||

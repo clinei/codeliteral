@@ -79,7 +79,7 @@ body {
 
 .selected {
 
-	color: rgb(230, 200, 160);
+	color: rgba(220, 220, 220, 0.8);
 
 	background-color: rgb(140, 70, 50) !important;
 
@@ -88,9 +88,14 @@ body {
 
 .executing {
 
-	color: rgb(220, 220, 210);
+	color: rgba(220, 220, 220, 0.8);
 
 	background-color: rgb(60, 60, 100);
+}
+
+.active_cursor {
+	
+	color: rgba(220, 220, 220, 1.0) !important;
 }
 
 .flow-1 {
