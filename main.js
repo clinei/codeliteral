@@ -126,33 +126,11 @@ function toggle_selection() {
 
 	if (!selection_mode) {
 
-		selection_block_stack = block_stack.slice(0);
-
-		selection_expression_stack = expression_stack.slice(0);
-
-		block_stack = selection_block_stack;
-
-		expression_stack = selection_expression_stack;
-
-		// we probably don't need to touch the call stack
-
-		let last_block = block_stack[block_stack.length-1];
-
 		selection_cursor = execution_cursor;
 
 		selection_mode = true;
 	}
 	else {
-
-		block_stack = execution_block_stack;
-
-		expression_stack = execution_expression_stack;
-
-		selection_expression_stack = expression_stack;
-
-		selection_cursor = null;
-
-		map_expr_to_selection_index.clear();
 
 		slider_element.value = slider_element.min;
 
@@ -216,8 +194,6 @@ function next_flowpoint() {
 		execution_index = flowpoint;
 		slider_element.value = flowpoint;
 		selection_cursor = execution_stack[flowpoint];
-
-		depth_first_traverse_to_reconstruct_selection_expression_stack();
 	}
 }
 function previous_flowpoint() {
@@ -249,45 +225,16 @@ function previous_flowpoint() {
 		execution_index = flowpoint;
 		slider_element.value = flowpoint;
 		selection_cursor = execution_stack[flowpoint];
-
-		depth_first_traverse_to_reconstruct_selection_expression_stack();
 	}
 }
 
 function map_index_get(expression) {
 
-	let index = null;
-
-	if (selection_mode) {
-
-		index = map_expr_to_selection_index.get(expression);
-
-		if (typeof index === "undefined") {
-
-			index = expression.index;
-
-			map_index_set(expression, index);
-		}
-		// @NotSure
-		// should we fix nonexistant indices for execution, too?
-	}
-	else {
-
-		index = expression.index;
-	}
-
-	return index;
+	return expression.index;
 }
 function map_index_set(expression, index) {
 
-	if (selection_mode) {
-
-		map_expr_to_selection_index.set(expression, index);
-	}
-	else {
-
-		expression.index = index;
-	}
+	expression.index = index;
 }
 
 let Code_Kind = {
@@ -641,9 +588,6 @@ let execution_expression_stack = expression_stack;
 let idents_used = new Set();
 
 let selection_cursor = null;
-let selection_block_stack = block_stack;
-let selection_expression_stack = expression_stack;
-let map_expr_to_selection_index = new Map();
 
 let dataflows = new Array(10);
 
@@ -773,146 +717,7 @@ function slider_oninput() {
 
 	selection_cursor = execution_stack[execution_index];
 
-	depth_first_traverse_to_reconstruct_selection_expression_stack();
-
 	print();
-}
-
-// must be in selection_mode !
-function depth_first_traverse_to_reconstruct_selection_expression_stack() {
-
-	let target = selection_cursor;
-
-	selection_expression_stack = new Array();
-
-	selection_cursor = Global_Block;
-
-	selection_expression_stack.push(selection_cursor);
-
-	walk();
-
-	// @FixMe
-	// it gets stuck on main_return for some reason
-	selection_cursor = target;
-
-	function walk() {
-
-		if (Object.is(selection_cursor, target)) {
-
-			return true;
-		}
-
-		selection_expression_stack.push(selection_cursor);
-
-		if (selection_cursor.base.kind == Code_Kind.IF) {
-
-			let condition = selection_cursor.condition;
-			let block = selection_cursor.block;
-
-			selection_cursor = condition;
-
-			let should_finish = walk();
-
-			if (should_finish) {
-
-				return true;
-			}
-
-			selection_cursor = block;
-
-			should_finish = walk();
-
-			if (should_finish) {
-
-				return true;
-			}
-		}
-		else if (selection_cursor.base.kind == Code_Kind.ELSE) {
-
-			let block = selection_cursor.block;
-
-			selection_cursor = block;
-
-			let should_finish = walk();
-
-			if (should_finish) {
-
-				return true;
-			}
-		}
-		else if (selection_cursor.base.kind == Code_Kind.PROCEDURE_CALL &&
-		         selection_cursor.transformed) {
-
-			let block = selection_cursor.transformed;
-
-			selection_cursor = block;
-
-			let should_finish = walk();
-
-			if (should_finish) {
-
-				return true;
-			}
-		}
-		else if (selection_cursor.base.kind == Code_Kind.BINARY_OPERATION) {
-
-			let op = selection_cursor;
-
-			selection_cursor = op.left;
-
-			let should_finish = walk();
-
-			if (should_finish) {
-
-				return true;
-			}
-
-			selection_cursor = op.right;
-
-			should_finish = walk();
-
-			if (should_finish) {
-
-				return true;
-			}
-		}
-		else if (typeof selection_cursor.expression != "undefined" &&
-		         selection_cursor.expression !== null) {
-
-
-			selection_cursor = selection_cursor.expression;
-
-			let should_finish = walk();
-
-			if (should_finish) {
-
-				return true;
-			}
-		}
-		else if (selection_cursor.base.kind == Code_Kind.BLOCK) {
-
-			let should_finish = false;
-
-			for (let stmt of selection_cursor.statements) {
-
-				// @Incomplete
-				// what about newlines
-				selection_cursor = stmt.expression;
-
-				should_finish = walk();
-
-				if (should_finish) {
-
-					return true;
-				}
-			}
-		}
-
-		// if we didn't find the target, we step out
-		selection_expression_stack.pop();
-
-		return false;
-	}
 }
 
 function print() {
@@ -983,27 +788,20 @@ function stop_debugging() {
 }
 function step_into() {
 
-	let cursor = null;
-
 	if (selection_mode) {
 
-		cursor = selection_cursor;
+		return;
 	}
-	else {
 
-		cursor = execution_cursor;
-	}
+	let cursor = execution_cursor;
 
 	let last_expression = expression_stack[expression_stack.length-1];
 
 	if (cursor.base.kind == Code_Kind.PROCEDURE_CALL) {
 
-		if (!selection_mode) {
-			
-			call_stack.push(execution_cursor);
+		call_stack.push(execution_cursor);
 
-			cursor.returned = false;
-		}
+		cursor.returned = false;
 
 		transform(cursor);
 
@@ -1011,15 +809,7 @@ function step_into() {
 
 		cursor = cursor.transformed;
 
-		// @Copypaste
-		if (selection_mode) {
-
-			selection_cursor = cursor;
-		}
-		else {
-
-			execution_cursor = cursor;
-		}
+		execution_cursor = cursor;
 
 		step_into();
 
@@ -1043,15 +833,7 @@ function step_into() {
 
 		cursor = cursor.elements[index];
 
-		// @Copypaste
-		if (selection_mode) {
-
-			selection_cursor = cursor;
-		}
-		else {
-
-			execution_cursor = cursor;
-		}
+		execution_cursor = cursor;
 	}
 	else if (cursor.base.kind == Code_Kind.ASSIGN) {
 
@@ -1065,15 +847,7 @@ function step_into() {
 
 		cursor = cursor.elements[index];
 
-		// @Copypaste
-		if (selection_mode) {
-
-			selection_cursor = cursor;
-		}
-		else {
-
-			execution_cursor = cursor;
-		}
+		execution_cursor = cursor;
 	}
 	else if (cursor.base.kind == Code_Kind.OPASSIGN) {
 
@@ -1087,15 +861,7 @@ function step_into() {
 
 		cursor = cursor.elements[index];
 
-		// @Copypaste
-		if (selection_mode) {
-
-			selection_cursor = cursor;
-		}
-		else {
-
-			execution_cursor = cursor;
-		}
+		execution_cursor = cursor;
 	}
 	else if (cursor.base.kind == Code_Kind.RETURN) {
 
@@ -1114,15 +880,7 @@ function step_into() {
 
 		cursor = cursor.expression;
 
-		// @Copypaste
-		if (selection_mode) {
-
-			selection_cursor = cursor;
-		}
-		else {
-
-			execution_cursor = cursor;
-		}
+		execution_cursor = cursor;
 	}
 	else if (cursor.base.kind == Code_Kind.BINARY_OPERATION) {
 
@@ -1136,15 +894,7 @@ function step_into() {
 
 		cursor = cursor.left;
 
-		// @Copypaste
-		if (selection_mode) {
-
-			selection_cursor = cursor;
-		}
-		else {
-
-			execution_cursor = cursor;
-		}
+		execution_cursor = cursor;
 	}
 	else if (cursor.base.kind == Code_Kind.BLOCK) {
 
@@ -1160,14 +910,7 @@ function step_into() {
 
 		cursor = get_current_executable_expression(cursor);
 
-		if (selection_mode) {
-
-			selection_cursor = cursor;
-		}
-		else {
-
-			execution_cursor = cursor;
-		}
+		execution_cursor = cursor;
 	}
 	else if (cursor.base.kind == Code_Kind.IF) {
 
@@ -1181,15 +924,7 @@ function step_into() {
 
 		cursor = cursor.condition;
 
-		// @Copypaste
-		if (selection_mode) {
-
-			selection_cursor = cursor;
-		}
-		else {
-
-			execution_cursor = cursor;
-		}
+		execution_cursor = cursor;
 	}
 	else if (cursor.base.kind == Code_Kind.ELSE) {
 
@@ -1203,15 +938,7 @@ function step_into() {
 
 		cursor = cursor.block;
 
-		// @Copypaste
-		if (selection_mode) {
-
-			selection_cursor = cursor;
-		}
-		else {
-
-			execution_cursor = cursor;
-		}
+		execution_cursor = cursor;
 
 		step_into();
 	}
@@ -1227,29 +954,17 @@ function step_into() {
 
 		cursor = cursor.condition;
 
-		// @Copypaste
-		if (selection_mode) {
-
-			selection_cursor = cursor;
-		}
-		else {
-
-			execution_cursor = cursor;
-		}
+		execution_cursor = cursor;
 	}
 }
 function step_out() {
 
-	let cursor = null;
-
 	if (selection_mode) {
 
-		cursor = selection_cursor;
+		return;
 	}
-	else {
 
-		cursor = execution_cursor;
-	}
+	let cursor = execution_cursor;
 
 	if (cursor.base.kind == Code_Kind.STATEMENT) {
 
@@ -1286,35 +1001,20 @@ function step_out() {
 
 			return;
 		}
-
-		// selection cursor can leave things open
-
-		if (last_expression.declarations) {
-
-			for (let decl of last_expression.declarations) {
-
-				// idents_used.delete(decl.ident.name);
-
-				// map_ident_to_value.delete(decl.ident);
-			}
-		}
 	}
 
-	if (!selection_mode) {
+	if (last_expression.base.kind == Code_Kind.PROCEDURE_CALL) {
 
-		if (last_expression.base.kind == Code_Kind.PROCEDURE_CALL) {
+		call_stack.pop();
+	}
 
-			call_stack.pop();
-		}
+	last_call = call_stack[call_stack.length-1];
 
-		let last_call = call_stack[call_stack.length-1];
+	if (last_call && last_call.returned) {
 
-		if (last_call && last_call.returned) {
+		step_out();
 
-			step_out();
-
-			return;
-		}
+		return;
 	}
 
 	if (last_expression.transformed_from_call) {
@@ -1323,15 +1023,7 @@ function step_out() {
 
 		cursor = last_expression.transformed_from_call;
 
-		// @Copypaste
-		if (selection_mode) {
-
-			selection_cursor = cursor;
-		}
-		else {
-
-			execution_cursor = cursor;
-		}
+		execution_cursor = cursor;
 
 		step_out();
 	}
@@ -1349,31 +1041,12 @@ function step_out() {
 		cursor = last_expression;
 	}
 
-	let last_index = map_index_get(last_expression);
-
-	// @Copypaste
-	if (selection_mode) {
-
-		selection_cursor = cursor;
-	}
-	else {
-
-		execution_cursor = cursor;
-	}
+	execution_cursor = cursor;
 }
 
 function get_current_executable_expression(parent) {
 
-	let index = null;
-
-	if (selection_mode) {
-
-		index = map_expr_to_selection_index.get(parent);
-	}
-	else {
-
-		index = parent.index;
-	}
+	let index = parent.index;
 
 	let current = parent.elements[index];
 
@@ -1457,11 +1130,12 @@ function step_next() {
 
 	if (selection_mode) {
 
-		execution_index += 1;
+		if (execution_index < execution_stack.length-1) {
+
+			execution_index += 1;
+		}
 
 		selection_cursor = execution_stack[execution_index];
-		
-		depth_first_traverse_to_reconstruct_selection_expression_stack();
 
 		return;
 	}
@@ -1527,15 +1201,7 @@ function step_next() {
 		return;
 	}
 
-	// @Copypaste
-	if (selection_mode) {
-
-		selection_cursor = cursor;
-	}
-	else {
-
-		execution_cursor = cursor;
-	}
+	execution_cursor = cursor;
 
 	if (last_expression.base.kind == Code_Kind.IF) {
 
@@ -1611,11 +1277,12 @@ function step_back() {
 		execution_index = execution_stack.length-1;
 	}
 
-	execution_index -= 1;
+	if (execution_index > 0) {
+
+		execution_index -= 1;
+	}
 
 	selection_cursor = execution_stack[execution_index];
-
-	depth_first_traverse_to_reconstruct_selection_expression_stack();
 }
 
 let disable_execution_recording = false;
@@ -1784,8 +1451,6 @@ function run(target, force = false) {
 
 		target.index = 0;
 		target.elements = target.statements;
-
-		let last_call = call_stack[call_stack.length-1];
 
 		let executing_expr = get_current_executable_expression(target);
 
@@ -2402,11 +2067,6 @@ function print_newline(print_target) {
 function should_inline(node) {
 
 	return node.contains_flowpoint | node.contains_selection | node.contains_execution;
-	/*
-	return (execution_expression_stack.indexOf(node) != -1 ||
-	        selection_expression_stack.indexOf(node) != -1) &&
-		   node.base.kind != Code_Kind.BLOCK;
-	*/
 }
 
 /* @Incomplete
