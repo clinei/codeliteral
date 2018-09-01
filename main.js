@@ -622,6 +622,45 @@ let Types = {
 	Any: make_ident("Any")
 };
 
+let map_call_to_settings = new Map();
+
+let map_ident_replace = new Map();
+let map_ident_to_value = new Map();
+
+let map_original_to_clone = new Map();
+
+let debugging = false;
+let execution_cursor = null;
+let execution_index = 0;
+let call_stack = new Array();
+let block_stack = new Array();
+let expression_stack = new Array();
+let execution_stack = new Array();
+let execution_block_stack = block_stack;
+let execution_expression_stack = expression_stack;
+let idents_used = new Set();
+
+let selection_cursor = null;
+let selection_block_stack = block_stack;
+let selection_expression_stack = expression_stack;
+let map_expr_to_selection_index = new Map();
+
+let dataflows = new Array(10);
+
+dataflows[0] = new Array();
+dataflows[1] = new Array();
+dataflows[2] = new Array();
+dataflows[3] = new Array();
+dataflows[4] = new Array();
+dataflows[5] = new Array();
+dataflows[6] = new Array();
+dataflows[7] = new Array();
+dataflows[8] = new Array();
+dataflows[9] = new Array();
+
+let active_dataflow = 1;
+let flowpoints = dataflows[active_dataflow];
+
 /*
 int some_function(int number) {
 	return number - 20;
@@ -704,48 +743,11 @@ Main_block.statements.push(make_statement(local_variable));
 Main_block.statements.push(newline);
 Main_block.statements.push(make_statement(local_variable_assign));
 Main_block.statements.push(newline);
+/*
 Main_block.statements.push(make_statement(while_loop));
 Main_block.statements.push(newline);
-Main_block.statements.push(make_statement(make_return(local_variable.ident)));
-
-let map_call_to_settings = new Map();
-
-let map_ident_replace = new Map();
-let map_ident_to_value = new Map();
-
-let map_original_to_clone = new Map();
-
-let debugging = false;
-let execution_cursor = null;
-let execution_index = 0;
-let call_stack = new Array();
-let block_stack = new Array();
-let expression_stack = new Array();
-let execution_stack = new Array();
-let execution_block_stack = block_stack;
-let execution_expression_stack = expression_stack;
-let idents_used = new Set();
-
-let selection_cursor = null;
-let selection_block_stack = block_stack;
-let selection_expression_stack = expression_stack;
-let map_expr_to_selection_index = new Map();
-
-let dataflows = new Array(10);
-
-dataflows[0] = new Array();
-dataflows[1] = new Array();
-dataflows[2] = new Array();
-dataflows[3] = new Array();
-dataflows[4] = new Array();
-dataflows[5] = new Array();
-dataflows[6] = new Array();
-dataflows[7] = new Array();
-dataflows[8] = new Array();
-dataflows[9] = new Array();
-
-let active_dataflow = 1;
-let flowpoints = dataflows[active_dataflow];
+*/
+Main_block.statements.push(make_statement(make_return(clone(local_variable.ident))));
 
 let code_element = document.getElementById("code");
 
@@ -922,6 +924,8 @@ function print() {
 
 		code_element.removeChild(code_element.firstChild);
 	}
+
+	mark_containment(Global_Block.statements[0]);
 
 	print_to_dom(Global_Block.statements[0], code_element, code_element);
 
@@ -2288,6 +2292,96 @@ function transform(node, force = false) {
 	}
 }
 
+function mark_containment(node) {
+
+	node.is_flowpoint = flowpoints.indexOf(execution_stack.indexOf(node)) >= 0 ||
+	                          flowpoints.indexOf(execution_stack.lastIndexOf(node)) >= 0;
+
+	node.is_selection = Object.is(node, selection_cursor);
+
+	node.is_execution = Object.is(node, execution_cursor);
+
+	node.contains_flowpoint = 0;
+	node.contains_selection = 0;
+	node.contains_execution = 0;
+
+	if (node.transformed) {
+
+		mark_containment(node.transformed);
+
+		node.contains_flowpoint |= node.transformed.contains_flowpoint;
+		node.contains_selection |= node.transformed.contains_selection;
+		node.contains_execution |= node.transformed.contains_execution;
+	}
+
+	if (node.base.kind == Code_Kind.STATEMENT) {
+
+		mark_containment(node.expression);
+
+		node.contains_flowpoint = node.expression.contains_flowpoint || node.expression.is_flowpoint;
+		node.contains_selection = node.expression.contains_selection || node.expression.is_selection;
+		node.contains_execution = node.expression.contains_execution || node.expression.is_execution;
+	}
+	else if (node.base.kind == Code_Kind.DECLARATION) {
+
+		if (node.expression) {
+
+			mark_containment(node.expression);
+
+			node.contains_flowpoint = node.expression.contains_flowpoint || node.expression.is_flowpoint;
+			node.contains_selection = node.expression.contains_selection || node.expression.is_selection;
+			node.contains_execution = node.expression.contains_execution || node.expression.is_execution;
+		}
+	}
+	else if (node.base.kind == Code_Kind.ASSIGN) {
+
+		mark_containment(node.expression);
+
+		node.contains_flowpoint = node.expression.contains_flowpoint || node.expression.is_flowpoint;
+		node.contains_selection = node.expression.contains_selection || node.expression.is_selection;
+		node.contains_execution = node.expression.contains_execution || node.expression.is_execution;
+	}
+	else if (node.base.kind == Code_Kind.OPASSIGN) {
+
+		mark_containment(node.expression);
+
+		node.contains_flowpoint = node.expression.contains_flowpoint || node.expression.is_flowpoint;
+		node.contains_selection = node.expression.contains_selection || node.expression.is_selection;
+		node.contains_execution = node.expression.contains_execution || node.expression.is_execution;
+	}
+	else if (node.base.kind == Code_Kind.RETURN) {
+
+		mark_containment(node.expression);
+
+		node.contains_flowpoint = node.expression.contains_flowpoint || node.expression.is_flowpoint;
+		node.contains_selection = node.expression.contains_selection || node.expression.is_selection;
+		node.contains_execution = node.expression.contains_execution || node.expression.is_execution;
+	}
+	else if (node.base.kind == Code_Kind.BINARY_OPERATION) {
+
+		mark_containment(node.left);
+		mark_containment(node.right);
+
+		node.contains_flowpoint = node.left.contains_flowpoint || node.left.is_flowpoint ||
+		                          node.right.contains_flowpoint || node.right.is_flowpoint;
+		node.contains_selection = node.left.contains_selection || node.left.is_selection ||
+		                          node.right.contains_selection || node.right.is_selection;
+		node.contains_execution = node.left.contains_execution || node.left.is_execution ||
+		                          node.right.contains_execution || node.right.is_execution;
+	}
+	else if (node.base.kind == Code_Kind.BLOCK) {
+
+		for (let stmt of node.statements) {
+
+			mark_containment(stmt);
+
+			node.contains_flowpoint |= stmt.contains_flowpoint || stmt.is_flowpoint;
+			node.contains_selection |= stmt.contains_selection || stmt.is_selection;
+			node.contains_execution |= stmt.contains_execution || stmt.is_execution;
+		}
+	}
+}
+
 let indent_level = 0;
 
 function print_indent(print_target) {
@@ -2307,11 +2401,19 @@ function print_newline(print_target) {
 
 function should_inline(node) {
 
+	return node.contains_flowpoint | node.contains_selection | node.contains_execution;
+	/*
 	return (execution_expression_stack.indexOf(node) != -1 ||
 	        selection_expression_stack.indexOf(node) != -1) &&
-	       node.base.kind != Code_Kind.BLOCK;
+		   node.base.kind != Code_Kind.BLOCK;
+	*/
 }
 
+/* @Incomplete
+// need to use flex for block indentation
+let palette = ["rgba(200, 0, 0, 0.1)", "rgba(0, 200, 0, 0.1)", "rgba(0, 0, 200, 0.1)"];
+let palette_index = 0;
+*/
 let print_expression_stack = new Array();
 let map_expr_to_printed = new Map();
 function print_to_dom(node, print_target, block_print_target, is_transformed_block = false) {
@@ -2325,8 +2427,18 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	if (node.transformed && should_inline_node && 
 		node.transformed.base.kind == Code_Kind.BLOCK &&
 		node.base.kind != Code_Kind.RETURN &&
-		node.base.kind != Code_Kind.OPASSIGN) {
+		node.base.kind != Code_Kind.OPASSIGN &&
+	    node.base.kind != Code_Kind.IDENT) {
 
+		/*
+		let inlined = document.createElement("inlined");
+		inlined.style = "background-color: "+ palette[palette_index];
+		palette_index += 1;
+		palette_index %= palette.length;
+
+		print_to_dom(node.transformed, inlined, inlined, true);
+		block_print_target.appendChild(inlined);
+		*/
 		print_to_dom(node.transformed, block_print_target, block_print_target, true);
 
 		print_newline(block_print_target);
@@ -2409,34 +2521,31 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 			expr.appendChild(document.createTextNode(node.last_return));
 		}
+		else if (should_inline_node && node.transformed) {
+
+			let return_ident = node.transformed.statements[0].expression.ident;
+
+			print_to_dom(clone(return_ident), expr, block_print_target);
+		}
 		else {
 
-			if (should_inline_node && node.transformed) {
+			print_to_dom(node.declaration.ident, expr, block_print_target);
 
-				let return_ident = node.transformed.statements[0].expression.ident;
+			expr.appendChild(document.createTextNode("("));
 
-				print_to_dom(clone(return_ident), expr, block_print_target);
-			}
-			else {
+			if (node.args) {
 
-				print_to_dom(node.declaration.ident, expr, block_print_target);
+				for (let arg of node.args) {
 
-				expr.appendChild(document.createTextNode("("));
+					print_to_dom(arg, expr, block_print_target);
 
-				if (node.args) {
-
-					for (let arg of node.args) {
-
-						print_to_dom(arg, expr, block_print_target);
-
-						expr.appendChild(document.createTextNode(", "));
-					}
-
-					expr.removeChild(expr.lastChild);
+					expr.appendChild(document.createTextNode(", "));
 				}
 
-				expr.appendChild(document.createTextNode(")"));
+				expr.removeChild(expr.lastChild);
 			}
+
+			expr.appendChild(document.createTextNode(")"));
 		}
 
 		print_target.appendChild(expr);
@@ -2476,7 +2585,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	else if (node.base.kind == Code_Kind.BINARY_OPERATION) {
 
 		// @Audit
-		if (values_shown && should_inline(node) == false && node.last_return !== null &&
+		if (values_shown && should_inline_node == false && node.last_return !== null &&
 		    typeof node.last_return !== "undefined" &&
 		    node.times_executed >= last_expression.times_executed) {
 

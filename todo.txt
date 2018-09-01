@@ -1,6 +1,8 @@
 Bugs:
 
-if a flowpoint is in a transformed block, we need to print the ancestor blocks
+should not clone when printing
+
+we don't have to compute selection expression stack anymore
 
 Ideas:
 
