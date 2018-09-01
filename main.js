@@ -99,7 +99,7 @@ function document_keydown(event) {
 	// press M
 	if (event.keyCode == 77) {
 
-		toggle_selection();
+		toggle_inspection();
 		print();
 	}
 
@@ -121,20 +121,22 @@ function toggle_values_shown() {
 	values_shown = !values_shown;
 }
 
-let selection_mode = false;
-function toggle_selection() {
+let inspection_mode = false;
+function toggle_inspection() {
 
-	if (!selection_mode) {
+	if (!inspection_mode) {
 
-		selection_cursor = execution_cursor;
+		inspection_cursor = execution_cursor;
 
-		selection_mode = true;
+		inspection_mode = true;
 	}
 	else {
 
 		slider_element.value = slider_element.min;
 
-		selection_mode = false;
+		inspection_cursor = null;
+
+		inspection_mode = false;
 	}
 }
 
@@ -169,9 +171,9 @@ function next_flowpoint() {
 
 	if (flowpoints.length) {
 
-		if (!selection_mode) {
+		if (!inspection_mode) {
 
-			toggle_selection();
+			toggle_inspection();
 		}
 
 		let index = 0;
@@ -193,16 +195,16 @@ function next_flowpoint() {
 		let flowpoint = flowpoints[index];
 		execution_index = flowpoint;
 		slider_element.value = flowpoint;
-		selection_cursor = execution_stack[flowpoint];
+		inspection_cursor = execution_stack[flowpoint];
 	}
 }
 function previous_flowpoint() {
 	
 	if (flowpoints.length) {
 
-		if (!selection_mode) {
+		if (!inspection_mode) {
 			
-			toggle_selection();
+			toggle_inspection();
 		}
 
 		let index = flowpoints.length-1;
@@ -224,7 +226,7 @@ function previous_flowpoint() {
 		let flowpoint = flowpoints[index];
 		execution_index = flowpoint;
 		slider_element.value = flowpoint;
-		selection_cursor = execution_stack[flowpoint];
+		inspection_cursor = execution_stack[flowpoint];
 	}
 }
 
@@ -587,7 +589,7 @@ let execution_block_stack = block_stack;
 let execution_expression_stack = expression_stack;
 let idents_used = new Set();
 
-let selection_cursor = null;
+let inspection_cursor = null;
 
 let dataflows = new Array(10);
 
@@ -708,14 +710,14 @@ slider.addEventListener("input", slider_oninput);
 
 function slider_oninput() {
 
-	if (!selection_mode) {
+	if (!inspection_mode) {
 
-		toggle_selection();
+		toggle_inspection();
 	}
 
 	execution_index = parseInt(slider_element.value);
 
-	selection_cursor = execution_stack[execution_index];
+	inspection_cursor = execution_stack[execution_index];
 
 	print();
 }
@@ -736,9 +738,9 @@ function print() {
 
 	let cursor = null;
 
-	if (selection_mode) {
+	if (inspection_mode) {
 
-		cursor = selection_cursor;
+		cursor = inspection_cursor;
 	}
 	else {
 
@@ -788,7 +790,7 @@ function stop_debugging() {
 }
 function step_into() {
 
-	if (selection_mode) {
+	if (inspection_mode) {
 
 		return;
 	}
@@ -959,7 +961,7 @@ function step_into() {
 }
 function step_out() {
 
-	if (selection_mode) {
+	if (inspection_mode) {
 
 		return;
 	}
@@ -1128,14 +1130,14 @@ function goto_next_executable_expression(parent) {
 }
 function step_next() {
 
-	if (selection_mode) {
+	if (inspection_mode) {
 
 		if (execution_index < execution_stack.length-1) {
 
 			execution_index += 1;
 		}
 
-		selection_cursor = execution_stack[execution_index];
+		inspection_cursor = execution_stack[execution_index];
 
 		return;
 	}
@@ -1270,19 +1272,18 @@ function step_next() {
 }
 function step_back() {
 
-	if (!selection_mode) {
+	if (!inspection_mode) {
 
-		toggle_selection();
+		toggle_inspection();
 
 		execution_index = execution_stack.length-1;
 	}
-
-	if (execution_index > 0) {
+	else if (execution_index > 0) {
 
 		execution_index -= 1;
 	}
 
-	selection_cursor = execution_stack[execution_index];
+	inspection_cursor = execution_stack[execution_index];
 }
 
 let disable_execution_recording = false;
@@ -1962,12 +1963,12 @@ function mark_containment(node) {
 	node.is_flowpoint = flowpoints.indexOf(execution_stack.indexOf(node)) >= 0 ||
 	                          flowpoints.indexOf(execution_stack.lastIndexOf(node)) >= 0;
 
-	node.is_selection = Object.is(node, selection_cursor);
+	node.is_inspection = Object.is(node, inspection_cursor);
 
 	node.is_execution = Object.is(node, execution_cursor);
 
 	node.contains_flowpoint = 0;
-	node.contains_selection = 0;
+	node.contains_inspection = 0;
 	node.contains_execution = 0;
 
 	if (node.transformed) {
@@ -1975,7 +1976,7 @@ function mark_containment(node) {
 		mark_containment(node.transformed);
 
 		node.contains_flowpoint |= node.transformed.contains_flowpoint;
-		node.contains_selection |= node.transformed.contains_selection;
+		node.contains_inspection |= node.transformed.contains_inspection;
 		node.contains_execution |= node.transformed.contains_execution;
 	}
 
@@ -1984,7 +1985,7 @@ function mark_containment(node) {
 		mark_containment(node.expression);
 
 		node.contains_flowpoint = node.expression.contains_flowpoint || node.expression.is_flowpoint;
-		node.contains_selection = node.expression.contains_selection || node.expression.is_selection;
+		node.contains_inspection = node.expression.contains_inspection || node.expression.is_inspection;
 		node.contains_execution = node.expression.contains_execution || node.expression.is_execution;
 	}
 	else if (node.base.kind == Code_Kind.DECLARATION) {
@@ -1994,7 +1995,7 @@ function mark_containment(node) {
 			mark_containment(node.expression);
 
 			node.contains_flowpoint = node.expression.contains_flowpoint || node.expression.is_flowpoint;
-			node.contains_selection = node.expression.contains_selection || node.expression.is_selection;
+			node.contains_inspection = node.expression.contains_inspection || node.expression.is_inspection;
 			node.contains_execution = node.expression.contains_execution || node.expression.is_execution;
 		}
 	}
@@ -2003,7 +2004,7 @@ function mark_containment(node) {
 		mark_containment(node.expression);
 
 		node.contains_flowpoint = node.expression.contains_flowpoint || node.expression.is_flowpoint;
-		node.contains_selection = node.expression.contains_selection || node.expression.is_selection;
+		node.contains_inspection = node.expression.contains_inspection || node.expression.is_inspection;
 		node.contains_execution = node.expression.contains_execution || node.expression.is_execution;
 	}
 	else if (node.base.kind == Code_Kind.OPASSIGN) {
@@ -2011,7 +2012,7 @@ function mark_containment(node) {
 		mark_containment(node.expression);
 
 		node.contains_flowpoint = node.expression.contains_flowpoint || node.expression.is_flowpoint;
-		node.contains_selection = node.expression.contains_selection || node.expression.is_selection;
+		node.contains_inspection = node.expression.contains_inspection || node.expression.is_inspection;
 		node.contains_execution = node.expression.contains_execution || node.expression.is_execution;
 	}
 	else if (node.base.kind == Code_Kind.RETURN) {
@@ -2019,7 +2020,7 @@ function mark_containment(node) {
 		mark_containment(node.expression);
 
 		node.contains_flowpoint = node.expression.contains_flowpoint || node.expression.is_flowpoint;
-		node.contains_selection = node.expression.contains_selection || node.expression.is_selection;
+		node.contains_inspection = node.expression.contains_inspection || node.expression.is_inspection;
 		node.contains_execution = node.expression.contains_execution || node.expression.is_execution;
 	}
 	else if (node.base.kind == Code_Kind.BINARY_OPERATION) {
@@ -2029,8 +2030,8 @@ function mark_containment(node) {
 
 		node.contains_flowpoint = node.left.contains_flowpoint || node.left.is_flowpoint ||
 		                          node.right.contains_flowpoint || node.right.is_flowpoint;
-		node.contains_selection = node.left.contains_selection || node.left.is_selection ||
-		                          node.right.contains_selection || node.right.is_selection;
+		node.contains_inspection = node.left.contains_inspection || node.left.is_inspection ||
+		                          node.right.contains_inspection || node.right.is_inspection;
 		node.contains_execution = node.left.contains_execution || node.left.is_execution ||
 		                          node.right.contains_execution || node.right.is_execution;
 	}
@@ -2041,7 +2042,7 @@ function mark_containment(node) {
 			mark_containment(stmt);
 
 			node.contains_flowpoint |= stmt.contains_flowpoint || stmt.is_flowpoint;
-			node.contains_selection |= stmt.contains_selection || stmt.is_selection;
+			node.contains_inspection |= stmt.contains_inspection || stmt.is_inspection;
 			node.contains_execution |= stmt.contains_execution || stmt.is_execution;
 		}
 	}
@@ -2066,7 +2067,7 @@ function print_newline(print_target) {
 
 function should_inline(node) {
 
-	return node.contains_flowpoint | node.contains_selection | node.contains_execution;
+	return node.contains_flowpoint | node.contains_inspection | node.contains_execution;
 }
 
 /* @Incomplete
@@ -2382,7 +2383,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		expr.classList.add("executing");
 	}
-	if (Object.is(node, selection_cursor)) {
+	if (Object.is(node, inspection_cursor)) {
 
 		expr.classList.add("selected");
 	}
