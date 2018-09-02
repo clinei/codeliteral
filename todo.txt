@@ -1,6 +1,6 @@
 Bugs:
 
-while cycle not visible
+execution order is broken, revisit stack-based method
 
 should not clone when printing
 

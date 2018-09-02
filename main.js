@@ -1284,6 +1284,9 @@ function step_next() {
 
 		if (should_run) {
 
+			// @Bug
+			// execution order is broken
+
 			// @Speed
 			let while_index = last_block.transformed.statements.findIndex(
 
