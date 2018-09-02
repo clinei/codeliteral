@@ -72,6 +72,19 @@ body {
 	margin: 0;
 }
 
+block {
+
+	width: 100%;
+
+	display: flex;
+	flex-direction: column;
+}
+
+.block > * {
+
+	width: 100%;
+}
+
 .selected, .executing, .flow-1 {
 
 	border-radius: 0.3em;

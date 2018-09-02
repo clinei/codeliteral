@@ -641,15 +641,12 @@ let if_condition = make_binary_operation(factorial_param.ident, ">", make_litera
 let factorial_binop = make_binary_operation(factorial_param.ident, "-", make_literal("1"));
 let factorial_recursive_call = make_procedure_call(factorial_declaration, [factorial_binop]);
 let factorial_binop_2 = make_binary_operation(factorial_recursive_call, "*", factorial_param.ident);
-if_block.statements.push(newline);
 if_block.statements.push(make_statement(make_return(factorial_binop_2)));
 
 let else_block = make_block();
-else_block.statements.push(newline);
 else_block.statements.push(make_statement(make_return(make_literal("1"))));
 
 factorial_block.statements.push(make_statement(make_if(if_condition, if_block)));
-factorial_block.statements.push(newline);
 factorial_block.statements.push(make_statement(make_else(else_block)));
 
 let Main_block = make_block();
@@ -683,16 +680,10 @@ let binop_3 = make_binary_operation(factorial_call, "-", make_literal("4"));
 let local_variable_opassign = make_opassign(local_variable.ident, "+", binop_3);
 let while_loop = make_while(while_condition, while_block);
 
-while_block.statements.push(newline);
 while_block.statements.push(make_statement(local_variable_opassign));
 Main_block.statements.push(make_statement(local_variable));
-Main_block.statements.push(newline);
 Main_block.statements.push(make_statement(local_variable_assign));
-Main_block.statements.push(newline);
-/*
 Main_block.statements.push(make_statement(while_loop));
-Main_block.statements.push(newline);
-*/
 Main_block.statements.push(make_statement(make_return(clone(local_variable.ident))));
 
 let code_element = document.getElementById("code");
@@ -731,6 +722,8 @@ function print() {
 
 		code_element.removeChild(code_element.firstChild);
 	}
+
+	palette_index = 0;
 
 	mark_containment(Global_Block.statements[0]);
 
@@ -1789,8 +1782,6 @@ function transform(node, force = false) {
 				}
 			}
 
-			replacement.statements.push(newline);
-
 			for (let stmt of procedure.block.statements) {
 
 				replacement.statements.push(stmt);
@@ -2054,19 +2045,9 @@ function mark_containment(node) {
 
 let indent_level = 0;
 
-function print_indent(print_target) {
-
-	print_target.appendChild(document.createTextNode("    ".repeat(indent_level)));
-}
-
 function print_semicolon(print_target) {
 
 	print_target.appendChild(document.createTextNode(";"));
-}
-
-function print_newline(print_target) {
-
-	print_target.appendChild(document.createElement("br"));
 }
 
 function should_inline(node) {
@@ -2074,11 +2055,9 @@ function should_inline(node) {
 	return node.contains_flowpoint | node.contains_inspection | node.contains_execution;
 }
 
-/* @Incomplete
 // need to use flex for block indentation
 let palette = ["rgba(200, 0, 0, 0.1)", "rgba(0, 200, 0, 0.1)", "rgba(0, 0, 200, 0.1)"];
 let palette_index = 0;
-*/
 let print_expression_stack = new Array();
 let map_expr_to_printed = new Map();
 function print_to_dom(node, print_target, block_print_target, is_transformed_block = false) {
@@ -2095,18 +2074,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		node.base.kind != Code_Kind.OPASSIGN &&
 	    node.base.kind != Code_Kind.IDENT) {
 
-		/*
-		let inlined = document.createElement("inlined");
-		inlined.style = "background-color: "+ palette[palette_index];
-		palette_index += 1;
-		palette_index %= palette.length;
-
-		print_to_dom(node.transformed, inlined, inlined, true);
-		block_print_target.appendChild(inlined);
-		*/
 		print_to_dom(node.transformed, block_print_target, block_print_target, true);
-
-		print_newline(block_print_target);
 
 		if (node.base.kind == Code_Kind.BINARY_OPERATION ||
 			node.base.kind == Code_Kind.RETURN ||
@@ -2126,15 +2094,27 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 			block_print_target.appendChild(document.createTextNode("{"));
 
-			print_newline(block_print_target);
-
 			indent_level += 1;
 		}
 
+		let block = document.createElement('block');
+		let style = "padding-left: "+ 4 * indent_level +"ch; ";
+
+		if (is_transformed_block) {
+
+			style += "background-color: "+ palette[palette_index];
+			palette_index += 1;
+			palette_index %= palette.length;
+		}
+
+		block.style = style;
+
 		for (let statement of node.statements) {
 
-			print_to_dom(statement, block_print_target, block_print_target);
+			print_to_dom(statement, block, block);
 		}
+
+		block_print_target.appendChild(block);
 
 		// @Incomplete
 		// should pop the extra newline
@@ -2142,8 +2122,6 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		if (!is_transformed_block) {
 
 			indent_level -= 1;
-
-			print_indent(block_print_target);
 
 			block_print_target.appendChild(document.createTextNode("}"));
 		}
@@ -2156,8 +2134,6 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 			print_to_dom(node.expression, expr, block_print_target);
 		}
 		else {
-
-			print_indent(expr);
 
 			print_to_dom(node.expression, expr, block_print_target);
 
@@ -2172,10 +2148,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 				}
 
 				print_target.appendChild(expr);
-
 			}
-
-			print_newline(print_target);
 		}
 	}
 	else if (node.base.kind == Code_Kind.PROCEDURE_CALL) {
@@ -2377,6 +2350,10 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		print_to_dom(node.transformed.statements[0].expression, expr, block_print_target);
 
 		print_target.appendChild(expr);
+	}
+	else if (node.base.kind == Code_Kind.NEWLINE) {
+
+		print_target.appendChild(document.createElement("br"));
 	}
 
 	print_expression_stack.pop();

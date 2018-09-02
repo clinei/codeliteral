@@ -1,8 +1,11 @@
 Bugs:
 
+while cycle not visible
+
 should not clone when printing
 
-we don't have to compute selection expression stack anymore
+inlined blocks are a different color
+indent is one element in a two element flex row, content is the other element
 
 Ideas:
 
@@ -18,7 +21,5 @@ we should have breakpoints for non-executed code, but only once we have text edi
 
 the run function could use the same code path as the step functions, to reduce potential drift and bugs
 running is sort of different though, further research is needed
-
-indent is one element in a two element flex row, content is the other element
 
 we could find the bug, fix it live, recompile, and run directly from the buggy place to check if it was fixed
