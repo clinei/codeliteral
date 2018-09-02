@@ -4,8 +4,7 @@ while cycle not visible
 
 should not clone when printing
 
-inlined blocks are a different color
-indent is one element in a two element flex row, content is the other element
+for loop not implemented
 
 Ideas:
 

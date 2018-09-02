@@ -127,6 +127,7 @@ function toggle_inspection() {
 	if (!inspection_mode) {
 
 		inspection_cursor = execution_cursor;
+		inspection_cursor.is_inspection = true;
 
 		inspection_mode = true;
 	}
@@ -134,6 +135,7 @@ function toggle_inspection() {
 
 		slider_element.value = slider_element.min;
 
+		inspection_cursor.is_inspection = false;
 		inspection_cursor = null;
 
 		inspection_mode = false;
@@ -156,6 +158,8 @@ function add_flowpoint() {
 
 		index += 1;
 	}
+	
+	inspection_cursor.is_flowpoint = true;
 
 	flowpoints.splice(index, 0, execution_index);
 }
@@ -164,6 +168,8 @@ function delete_flowpoint() {
 	let flowpoint_index = flowpoints.indexOf(execution_index);
 
 	if (flowpoint_index >= 0) {
+
+		inspection_cursor.is_flowpoint = false;
 		flowpoints.splice(flowpoint_index, 1);
 	}
 }
@@ -195,7 +201,9 @@ function next_flowpoint() {
 		let flowpoint = flowpoints[index];
 		execution_index = flowpoint;
 		slider_element.value = flowpoint;
+		inspection_cursor.is_inspection = false;
 		inspection_cursor = execution_stack[flowpoint];
+		inspection_cursor.is_inspection = true;
 	}
 }
 function previous_flowpoint() {
@@ -226,7 +234,9 @@ function previous_flowpoint() {
 		let flowpoint = flowpoints[index];
 		execution_index = flowpoint;
 		slider_element.value = flowpoint;
+		inspection_cursor.is_inspection = false;
 		inspection_cursor = execution_stack[flowpoint];
+		inspection_cursor.is_inspection = true;
 	}
 }
 
@@ -708,7 +718,9 @@ function slider_oninput() {
 
 	execution_index = parseInt(slider_element.value);
 
+	inspection_cursor.is_inspection = false;
 	inspection_cursor = execution_stack[execution_index];
+	inspection_cursor.is_inspection = true;
 
 	print();
 }
@@ -771,12 +783,15 @@ function start_debugging() {
 	execution_cursor.index = 0;
 	execution_cursor.elements = execution_cursor.statements;
 
+	execution_cursor.is_execution = false;
 	execution_cursor = Global_Block.elements[0].expression;
+	execution_cursor.is_execution = true;
 
 	debugging = true;
 }
 function stop_debugging() {
 
+	execution_cursor.is_execution = false;
 	execution_cursor = null;
 
 	debugging = false;
@@ -804,7 +819,9 @@ function step_into() {
 
 		cursor = cursor.transformed;
 
+		execution_cursor.is_execution = false;
 		execution_cursor = cursor;
+		execution_cursor.is_execution = true;
 
 		step_into();
 
@@ -828,7 +845,9 @@ function step_into() {
 
 		cursor = cursor.elements[index];
 
+		execution_cursor.is_execution = false;
 		execution_cursor = cursor;
+		execution_cursor.is_execution = true;
 	}
 	else if (cursor.base.kind == Code_Kind.ASSIGN) {
 
@@ -842,7 +861,9 @@ function step_into() {
 
 		cursor = cursor.elements[index];
 
+		execution_cursor.is_execution = false;
 		execution_cursor = cursor;
+		execution_cursor.is_execution = true;
 	}
 	else if (cursor.base.kind == Code_Kind.OPASSIGN) {
 
@@ -856,7 +877,9 @@ function step_into() {
 
 		cursor = cursor.elements[index];
 
+		execution_cursor.is_execution = false;
 		execution_cursor = cursor;
+		execution_cursor.is_execution = true;
 	}
 	else if (cursor.base.kind == Code_Kind.RETURN) {
 
@@ -875,7 +898,9 @@ function step_into() {
 
 		cursor = cursor.expression;
 
+		execution_cursor.is_execution = false;
 		execution_cursor = cursor;
+		execution_cursor.is_execution = true;
 	}
 	else if (cursor.base.kind == Code_Kind.BINARY_OPERATION) {
 
@@ -889,7 +914,9 @@ function step_into() {
 
 		cursor = cursor.left;
 
+		execution_cursor.is_execution = false;
 		execution_cursor = cursor;
+		execution_cursor.is_execution = true;
 	}
 	else if (cursor.base.kind == Code_Kind.BLOCK) {
 
@@ -905,7 +932,9 @@ function step_into() {
 
 		cursor = get_current_executable_expression(cursor);
 
+		execution_cursor.is_execution = false;
 		execution_cursor = cursor;
+		execution_cursor.is_execution = true;
 	}
 	else if (cursor.base.kind == Code_Kind.IF) {
 
@@ -919,7 +948,9 @@ function step_into() {
 
 		cursor = cursor.condition;
 
+		execution_cursor.is_execution = false;
 		execution_cursor = cursor;
+		execution_cursor.is_execution = true;
 	}
 	else if (cursor.base.kind == Code_Kind.ELSE) {
 
@@ -933,7 +964,9 @@ function step_into() {
 
 		cursor = cursor.block;
 
+		execution_cursor.is_execution = false;
 		execution_cursor = cursor;
+		execution_cursor.is_execution = true;
 
 		step_into();
 	}
@@ -949,7 +982,9 @@ function step_into() {
 
 		cursor = cursor.condition;
 
+		execution_cursor.is_execution = false;
 		execution_cursor = cursor;
+		execution_cursor.is_execution = true;
 	}
 }
 function step_out() {
@@ -1018,7 +1053,9 @@ function step_out() {
 
 		cursor = last_expression.transformed_from_call;
 
+		execution_cursor.is_execution = false;
 		execution_cursor = cursor;
+		execution_cursor.is_execution = true;
 
 		step_out();
 	}
@@ -1036,7 +1073,9 @@ function step_out() {
 		cursor = last_expression;
 	}
 
+	execution_cursor.is_execution = false;
 	execution_cursor = cursor;
+	execution_cursor.is_execution = true;
 }
 
 function get_current_executable_expression(parent) {
@@ -1129,7 +1168,9 @@ function step_next() {
 
 			execution_index += 1;
 
+			inspection_cursor.is_inspection = false;
 			inspection_cursor = execution_stack[execution_index];
+			inspection_cursor.is_inspection = true;
 		}
 		else {
 
@@ -1180,7 +1221,9 @@ function step_next() {
 
 	if (last_call.returned) {
 
+		execution_cursor.is_execution = false;
 		execution_cursor = last_call;
+		execution_cursor.is_execution = true;
 
 		return;
 	}
@@ -1200,13 +1243,17 @@ function step_next() {
 		return;
 	}
 
+	execution_cursor.is_execution = false;
 	execution_cursor = cursor;
+	execution_cursor.is_execution = true;
 
 	if (last_expression.base.kind == Code_Kind.IF) {
 
 		if (run(last_expression.condition)) {
 
+			execution_cursor.is_execution = false;
 			execution_cursor = last_expression.block;
+			execution_cursor.is_execution = true;
 
 			step_into();
 		}
@@ -1216,7 +1263,9 @@ function step_next() {
 
 			last_expression = expression_stack[expression_stack.length-1];
 
+			execution_cursor.is_execution = false;
 			execution_cursor = goto_next_executable_expression(last_expression);
+			execution_cursor.is_execution = true;
 		}
 	}
 	else if (last_expression.base.kind == Code_Kind.WHILE) {
@@ -1236,7 +1285,7 @@ function step_next() {
 		if (should_run) {
 
 			// @Speed
-			let while_index = last_block.statements.findIndex(
+			let while_index = last_block.transformed.statements.findIndex(
 
 				function(elem) {
 
@@ -1245,11 +1294,13 @@ function step_next() {
 			);
 
 			// @Audit
-			last_block.statements.splice(while_index, 0, make_statement(cycle));
+			last_block.transformed.statements.splice(while_index, 0, make_statement(cycle));
 
 			let while_expr = expression_stack.pop();
 
+			execution_cursor.is_execution = false;
 			execution_cursor = cycle;
+			execution_cursor.is_execution = true;
 
 			step_into();
 		}
@@ -1261,7 +1312,9 @@ function step_next() {
 
 			last_expression = expression_stack[expression_stack.length-1];
 
+			execution_cursor.is_execution = false;
 			execution_cursor = goto_next_executable_expression(last_expression);
+			execution_cursor.is_execution = true;
 		}
 	}
 
@@ -1280,7 +1333,9 @@ function step_back() {
 		execution_index -= 1;
 	}
 
+	inspection_cursor.is_inspection = false;
 	inspection_cursor = execution_stack[execution_index];
+	inspection_cursor.is_inspection = true;
 }
 
 let disable_execution_recording = false;
@@ -1388,7 +1443,9 @@ function run(target, force = false) {
 
 		let old_execution_cursor = execution_cursor;
 
+		execution_cursor.is_execution = false;
 		execution_cursor = target;
+		execution_cursor.is_execution = true;
 
 		while (should_run) {
 
@@ -1409,7 +1466,9 @@ function run(target, force = false) {
 			disable_execution_recording = false;
 		}
 
+		execution_cursor.is_execution = false;
 		execution_cursor = old_execution_cursor;
+		execution_cursor.is_execution = true;
 	}
 	else if (target.base.kind == Code_Kind.ASSIGN) {
 
@@ -1955,13 +2014,6 @@ function transform(node, force = false) {
 
 function mark_containment(node) {
 
-	node.is_flowpoint = flowpoints.indexOf(execution_stack.indexOf(node)) >= 0 ||
-	                          flowpoints.indexOf(execution_stack.lastIndexOf(node)) >= 0;
-
-	node.is_inspection = Object.is(node, inspection_cursor);
-
-	node.is_execution = Object.is(node, execution_cursor);
-
 	node.contains_flowpoint = 0;
 	node.contains_inspection = 0;
 	node.contains_execution = 0;
@@ -2030,15 +2082,47 @@ function mark_containment(node) {
 		node.contains_execution = node.left.contains_execution || node.left.is_execution ||
 		                          node.right.contains_execution || node.right.is_execution;
 	}
+	else if (node.base.kind == Code_Kind.IF) {
+
+		mark_containment(node.condition);
+		mark_containment(node.block);
+
+		node.contains_flowpoint = node.condition.contains_flowpoint || node.condition.is_flowpoint ||
+		                          node.block.contains_flowpoint || node.block.is_flowpoint;
+		node.contains_inspection = node.condition.contains_inspection || node.condition.is_inspection ||
+		                          node.block.contains_inspection || node.block.is_inspection;
+		node.contains_execution = node.condition.contains_execution || node.condition.is_execution ||
+		                          node.block.contains_execution || node.block.is_execution;
+	}
+	else if (node.base.kind == Code_Kind.ELSE) {
+
+		mark_containment(node.block);
+
+		node.contains_flowpoint = node.block.contains_flowpoint || node.block.is_flowpoint;
+		node.contains_inspection = node.block.contains_inspection || node.block.is_inspection;
+		node.contains_execution = node.block.contains_execution || node.block.is_execution;
+	}
+	else if (node.base.kind == Code_Kind.WHILE) {
+
+		mark_containment(node.condition);
+		mark_containment(node.block);
+
+		node.contains_flowpoint = node.condition.contains_flowpoint || node.condition.is_flowpoint ||
+		                          node.block.contains_flowpoint || node.block.is_flowpoint;
+		node.contains_inspection = node.condition.contains_inspection || node.condition.is_inspection ||
+		                          node.block.contains_inspection || node.block.is_inspection;
+		node.contains_execution = node.condition.contains_execution || node.condition.is_execution ||
+		                          node.block.contains_execution || node.block.is_execution;
+	}
 	else if (node.base.kind == Code_Kind.BLOCK) {
 
 		for (let stmt of node.statements) {
 
-			mark_containment(stmt);
+			mark_containment(stmt.expression);
 
-			node.contains_flowpoint |= stmt.contains_flowpoint || stmt.is_flowpoint;
-			node.contains_inspection |= stmt.contains_inspection || stmt.is_inspection;
-			node.contains_execution |= stmt.contains_execution || stmt.is_execution;
+			node.contains_flowpoint |= stmt.expression.contains_flowpoint || stmt.expression.is_flowpoint;
+			node.contains_inspection |= stmt.expression.contains_inspection || stmt.expression.is_inspection;
+			node.contains_execution |= stmt.expression.contains_execution || stmt.expression.is_execution;
 		}
 	}
 }
@@ -2056,7 +2140,7 @@ function should_inline(node) {
 }
 
 // need to use flex for block indentation
-let palette = ["rgba(200, 0, 0, 0.1)", "rgba(0, 200, 0, 0.1)", "rgba(0, 0, 200, 0.1)"];
+let palette = ["rgba(200, 0, 0, 0.03)", "rgba(0, 200, 0, 0.03)", "rgba(0, 0, 200, 0.03)"];
 let palette_index = 0;
 let print_expression_stack = new Array();
 let map_expr_to_printed = new Map();
@@ -2068,11 +2152,16 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 	let should_inline_node = should_inline(node);
 
+	let last_expression = print_expression_stack[print_expression_stack.length-1];
+
 	if (node.transformed && should_inline_node && 
 		node.transformed.base.kind == Code_Kind.BLOCK &&
 		node.base.kind != Code_Kind.RETURN &&
 		node.base.kind != Code_Kind.OPASSIGN &&
-	    node.base.kind != Code_Kind.IDENT) {
+		node.base.kind != Code_Kind.IDENT &&
+		last_expression.base.kind != Code_Kind.IF &&
+		last_expression.base.kind != Code_Kind.ELSE &&
+		last_expression.base.kind != Code_Kind.WHILE) {
 
 		print_to_dom(node.transformed, block_print_target, block_print_target, true);
 
@@ -2083,8 +2172,6 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 			return;
 		}
 	}
-
-	let last_expression = print_expression_stack[print_expression_stack.length-1];
 
 	print_expression_stack.push(node);
 
@@ -2098,13 +2185,18 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		}
 
 		let block = document.createElement('block');
-		let style = "padding-left: "+ 4 * indent_level +"ch; ";
+		block_print_target.appendChild(block);
+		let style = "";
 
 		if (is_transformed_block) {
 
 			style += "background-color: "+ palette[palette_index];
 			palette_index += 1;
 			palette_index %= palette.length;
+		}
+		else {
+
+			style += "padding-left: 4ch";
 		}
 
 		block.style = style;
@@ -2113,8 +2205,6 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 			print_to_dom(statement, block, block);
 		}
-
-		block_print_target.appendChild(block);
 
 		// @Incomplete
 		// should pop the extra newline
@@ -2350,10 +2440,6 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		print_to_dom(node.transformed.statements[0].expression, expr, block_print_target);
 
 		print_target.appendChild(expr);
-	}
-	else if (node.base.kind == Code_Kind.NEWLINE) {
-
-		print_target.appendChild(document.createElement("br"));
 	}
 
 	print_expression_stack.pop();
