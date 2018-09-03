@@ -1,7 +1,5 @@
 Bugs:
 
-execution order is broken, revisit stack-based method
-
 should not clone when printing
 
 for loop not implemented

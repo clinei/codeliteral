@@ -596,7 +596,6 @@ let block_stack = new Array();
 let expression_stack = new Array();
 let execution_stack = new Array();
 let execution_block_stack = block_stack;
-let execution_expression_stack = expression_stack;
 let idents_used = new Set();
 
 let inspection_cursor = null;
@@ -1288,7 +1287,7 @@ function step_next() {
 			// execution order is broken
 
 			// @Speed
-			let while_index = last_block.transformed.statements.findIndex(
+			let while_index = last_block.statements.findIndex(
 
 				function(elem) {
 
@@ -1297,7 +1296,7 @@ function step_next() {
 			);
 
 			// @Audit
-			last_block.transformed.statements.splice(while_index, 0, make_statement(cycle));
+			last_block.statements.splice(while_index, 0, make_statement(cycle));
 
 			let while_expr = expression_stack.pop();
 
@@ -2021,7 +2020,7 @@ function mark_containment(node) {
 	node.contains_inspection = 0;
 	node.contains_execution = 0;
 
-	if (node.transformed) {
+	if (node.transformed && node.base.kind != Code_Kind.BLOCK) {
 
 		mark_containment(node.transformed);
 
@@ -2029,8 +2028,18 @@ function mark_containment(node) {
 		node.contains_inspection |= node.transformed.contains_inspection;
 		node.contains_execution |= node.transformed.contains_execution;
 	}
+	else if (node.base.kind == Code_Kind.BLOCK) {
 
-	if (node.base.kind == Code_Kind.STATEMENT) {
+		for (let stmt of node.statements) {
+
+			mark_containment(stmt.expression);
+
+			node.contains_flowpoint |= stmt.expression.contains_flowpoint || stmt.expression.is_flowpoint;
+			node.contains_inspection |= stmt.expression.contains_inspection || stmt.expression.is_inspection;
+			node.contains_execution |= stmt.expression.contains_execution || stmt.expression.is_execution;
+		}
+	}
+	else if (node.base.kind == Code_Kind.STATEMENT) {
 
 		mark_containment(node.expression);
 
@@ -2117,17 +2126,6 @@ function mark_containment(node) {
 		node.contains_execution = node.condition.contains_execution || node.condition.is_execution ||
 		                          node.block.contains_execution || node.block.is_execution;
 	}
-	else if (node.base.kind == Code_Kind.BLOCK) {
-
-		for (let stmt of node.statements) {
-
-			mark_containment(stmt.expression);
-
-			node.contains_flowpoint |= stmt.expression.contains_flowpoint || stmt.expression.is_flowpoint;
-			node.contains_inspection |= stmt.expression.contains_inspection || stmt.expression.is_inspection;
-			node.contains_execution |= stmt.expression.contains_execution || stmt.expression.is_execution;
-		}
-	}
 }
 
 let indent_level = 0;
@@ -2157,6 +2155,8 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 	let last_expression = print_expression_stack[print_expression_stack.length-1];
 
+	print_expression_stack.push(node);
+
 	if (node.transformed && should_inline_node && 
 		node.transformed.base.kind == Code_Kind.BLOCK &&
 		node.base.kind != Code_Kind.RETURN &&
@@ -2164,7 +2164,8 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		node.base.kind != Code_Kind.IDENT &&
 		last_expression.base.kind != Code_Kind.IF &&
 		last_expression.base.kind != Code_Kind.ELSE &&
-		last_expression.base.kind != Code_Kind.WHILE) {
+		last_expression.base.kind != Code_Kind.WHILE &&
+		is_transformed_block == false) {
 
 		print_to_dom(node.transformed, block_print_target, block_print_target, true);
 
@@ -2175,8 +2176,6 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 			return;
 		}
 	}
-
-	print_expression_stack.push(node);
 
 	if (node.base.kind == Code_Kind.BLOCK) {
 
