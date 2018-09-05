@@ -198,7 +198,7 @@ function next_flowpoint() {
 			toggle_inspection();
 		}
 
-		let index = find_next_flowpoint_index(execution_index);
+		let index = find_next_index_in_array(flowpoints, execution_index);
 
 		if (index >= flowpoints.length) {
 
@@ -222,7 +222,7 @@ function previous_flowpoint() {
 			toggle_inspection();
 		}
 
-		let index = find_previous_flowpoint_index(execution_index);
+		let index = find_previous_index_in_array(flowpoints, execution_index);
 
 		if (index < 0) {
 
@@ -237,12 +237,12 @@ function previous_flowpoint() {
 		inspection_cursor.is_inspection = true;
 	}
 }
-function find_next_flowpoint_index(index) {
+function find_next_index_in_array(array, index) {
 
 	let i = 0;
-	while  (i < flowpoints.length) {
+	while  (i < array.length) {
 
-		if (flowpoints[i] > index) {
+		if (array[i] > index) {
 
 			return i;
 		}
@@ -252,12 +252,12 @@ function find_next_flowpoint_index(index) {
 
 	return i;
 }
-function find_previous_flowpoint_index(index) {
+function find_previous_index_in_array(array, index) {
 
-	let i = flowpoints.length-1;
+	let i = array.length-1;
 	while (i >= 0) {
 
-		if (flowpoints[i] < index) {
+		if (array[i] < index) {
 
 			return i;
 		}
@@ -267,12 +267,12 @@ function find_previous_flowpoint_index(index) {
 
 	return i;
 }
-function find_previous_flowpoint_index_inclusive(index) {
+function find_previous_index_in_array_inclusive(array, elem) {
 
-	let i = flowpoints.length-1;
+	let i = array.length-1;
 	while (i >= 0) {
 
-		if (flowpoints[i] <= index) {
+		if (array[i] <= elem) {
 
 			return i;
 		}
@@ -284,7 +284,7 @@ function find_previous_flowpoint_index_inclusive(index) {
 }
 function hide_flowzone() {
 
-	let flowpoint = find_previous_flowpoint_index_inclusive(execution_index);
+	let flowpoint = flowpoints[find_previous_index_in_array_inclusive(flowpoints, execution_index)];
 
 	if (hidden_flowzones[active_dataflow].indexOf(flowpoint) >= 0) {
 
@@ -295,7 +295,7 @@ function hide_flowzone() {
 }
 function unhide_flowzone() {
 
-	let flowpoint = find_previous_flowpoint_index_inclusive(execution_index);
+	let flowpoint = flowpoints[find_previous_index_in_array_inclusive(flowpoints, execution_index)];
 
 	let index = hidden_flowzones[active_dataflow].indexOf(flowpoint);
 
@@ -2099,6 +2099,8 @@ function mark_containment(node) {
 	node.contains_inspection = 0;
 	node.contains_execution = 0;
 
+	// node.is_flowpoint = flowpoints.indexOf(node.execution_index) >= 0;
+
 	if (node.transformed && node.base.kind != Code_Kind.BLOCK) {
 
 		mark_containment(node.transformed);
@@ -2233,10 +2235,15 @@ function should_hide(node) {
 
 	for (let i = 0; i < hidden_flowzones.length; i += 1) {
 
-		if (hidden_flowzones[i].indexOf(find_previous_flowpoint_index(node.execution_index)) >= 0) {
+		for (let j = 0; j < dataflows.length; j += 1) {
+
+			let flowpoint = dataflows[j][find_previous_index_in_array(dataflows[j], node.execution_index)];
+
+			if (hidden_flowzones[i].indexOf(flowpoint) >= 0) {
 
 			return true;
 		}
+	}
 	}
 
 	return false;
