@@ -89,6 +89,20 @@ function document_keydown(event) {
 		print();
 	}
 
+	// press H
+	if (event.keyCode == 72) {
+
+		hide_flowzone();
+		print();
+	}
+
+	// press J
+	if (event.keyCode == 74) {
+
+		unhide_flowzone();
+		print();
+	}
+
 	// press K
 	if (event.keyCode == 75) {
 
@@ -144,8 +158,10 @@ function toggle_inspection() {
 
 function add_flowpoint() {
 
-	// @Incomplete
-	// disallow duplicates
+	if (flowpoints.indexOf(execution_index) >= 0) {
+
+		return;
+	}
 
 	// insertion sort
 	let index = 0;
@@ -182,16 +198,7 @@ function next_flowpoint() {
 			toggle_inspection();
 		}
 
-		let index = 0;
-		while (index < flowpoints.length) {
-
-			if (flowpoints[index] > execution_index) {
-
-				break;
-			}
-
-			index += 1;
-		}
+		let index = find_next_flowpoint_index(execution_index);
 
 		if (index >= flowpoints.length) {
 
@@ -215,16 +222,7 @@ function previous_flowpoint() {
 			toggle_inspection();
 		}
 
-		let index = flowpoints.length-1;
-		while (index >= 0) {
-
-			if (flowpoints[index] < execution_index) {
-
-				break;
-			}
-
-			index -= 1;
-		}
+		let index = find_previous_flowpoint_index(execution_index);
 
 		if (index < 0) {
 
@@ -237,6 +235,73 @@ function previous_flowpoint() {
 		inspection_cursor.is_inspection = false;
 		inspection_cursor = execution_stack[flowpoint];
 		inspection_cursor.is_inspection = true;
+	}
+}
+function find_next_flowpoint_index(index) {
+
+	let i = 0;
+	while  (i < flowpoints.length) {
+
+		if (flowpoints[i] > index) {
+
+			return i;
+		}
+
+		i += 1;
+	}
+
+	return i;
+}
+function find_previous_flowpoint_index(index) {
+
+	let i = flowpoints.length-1;
+	while (i >= 0) {
+
+		if (flowpoints[i] < index) {
+
+			return i;
+		}
+
+		i -= 1;
+	}
+
+	return i;
+}
+function find_previous_flowpoint_index_inclusive(index) {
+
+	let i = flowpoints.length-1;
+	while (i >= 0) {
+
+		if (flowpoints[i] <= index) {
+
+			return i;
+		}
+
+		i -= 1;
+	}
+
+	return i;
+}
+function hide_flowzone() {
+
+	let flowpoint = find_previous_flowpoint_index_inclusive(execution_index);
+
+	if (hidden_flowzones[active_dataflow].indexOf(flowpoint) >= 0) {
+
+		return;
+	}
+
+	hidden_flowzones[active_dataflow].push(flowpoint);
+}
+function unhide_flowzone() {
+
+	let flowpoint = find_previous_flowpoint_index_inclusive(execution_index);
+
+	let index = hidden_flowzones[active_dataflow].indexOf(flowpoint);
+
+	if (index >= 0) {
+
+		hidden_flowzones[active_dataflow].splice(index, 1);
 	}
 }
 
@@ -612,6 +677,19 @@ dataflows[6] = new Array();
 dataflows[7] = new Array();
 dataflows[8] = new Array();
 dataflows[9] = new Array();
+
+let hidden_flowzones = new Array(10);
+
+hidden_flowzones[0] = new Array();
+hidden_flowzones[1] = new Array();
+hidden_flowzones[2] = new Array();
+hidden_flowzones[3] = new Array();
+hidden_flowzones[4] = new Array();
+hidden_flowzones[5] = new Array();
+hidden_flowzones[6] = new Array();
+hidden_flowzones[7] = new Array();
+hidden_flowzones[8] = new Array();
+hidden_flowzones[9] = new Array();
 
 let active_dataflow = 1;
 let flowpoints = dataflows[active_dataflow];
@@ -1283,9 +1361,6 @@ function step_next() {
 
 		if (should_run) {
 
-			// @Bug
-			// execution order is broken
-
 			// @Speed
 			let while_index = last_block.statements.findIndex(
 
@@ -1365,9 +1440,13 @@ function run(target, force = false) {
 	if (typeof target.transformed_from_return === "undefined" &&
 		typeof target.transformed_from_opassign === "undefined" &&
 		target.base.kind != Code_Kind.BLOCK &&
+		target.base.kind != Code_Kind.WHILE &&
 		disable_execution_recording == false) {
 
 		execution_stack.push(target);
+
+		execution_index += 1;
+		target.execution_index = execution_index;
 	}
 
 	let return_value = null;
@@ -2140,6 +2219,29 @@ function should_inline(node) {
 	return node.contains_flowpoint | node.contains_inspection | node.contains_execution;
 }
 
+function should_hide(node) {
+
+	if (node.is_execution || node.is_inspection || node.is_flowpoint) {
+
+		return false;
+	}
+
+	if (typeof node.execution_index == "undefined") {
+
+		return true;
+	}
+
+	for (let i = 0; i < hidden_flowzones.length; i += 1) {
+
+		if (hidden_flowzones[i].indexOf(find_previous_flowpoint_index(node.execution_index)) >= 0) {
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
 // need to use flex for block indentation
 let palette = ["rgba(200, 0, 0, 0.03)", "rgba(0, 200, 0, 0.03)", "rgba(0, 0, 200, 0.03)"];
 let palette_index = 0;
@@ -2154,6 +2256,12 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	let should_inline_node = should_inline(node);
 
 	let last_expression = print_expression_stack[print_expression_stack.length-1];
+	
+	if (last_expression && last_expression.base.kind == Code_Kind.STATEMENT &&
+	    should_hide(node) && should_inline_node == false) {
+
+		return;
+	}
 
 	print_expression_stack.push(node);
 
