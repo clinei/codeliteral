@@ -1441,10 +1441,13 @@ function run(target, force = false) {
 		typeof target.transformed_from_opassign === "undefined" &&
 		target.base.kind != Code_Kind.BLOCK &&
 		target.base.kind != Code_Kind.WHILE &&
+		target.base.kind != Code_Kind.DECLARATION &&
+		target.base.kind != Code_Kind.ASSIGN &&
+		target.base.kind != Code_Kind.OPASSIGN &&
+		target.base.kind != Code_Kind.RETURN &&
 		disable_execution_recording == false) {
 
 		execution_stack.push(target);
-
 		execution_index += 1;
 		target.execution_index = execution_index;
 	}
@@ -1553,7 +1556,9 @@ function run(target, force = false) {
 	}
 	else if (target.base.kind == Code_Kind.ASSIGN) {
 
-		// OPASSIGNs get transformed into assigns which are run here
+		execution_stack.push(target.ident);
+		execution_index += 1;
+		target.execution_index = execution_index;
 
 		let expression_value = run(target.expression);
 
@@ -1564,6 +1569,10 @@ function run(target, force = false) {
 	else if (target.base.kind == Code_Kind.DECLARATION) {
 
 		let expression_value = null;
+
+		execution_stack.push(target.ident);
+		execution_index += 1;
+		target.execution_index = execution_index;
 
 		if (target.expression) {
 
@@ -2099,9 +2108,9 @@ function mark_containment(node) {
 	node.contains_inspection = 0;
 	node.contains_execution = 0;
 
-	// node.is_flowpoint = flowpoints.indexOf(node.execution_index) >= 0;
-
-	if (node.transformed && node.base.kind != Code_Kind.BLOCK) {
+	if (node.transformed && node.base.kind != Code_Kind.BLOCK &&
+		node.base.kind != Code_Kind.IDENT &&
+		node.base.kind != Code_Kind.OPASSIGN) {
 
 		mark_containment(node.transformed);
 
@@ -2132,36 +2141,48 @@ function mark_containment(node) {
 
 		if (node.expression) {
 
+			mark_containment(node.ident);
 			mark_containment(node.expression);
+	
+			node.contains_flowpoint = node.ident.contains_flowpoint || node.ident.is_flowpoint ||
+									  node.expression.contains_flowpoint || node.expression.is_flowpoint;
+			node.contains_inspection = node.ident.contains_inspection || node.ident.is_inspection ||
+									   node.expression.contains_inspection || node.expression.is_inspection;
+			node.contains_execution = node.ident.contains_execution || node.ident.is_execution ||
+									  node.expression.contains_execution || node.expression.is_execution;
+		}
+		else {
+	
+			mark_containment(node.ident);
 
-			node.contains_flowpoint = node.expression.contains_flowpoint || node.expression.is_flowpoint;
-			node.contains_inspection = node.expression.contains_inspection || node.expression.is_inspection;
-			node.contains_execution = node.expression.contains_execution || node.expression.is_execution;
+			node.contains_flowpoint = node.ident.contains_flowpoint || node.ident.is_flowpoint;
+			node.contains_inspection = node.ident.contains_inspection || node.ident.is_inspection;
+			node.contains_execution = node.ident.contains_execution || node.ident.is_execution;
 		}
 	}
 	else if (node.base.kind == Code_Kind.ASSIGN) {
 
+		mark_containment(node.ident);
 		mark_containment(node.expression);
 
-		node.contains_flowpoint = node.expression.contains_flowpoint || node.expression.is_flowpoint;
-		node.contains_inspection = node.expression.contains_inspection || node.expression.is_inspection;
-		node.contains_execution = node.expression.contains_execution || node.expression.is_execution;
+		node.contains_flowpoint = node.ident.contains_flowpoint || node.ident.is_flowpoint ||
+		                          node.expression.contains_flowpoint || node.expression.is_flowpoint;
+		node.contains_inspection = node.ident.contains_inspection || node.ident.is_inspection ||
+		                           node.expression.contains_inspection || node.expression.is_inspection;
+		node.contains_execution = node.ident.contains_execution || node.ident.is_execution ||
+		                          node.expression.contains_execution || node.expression.is_execution;
 	}
 	else if (node.base.kind == Code_Kind.OPASSIGN) {
 
+		mark_containment(node.ident);
 		mark_containment(node.expression);
 
-		node.contains_flowpoint = node.expression.contains_flowpoint || node.expression.is_flowpoint;
-		node.contains_inspection = node.expression.contains_inspection || node.expression.is_inspection;
-		node.contains_execution = node.expression.contains_execution || node.expression.is_execution;
-	}
-	else if (node.base.kind == Code_Kind.RETURN) {
-
-		mark_containment(node.expression);
-
-		node.contains_flowpoint = node.expression.contains_flowpoint || node.expression.is_flowpoint;
-		node.contains_inspection = node.expression.contains_inspection || node.expression.is_inspection;
-		node.contains_execution = node.expression.contains_execution || node.expression.is_execution;
+		node.contains_flowpoint = node.ident.contains_flowpoint || node.ident.is_flowpoint ||
+		                          node.expression.contains_flowpoint || node.expression.is_flowpoint;
+		node.contains_inspection = node.ident.contains_inspection || node.ident.is_inspection ||
+		                           node.expression.contains_inspection || node.expression.is_inspection;
+		node.contains_execution = node.ident.contains_execution || node.ident.is_execution ||
+		                          node.expression.contains_execution || node.expression.is_execution;
 	}
 	else if (node.base.kind == Code_Kind.BINARY_OPERATION) {
 
@@ -2228,7 +2249,11 @@ function should_hide(node) {
 		return false;
 	}
 
-	if (typeof node.execution_index == "undefined") {
+	if (typeof node.execution_index == "undefined" &&
+		node.base.kind != Code_Kind.RETURN &&
+		node.base.kind != Code_Kind.ASSIGN &&
+	    node.base.kind != Code_Kind.OPASSIGN &&
+	    node.base.kind != Code_Kind.DECLARATION) {
 
 		return true;
 	}
