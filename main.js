@@ -2312,6 +2312,13 @@ function should_hide(node) {
 		return false;
 	}
 
+	if (node.base.kind == Code_Kind.DECLARATION ||
+		node.base.kind == Code_Kind.ASSIGN ||
+		node.base.kind == Code_Kind.OPASSIGN) {
+
+		return should_hide(node.ident);
+	}
+
 	if (typeof node.execution_index == "undefined" &&
 	    typeof node.last_return == "undefined") {
 
