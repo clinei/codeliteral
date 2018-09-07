@@ -7,7 +7,7 @@ body {
 	font-weight: normal;
 	font-size: 12pt;
 
-	color: rgb(200, 210, 200);
+	color: rgb(200, 200, 200);
 	background: rgb(40, 40, 40);
 }
 
@@ -39,6 +39,15 @@ body {
 
 		width: calc(800px - 24pt);
 	}
+}
+
+.key {
+
+	display: inline;
+
+	color: rgb(180, 180, 50);
+
+	font-weight: bold;
 }
 
 #code {

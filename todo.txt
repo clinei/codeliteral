@@ -4,29 +4,12 @@ we should have a comment on the general design
 
 should not clone when printing
 
-moving left and right on line
-
-map_ident_to_changes
-
-map_ident_to_uses
-
 for loop not implemented, put declarations before cycles, put cycle end as last statement, otherwise like while
 
 Ideas:
 
-we could move around with a text cursor and select executed things that way
+values_shown could show the value of an ident when it gets changed on the left hand side
 
 we could set the execution to scroll automatically by some speed, and maybe bounce between flowpoints
-
-values shown only when selection cursor hasn't been printed yet
-
-or not shown only when on selection cursor and a mode is toggled on
-
-execution_stack should push extra on expressions that returned
-
-we should have breakpoints for non-executed code, but only once we have text editing
-
-the run function could use the same code path as the step functions, to reduce potential drift and bugs
-running is sort of different though, further research is needed
 
 we could find the bug, fix it live, recompile, and run directly from the buggy place to check if it was fixed

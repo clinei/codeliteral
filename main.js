@@ -15,24 +15,6 @@ function map_keyboard() {
 
 function document_keydown(event) {
 
-	/* disabled
-	// press R
-	if (event.keyCode == 82) {
-
-		start_debugging();
-		print();
-	}
-	*/
-
-	/*
-	// press S
-	if (event.keyCode == 83) {
-
-		stop_debugging();
-		print();
-	}
-	*/
-
 	// press B
 	if (event.keyCode == 66) {
 
@@ -58,6 +40,34 @@ function document_keydown(event) {
 	if (event.keyCode == 79) {
 
 		step_out();
+		print();
+	}
+
+	// press E
+	if (event.keyCode == 69) {
+
+		previous_change();
+		print();
+	}
+
+	// press R
+	if (event.keyCode == 82) {
+
+		next_change();
+		print();
+	}
+
+	// press Y
+	if (event.keyCode == 89) {
+
+		previous_use();
+		print();
+	}
+
+	// press U
+	if (event.keyCode == 85) {
+
+		next_use();
 		print();
 	}
 
@@ -344,6 +354,82 @@ function right_line() {
 	inspection_cursor.is_inspection = false;
 	inspection_cursor = execution_stack[execution_index];
 	inspection_cursor.is_inspection = true;
+}
+function previous_change() {
+
+	if (inspection_cursor.base.kind == Code_Kind.IDENT) {
+
+		let indices = map_ident_to_changes.get(inspection_cursor.declaration.ident);
+		let index = find_previous_index_in_array(indices, execution_index);
+
+		if (index < 0) {
+	
+			return;
+		}
+
+		execution_index = indices[index];
+		slider_element.value = execution_index;
+		inspection_cursor.is_inspection = false;
+		inspection_cursor = execution_stack[execution_index];
+		inspection_cursor.is_inspection = true;
+	}
+}
+function next_change() {
+
+	if (inspection_cursor.base.kind == Code_Kind.IDENT) {
+
+		let indices = map_ident_to_changes.get(inspection_cursor.declaration.ident);
+		let index = find_next_index_in_array(indices, execution_index);
+
+		if (index >= indices.length) {
+
+			return;
+		}
+
+		execution_index = indices[index];
+		slider_element.value = execution_index;
+		inspection_cursor.is_inspection = false;
+		inspection_cursor = execution_stack[execution_index];
+		inspection_cursor.is_inspection = true;
+	}
+}
+function previous_use() {
+
+	if (inspection_cursor.base.kind == Code_Kind.IDENT) {
+
+		let indices = map_ident_to_uses.get(inspection_cursor.declaration.ident);
+		let index = find_previous_index_in_array(indices, execution_index);
+
+		if (index < 0) {
+	
+			return;
+		}
+
+		execution_index = indices[index];
+		slider_element.value = execution_index;
+		inspection_cursor.is_inspection = false;
+		inspection_cursor = execution_stack[execution_index];
+		inspection_cursor.is_inspection = true;
+	}
+}
+function next_use() {
+
+	if (inspection_cursor.base.kind == Code_Kind.IDENT) {
+
+		let indices = map_ident_to_uses.get(inspection_cursor.declaration.ident);
+		let index = find_next_index_in_array(indices, execution_index);
+
+		if (index >= indices.length) {
+
+			return;
+		}
+
+		execution_index = indices[index];
+		slider_element.value = execution_index;
+		inspection_cursor.is_inspection = false;
+		inspection_cursor = execution_stack[execution_index];
+		inspection_cursor.is_inspection = true;
+	}
 }
 function find_next_index_in_array(array, index) {
 
@@ -773,6 +859,8 @@ let map_call_to_settings = new Map();
 
 let map_ident_replace = new Map();
 let map_ident_to_value = new Map();
+let map_ident_to_changes = new Map();
+let map_ident_to_uses = new Map();
 
 let map_original_to_clone = new Map();
 
@@ -1670,6 +1758,7 @@ function run(target, force = false) {
 		let expression_value = run(target.expression);
 
 		map_ident_to_value.set(target.ident.declaration.ident, expression_value);
+		map_ident_to_changes.get(target.ident.declaration.ident).push(target.ident.execution_index);
 
 		return_value = expression_value;
 	}
@@ -1692,18 +1781,18 @@ function run(target, force = false) {
 
 		map_ident_to_value.set(target.ident.declaration.ident, expression_value);
 
+		let changes = new Array();
+		changes.push(target.ident.execution_index);
+		map_ident_to_changes.set(target.ident.declaration.ident, changes);
+
+		let uses = new Array();
+		map_ident_to_uses.set(target.ident.declaration.ident, uses);
+
 		return_value = expression_value;
 	}
 	else if (target.base.kind == Code_Kind.IDENT) {
 
-		if (target.transformed) {
-
-			return_value = map_ident_to_value.get(target.transformed.statements[0].expression);
-		}
-		else {
-
-			return_value = map_ident_to_value.get(target.declaration.ident);
-		}
+		return_value = map_ident_to_value.get(target.declaration.ident);
 	}
 	else if (target.base.kind == Code_Kind.BLOCK) {
 
@@ -1753,6 +1842,11 @@ function run(target, force = false) {
 		target.execution_index = execution_index;
 		execution_stack.push(target);
 		execution_index += 1;
+	}
+
+	if (target.base.kind == Code_Kind.IDENT && target.execution_index) {
+
+		map_ident_to_uses.get(target.declaration.ident).push(target.execution_index);
 	}
 
 	target.last_return = return_value;
@@ -2403,7 +2497,7 @@ function should_hide(node) {
 }
 
 // need to use flex for block indentation
-let palette = ["rgba(200, 0, 0, 0.03)", "rgba(0, 200, 0, 0.03)", "rgba(0, 0, 200, 0.03)"];
+let palette = ["rgba(250, 0, 0, 0.03)", "rgba(0, 200, 0, 0.03)", "rgba(0, 0, 200, 0.03)"];
 let palette_index = 0;
 let print_expression_stack = new Array();
 let map_expr_to_printed = new Map();
