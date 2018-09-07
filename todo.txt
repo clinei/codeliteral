@@ -1,12 +1,10 @@
 Bugs:
 
+we should have a comment on the general design
+
 should not clone when printing
 
-going down a line on if does not go into else
-
 moving left and right on line
-
-hiding is broken
 
 map_ident_to_changes
 

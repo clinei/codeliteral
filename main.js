@@ -68,8 +68,8 @@ function document_keydown(event) {
 		print();
 	}
 
-	// press D
-	if (event.keyCode == 68) {
+	// press G
+	if (event.keyCode == 71) {
 
 		delete_flowpoint();
 		print();
@@ -92,14 +92,28 @@ function document_keydown(event) {
 	// press W
 	if (event.keyCode == 87) {
 
-		previous_line();
+		up_line();
 		print();
 	}
 
 	// press S
 	if (event.keyCode == 83) {
 
-		next_line();
+		down_line();
+		print();
+	}
+
+	// press A
+	if (event.keyCode == 65) {
+
+		left_line();
+		print();
+	}
+
+	// press D
+	if (event.keyCode == 68) {
+
+		right_line();
 		print();
 	}
 
@@ -251,7 +265,7 @@ function previous_flowpoint() {
 		inspection_cursor.is_inspection = true;
 	}
 }
-function next_line() {
+function down_line() {
 
 	let line = current_line;
 
@@ -275,7 +289,7 @@ function next_line() {
 		}
 	}
 }
-function previous_line() {
+function up_line() {
 
 	let line = current_line;
 
@@ -299,12 +313,59 @@ function previous_line() {
 		}
 	}
 }
+function left_line() {
+
+	let indices = map_line_to_execution_indices[current_line];
+	let index = find_previous_index_in_array(indices, execution_index);
+
+	if (index < 0) {
+
+		return;
+	}
+
+	execution_index = indices[index];
+	slider_element.value = execution_index;
+	inspection_cursor.is_inspection = false;
+	inspection_cursor = execution_stack[execution_index];
+	inspection_cursor.is_inspection = true;
+}
+function right_line() {
+
+	let indices = map_line_to_execution_indices[current_line];
+	let index = find_next_index_in_array(indices, execution_index);
+
+	if (index >= indices.length) {
+
+		return;
+	}
+
+	execution_index = indices[index];
+	slider_element.value = execution_index;
+	inspection_cursor.is_inspection = false;
+	inspection_cursor = execution_stack[execution_index];
+	inspection_cursor.is_inspection = true;
+}
 function find_next_index_in_array(array, index) {
 
 	let i = 0;
 	while  (i < array.length) {
 
 		if (array[i] > index) {
+
+			return i;
+		}
+
+		i += 1;
+	}
+
+	return i;
+}
+function find_next_index_in_array_inclusive(array, index) {
+
+	let i = 0;
+	while  (i < array.length) {
+
+		if (array[i] >= index) {
 
 			return i;
 		}
