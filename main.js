@@ -258,6 +258,10 @@ function next_line() {
 	while (line < map_line_to_execution_indices.length) {
 
 		line += 1;
+		if (typeof map_line_to_execution_indices[line] == "undefined") {
+
+			continue;
+		}
 		let indices = map_line_to_execution_indices[line];
 		if (indices.length) {
 
@@ -278,6 +282,10 @@ function previous_line() {
 	while (line >= 0) {
 
 		line -= 1;
+		if (typeof map_line_to_execution_indices[line] == "undefined") {
+
+			continue;
+		}
 		let indices = map_line_to_execution_indices[line];
 		if (indices.length) {
 
@@ -875,6 +883,14 @@ function print() {
 	mark_containment(Global_Block.statements[0]);
 
 	print_to_dom(Global_Block.statements[0], code_element, code_element);
+	
+	for (let i = 0; i < map_line_to_execution_indices.length; i += 1) {
+
+		if (map_line_to_execution_indices[i]) {
+
+			map_line_to_execution_indices[i].sort((a, b) => a < b ? -1 : 1);
+		}
+	}
 
 	let cursor = null;
 
@@ -1369,10 +1385,6 @@ function step_next() {
 
 	if (index >= last_expression.elements.length) {
 
-		// @Audit
-		// :ExtraExpressions
-		// execution_stack.push(last_expression);
-
 		step_out();
 
 		return;
@@ -1407,8 +1419,6 @@ function step_next() {
 
 		let condition = clone(last_expression.condition);
 
-		// @Audit
-		// should we transform here or just clone the .transformed?
 		let block = transform(clone(last_expression.block));
 
 		let cycle = make_if(condition, block);
@@ -1428,7 +1438,6 @@ function step_next() {
 				}
 			);
 
-			// @Audit
 			last_block.statements.splice(while_index, 0, make_statement(cycle));
 
 			let while_expr = expression_stack.pop();
@@ -1452,8 +1461,6 @@ function step_next() {
 			execution_cursor.is_execution = true;
 		}
 	}
-
-	execution_index = execution_stack.length-1;
 }
 function step_back() {
 
@@ -1555,12 +1562,11 @@ function run(target, force = false) {
 		// @Incomplete
 		// what about returns inside whiles?
 
-		let condition = clone(target.condition);
-
 		// @MassiveHack
 		// the other approach would be to pass everything through functions, which is more messy
 		disable_execution_recording = true;
 
+		let condition = clone(target.condition);
 		let should_run = run(condition);
 
 		disable_execution_recording = false;
@@ -1596,9 +1602,9 @@ function run(target, force = false) {
 	}
 	else if (target.base.kind == Code_Kind.ASSIGN) {
 
+		target.ident.execution_index = execution_index;
 		execution_stack.push(target.ident);
 		execution_index += 1;
-		target.ident.execution_index = execution_index;
 
 		let expression_value = run(target.expression);
 
@@ -1614,9 +1620,9 @@ function run(target, force = false) {
 
 		let expression_value = null;
 
+		target.ident.execution_index = execution_index;
 		execution_stack.push(target.ident);
 		execution_index += 1;
-		target.ident.execution_index = execution_index;
 
 		if (target.expression) {
 
@@ -1683,9 +1689,9 @@ function run(target, force = false) {
 		target.base.kind != Code_Kind.ELSE &&
 		disable_execution_recording == false) {
 
+		target.execution_index = execution_index;
 		execution_stack.push(target);
 		execution_index += 1;
-		target.execution_index = execution_index;
 	}
 
 	target.last_return = return_value;
@@ -2382,6 +2388,9 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 			indent_level += 1;
 		}
+		
+		line_count += 1;
+		map_line_to_execution_indices[line_count] = new Array();
 
 		let block = document.createElement('block');
 		block_print_target.appendChild(block);
@@ -2402,17 +2411,8 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		for (let statement of node.statements) {
 
-			// @Lazy
-			map_line_to_execution_indices[line_count].sort((a, b) => a < b ? -1 : 1);
-
-			line_count += 1;
-			map_line_to_execution_indices[line_count] = new Array();
-
 			print_to_dom(statement, block, block);
 		}
-
-		// @Incomplete
-		// should pop the extra newline
 
 		if (!is_transformed_block) {
 
@@ -2431,6 +2431,9 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		else {
 
 			print_to_dom(node.expression, expr, block_print_target);
+
+			line_count += 1;
+			map_line_to_execution_indices[line_count] = new Array();
 
 			if (expr.children.length > 0) {
 
@@ -2503,6 +2506,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		print_to_dom(node.block, print_target, print_target);
 	}
+	/*
 	else if (node.base.kind == Code_Kind.WHILE) {
 
 		expr.appendChild(document.createTextNode("while ("));
@@ -2515,6 +2519,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		print_to_dom(node.block, print_target, print_target);
 	}
+	*/
 	else if (node.base.kind == Code_Kind.BINARY_OPERATION) {
 
 		// @Audit
@@ -2686,7 +2691,14 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 	if (node.execution_index) {
 
-		map_line_to_execution_indices[line_count].push(node.execution_index);
+		if (map_line_to_execution_indices[line_count]) {
+
+			map_line_to_execution_indices[line_count].push(node.execution_index);
+		}
+		else {
+
+			console.log("line "+ line_count + " broken");
+		}
 	}
 }
 

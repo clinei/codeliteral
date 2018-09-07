@@ -2,7 +2,17 @@ Bugs:
 
 should not clone when printing
 
-for loop not implemented
+going down a line on if does not go into else
+
+moving left and right on line
+
+hiding is broken
+
+map_ident_to_changes
+
+map_ident_to_uses
+
+for loop not implemented, put declarations before cycles, put cycle end as last statement, otherwise like while
 
 Ideas:
 
