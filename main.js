@@ -2600,16 +2600,6 @@ function should_hide(node) {
 		return true;
 	}
 
-	if (node.base.kind == Code_Kind.IF) {
-
-		return false;
-	}
-
-	if (node.base.kind == Code_Kind.ELSE) {
-
-		return node.if_expr.condition.last_return == false;
-	}
-
 	if (node.base.kind == Code_Kind.BLOCK) {
 
 		let should = false;
@@ -2621,7 +2611,17 @@ function should_hide(node) {
 
 		return should;
 	}
+	
+	if (node.base.kind == Code_Kind.IF) {
 
+		node = node.condition;
+	}
+
+	if (node.base.kind == Code_Kind.ELSE) {
+
+		return node.if_expr.condition.last_return == false;
+	}
+	
 	// hide code that has not been run
 	if (typeof node.execution_index == "undefined" &&
 		typeof node.last_return == "undefined") {
