@@ -2649,9 +2649,9 @@ function should_hide(node) {
 
 			if (hidden_flowzones[i].indexOf(flowpoint) >= 0) {
 
-			return true;
+				return true;
+			}
 		}
-	}
 	}
 
 	return false;
@@ -2660,6 +2660,12 @@ function should_hide(node) {
 // need to use flex for block indentation
 let palette = ["rgba(250, 0, 0, 0.03)", "rgba(0, 200, 0, 0.03)", "rgba(0, 0, 200, 0.03)"];
 let palette_index = 0;
+let Styles = {
+	LITERAL: "color: rgb(200, 220, 130)",
+	IDENT: "color: rgb(210, 210, 210)",
+	TYPE: "color: rgb(140, 160, 220)",
+	KEYWORD: "color: rgb(210, 130, 210)",
+};
 let print_expression_stack = new Array();
 let map_expr_to_printed = new Map();
 let map_line_to_execution_indices = new Array();
@@ -2775,9 +2781,9 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	else if (node.base.kind == Code_Kind.PROCEDURE_CALL) {
 
 		if (values_shown && node.last_return !== null &&
-		    typeof node.last_return !== "undefined" &&
-		    node.times_executed >= last_expression.times_executed) {
+		    typeof node.last_return !== "undefined") {
 
+			expr.style = Styles.LITERAL;
 			expr.appendChild(document.createTextNode(node.last_return));
 		}
 		else if (should_inline_node && node.transformed) {
@@ -2811,7 +2817,12 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	}
 	else if (node.base.kind == Code_Kind.IF) {
 
-		expr.appendChild(document.createTextNode("if ("));
+		let if_keyword = document.createElement("expr");
+		if_keyword.style = Styles.KEYWORD;
+		if_keyword.appendChild(document.createTextNode("if"));
+		expr.appendChild(if_keyword);
+
+		expr.appendChild(document.createTextNode(" ("));
 
 		print_to_dom(node.condition, expr, block_print_target);
 
@@ -2823,7 +2834,12 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	}
 	else if (node.base.kind == Code_Kind.ELSE) {
 
-		expr.appendChild(document.createTextNode("else "));
+		let else_keyword = document.createElement("expr");
+		else_keyword.style = Styles.KEYWORD;
+		else_keyword.appendChild(document.createTextNode("else"));
+		expr.appendChild(else_keyword);
+
+		expr.appendChild(document.createTextNode(" "));
 
 		print_target.appendChild(expr);
 
@@ -2848,6 +2864,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		// @Audit
 		if (values_shown && should_inline_node == false) {
 
+			expr.style = Styles.LITERAL;
 			expr.appendChild(document.createTextNode(node.last_return));
 		}
 		else {
@@ -2951,6 +2968,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		}
 
 		let text = null;
+		let style = "";
 
 		// @Incomplete
 		// what about `ident = ident`
@@ -2958,18 +2976,27 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 			typeof node.last_return !== "undefined") {
 
 			text = node.last_return;
+			style += Styles.LITERAL;
 		}
 		else {
 
 			text = ident.name;
+			if (Object.getOwnPropertyNames(Types).indexOf(ident.name) >= 0) {
+				style += Styles.TYPE;
+			}
+			else {
+				style += Styles.IDENT;
+			}
 		}
 
+		expr.style = style;
 		expr.appendChild(document.createTextNode(text));
 
 		print_target.appendChild(expr);
 	}
 	else if (node.base.kind == Code_Kind.LITERAL) {
 
+		expr.style = Styles.LITERAL;
 		expr.appendChild(document.createTextNode(node.value));
 
 		print_target.appendChild(expr);
