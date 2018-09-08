@@ -1,14 +1,35 @@
 Bugs:
 
+most instructions are in pairs, make a table so they are aligned vertically
+
 we should have a comment on the general design
+
+check how stepping next and into looks like
 
 should not clone when printing
 
 for loop not implemented, put declarations before cycles, put cycle end as last statement, otherwise like while
 
+continue and break not implemented
+
+else if not implemented
+
+true and false keywords not implemented
+
+increment and decrement not implemented
+
 Ideas:
 
-values_shown could show the value of an ident when it gets changed on the left hand side
+need to implement heap and stack memory, and map_memory_to_changes and map_memory_to_uses
+malloc and free
+
+pressing M makes the prev/next use/change look in memory instead of ident
+needs visual feedback
+
+we could inline if statements, but declarations in them have to be transformed
+
+pressing a button when the cursor is on an ident shows the value of that ident at that point in time
+especially when it's the left hand side of an assign or opassign
 
 we could set the execution to scroll automatically by some speed, and maybe bounce between flowpoints
 

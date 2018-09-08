@@ -528,6 +528,7 @@ let Code_Kind = {
 	IF: "if",
 	ELSE: "else",
 	WHILE: "while",
+	FOR: "for",
 	IDENT: "identifier",
 	ASSIGN: "assign",
 	LITERAL: "literal",
@@ -733,6 +734,29 @@ function make_while(condition, block) {
 	return while_;
 }
 
+let Code_For = {
+
+	base: null,
+
+	begin: null,
+	condition: null,
+	cycle_end: null,
+	block: null
+};
+function make_for(begin, condition, cycle_end, block) {
+
+	let for_ = Object.assign({}, Code_For);
+	for_.base = make_node();
+	for_.base.kind = Code_Kind.FOR;
+
+	for_.begin = begin;
+	for_.condition = condition;
+	for_.cycle_end = cycle_end;
+	for_.block = block;
+
+	return for_;
+}
+
 let Code_Assign = {
 
 	base: null,
@@ -906,18 +930,65 @@ let active_dataflow = 1;
 let flowpoints = dataflows[active_dataflow];
 
 /*
-int some_function(int number) {
-	return number - 20;
+int some_other_function(int number) {
+	int i = 0;
+	while (number > 0) {
+		if (number > 60) {
+			number -= 3;
+			continue;
+		}
+		if (number < 40) {
+			number = 20;
+			break;
+		}
+		number -= 10;
+		i += 1;
+	}
+	return number - i;
+}
+*/
+let some_other_function_block = make_block();
+let some_other_function_param = make_declaration(make_ident("num_iters"), null, Types.int);
+let some_other_function_procedure = make_procedure([some_other_function_param], Types.int, some_other_function_block);
+let some_other_function_declaration = make_declaration(make_ident("some_other_function"), some_other_function_procedure);
+// @Incomplete
+
+/*
+int some_function(int num_iters) {
+	int sum = 0;
+	for (int i = 0; i < num_iters; i += 1) {
+		sum += i;
+	}
+	// sum = some_other_function(sum);
+	return sum;
 }
 */
 let some_function_block = make_block();
-let some_function_param = make_declaration(make_ident("number"), null, Types.int);
+let some_function_param = make_declaration(make_ident("num_iters"), null, Types.int);
 let some_function_procedure = make_procedure([some_function_param], Types.int, some_function_block);
 let some_function_declaration = make_declaration(make_ident("some_function"), some_function_procedure);
 
-let some_function_sub = make_binary_operation(some_function_param.ident, "-", make_literal("20"));
+let some_function_sum = make_declaration(make_ident("sum"), make_literal("0"), Types.int);
+let some_function_for_begin = make_declaration(make_ident("i"), make_literal("0"), Types.int);
+let some_function_for_cond = make_binary_operation(some_function_for_begin.ident, "<", some_function_param.ident);
+let some_function_for_end = make_opassign(some_function_for_begin.ident, "+", make_literal("1"));
+let some_function_for_block = make_block();
+let some_function_for = make_for(make_statement(some_function_for_begin), 
+								 some_function_for_cond, 
+								 make_statement(some_function_for_end), 
+								 some_function_for_block);
+let for_block_stmt = make_statement(
+                     make_opassign(some_function_sum.ident, 
+                                   "+", 
+                                   make_binary_operation(some_function_for_begin.ident, "*", make_literal("40"))));
+some_function_for_block.statements.push(for_block_stmt);
+// let some_other_function_call = make_procedure_call(some_other_function_procedure, [some_function_sum.ident]);
+// let some_function_assign = make_assign(some_function_param.ident, some_other_function_call);
 
-some_function_block.statements.push(make_statement(make_return(some_function_sub)));
+some_function_block.statements.push(make_statement(some_function_sum));
+some_function_block.statements.push(make_statement(some_function_for));
+// some_function_block.statements.push(make_statement(some_function_assign));
+some_function_block.statements.push(make_statement(make_return(some_function_sum.ident)));
 
 /*
 int factorial(int number) {
@@ -956,19 +1027,17 @@ Global_Block.statements.push(make_statement(Main_call));
 
 /*
 int main() {
-    int local_variable = 42;
-    local_variable = some_function(2 + some_function(local_variable));
-	while (local_variable <= 24) {
+    int local_variable = 3;
+	local_variable = some_function(local_variable);
+	// while (local_variable <= 24) {
 		local_variable += factorial(local_variable - 1) - 4;
 	}
 	return local_variable;
 }
 */
-let local_variable = make_declaration(make_ident("local_variable"), make_literal("42"), Types.int);
+let local_variable = make_declaration(make_ident("local_variable"), make_literal("3"), Types.int);
 let some_function_call = make_procedure_call(some_function_declaration, [local_variable.ident]);
-let binop = make_binary_operation(make_literal("2"), "+", some_function_call);
-let some_function_call_2 = make_procedure_call(some_function_declaration, [binop]);
-let local_variable_assign = make_assign(local_variable.ident, some_function_call_2);
+let local_variable_assign = make_assign(local_variable.ident, some_function_call);
 
 let while_block = make_block();
 let while_condition = make_binary_operation(local_variable.ident, "<=", make_literal("24"));
@@ -981,7 +1050,7 @@ let while_loop = make_while(while_condition, while_block);
 while_block.statements.push(make_statement(local_variable_opassign));
 Main_block.statements.push(make_statement(local_variable));
 Main_block.statements.push(make_statement(local_variable_assign));
-Main_block.statements.push(make_statement(while_loop));
+// Main_block.statements.push(make_statement(while_loop));
 Main_block.statements.push(make_statement(make_return(clone(local_variable.ident))));
 
 let code_element = document.getElementById("code");
@@ -1086,6 +1155,11 @@ function start_debugging() {
 	execution_cursor.is_execution = false;
 	execution_cursor = Global_Block.elements[0].expression;
 	execution_cursor.is_execution = true;
+
+	run(execution_cursor);
+
+	slider_element.value = 0;
+	slider_oninput();
 
 	debugging = true;
 }
@@ -1286,6 +1360,22 @@ function step_into() {
 		execution_cursor = cursor;
 		execution_cursor.is_execution = true;
 	}
+	else if (cursor.base.kind == Code_Kind.FOR) {
+
+		let index = 0;
+
+		map_index_set(cursor, index);
+
+		cursor.elements = [cursor.condition, cursor.block];
+
+		expression_stack.push(cursor);
+
+		cursor = cursor.condition;
+
+		execution_cursor.is_execution = false;
+		execution_cursor = cursor;
+		execution_cursor.is_execution = true;
+	}
 }
 function step_out() {
 
@@ -1312,7 +1402,8 @@ function step_out() {
 		let second_last_expression = expression_stack[expression_stack.length-1];
 
 		// @Audit
-		if (second_last_expression.base.kind == Code_Kind.WHILE) {
+		if (second_last_expression.base.kind == Code_Kind.WHILE ||
+		    second_last_expression.base.kind == Code_Kind.FOR) {
 
 			cursor = second_last_expression.condition;
 
@@ -1368,6 +1459,7 @@ function step_out() {
 		last_expression.base.kind == Code_Kind.IF ||
 		last_expression.base.kind == Code_Kind.ELSE ||
 		last_expression.base.kind == Code_Kind.WHILE ||
+		last_expression.base.kind == Code_Kind.FOR ||
 		last_expression.base.kind == Code_Kind.RETURN) {
 
 		cursor = last_expression;
@@ -1508,7 +1600,8 @@ function step_next() {
 
 	// we're gonna test the condition later
 	if (last_expression.base.kind != Code_Kind.IF &&
-	    last_expression.base.kind != Code_Kind.WHILE) {
+		last_expression.base.kind != Code_Kind.WHILE &&
+		last_expression.base.kind != Code_Kind.FOR) {
 
 		run(execution_cursor);
 	}
@@ -1564,7 +1657,8 @@ function step_next() {
 			execution_cursor.is_execution = true;
 		}
 	}
-	else if (last_expression.base.kind == Code_Kind.WHILE) {
+	else if (last_expression.base.kind == Code_Kind.WHILE ||
+	         last_expression.base.kind == Code_Kind.FOR) {
 
 		let condition = clone(last_expression.condition);
 
@@ -1634,6 +1728,8 @@ function run(target, force = false) {
 
 	let last_expression = expression_stack[expression_stack.length-1];
 
+	let last_block = block_stack[block_stack.length-1];
+
 	if (typeof target.times_executed == "undefined") {
 
 		target.times_executed = 0;
@@ -1699,6 +1795,8 @@ function run(target, force = false) {
 
 			let else_expr = goto_next_executable_expression(last_expression);
 
+			else_expr.if_expr = target;
+
 			return_value = run(else_expr);
 		}
 	}
@@ -1711,43 +1809,59 @@ function run(target, force = false) {
 		// @Incomplete
 		// what about returns inside whiles?
 
-		// @MassiveHack
-		// the other approach would be to pass everything through functions, which is more messy
-		disable_execution_recording = true;
+		// could pass this as a param
+		let block_index = last_block.statements.findIndex(
+			function(elem) {
+				return Object.is(elem.expression, target);
+			}
+		);
 
-		let condition = clone(target.condition);
-		let should_run = run(condition);
+		let should_run = true;
+		do {
+			let condition = clone(target.condition);
+			should_run = run(condition);
+			let block = transform(clone(target.block));
+			if (should_run) {
+				run(block);
+			}
+			let cycle = make_if(condition, block);
+			cycle.loop = target;
 
-		disable_execution_recording = false;
+			last_block.statements.splice(block_index, 0, make_statement(cycle));
+			block_index += 1;
 
-		let old_execution_cursor = execution_cursor;
+		} while (should_run);
 
-		execution_cursor.is_execution = false;
-		execution_cursor = target;
-		execution_cursor.is_execution = true;
+		last_block.index = block_index;
+	}
+	else if (target.base.kind == Code_Kind.FOR) {
 
-		while (should_run) {
+		// could pass this as a param
+		let block_index = last_block.statements.findIndex(
+			function(elem) {
+				return Object.is(elem.expression, target);
+			}
+		);
+		last_block.statements.splice(block_index, 0, target.begin);
+		block_index += 1;
+		run(target.begin.expression);
 
-			// @Ugly
+		let should_run = true;
+		do {
+			let condition = clone(target.condition);
+			should_run = run(condition);
+			let block = transform(clone(target.block));
+			if (should_run) {
+				run(block);
+			}
+			let cycle = make_if(condition, block);
+			cycle.loop = target;
 
-			step_into();
+			last_block.statements.splice(block_index, 0, make_statement(cycle));
+			block_index += 1;
+		} while (should_run);
 
-			step_next();
-
-			step_out();
-
-			step_next();
-
-			disable_execution_recording = true;
-
-			should_run = run(condition, true);
-
-			disable_execution_recording = false;
-		}
-
-		execution_cursor.is_execution = false;
-		execution_cursor = old_execution_cursor;
-		execution_cursor.is_execution = true;
+		last_block.index = block_index;
 	}
 	else if (target.base.kind == Code_Kind.ASSIGN) {
 
@@ -1802,17 +1916,16 @@ function run(target, force = false) {
 		let executing_expr = get_current_executable_expression(target);
 
 		do {
-
+			executing_expr = target.elements[target.index].expression;
 			return_value = run(executing_expr);
-
-			executing_expr = goto_next_executable_expression(target);
+			target.index += 1;
 
 			if (last_call.returned) {
 
 				break;
 			}
 
-		} while (executing_expr)
+		} while (target.index < target.elements.length)
 	}
 	else if (!return_value && target.transformed) { // @Audit
 
@@ -1831,12 +1944,13 @@ function run(target, force = false) {
 		typeof target.transformed_from_opassign === "undefined" &&
 		target.base.kind != Code_Kind.BLOCK &&
 		target.base.kind != Code_Kind.WHILE &&
+		target.base.kind != Code_Kind.FOR &&
+		target.base.kind != Code_Kind.IF &&
+		target.base.kind != Code_Kind.ELSE &&
 		target.base.kind != Code_Kind.DECLARATION &&
 		target.base.kind != Code_Kind.ASSIGN &&
 		target.base.kind != Code_Kind.OPASSIGN &&
 		target.base.kind != Code_Kind.RETURN &&
-		target.base.kind != Code_Kind.IF &&
-		target.base.kind != Code_Kind.ELSE &&
 		disable_execution_recording == false) {
 
 		target.execution_index = execution_index;
@@ -1846,6 +1960,9 @@ function run(target, force = false) {
 
 	if (target.base.kind == Code_Kind.IDENT && target.execution_index) {
 
+		if (typeof map_ident_to_uses.get(target.declaration.ident) == "undefined") {
+			debugger;
+		}
 		map_ident_to_uses.get(target.declaration.ident).push(target.execution_index);
 	}
 
@@ -2007,6 +2124,10 @@ function clone(node) {
 	else if (node.base.kind == Code_Kind.WHILE) {
 
 		return make_while(clone(node.condition), clone(node.block));
+	}
+	else if (node.base.kind == Code_Kind.FOR) {
+
+		return make_for(clone(node.begin), clone(node.condition), clone(node.cycle_end), clone(node.block));
 	}
 	else if (node.base.kind == Code_Kind.DECLARATION) {
 
@@ -2225,7 +2346,7 @@ function transform(node, force = false) {
 
 		assign.transformed_from_opassign = node;
 
-		replacement.statements.push(assign);
+		replacement.statements.push(make_statement(assign));
 	}
 	else if (node.base.kind == Code_Kind.IF) {
 
@@ -2241,6 +2362,17 @@ function transform(node, force = false) {
 
 		transform(node.condition);
 
+		transform(node.block);
+	}
+	else if (node.base.kind == Code_Kind.FOR) {
+
+		transform(node.begin);
+
+		transform(node.condition);
+
+		transform(node.cycle_end);
+
+		node.block.statements.push(node.cycle_end);
 		transform(node.block);
 	}
 	else if (node.base.kind == Code_Kind.RETURN) {
@@ -2474,8 +2606,37 @@ function should_hide(node) {
 		return should_hide(node.ident);
 	}
 
+	if (node.base.kind == Code_Kind.WHILE ||
+	    node.base.kind == Code_Kind.FOR) {
+
+		return true;
+	}
+
+	if (node.base.kind == Code_Kind.IF) {
+
+		return false;
+	}
+
+	if (node.base.kind == Code_Kind.ELSE) {
+
+		return node.if_expr.condition.last_return == false;
+	}
+
+	if (node.base.kind == Code_Kind.BLOCK) {
+
+		let should = false;
+
+		for (let stmt of node.statements) {
+
+			should = should || should_hide(stmt.expression);
+		}
+
+		return should;
+	}
+
+	// hide code that has not been run
 	if (typeof node.execution_index == "undefined" &&
-	    typeof node.last_return == "undefined") {
+		typeof node.last_return == "undefined") {
 
 		return true;
 	}
@@ -2685,9 +2846,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	else if (node.base.kind == Code_Kind.BINARY_OPERATION) {
 
 		// @Audit
-		if (values_shown && should_inline_node == false && node.last_return !== null &&
-		    typeof node.last_return !== "undefined" &&
-		    node.times_executed >= last_expression.times_executed) {
+		if (values_shown && should_inline_node == false) {
 
 			expr.appendChild(document.createTextNode(node.last_return));
 		}
