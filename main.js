@@ -2731,6 +2731,11 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 			print_to_dom(statement, block, block);
 		}
 
+		if (block.children.length == 0) {
+
+			block_print_target.removeChild(block);
+		}
+
 		if (!is_transformed_block) {
 
 			indent_level -= 1;
