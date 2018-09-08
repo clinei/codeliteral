@@ -29,34 +29,6 @@ function document_keydown(event) {
 		print();
 	}
 
-	// press F
-	if (event.keyCode == 70) {
-
-		add_flowpoint();
-		print();
-	}
-
-	// press G
-	if (event.keyCode == 71) {
-
-		delete_flowpoint();
-		print();
-	}
-
-	// press C
-	if (event.keyCode == 67) {
-
-		previous_flowpoint();
-		print();
-	}
-
-	// press V
-	if (event.keyCode == 86) {
-
-		next_flowpoint();
-		print();
-	}
-
 	// press W
 	if (event.keyCode == 87) {
 
@@ -129,6 +101,34 @@ function document_keydown(event) {
 
 	// press K
 	if (event.keyCode == 75) {
+
+		add_flowpoint();
+		print();
+	}
+
+	// press L
+	if (event.keyCode == 76) {
+
+		delete_flowpoint();
+		print();
+	}
+
+	// press ,
+	if (event.keyCode == 188) {
+
+		previous_flowpoint();
+		print();
+	}
+
+	// press .
+	if (event.keyCode == 190) {
+
+		next_flowpoint();
+		print();
+	}
+
+	// press F
+	if (event.keyCode == 70) {
 
 		toggle_values_shown();
 		print();
