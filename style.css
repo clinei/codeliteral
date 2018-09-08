@@ -1,14 +1,28 @@
+@font-face {
+	font-family: DejaVuSansMono;
+	src: url(DejaVuSansMono.ttf);
+}
+
 body {
 
-	margin: 12pt;
+	margin: 20px;
 	margin-bottom: 0;
 
-	font-family: monospace;
+	font-family: DejaVuSansMono, monospace;
 	font-weight: normal;
-	font-size: 12pt;
+	font-size: 15px;
+	margin-bottom: 0.3em;
 
 	color: rgb(200, 200, 200);
 	background: rgb(40, 40, 40);
+}
+
+table {
+	color: inherit;
+	font-size: inherit;
+}
+td {
+	padding-right: 16px;
 }
 
 #instructions {
@@ -96,7 +110,7 @@ block {
 
 .selected, .executing, .flow-1, .flow-2, .flow-3, .flow-4, .flow-5, .flow-6, .flow-7, .flow-8, .flow-9 {
 
-	border-radius: 0.3em;
+	border-radius: 0.2em;
 }
 
 .selected {
@@ -104,6 +118,7 @@ block {
 	color: rgba(220, 220, 220, 0.8);
 
 	background-color: rgb(140, 70, 50) !important;
+	/* box-shadow: 0 0 0 1px rgb(140, 70, 50); */
 
 	z-index: 10;
 }

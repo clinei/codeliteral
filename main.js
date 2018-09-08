@@ -29,48 +29,6 @@ function document_keydown(event) {
 		print();
 	}
 
-	// press I
-	if (event.keyCode == 73) {
-
-		step_into();
-		print();
-	}
-
-	// press O
-	if (event.keyCode == 79) {
-
-		step_out();
-		print();
-	}
-
-	// press E
-	if (event.keyCode == 69) {
-
-		previous_change();
-		print();
-	}
-
-	// press R
-	if (event.keyCode == 82) {
-
-		next_change();
-		print();
-	}
-
-	// press Y
-	if (event.keyCode == 89) {
-
-		previous_use();
-		print();
-	}
-
-	// press U
-	if (event.keyCode == 85) {
-
-		next_use();
-		print();
-	}
-
 	// press F
 	if (event.keyCode == 70) {
 
@@ -127,15 +85,43 @@ function document_keydown(event) {
 		print();
 	}
 
+	// press Y
+	if (event.keyCode == 89) {
+
+		previous_use();
+		print();
+	}
+
+	// press U
+	if (event.keyCode == 85) {
+
+		next_use();
+		print();
+	}
+
 	// press H
 	if (event.keyCode == 72) {
 
-		hide_flowzone();
+		previous_change();
 		print();
 	}
 
 	// press J
 	if (event.keyCode == 74) {
+
+		next_change();
+		print();
+	}
+
+	// press I
+	if (event.keyCode == 73) {
+
+		hide_flowzone();
+		print();
+	}
+
+	// press O
+	if (event.keyCode == 79) {
 
 		unhide_flowzone();
 		print();
@@ -148,12 +134,14 @@ function document_keydown(event) {
 		print();
 	}
 
+	/*
 	// press M
 	if (event.keyCode == 77) {
 
 		toggle_inspection();
 		print();
 	}
+	*/
 
 	let number = event.keyCode - 48;
 
