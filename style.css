@@ -159,3 +159,20 @@ block {
 
 	outline: none;
 }
+
+/* Syntax Highlighting */
+.code-literal {
+	color: rgb(0, 255, 213);
+}
+.code-ident {
+	color: rgb(210, 210, 210);
+}
+.code-type {
+	color: rgb(145, 167, 255);
+}
+.code-func {
+	color: rgb(213, 214, 140);
+}
+.code-keyword {
+	color: rgb(248, 156, 248);
+}

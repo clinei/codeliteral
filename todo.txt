@@ -1,16 +1,8 @@
 Bugs:
 
-most instructions are in pairs, make a table so they are aligned vertically
-
 we should have a comment on the general design
 
-check how stepping next and into looks like
-
-should not clone when printing
-
-for loop not implemented, put declarations before cycles, put cycle end as last statement, otherwise like while
-
-continue and break not implemented
+do while loop not implemented
 
 else if not implemented
 
@@ -22,9 +14,15 @@ Ideas:
 
 need to implement heap and stack memory, and map_memory_to_changes and map_memory_to_uses
 malloc and free
+arrays
 
-pressing M makes the prev/next use/change look in memory instead of ident
+pressing M makes the prev/next use/change use memory instead of ident
 needs visual feedback
+
+pressing E shows the elements inside binary operations, so they never show values
+make an example that uses a lot of binary operations in a conditional
+
+make a demo where we solve a nasty bug
 
 we could inline if statements, but declarations in them have to be transformed
 
