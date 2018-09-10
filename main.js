@@ -2291,7 +2291,8 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		if (is_transformed_block) {
 
-			style += "background-color: rgba("+ palette[palette_index] +", 0.03)";
+			// style += "background-color: rgba("+ palette[palette_index] +", 0.03)";
+			style += "background-color: rgba(250, 250, 250, 0.02)";
 			palette_index += 1;
 			palette_index %= palette.length;
 		}
@@ -2452,7 +2453,10 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 			print_to_dom(node.left, expr, block_print_target);
 
-			expr.appendChild(document.createTextNode(" "+ node.operation_type +" "));
+			let op = document.createElement("expr");
+			op.appendChild(document.createTextNode(" "+ node.operation_type +" "));
+			op.classList.add("code-op");
+			expr.appendChild(op);
 
 			print_to_dom(node.right, expr, block_print_target);
 		}
@@ -2515,7 +2519,10 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		print_to_dom(node.ident, expr, block_print_target);
 
-		expr.appendChild(document.createTextNode(" = "));
+		let op = document.createElement("expr");
+		op.appendChild(document.createTextNode(" = "));
+		op.classList.add("code-op");
+		expr.appendChild(op);
 
 		expr.appendChild(temp_expr.children[0]);
 
@@ -2529,7 +2536,10 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		print_to_dom(node.ident, expr, block_print_target);
 
-		expr.appendChild(document.createTextNode(" "+ node.operation_type +"= "));
+		let op = document.createElement("expr");
+		op.appendChild(document.createTextNode(" "+ node.operation_type +"= "));
+		op.classList.add("code-op");
+		expr.appendChild(op);
 
 		expr.appendChild(temp_expr.children[0]);
 
