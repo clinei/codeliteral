@@ -8,6 +8,20 @@ function main() {
 	print();
 }
 
+let values_shown = false;
+let lhs_values_shown = false;
+let binop_values_shown = true;
+let move_between_original_idents = false;
+
+function number_compare(a, b) {
+	if (a < b) {
+		return -1;
+	}
+	else {
+		return 1;
+	}
+}
+
 function map_keyboard() {
 
 	document.addEventListener("keydown", document_keydown);
@@ -127,17 +141,39 @@ function document_keydown(event) {
 		print();
 	}
 
+	// press R
+	if (event.keyCode == 82) {
+
+		// move_between_original_idents = !move_between_original_idents;
+		previous_original();
+		print();
+	}
+
+	// press T
+	if (event.keyCode == 84) {
+
+		next_original();
+		print();
+	}
+
 	// press F
 	if (event.keyCode == 70) {
 
-		toggle_values_shown();
+		values_shown = !values_shown;
 		print();
 	}
 
 	// press C
 	if (event.keyCode == 67) {
 
-		toggle_lhs_values_shown();
+		lhs_values_shown = !lhs_values_shown;
+		print();
+	}
+
+	// press E
+	if (event.keyCode == 69) {
+
+		binop_values_shown = !binop_values_shown;
 		print();
 	}
 
@@ -160,18 +196,6 @@ function document_keydown(event) {
 		
 		print();
 	}
-}
-
-let values_shown = false;
-function toggle_values_shown() {
-
-	values_shown = !values_shown;
-}
-
-let lhs_values_shown = false;
-function toggle_lhs_values_shown() {
-
-	lhs_values_shown = !lhs_values_shown;
 }
 
 let inspection_mode = false;
@@ -290,7 +314,10 @@ function down_line() {
 		let indices = map_line_to_execution_indices[line];
 		if (indices.length) {
 
-			execution_index = indices[0];
+			if (column_index >= indices.length) {
+				column_index = indices.length - 1;
+			}
+			execution_index = indices[column_index];
 			slider_element.value = execution_index;
 			inspection_cursor.is_inspection = false;
 			inspection_cursor = execution_stack[execution_index];
@@ -314,7 +341,10 @@ function up_line() {
 		let indices = map_line_to_execution_indices[line];
 		if (indices.length) {
 
-			execution_index = indices[0];
+			if (column_index >= indices.length) {
+				column_index = indices.length - 1;
+			}
+			execution_index = indices[column_index];
 			slider_element.value = execution_index;
 			inspection_cursor.is_inspection = false;
 			inspection_cursor = execution_stack[execution_index];
@@ -327,14 +357,12 @@ function up_line() {
 function left_line() {
 
 	let indices = map_line_to_execution_indices[current_line];
-	let index = find_previous_index_in_array(indices, execution_index);
 
-	if (index < 0) {
-
-		return;
+	if (column_index > 0) {
+		column_index -= 1;
 	}
 
-	execution_index = indices[index];
+	execution_index = indices[column_index];
 	slider_element.value = execution_index;
 	inspection_cursor.is_inspection = false;
 	inspection_cursor = execution_stack[execution_index];
@@ -343,14 +371,12 @@ function left_line() {
 function right_line() {
 
 	let indices = map_line_to_execution_indices[current_line];
-	let index = find_next_index_in_array(indices, execution_index);
 
-	if (index >= indices.length) {
-
-		return;
+	if (column_index < indices.length-1) {
+		column_index += 1;
 	}
 
-	execution_index = indices[index];
+	execution_index = indices[column_index];
 	slider_element.value = execution_index;
 	inspection_cursor.is_inspection = false;
 	inspection_cursor = execution_stack[execution_index];
@@ -431,6 +457,36 @@ function next_use() {
 		inspection_cursor = execution_stack[execution_index];
 		inspection_cursor.is_inspection = true;
 	}
+}
+function previous_original() {
+	let indices = map_original_to_indices.get(inspection_cursor.original);
+	let index = find_previous_index_in_array(indices, execution_index);
+	
+	if (index < 0) {
+
+		return;
+	}
+
+	execution_index = indices[index];
+	slider_element.value = execution_index;
+	inspection_cursor.is_inspection = false;
+	inspection_cursor = execution_stack[execution_index];
+	inspection_cursor.is_inspection = true;
+}
+function next_original() {
+	let indices = map_original_to_indices.get(inspection_cursor.original);
+	let index = find_next_index_in_array(indices, execution_index);
+	
+	if (index >= indices.length) {
+
+		return;
+	}
+
+	execution_index = indices[index];
+	slider_element.value = execution_index;
+	inspection_cursor.is_inspection = false;
+	inspection_cursor = execution_stack[execution_index];
+	inspection_cursor.is_inspection = true;
 }
 function find_next_index_in_array(array, index) {
 
@@ -915,6 +971,7 @@ let map_call_to_settings = new Map();
 let map_ident_to_value = new Map();
 let map_ident_to_changes = new Map();
 let map_ident_to_uses = new Map();
+let map_original_to_indices = new Map();
 
 let map_original_to_clone = new Map();
 
@@ -958,6 +1015,7 @@ hidden_flowzones[9] = new Array();
 let active_dataflow = 1;
 let flowpoints = dataflows[active_dataflow];
 
+let code_composed = false;
 
 /*
 void print(let arg) {
@@ -966,7 +1024,6 @@ void print(let arg) {
 */
 let print_procedure = console.log;
 let print_declaration = make_declaration(make_ident("print"), print_procedure);
-
 
 /*
 int some_other_function(int number) {
@@ -1177,6 +1234,8 @@ Main_block.statements.push(make_statement(local_variable_assign_3));
 Main_block.statements.push(make_statement(local_variable_assign_4));
 Main_block.statements.push(make_statement(make_return(clone(local_variable.ident))));
 
+code_composed = true;
+
 let code_element = document.getElementById("code");
 
 code_element.scroll_options = {
@@ -1225,14 +1284,6 @@ function print() {
 	mark_containment(Global_Block.statements[0]);
 
 	print_to_dom(Global_Block.statements[0], code_element, code_element);
-	
-	for (let i = 0; i < map_line_to_execution_indices.length; i += 1) {
-
-		if (map_line_to_execution_indices[i]) {
-
-			map_line_to_execution_indices[i].sort((a, b) => a < b ? -1 : 1);
-		}
-	}
 
 	let cursor = null;
 
@@ -1359,6 +1410,11 @@ function run(target, force = false) {
 
 		return_value = run(transform(target));
 
+		/*
+		map_ident_to_changes.get(last_call.transformed.statements[0].expression.ident).push(target.execution_cursor);
+		map_original_ident_to_changes.get(last_call.transformed.statements[0].expression.ident.original).push(target.execution_cursor);
+		*/
+
 		last_call.returned = true;
 
 		last_call.last_return = return_value;
@@ -1470,10 +1526,10 @@ function run(target, force = false) {
 	}
 	else if (target.base.kind == Code_Kind.ASSIGN) {
 
-		target.ident.is_lhs = true;
-		run(target.ident)
-
 		let expression_value = run(target.expression);
+
+		target.ident.is_lhs = true;
+		run(target.ident);
 
 		map_ident_to_value.set(target.ident.declaration.ident, expression_value);
 		map_ident_to_changes.get(target.ident.declaration.ident).push(target.ident.execution_index);
@@ -1482,8 +1538,8 @@ function run(target, force = false) {
 	}
 	else if (target.base.kind == Code_Kind.OPASSIGN) {
 
+		run(target.ident);
 		target.ident.is_lhs = true;
-		run(target.ident)
 
 		return_value = run(transform(target));
 	}
@@ -1491,9 +1547,8 @@ function run(target, force = false) {
 
 		let expression_value = null;
 
-		target.ident.execution_index = execution_index;
-		execution_stack.push(target.ident);
-		execution_index += 1;
+		target.ident.is_lhs = true;
+		run(target.ident);
 		
 		idents_used.add(target.ident.name);
 
@@ -1514,6 +1569,11 @@ function run(target, force = false) {
 		return_value = expression_value;
 	}
 	else if (target.base.kind == Code_Kind.IDENT) {
+
+		if (target.is_lhs != true && target.execution_index) {
+
+			map_ident_to_uses.get(target.declaration.ident).push(target.execution_index);
+		}
 
 		return_value = map_ident_to_value.get(target.declaration.ident);
 	}
@@ -1545,9 +1605,7 @@ function run(target, force = false) {
 		return_value = math_solve(target);
 	}
 
-	if (typeof target.transformed_from_return === "undefined" &&
-		typeof target.transformed_from_opassign === "undefined" &&
-		target.base.kind != Code_Kind.BLOCK &&
+	if (target.base.kind != Code_Kind.BLOCK &&
 		target.base.kind != Code_Kind.WHILE &&
 		target.base.kind != Code_Kind.FOR &&
 		target.base.kind != Code_Kind.IF &&
@@ -1555,20 +1613,19 @@ function run(target, force = false) {
 		target.base.kind != Code_Kind.DECLARATION &&
 		target.base.kind != Code_Kind.ASSIGN &&
 		target.base.kind != Code_Kind.OPASSIGN &&
-		target.base.kind != Code_Kind.RETURN &&
-		disable_execution_recording == false) {
+		target.base.kind != Code_Kind.RETURN) {
 
-		target.execution_index = execution_index;
-		execution_stack.push(target);
-		execution_index += 1;
-	}
+		if (disable_execution_recording == false) {
 
-	if (target.base.kind == Code_Kind.IDENT && target.execution_index) {
-
-		if (typeof map_ident_to_uses.get(target.declaration.ident) == "undefined") {
-			debugger;
+			target.execution_index = execution_index;
+			execution_stack.push(target);
+			execution_index += 1;
 		}
-		map_ident_to_uses.get(target.declaration.ident).push(target.execution_index);
+
+		if (typeof target.original != "undefined") {
+
+			map_original_to_indices.get(target.original).push(target.execution_index);
+		}
 	}
 
 	target.last_return = return_value;
@@ -1661,9 +1718,12 @@ function math_solve(node) {
 
 function clone(node) {
 
+	// @@@
 	if (node === null) {
 		return;
 	}
+
+	let cloned;
 
 	if (node.base.kind == Code_Kind.BLOCK) {
 
@@ -1674,7 +1734,7 @@ function clone(node) {
 			statements.push(clone(statement));
 		}
 
-		return make_block(statements);
+		cloned = make_block(statements);
 	}
 	else if (node.base.kind == Code_Kind.PROCEDURE) {
 
@@ -1690,7 +1750,7 @@ function clone(node) {
 			}
 		}
 
-		return make_procedure(params, node.return_type, clone(node.block));
+		cloned = make_procedure(params, node.return_type, clone(node.block));
 	}
 	else if (node.base.kind == Code_Kind.PROCEDURE_CALL) {
 
@@ -1706,47 +1766,47 @@ function clone(node) {
 			}
 		}
 
-		return make_procedure_call(node.declaration, args);
+		cloned = make_procedure_call(node.declaration, args);
 	}
 	else if (node.base.kind == Code_Kind.IF) {
 
-		return make_if(clone(node.condition), clone(node.block));
+		cloned = make_if(clone(node.condition), clone(node.block));
 	}
 	else if (node.base.kind == Code_Kind.ELSE) {
 
-		return make_else(clone(node.block));
+		cloned = make_else(clone(node.block));
 	}
 	else if (node.base.kind == Code_Kind.WHILE) {
 
-		return make_while(clone(node.condition), clone(node.block));
+		cloned = make_while(clone(node.condition), clone(node.block));
 	}
 	else if (node.base.kind == Code_Kind.FOR) {
 
-		return make_for(clone(node.begin), clone(node.condition), clone(node.cycle_end), clone(node.block));
+		cloned = make_for(clone(node.begin), clone(node.condition), clone(node.cycle_end), clone(node.block));
 	}
 	else if (node.base.kind == Code_Kind.BREAK) {
 
-		return make_break();
+		cloned = make_break();
 	}
 	else if (node.base.kind == Code_Kind.CONTINUE) {
 
-		return make_continue();
+		cloned = make_continue();
 	}
 	else if (node.base.kind == Code_Kind.DECLARATION) {
 
 		let decl = make_declaration(clone(node.ident), clone(node.expression), node.type);
 
-		decl.ident.original = node.ident.original;
 		decl.ident.name = get_final_name(node.ident.original.name);
 
 		map_original_to_clone.set(node, decl);
 
-		return decl;
+		cloned = decl;
 	}
 	else if (node.base.kind == Code_Kind.IDENT) {
 
 		let ident = make_ident(node.name);
 
+		// @Cleanup
 		let decl_clone = map_original_to_clone.get(node.declaration);
 
 		if (decl_clone) {
@@ -1760,36 +1820,48 @@ function clone(node) {
 			ident.declaration = node.declaration;
 		}
 
-		return ident;
+		cloned = ident;
 	}
 	else if (node.base.kind == Code_Kind.ASSIGN) {
 
-		return make_assign(clone(node.ident), clone(node.expression));
+		cloned = make_assign(clone(node.ident), clone(node.expression));
 	}
 	else if (node.base.kind == Code_Kind.OPASSIGN) {
 
-		return make_opassign(clone(node.ident), node.operation_type, clone(node.expression));
+		cloned = make_opassign(clone(node.ident), node.operation_type, clone(node.expression));
 	}
 	else if (node.base.kind == Code_Kind.BINARY_OPERATION) {
 
-		return make_binary_operation(clone(node.left), node.operation_type, clone(node.right));
+		cloned = make_binary_operation(clone(node.left), node.operation_type, clone(node.right));
 	}
 	else if (node.base.kind == Code_Kind.LITERAL) {
 
-		return make_literal(node.value);
+		cloned = make_literal(node.value);
 	}
 	else if (node.base.kind == Code_Kind.RETURN) {
 
-		return make_return(clone(node.expression));
+		cloned = make_return(clone(node.expression));
 	}
 	else if (node.base.kind == Code_Kind.NEWLINE) {
 
-		return node;
+		cloned = node;
 	}
 	else if (node.base.kind == Code_Kind.STATEMENT) {
 
-		return make_statement(clone(node.expression));
+		cloned = make_statement(clone(node.expression));
 	}
+
+	if (code_composed) {
+		cloned.original = node.original ? node.original : node;
+		let indices = map_original_to_indices.get(cloned.original);
+		if (typeof indices == "undefined") {
+			indices = new Array();
+			map_original_to_indices.set(cloned.original, indices);
+		}
+		// map_instance_to_original.set(cloned, indices);
+	}
+
+	return cloned;
 }
 
 function get_final_name(name) {
@@ -1866,139 +1938,21 @@ function transform(node) {
 
 		call_stack.pop();
 	}
-	/*
-	else if (node.base.kind == Code_Kind.BLOCK) {
-
-		block_stack.push(node);
-
-		node.declarations = new Array();
-
-		for (let stmt of node.statements) {
-
-			transform(stmt);
-
-			replacement.statements.push(stmt);
-		}
-
-		block_stack.pop();
-	}
-	else if (node.base.kind == Code_Kind.STATEMENT) {
-
-		if (node.expression.base.kind != Code_Kind.NEWLINE) {
-
-			transform(node.expression);
-		}
-	}
-	else if (node.base.kind == Code_Kind.PROCEDURE) {
-
-		transform(node.block);
-
-		replacement.push(make_procedure(node.parameters, node.return_type, node.block));
-	}
-	else if (node.base.kind == Code_Kind.DECLARATION) {
-
-		last_block.declarations.push(node);
-
-		if (node.expression) {
-
-			transform(node.expression);
-		}
-	}
-	else if (node.base.kind == Code_Kind.ASSIGN) {
-
-		transform(node.expression);
-	}
-	*/
 	else if (node.base.kind == Code_Kind.OPASSIGN) {
-
-		node.ident.transformed_from_opassign = node;
 
 		let binop = make_binary_operation(node.ident, node.operation_type, node.expression);
 
-		binop.transformed_from_opassign = node;
-
 		let assign = make_assign(node.ident, binop);
-
-		assign.transformed_from_opassign = node;
 
 		replacement.statements.push(make_statement(assign));
 	}
-	else if (node.base.kind == Code_Kind.IF) {
-
-		transform(node.condition);
-
-		transform(node.block);
-	}
-	else if (node.base.kind == Code_Kind.ELSE) {
-
-		transform(node.block);
-	}
-	/*
-	else if (node.base.kind == Code_Kind.WHILE) {
-
-		transform(node.condition);
-
-		transform(node.block);
-	}
-	else if (node.base.kind == Code_Kind.FOR) {
-
-		transform(node.begin);
-
-		transform(node.condition);
-
-		transform(node.cycle_end);
-
-		node.block.statements.push(node.cycle_end);
-		transform(node.block);
-	}
-	*/
 	else if (node.base.kind == Code_Kind.RETURN) {
 
 		let ident = last_call.transformed.statements[0].expression.ident;
 
 		let assign = make_assign(clone(ident), node.expression);
 
-		assign.transformed_from_return = node;
-
-		// transform(node.expression);
-
 		replacement.statements.push(make_statement(assign));
-	}
-	else if (node.base.kind == Code_Kind.BINARY_OPERATION) {
-
-		/* @Disabled
-		// until operator overloading
-
-		// @Incomplete
-		// need dynamic type
-		let ident = make_ident(get_final_name("binop"));
-
-		// if (Object.is(node.left.declaration.type, Types.int)) {}
-		let type = Types.int;
-
-		let decl = make_declaration(ident, null, type);
-
-		// @Audit
-		last_block.declarations.push(decl);
-
-		replacement.statements.push(make_statement(decl));
-		*/
-
-		transform(node.left);
-		transform(node.right);
-
-		/* @Disabled
-
-		// @Incomplete
-		// if neither the left or the right are transformed, combine declaration and assign
-
-		let binop = make_binary_operation(node.left, node.operation_type, node.right);
-
-		let assign = make_assign(make_ident(ident.name, ident.declaration), binop);
-
-		replacement.statements.push(make_statement(assign));
-
-		*/
 	}
 
 	if (replacement.statements.length > 0) {
@@ -2236,6 +2190,7 @@ let map_expr_to_printed = new Map();
 let map_line_to_execution_indices = new Array();
 let line_count = 0;
 let current_line = 0;
+let column_index = 0;
 function print_to_dom(node, print_target, block_print_target, is_transformed_block = false) {
 
 	let expr = document.createElement("expr");
@@ -2274,6 +2229,18 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		}
 	}
 
+	let order_last = false;
+	if (node.base.kind == Code_Kind.BINARY_OPERATION) {
+
+		order_last = true;
+	}
+	
+	if (order_last == false && node.execution_index >= 0) {
+		if (map_line_to_execution_indices[line_count]) {
+			map_line_to_execution_indices[line_count].push(node.execution_index);
+		}
+	}
+
 	if (node.base.kind == Code_Kind.BLOCK) {
 
 		if (!is_transformed_block) {
@@ -2306,6 +2273,9 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		for (let statement of node.statements) {
 
 			print_to_dom(statement, block, block);
+			
+			line_count += 1;
+			map_line_to_execution_indices[line_count] = new Array();
 		}
 
 		if (block.children.length > 0) {
@@ -2331,9 +2301,6 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		else {
 
 			print_to_dom(node.expression, expr, block_print_target);
-
-			line_count += 1;
-			map_line_to_execution_indices[line_count] = new Array();
 
 			if (expr.children.length > 0) {
 
@@ -2444,7 +2411,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	}
 	else if (node.base.kind == Code_Kind.BINARY_OPERATION) {
 
-		if (values_shown && should_inline_node == false) {
+		if (values_shown && binop_values_shown && should_inline_node == false) {
 
 			expr.classList.add("code-literal");
 			expr.appendChild(document.createTextNode(node.last_return));
@@ -2503,7 +2470,10 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 			if (node.expression) {
 
-				expr.appendChild(document.createTextNode(" = "));
+				let op = document.createElement("expr");
+				op.appendChild(document.createTextNode(" = "));
+				op.classList.add("code-op");
+				expr.appendChild(op);
 
 				print_to_dom(node.expression, expr, block_print_target);
 			}
@@ -2513,11 +2483,24 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	}
 	else if (node.base.kind == Code_Kind.ASSIGN) {
 
+		let prev_line_count = line_count;
+		// if we print the expression after the ident, up_line will be incorrect
 		let temp_expr = document.createElement("expr");
-
 		print_to_dom(node.expression, temp_expr, block_print_target);
 
 		print_to_dom(node.ident, expr, block_print_target);
+
+		// @Ugly
+		if (prev_line_count == line_count) {
+			let line = map_line_to_execution_indices[line_count];
+			if (line.length >= 2) {
+				line.unshift(line.pop());
+				// @Copypaste
+				if (Object.is(node.ident, inspection_cursor)) {
+					column_index = map_line_to_execution_indices[current_line].indexOf(execution_index);
+				}
+			}
+		}
 
 		let op = document.createElement("expr");
 		op.appendChild(document.createTextNode(" = "));
@@ -2530,11 +2513,25 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	}
 	else if (node.base.kind == Code_Kind.OPASSIGN) {
 
+		let prev_line_count = line_count;
 		let temp_expr = document.createElement("expr");
 
 		print_to_dom(node.expression, temp_expr, block_print_target);
 
 		print_to_dom(node.ident, expr, block_print_target);
+
+		// @Ugly
+		// @Copypaste
+		if (prev_line_count == line_count) {
+			let line = map_line_to_execution_indices[line_count];
+			if (line.length >= 2) {
+				line.unshift(line.pop());
+				// @Copypaste
+				if (Object.is(node.ident, inspection_cursor)) {
+					column_index = map_line_to_execution_indices[current_line].indexOf(execution_index);
+				}
+			}
+		}
 
 		let op = document.createElement("expr");
 		op.appendChild(document.createTextNode(" "+ node.operation_type +"= "));
@@ -2606,6 +2603,12 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 	map_expr_to_printed.set(node, expr);
 
+	if (order_last && node.execution_index >= 0) {
+		if (map_line_to_execution_indices[line_count]) {
+			map_line_to_execution_indices[line_count].push(node.execution_index);
+		}
+	}
+
 	if (Object.is(node, execution_cursor)) {
 
 		expr.classList.add("executing");
@@ -2619,6 +2622,8 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		current_line = line_count;
 
+		column_index = map_line_to_execution_indices[current_line].indexOf(execution_index);
+
 		expr.classList.add("selected");
 
 		if (inspection_mode) {
@@ -2626,23 +2631,9 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 			expr.classList.add("active_cursor");
 		}
 	}
-	// procedure calls show up twice in execution stack
-	if (flowpoints.indexOf(execution_stack.indexOf(node)) >= 0 ||
-	    flowpoints.indexOf(execution_stack.lastIndexOf(node)) >= 0) {
+	if (flowpoints.indexOf(execution_stack.indexOf(node)) >= 0) {
 
 		expr.classList.add("flow-"+ active_dataflow);
-	}
-
-	if (node.execution_index) {
-
-		if (map_line_to_execution_indices[line_count]) {
-
-			map_line_to_execution_indices[line_count].push(node.execution_index);
-		}
-		else {
-
-			console.log("line "+ line_count + " broken");
-		}
 	}
 }
 

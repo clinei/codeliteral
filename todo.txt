@@ -12,14 +12,17 @@ increment and decrement not implemented
 
 Ideas:
 
+add page up and page down
+speed up scrolling when holding down W or D
+
 need to implement heap and stack memory, and map_memory_to_changes and map_memory_to_uses
 malloc and free
 arrays
 
-pressing M makes the prev/next use/change use memory instead of ident
+pressing M makes the prev/next use/change check memory instead of ident
 needs visual feedback
 
-pressing E shows the elements inside binary operations, so they never show values
+pressing E shows the elements inside binary operations, so they don't collapse into a value
 make an example that uses a lot of binary operations in a conditional
 
 make a demo where we solve a nasty bug
