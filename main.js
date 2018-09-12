@@ -1365,7 +1365,7 @@ function step_back() {
 }
 
 let disable_execution_recording = false;
-function run(target, force = false) {
+function run(node, force = false) {
 
 	let last_block = block_stack[block_stack.length-1];
 	let last_loop = loop_stack[loop_stack.length-1];
@@ -1374,36 +1374,36 @@ function run(target, force = false) {
 
 	let last_call = call_stack[call_stack.length-1];
 
-	if (target.base.kind == Code_Kind.PROCEDURE_CALL) {
+	if (node.base.kind == Code_Kind.PROCEDURE_CALL) {
 
-		call_stack.push(target);
+		call_stack.push(node);
 
-		target.returned = false;
+		node.returned = false;
 
-		if (typeof target.declaration.expression == "function") {
+		if (typeof node.declaration.expression == "function") {
 			// native JS function
 			let values = [];
-			for (let arg of target.args) {
+			for (let arg of node.args) {
 				values.push(run(arg));
 			}
-			return_value = target.declaration.expression.apply(null, values);
-			target.returned = true;
+			return_value = node.declaration.expression.apply(null, values);
+			node.returned = true;
 		}
 		else {
 
-			return_value = run(transform(target));
+			return_value = run(transform(node));
 		}
 
 		call_stack.pop();
 	}
 
-	if (target.base.kind == Code_Kind.RETURN) {
+	if (node.base.kind == Code_Kind.RETURN) {
 
-		return_value = run(transform(target));
+		return_value = run(transform(node));
 
 		/*
-		map_ident_to_changes.get(last_call.transformed.statements[0].expression.ident).push(target.execution_cursor);
-		map_original_ident_to_changes.get(last_call.transformed.statements[0].expression.ident.original).push(target.execution_cursor);
+		map_ident_to_changes.get(last_call.transformed.statements[0].expression.ident).push(node.execution_cursor);
+		map_original_ident_to_changes.get(last_call.transformed.statements[0].expression.ident.original).push(node.execution_cursor);
 		*/
 
 		last_call.returned = true;
@@ -1411,23 +1411,23 @@ function run(target, force = false) {
 		last_call.last_return = return_value;
 	}
 
-	if (target.base.kind == Code_Kind.STATEMENT) {
+	if (node.base.kind == Code_Kind.STATEMENT) {
 
-		return_value = run(target.expression);
+		return_value = run(node.expression);
 	}
-	else if (target.base.kind == Code_Kind.IF) {
+	else if (node.base.kind == Code_Kind.IF) {
 
 		let else_stmt = last_block.statements[last_block.index + 1];
 		let else_expr;
 		if (else_stmt && else_stmt.expression.base.kind == Code_Kind.ELSE) {
 
 			else_expr = else_stmt.expression;
-			else_expr.if_expr = target;
+			else_expr.if_expr = node;
 		}
 
-		if (run(target.condition)) {
+		if (run(node.condition)) {
 
-			return_value = run(target.block);
+			return_value = run(node.block);
 		}
 		else if (else_expr) {
 
@@ -1435,33 +1435,33 @@ function run(target, force = false) {
 			return_value = run(else_expr);
 		}
 	}
-	else if (target.base.kind == Code_Kind.ELSE) {
+	else if (node.base.kind == Code_Kind.ELSE) {
 
-		return_value = run(target.block);
+		return_value = run(node.block);
 	}
-	else if (target.base.kind == Code_Kind.WHILE) {
+	else if (node.base.kind == Code_Kind.WHILE) {
 
 		// could pass this as a param
 		let block_index = last_block.statements.findIndex(
 			function(elem) {
-				return Object.is(elem.expression, target);
+				return Object.is(elem.expression, node);
 			}
 		);
 
-		loop_stack.push(target);
+		loop_stack.push(node);
 
 		let should_run = true;
-		target.broken = false;
-		while (should_run && target.broken == false && last_call.returned == false) {
-			let condition = clone(target.condition);
+		node.broken = false;
+		while (should_run && node.broken == false && last_call.returned == false) {
+			let condition = clone(node.condition);
 			should_run = run(condition);
-			let block = clone(target.block);
-			target.continued = false;
+			let block = clone(node.block);
+			node.continued = false;
 			if (should_run) {
 				return_value = run(block);
 			}
 			let cycle = make_if(condition, block);
-			cycle.loop = target;
+			cycle.loop = node;
 
 			last_block.statements.splice(block_index, 0, make_statement(cycle));
 			block_index += 1;
@@ -1471,33 +1471,33 @@ function run(target, force = false) {
 
 		last_block.index = block_index;
 	}
-	else if (target.base.kind == Code_Kind.FOR) {
+	else if (node.base.kind == Code_Kind.FOR) {
 
 		// could pass this as a param
 		let block_index = last_block.statements.findIndex(
 			function(elem) {
-				return Object.is(elem.expression, target);
+				return Object.is(elem.expression, node);
 			}
 		);
-		last_block.statements.splice(block_index, 0, target.begin);
+		last_block.statements.splice(block_index, 0, node.begin);
 		block_index += 1;
-		run(target.begin.expression);
-		target.block.statements.push(target.cycle_end);
+		run(node.begin.expression);
+		node.block.statements.push(node.cycle_end);
 
-		loop_stack.push(target);
+		loop_stack.push(node);
 
 		let should_run = true;
-		target.broken = false;
-		while (should_run && target.broken == false && last_call.returned == false) {
-			let condition = clone(target.condition);
+		node.broken = false;
+		while (should_run && node.broken == false && last_call.returned == false) {
+			let condition = clone(node.condition);
 			should_run = run(condition);
-			let block = clone(target.block);
-			target.continued = false;
+			let block = clone(node.block);
+			node.continued = false;
 			if (should_run) {
 				return_value = run(block);
 			}
 			let cycle = make_if(condition, block);
-			cycle.loop = target;
+			cycle.loop = node;
 
 			last_block.statements.splice(block_index, 0, make_statement(cycle));
 			block_index += 1;
@@ -1507,83 +1507,83 @@ function run(target, force = false) {
 
 		last_block.index = block_index;
 	}
-	else if (target.base.kind == Code_Kind.BREAK) {
+	else if (node.base.kind == Code_Kind.BREAK) {
 
 		last_loop.broken = true;
 	}
-	else if (target.base.kind == Code_Kind.CONTINUE) {
+	else if (node.base.kind == Code_Kind.CONTINUE) {
 
 		last_loop.continued = true;
 	}
-	else if (target.base.kind == Code_Kind.ASSIGN) {
+	else if (node.base.kind == Code_Kind.ASSIGN) {
 
-		let expression_value = run(target.expression);
+		let expression_value = run(node.expression);
 
-		target.ident.is_lhs = true;
-		run(target.ident);
+		node.ident.is_lhs = true;
+		run(node.ident);
 
-		map_ident_to_value.set(target.ident.declaration.ident, expression_value);
-		map_ident_to_changes.get(target.ident.declaration.ident).push(target.ident.execution_index);
+		map_ident_to_value.set(node.ident.declaration.ident, expression_value);
+		map_ident_to_changes.get(node.ident.declaration.ident).push(node.ident.execution_index);
 
 		return_value = expression_value;
 	}
-	else if (target.base.kind == Code_Kind.OPASSIGN) {
+	else if (node.base.kind == Code_Kind.OPASSIGN) {
 
-		let binop = make_binary_operation(target.ident, target.operation_type, target.expression);
+		let binop = make_binary_operation(node.ident, node.operation_type, node.expression);
 		
-		target.ident.is_lhs = true;
+		node.ident.is_lhs = true;
 
 		let expression_value = math_solve(binop);
 
-		map_ident_to_value.set(target.ident.declaration.ident, expression_value);
-		map_ident_to_changes.get(target.ident.declaration.ident).push(target.ident.execution_index);
+		map_ident_to_value.set(node.ident.declaration.ident, expression_value);
+		map_ident_to_changes.get(node.ident.declaration.ident).push(node.ident.execution_index);
 
 		return_value = expression_value;
 	}
-	else if (target.base.kind == Code_Kind.DECLARATION) {
+	else if (node.base.kind == Code_Kind.DECLARATION) {
 
 		let expression_value = null;
 
-		target.ident.is_lhs = true;
-		run(target.ident);
+		node.ident.is_lhs = true;
+		run(node.ident);
 		
-		idents_used.add(target.ident.name);
+		idents_used.add(node.ident.name);
 
-		if (target.expression) {
+		if (node.expression) {
 
-			expression_value = run(target.expression);
+			expression_value = run(node.expression);
 		}
 
-		map_ident_to_value.set(target.ident.declaration.ident, expression_value);
+		map_ident_to_value.set(node.ident.declaration.ident, expression_value);
 
 		let changes = new Array();
-		changes.push(target.ident.execution_index);
-		map_ident_to_changes.set(target.ident.declaration.ident, changes);
+		changes.push(node.ident.execution_index);
+		map_ident_to_changes.set(node.ident.declaration.ident, changes);
 
 		let uses = new Array();
-		map_ident_to_uses.set(target.ident.declaration.ident, uses);
+		map_ident_to_uses.set(node.ident.declaration.ident, uses);
 
 		return_value = expression_value;
 	}
-	else if (target.base.kind == Code_Kind.IDENT) {
+	else if (node.base.kind == Code_Kind.IDENT) {
 
-		if (target.is_lhs != true && target.execution_index) {
+		if (node.is_lhs != true && node.execution_index) {
 
-			map_ident_to_uses.get(target.declaration.ident).push(target.execution_index);
+			map_ident_to_uses.get(node.declaration.ident).push(node.execution_index);
 		}
 
-		return_value = map_ident_to_value.get(target.declaration.ident);
+		return_value = map_ident_to_value.get(node.declaration.ident);
 	}
-	else if (target.base.kind == Code_Kind.BLOCK) {
+	else if (node.base.kind == Code_Kind.BLOCK) {
 
-		target.index = 0;
-		target.elements = target.statements;
-		block_stack.push(target);
+		node.index = 0;
+		node.elements = node.statements;
+		block_stack.push(node);
 
-		while (target.index < target.elements.length) {
-			let executing_expr = target.elements[target.index].expression;
+		while (node.index < node.elements.length) {
+			let executing_expr = node.elements[node.index].expression;
 			return_value = run(executing_expr);
-			target.index += 1;
+			node.index += 1;
 
 			if (last_call.returned || (last_loop && (last_loop.broken || last_loop.continued))) {
 
@@ -1593,39 +1593,39 @@ function run(target, force = false) {
 
 		block_stack.pop();
 	}
-	else if (target.base.kind == Code_Kind.BINARY_OPERATION) {
+	else if (node.base.kind == Code_Kind.BINARY_OPERATION) {
 
-		return_value = math_solve(target);
+		return_value = math_solve(node);
 	}
-	else if (target.base.kind == Code_Kind.LITERAL) {
+	else if (node.base.kind == Code_Kind.LITERAL) {
 
-		return_value = math_solve(target);
+		return_value = math_solve(node);
 	}
 
-	if (target.base.kind != Code_Kind.BLOCK &&
-		target.base.kind != Code_Kind.WHILE &&
-		target.base.kind != Code_Kind.FOR &&
-		target.base.kind != Code_Kind.IF &&
-		target.base.kind != Code_Kind.ELSE &&
-		target.base.kind != Code_Kind.DECLARATION &&
-		target.base.kind != Code_Kind.ASSIGN &&
-		target.base.kind != Code_Kind.OPASSIGN &&
-		target.base.kind != Code_Kind.RETURN) {
+	if (node.base.kind != Code_Kind.BLOCK &&
+		node.base.kind != Code_Kind.WHILE &&
+		node.base.kind != Code_Kind.FOR &&
+		node.base.kind != Code_Kind.IF &&
+		node.base.kind != Code_Kind.ELSE &&
+		node.base.kind != Code_Kind.DECLARATION &&
+		node.base.kind != Code_Kind.ASSIGN &&
+		node.base.kind != Code_Kind.OPASSIGN &&
+		node.base.kind != Code_Kind.RETURN) {
 
 		if (disable_execution_recording == false) {
 
-			target.execution_index = execution_index;
-			execution_stack.push(target);
+			node.execution_index = execution_index;
+			execution_stack.push(node);
 			execution_index += 1;
 		}
 
-		if (typeof target.original != "undefined") {
+		if (typeof node.original != "undefined") {
 
-			map_original_to_indices.get(target.original).push(target.execution_index);
+			map_original_to_indices.get(node.original).push(node.execution_index);
 		}
 	}
 
-	target.last_return = return_value;
+	node.last_return = return_value;
 
 	return return_value;
 }
