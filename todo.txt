@@ -2,15 +2,22 @@ Bugs:
 
 we should have a comment on the general design
 
-do while loop not implemented
+opassign disappears
+
+do while loop not implemented, use an if (true) for the first cycle
 
 else if not implemented
 
 true and false keywords not implemented
 
-increment and decrement not implemented
+increment and decrement, and unary minus and not operators not implemented
+bitwise & and bitwise |
+
+someday port to C through WebAssembly
 
 Ideas:
+
+relocate flowpoint move buttons to left side
 
 add page up and page down
 speed up scrolling when holding down W or D
