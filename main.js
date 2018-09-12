@@ -950,15 +950,6 @@ let newline = make_statement(newline_expr);
 
 let Global_Block = make_block();
 
-Global_Block.settings = {
-
-	past_shown: true,
-	future_shown: true,
-	values_shown: false,
-	math_solve: false,
-	inline : false
-};
-
 let Types = {
 	int : make_ident("int"),
 	float : make_ident("float"),
@@ -1538,10 +1529,16 @@ function run(target, force = false) {
 	}
 	else if (target.base.kind == Code_Kind.OPASSIGN) {
 
-		run(target.ident);
+		let binop = make_binary_operation(target.ident, target.operation_type, target.expression);
+		
 		target.ident.is_lhs = true;
 
-		return_value = run(transform(target));
+		let expression_value = math_solve(binop);
+
+		map_ident_to_value.set(target.ident.declaration.ident, expression_value);
+		map_ident_to_changes.get(target.ident.declaration.ident).push(target.ident.execution_index);
+
+		return_value = expression_value;
 	}
 	else if (target.base.kind == Code_Kind.DECLARATION) {
 
