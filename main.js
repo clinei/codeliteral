@@ -27,7 +27,10 @@ function map_keyboard() {
 	document.addEventListener("keydown", document_keydown);
 }
 
+let prev_cursor;
 function document_keydown(event) {
+
+	prev_cursor = inspection_cursor;
 
 	// press B
 	if (event.keyCode == 66) {
@@ -1162,6 +1165,7 @@ int nested_loops(int width, int height) {
 		for (int height_iter = 0; height_iter < height; height_iter += 1) {
 			int d = width_iter * width + height_iter;
 			print(d);
+			factorial(d);
 		}
 	}
 	return 42;
@@ -1192,8 +1196,10 @@ let nested_loops_binop = make_binary_operation(clone(nested_loops_for_begin.iden
 let nested_loops_binop_2 = make_binary_operation(nested_loops_binop, "+", clone(nested_loops_for_2_begin.ident));
 let nested_loops_inner = make_declaration(make_ident("inner"), nested_loops_binop_2, Types.int);
 let nested_loops_print_call = make_procedure_call(print_declaration, [clone(nested_loops_inner.ident)]);
+let nested_loops_factorial_call = make_procedure_call(factorial_declaration, [clone(nested_loops_inner.ident)]);
 nested_loops_for_2_block.statements.push(make_statement(nested_loops_inner));
 nested_loops_for_2_block.statements.push(make_statement(nested_loops_print_call));
+nested_loops_for_2_block.statements.push(make_statement(nested_loops_factorial_call));
 nested_loops_for_block.statements.push(make_statement(nested_loops_for_2));
 nested_loops_block.statements.push(make_statement(nested_loops_for));
 nested_loops_block.statements.push(make_statement(make_return(make_literal("42"))));
@@ -1280,27 +1286,34 @@ function print() {
 	map_line_to_execution_indices[0] = new Array();
 
 	mark_containment(Global_Block.statements[0]);
-
+	
 	print_to_dom(Global_Block.statements[0], code_element, code_element);
 	
 	column_index = map_line_to_execution_indices[current_line].indexOf(execution_index);
 
 	let printed_cursor = map_expr_to_printed.get(inspection_cursor);
-
-	let position_x = printed_cursor.offsetLeft - code_element.scrollLeft;
-	let midpoint_x = code_element.clientWidth / 2;
-	let radius_x = code_element.clientWidth / 8;
-
+	
 	let position_y = printed_cursor.offsetTop - code_element.scrollTop;
 	let midpoint_y = code_element.clientHeight / 2;
 	let radius_y = 20;
 
-	if (position_x < (midpoint_x - radius_x) ||
-		position_x > (midpoint_x + radius_x) ||
-		position_y < (midpoint_y - radius_y) ||
-		position_y > (midpoint_y + radius_y)) {
+	if (Object.is(inspection_cursor, prev_cursor) && expand_all && false) {
 
-		printed_cursor.scrollIntoView(code_element.scroll_options);
+		code_element.scrollTop = position_y - midpoint_y / 2;
+	}
+	else {
+
+		let position_x = printed_cursor.offsetLeft - code_element.scrollLeft;
+		let midpoint_x = code_element.clientWidth / 2;
+		let radius_x = code_element.clientWidth / 8;
+	
+		if (position_x < (midpoint_x - radius_x) ||
+			position_x > (midpoint_x + radius_x) ||
+			position_y < (midpoint_y - radius_y) ||
+			position_y > (midpoint_y + radius_y)) {
+	
+			printed_cursor.scrollIntoView(code_element.scroll_options);
+		}
 	}
 }
 
@@ -2105,8 +2118,7 @@ function print_semicolon(print_target) {
 }
 
 function should_expand(node) {
-
-	return node.contains_flowpoint | node.contains_inspection | node.contains_execution;
+	return node.contains_flowpoint || node.contains_inspection || node.contains_execution;
 }
 
 function should_hide(node) {
@@ -2183,26 +2195,25 @@ let map_line_to_execution_indices = new Array();
 let line_count = 0;
 let current_line = 0;
 let column_index = 0;
-function print_to_dom(node, print_target, block_print_target, is_transformed_block = false) {
+function print_to_dom(node, print_target, block_print_target, is_transformed_block = false, push_index = true) {
 
 	let expr = document.createElement("expr");
 
 	expr.node = node;
 
-	let should_expand_node = (expand_all || should_expand(node)) &&
-	                         typeof node.transformed != "undefined";
+	let should_expand_node = should_expand(node);
 
 	let last_expression = print_expression_stack[print_expression_stack.length-1];
 	
 	if (last_expression && last_expression.base.kind == Code_Kind.STATEMENT &&
-	    should_hide(node) && should_expand_node == false) {
+	    should_hide(node) && should_expand_node != true) {
 
 		return;
 	}
 
 	print_expression_stack.push(node);
 
-	if (node.transformed && should_expand_node && 
+	if (node.transformed && (should_expand_node || expand_all) && 
 		node.transformed.base.kind == Code_Kind.BLOCK &&
 		node.base.kind != Code_Kind.RETURN &&
 		node.base.kind != Code_Kind.OPASSIGN &&
@@ -2228,7 +2239,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		order_last = true;
 	}
 	
-	if (order_last == false && node.execution_index >= 0) {
+	if (push_index && order_last == false && node.execution_index >= 0) {
 		if (map_line_to_execution_indices[line_count]) {
 			map_line_to_execution_indices[line_count].push(node.execution_index);
 		}
@@ -2286,8 +2297,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	else if (node.base.kind == Code_Kind.STATEMENT) {
 
 		if (node.expression.base.kind == Code_Kind.PROCEDURE_CALL &&
-			should_expand(node.expression) == true &&
-			typeof node.expression.declaration.expression != "function") {
+			node.expression.declaration.ident.name == "main") {
 
 			print_to_dom(node.expression, expr, block_print_target);
 		}
@@ -2312,12 +2322,12 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	else if (node.base.kind == Code_Kind.PROCEDURE_CALL) {
 
 		if (values_shown && node.last_return !== null &&
-		    typeof node.last_return !== "undefined") {
+			typeof node.last_return !== "undefined") {
 
 			expr.classList.add("code-literal");
 			expr.appendChild(document.createTextNode(node.last_return));
 		}
-		else if (should_expand_node && node.transformed) {
+		else if ((should_expand_node || expand_all) && node.transformed) {
 
 			print_to_dom(node.transformed.return_ident, expr, block_print_target);
 		}
@@ -2404,10 +2414,20 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	}
 	else if (node.base.kind == Code_Kind.BINARY_OPERATION) {
 
-		if (values_shown && binop_values_shown && should_expand_node == false) {
+		if (values_shown && binop_values_shown && should_expand_node != true) {
 
-			expr.classList.add("code-literal");
-			expr.appendChild(document.createTextNode(node.last_return));
+			// ###
+			if (true) {
+
+				expr.classList.add("code-literal");
+				expr.appendChild(document.createTextNode(node.last_return));
+			}
+			if (expand_all) {
+				let temp_expr = document.createElement("expr");
+				print_to_dom(node.left, temp_expr, block_print_target, false, false);
+				temp_expr = document.createElement("expr");
+				print_to_dom(node.right, temp_expr, block_print_target, false, false);
+			}
 		}
 		else {
 
@@ -2476,19 +2496,15 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	}
 	else if (node.base.kind == Code_Kind.ASSIGN) {
 
-		let prev_line_count = line_count;
 		// if we print the expression after the ident, up_line will be incorrect
 		let temp_expr = document.createElement("expr");
 		print_to_dom(node.expression, temp_expr, block_print_target);
 
 		print_to_dom(node.ident, expr, block_print_target);
 
-		// @Ugly
-		if (prev_line_count == line_count) {
-			let line = map_line_to_execution_indices[line_count];
-			if (line.length >= 2) {
-				line.unshift(line.pop());
-			}
+		let line = map_line_to_execution_indices[line_count];
+		if (line.length >= 2) {
+			line.unshift(line.pop());
 		}
 
 		let op = document.createElement("expr");
@@ -2502,20 +2518,16 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	}
 	else if (node.base.kind == Code_Kind.OPASSIGN) {
 
-		let prev_line_count = line_count;
 		let temp_expr = document.createElement("expr");
 
 		print_to_dom(node.expression, temp_expr, block_print_target);
 
 		print_to_dom(node.ident, expr, block_print_target);
 
-		// @Ugly
 		// @Copypaste
-		if (prev_line_count == line_count) {
-			let line = map_line_to_execution_indices[line_count];
-			if (line.length >= 2) {
-				line.unshift(line.pop());
-			}
+		let line = map_line_to_execution_indices[line_count];
+		if (line.length >= 2) {
+			line.unshift(line.pop());
 		}
 
 		let op = document.createElement("expr");
@@ -2581,14 +2593,17 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	}
 	else if (node.base.kind == Code_Kind.RETURN) {
 
-		print_to_dom(node.transformed.statements[0].expression, print_target, block_print_target);
+		if (node.transformed) {
+
+			print_to_dom(node.transformed.statements[0].expression, print_target, block_print_target);
+		}
 	}
 
 	print_expression_stack.pop();
 
 	map_expr_to_printed.set(node, expr);
 
-	if (order_last && node.execution_index >= 0) {
+	if (push_index && order_last && node.execution_index >= 0) {
 		if (map_line_to_execution_indices[line_count]) {
 			map_line_to_execution_indices[line_count].push(node.execution_index);
 		}
