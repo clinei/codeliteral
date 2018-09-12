@@ -1275,6 +1275,8 @@ function print() {
 	mark_containment(Global_Block.statements[0]);
 
 	print_to_dom(Global_Block.statements[0], code_element, code_element);
+	
+	column_index = map_line_to_execution_indices[current_line].indexOf(execution_index);
 
 	let cursor = null;
 
@@ -2492,10 +2494,6 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 			let line = map_line_to_execution_indices[line_count];
 			if (line.length >= 2) {
 				line.unshift(line.pop());
-				// @Copypaste
-				if (Object.is(node.ident, inspection_cursor)) {
-					column_index = map_line_to_execution_indices[current_line].indexOf(execution_index);
-				}
 			}
 		}
 
@@ -2523,10 +2521,6 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 			let line = map_line_to_execution_indices[line_count];
 			if (line.length >= 2) {
 				line.unshift(line.pop());
-				// @Copypaste
-				if (Object.is(node.ident, inspection_cursor)) {
-					column_index = map_line_to_execution_indices[current_line].indexOf(execution_index);
-				}
 			}
 		}
 
@@ -2618,8 +2612,6 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	if (Object.is(node, inspection_cursor)) {
 
 		current_line = line_count;
-
-		column_index = map_line_to_execution_indices[current_line].indexOf(execution_index);
 
 		expr.classList.add("selected");
 
