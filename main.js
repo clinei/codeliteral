@@ -11,7 +11,7 @@ function main() {
 let values_shown = false;
 let lhs_values_shown = false;
 let binop_values_shown = true;
-let move_between_original_idents = false;
+let expand_all = false;
 
 function number_compare(a, b) {
 	if (a < b) {
@@ -174,6 +174,13 @@ function document_keydown(event) {
 	if (event.keyCode == 69) {
 
 		binop_values_shown = !binop_values_shown;
+		print();
+	}
+
+	// press G
+	if (event.keyCode == 71) {
+
+		expand_all = !expand_all;
 		print();
 	}
 
@@ -1278,36 +1285,22 @@ function print() {
 	
 	column_index = map_line_to_execution_indices[current_line].indexOf(execution_index);
 
-	let cursor = null;
+	let printed_cursor = map_expr_to_printed.get(inspection_cursor);
 
-	if (inspection_mode) {
+	let position_x = printed_cursor.offsetLeft - code_element.scrollLeft;
+	let midpoint_x = code_element.clientWidth / 2;
+	let radius_x = code_element.clientWidth / 8;
 
-		cursor = inspection_cursor;
-	}
-	else {
+	let position_y = printed_cursor.offsetTop - code_element.scrollTop;
+	let midpoint_y = code_element.clientHeight / 2;
+	let radius_y = 20;
 
-		cursor = execution_cursor;
-	}
+	if (position_x < (midpoint_x - radius_x) ||
+		position_x > (midpoint_x + radius_x) ||
+		position_y < (midpoint_y - radius_y) ||
+		position_y > (midpoint_y + radius_y)) {
 
-	if (cursor) {
-
-		let printed_cursor = map_expr_to_printed.get(cursor);
-
-		let position_x = printed_cursor.offsetLeft - code_element.scrollLeft;
-		let midpoint_x = code_element.clientWidth / 2;
-		let radius_x = code_element.clientWidth / 8;
-
-		let position_y = printed_cursor.offsetTop - code_element.scrollTop;
-		let midpoint_y = code_element.clientHeight / 2;
-		let radius_y = 20;
-
-		if (position_x < (midpoint_x - radius_x) ||
-			position_x > (midpoint_x + radius_x) ||
-			position_y < (midpoint_y - radius_y) ||
-			position_y > (midpoint_y + radius_y)) {
-
-			printed_cursor.scrollIntoView(code_element.scroll_options);
-		}
+		printed_cursor.scrollIntoView(code_element.scroll_options);
 	}
 }
 
@@ -2111,7 +2104,7 @@ function print_semicolon(print_target) {
 	print_target.appendChild(document.createTextNode(";"));
 }
 
-function should_inline(node) {
+function should_expand(node) {
 
 	return node.contains_flowpoint | node.contains_inspection | node.contains_execution;
 }
@@ -2196,19 +2189,20 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 	expr.node = node;
 
-	let should_inline_node = should_inline(node);
+	let should_expand_node = (expand_all || should_expand(node)) &&
+	                         typeof node.transformed != "undefined";
 
 	let last_expression = print_expression_stack[print_expression_stack.length-1];
 	
 	if (last_expression && last_expression.base.kind == Code_Kind.STATEMENT &&
-	    should_hide(node) && should_inline_node == false) {
+	    should_hide(node) && should_expand_node == false) {
 
 		return;
 	}
 
 	print_expression_stack.push(node);
 
-	if (node.transformed && should_inline_node && 
+	if (node.transformed && should_expand_node && 
 		node.transformed.base.kind == Code_Kind.BLOCK &&
 		node.base.kind != Code_Kind.RETURN &&
 		node.base.kind != Code_Kind.OPASSIGN &&
@@ -2292,7 +2286,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	else if (node.base.kind == Code_Kind.STATEMENT) {
 
 		if (node.expression.base.kind == Code_Kind.PROCEDURE_CALL &&
-			should_inline(node.expression) == true &&
+			should_expand(node.expression) == true &&
 			typeof node.expression.declaration.expression != "function") {
 
 			print_to_dom(node.expression, expr, block_print_target);
@@ -2323,7 +2317,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 			expr.classList.add("code-literal");
 			expr.appendChild(document.createTextNode(node.last_return));
 		}
-		else if (should_inline_node && node.transformed) {
+		else if (should_expand_node && node.transformed) {
 
 			print_to_dom(node.transformed.return_ident, expr, block_print_target);
 		}
@@ -2410,7 +2404,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	}
 	else if (node.base.kind == Code_Kind.BINARY_OPERATION) {
 
-		if (values_shown && binop_values_shown && should_inline_node == false) {
+		if (values_shown && binop_values_shown && should_expand_node == false) {
 
 			expr.classList.add("code-literal");
 			expr.appendChild(document.createTextNode(node.last_return));
