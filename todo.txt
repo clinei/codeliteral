@@ -4,8 +4,6 @@ we should have a comment on the general design
 
 do while loop not implemented, use an if (true) for the first cycle
 
-for (;;) does not parse
-
 true and false keywords not implemented
 
 increment and decrement, and unary minus and not operators not implemented

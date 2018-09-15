@@ -959,6 +959,9 @@ function run(node, force = false) {
 			block_index += 1;
 			run(node.begin);
 		}
+		if (!node.condition) {
+			node.condition = make_literal(42);
+		}
 		if (node.cycle_end) {
 			if (node.expression.base.kind != Code_Kind.BLOCK) {
 				node.expression = make_block([node.expression]);
@@ -1236,7 +1239,17 @@ function clone(node) {
 	}
 	else if (node.base.kind == Code_Kind.FOR) {
 
-		cloned = make_for(clone(node.begin), clone(node.condition), clone(node.cycle_end), clone(node.expression));
+		let begin, condition, cycle_end;
+		if (node.begin) {
+			begin = clone(node.begin);
+		}
+		if (node.condition) {
+			condition = clone(node.condition);
+		}
+		if (node.cycle_end) {
+			condition = clone(node.cycle_end);
+		}
+		cloned = make_for(begin, condition, cycle_end, clone(node.expression));
 	}
 	else if (node.base.kind == Code_Kind.BREAK) {
 
