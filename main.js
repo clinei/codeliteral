@@ -682,13 +682,21 @@ int factorial(int number) {
 		return 1;
 	}
 }
-int factorial_iter(int number) {
-	int sum = 1;
-	while (number > 1) {
-		sum *= number;
-		number -= 1;
+void fizzbuzz(int number) {
+	for (int i = 1; i < number; i += 1) {
+		if (i % 15 == 0) {
+			print(1234);
+		}
+		else if (i % 5 == 0) {
+			print(4321);
+		}
+		else if (i % 3 == 0) {
+			print(9999);
+		}
+		else {
+			print(i);
+		}
 	}
-	return sum;
 }
 int nested_loops(int width, int height) {
 	for (int width_iter = 0; width_iter < width; width_iter += 1) {
@@ -704,8 +712,8 @@ int main() {
     int local_variable = 3;
 	local_variable = some_function(local_variable);
 	local_variable = factorial(local_variable);
-	local_variable = factorial_iter(5);
-	local_variable = nested_loops(2, 2);
+	local_variable = fizzbuzz(30);
+	// local_variable = nested_loops(2, 2);
 	return local_variable;
 }
 main();
@@ -898,7 +906,7 @@ function run(node, force = false) {
 
 		if (run(node.condition)) {
 
-			return_value = run(node.block);
+			return_value = run(node.expression);
 		}
 		else {
 
@@ -910,8 +918,9 @@ function run(node, force = false) {
 		}
 	}
 	else if (node.base.kind == Code_Kind.ELSE) {
-
-		return_value = run(node.block);
+		if (node.if_expr && node.if_expr.condition.last_return == false) {
+			return_value = run(node.expression);
+		}
 	}
 	else if (node.base.kind == Code_Kind.WHILE) {
 
@@ -925,12 +934,12 @@ function run(node, force = false) {
 		while (should_run && node.broken == false && last_call.returned == false) {
 			let condition = clone(node.condition);
 			should_run = run(condition);
-			let block = clone(node.block);
+			let cloned_expr = clone(node.expression);
 			node.continued = false;
 			if (should_run) {
-				return_value = run(block);
+				return_value = run(cloned_expr);
 			}
-			let cycle = make_if(condition, block);
+			let cycle = make_if(condition, cloned_expr);
 			cycle.loop = node;
 
 			last_block.statements.splice(block_index, 0, cycle);
@@ -945,10 +954,17 @@ function run(node, force = false) {
 
 		// could pass this as a param
 		let block_index = last_block.statements.indexOf(node);
-		last_block.statements.splice(block_index, 0, node.begin);
-		block_index += 1;
-		run(node.begin);
-		node.block.statements.push(node.cycle_end);
+		if (node.begin) {
+			last_block.statements.splice(block_index, 0, node.begin);
+			block_index += 1;
+			run(node.begin);
+		}
+		if (node.cycle_end) {
+			if (node.expression.base.kind != Code_Kind.BLOCK) {
+				node.expression = make_block([node.expression]);
+			}
+			node.expression.statements.push(node.cycle_end);
+		}
 
 		loop_stack.push(node);
 
@@ -957,12 +973,12 @@ function run(node, force = false) {
 		while (should_run && node.broken == false && last_call.returned == false) {
 			let condition = clone(node.condition);
 			should_run = run(condition);
-			let block = clone(node.block);
+			let cloned_expr = clone(node.expression);
 			node.continued = false;
 			if (should_run) {
-				return_value = run(block);
+				return_value = run(cloned_expr);
 			}
-			let cycle = make_if(condition, block);
+			let cycle = make_if(condition, cloned_expr);
 			cycle.loop = node;
 
 			last_block.statements.splice(block_index, 0, cycle);
@@ -1097,85 +1113,64 @@ function run(node, force = false) {
 }
 
 function math_solve(node) {
-
 	if (node.base.kind == Code_Kind.BINARY_OPERATION) {
-
 		let left = run(node.left);
-
 		let right = run(node.right);
-
 		if (node.operation_type == "+") {
-
 			return left + right;
 		}
 		else if (node.operation_type == "-") {
-
 			return left - right;
 		}
 		else if (node.operation_type == "*") {
-
 			return left * right;
 		}
 		else if (node.operation_type == "/") {
-
 			// emulate actual int division
 			return Math.floor(left / right);
 		}
 		else if (node.operation_type == "%") {
-
 			return left % right;
 		}
 		else if (node.operation_type == "<") {
-
 			return left < right;
 		}
 		else if (node.operation_type == ">") {
-
 			return left > right;
 		}
 		else if (node.operation_type == "<=") {
-
 			return left <= right;
 		}
 		else if (node.operation_type == ">=") {
-
 			return left >= right;
 		}
 		else if (node.operation_type == "==") {
-
 			return left == right;
 		}
 		else if (node.operation_type == "!=") {
-
 			return left != right;
 		}
 		else if (node.operation_type == "&&") {
-
 			return left && right;
 		}
 		else if (node.operation_type == "||") {
-
 			return left || right;
+		}
+		else if (node.operation_type == "&") {
+			return left & right;
+		}
+		else if (node.operation_type == "|") {
+			return left | right;
 		}
 	}
 	else if (node.base.kind == Code_Kind.IDENT) {
-
 		let ident = node;
-
-		// @Cleanup
-		if (ident.transformed) {
-
-			ident = ident.transformed.statements[0];
-		}
-
 		return map_ident_to_value.get(ident.declaration.ident);
 	}
 	else if (node.base.kind == Code_Kind.LITERAL) {
-
 		return parseInt(node.value);
 	}
 	else if (node.base.kind == Code_Kind.CALL) {
-
 		return run(node);
 	}
 }
@@ -1229,19 +1224,19 @@ function clone(node) {
 	}
 	else if (node.base.kind == Code_Kind.IF) {
 
-		cloned = make_if(clone(node.condition), clone(node.block));
+		cloned = make_if(clone(node.condition), clone(node.expression));
 	}
 	else if (node.base.kind == Code_Kind.ELSE) {
 
-		cloned = make_else(clone(node.block));
+		cloned = make_else(clone(node.expression));
 	}
 	else if (node.base.kind == Code_Kind.WHILE) {
 
-		cloned = make_while(clone(node.condition), clone(node.block));
+		cloned = make_while(clone(node.condition), clone(node.expression));
 	}
 	else if (node.base.kind == Code_Kind.FOR) {
 
-		cloned = make_for(clone(node.begin), clone(node.condition), clone(node.cycle_end), clone(node.block));
+		cloned = make_for(clone(node.begin), clone(node.condition), clone(node.cycle_end), clone(node.expression));
 	}
 	else if (node.base.kind == Code_Kind.BREAK) {
 
@@ -1513,34 +1508,22 @@ function mark_containment(node) {
 	else if (node.base.kind == Code_Kind.IF) {
 
 		mark_containment(node.condition);
-		mark_containment(node.block);
+		mark_containment(node.expression);
 
 		node.contains_flowpoint = node.condition.contains_flowpoint || node.condition.is_flowpoint ||
-		                          node.block.contains_flowpoint || node.block.is_flowpoint;
+		                          node.expression.contains_flowpoint || node.expression.is_flowpoint;
 		node.contains_inspection = node.condition.contains_inspection || node.condition.is_inspection ||
-		                          node.block.contains_inspection || node.block.is_inspection;
+		                          node.expression.contains_inspection || node.expression.is_inspection;
 		node.contains_execution = node.condition.contains_execution || node.condition.is_execution ||
-		                          node.block.contains_execution || node.block.is_execution;
+		                          node.expression.contains_execution || node.expression.is_execution;
 	}
 	else if (node.base.kind == Code_Kind.ELSE) {
 
-		mark_containment(node.block);
+		mark_containment(node.expression);
 
-		node.contains_flowpoint = node.block.contains_flowpoint || node.block.is_flowpoint;
-		node.contains_inspection = node.block.contains_inspection || node.block.is_inspection;
-		node.contains_execution = node.block.contains_execution || node.block.is_execution;
-	}
-	else if (node.base.kind == Code_Kind.WHILE) {
-
-		mark_containment(node.condition);
-		mark_containment(node.block);
-
-		node.contains_flowpoint = node.condition.contains_flowpoint || node.condition.is_flowpoint ||
-		                          node.block.contains_flowpoint || node.block.is_flowpoint;
-		node.contains_inspection = node.condition.contains_inspection || node.condition.is_inspection ||
-		                          node.block.contains_inspection || node.block.is_inspection;
-		node.contains_execution = node.condition.contains_execution || node.condition.is_execution ||
-		                          node.block.contains_execution || node.block.is_execution;
+		node.contains_flowpoint = node.expression.contains_flowpoint || node.expression.is_flowpoint;
+		node.contains_inspection = node.expression.contains_inspection || node.expression.is_inspection;
+		node.contains_execution = node.expression.contains_execution || node.expression.is_execution;
 	}
 	else if (node.base.kind == Code_Kind.CALL &&
 	         typeof node.ident.declaration.expression == "function") {
@@ -1601,7 +1584,7 @@ function should_hide(node) {
 
 	if (node.base.kind == Code_Kind.ELSE) {
 
-		return node.if_expr.condition.last_return;
+		return !node.if_expr || node.if_expr.condition.last_return;
 	}
 	
 	// hide code that has not been run
@@ -1793,14 +1776,14 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		expr.appendChild(if_keyword);
 
 		expr.appendChild(document.createTextNode(" ("));
-
 		print_to_dom(node.condition, expr, block_print_target);
-
 		expr.appendChild(document.createTextNode(") "));
 
 		print_target.appendChild(expr);
 
-		print_to_dom(node.block, print_target, block_print_target);
+		if (node.condition.last_return) {
+			print_to_dom(node.expression, print_target, block_print_target);
+		}
 	}
 	else if (node.base.kind == Code_Kind.ELSE) {
 
@@ -1813,35 +1796,18 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		print_target.appendChild(expr);
 
-		print_to_dom(node.block, print_target, block_print_target);
+		if (node.if_expr) {
+			print_to_dom(node.expression, print_target, block_print_target);
+		}
 	}
 	else if (node.base.kind == Code_Kind.WHILE) {
-
-		expr.appendChild(document.createTextNode("while ("));
-
-		print_to_dom(node.condition, expr, block_print_target);
-
-		expr.appendChild(document.createTextNode(") "));
-
-		print_target.appendChild(expr);
-
-		print_to_dom(node.block, print_target, block_print_target);
+		console.log("a while loop slipped through!");
+		debugger;
 	}
 	else if (node.base.kind == Code_Kind.FOR) {
 
-		expr.appendChild(document.createTextNode("for ("));
-
-		print_to_dom(node.begin, expr, block_print_target);
-		expr.appendChild(document.createTextNode("; "));
-		print_to_dom(node.condition, expr, block_print_target);
-		expr.appendChild(document.createTextNode("; "));
-		print_to_dom(node.cycle_end, expr, block_print_target);
-
-		expr.appendChild(document.createTextNode(") "));
-
-		print_target.appendChild(expr);
-
-		print_to_dom(node.block, print_target, block_print_target);
+		console.log("a for loop slipped through!");
+		debugger;
 	}
 	else if (node.base.kind == Code_Kind.BINARY_OPERATION) {
 

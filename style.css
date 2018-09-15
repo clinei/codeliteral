@@ -122,32 +122,16 @@ block {
 	width: 100%;
 }
 
-.selected, .executing, .flow-1, .flow-2, .flow-3, .flow-4, .flow-5, .flow-6, .flow-7, .flow-8, .flow-9 {
+.active_cursor, .flow-1, .flow-2, .flow-3, .flow-4, .flow-5, .flow-6, .flow-7, .flow-8, .flow-9 {
 
 	border-radius: 0.2em;
 }
 
-.selected {
+.active_cursor, .active_cursor * {
 
-	color: rgba(220, 220, 220, 0.8);
-
-	background-color: rgb(83, 56, 49) !important;
-	box-shadow: 0 0 0.6em 0.14em rgba(20, 20, 20, 0.2);
-
+	background-color: rgb(120, 60, 20) !important;
 	position: relative;
 	z-index: 10;
-}
-
-.executing {
-
-	color: rgba(220, 220, 220, 0.8);
-
-	background-color: rgb(60, 60, 100);
-}
-
-.active_cursor {
-	
-	color: rgba(220, 220, 220, 1.0) !important;
 }
 
 .flow-1 {
