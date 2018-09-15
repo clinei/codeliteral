@@ -683,7 +683,7 @@ int factorial(int number) {
 	}
 }
 void fizzbuzz(int number) {
-	for (int i = 1; i < number; i += 1) {
+	for (int i = 1; i <= number; i += 1) {
 		if (i % 15 == 0) {
 			print(1234);
 		}
@@ -1247,7 +1247,7 @@ function clone(node) {
 			condition = clone(node.condition);
 		}
 		if (node.cycle_end) {
-			condition = clone(node.cycle_end);
+			cycle_end = clone(node.cycle_end);
 		}
 		cloned = make_for(begin, condition, cycle_end, clone(node.expression));
 	}
