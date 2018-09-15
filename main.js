@@ -590,359 +590,6 @@ function map_index_set(expression, index) {
 	expression.index = index;
 }
 
-let Code_Kind = {
-
-	IF: "if",
-	ELSE: "else",
-	WHILE: "while",
-	FOR: "for",
-	BREAK: "break",
-	CONTINUE: "continue",
-	IDENT: "identifier",
-	ASSIGN: "assign",
-	LITERAL: "literal",
-	OPASSIGN: "opassign",
-	BINARY_OPERATION: "binary op",
-	BLOCK: "block",
-	DECLARATION: "declaration",
-	PROCEDURE_CALL: "call",
-	PROCEDURE: "procedure",
-	RETURN: "return",
-	NEWLINE: "newline",
-};
-
-let Code_Node = {
-
-	kind: null,
-	type: null,
-	serial: null
-};
-let next_serial = 0;
-function make_node() {
-
-	let node = Object.assign({}, Code_Node);
-	node.serial = next_serial;
-
-	next_serial += 1;
-
-	return node;
-}
-
-let Code_Procedure = {
-
-	base: null,
-
-	parameters: null,
-	return_type: null,
-	block: null
-};
-function make_procedure(parameters, return_type, block) {
-
-	let procedure = Object.assign({}, Code_Procedure);
-	procedure.base = make_node();
-	procedure.base.kind = Code_Kind.PROCEDURE;
-
-	procedure.parameters = parameters ? parameters : [];
-	procedure.return_type = return_type ? return_type : Types.void;
-	procedure.block = block;
-
-	return procedure;
-}
-
-let Code_Procedure_Call = {
-
-	base: null,
-
-	declaration: null,
-	args: null
-};
-function make_procedure_call(declaration, args) {
-
-	let procedure_call = Object.assign({}, Code_Procedure_Call);
-	procedure_call.base = make_node();
-	procedure_call.base.kind = Code_Kind.PROCEDURE_CALL;
-
-	procedure_call.declaration = declaration;
-	procedure_call.args = args ? args : [];
-
-	return procedure_call;
-}
-
-let Code_Declaration = {
-
-	base: null,
-
-	ident: null,
-	expression: null,
-	type: null
-};
-function make_declaration(ident, expression, type) {
-
-	let declaration = Object.assign({}, Code_Declaration);
-	declaration.base = make_node();
-	declaration.base.kind = Code_Kind.DECLARATION;
-
-	ident.declaration = declaration;
-
-	declaration.ident = ident;
-	declaration.expression = expression;
-	declaration.type = type;
-
-	return declaration;
-}
-
-let Code_Block = {
-
-	base: null,
-
-	statements: null
-};
-function make_block(statements) {
-
-	let block = Object.assign({}, Code_Block);
-	block.base = make_node();
-	block.base.kind = Code_Kind.BLOCK;
-
-	block.statements = statements;
-
-	if (!block.statements) {
-
-		block.statements = new Array();
-	}
-
-	return block;
-}
-
-let Code_Return = {
-
-	base: null,
-
-	expression: null
-};
-function make_return(expression) {
-
-	let return_ = Object.assign({}, Code_Return);
-	return_.base = make_node();
-	return_.base.kind = Code_Kind.RETURN;
-
-	return_.expression = expression;
-
-	return return_;
-}
-
-let Code_If = {
-
-	base: null,
-
-	condition: null,
-	block: null
-};
-function make_if(condition, block) {
-
-	let if_ = Object.assign({}, Code_If);
-	if_.base = make_node();
-	if_.base.kind = Code_Kind.IF;
-
-	if_.condition = condition;
-	if_.block = block;
-
-	return if_;
-}
-
-let Code_Else = {
-
-	base: null,
-
-	block: null
-};
-function make_else(block) {
-
-	let else_ = Object.assign({}, Code_Else);
-	else_.base = make_node();
-	else_.base.kind = Code_Kind.ELSE;
-
-	else_.block = block;
-
-	return else_;
-}
-
-let Code_While = {
-
-	base: null,
-
-	condition: null,
-	block: null
-};
-function make_while(condition, block) {
-
-	let while_ = Object.assign({}, Code_While);
-	while_.base = make_node();
-	while_.base.kind = Code_Kind.WHILE;
-
-	while_.condition = condition;
-	while_.block = block;
-
-	return while_;
-}
-
-let Code_For = {
-
-	base: null,
-
-	begin: null,
-	condition: null,
-	cycle_end: null,
-	block: null
-};
-function make_for(begin, condition, cycle_end, block) {
-
-	let for_ = Object.assign({}, Code_For);
-	for_.base = make_node();
-	for_.base.kind = Code_Kind.FOR;
-
-	for_.begin = begin;
-	for_.condition = condition;
-	for_.cycle_end = cycle_end;
-	for_.block = block;
-
-	return for_;
-}
-
-let Code_Break = {
-
-	base: null,
-};
-function make_break() {
-
-	let break_ = Object.assign({}, Code_Break);
-	break_.base = make_node();
-	break_.base.kind = Code_Kind.BREAK;
-
-	return break_;
-}
-
-let Code_Continue = {
-
-	base: null,
-};
-function make_continue() {
-
-	let continue_ = Object.assign({}, Code_Continue);
-	continue_.base = make_node();
-	continue_.base.kind = Code_Kind.CONTINUE;
-
-	return continue_;
-}
-
-let Code_Assign = {
-
-	base: null,
-
-	ident: null,
-	expression: null
-};
-function make_assign(ident, expression) {
-
-	let assign = Object.assign({}, Code_Assign);
-	assign.base = make_node();
-	assign.base.kind = Code_Kind.ASSIGN;
-
-	assign.ident = ident;
-	assign.expression = expression;
-
-	return assign;
-}
-
-let Code_OpAssign = {
-
-	base: null,
-
-	ident: null,
-	operation_type: null,
-	expression: null
-};
-function make_opassign(ident, operation_type, expression) {
-
-	let opassign = Object.assign({}, Code_OpAssign);
-	opassign.base = make_node();
-	opassign.base.kind = Code_Kind.OPASSIGN;
-
-	opassign.ident = ident;
-	opassign.operation_type = operation_type;
-	opassign.expression = expression;
-
-	return opassign;
-}
-
-let Code_Binary_Operation = {
-
-	base: null,
-
-	operation_type: null,
-	left: null,
-	right: null
-};
-function make_binary_operation(left, operation_type, right) {
-
-	let binary_operation = Object.assign({}, Code_Binary_Operation);
-	binary_operation.base = make_node();
-	binary_operation.base.kind = Code_Kind.BINARY_OPERATION;
-
-	binary_operation.left = left;
-	binary_operation.operation_type = operation_type;
-	binary_operation.right = right;
-
-	return binary_operation;
-}
-
-let Code_Ident = {
-
-	base: null,
-
-	original: null,
-	name: null,
-	block: null,
-	declaration: null
-};
-function make_ident(name, declaration) {
-
-	let ident = Object.assign({}, Code_Ident);
-	ident.base = make_node();
-	ident.base.kind = Code_Kind.IDENT;
-
-	ident.original = ident;
-	ident.name = name;
-	ident.declaration = declaration;
-
-	return ident;
-}
-
-let Code_Literal = {
-
-	base: null,
-
-	value: null
-};
-function make_literal(value) {
-
-	let literal = Object.assign({}, Code_Literal);
-	literal.base = make_node();
-	literal.base.kind = Code_Kind.LITERAL;
-
-	literal.value = value;
-
-	return literal;
-}
-
-let Global_Block = make_block();
-
-let Types = {
-	int : make_ident("int"),
-	float : make_ident("float"),
-	void : make_ident("void"),
-	Any: make_ident("Any")
-};
-
 let map_call_to_settings = new Map();
 
 let map_ident_to_value = new Map();
@@ -1001,8 +648,11 @@ void print(let arg) {
 */
 let print_procedure = console.log;
 let print_declaration = make_declaration(make_ident("print"), print_procedure);
+let stdlib = [
+	print_declaration,
+];
 
-/*
+let code = `
 int some_other_function(int number) {
 	while (number > 0) {
 		if (number > 50) {
@@ -1017,36 +667,6 @@ int some_other_function(int number) {
 	}
 	return number;
 }
-*/
-let some_other_function_block = make_block();
-let some_other_function_param = make_declaration(make_ident("number"), null, Types.int);
-let some_other_function_procedure = make_procedure([some_other_function_param], Types.int, some_other_function_block);
-let some_other_function_declaration = make_declaration(make_ident("some_other_function"), some_other_function_procedure);
-let while_block_2 = make_block();
-let while_cond_2 = make_binary_operation(clone(some_other_function_param.ident), ">", make_literal("0"));
-let while_2 = make_while(while_cond_2, while_block_2);
-let while_if_cond_2 = make_binary_operation(clone(some_other_function_param.ident), ">", make_literal("50"));
-let while_if_block_2 = make_block();
-let while_if_2 = make_if(while_if_cond_2, while_if_block_2);
-let while_if_opassign_2 = make_opassign(clone(some_other_function_param.ident), "-", make_literal("5"));
-let while_if_continue_2 = make_continue();
-while_if_block_2.statements.push(while_if_opassign_2);
-while_if_block_2.statements.push(while_if_continue_2);
-let while_if_cond_3 = make_binary_operation(clone(some_other_function_param.ident), "<", make_literal("40"));
-let while_if_block_3 = make_block();
-let while_if_3 = make_if(while_if_cond_3, while_if_block_3);
-let while_if_assign_3 = make_assign(clone(some_other_function_param.ident), make_literal("5"));
-let while_if_break_3 = make_break();
-while_if_block_3.statements.push(while_if_assign_3);
-while_if_block_3.statements.push(while_if_break_3);
-let while_opassign_4 = make_opassign(clone(some_other_function_param.ident), "-", make_literal("10"));
-while_block_2.statements.push(while_if_2);
-while_block_2.statements.push(while_if_3);
-while_block_2.statements.push(while_opassign_4);
-some_other_function_block.statements.push(while_2);
-some_other_function_block.statements.push(make_return(clone(some_other_function_param.ident)));
-
-/*
 int some_function(int num_iters) {
 	int sum = 0;
 	for (int i = 0; i < num_iters; i += 1) {
@@ -1054,32 +674,6 @@ int some_function(int num_iters) {
 	}
 	return some_other_function(sum);
 }
-*/
-let some_function_block = make_block();
-let some_function_param = make_declaration(make_ident("num_iters"), null, Types.int);
-let some_function_procedure = make_procedure([some_function_param], Types.int, some_function_block);
-let some_function_declaration = make_declaration(make_ident("some_function"), some_function_procedure);
-
-let some_function_sum = make_declaration(make_ident("sum"), make_literal("0"), Types.int);
-let some_function_for_begin = make_declaration(make_ident("i"), make_literal("0"), Types.int);
-let some_function_for_cond = make_binary_operation(clone(some_function_for_begin.ident), "<", some_function_param.ident);
-let some_function_for_end = make_opassign(clone(some_function_for_begin.ident), "+", make_literal("1"));
-let some_function_for_block = make_block();
-let some_function_for = make_for(some_function_for_begin, 
-								 some_function_for_cond, 
-								 some_function_for_end, 
-								 some_function_for_block);
-let for_block_stmt = make_opassign(clone(some_function_sum.ident), 
-                                   "+", 
-                                   make_binary_operation(clone(some_function_for_begin.ident), "*", make_literal("20")));
-some_function_for_block.statements.push(for_block_stmt);
-let some_other_function_call = make_procedure_call(some_other_function_declaration, [clone(some_function_sum.ident)]);
-
-some_function_block.statements.push(some_function_sum);
-some_function_block.statements.push(some_function_for);
-some_function_block.statements.push(make_return(some_other_function_call));
-
-/*
 int factorial(int number) {
 	if (number > 1) {
 		return factorial(number - 1) * number;
@@ -1088,26 +682,6 @@ int factorial(int number) {
 		return 1;
 	}
 }
-*/
-let factorial_block = make_block();
-let factorial_param = make_declaration(make_ident("number"), null, Types.int);
-let factorial_procedure = make_procedure([factorial_param], Types.int, factorial_block);
-let factorial_declaration = make_declaration(make_ident("factorial"), factorial_procedure);
-
-let if_block = make_block();
-let if_condition = make_binary_operation(clone(factorial_param.ident), ">", make_literal("1"));
-let factorial_binop = make_binary_operation(clone(factorial_param.ident), "-", make_literal("1"));
-let factorial_recursive_call = make_procedure_call(factorial_declaration, [factorial_binop]);
-let factorial_binop_2 = make_binary_operation(factorial_recursive_call, "*", clone(factorial_param.ident));
-if_block.statements.push(make_return(factorial_binop_2));
-
-let else_block = make_block();
-else_block.statements.push(make_return(make_literal("1")));
-
-factorial_block.statements.push(make_if(if_condition, if_block));
-factorial_block.statements.push(make_else(else_block));
-
-/*
 int factorial_iter(int number) {
 	int sum = 1;
 	while (number > 1) {
@@ -1116,25 +690,6 @@ int factorial_iter(int number) {
 	}
 	return sum;
 }
-*/
-let factorial_iter_block = make_block();
-let factorial_iter_param = make_declaration(make_ident("number"), null, Types.int);
-let factorial_iter_procedure = make_procedure([factorial_iter_param], Types.int, factorial_iter_block);
-let factorial_iter_declaration = make_declaration(make_ident("factorial_iter"), factorial_iter_procedure);
-
-let factorial_iter_sum = make_declaration(make_ident("sum"), make_literal("1"), Types.int);
-let factorial_iter_while_block = make_block();
-let factorial_iter_while_cond = make_binary_operation(clone(factorial_iter_param.ident), ">", make_literal("1"));
-let factorial_iter_while = make_while(factorial_iter_while_cond, factorial_iter_while_block);
-let factorial_iter_while_opassign = make_opassign(clone(factorial_iter_sum.ident), "*", clone(factorial_iter_param.ident));
-let factorial_iter_while_opassign_2 = make_opassign(clone(factorial_iter_param.ident), "-", make_literal("1"));
-factorial_iter_while_block.statements.push(factorial_iter_while_opassign);
-factorial_iter_while_block.statements.push(factorial_iter_while_opassign_2);
-factorial_iter_block.statements.push(factorial_iter_sum);
-factorial_iter_block.statements.push(factorial_iter_while);
-factorial_iter_block.statements.push(make_return(clone(factorial_iter_sum.ident)));
-
-/*
 int nested_loops(int width, int height) {
 	for (int width_iter = 0; width_iter < width; width_iter += 1) {
 		for (int height_iter = 0; height_iter < height; height_iter += 1) {
@@ -1145,74 +700,26 @@ int nested_loops(int width, int height) {
 	}
 	return 42;
 }
-*/
-let nested_loops_block = make_block();
-let nested_loops_width = make_declaration(make_ident("width"), null, Types.int);
-let nested_loops_height = make_declaration(make_ident("height"), null, Types.int);
-let nested_loops_procedure = make_procedure([nested_loops_width, nested_loops_height], Types.int, nested_loops_block);
-let nested_loops_declaration = make_declaration(make_ident("nested_loops"), nested_loops_procedure);
-let nested_loops_for_block = make_block();
-let nested_loops_for_begin = make_declaration(make_ident("width_iter"), make_literal("0"), Types.int);
-let nested_loops_for_cond = make_binary_operation(clone(nested_loops_for_begin.ident), "<", clone(nested_loops_width.ident));
-let nested_loops_for_end = make_opassign(clone(nested_loops_for_begin.ident), "+", make_literal("1"));
-let nested_loops_for = make_for(nested_loops_for_begin, 
-                                nested_loops_for_cond, 
-                                nested_loops_for_end, 
-                                nested_loops_for_block);
-let nested_loops_for_2_block = make_block();
-let nested_loops_for_2_begin = make_declaration(make_ident("height_iter"), make_literal("0"), Types.int);
-let nested_loops_for_2_cond = make_binary_operation(clone(nested_loops_for_2_begin.ident), "<", clone(nested_loops_height.ident));
-let nested_loops_for_2_end = make_opassign(clone(nested_loops_for_2_begin.ident), "+", make_literal("1"));
-let nested_loops_for_2 = make_for(nested_loops_for_2_begin, 
-                                  nested_loops_for_2_cond, 
-                                  nested_loops_for_2_end, 
-                                  nested_loops_for_2_block);
-let nested_loops_binop = make_binary_operation(clone(nested_loops_for_begin.ident), "*", make_literal("2"));
-let nested_loops_binop_2 = make_binary_operation(nested_loops_binop, "+", clone(nested_loops_for_2_begin.ident));
-let nested_loops_inner = make_declaration(make_ident("inner"), nested_loops_binop_2, Types.int);
-let nested_loops_print_call = make_procedure_call(print_declaration, [clone(nested_loops_inner.ident)]);
-let nested_loops_factorial_call = make_procedure_call(factorial_declaration, [clone(nested_loops_inner.ident)]);
-nested_loops_for_2_block.statements.push(nested_loops_inner);
-nested_loops_for_2_block.statements.push(nested_loops_print_call);
-nested_loops_for_2_block.statements.push(nested_loops_factorial_call);
-nested_loops_for_block.statements.push(nested_loops_for_2);
-nested_loops_block.statements.push(nested_loops_for);
-nested_loops_block.statements.push(make_return(make_literal("42")));
-
-let Main_block = make_block();
-let Main_procedure = make_procedure(null, Types.int, Main_block);
-let Main_declaration = make_declaration(make_ident("main"), Main_procedure);
-let Main_call = make_procedure_call(Main_declaration);
-
-Global_Block.statements.push(Main_call);
-
-/*
 int main() {
     int local_variable = 3;
 	local_variable = some_function(local_variable);
 	local_variable = factorial(local_variable);
 	local_variable = factorial_iter(5);
-	local_variable = nested_loops();
+	local_variable = nested_loops(2, 2);
 	return local_variable;
 }
-*/
-let local_variable = make_declaration(make_ident("local_variable"), make_literal("3"), Types.int);
-let some_function_call = make_procedure_call(some_function_declaration, [clone(local_variable.ident)]);
-let local_variable_assign = make_assign(clone(local_variable.ident), some_function_call);
-let factorial_call = make_procedure_call(factorial_declaration, [clone(local_variable.ident)]);
-let local_variable_assign_2 = make_assign(clone(local_variable.ident), factorial_call);
-let factorial_iter_call = make_procedure_call(factorial_iter_declaration, [make_literal("5")]);
-let local_variable_assign_3 = make_assign(clone(local_variable.ident), factorial_iter_call);
-let nested_loops_call = make_procedure_call(nested_loops_declaration, [make_literal("2"), make_literal("2")]);
-let local_variable_assign_4 = make_assign(clone(local_variable.ident), nested_loops_call);
-
-Main_block.statements.push(local_variable);
-Main_block.statements.push(local_variable_assign);
-Main_block.statements.push(local_variable_assign_2);
-Main_block.statements.push(local_variable_assign_3);
-Main_block.statements.push(local_variable_assign_4);
-Main_block.statements.push(make_return(clone(local_variable.ident)));
-
+main();
+`;
+let Types = {
+	int : make_ident("int"),
+	float : make_ident("float"),
+	void : make_ident("void"),
+	Any: make_ident("Any")
+};
+let parsed = parse(tokenize(code));
+parsed.statements = stdlib.concat(parsed.statements);
+let Global_Block = infer(parsed);
+let Main_call = Global_Block.statements[Global_Block.statements.length-1];
 code_composed = true;
 
 let code_element = document.getElementById("code");
@@ -1260,9 +767,9 @@ function print() {
 	map_line_to_execution_indices = new Array();
 	map_line_to_execution_indices[0] = new Array();
 
-	mark_containment(Global_Block.statements[0]);
+	mark_containment(Main_call);
 	
-	print_to_dom(Global_Block.statements[0], code_element, code_element);
+	print_to_dom(Main_call, code_element, code_element);
 	
 	column_index = map_line_to_execution_indices[current_line].indexOf(execution_index);
 
@@ -1294,16 +801,8 @@ function print() {
 
 function start_debugging() {
 
-	execution_cursor = Global_Block;
-
-	execution_cursor.index = 0;
-	execution_cursor.elements = execution_cursor.statements;
-
-	execution_cursor.is_execution = false;
-	execution_cursor = Global_Block.elements[0];
-	execution_cursor.is_execution = true;
-
-	run(execution_cursor);
+	execution_cursor = Main_call;
+	run(Main_call);
 
 	slider_element.value = 0;
 	slider_oninput();
@@ -1357,19 +856,19 @@ function run(node, force = false) {
 
 	let last_call = call_stack[call_stack.length-1];
 
-	if (node.base.kind == Code_Kind.PROCEDURE_CALL) {
+	if (node.base.kind == Code_Kind.CALL) {
 
 		call_stack.push(node);
 
 		node.returned = false;
 
-		if (typeof node.declaration.expression == "function") {
+		if (typeof node.ident.declaration.expression == "function") {
 			// native JS function
 			let values = [];
 			for (let arg of node.args) {
 				values.push(run(arg));
 			}
-			return_value = node.declaration.expression.apply(null, values);
+			return_value = node.ident.declaration.expression.apply(null, values);
 			node.returned = true;
 		}
 		else {
@@ -1675,7 +1174,7 @@ function math_solve(node) {
 
 		return parseInt(node.value);
 	}
-	else if (node.base.kind == Code_Kind.PROCEDURE_CALL) {
+	else if (node.base.kind == Code_Kind.CALL) {
 
 		return run(node);
 	}
@@ -1712,7 +1211,7 @@ function clone(node) {
 
 		cloned = make_procedure(params, node.return_type, clone(node.block));
 	}
-	else if (node.base.kind == Code_Kind.PROCEDURE_CALL) {
+	else if (node.base.kind == Code_Kind.CALL) {
 
 		let args = null;
 
@@ -1726,7 +1225,7 @@ function clone(node) {
 			}
 		}
 
-		cloned = make_procedure_call(node.declaration, args);
+		cloned = make_call(node.ident, args);
 	}
 	else if (node.base.kind == Code_Kind.IF) {
 
@@ -1852,16 +1351,16 @@ function transform(node) {
 
 	let last_call = call_stack[call_stack.length-1];
 
-	if (node.base.kind == Code_Kind.PROCEDURE_CALL) {
+	if (node.base.kind == Code_Kind.CALL) {
 
 
-		let procedure = node.declaration.expression;
+		let procedure = node.ident.declaration.expression;
 
 		if (typeof procedure.transformed == "undefined") {
 
 			procedure.transformed = make_block();
 
-			let return_ident = make_ident(node.declaration.ident.name +"_return");
+			let return_ident = make_ident(node.ident.name +"_return");
 			procedure.transformed.return_ident = return_ident;
 
 			let return_decl = make_declaration(return_ident, null, procedure.return_type);
@@ -2043,8 +1542,8 @@ function mark_containment(node) {
 		node.contains_execution = node.condition.contains_execution || node.condition.is_execution ||
 		                          node.block.contains_execution || node.block.is_execution;
 	}
-	else if (node.base.kind == Code_Kind.PROCEDURE_CALL &&
-	         typeof node.declaration.expression == "function") {
+	else if (node.base.kind == Code_Kind.CALL &&
+	         typeof node.ident.declaration.expression == "function") {
 		// native function
 		for (let arg of node.args) {
 
@@ -2167,8 +1666,8 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		if (node.base.kind == Code_Kind.BINARY_OPERATION ||
 			node.base.kind == Code_Kind.RETURN ||
 			node.base.kind == Code_Kind.BLOCK ||
-			(node.base.kind == Code_Kind.PROCEDURE_CALL &&
-			 node.declaration.ident.name == "main")
+			(node.base.kind == Code_Kind.CALL &&
+			 node.ident.name == "main")
 			) {
 
 			return;
@@ -2251,7 +1750,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 			print_target.appendChild(document.createTextNode("}"));
 		}
 	}
-	else if (node.base.kind == Code_Kind.PROCEDURE_CALL) {
+	else if (node.base.kind == Code_Kind.CALL) {
 
 		if (values_shown && node.last_return !== null &&
 			typeof node.last_return !== "undefined") {
@@ -2265,7 +1764,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		}
 		else {
 
-			print_to_dom(node.declaration.ident, expr, block_print_target);
+			print_to_dom(node.ident, expr, block_print_target);
 
 			expr.appendChild(document.createTextNode("("));
 
