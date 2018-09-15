@@ -604,7 +604,6 @@ let Code_Kind = {
 	OPASSIGN: "opassign",
 	BINARY_OPERATION: "binary op",
 	BLOCK: "block",
-	STATEMENT: "statement",
 	DECLARATION: "declaration",
 	PROCEDURE_CALL: "call",
 	PROCEDURE: "procedure",
@@ -627,23 +626,6 @@ function make_node() {
 	next_serial += 1;
 
 	return node;
-}
-
-let Code_Statement = {
-
-	base: null,
-
-	expression: null
-};
-function make_statement(expression) {
-
-	let statement = Object.assign({}, Code_Statement);
-	statement.base = make_node();
-	statement.base.kind = Code_Kind.STATEMENT;
-
-	statement.expression = expression;
-
-	return statement;
 }
 
 let Code_Procedure = {
@@ -952,12 +934,6 @@ function make_literal(value) {
 	return literal;
 }
 
-let newline_expr = {};
-newline_expr.base = make_node();
-newline_expr.base.kind = Code_Kind.NEWLINE;
-
-let newline = make_statement(newline_expr);
-
 let Global_Block = make_block();
 
 let Types = {
@@ -1054,21 +1030,21 @@ let while_if_block_2 = make_block();
 let while_if_2 = make_if(while_if_cond_2, while_if_block_2);
 let while_if_opassign_2 = make_opassign(clone(some_other_function_param.ident), "-", make_literal("5"));
 let while_if_continue_2 = make_continue();
-while_if_block_2.statements.push(make_statement(while_if_opassign_2));
-while_if_block_2.statements.push(make_statement(while_if_continue_2));
+while_if_block_2.statements.push(while_if_opassign_2);
+while_if_block_2.statements.push(while_if_continue_2);
 let while_if_cond_3 = make_binary_operation(clone(some_other_function_param.ident), "<", make_literal("40"));
 let while_if_block_3 = make_block();
 let while_if_3 = make_if(while_if_cond_3, while_if_block_3);
 let while_if_assign_3 = make_assign(clone(some_other_function_param.ident), make_literal("5"));
 let while_if_break_3 = make_break();
-while_if_block_3.statements.push(make_statement(while_if_assign_3));
-while_if_block_3.statements.push(make_statement(while_if_break_3));
+while_if_block_3.statements.push(while_if_assign_3);
+while_if_block_3.statements.push(while_if_break_3);
 let while_opassign_4 = make_opassign(clone(some_other_function_param.ident), "-", make_literal("10"));
-while_block_2.statements.push(make_statement(while_if_2));
-while_block_2.statements.push(make_statement(while_if_3));
-while_block_2.statements.push(make_statement(while_opassign_4));
-some_other_function_block.statements.push(make_statement(while_2));
-some_other_function_block.statements.push(make_statement(make_return(clone(some_other_function_param.ident))));
+while_block_2.statements.push(while_if_2);
+while_block_2.statements.push(while_if_3);
+while_block_2.statements.push(while_opassign_4);
+some_other_function_block.statements.push(while_2);
+some_other_function_block.statements.push(make_return(clone(some_other_function_param.ident)));
 
 /*
 int some_function(int num_iters) {
@@ -1089,20 +1065,19 @@ let some_function_for_begin = make_declaration(make_ident("i"), make_literal("0"
 let some_function_for_cond = make_binary_operation(clone(some_function_for_begin.ident), "<", some_function_param.ident);
 let some_function_for_end = make_opassign(clone(some_function_for_begin.ident), "+", make_literal("1"));
 let some_function_for_block = make_block();
-let some_function_for = make_for(make_statement(some_function_for_begin), 
+let some_function_for = make_for(some_function_for_begin, 
 								 some_function_for_cond, 
-								 make_statement(some_function_for_end), 
+								 some_function_for_end, 
 								 some_function_for_block);
-let for_block_stmt = make_statement(
-                     make_opassign(clone(some_function_sum.ident), 
+let for_block_stmt = make_opassign(clone(some_function_sum.ident), 
                                    "+", 
-                                   make_binary_operation(clone(some_function_for_begin.ident), "*", make_literal("20"))));
+                                   make_binary_operation(clone(some_function_for_begin.ident), "*", make_literal("20")));
 some_function_for_block.statements.push(for_block_stmt);
 let some_other_function_call = make_procedure_call(some_other_function_declaration, [clone(some_function_sum.ident)]);
 
-some_function_block.statements.push(make_statement(some_function_sum));
-some_function_block.statements.push(make_statement(some_function_for));
-some_function_block.statements.push(make_statement(make_return(some_other_function_call)));
+some_function_block.statements.push(some_function_sum);
+some_function_block.statements.push(some_function_for);
+some_function_block.statements.push(make_return(some_other_function_call));
 
 /*
 int factorial(int number) {
@@ -1124,13 +1099,13 @@ let if_condition = make_binary_operation(clone(factorial_param.ident), ">", make
 let factorial_binop = make_binary_operation(clone(factorial_param.ident), "-", make_literal("1"));
 let factorial_recursive_call = make_procedure_call(factorial_declaration, [factorial_binop]);
 let factorial_binop_2 = make_binary_operation(factorial_recursive_call, "*", clone(factorial_param.ident));
-if_block.statements.push(make_statement(make_return(factorial_binop_2)));
+if_block.statements.push(make_return(factorial_binop_2));
 
 let else_block = make_block();
-else_block.statements.push(make_statement(make_return(make_literal("1"))));
+else_block.statements.push(make_return(make_literal("1")));
 
-factorial_block.statements.push(make_statement(make_if(if_condition, if_block)));
-factorial_block.statements.push(make_statement(make_else(else_block)));
+factorial_block.statements.push(make_if(if_condition, if_block));
+factorial_block.statements.push(make_else(else_block));
 
 /*
 int factorial_iter(int number) {
@@ -1153,11 +1128,11 @@ let factorial_iter_while_cond = make_binary_operation(clone(factorial_iter_param
 let factorial_iter_while = make_while(factorial_iter_while_cond, factorial_iter_while_block);
 let factorial_iter_while_opassign = make_opassign(clone(factorial_iter_sum.ident), "*", clone(factorial_iter_param.ident));
 let factorial_iter_while_opassign_2 = make_opassign(clone(factorial_iter_param.ident), "-", make_literal("1"));
-factorial_iter_while_block.statements.push(make_statement(factorial_iter_while_opassign));
-factorial_iter_while_block.statements.push(make_statement(factorial_iter_while_opassign_2));
-factorial_iter_block.statements.push(make_statement(factorial_iter_sum));
-factorial_iter_block.statements.push(make_statement(factorial_iter_while));
-factorial_iter_block.statements.push(make_statement(make_return(clone(factorial_iter_sum.ident))));
+factorial_iter_while_block.statements.push(factorial_iter_while_opassign);
+factorial_iter_while_block.statements.push(factorial_iter_while_opassign_2);
+factorial_iter_block.statements.push(factorial_iter_sum);
+factorial_iter_block.statements.push(factorial_iter_while);
+factorial_iter_block.statements.push(make_return(clone(factorial_iter_sum.ident)));
 
 /*
 int nested_loops(int width, int height) {
@@ -1180,36 +1155,36 @@ let nested_loops_for_block = make_block();
 let nested_loops_for_begin = make_declaration(make_ident("width_iter"), make_literal("0"), Types.int);
 let nested_loops_for_cond = make_binary_operation(clone(nested_loops_for_begin.ident), "<", clone(nested_loops_width.ident));
 let nested_loops_for_end = make_opassign(clone(nested_loops_for_begin.ident), "+", make_literal("1"));
-let nested_loops_for = make_for(make_statement(nested_loops_for_begin), 
-								nested_loops_for_cond, 
-								make_statement(nested_loops_for_end), 
-								nested_loops_for_block);
+let nested_loops_for = make_for(nested_loops_for_begin, 
+                                nested_loops_for_cond, 
+                                nested_loops_for_end, 
+                                nested_loops_for_block);
 let nested_loops_for_2_block = make_block();
 let nested_loops_for_2_begin = make_declaration(make_ident("height_iter"), make_literal("0"), Types.int);
 let nested_loops_for_2_cond = make_binary_operation(clone(nested_loops_for_2_begin.ident), "<", clone(nested_loops_height.ident));
 let nested_loops_for_2_end = make_opassign(clone(nested_loops_for_2_begin.ident), "+", make_literal("1"));
-let nested_loops_for_2 = make_for(make_statement(nested_loops_for_2_begin), 
-								nested_loops_for_2_cond, 
-								make_statement(nested_loops_for_2_end), 
-								nested_loops_for_2_block);
+let nested_loops_for_2 = make_for(nested_loops_for_2_begin, 
+                                  nested_loops_for_2_cond, 
+                                  nested_loops_for_2_end, 
+                                  nested_loops_for_2_block);
 let nested_loops_binop = make_binary_operation(clone(nested_loops_for_begin.ident), "*", make_literal("2"));
 let nested_loops_binop_2 = make_binary_operation(nested_loops_binop, "+", clone(nested_loops_for_2_begin.ident));
 let nested_loops_inner = make_declaration(make_ident("inner"), nested_loops_binop_2, Types.int);
 let nested_loops_print_call = make_procedure_call(print_declaration, [clone(nested_loops_inner.ident)]);
 let nested_loops_factorial_call = make_procedure_call(factorial_declaration, [clone(nested_loops_inner.ident)]);
-nested_loops_for_2_block.statements.push(make_statement(nested_loops_inner));
-nested_loops_for_2_block.statements.push(make_statement(nested_loops_print_call));
-nested_loops_for_2_block.statements.push(make_statement(nested_loops_factorial_call));
-nested_loops_for_block.statements.push(make_statement(nested_loops_for_2));
-nested_loops_block.statements.push(make_statement(nested_loops_for));
-nested_loops_block.statements.push(make_statement(make_return(make_literal("42"))));
+nested_loops_for_2_block.statements.push(nested_loops_inner);
+nested_loops_for_2_block.statements.push(nested_loops_print_call);
+nested_loops_for_2_block.statements.push(nested_loops_factorial_call);
+nested_loops_for_block.statements.push(nested_loops_for_2);
+nested_loops_block.statements.push(nested_loops_for);
+nested_loops_block.statements.push(make_return(make_literal("42")));
 
 let Main_block = make_block();
 let Main_procedure = make_procedure(null, Types.int, Main_block);
 let Main_declaration = make_declaration(make_ident("main"), Main_procedure);
 let Main_call = make_procedure_call(Main_declaration);
 
-Global_Block.statements.push(make_statement(Main_call));
+Global_Block.statements.push(Main_call);
 
 /*
 int main() {
@@ -1231,12 +1206,12 @@ let local_variable_assign_3 = make_assign(clone(local_variable.ident), factorial
 let nested_loops_call = make_procedure_call(nested_loops_declaration, [make_literal("2"), make_literal("2")]);
 let local_variable_assign_4 = make_assign(clone(local_variable.ident), nested_loops_call);
 
-Main_block.statements.push(make_statement(local_variable));
-Main_block.statements.push(make_statement(local_variable_assign));
-Main_block.statements.push(make_statement(local_variable_assign_2));
-Main_block.statements.push(make_statement(local_variable_assign_3));
-Main_block.statements.push(make_statement(local_variable_assign_4));
-Main_block.statements.push(make_statement(make_return(clone(local_variable.ident))));
+Main_block.statements.push(local_variable);
+Main_block.statements.push(local_variable_assign);
+Main_block.statements.push(local_variable_assign_2);
+Main_block.statements.push(local_variable_assign_3);
+Main_block.statements.push(local_variable_assign_4);
+Main_block.statements.push(make_return(clone(local_variable.ident)));
 
 code_composed = true;
 
@@ -1325,7 +1300,7 @@ function start_debugging() {
 	execution_cursor.elements = execution_cursor.statements;
 
 	execution_cursor.is_execution = false;
-	execution_cursor = Global_Block.elements[0].expression;
+	execution_cursor = Global_Block.elements[0];
 	execution_cursor.is_execution = true;
 
 	run(execution_cursor);
@@ -1409,27 +1384,16 @@ function run(node, force = false) {
 
 		return_value = run(transform(node));
 
-		/*
-		map_ident_to_changes.get(last_call.transformed.statements[0].expression.ident).push(node.execution_cursor);
-		map_original_ident_to_changes.get(last_call.transformed.statements[0].expression.ident.original).push(node.execution_cursor);
-		*/
-
 		last_call.returned = true;
 
 		last_call.last_return = return_value;
 	}
 
-	if (node.base.kind == Code_Kind.STATEMENT) {
+	if (node.base.kind == Code_Kind.IF) {
 
-		return_value = run(node.expression);
-	}
-	else if (node.base.kind == Code_Kind.IF) {
+		let else_expr = last_block.statements[last_block.index + 1];
+		if (else_expr && else_expr.base.kind == Code_Kind.ELSE) {
 
-		let else_stmt = last_block.statements[last_block.index + 1];
-		let else_expr;
-		if (else_stmt && else_stmt.expression.base.kind == Code_Kind.ELSE) {
-
-			else_expr = else_stmt.expression;
 			else_expr.if_expr = node;
 		}
 
@@ -1437,10 +1401,13 @@ function run(node, force = false) {
 
 			return_value = run(node.block);
 		}
-		else if (else_expr) {
+		else {
 
-			last_block.index += 1;
-			return_value = run(else_expr);
+			if (else_expr && else_expr.base.kind == Code_Kind.ELSE) {
+
+				last_block.index += 1;
+				return_value = run(else_expr);
+			}
 		}
 	}
 	else if (node.base.kind == Code_Kind.ELSE) {
@@ -1450,11 +1417,7 @@ function run(node, force = false) {
 	else if (node.base.kind == Code_Kind.WHILE) {
 
 		// could pass this as a param
-		let block_index = last_block.statements.findIndex(
-			function(elem) {
-				return Object.is(elem.expression, node);
-			}
-		);
+		let block_index = last_block.statements.indexOf(node);
 
 		loop_stack.push(node);
 
@@ -1471,7 +1434,7 @@ function run(node, force = false) {
 			let cycle = make_if(condition, block);
 			cycle.loop = node;
 
-			last_block.statements.splice(block_index, 0, make_statement(cycle));
+			last_block.statements.splice(block_index, 0, cycle);
 			block_index += 1;
 		}
 
@@ -1482,14 +1445,10 @@ function run(node, force = false) {
 	else if (node.base.kind == Code_Kind.FOR) {
 
 		// could pass this as a param
-		let block_index = last_block.statements.findIndex(
-			function(elem) {
-				return Object.is(elem.expression, node);
-			}
-		);
+		let block_index = last_block.statements.indexOf(node);
 		last_block.statements.splice(block_index, 0, node.begin);
 		block_index += 1;
-		run(node.begin.expression);
+		run(node.begin);
 		node.block.statements.push(node.cycle_end);
 
 		loop_stack.push(node);
@@ -1507,7 +1466,7 @@ function run(node, force = false) {
 			let cycle = make_if(condition, block);
 			cycle.loop = node;
 
-			last_block.statements.splice(block_index, 0, make_statement(cycle));
+			last_block.statements.splice(block_index, 0, cycle);
 			block_index += 1;
 		}
 
@@ -1589,7 +1548,7 @@ function run(node, force = false) {
 		block_stack.push(node);
 
 		while (node.index < node.elements.length) {
-			let executing_expr = node.elements[node.index].expression;
+			let executing_expr = node.elements[node.index];
 			return_value = run(executing_expr);
 			node.index += 1;
 
@@ -1704,9 +1663,10 @@ function math_solve(node) {
 
 		let ident = node;
 
+		// @Cleanup
 		if (ident.transformed) {
 
-			ident = ident.transformed.statements[0].expression;
+			ident = ident.transformed.statements[0];
 		}
 
 		return map_ident_to_value.get(ident.declaration.ident);
@@ -1722,11 +1682,6 @@ function math_solve(node) {
 }
 
 function clone(node) {
-
-	// @@@
-	if (node === null) {
-		return;
-	}
 
 	let cloned;
 
@@ -1799,7 +1754,12 @@ function clone(node) {
 	}
 	else if (node.base.kind == Code_Kind.DECLARATION) {
 
-		let decl = make_declaration(clone(node.ident), clone(node.expression), node.type);
+		let expr;
+		if (node.expression) {
+			expr = clone(node.expression);
+		}
+
+		let decl = make_declaration(clone(node.ident), expr, node.type);
 
 		decl.ident.name = get_final_name(node.ident.original.name);
 
@@ -1851,10 +1811,6 @@ function clone(node) {
 
 		cloned = node;
 	}
-	else if (node.base.kind == Code_Kind.STATEMENT) {
-
-		cloned = make_statement(clone(node.expression));
-	}
 
 	if (code_composed) {
 		cloned.original = node.original ? node.original : node;
@@ -1863,7 +1819,6 @@ function clone(node) {
 			indices = new Array();
 			map_original_to_indices.set(cloned.original, indices);
 		}
-		// map_instance_to_original.set(cloned, indices);
 	}
 
 	return cloned;
@@ -1911,12 +1866,12 @@ function transform(node) {
 
 			let return_decl = make_declaration(return_ident, null, procedure.return_type);
 
-			procedure.transformed.statements.push(make_statement(return_decl));
+			procedure.transformed.statements.push(return_decl);
 
 			for (let i = 0; i < procedure.parameters.length; i += 1) {
 
 				let param = procedure.parameters[i];
-				procedure.transformed.statements.push(make_statement(param));
+				procedure.transformed.statements.push(param);
 			}
 
 			for (let i = 0; i < procedure.block.statements.length; i += 1) {
@@ -1949,15 +1904,15 @@ function transform(node) {
 
 		let assign = make_assign(node.ident, binop);
 
-		replacement.statements.push(make_statement(assign));
+		replacement.statements.push(assign);
 	}
 	else if (node.base.kind == Code_Kind.RETURN) {
 
-		let ident = last_call.transformed.statements[0].expression.ident;
+		let ident = last_call.transformed.statements[0].ident;
 
 		let assign = make_assign(clone(ident), node.expression);
 
-		replacement.statements.push(make_statement(assign));
+		replacement.statements.push(assign);
 	}
 
 	if (replacement.statements.length > 0) {
@@ -1990,20 +1945,12 @@ function mark_containment(node) {
 
 		for (let stmt of node.statements) {
 
-			mark_containment(stmt.expression);
+			mark_containment(stmt);
 
-			node.contains_flowpoint |= stmt.expression.contains_flowpoint || stmt.expression.is_flowpoint;
-			node.contains_inspection |= stmt.expression.contains_inspection || stmt.expression.is_inspection;
-			node.contains_execution |= stmt.expression.contains_execution || stmt.expression.is_execution;
+			node.contains_flowpoint |= stmt.contains_flowpoint || stmt.is_flowpoint;
+			node.contains_inspection |= stmt.contains_inspection || stmt.is_inspection;
+			node.contains_execution |= stmt.contains_execution || stmt.is_execution;
 		}
-	}
-	else if (node.base.kind == Code_Kind.STATEMENT) {
-
-		mark_containment(node.expression);
-
-		node.contains_flowpoint = node.expression.contains_flowpoint || node.expression.is_flowpoint;
-		node.contains_inspection = node.expression.contains_inspection || node.expression.is_inspection;
-		node.contains_execution = node.expression.contains_execution || node.expression.is_execution;
 	}
 	else if (node.base.kind == Code_Kind.DECLARATION) {
 
@@ -2112,11 +2059,6 @@ function mark_containment(node) {
 
 let indent_level = 0;
 
-function print_semicolon(print_target) {
-
-	print_target.appendChild(document.createTextNode(";"));
-}
-
 function should_expand(node) {
 	return node.contains_flowpoint || node.contains_inspection || node.contains_execution;
 }
@@ -2147,7 +2089,7 @@ function should_hide(node) {
 
 		for (let stmt of node.statements) {
 
-			should = should || should_hide(stmt.expression);
+			should = should || should_hide(stmt);
 		}
 
 		return should;
@@ -2205,7 +2147,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 	let last_expression = print_expression_stack[print_expression_stack.length-1];
 	
-	if (last_expression && last_expression.base.kind == Code_Kind.STATEMENT &&
+	if (last_expression && last_expression.base.kind == Code_Kind.BLOCK &&
 	    should_hide(node) && should_expand_node != true) {
 
 		return;
@@ -2218,16 +2160,16 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		node.base.kind != Code_Kind.RETURN &&
 		node.base.kind != Code_Kind.OPASSIGN &&
 		node.base.kind != Code_Kind.IDENT &&
-		last_expression.base.kind != Code_Kind.IF &&
-		last_expression.base.kind != Code_Kind.ELSE &&
-		last_expression.base.kind != Code_Kind.WHILE &&
 		is_transformed_block == false) {
 
 		print_to_dom(node.transformed, block_print_target, block_print_target, true);
 
 		if (node.base.kind == Code_Kind.BINARY_OPERATION ||
 			node.base.kind == Code_Kind.RETURN ||
-			node.base.kind == Code_Kind.BLOCK) {
+			node.base.kind == Code_Kind.BLOCK ||
+			(node.base.kind == Code_Kind.PROCEDURE_CALL &&
+			 node.declaration.ident.name == "main")
+			) {
 
 			return;
 		}
@@ -2274,9 +2216,24 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		block.style = style;
 
-		for (let statement of node.statements) {
+		for (let stmt of node.statements) {
 
-			print_to_dom(statement, block, block);
+			let stmt_elem = document.createElement("stmt");
+
+			print_to_dom(stmt, stmt_elem, block);
+
+			if (stmt_elem.children.length > 0) {
+
+				if (stmt.base.kind != Code_Kind.NEWLINE &&
+					stmt.base.kind != Code_Kind.IF &&
+					stmt.base.kind != Code_Kind.ELSE &&
+					stmt.base.kind != Code_Kind.WHILE) {
+
+					stmt_elem.appendChild(document.createTextNode(";"));
+				}
+
+				block.appendChild(stmt_elem);
+			}
 			
 			line_count += 1;
 			map_line_to_execution_indices[line_count] = new Array();
@@ -2294,31 +2251,6 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 			print_target.appendChild(document.createTextNode("}"));
 		}
 	}
-	else if (node.base.kind == Code_Kind.STATEMENT) {
-
-		if (node.expression.base.kind == Code_Kind.PROCEDURE_CALL &&
-			node.expression.declaration.ident.name == "main") {
-
-			print_to_dom(node.expression, expr, block_print_target);
-		}
-		else {
-
-			print_to_dom(node.expression, expr, block_print_target);
-
-			if (expr.children.length > 0) {
-
-				if (node.expression.base.kind != Code_Kind.NEWLINE &&
-					node.expression.base.kind != Code_Kind.IF &&
-					node.expression.base.kind != Code_Kind.ELSE &&
-					node.expression.base.kind != Code_Kind.WHILE) {
-
-					print_semicolon(expr);
-				}
-
-				print_target.appendChild(expr);
-			}
-		}
-	}
 	else if (node.base.kind == Code_Kind.PROCEDURE_CALL) {
 
 		if (values_shown && node.last_return !== null &&
@@ -2328,7 +2260,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 			expr.appendChild(document.createTextNode(node.last_return));
 		}
 		else if ((should_expand_node || expand_all) && node.transformed) {
-
+				
 			print_to_dom(node.transformed.return_ident, expr, block_print_target);
 		}
 		else {
@@ -2595,7 +2527,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		if (node.transformed) {
 
-			print_to_dom(node.transformed.statements[0].expression, print_target, block_print_target);
+			print_to_dom(node.transformed.statements[0], print_target, block_print_target);
 		}
 	}
 
