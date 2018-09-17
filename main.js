@@ -609,55 +609,90 @@ let loop_stack = new Array();
 let execution_stack = new Array();
 let stack_pointer = 0;
 let stack_buffer = new ArrayBuffer(64 * 64 * 64);
+let stack_view = new DataView(stack_buffer);
 let heap_buffer = new ArrayBuffer(64 * 64 * 64);
-function get_ident_typedarray(node) {
+let heap_view = new DataView(heap_buffer);
+function get_ident_value(node) {
 	let type = node.declaration.ident.base.type;
-	if (type.kind == Type_Kind.INTEGER) {
+	if (type.base.kind == Type_Kind.INTEGER) {
 		if (type.size_in_bytes == 1) {
 			if (type.signed) {
-				return new Int8Array(stack_buffer, node.declaration.pointer, 1);
+				return stack_view.getInt8(node.declaration.pointer);
 			}
 			else {
-				return new Uint8Array(stack_buffer, node.declaration.pointer, 1);
+				return stack_view.getUint8(node.declaration.pointer);
 			}
 		}
 		else if (type.size_in_bytes == 2) {
 			if (type.signed) {
-				return new Int16Array(stack_buffer, node.declaration.pointer, 1);
+				return stack_view.getInt16(node.declaration.pointer);
 			}
 			else {
-				return new Uint16Array(stack_buffer, node.declaration.pointer, 1);
+				return stack_view.getUint16(node.declaration.pointer);
 			}
 		}
 		else if (type.size_in_bytes == 4) {
 			if (type.signed) {
-				return new Int32Array(stack_buffer, node.declaration.pointer, 1);
+				return stack_view.getInt32(node.declaration.pointer);
 			}
 			else {
-				return new Uint32Array(stack_buffer, node.declaration.pointer, 1);
+				return stack_view.getUint32(node.declaration.pointer);
 			}
 		}
 		// @Incomplete
 		// 64bit int has to be faked
 	}
-	else if (type.kind == Type_Kind.FLOAT) {
+	else if (type.base.kind == Type_Kind.FLOAT) {
 		if (type.size_in_bytes == 4) {
-			return new Float32Array(stack_buffer, node.declaration.pointer, 1);
+			return stack_view.getFloat32(node.declaration.pointer);
 		}
 		else if (type.size_in_bytes == 8) {
-			return new Float64Array(stack_buffer, node.declaration.pointer, 1);
+			return stack_view.getFloat64(node.declaration.pointer);
 		}
 		// @Incomplete
 		// 80bit float has to be faked
 	}
 }
 function set_ident_value(node, value) {
-	let arr = get_ident_typedarray(node);
-	arr[0] = value;
-}
-function get_ident_value(node) {
-	let arr = get_ident_typedarray(node);
-	return arr[0];
+	let type = node.declaration.ident.base.type;
+	if (type.base.kind == Type_Kind.INTEGER) {
+		if (type.size_in_bytes == 1) {
+			if (type.signed) {
+				return stack_view.setInt8(node.declaration.pointer, value);
+			}
+			else {
+				return stack_view.setUint8(node.declaration.pointer, value);
+			}
+		}
+		else if (type.size_in_bytes == 2) {
+			if (type.signed) {
+				return stack_view.setInt16(node.declaration.pointer, value);
+			}
+			else {
+				return stack_view.setUint16(node.declaration.pointer, value);
+			}
+		}
+		else if (type.size_in_bytes == 4) {
+			if (type.signed) {
+				return stack_view.setInt32(node.declaration.pointer, value);
+			}
+			else {
+				return stack_view.setUint32(node.declaration.pointer, value);
+			}
+		}
+		// @Incomplete
+		// 64bit int has to be faked
+	}
+	else if (type.base.kind == Type_Kind.FLOAT) {
+		if (type.size_in_bytes == 4) {
+			return stack_view.setFloat32(node.declaration.pointer, value);
+		}
+		else if (type.size_in_bytes == 8) {
+			return stack_view.setFloat64(node.declaration.pointer, value);
+		}
+		// @Incomplete
+		// 80bit float has to be faked
+	}
 }
 
 let inspection_cursor = null;
@@ -705,7 +740,7 @@ let stdlib = [
 ];
 
 let code = `
-int some_other_function(int number) {
+int some_other_function(char number) {
 	while (number > 0) {
 		if (number > 50) {
 			number -= 5;
@@ -719,14 +754,14 @@ int some_other_function(int number) {
 	}
 	return number;
 }
-int some_function(int num_iters) {
+int some_function(uchar num_iters) {
 	int sum = 0;
 	for (int i = 0; i < num_iters; i += 1) {
 		sum += i * 20;
 	}
 	return some_other_function(sum);
 }
-int factorial(int number) {
+int factorial(short number) {
 	if (number > 1) {
 		return factorial(number - 1) * number;
 	}
@@ -734,8 +769,8 @@ int factorial(int number) {
 		return 1;
 	}
 }
-void fizzbuzz(int number) {
-	for (int i = 1; i <= number; i += 1) {
+void fizzbuzz(ushort number) {
+	for (uint i = 1; i <= number; i += 1) {
 		if (i % 15 == 0) {
 			print(1234);
 		}
@@ -1158,6 +1193,15 @@ function run(node, force = false) {
 	else if (node.base.kind == Code_Kind.LITERAL) {
 
 		return_value = math_solve(node);
+	}
+	else if (node.base.kind == Code_Kind.REFERENCE) {
+
+		// @Audit
+		return_value = node.expression.declaration.pointer;
+	}
+	else if (node.base.kind == Code_Kind.DEREFERENCE) {
+
+		return_value = get_ident_value(node.expression);
 	}
 
 	if (node.base.kind != Code_Kind.BLOCK &&
@@ -1920,7 +1964,6 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	}
 	else if (node.base.kind == Code_Kind.DECLARATION) {
 
-		// @Audit
 		// @NotTested
 		if (node.expression && node.expression.base.kind == Code_Kind.PROCEDURE) {
 

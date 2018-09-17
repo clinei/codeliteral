@@ -10,7 +10,9 @@ let Code_Kind = {
 	OPASSIGN: "opassign",
 	BLOCK: "block",
 	PROCEDURE: "procedure",
-	DECLARATION: "declaration",
+    DECLARATION: "declaration",
+    REFERENCE: "reference",
+    DEREFERENCE: "dereference",
 	CALL: "call",
 	RETURN: "return",
 	BINARY_OPERATION: "binop",
@@ -93,6 +95,38 @@ function make_declaration(ident, expression, type) {
 	declaration.type = type;
 
 	return declaration;
+}
+
+let Code_Reference = {
+
+    base: null,
+
+    expression: null,
+};
+function make_reference(expression) {
+    let reference = Object.assign({}, Code_Reference);
+    reference.base = make_node();
+    reference.base.kind = Code_Kind.REFERENCE;
+
+    reference.expression = expression;
+
+    return reference;
+}
+
+let Code_Dereference = {
+
+    base: null,
+
+    expression: null,
+};
+function make_dereference(expression) {
+    let dereference = Object.assign({}, Code_Dereference);
+    dereference.base = make_node();
+    dereference.base.kind = Code_Kind.DEREFERENCE;
+
+    dereference.expression = expression;
+
+    return dereference;
 }
 
 let Code_Block = {
@@ -341,6 +375,8 @@ let Type_Kind = {
     INTEGER: "integer",
     FLOAT: "float",
     VOID: "void",
+    ARRAY: "array",
+    FUNCTION_POINTER: "function pointer",
 };
 let Type_Info = {
     kind: null,
@@ -351,13 +387,31 @@ let Type_Info_Integer = {
     size_in_bytes: null,
     signed: null,
 };
+let Type_Info_Float = {
+    base: null,
+
+    size_in_bytes: null,
+};
+let Type_Info_Array = {
+    base: null,
+
+    elem_type: null,
+    length: null,
+};
+let Type_Info_Function_Pointer = {
+    base: null,
+
+    return_type: null,
+    param_types: null,
+};
 function make_type_info() {
     let info = Object.assign({}, Type_Info);
     return info;
 }
 function make_type_info_integer(size_in_bytes, signed) {
-    let info = Object.assign({}, make_type_info());
-    info.kind = Type_Kind.INTEGER;
+    let info = Object.assign({}, Type_Info_Integer);
+    info.base = make_type_info();
+    info.base.kind = Type_Kind.INTEGER;
 
     info.size_in_bytes = size_in_bytes;
     info.signed = signed;
@@ -365,11 +419,32 @@ function make_type_info_integer(size_in_bytes, signed) {
     return info;
 }
 function make_type_info_float(size_in_bytes) {
-    let info = Object.assign({}, make_type_info());
-    info.kind = Type_Kind.FLOAT;
+    let info = Object.assign({}, Type_Info_Float);
+    info.base = make_type_info();
+    info.base.kind = Type_Kind.FLOAT;
 
     info.size_in_bytes = size_in_bytes;
     
+    return info;
+}
+function make_type_info_array(elem_type, length) {
+    let info = Object.assign({}, Type_Info_Array);
+    info.base = make_type_info();
+    info.base.kind = Type_Kind.ARRAY;
+
+    info.elem_type = elem_type;
+    info.length = length;
+
+    return info;
+}
+function make_type_info_function_pointer(return_type, param_types) {
+    let info = Object.assign({}, Type_Info_Array);
+    info.base = make_type_info();
+    info.base.kind = Type_Kind.FUNCTION_POINTER;
+
+    info.return_type = return_type;
+    info.param_types = param_types;
+
     return info;
 }
 function make_type_info_void() {
@@ -381,34 +456,16 @@ function make_type_info_void() {
 
 let Types = {
     "char": make_type_info_integer(1, false),
-    "signed char": make_type_info_integer(1, true),
-    "unsigned char": make_type_info_integer(1, false),
+    "uchar": make_type_info_integer(1, false),
     "short": make_type_info_integer(2, true),
-    "short int": make_type_info_integer(2, true),
-    "signed short": make_type_info_integer(2, true),
-    "signed short int": make_type_info_integer(2, true),
-    "unsigned short": make_type_info_integer(2, false),
-    "unsigned short int": make_type_info_integer(2, false),
+    "ushort": make_type_info_integer(2, false),
     "int": make_type_info_integer(4, true),
-    "signed": make_type_info_integer(4, true),
-    "signed int": make_type_info_integer(4, true),
-    "unsigned": make_type_info_integer(4, false),
-    "unsigned int": make_type_info_integer(4, false),
-    "long": make_type_info_integer(4, true),
-    "long int": make_type_info_integer(4, true),
-    "signed long": make_type_info_integer(4, true),
-    "signed long int": make_type_info_integer(4, true),
-    "unsigned long": make_type_info_integer(4, false),
-    "unsigned long int": make_type_info_integer(4, false),
-    "long long": make_type_info_integer(8, true),
-    "long long int": make_type_info_integer(8, true),
-    "signed long long": make_type_info_integer(8, true),
-    "signed long long int": make_type_info_integer(8, true),
-    "unsigned long long": make_type_info_integer(8, false),
-    "unsigned long long int": make_type_info_integer(8, false),
+    "uint": make_type_info_integer(4, false),
+    // no native int64 in Javascript, need to fake
+    "long": make_type_info_integer(8, true),
+    "ulong": make_type_info_integer(8, false),
     "float": make_type_info_float(4),
     "double": make_type_info_float(8),
-    "long double": make_type_info_float(12),
     "void": make_type_info_void(),
 };
 
@@ -609,8 +666,15 @@ function parse(tokens) {
         return parse_expression();
     }
     function parse_expression() {
-        let left = parse_atom();
         let curr_token = tokens[token_index];
+        if (curr_token.str == "&") {
+            return parse_reference();
+        }
+        else if (curr_token.str == "*") {
+            return parse_dereference();
+        }
+        let left = parse_atom();
+        curr_token = tokens[token_index];
         if (curr_token.kind == "op") {
             if (curr_token.str == "=") {
                 return parse_assign(left);
@@ -632,6 +696,14 @@ function parse(tokens) {
     }
     function parse_call(atom) {
         return make_call(atom, delimited("(", ")", ",", parse_expression));
+    }
+    function parse_reference() {
+        token_index += 1;
+        return make_reference(parse_expression());
+    }
+    function parse_dereference() {
+        token_index += 1;
+        return make_reference(parse_expression());
     }
     function parse_while() {
         token_index += 2;
@@ -746,16 +818,58 @@ function parse(tokens) {
         let block = parse_block();
         return make_declaration(ident, make_procedure(parameters, type, block));
     }
+    /*
+    int x;
+    int[] arr;
+    int (*fp)(int[]);
+    // array brackets must be next to type, not ident
+    */
+    function parse_array_type(elem_type) {
+        token_index +=1;
+        let curr_token = tokens[token_index];
+        if (curr_token.kind == "literal") {
+            token_index += 2;
+            return make_array_type(elem_type, parseInt(curr_token.str));
+        }
+        else if (curr_token.str == "]") {
+            token_index += 1;
+            return make_array_type(elem_type, null);
+        }
+    }
+    function parse_type() {
+        let curr_token = tokens[token_index];
+        let curr_type = parse_ident();
+        curr_token = tokens[token_index];
+        if (curr_token.kind == "ident") {
+            return curr_type;
+        }
+        else if (curr_token.str == "(") {
+            token_index += 1;
+            curr_token = tokens[token_index];
+            let fp_ident;
+            if (curr_token.str == "*") {
+                fp_ident = parse_ident();
+            }
+            else {
+                debugger;
+            }
+            if (curr_token.str == ")") {
+                token_index += 1;
+            }
+            else {
+                debugger;
+            }
+            let param_types = delimited("(", ")", ",", parse_type);
+            curr_type = make_type_info_function_pointer(curr_type, param_types);
+        }
+        while (curr_token.str == "[") {
+            curr_type = parse_array_type(curr_type);
+        }
+        return curr_type;
+    }
     function parse_declaration() {
-        let idents = new Array();
-        while (tokens[token_index].kind == "ident") {
-            idents.push(parse_atom());
-        }
-        let ident = idents.pop();
-        let type = idents.shift();
-        while (idents.length > 0) {
-            ident.name += idents.shift().name;
-        }
+        let type = parse_type();
+        let ident = parse_ident();
         let curr_token = tokens[token_index];
         let expression;
         if (curr_token.str == "=") {
