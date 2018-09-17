@@ -2,6 +2,8 @@ Bugs:
 
 we should have a comment on the general design
 
+implement arrays, memory, and then strings
+
 do while loop not implemented, use an if (true) for the first cycle
 
 true and false keywords not implemented
