@@ -602,11 +602,63 @@ let map_original_to_clone = new Map();
 let debugging = false;
 let execution_cursor = null;
 let execution_index = 0;
+let idents_used = new Set();
 let call_stack = new Array();
 let block_stack = new Array();
 let loop_stack = new Array();
 let execution_stack = new Array();
-let idents_used = new Set();
+let stack_pointer = 0;
+let stack_buffer = new ArrayBuffer(64 * 64 * 64);
+let heap_buffer = new ArrayBuffer(64 * 64 * 64);
+function get_ident_typedarray(node) {
+	let type = node.declaration.ident.base.type;
+	if (type.kind == Type_Kind.INTEGER) {
+		if (type.size_in_bytes == 1) {
+			if (type.signed) {
+				return new Int8Array(stack_buffer, node.declaration.pointer, 1);
+			}
+			else {
+				return new Uint8Array(stack_buffer, node.declaration.pointer, 1);
+			}
+		}
+		else if (type.size_in_bytes == 2) {
+			if (type.signed) {
+				return new Int16Array(stack_buffer, node.declaration.pointer, 1);
+			}
+			else {
+				return new Uint16Array(stack_buffer, node.declaration.pointer, 1);
+			}
+		}
+		else if (type.size_in_bytes == 4) {
+			if (type.signed) {
+				return new Int32Array(stack_buffer, node.declaration.pointer, 1);
+			}
+			else {
+				return new Uint32Array(stack_buffer, node.declaration.pointer, 1);
+			}
+		}
+		// @Incomplete
+		// 64bit int has to be faked
+	}
+	else if (type.kind == Type_Kind.FLOAT) {
+		if (type.size_in_bytes == 4) {
+			return new Float32Array(stack_buffer, node.declaration.pointer, 1);
+		}
+		else if (type.size_in_bytes == 8) {
+			return new Float64Array(stack_buffer, node.declaration.pointer, 1);
+		}
+		// @Incomplete
+		// 80bit float has to be faked
+	}
+}
+function set_ident_value(node, value) {
+	let arr = get_ident_typedarray(node);
+	arr[0] = value;
+}
+function get_ident_value(node) {
+	let arr = get_ident_typedarray(node);
+	return arr[0];
+}
 
 let inspection_cursor = null;
 
@@ -710,20 +762,14 @@ int nested_loops(int width, int height) {
 }
 int main() {
     int local_variable = 3;
-	local_variable = some_function(local_variable);
-	local_variable = factorial(local_variable);
-	local_variable = fizzbuzz(30);
-	// local_variable = nested_loops(2, 2);
+	some_function(local_variable);
+	factorial(local_variable);
+	fizzbuzz(30);
+	nested_loops(2, 2);
 	return local_variable;
 }
 main();
 `;
-let Types = {
-	int : make_ident("int"),
-	float : make_ident("float"),
-	void : make_ident("void"),
-	Any: make_ident("Any")
-};
 let parsed = parse(tokenize(code));
 parsed.statements = stdlib.concat(parsed.statements);
 let Global_Block = infer(parsed);
@@ -870,18 +916,26 @@ function run(node, force = false) {
 
 		node.returned = false;
 
-		if (typeof node.ident.declaration.expression == "function") {
+		let run_result = null;
+		let proc = node.ident.declaration.expression;
+
+		if (typeof proc == "function") {
 			// native JS function
 			let values = [];
 			for (let arg of node.args) {
 				values.push(run(arg));
 			}
-			return_value = node.ident.declaration.expression.apply(null, values);
+			run_result = proc.apply(null, values);
 			node.returned = true;
 		}
 		else {
-
-			return_value = run(transform(node));
+			run_result = run(transform(node));
+			if (proc.return_type.name != "void") {
+				return_value = run_result;
+			}
+			else {
+				return_value = null;
+			}
 		}
 
 		call_stack.pop();
@@ -1007,6 +1061,7 @@ function run(node, force = false) {
 		node.ident.is_lhs = true;
 		run(node.ident);
 
+		set_ident_value(node.ident, expression_value);
 		map_ident_to_value.set(node.ident.declaration.ident, expression_value);
 		map_ident_to_changes.get(node.ident.declaration.ident).push(node.ident.execution_index);
 
@@ -1020,6 +1075,7 @@ function run(node, force = false) {
 
 		let expression_value = math_solve(binop);
 
+		set_ident_value(node.ident, expression_value);
 		map_ident_to_value.set(node.ident.declaration.ident, expression_value);
 		map_ident_to_changes.get(node.ident.declaration.ident).push(node.ident.execution_index);
 
@@ -1031,15 +1087,21 @@ function run(node, force = false) {
 
 		node.ident.is_lhs = true;
 		run(node.ident);
+
+		if (node.type.name != "void") {
+			node.pointer = stack_pointer;
+			stack_pointer += node.ident.base.type.size_in_bytes;
+			last_block.allocations.push(node);
+
+			if (node.expression) {
+				expression_value = run(node.expression);
+				
+				set_ident_value(node.ident, expression_value);
+				map_ident_to_value.set(node.ident.declaration.ident, expression_value);
+			}
+		}
 		
 		idents_used.add(node.ident.name);
-
-		if (node.expression) {
-
-			expression_value = run(node.expression);
-		}
-
-		map_ident_to_value.set(node.ident.declaration.ident, expression_value);
 
 		let changes = new Array();
 		changes.push(node.ident.execution_index);
@@ -1053,17 +1115,23 @@ function run(node, force = false) {
 	else if (node.base.kind == Code_Kind.IDENT) {
 
 		if (node.is_lhs != true && node.execution_index) {
-
 			map_ident_to_uses.get(node.declaration.ident).push(node.execution_index);
 		}
 
-		return_value = map_ident_to_value.get(node.declaration.ident);
+		// return_value = map_ident_to_value.get(node.declaration.ident);
+		if (node.declaration.type.name != "void") {
+			return_value = get_ident_value(node);
+		}
+		else {
+			return_value = null;
+		}
 	}
 	else if (node.base.kind == Code_Kind.BLOCK) {
 
 		node.index = 0;
 		node.elements = node.statements;
 		block_stack.push(node);
+		node.allocations = new Array();
 
 		while (node.index < node.elements.length) {
 			let executing_expr = node.elements[node.index];
@@ -1074,6 +1142,11 @@ function run(node, force = false) {
 
 				break;
 			}
+		}
+
+		for (let i = 0; i < node.allocations.length; i += 1) {
+			let decl = node.allocations[i];
+			stack_pointer -= decl.ident.base.type.size_in_bytes;
 		}
 
 		block_stack.pop();
@@ -1178,7 +1251,7 @@ function math_solve(node) {
 	}
 }
 
-function clone(node) {
+function clone(node, set_original = true) {
 
 	let cloned;
 
@@ -1291,6 +1364,8 @@ function clone(node) {
 			// @Audit
 			ident.declaration = node.declaration;
 		}
+		
+		ident.base.type = node.declaration.ident.base.type;
 
 		cloned = ident;
 	}
@@ -1319,7 +1394,7 @@ function clone(node) {
 		cloned = node;
 	}
 
-	if (code_composed) {
+	if (code_composed && set_original) {
 		cloned.original = node.original ? node.original : node;
 		let indices = map_original_to_indices.get(cloned.original);
 		if (typeof indices == "undefined") {
@@ -1351,16 +1426,11 @@ function transform(node) {
 
 	let replacement = make_block();
 
-	replacement.declarations = new Array();
-
 	node.transformed = replacement;
-
-	let last_block = block_stack[block_stack.length-1];
 
 	let last_call = call_stack[call_stack.length-1];
 
 	if (node.base.kind == Code_Kind.CALL) {
-
 
 		let procedure = node.ident.declaration.expression;
 
@@ -1371,18 +1441,14 @@ function transform(node) {
 			let return_ident = make_ident(node.ident.name +"_return");
 			procedure.transformed.return_ident = return_ident;
 
-			let return_decl = make_declaration(return_ident, null, procedure.return_type);
-
+			let return_decl = infer(make_declaration(return_ident, null, procedure.return_type));
 			procedure.transformed.statements.push(return_decl);
 
 			for (let i = 0; i < procedure.parameters.length; i += 1) {
-
 				let param = procedure.parameters[i];
 				procedure.transformed.statements.push(param);
 			}
-
 			for (let i = 0; i < procedure.block.statements.length; i += 1) {
-
 				let stmt = procedure.block.statements[i];
 				procedure.transformed.statements.push(stmt);
 			}
@@ -1398,7 +1464,6 @@ function transform(node) {
 		}
 
 		replacement = clone(procedure.transformed);
-		replacement.declarations = new Array();
 		replacement.return_ident = clone(procedure.transformed.return_ident);
 		replacement.transformed_from_call = node;
 		node.transformed = replacement;

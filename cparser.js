@@ -57,8 +57,8 @@ let Code_Call = {
 
 	base: null,
 
-	declaration: null,
-	args: null
+    ident: null,
+	args: null,
 };
 function make_call(ident, args) {
 
@@ -337,7 +337,80 @@ function make_literal(value) {
 	return literal;
 }
 
-let infer_block_stack = new Array();
+let Type_Kind = {
+    INTEGER: "integer",
+    FLOAT: "float",
+    VOID: "void",
+};
+let Type_Info = {
+    kind: null,
+};
+let Type_Info_Integer = {
+    base: null,
+
+    size_in_bytes: null,
+    signed: null,
+};
+function make_type_info() {
+    let info = Object.assign({}, Type_Info);
+    return info;
+}
+function make_type_info_integer(size_in_bytes, signed) {
+    let info = Object.assign({}, make_type_info());
+    info.kind = Type_Kind.INTEGER;
+
+    info.size_in_bytes = size_in_bytes;
+    info.signed = signed;
+
+    return info;
+}
+function make_type_info_float(size_in_bytes) {
+    let info = Object.assign({}, make_type_info());
+    info.kind = Type_Kind.FLOAT;
+
+    info.size_in_bytes = size_in_bytes;
+    
+    return info;
+}
+function make_type_info_void() {
+    let info = Object.assign({}, make_type_info());
+    info.kind = Type_Kind.VOID;
+
+    return info;
+}
+
+let Types = {
+    "char": make_type_info_integer(1, false),
+    "signed char": make_type_info_integer(1, true),
+    "unsigned char": make_type_info_integer(1, false),
+    "short": make_type_info_integer(2, true),
+    "short int": make_type_info_integer(2, true),
+    "signed short": make_type_info_integer(2, true),
+    "signed short int": make_type_info_integer(2, true),
+    "unsigned short": make_type_info_integer(2, false),
+    "unsigned short int": make_type_info_integer(2, false),
+    "int": make_type_info_integer(4, true),
+    "signed": make_type_info_integer(4, true),
+    "signed int": make_type_info_integer(4, true),
+    "unsigned": make_type_info_integer(4, false),
+    "unsigned int": make_type_info_integer(4, false),
+    "long": make_type_info_integer(4, true),
+    "long int": make_type_info_integer(4, true),
+    "signed long": make_type_info_integer(4, true),
+    "signed long int": make_type_info_integer(4, true),
+    "unsigned long": make_type_info_integer(4, false),
+    "unsigned long int": make_type_info_integer(4, false),
+    "long long": make_type_info_integer(8, true),
+    "long long int": make_type_info_integer(8, true),
+    "signed long long": make_type_info_integer(8, true),
+    "signed long long int": make_type_info_integer(8, true),
+    "unsigned long long": make_type_info_integer(8, false),
+    "unsigned long long int": make_type_info_integer(8, false),
+    "float": make_type_info_float(4),
+    "double": make_type_info_float(8),
+    "long double": make_type_info_float(12),
+    "void": make_type_info_void(),
+};
 
 function infer_decl_of_ident(ident) {
     for (let i = infer_block_stack.length-1; i >= 0; i -= 1) {
@@ -350,7 +423,7 @@ function infer_decl_of_ident(ident) {
         }
     }
 }
-
+let infer_block_stack = new Array();
 function infer(node) {
     let last_block = infer_block_stack[infer_block_stack.length-1];
     if (node.base.kind == Code_Kind.BLOCK) {
@@ -365,9 +438,15 @@ function infer(node) {
     }
     else if (node.base.kind == Code_Kind.DECLARATION) {
         // should error here when ident already declared in current scope
-        last_block.declarations.push(node);
+        if (last_block) {
+            last_block.declarations.push(node);
+        }
         if (node.type) {
-            infer(node.type);
+            let type = Types[node.type.name];
+            if (!type) {
+                type = infer(node.type);
+            }
+            node.ident.base.type = type;
         }
         if (node.expression && node.expression.base) {
             infer(node.expression);
@@ -668,8 +747,15 @@ function parse(tokens) {
         return make_declaration(ident, make_procedure(parameters, type, block));
     }
     function parse_declaration() {
-        let type = parse_atom();
-        let ident = parse_atom();
+        let idents = new Array();
+        while (tokens[token_index].kind == "ident") {
+            idents.push(parse_atom());
+        }
+        let ident = idents.pop();
+        let type = idents.shift();
+        while (idents.length > 0) {
+            ident.name += idents.shift().name;
+        }
         let curr_token = tokens[token_index];
         let expression;
         if (curr_token.str == "=") {
