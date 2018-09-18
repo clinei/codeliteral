@@ -158,7 +158,7 @@ let Code_Dot_Operator = {
     right: null,
 };
 function make_dot_operator(left, right) {
-    let dot_operator = Object.assign({}, Code_Array_Index);
+    let dot_operator = Object.assign({}, Code_Dot_Operator);
     dot_operator.base = make_node();
     dot_operator.base.kind = Code_Kind.DOT_OPERATOR;
 
@@ -453,24 +453,29 @@ let Type_Info_Float = {
 let Type_Info_Array = {
     base: null,
 
+    size_in_bytes: null,
     elem_type: null,
     length: null,
 };
 let Type_Info_Pointer = {
     base: null,
 
+    size_in_bytes: null,
     elem_type: null,
 };
 let Type_Info_Function_Pointer = {
     base: null,
 
+    size_in_bytes: null,
     return_type: null,
     param_types: null,
 };
 let Type_Info_Struct = {
     base: null,
-
+    
+    size_in_bytes: null,
     members: null,
+
 };
 function make_type_info() {
     let info = Object.assign({}, Type_Info);
@@ -502,6 +507,7 @@ function make_type_info_array(elem_type, length) {
 
     info.elem_type = elem_type;
     info.length = length;
+    info.size_in_bytes = elem_type.size_in_bytes * length;
 
     return info;
 }
@@ -511,6 +517,7 @@ function make_type_info_pointer(elem_type) {
     info.base.kind = Type_Kind.POINTER;
 
     info.elem_type = elem_type;
+    info.size_in_bytes = Types.size_t.size_in_bytes;
 
     return info;
 }
@@ -521,6 +528,41 @@ function make_type_info_function_pointer(return_type, param_types) {
 
     info.return_type = return_type;
     info.param_types = param_types;
+    info.size_in_bytes = Types.size_t.size_in_bytes;
+
+    return info;
+}
+function make_type_info_struct_dummy() {
+    let info = Object.assign({}, Type_Info_Struct);
+    info.base = make_type_info();
+    info.base.kind = Type_Kind.STRUCT;
+
+    info.members = new Object();
+
+    return info;
+}
+function fill_type_info_struct(struct) {
+    let info = struct.base.type;
+
+    let members = info.members;
+    let size_in_bytes = 0;
+
+    for (let i = 0; i < struct.block.statements.length; i += 1) {
+        let stmt = struct.block.statements[i];
+        if (stmt.base.kind == Code_Kind.DECLARATION) {
+            infer(stmt);
+            let member = new Object();
+            member.offset = size_in_bytes;
+            member.type = stmt.ident.base.type;
+            members[stmt.ident.name] = member;
+            size_in_bytes += member.type.size_in_bytes;
+        }
+        else {
+            debugger;
+        }
+    }
+
+    info.size_in_bytes = size_in_bytes;
 
     return info;
 }
@@ -529,21 +571,28 @@ function make_type_info_struct(struct) {
     info.base = make_type_info();
     info.base.kind = Type_Kind.STRUCT;
 
-    let members = new Array();
+    let members = new Object();
+    let size_in_bytes = 0;
+
     for (let i = 0; i < struct.block.statements.length; i += 1) {
         let stmt = struct.block.statements[i];
         if (stmt.base.kind == Code_Kind.DECLARATION) {
             infer(stmt);
-            members.push(stmt.ident.base.type);
+            let type = stmt.ident.base.type;
+            members[stmt.ident.name] = type;
+            size_in_bytes += type.size_in_bytes;
         }
     }
+
+    info.size_in_bytes = size_in_bytes;
     info.members = members;
 
     return info;
 }
 function make_type_info_void() {
-    let info = Object.assign({}, make_type_info());
-    info.kind = Type_Kind.VOID;
+    let info = Object.assign({}, Type_Info_Struct);
+    info.base = make_type_info();
+    info.base.kind = Type_Kind.VOID;
 
     return info;
 }
@@ -561,6 +610,8 @@ let Types = {
     "float": make_type_info_float(4),
     "double": make_type_info_float(8),
     "void": make_type_info_void(),
+    // 32bit pointer
+    "size_t": make_type_info_integer(4, false),
 };
 let User_Types = {};
 
@@ -593,16 +644,19 @@ function infer(node) {
         if (last_block) {
             last_block.declarations.push(node);
         }
-        if (node.expression && node.expression.base) {
-            infer(node.expression);
-        }
         if (node.type) {
-            if (node.type.base.kind == Type_Kind.STRUCT) {
-                // implicit declaration so we can refer to the type inside the struct
-                // @@@
-                node.ident.base.type = null;
-            }
             node.ident.base.type = infer_type(node.type);
+        }
+        if (node.expression && node.expression.base) {
+            if (node.expression.base.kind == Code_Kind.STRUCT) {
+                // implicit declaration so we can refer to the type inside the struct
+                // when the struct type itself has not been declared yet
+                let dummy = make_type_info_struct_dummy();
+                node.expression.base.type = dummy;
+                node.ident.base.type = dummy;
+                node.type = dummy;
+            }
+            infer(node.expression);
         }
     }
     else if (node.base.kind == Code_Kind.ASSIGN) {
@@ -623,11 +677,23 @@ function infer(node) {
             infer(node.right);
         }
         else if (node.right.base.kind == Code_Kind.IDENT) {
-            if (node.left.base.type.kind == Type_Kind.ARRAY) {
+            let type;
+            if (node.left.base.type.base.kind == Type_Kind.STRUCT) {
+                type = node.left.base.type.members[node.right.name].type;
+            }
+            else if (node.left.base.type.base.kind == Type_Kind.ARRAY) {
                 if (node.right.name == "length") {
-                    node.right.base.type = Types.uint;
+                    type = Types.size_t;
+                }
+                else {
+                    debugger;
                 }
             }
+            else {
+                debugger;
+            }
+            node.base.type = type;
+            node.right.base.type = type;
         }
     }
     else if (node.base.kind == Code_Kind.STRUCT) {
@@ -679,9 +745,11 @@ function infer(node) {
         node.base.type = node.declaration.ident.base.type;
     }
 	else if (node.base.kind == Code_Kind.REFERENCE) {
+        node.base.type = infer_type(node);
         infer(node.expression);
 	}
 	else if (node.base.kind == Code_Kind.DEREFERENCE) {
+        node.base.type = infer_type(node);
         infer(node.expression);
 	}
     else if (node.base.kind == Code_Kind.BINARY_OPERATION) {
@@ -707,8 +775,25 @@ function infer_type(node) {
             }
         }
     }
+    else if (node.base.kind == Code_Kind.REFERENCE) {
+        infer(node.expression);
+        if (node.expression.base.kind == Code_Kind.REFERENCE) {
+            debugger;
+        }
+        return make_type_info_pointer(node.expression.base.type);
+    }
+    else if (node.base.kind == Code_Kind.DEREFERENCE) {
+        infer(node.expression);
+        if (node.expression.base.type.base.kind == Type_Kind.POINTER) {
+            return node.expression.base.type.elem_type;
+        }
+        else {
+            debugger;
+        }
+
+    }
     else if (node.base.kind == Type_Kind.STRUCT) {
-        return make_type_info_struct(node);
+        return fill_type_info_struct(node);
     }
     else if (node.base.kind == Type_Kind.POINTER) {
         let elem_type = infer_type(node.elem_type);
@@ -758,9 +843,10 @@ function parse(tokens) {
             }
             return left;
         }
+        // @@@
         else if (curr_token.str == "(") {
             token_index += 1;
-            let ret = parse_expression();
+            let ret = parse_rvalue();
             curr_token = tokens[token_index];
             if (curr_token.str == ")") {
                 return ret;
@@ -775,7 +861,7 @@ function parse(tokens) {
         let curr_prec = operator_precedence[curr_token.str];
         if (curr_prec && prev_prec >= curr_prec) {
             token_index += 1;
-            let right = maybe_binary(parse_atom(), curr_prec);
+            let right = maybe_binary(parse_rvalue(), curr_prec);
             let binop = make_binary_operation(left, curr_token.str, right);
             return maybe_binary(binop, prev_prec);
         }
@@ -784,7 +870,10 @@ function parse(tokens) {
     function parse_statement() {
         let curr_token = tokens[token_index];
         let next_token = tokens[token_index + 1];
-        if (curr_token.kind == "ident") {
+        if (curr_token.str == "{") {
+            return parse_block();
+        }
+        else if (curr_token.kind == "ident") {
             if (curr_token.str == "if") {
                 return parse_if();
             }
@@ -809,29 +898,67 @@ function parse(tokens) {
             else if (curr_token.str == "struct") {
                 return parse_struct_declaration();
             }
-            let type = parse_type();
-            curr_token = tokens[token_index];
-            next_token = tokens[token_index + 1];
-            if (curr_token.kind == "ident" && type) {
-                if (next_token.str == "(") {
-                    return parse_procedure_declaration(type);
+            else {
+                let type = parse_type();
+                curr_token = tokens[token_index];
+                next_token = tokens[token_index + 1];
+                if (type && curr_token.kind == "ident") {
+                    if (next_token.str == "(") {
+                        return parse_procedure_declaration(type);
+                    }
+                    else {
+                        return parse_declaration(type);
+                    }
                 }
-                else {
-                    return parse_declaration(type);
+            }
+        }
+        let left = parse_lvalue();
+        if (left) {
+            curr_token = tokens[token_index];
+            if (curr_token.kind == "op") {
+                if (curr_token.str == "=") {
+                    return parse_assign(left);
+                }
+                else if (curr_token.str[curr_token.str.length-1] == "=") {
+                    return parse_opassign(left);
                 }
             }
             else {
-                return parse_expression();
+                return left;
             }
         }
-        else if (curr_token.kind == "punc") {
-            if (curr_token.str == "{") {
-                return parse_block();
-            }
+        else {
+            left = parse_rvalue();
+            return left;
         }
-        return parse_expression();
+        debugger;
     }
-    function parse_expression() {
+    function parse_rvalue() {
+        let prev_index = token_index;
+        let left = parse_lvalue();
+        let curr_token = tokens[token_index];
+        if (!left) {
+            if (curr_token.kind == "literal") {
+                left = parse_literal();
+                curr_token = tokens[token_index];
+            }
+            else {
+                debugger;
+            }
+        }
+        if (!left) {
+            token_index = prev_index;
+            return;
+        }
+        else if (binary_ops.indexOf(curr_token.str) >= 0) {
+            let maybin = maybe_binary(left, 99);
+            return maybin;
+        }
+        else {
+            return left;
+        }
+    }
+    function parse_lvalue() {
         let curr_token = tokens[token_index];
         if (curr_token.str == "&") {
             return parse_reference();
@@ -839,24 +966,27 @@ function parse(tokens) {
         else if (curr_token.str == "*") {
             return parse_dereference();
         }
-        let left = parse_atom();
-        curr_token = tokens[token_index];
-        if (curr_token.kind == "op") {
-            if (curr_token.str == "=") {
-                return parse_assign(left);
+        let prev_index = token_index;
+        if (curr_token.kind == "ident") {
+            let left = parse_ident();
+            curr_token = tokens[token_index];
+            if (curr_token.str == ".") {
+                return parse_dot_operator(left);
             }
-            else if (binary_ops.indexOf(curr_token.str) >= 0) {
-                let maybin = maybe_binary(left, 99);
-                return maybin;
+            else if (curr_token.str == "(") {
+                return parse_call(left);
             }
-            else if (curr_token.str[curr_token.str.length-1] == "=") {
-                return parse_opassign(left);
+            else if (curr_token.str == "[") {
+                return parse_array_index(left);
+            }
+            else if (left) {
+                return left;
             }
         }
-        else if (curr_token.str == ".") {
-            return parse_dot_operator(left);
+        else {
+            token_index = prev_index;
+            return;
         }
-        return left;
     }
     function parse_literal() {
         let curr_token = tokens[token_index];
@@ -864,15 +994,15 @@ function parse(tokens) {
         return make_literal(parseInt(curr_token.str));
     }
     function parse_call(atom) {
-        return make_call(atom, delimited("(", ")", ",", parse_expression));
+        return make_call(atom, delimited("(", ")", ",", parse_rvalue));
     }
     function parse_reference() {
         token_index += 1;
-        return make_reference(parse_expression());
+        return make_reference(parse_lvalue());
     }
     function parse_dereference() {
         token_index += 1;
-        return make_reference(parse_expression());
+        return make_dereference(parse_lvalue());
     }
     function parse_array_index(left) {
         token_index += 1;
@@ -890,7 +1020,7 @@ function parse(tokens) {
     }
     function parse_while() {
         token_index += 2;
-        let condition = parse_expression();
+        let condition = parse_rvalue();
         let curr_token = tokens[token_index];
         if (curr_token.str == ")") {
             token_index += 1;
@@ -920,7 +1050,7 @@ function parse(tokens) {
         }
         curr_token = tokens[token_index];
         if (curr_token.str != ";") {
-            condition = parse_expression();
+            condition = parse_rvalue();
             curr_token = tokens[token_index];
             if (curr_token.str == ";") {
                 token_index += 1;
@@ -956,7 +1086,7 @@ function parse(tokens) {
     }
     function parse_return() {
         token_index += 1;
-        return make_return(parse_expression());
+        return make_return(parse_rvalue());
     }
     function parse_ident() {
         let curr_token = tokens[token_index];
@@ -971,7 +1101,7 @@ function parse(tokens) {
     }
     function parse_if() {
         token_index += 2;
-        let condition = parse_expression();
+        let condition = parse_rvalue();
         if (tokens[token_index].str == ")") {
             token_index += 1;
         }
@@ -989,13 +1119,13 @@ function parse(tokens) {
     }
     function parse_assign(left) {
         token_index += 1;
-        return make_assign(left, parse_expression());
+        return make_assign(left, parse_rvalue());
     }
     function parse_opassign(left) {
         let curr_token = tokens[token_index];
         let op = curr_token.str.slice(0, curr_token.str.length-1);
         token_index += 1;
-        let expr = parse_expression();
+        let expr = parse_rvalue();
         return make_opassign(left, op, expr);
     }
     function parse_procedure_declaration(type) {
@@ -1079,7 +1209,7 @@ function parse(tokens) {
         let expression;
         if (curr_token.str == "=") {
             token_index += 1;
-            expression = parse_expression();
+            expression = parse_rvalue();
         }
         return make_declaration(ident, expression, type);
     }
