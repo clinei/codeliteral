@@ -805,7 +805,7 @@ void arrays() {
 	int[8] arr;
 	arr[7] = 42;
 	arr[0] = arr[7];
-	// print(arr.length);
+	print(arr.length);
 }
 void pointers() {
 	int a;
@@ -813,6 +813,10 @@ void pointers() {
 	// b = &a;
 	print(&a);
 }
+struct node {
+	node* left;
+	node* right;
+};
 int main() {
     int local_variable = 3;
 	// some_function(local_variable);
@@ -953,6 +957,12 @@ function step_back() {
 	inspection_cursor.is_inspection = false;
 	inspection_cursor = execution_stack[execution_index];
 	inspection_cursor.is_inspection = true;
+}
+
+function add_node_to_execution_stack(node) {
+	node.execution_index = execution_index;
+	execution_stack.push(node);
+	execution_index += 1;
 }
 
 let disable_execution_recording = false;
@@ -1187,10 +1197,26 @@ function run(node, force = false) {
 	}
 	else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
 		
-		run(node.array);
+		add_node_to_execution_stack(node.array);
 		run(node.index);
 
 		return_value = get_memory(get_lvalue(node), node.base.type);
+	}
+	else if (node.base.kind == Code_Kind.DOT_OPERATOR) {
+		
+		add_node_to_execution_stack(node.left);
+		add_node_to_execution_stack(node.right);
+
+		if (node.left.base.type.base.kind == Type_Kind.ARRAY) {
+			if (node.right.base.kind == Code_Kind.IDENT) {
+				if (node.right.name == "length") {
+					return_value = node.left.base.type.length;
+				}
+			}
+		}
+		else {
+			return_value = get_memory(get_lvalue(node), node.base.type);
+		}
 	}
 	else if (node.base.kind == Code_Kind.BLOCK) {
 
@@ -1247,9 +1273,7 @@ function run(node, force = false) {
 
 		if (disable_execution_recording == false) {
 
-			node.execution_index = execution_index;
-			execution_stack.push(node);
-			execution_index += 1;
+			add_node_to_execution_stack(node);
 		}
 
 		if (typeof node.original != "undefined") {
@@ -1376,6 +1400,10 @@ function clone(node, set_original = true) {
 	else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
 
 		cloned = make_array_index(clone(node.array), clone(node.index));
+	}
+	else if (node.base.kind == Code_Kind.DOT_OPERATOR) {
+
+		cloned = make_dot_operator(clone(node.left), clone(node.right));
 	}
 	else if (node.base.kind == Code_Kind.IF) {
 
@@ -2128,7 +2156,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 			if (Object.getOwnPropertyNames(Types).indexOf(node.name) >= 0) {
 				expr.classList.add("code-type");
 			}
-			else if (node.declaration.expression &&
+			else if (node.declaration && node.declaration.expression &&
 			         typeof node.declaration.expression != "function" &&
 			         node.declaration.expression.base.kind == Code_Kind.PROCEDURE) {
 
@@ -2205,6 +2233,21 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 			expr.appendChild(document.createTextNode("["));
 			print_to_dom(node.index, expr, block_print_target);
 			expr.appendChild(document.createTextNode("]"));
+		}
+
+		print_target.appendChild(expr);
+	}
+	else if (node.base.kind == Code_Kind.DOT_OPERATOR) {
+		
+		if (values_shown && node.is_lhs != true) {
+			
+			expr.appendChild(document.createTextNode(node.last_return));
+			expr.classList.add("code-literal");
+		}
+		else {
+			print_to_dom(node.left, expr, block_print_target);
+			expr.appendChild(document.createTextNode("."));
+			print_to_dom(node.right, expr, block_print_target);
 		}
 
 		print_target.appendChild(expr);

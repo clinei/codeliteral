@@ -10,10 +10,12 @@ let Code_Kind = {
 	OPASSIGN: "opassign",
 	BLOCK: "block",
 	PROCEDURE: "procedure",
+    STRUCT: "struct",
     DECLARATION: "declaration",
     REFERENCE: "reference",
     DEREFERENCE: "dereference",
     ARRAY_INDEX: "array index",
+    DOT_OPERATOR: "dot operator",
 	CALL: "call",
 	RETURN: "return",
 	BINARY_OPERATION: "binop",
@@ -148,6 +150,24 @@ function make_array_index(array, index) {
     return array_index;
 }
 
+let Code_Dot_Operator = {
+
+    base: null,
+
+    left: null,
+    right: null,
+};
+function make_dot_operator(left, right) {
+    let dot_operator = Object.assign({}, Code_Array_Index);
+    dot_operator.base = make_node();
+    dot_operator.base.kind = Code_Kind.DOT_OPERATOR;
+
+    dot_operator.left = left;
+    dot_operator.right = right;
+
+    return dot_operator;
+}
+
 let Code_Block = {
 
 	base: null,
@@ -185,6 +205,23 @@ function make_return(expression) {
 	return_.expression = expression;
 
 	return return_;
+}
+
+let Code_Struct = {
+
+	base: null,
+
+    block: null,
+};
+function make_struct(block) {
+
+	let struct = Object.assign({}, Code_Struct);
+	struct.base = make_node();
+	struct.base.kind = Code_Kind.STRUCT;
+
+	struct.block = block;
+
+	return struct;
 }
 
 let Code_If = {
@@ -395,6 +432,8 @@ let Type_Kind = {
     FLOAT: "float",
     VOID: "void",
     ARRAY: "array",
+    POINTER: "pointer",
+    STRUCT: "struct",
     FUNCTION_POINTER: "function pointer",
 };
 let Type_Info = {
@@ -417,11 +456,21 @@ let Type_Info_Array = {
     elem_type: null,
     length: null,
 };
+let Type_Info_Pointer = {
+    base: null,
+
+    elem_type: null,
+};
 let Type_Info_Function_Pointer = {
     base: null,
 
     return_type: null,
     param_types: null,
+};
+let Type_Info_Struct = {
+    base: null,
+
+    members: null,
 };
 function make_type_info() {
     let info = Object.assign({}, Type_Info);
@@ -456,13 +505,39 @@ function make_type_info_array(elem_type, length) {
 
     return info;
 }
+function make_type_info_pointer(elem_type) {
+    let info = Object.assign({}, Type_Info_Pointer);
+    info.base = make_type_info();
+    info.base.kind = Type_Kind.POINTER;
+
+    info.elem_type = elem_type;
+
+    return info;
+}
 function make_type_info_function_pointer(return_type, param_types) {
-    let info = Object.assign({}, Type_Info_Array);
+    let info = Object.assign({}, Type_Info_Function_Pointer);
     info.base = make_type_info();
     info.base.kind = Type_Kind.FUNCTION_POINTER;
 
     info.return_type = return_type;
     info.param_types = param_types;
+
+    return info;
+}
+function make_type_info_struct(struct) {
+    let info = Object.assign({}, Type_Info_Struct);
+    info.base = make_type_info();
+    info.base.kind = Type_Kind.STRUCT;
+
+    let members = new Array();
+    for (let i = 0; i < struct.block.statements.length; i += 1) {
+        let stmt = struct.block.statements[i];
+        if (stmt.base.kind == Code_Kind.DECLARATION) {
+            infer(stmt);
+            members.push(stmt.ident.base.type);
+        }
+    }
+    info.members = members;
 
     return info;
 }
@@ -487,6 +562,7 @@ let Types = {
     "double": make_type_info_float(8),
     "void": make_type_info_void(),
 };
+let User_Types = {};
 
 function infer_decl_of_ident(ident) {
     for (let i = infer_block_stack.length-1; i >= 0; i -= 1) {
@@ -517,11 +593,16 @@ function infer(node) {
         if (last_block) {
             last_block.declarations.push(node);
         }
-        if (node.type) {
-            node.ident.base.type = infer_type(node.type);
-        }
         if (node.expression && node.expression.base) {
             infer(node.expression);
+        }
+        if (node.type) {
+            if (node.type.base.kind == Type_Kind.STRUCT) {
+                // implicit declaration so we can refer to the type inside the struct
+                // @@@
+                node.ident.base.type = null;
+            }
+            node.ident.base.type = infer_type(node.type);
         }
     }
     else if (node.base.kind == Code_Kind.ASSIGN) {
@@ -535,6 +616,22 @@ function infer(node) {
     else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
         infer(node.array);
         node.base.type = node.array.base.type.elem_type;
+    }
+    else if (node.base.kind == Code_Kind.DOT_OPERATOR) {
+        infer(node.left);
+        if (node.right.base.kind == Code_Kind.DOT_OPERATOR) {
+            infer(node.right);
+        }
+        else if (node.right.base.kind == Code_Kind.IDENT) {
+            if (node.left.base.type.kind == Type_Kind.ARRAY) {
+                if (node.right.name == "length") {
+                    node.right.base.type = Types.uint;
+                }
+            }
+        }
+    }
+    else if (node.base.kind == Code_Kind.STRUCT) {
+        infer_type(node);
     }
     else if (node.base.kind == Code_Kind.PROCEDURE) {
         infer_block_stack.push(node.block);
@@ -600,10 +697,23 @@ function infer_type(node) {
             return primitive;
         }
         else {
-            // @Incomplete
-            // user defined type
-            debugger;
+            infer(node);
+            let user_type = node.declaration.ident.base.type;
+            if (user_type.base.kind == Type_Kind.STRUCT) {
+                return user_type;
+            }
+            else {
+                debugger;
+            }
         }
+    }
+    else if (node.base.kind == Type_Kind.STRUCT) {
+        return make_type_info_struct(node);
+    }
+    else if (node.base.kind == Type_Kind.POINTER) {
+        let elem_type = infer_type(node.elem_type);
+        let type = make_type_info_pointer(elem_type);
+        return type;
     }
     else if (node.base.kind == Type_Kind.ARRAY) {
         let elem_type = infer_type(node.elem_type);
@@ -696,6 +806,9 @@ function parse(tokens) {
             else if (curr_token.str == "return") {
                 return parse_return();
             }
+            else if (curr_token.str == "struct") {
+                return parse_struct_declaration();
+            }
             let type = parse_type();
             curr_token = tokens[token_index];
             next_token = tokens[token_index + 1];
@@ -740,6 +853,9 @@ function parse(tokens) {
                 return parse_opassign(left);
             }
         }
+        else if (curr_token.str == ".") {
+            return parse_dot_operator(left);
+        }
         return left;
     }
     function parse_literal() {
@@ -763,6 +879,14 @@ function parse(tokens) {
         let index = parse_literal();
         token_index += 1;
         return make_array_index(left, index);
+    }
+    function parse_dot_operator(left) {
+        token_index += 1;
+        let right = parse_ident();
+        while (tokens[token_index].str == ".") {
+            right = parse_dot_operator(right);
+        }
+        return make_dot_operator(left, right);
     }
     function parse_while() {
         token_index += 2;
@@ -839,6 +963,12 @@ function parse(tokens) {
         token_index += 1;
         return make_ident(curr_token.str);
     }
+    function parse_struct_declaration() {
+        token_index += 1;
+        let ident = parse_ident();
+        let block = parse_block();
+        return make_declaration(ident, make_struct(block));
+    }
     function parse_if() {
         token_index += 2;
         let condition = parse_expression();
@@ -888,6 +1018,10 @@ function parse(tokens) {
             return make_type_info_array(elem_type, null);
         }
     }
+    function parse_pointer_type(elem_type) {
+        token_index += 1;
+        return make_type_info_pointer(elem_type);
+    }
     function parse_type() {
         let prev_index = token_index;
         let curr_token = tokens[token_index];
@@ -917,6 +1051,10 @@ function parse(tokens) {
             }
             let param_types = delimited("(", ")", ",", parse_type);
             curr_type = make_type_info_function_pointer(curr_type, param_types);
+        }
+        while (curr_token.str == "*") {
+            curr_type = parse_pointer_type(curr_type);
+            curr_token = tokens[token_index];
         }
         while (curr_token.str == "[") {
             curr_type = parse_array_type(curr_type);
