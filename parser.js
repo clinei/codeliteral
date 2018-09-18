@@ -13,6 +13,7 @@ let Code_Kind = {
     DECLARATION: "declaration",
     REFERENCE: "reference",
     DEREFERENCE: "dereference",
+    ARRAY_INDEX: "array index",
 	CALL: "call",
 	RETURN: "return",
 	BINARY_OPERATION: "binop",
@@ -127,6 +128,24 @@ function make_dereference(expression) {
     dereference.expression = expression;
 
     return dereference;
+}
+
+let Code_Array_Index = {
+
+    base: null,
+
+    array: null,
+    index: null,
+};
+function make_array_index(array, index) {
+    let array_index = Object.assign({}, Code_Array_Index);
+    array_index.base = make_node();
+    array_index.base.kind = Code_Kind.ARRAY_INDEX;
+
+    array_index.array = array;
+    array_index.index = index;
+
+    return array_index;
 }
 
 let Code_Block = {
@@ -499,11 +518,7 @@ function infer(node) {
             last_block.declarations.push(node);
         }
         if (node.type) {
-            let type = Types[node.type.name];
-            if (!type) {
-                type = infer(node.type);
-            }
-            node.ident.base.type = type;
+            node.ident.base.type = infer_type(node.type);
         }
         if (node.expression && node.expression.base) {
             infer(node.expression);
@@ -516,6 +531,10 @@ function infer(node) {
     else if (node.base.kind == Code_Kind.OPASSIGN) {
         infer(node.ident);
         infer(node.expression);
+    }
+    else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
+        infer(node.array);
+        node.base.type = node.array.base.type.elem_type;
     }
     else if (node.base.kind == Code_Kind.PROCEDURE) {
         infer_block_stack.push(node.block);
@@ -560,12 +579,38 @@ function infer(node) {
     }
     else if (node.base.kind == Code_Kind.IDENT) {
         node.declaration = infer_decl_of_ident(node);
+        node.base.type = node.declaration.ident.base.type;
     }
+	else if (node.base.kind == Code_Kind.REFERENCE) {
+        infer(node.expression);
+	}
+	else if (node.base.kind == Code_Kind.DEREFERENCE) {
+        infer(node.expression);
+	}
     else if (node.base.kind == Code_Kind.BINARY_OPERATION) {
         infer(node.left);
         infer(node.right);
     }
     return node;
+}
+function infer_type(node) {
+    if (node.base.kind == Code_Kind.IDENT) {
+        let primitive = Types[node.name];
+        if (primitive) {
+            return primitive;
+        }
+        else {
+            // @Incomplete
+            // user defined type
+            debugger;
+        }
+    }
+    else if (node.base.kind == Type_Kind.ARRAY) {
+        let elem_type = infer_type(node.elem_type);
+        let type = make_type_info_array(elem_type, node.length);
+        type.size_in_bytes = elem_type.size_in_bytes * node.length;
+        return type;
+    }
 }
 
 function parse(tokens) {
@@ -598,6 +643,9 @@ function parse(tokens) {
             if (curr_token.str == "(") {
                 return parse_call(left);
             }
+            else if (curr_token.str == "[") {
+                return parse_array_index(left);
+            }
             return left;
         }
         else if (curr_token.str == "(") {
@@ -626,7 +674,6 @@ function parse(tokens) {
     function parse_statement() {
         let curr_token = tokens[token_index];
         let next_token = tokens[token_index + 1];
-        let second_next_token = tokens[token_index + 2];
         if (curr_token.kind == "ident") {
             if (curr_token.str == "if") {
                 return parse_if();
@@ -649,13 +696,19 @@ function parse(tokens) {
             else if (curr_token.str == "return") {
                 return parse_return();
             }
-            else if (next_token.kind == "ident") {
-                if (second_next_token.str == "(") {
-                    return parse_procedure_declaration();
+            let type = parse_type();
+            curr_token = tokens[token_index];
+            next_token = tokens[token_index + 1];
+            if (curr_token.kind == "ident" && type) {
+                if (next_token.str == "(") {
+                    return parse_procedure_declaration(type);
                 }
                 else {
-                    return parse_declaration();
+                    return parse_declaration(type);
                 }
+            }
+            else {
+                return parse_expression();
             }
         }
         else if (curr_token.kind == "punc") {
@@ -704,6 +757,12 @@ function parse(tokens) {
     function parse_dereference() {
         token_index += 1;
         return make_reference(parse_expression());
+    }
+    function parse_array_index(left) {
+        token_index += 1;
+        let index = parse_literal();
+        token_index += 1;
+        return make_array_index(left, index);
     }
     function parse_while() {
         token_index += 2;
@@ -809,8 +868,7 @@ function parse(tokens) {
         let expr = parse_expression();
         return make_opassign(left, op, expr);
     }
-    function parse_procedure_declaration() {
-        let type = parse_atom();
+    function parse_procedure_declaration(type) {
         let curr_token = tokens[token_index];
         token_index += 1;
         let ident = make_ident(curr_token.str);
@@ -818,25 +876,20 @@ function parse(tokens) {
         let block = parse_block();
         return make_declaration(ident, make_procedure(parameters, type, block));
     }
-    /*
-    int x;
-    int[] arr;
-    int (*fp)(int[]);
-    // array brackets must be next to type, not ident
-    */
     function parse_array_type(elem_type) {
         token_index +=1;
         let curr_token = tokens[token_index];
         if (curr_token.kind == "literal") {
             token_index += 2;
-            return make_array_type(elem_type, parseInt(curr_token.str));
+            return make_type_info_array(elem_type, parseInt(curr_token.str));
         }
         else if (curr_token.str == "]") {
             token_index += 1;
-            return make_array_type(elem_type, null);
+            return make_type_info_array(elem_type, null);
         }
     }
     function parse_type() {
+        let prev_index = token_index;
         let curr_token = tokens[token_index];
         let curr_type = parse_ident();
         curr_token = tokens[token_index];
@@ -851,7 +904,10 @@ function parse(tokens) {
                 fp_ident = parse_ident();
             }
             else {
-                debugger;
+                // not a function pointer
+                // probably a call
+                token_index = prev_index;
+                return;
             }
             if (curr_token.str == ")") {
                 token_index += 1;
@@ -864,11 +920,22 @@ function parse(tokens) {
         }
         while (curr_token.str == "[") {
             curr_type = parse_array_type(curr_type);
+            curr_token = tokens[token_index];
         }
-        return curr_type;
+        if (curr_token.kind == "ident") {
+            return curr_type;
+        }
+        else {
+            token_index = prev_index;
+            return;
+        }
+        /*
+        number -= 5;
+        number[8] arr;
+        number[8] -= 5;
+        */
     }
-    function parse_declaration() {
-        let type = parse_type();
+    function parse_declaration(type) {
         let ident = parse_ident();
         let curr_token = tokens[token_index];
         let expression;

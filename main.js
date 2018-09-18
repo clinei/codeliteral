@@ -612,31 +612,30 @@ let stack_buffer = new ArrayBuffer(64 * 64 * 64);
 let stack_view = new DataView(stack_buffer);
 let heap_buffer = new ArrayBuffer(64 * 64 * 64);
 let heap_view = new DataView(heap_buffer);
-function get_ident_value(node) {
-	let type = node.declaration.ident.base.type;
+function get_memory(offset, type) {
 	if (type.base.kind == Type_Kind.INTEGER) {
 		if (type.size_in_bytes == 1) {
 			if (type.signed) {
-				return stack_view.getInt8(node.declaration.pointer);
+				return stack_view.getInt8(offset);
 			}
 			else {
-				return stack_view.getUint8(node.declaration.pointer);
+				return stack_view.getUint8(offset);
 			}
 		}
 		else if (type.size_in_bytes == 2) {
 			if (type.signed) {
-				return stack_view.getInt16(node.declaration.pointer);
+				return stack_view.getInt16(offset);
 			}
 			else {
-				return stack_view.getUint16(node.declaration.pointer);
+				return stack_view.getUint16(offset);
 			}
 		}
 		else if (type.size_in_bytes == 4) {
 			if (type.signed) {
-				return stack_view.getInt32(node.declaration.pointer);
+				return stack_view.getInt32(offset);
 			}
 			else {
-				return stack_view.getUint32(node.declaration.pointer);
+				return stack_view.getUint32(offset);
 			}
 		}
 		// @Incomplete
@@ -644,40 +643,47 @@ function get_ident_value(node) {
 	}
 	else if (type.base.kind == Type_Kind.FLOAT) {
 		if (type.size_in_bytes == 4) {
-			return stack_view.getFloat32(node.declaration.pointer);
+			return stack_view.getFloat32(offset);
 		}
 		else if (type.size_in_bytes == 8) {
-			return stack_view.getFloat64(node.declaration.pointer);
+			return stack_view.getFloat64(offset);
 		}
 		// @Incomplete
 		// 80bit float has to be faked
 	}
 }
-function set_ident_value(node, value) {
-	let type = node.declaration.ident.base.type;
+function get_lvalue(nd) {
+	if (nd.base.kind == Code_Kind.IDENT) {
+		return nd.declaration.pointer;
+	}
+	else if (nd.base.kind == Code_Kind.ARRAY_INDEX) {
+		return get_lvalue(nd.array) + nd.index.value * nd.array.base.type.size_in_bytes;
+	}
+}
+function set_memory(offset, type, value) {
 	if (type.base.kind == Type_Kind.INTEGER) {
 		if (type.size_in_bytes == 1) {
 			if (type.signed) {
-				return stack_view.setInt8(node.declaration.pointer, value);
+				return stack_view.setInt8(offset, value);
 			}
 			else {
-				return stack_view.setUint8(node.declaration.pointer, value);
+				return stack_view.setUint8(offset, value);
 			}
 		}
 		else if (type.size_in_bytes == 2) {
 			if (type.signed) {
-				return stack_view.setInt16(node.declaration.pointer, value);
+				return stack_view.setInt16(offset, value);
 			}
 			else {
-				return stack_view.setUint16(node.declaration.pointer, value);
+				return stack_view.setUint16(offset, value);
 			}
 		}
 		else if (type.size_in_bytes == 4) {
 			if (type.signed) {
-				return stack_view.setInt32(node.declaration.pointer, value);
+				return stack_view.setInt32(offset, value);
 			}
 			else {
-				return stack_view.setUint32(node.declaration.pointer, value);
+				return stack_view.setUint32(offset, value);
 			}
 		}
 		// @Incomplete
@@ -685,10 +691,10 @@ function set_ident_value(node, value) {
 	}
 	else if (type.base.kind == Type_Kind.FLOAT) {
 		if (type.size_in_bytes == 4) {
-			return stack_view.setFloat32(node.declaration.pointer, value);
+			return stack_view.setFloat32(offset, value);
 		}
 		else if (type.size_in_bytes == 8) {
-			return stack_view.setFloat64(node.declaration.pointer, value);
+			return stack_view.setFloat64(offset, value);
 		}
 		// @Incomplete
 		// 80bit float has to be faked
@@ -795,12 +801,26 @@ int nested_loops(int width, int height) {
 	}
 	return 42;
 }
+void arrays() {
+	int[8] arr;
+	arr[7] = 42;
+	arr[0] = arr[7];
+	// print(arr.length);
+}
+void pointers() {
+	int a;
+	// int* b;
+	// b = &a;
+	print(&a);
+}
 int main() {
     int local_variable = 3;
-	some_function(local_variable);
-	factorial(local_variable);
-	fizzbuzz(30);
-	nested_loops(2, 2);
+	// some_function(local_variable);
+	// factorial(local_variable);
+	// fizzbuzz(30);
+	arrays();
+	pointers();
+	// nested_loops(2, 2);
 	return local_variable;
 }
 main();
@@ -1094,11 +1114,15 @@ function run(node, force = false) {
 		let expression_value = run(node.expression);
 
 		node.ident.is_lhs = true;
+		// rename to lhs
 		run(node.ident);
 
-		set_ident_value(node.ident, expression_value);
+		set_memory(get_lvalue(node.ident), node.ident.base.type, expression_value);
+
+		/*
 		map_ident_to_value.set(node.ident.declaration.ident, expression_value);
 		map_ident_to_changes.get(node.ident.declaration.ident).push(node.ident.execution_index);
+		*/
 
 		return_value = expression_value;
 	}
@@ -1110,7 +1134,7 @@ function run(node, force = false) {
 
 		let expression_value = math_solve(binop);
 
-		set_ident_value(node.ident, expression_value);
+		set_memory(get_lvalue(node.ident), node.ident.base.type, expression_value);
 		map_ident_to_value.set(node.ident.declaration.ident, expression_value);
 		map_ident_to_changes.get(node.ident.declaration.ident).push(node.ident.execution_index);
 
@@ -1131,7 +1155,7 @@ function run(node, force = false) {
 			if (node.expression) {
 				expression_value = run(node.expression);
 				
-				set_ident_value(node.ident, expression_value);
+				set_memory(get_lvalue(node.ident), node.ident.base.type, expression_value);
 				map_ident_to_value.set(node.ident.declaration.ident, expression_value);
 			}
 		}
@@ -1155,11 +1179,18 @@ function run(node, force = false) {
 
 		// return_value = map_ident_to_value.get(node.declaration.ident);
 		if (node.declaration.type.name != "void") {
-			return_value = get_ident_value(node);
+			return_value = get_memory(get_lvalue(node), node.base.type);
 		}
 		else {
 			return_value = null;
 		}
+	}
+	else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
+		
+		run(node.array);
+		run(node.index);
+
+		return_value = get_memory(get_lvalue(node), node.base.type);
 	}
 	else if (node.base.kind == Code_Kind.BLOCK) {
 
@@ -1342,6 +1373,10 @@ function clone(node, set_original = true) {
 
 		cloned = make_call(node.ident, args);
 	}
+	else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
+
+		cloned = make_array_index(clone(node.array), clone(node.index));
+	}
 	else if (node.base.kind == Code_Kind.IF) {
 
 		cloned = make_if(clone(node.condition), clone(node.expression));
@@ -1408,8 +1443,6 @@ function clone(node, set_original = true) {
 			// @Audit
 			ident.declaration = node.declaration;
 		}
-		
-		ident.base.type = node.declaration.ident.base.type;
 
 		cloned = ident;
 	}
@@ -1433,6 +1466,14 @@ function clone(node, set_original = true) {
 
 		cloned = make_return(clone(node.expression));
 	}
+	else if (node.base.kind == Code_Kind.REFERENCE) {
+
+		cloned = make_reference(clone(node.expression));
+	}
+	else if (node.base.kind == Code_Kind.DEREFERENCE) {
+
+		cloned = make_dereference(clone(node.expression));
+	}
 	else if (node.base.kind == Code_Kind.NEWLINE) {
 
 		cloned = node;
@@ -1446,6 +1487,8 @@ function clone(node, set_original = true) {
 			map_original_to_indices.set(cloned.original, indices);
 		}
 	}
+	
+	cloned.base.type = node.base.type;
 
 	return cloned;
 }
@@ -1614,6 +1657,18 @@ function mark_containment(node) {
 		                           node.expression.contains_inspection || node.expression.is_inspection;
 		node.contains_execution = node.ident.contains_execution || node.ident.is_execution ||
 		                          node.expression.contains_execution || node.expression.is_execution;
+	}
+	else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
+
+		mark_containment(node.array);
+		mark_containment(node.index);
+
+		node.contains_flowpoint = node.array.contains_flowpoint || node.array.is_flowpoint ||
+		                          node.index.contains_flowpoint || node.index.is_flowpoint;
+		node.contains_inspection = node.array.contains_inspection || node.array.is_inspection ||
+		                           node.index.contains_inspection || node.index.is_inspection;
+		node.contains_execution = node.array.contains_execution || node.array.is_execution ||
+		                          node.index.contains_execution || node.index.is_execution;
 	}
 	else if (node.base.kind == Code_Kind.BINARY_OPERATION) {
 
@@ -2115,6 +2170,59 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 			print_to_dom(node.transformed.statements[0], print_target, block_print_target);
 		}
+	}
+	else if (node.base.kind == Code_Kind.REFERENCE) {
+
+		if (values_shown && node.is_lhs != true) {
+
+			expr.appendChild(document.createTextNode(node.last_return));
+			expr.classList.add("code-literal");
+		}
+		else {
+
+			expr.appendChild(document.createTextNode("&"));
+			print_to_dom(node.expression, expr, block_print_target);
+		}
+
+		print_target.appendChild(expr);
+	}
+	else if (node.base.kind == Code_Kind.DEREFERENCE) {
+		expr.appendChild(document.createTextNode("*"));
+		print_to_dom(node.expression, expr, block_print_target);
+
+		print_target.appendChild(expr);
+	}
+	else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
+
+		if (values_shown && node.is_lhs != true) {
+			
+			expr.appendChild(document.createTextNode(node.last_return));
+			expr.classList.add("code-literal");
+		}
+		else {
+			print_to_dom(node.array, expr, block_print_target);
+	
+			expr.appendChild(document.createTextNode("["));
+			print_to_dom(node.index, expr, block_print_target);
+			expr.appendChild(document.createTextNode("]"));
+		}
+
+		print_target.appendChild(expr);
+	}
+	else if (node.base.kind == Type_Kind.ARRAY) {
+
+		print_to_dom(node.elem_type, expr, block_print_target);
+
+		expr.appendChild(document.createTextNode("["));
+		if (node.length) {
+			let length_expr = document.createElement("expr");
+			length_expr.appendChild(document.createTextNode(node.length));
+			length_expr.classList.add("code-literal");
+			expr.appendChild(length_expr);
+		}
+		expr.appendChild(document.createTextNode("]"));
+
+		print_target.appendChild(expr);
 	}
 
 	print_expression_stack.pop();

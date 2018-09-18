@@ -1,3 +1,0 @@
-[submodule "deps/cparser"]
-	path = deps/cparser
-	url = https://github.com/clinei/cparser
