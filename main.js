@@ -394,9 +394,11 @@ function right_line() {
 }
 function previous_change() {
 
-	if (inspection_cursor.base.kind == Code_Kind.IDENT) {
+	// if (inspection_cursor.base.kind == Code_Kind.IDENT) {
+	if (inspection_cursor.base.pointer) {
 
-		let indices = map_ident_to_changes.get(inspection_cursor.declaration.ident);
+		// let indices = map_ident_to_changes.get(inspection_cursor.declaration.ident);
+		let indices = map_memory_to_changes.get(inspection_cursor.base.pointer);
 		let index = find_previous_index_in_array(indices, execution_index);
 
 		if (index < 0) {
@@ -413,9 +415,11 @@ function previous_change() {
 }
 function next_change() {
 
-	if (inspection_cursor.base.kind == Code_Kind.IDENT) {
+	// if (inspection_cursor.base.kind == Code_Kind.IDENT) {
+	if (inspection_cursor.base.pointer) {
 
-		let indices = map_ident_to_changes.get(inspection_cursor.declaration.ident);
+		// let indices = map_ident_to_changes.get(inspection_cursor.declaration.ident);
+		let indices = map_memory_to_changes.get(inspection_cursor.base.pointer);
 		let index = find_next_index_in_array(indices, execution_index);
 
 		if (index >= indices.length) {
@@ -432,9 +436,11 @@ function next_change() {
 }
 function previous_use() {
 
-	if (inspection_cursor.base.kind == Code_Kind.IDENT) {
+	// if (inspection_cursor.base.kind == Code_Kind.IDENT) {
+	if (inspection_cursor.base.pointer) {
 
-		let indices = map_ident_to_uses.get(inspection_cursor.declaration.ident);
+		// let indices = map_ident_to_uses.get(inspection_cursor.declaration.ident);
+		let indices = map_memory_to_uses.get(inspection_cursor.base.pointer);
 		let index = find_previous_index_in_array(indices, execution_index);
 
 		if (index < 0) {
@@ -451,9 +457,11 @@ function previous_use() {
 }
 function next_use() {
 
-	if (inspection_cursor.base.kind == Code_Kind.IDENT) {
+	// if (inspection_cursor.base.kind == Code_Kind.IDENT) {
+	if (inspection_cursor.base.pointer) {
 
-		let indices = map_ident_to_uses.get(inspection_cursor.declaration.ident);
+		// let indices = map_ident_to_uses.get(inspection_cursor.declaration.ident);
+		let indices = map_memory_to_uses.get(inspection_cursor.base.pointer);
 		let index = find_next_index_in_array(indices, execution_index);
 
 		if (index >= indices.length) {
@@ -595,6 +603,8 @@ let map_call_to_settings = new Map();
 let map_ident_to_value = new Map();
 let map_ident_to_changes = new Map();
 let map_ident_to_uses = new Map();
+let map_memory_to_uses = new Map();
+let map_memory_to_changes = new Map();
 let map_original_to_indices = new Map();
 
 let map_original_to_clone = new Map();
@@ -612,7 +622,21 @@ let stack_buffer = new ArrayBuffer(64 * 64 * 64);
 let stack_view = new DataView(stack_buffer);
 let heap_buffer = new ArrayBuffer(64 * 64 * 64);
 let heap_view = new DataView(heap_buffer);
-function get_memory(offset, type) {
+function get_memory(offset, type, node) {
+	let uses = map_memory_to_uses.get(offset);
+	if (!uses) {
+		uses = new Array();
+		map_memory_to_uses.set(offset, uses);
+	}
+	if (node) {
+		node.base.pointer = offset;
+		if (node.execution_index >= 0) {
+			uses.push(node.execution_index);
+		}
+		else {
+			uses.push(execution_index);
+		}
+	}
 	if (type.base.kind == Type_Kind.INTEGER) {
 		if (type.size_in_bytes == 1) {
 			if (type.signed) {
@@ -655,44 +679,21 @@ function get_memory(offset, type) {
 		return get_memory(offset, Types.size_t);
 	}
 }
-function get_lvalue_dereference(node) {
-	if (node.base.kind == Code_Kind.IDENT) {
-		return get_memory(node.declaration.pointer, node.base.type);
+function set_memory(offset, type, value, node) {
+	let changes = map_memory_to_changes.get(offset);
+	if (!changes) {
+		changes = new Array();
+		map_memory_to_changes.set(offset, changes);
 	}
-	else if (node.base.kind == Code_Kind.DEREFERENCE) {
-		return get_memory(get_lvalue_dereference(node.expression), node.expression.base.type);
-	}
-}
-function get_pointer(node) {
-	if (node.base.kind == Code_Kind.IDENT) {
-		return node.declaration.pointer;
-	}
-	else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
-		return get_pointer(node.array) + node.index.value * node.base.type.size_in_bytes;
-	}
-	else if (node.base.kind == Code_Kind.DEREFERENCE) {
-		if (node.is_lhs) {
-			return get_lvalue_dereference(node.expression);
+	if (node) {
+		node.base.pointer = offset;
+		if (node.execution_index >= 0) {
+			changes.push(node.execution_index);
 		}
 		else {
-			return get_memory(get_pointer(node.expression), node.base.type);
+			changes.push(execution_index);
 		}
 	}
-	else if (node.base.kind == Code_Kind.DOT_OPERATOR) {
-		if (node.left.base.kind == Code_Kind.IDENT) {
-			if (node.left.base.type.base.kind == Type_Kind.STRUCT) {
-				if (node.right.base.kind == Code_Kind.IDENT) {
-					return node.left.declaration.pointer + node.left.base.type.members[node.right.name].offset;
-				}
-				else {
-					// @@@
-					throw Error();
-				}
-			}
-		}
-	}
-}
-function set_memory(offset, type, value) {
 	if (type.base.kind == Type_Kind.INTEGER) {
 		if (type.size_in_bytes == 1) {
 			if (type.signed) {
@@ -732,7 +733,7 @@ function set_memory(offset, type, value) {
 		// 80bit float has to be faked
 	}
 	else if (type.base.kind == Type_Kind.POINTER) {
-		return set_memory(offset, Types.size_t, value);
+		return set_memory(offset, Types.size_t, value, node);
 	}
 }
 
@@ -881,12 +882,12 @@ void structs() {
 int main() {
     int local_variable = 3;
 	// some_function(local_variable);
-	factorial(local_variable);
+	// factorial(local_variable);
 	// fizzbuzz(30);
-	arrays();
+	// arrays();
 	pointers();
 	// linked_list();
-	structs();
+	// structs();
 	// nested_loops(2, 2);
 	return local_variable;
 }
@@ -1027,18 +1028,62 @@ function add_node_to_execution_stack(node) {
 	execution_stack.push(node);
 	execution_index += 1;
 }
-
-function run_lhs_lvalue_dereference(node) {
-	let lhs_pointer;
+function get_lvalue_dereference(node) {
 	if (node.base.kind == Code_Kind.IDENT) {
-		lhs_pointer = get_memory(node.declaration.pointer, node.base.type);
+		return get_memory(node.declaration.pointer, node.base.type, node);
 	}
 	else if (node.base.kind == Code_Kind.DEREFERENCE) {
-		lhs_pointer =  get_memory(run_lhs_lvalue_dereference(node.expression), node.expression.base.type);
+		return get_memory(get_lvalue_dereference(node.expression), node.expression.base.type);
+	}
+}
+function get_pointer(node) {
+	if (node.base.kind == Code_Kind.IDENT) {
+		return node.declaration.pointer;
+	}
+	else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
+		return get_pointer(node.array) + node.index.value * node.base.type.size_in_bytes;
+	}
+	else if (node.base.kind == Code_Kind.DEREFERENCE) {
+		if (node.is_lhs) {
+			return get_lvalue_dereference(node.expression);
+		}
+		else {
+			return get_memory(get_pointer(node.expression), node.base.type);
+		}
+	}
+	else if (node.base.kind == Code_Kind.DOT_OPERATOR) {
+		let left = node.left;
+		let right = node.right;
+		let pointer = get_pointer(node.left);
+		while (true) {
+			left.is_lhs = node.is_lhs;
+			right.is_lhs = node.is_lhs;
+			if (right.base.kind == Code_Kind.DOT_OPERATOR) {
+				pointer += left.base.type.members[right.left.name].offset;
+				left = right.left;
+				right = right.right;
+			}
+			else if (right.base.kind == Code_Kind.IDENT) {
+				pointer += left.base.type.members[right.name].offset;
+				break;
+			}
+		}
+		return pointer;
+	}
+}
+// @Refactor
+function run_lvalue_dereference(node) {
+	let lhs_pointer;
+	add_node_to_execution_stack(node);
+	if (node.base.kind == Code_Kind.IDENT) {
+		lhs_pointer = get_memory(node.declaration.pointer, node.base.type, node);
+	}
+	else if (node.base.kind == Code_Kind.DEREFERENCE) {
+		node.expression.is_lhs = node.is_lhs;
+		lhs_pointer = get_memory(run_lvalue_dereference(node.expression), node.expression.base.type, node);
 	}
 
 	node.last_return = get_memory(lhs_pointer, node.base.type);
-	add_node_to_execution_stack(node);
 
 	return lhs_pointer;
 }
@@ -1050,7 +1095,8 @@ function run_lhs(node) {
 	}
 	else if (node.base.kind == Code_Kind.DEREFERENCE) {
 		node.expression.is_lhs = node.is_lhs;
-		lhs_pointer = run_lhs_lvalue_dereference(node.expression);
+		add_node_to_execution_stack(node);
+		lhs_pointer = run_lvalue_dereference(node.expression);
 	}
 	else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
 		node.array.is_lhs = node.is_lhs;
@@ -1058,24 +1104,21 @@ function run_lhs(node) {
 		lhs_pointer = get_pointer(node);
 	}
 	else if (node.base.kind == Code_Kind.DOT_OPERATOR) {
+		// @Copypaste
 		let left = node.left;
 		let right = node.right;
-		lhs_pointer = run_lhs(node.left);
-		/*
-		8     0
-		steve.age
-		8     4   4
-		steve.car.age
-		*/
+		lhs_pointer = get_pointer(node.left);
 		while (true) {
 			left.is_lhs = node.is_lhs;
 			right.is_lhs = node.is_lhs;
+			add_node_to_execution_stack(left);
 			if (right.base.kind == Code_Kind.DOT_OPERATOR) {
 				lhs_pointer += left.base.type.members[right.left.name].offset;
 				left = right.left;
 				right = right.right;
 			}
 			else if (right.base.kind == Code_Kind.IDENT) {
+				add_node_to_execution_stack(right);
 				lhs_pointer += left.base.type.members[right.name].offset;
 				break;
 			}
@@ -1252,7 +1295,7 @@ function run(node) {
 		node.ident.is_lhs = true;
 		let lhs_pointer = run_lhs(node.ident);
 
-		set_memory(lhs_pointer, node.ident.base.type, expression_value);
+		set_memory(lhs_pointer, node.ident.base.type, expression_value, node.ident);
 		/*
 		map_ident_to_value.set(node.ident.declaration.ident, expression_value);
 		map_ident_to_changes.get(node.ident.declaration.ident).push(node.ident.execution_index);
@@ -1268,7 +1311,7 @@ function run(node) {
 		node.ident.is_lhs = true;
 		let lhs_pointer = run_lhs(node.ident);
 
-		set_memory(lhs_pointer, node.ident.base.type, expression_value);
+		set_memory(lhs_pointer, node.ident.base.type, expression_value, node.ident);
 		/*
 		map_ident_to_value.set(node.ident.declaration.ident, expression_value);
 		map_ident_to_changes.get(node.ident.declaration.ident).push(node.ident.execution_index);
@@ -1283,9 +1326,8 @@ function run(node) {
 		if (node.ident.base.type.base.kind != "void") {
 
 			node.ident.is_lhs = true;
-			let lhs_pointer = stack_pointer;
-			node.ident.last_return = get_memory(lhs_pointer, node.ident.base.type);
 			add_node_to_execution_stack(node.ident);
+			node.ident.last_return = get_memory(stack_pointer, node.ident.base.type, node.ident);
 
 			node.pointer = stack_pointer;
 			stack_pointer += node.ident.base.type.size_in_bytes;
@@ -1294,8 +1336,13 @@ function run(node) {
 			if (node.expression) {
 				expression_value = run(node.expression);
 				
-				set_memory(get_pointer(node.ident), node.ident.base.type, expression_value);
-				map_ident_to_value.set(node.ident.declaration.ident, expression_value);
+				set_memory(node.pointer, node.ident.base.type, expression_value, node.ident);
+				map_ident_to_value.set(node.ident, expression_value);
+			}
+			else {
+				// @Overkill
+				// for map_memory_to_uses
+				set_memory(node.pointer, node.ident.base.type, node.ident.last_return, node.ident);
 			}
 		}
 		
@@ -1303,10 +1350,10 @@ function run(node) {
 
 		let changes = new Array();
 		changes.push(node.ident.execution_index);
-		map_ident_to_changes.set(node.ident.declaration.ident, changes);
+		map_ident_to_changes.set(node.ident, changes);
 
 		let uses = new Array();
-		map_ident_to_uses.set(node.ident.declaration.ident, uses);
+		map_ident_to_uses.set(node.ident, uses);
 
 		return_value = expression_value;
 	}
@@ -1318,7 +1365,7 @@ function run(node) {
 
 		// return_value = map_ident_to_value.get(node.declaration.ident);
 		if (node.declaration.type.name != "void") {
-			return_value = get_memory(get_pointer(node), node.base.type);
+			return_value = get_memory(get_pointer(node), node.base.type, node);
 		}
 		else {
 			return_value = null;
@@ -1326,25 +1373,27 @@ function run(node) {
 	}
 	else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
 		
-		add_node_to_execution_stack(node.array);
+		run(node.array);
 		run(node.index);
 
-		return_value = get_memory(get_pointer(node), node.base.type);
+		return_value = get_memory(get_pointer(node), node.base.type, node);
 	}
 	else if (node.base.kind == Code_Kind.DOT_OPERATOR) {
-		
-		add_node_to_execution_stack(node.left);
-		add_node_to_execution_stack(node.right);
 
 		if (node.left.base.type.base.kind == Type_Kind.ARRAY) {
 			if (node.right.base.kind == Code_Kind.IDENT) {
+				add_node_to_execution_stack(node.left);
+				add_node_to_execution_stack(node.right);
 				if (node.right.name == "length") {
 					return_value = node.left.base.type.length;
+				}
+				else {
+					debugger;
 				}
 			}
 		}
 		else {
-			return_value = get_memory(get_pointer(node), node.base.type);
+			return_value = get_memory(get_pointer(node), node.base.type, node);
 		}
 	}
 	else if (node.base.kind == Code_Kind.BLOCK) {
@@ -1382,11 +1431,20 @@ function run(node) {
 	}
 	else if (node.base.kind == Code_Kind.REFERENCE) {
 
-		return_value = get_pointer(node.expression);
+		let address = get_pointer(node.expression);
+		node.base.pointer = address;
+		// @Overkill
+		// add to map_memory_to_uses
+		get_memory(address, node.expression.base.type, node.expression);
+		add_node_to_execution_stack(node.expression);
+
+		return_value = address;
 	}
 	else if (node.base.kind == Code_Kind.DEREFERENCE) {
 
-		return_value = get_lvalue_dereference(node);
+		// @Incomplete
+		// this is different than lvalue
+		return_value = run_lvalue_dereference(node);
 	}
 
 	if (node.base.kind != Code_Kind.BLOCK &&
@@ -1878,6 +1936,22 @@ function mark_containment(node) {
 		node.contains_inspection = node.expression.contains_inspection || node.expression.is_inspection;
 		node.contains_execution = node.expression.contains_execution || node.expression.is_execution;
 	}
+	else if (node.base.kind == Code_Kind.REFERENCE) {
+
+		mark_containment(node.expression);
+
+		node.contains_flowpoint = node.expression.contains_flowpoint || node.expression.is_flowpoint;
+		node.contains_inspection = node.expression.contains_inspection || node.expression.is_inspection;
+		node.contains_execution = node.expression.contains_execution || node.expression.is_execution;
+	}
+	else if (node.base.kind == Code_Kind.DEREFERENCE) {
+
+		mark_containment(node.expression);
+
+		node.contains_flowpoint = node.expression.contains_flowpoint || node.expression.is_flowpoint;
+		node.contains_inspection = node.expression.contains_inspection || node.expression.is_inspection;
+		node.contains_execution = node.expression.contains_execution || node.expression.is_execution;
+	}
 	else if (node.base.kind == Code_Kind.CALL &&
 	         typeof node.ident.declaration.expression == "function") {
 		// native function
@@ -1909,7 +1983,7 @@ function should_hide(node) {
 		node.base.kind == Code_Kind.ASSIGN ||
 		node.base.kind == Code_Kind.OPASSIGN) {
 
-		return should_hide(node.ident);
+		return false;
 	}
 
 	if (node.base.kind == Code_Kind.WHILE ||
