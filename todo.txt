@@ -2,7 +2,21 @@ Bugs:
 
 we should have a comment on the general design
 
-implement arrays, memory, and then strings
+nested structs and dot operators
+
+when we show values or changes, save the previous cursor, 
+and when we go back and haven't moved, set the cursor back to the previous one
+`m = a.[b].c` (F) `m = [42]` (F) `m = a.[b].c`
+`m = a.[b].c` (F) `m = [42]` (A) `[m] = 42` (F) `[m] = a.b.c`
+
+implement strings, then test combinations of arrays, structs, pointers, and strings
+casts
+only the elements of dot operator and pointer dereference and array index get added to execution stack
+array index line order is wrong
+
+need to implement map_memory_to_changes and map_memory_to_uses
+malloc and free
+dynamic arrays
 
 do while loop not implemented, use an if (true) for the first cycle
 
@@ -17,14 +31,8 @@ someday port to C through WebAssembly, for faster running and printing
 
 Ideas:
 
-relocate flowpoint move buttons to left side
-
 add page up and page down
 speed up scrolling when holding down W or D
-
-need to implement heap and stack memory, and map_memory_to_changes and map_memory_to_uses
-malloc and free
-arrays
 
 pressing M makes the prev/next use/change check memory instead of ident
 needs visual feedback

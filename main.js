@@ -655,17 +655,24 @@ function get_memory(offset, type) {
 		return get_memory(offset, Types.size_t);
 	}
 }
+function get_lvalue_dereference(node) {
+	if (node.base.kind == Code_Kind.IDENT) {
+		return get_memory(node.declaration.pointer, node.base.type);
+	}
+	else if (node.base.kind == Code_Kind.DEREFERENCE) {
+		return get_memory(get_lvalue_dereference(node.expression), node.expression.base.type);
+	}
+}
 function get_pointer(node) {
 	if (node.base.kind == Code_Kind.IDENT) {
 		return node.declaration.pointer;
 	}
 	else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
-		return get_pointer(node.array) + node.index.value * node.array.base.type.size_in_bytes;
+		return get_pointer(node.array) + node.index.value * node.base.type.size_in_bytes;
 	}
 	else if (node.base.kind == Code_Kind.DEREFERENCE) {
 		if (node.is_lhs) {
-			@@@
-			;
+			return get_lvalue_dereference(node.expression);
 		}
 		else {
 			return get_memory(get_pointer(node.expression), node.base.type);
@@ -678,35 +685,11 @@ function get_pointer(node) {
 					return node.left.declaration.pointer + node.left.base.type.members[node.right.name].offset;
 				}
 				else {
-					debugger;
+					// @@@
+					throw Error();
 				}
 			}
-			else {
-				debugger;
-			}
 		}
-		else {
-			debugger;
-		}
-	}
-	else {
-		debugger;
-	}
-}
-function dereference(node) {
-	if (node.base.kind == Code_Kind.DEREFERENCE) {
-		if (node.expression.base.kind == Code_Kind.IDENT) {
-			return get_memory(node.expression.declaration.pointer, node.expression.base.type);
-		}
-		else if (node.expression.base.kind == Code_Kind.DEREFERENCE) {
-			return get_memory(dereference(node.expression), node.expression.base.type);
-		}
-		else {
-			debugger;
-		}
-	}
-	else {
-		debugger;
 	}
 }
 function set_memory(offset, type, value) {
@@ -747,6 +730,9 @@ function set_memory(offset, type, value) {
 		}
 		// @Incomplete
 		// 80bit float has to be faked
+	}
+	else if (type.base.kind == Type_Kind.POINTER) {
+		return set_memory(offset, Types.size_t, value);
 	}
 }
 
@@ -862,33 +848,40 @@ void arrays() {
 void pointers() {
 	int a;
 	int* b;
+	int** c;
 	b = &a;
-	*b = 123;
-	print(a);
-	// assert(a == 123);
+	c = &b;
+	**c = 123;
+	int d
+	d = **c;
+	assert(a == d);
 }
 struct List_Node {
 	void* data;
-	List_Node* next;
+	List_Node*[2] links;
 };
 void linked_list() {
 	List_Node first;
 }
 void structs() {
+	struct Car {
+		uint type;
+		uint age;
+	}
 	struct Person {
 		uint age;
-		uint num_cars;
+		Car car;
 	}
 	Person steve;
 	steve.age = 20;
-	steve.num_cars = 1;
-	steve.age += 30;
-	steve.num_cars += 3;
+	steve.car.age = 2;
+	steve.age += 4;
+	steve.car.age += 4;
 }
 int main() {
     int local_variable = 3;
 	// some_function(local_variable);
-	// factorial(local_variable);
+	factorial(local_variable);
 	// fizzbuzz(30);
 	arrays();
 	pointers();
@@ -1035,8 +1028,71 @@ function add_node_to_execution_stack(node) {
 	execution_index += 1;
 }
 
+function run_lhs_lvalue_dereference(node) {
+	let lhs_pointer;
+	if (node.base.kind == Code_Kind.IDENT) {
+		lhs_pointer = get_memory(node.declaration.pointer, node.base.type);
+	}
+	else if (node.base.kind == Code_Kind.DEREFERENCE) {
+		lhs_pointer =  get_memory(run_lhs_lvalue_dereference(node.expression), node.expression.base.type);
+	}
+
+	node.last_return = get_memory(lhs_pointer, node.base.type);
+	add_node_to_execution_stack(node);
+
+	return lhs_pointer;
+}
+function run_lhs(node) {
+	let lhs_pointer;
+	if (node.base.kind == Code_Kind.IDENT) {
+		lhs_pointer = node.declaration.pointer;
+		add_node_to_execution_stack(node);
+	}
+	else if (node.base.kind == Code_Kind.DEREFERENCE) {
+		node.expression.is_lhs = node.is_lhs;
+		lhs_pointer = run_lhs_lvalue_dereference(node.expression);
+	}
+	else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
+		node.array.is_lhs = node.is_lhs;
+		node.index.is_lhs = node.is_lhs;
+		lhs_pointer = get_pointer(node);
+	}
+	else if (node.base.kind == Code_Kind.DOT_OPERATOR) {
+		let left = node.left;
+		let right = node.right;
+		lhs_pointer = run_lhs(node.left);
+		/*
+		8     0
+		steve.age
+		8     4   4
+		steve.car.age
+		*/
+		while (true) {
+			left.is_lhs = node.is_lhs;
+			right.is_lhs = node.is_lhs;
+			if (right.base.kind == Code_Kind.DOT_OPERATOR) {
+				lhs_pointer += left.base.type.members[right.left.name].offset;
+				left = right.left;
+				right = right.right;
+			}
+			else if (right.base.kind == Code_Kind.IDENT) {
+				lhs_pointer += left.base.type.members[right.name].offset;
+				break;
+			}
+		}
+	}
+
+	node.last_return = get_memory(lhs_pointer, node.base.type);
+
+	return lhs_pointer;
+}
+
 let disable_execution_recording = false;
-function run(node, force = false) {
+function run(node) {
+
+	if (node.base.kind == Code_Kind.STRUCT) {
+		return;
+	}
 
 	let last_block = block_stack[block_stack.length-1];
 	let last_loop = loop_stack[loop_stack.length-1];
@@ -1190,13 +1246,11 @@ function run(node, force = false) {
 		last_loop.continued = true;
 	}
 	else if (node.base.kind == Code_Kind.ASSIGN) {
-
-		let lhs_pointer = get_pointer(node.ident);
-		node.ident.is_lhs = true;
-		node.ident.last_return = get_memory(lhs_pointer, node.ident.base.type);
-		add_node_to_execution_stack(node.ident);
 		
 		let expression_value = run(node.expression);
+		
+		node.ident.is_lhs = true;
+		let lhs_pointer = run_lhs(node.ident);
 
 		set_memory(lhs_pointer, node.ident.base.type, expression_value);
 		/*
@@ -1207,12 +1261,12 @@ function run(node, force = false) {
 		return_value = expression_value;
 	}
 	else if (node.base.kind == Code_Kind.OPASSIGN) {
-
-		let lhs_pointer = get_pointer(node.ident);
-		node.ident.is_lhs = true;
 		
-		let binop = make_binary_operation(node.ident, node.operation_type, node.expression);
+		let binop = make_binary_operation(clone(node.ident), node.operation_type, node.expression);
 		let expression_value = math_solve(binop);
+		
+		node.ident.is_lhs = true;
+		let lhs_pointer = run_lhs(node.ident);
 
 		set_memory(lhs_pointer, node.ident.base.type, expression_value);
 		/*
@@ -1228,8 +1282,8 @@ function run(node, force = false) {
 
 		if (node.ident.base.type.base.kind != "void") {
 
-			let lhs_pointer = stack_pointer;
 			node.ident.is_lhs = true;
+			let lhs_pointer = stack_pointer;
 			node.ident.last_return = get_memory(lhs_pointer, node.ident.base.type);
 			add_node_to_execution_stack(node.ident);
 
@@ -1332,7 +1386,7 @@ function run(node, force = false) {
 	}
 	else if (node.base.kind == Code_Kind.DEREFERENCE) {
 
-		return_value = dereference(node);
+		return_value = get_lvalue_dereference(node);
 	}
 
 	if (node.base.kind != Code_Kind.BLOCK &&
@@ -1780,6 +1834,18 @@ function mark_containment(node) {
 		node.contains_execution = node.array.contains_execution || node.array.is_execution ||
 		                          node.index.contains_execution || node.index.is_execution;
 	}
+	else if (node.base.kind == Code_Kind.DOT_OPERATOR) {
+
+		mark_containment(node.left);
+		mark_containment(node.right);
+
+		node.contains_flowpoint = node.left.contains_flowpoint || node.left.is_flowpoint ||
+		                          node.right.contains_flowpoint || node.right.is_flowpoint;
+		node.contains_inspection = node.left.contains_inspection || node.left.is_inspection ||
+		                          node.right.contains_inspection || node.right.is_inspection;
+		node.contains_execution = node.left.contains_execution || node.left.is_execution ||
+		                          node.right.contains_execution || node.right.is_execution;
+	}
 	else if (node.base.kind == Code_Kind.BINARY_OPERATION) {
 
 		mark_containment(node.left);
@@ -1873,7 +1939,12 @@ function should_hide(node) {
 
 		return !node.if_expr || node.if_expr.condition.last_return;
 	}
-	
+
+	if (node.base.kind == Code_Kind.DOT_OPERATOR) {
+
+		return should_hide(node.left) || should_hide(node.right);
+	}
+
 	// hide code that has not been run
 	if (typeof node.execution_index == "undefined" &&
 		typeof node.last_return == "undefined") {
@@ -1944,7 +2015,8 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	}
 
 	let order_last = false;
-	if (node.base.kind == Code_Kind.BINARY_OPERATION) {
+	if (node.base.kind == Code_Kind.BINARY_OPERATION ||
+	    node.base.kind == Code_Kind.DOT_OPERATOR) {
 
 		order_last = true;
 	}
@@ -2197,9 +2269,12 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		print_to_dom(node.ident, expr, block_print_target);
 
+		// @Copypaste
 		let line = map_line_to_execution_indices[line_count];
 		if (line.length >= 2) {
-			line.unshift(line.pop());
+			let cut_index = find_next_index_in_array(line, node.expression.execution_index);
+			line = line.slice(cut_index, line.length).concat(line.slice(0, cut_index));
+			map_line_to_execution_indices[line_count] = line;
 		}
 
 		let op = document.createElement("expr");
@@ -2214,7 +2289,6 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	else if (node.base.kind == Code_Kind.OPASSIGN) {
 
 		let temp_expr = document.createElement("expr");
-
 		print_to_dom(node.expression, temp_expr, block_print_target);
 
 		print_to_dom(node.ident, expr, block_print_target);
@@ -2222,7 +2296,9 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		// @Copypaste
 		let line = map_line_to_execution_indices[line_count];
 		if (line.length >= 2) {
-			line.unshift(line.pop());
+			let cut_index = find_next_index_in_array(line, node.expression.execution_index);
+			line = line.slice(cut_index, line.length).concat(line.slice(0, cut_index));
+			map_line_to_execution_indices[line_count] = line;
 		}
 
 		let op = document.createElement("expr");
@@ -2284,8 +2360,18 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		print_target.appendChild(expr);
 	}
 	else if (node.base.kind == Code_Kind.DEREFERENCE) {
-		expr.appendChild(document.createTextNode("*"));
-		print_to_dom(node.expression, expr, block_print_target);
+		
+		// @Copypaste
+		if ((node.is_lhs ? lhs_values_shown : values_shown) && node.last_return !== null &&
+			typeof node.last_return !== "undefined") {
+
+			expr.appendChild(document.createTextNode(node.last_return));
+			expr.classList.add("code-literal");
+		}
+		else {
+			expr.appendChild(document.createTextNode("*"));
+			print_to_dom(node.expression, expr, block_print_target);
+		}
 
 		print_target.appendChild(expr);
 	}

@@ -672,7 +672,40 @@ function infer(node) {
         node.base.type = node.array.base.type.elem_type;
     }
     else if (node.base.kind == Code_Kind.DOT_OPERATOR) {
-        infer(node.left);
+        /*
+        Steve uint
+        steve.age
+        Steve Car uint
+        steve.car.age
+        */
+        let left = node.left;
+        let right = node.right;
+        
+        while (true) {
+            left.is_lhs = node.is_lhs;
+            right.is_lhs = node.is_lhs;
+            infer(left);
+            if (right.base.kind == Code_Kind.DOT_OPERATOR) {
+                right.base.type = left.base.type.members[right.left.name].type;
+                left = right.left;
+                right = right.right;
+            }
+            else if (left.base.type.base.kind == Type_Kind.ARRAY) {
+                if (right.name == "length") {
+                    right.base.type = Types.size_t;
+                }
+                else {
+                    debugger;
+                }
+                break;
+            }
+            else if (right.base.kind == Code_Kind.IDENT) {
+                right.base.type = left.base.type.members[right.name].type;
+                break;
+            }
+        }
+        node.base.type = right.base.type;
+        /*
         if (node.right.base.kind == Code_Kind.DOT_OPERATOR) {
             infer(node.right);
         }
@@ -685,16 +718,11 @@ function infer(node) {
                 if (node.right.name == "length") {
                     type = Types.size_t;
                 }
-                else {
-                    debugger;
-                }
-            }
-            else {
-                debugger;
             }
             node.base.type = type;
             node.right.base.type = type;
         }
+        */
     }
     else if (node.base.kind == Code_Kind.STRUCT) {
         infer_type(node);
@@ -963,7 +991,7 @@ function parse(tokens) {
         if (curr_token.str == "&") {
             return parse_reference();
         }
-        else if (curr_token.str == "*") {
+        else if (curr_token.str[0] == "*") {
             return parse_dereference();
         }
         let prev_index = token_index;
@@ -1001,8 +1029,20 @@ function parse(tokens) {
         return make_reference(parse_lvalue());
     }
     function parse_dereference() {
+        let curr_token = tokens[token_index];
+        let levels = curr_token.str.length;
         token_index += 1;
-        return make_dereference(parse_lvalue());
+        let lvalue = parse_lvalue();
+        let node = make_dereference(lvalue);
+        for (let i = 1; i < levels; i += 1) {
+            if (curr_token.str[i] == "*") {
+                node = make_dereference(node);
+            }
+            else {
+                debugger;
+            }
+        }
+        return node;
     }
     function parse_array_index(left) {
         token_index += 1;
@@ -1149,8 +1189,19 @@ function parse(tokens) {
         }
     }
     function parse_pointer_type(elem_type) {
+        let curr_token = tokens[token_index];
+        let levels = curr_token.str.length;
+        let type = make_type_info_pointer(elem_type);
+        for (let i = 1; i < levels; i += 1) {
+            if (curr_token.str[i] == "*") {
+                type = make_type_info_pointer(type);
+            }
+            else {
+                debugger;
+            }
+        }
         token_index += 1;
-        return make_type_info_pointer(elem_type);
+        return type;
     }
     function parse_type() {
         let prev_index = token_index;
@@ -1182,7 +1233,7 @@ function parse(tokens) {
             let param_types = delimited("(", ")", ",", parse_type);
             curr_type = make_type_info_function_pointer(curr_type, param_types);
         }
-        while (curr_token.str == "*") {
+        while (curr_token.str[0] == "*") {
             curr_type = parse_pointer_type(curr_type);
             curr_token = tokens[token_index];
         }
@@ -1197,13 +1248,11 @@ function parse(tokens) {
             token_index = prev_index;
             return;
         }
-        /*
-        number -= 5;
-        number[8] arr;
-        number[8] -= 5;
-        */
     }
     function parse_declaration(type) {
+        if (!type) {
+            type = parse_type();
+        }
         let ident = parse_ident();
         let curr_token = tokens[token_index];
         let expression;
