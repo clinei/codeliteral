@@ -841,7 +841,7 @@ function parse(tokens) {
     // @Todo
     // use enum
     const operator_precedence = {
-        ",": 15,
+        // ",": 15,
         "=": 14,
         // ternary 13
         "||": 12,
@@ -861,15 +861,7 @@ function parse(tokens) {
             return parse_literal();
         }
         else if (curr_token.kind == "ident") {
-            let left = parse_ident();
-            curr_token = tokens[token_index];
-            if (curr_token.str == "(") {
-                return parse_call(left);
-            }
-            else if (curr_token.str == "[") {
-                return parse_array_index(left);
-            }
-            return left;
+            return parse_ident();
         }
         else if (curr_token.str == "(") {
             token_index += 1;

@@ -2,8 +2,6 @@ Bugs:
 
 we should have a comment on the general design
 
-nested structs and dot operators
-
 when we show values or changes, save the previous cursor, 
 and when we go back and haven't moved, set the cursor back to the previous one
 `m = a.[b].c` (F) `m = [42]` (F) `m = a.[b].c`
@@ -31,18 +29,21 @@ someday port to C through WebAssembly, for faster running and printing
 
 Ideas:
 
+make a comma operator, see how parsing looks like
+
 add page up and page down
 speed up scrolling when holding down W or D
 
 pressing M makes the prev/next use/change check memory instead of ident
 needs visual feedback
 
-pressing E shows the elements inside binary operations, so they don't collapse into a value
+pressing Q will show the value of the ident under the inspection cursor or a repeated expression
+
 make an example that uses a lot of binary operations in a conditional
 
 make a demo where we solve a nasty bug
 
-we could inline if statements, but declarations in them have to be transformed
+we could contract nested if statements to reduce indentation, but declarations in them have to be transformed
 
 pressing a button when the cursor is on an ident shows the value of that ident at that point in time
 especially when it's the left hand side of an assign or opassign
