@@ -871,7 +871,6 @@ function parse(tokens) {
             }
             return left;
         }
-        // @@@
         else if (curr_token.str == "(") {
             token_index += 1;
             let ret = parse_rvalue();
@@ -889,7 +888,7 @@ function parse(tokens) {
         let curr_prec = operator_precedence[curr_token.str];
         if (curr_prec && prev_prec >= curr_prec) {
             token_index += 1;
-            let right = maybe_binary(parse_rvalue(), curr_prec);
+            let right = maybe_binary(parse_atom(), curr_prec);
             let binop = make_binary_operation(left, curr_token.str, right);
             return maybe_binary(binop, prev_prec);
         }
