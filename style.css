@@ -134,7 +134,7 @@ block {
 	z-index: 10;
 }
 
-.flow-1 {
+.flow-1, .flow-1 > .code-ident {
 
 	color: rgb(250, 220, 60) !important;
 
@@ -171,6 +171,9 @@ block {
 }
 .code-func {
 	color: rgb(220, 221, 140);
+}
+.code-return, .code-return > .code-ident {
+	color: rgb(231, 250, 236);
 }
 .code-keyword {
 	color: rgb(248, 130, 248);

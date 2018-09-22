@@ -2,7 +2,7 @@
 
 function main() {
 
-	map_keyboard();
+	map_controls();
 
 	start_debugging();
 	print();
@@ -13,24 +13,31 @@ let lhs_values_shown = false;
 let binop_values_shown = true;
 let expand_all = false;
 
-function number_compare(a, b) {
-	if (a < b) {
-		return -1;
-	}
-	else {
-		return 1;
-	}
-}
+let inspection_mode = false;
+let memory_mode = false;
 
-function map_keyboard() {
+function map_controls() {
 
 	document.addEventListener("keydown", document_keydown);
+	document.addEventListener("keyup", document_keyup);
+	slider_element.addEventListener("mousedown", slider_mousedown);
+	slider_element.addEventListener("mouseup", slider_mouseup);
 }
 
-let prev_cursor;
-function document_keydown(event) {
+let instant_scroll = false;
 
-	prev_cursor = inspection_cursor;
+function slider_mousedown() {
+	instant_scroll = true;
+}
+function slider_mouseup() {
+	instant_scroll = false;
+}
+
+function document_keyup(event) {
+	instant_scroll = false;
+}
+
+function document_keydown(event) {
 
 	// press B
 	if (event.keyCode == 66) {
@@ -77,7 +84,7 @@ function document_keydown(event) {
 	// press Y
 	if (event.keyCode == 89) {
 
-		previous_use();
+		prev_use();
 		print();
 	}
 
@@ -91,7 +98,7 @@ function document_keydown(event) {
 	// press H
 	if (event.keyCode == 72) {
 
-		previous_change();
+		prev_change();
 		print();
 	}
 
@@ -133,7 +140,7 @@ function document_keydown(event) {
 	// press ,
 	if (event.keyCode == 188) {
 
-		previous_flowpoint();
+		prev_flowpoint();
 		print();
 	}
 
@@ -148,7 +155,7 @@ function document_keydown(event) {
 	if (event.keyCode == 82) {
 
 		// move_between_original_idents = !move_between_original_idents;
-		previous_original();
+		prev_original();
 		print();
 	}
 
@@ -187,14 +194,12 @@ function document_keydown(event) {
 		print();
 	}
 
-	/*
 	// press M
 	if (event.keyCode == 77) {
 
-		toggle_inspection();
-		print();
+		toggle_memory();
+		// print();
 	}
-	*/
 
 	let number = event.keyCode - 48;
 
@@ -206,9 +211,10 @@ function document_keydown(event) {
 		
 		print();
 	}
+
+	instant_scroll = true;
 }
 
-let inspection_mode = false;
 function toggle_inspection() {
 
 	if (!inspection_mode) {
@@ -225,6 +231,9 @@ function toggle_inspection() {
 
 		inspection_mode = false;
 	}
+}
+function toggle_memory() {
+	memory_mode = !memory_mode;
 }
 
 function add_flowpoint() {
@@ -245,8 +254,6 @@ function add_flowpoint() {
 
 		index += 1;
 	}
-	
-	inspection_cursor.is_flowpoint = true;
 
 	flowpoints.splice(index, 0, execution_index);
 }
@@ -256,7 +263,6 @@ function delete_flowpoint() {
 
 	if (flowpoint_index >= 0) {
 
-		inspection_cursor.is_flowpoint = false;
 		flowpoints.splice(flowpoint_index, 1);
 	}
 }
@@ -282,7 +288,7 @@ function next_flowpoint() {
 		inspection_cursor = execution_stack[flowpoint];
 	}
 }
-function previous_flowpoint() {
+function prev_flowpoint() {
 	
 	if (flowpoints.length) {
 
@@ -291,7 +297,7 @@ function previous_flowpoint() {
 			toggle_inspection();
 		}
 
-		let index = find_previous_index_in_array(flowpoints, execution_index);
+		let index = find_prev_index_in_array(flowpoints, execution_index);
 
 		if (index < 0) {
 
@@ -378,19 +384,15 @@ function right_line() {
 	slider_element.value = execution_index;
 	inspection_cursor = execution_stack[execution_index];
 }
-function previous_change() {
+function prev_change() {
 
 	// if (inspection_cursor.base.kind == Code_Kind.IDENT) {
-	if (inspection_cursor.base.pointer) {
+	if (inspection_cursor.base.pointer >= 0) {
 
-		// let indices = map_ident_to_changes.get(inspection_cursor.declaration.ident);
 		let indices = map_memory_to_changes.get(inspection_cursor.base.pointer);
-		let index = find_previous_index_in_array(indices, execution_index);
-
-		if (index < 0) {
-	
-			return;
-		}
+		if (!indices) return;
+		let index = find_prev_index_in_array(indices, execution_index);
+		if (index < 0) return;
 
 		execution_index = indices[index];
 		slider_element.value = execution_index;
@@ -400,35 +402,27 @@ function previous_change() {
 function next_change() {
 
 	// if (inspection_cursor.base.kind == Code_Kind.IDENT) {
-	if (inspection_cursor.base.pointer) {
+	if (inspection_cursor.base.pointer >= 0) {
 
 		// let indices = map_ident_to_changes.get(inspection_cursor.declaration.ident);
 		let indices = map_memory_to_changes.get(inspection_cursor.base.pointer);
+		if (!indices) return;
 		let index = find_next_index_in_array(indices, execution_index);
-
-		if (index >= indices.length) {
-
-			return;
-		}
+		if (index >= indices.length) return;
 
 		execution_index = indices[index];
 		slider_element.value = execution_index;
 		inspection_cursor = execution_stack[execution_index];
 	}
 }
-function previous_use() {
+function prev_use() {
 
-	// if (inspection_cursor.base.kind == Code_Kind.IDENT) {
-	if (inspection_cursor.base.pointer) {
+	if (inspection_cursor.base.pointer >= 0) {
 
-		// let indices = map_ident_to_uses.get(inspection_cursor.declaration.ident);
 		let indices = map_memory_to_uses.get(inspection_cursor.base.pointer);
-		let index = find_previous_index_in_array(indices, execution_index);
-
-		if (index < 0) {
-	
-			return;
-		}
+		if (!indices) return;
+		let index = find_prev_index_in_array(indices, execution_index);
+		if (index < 0) return;
 
 		execution_index = indices[index];
 		slider_element.value = execution_index;
@@ -437,26 +431,21 @@ function previous_use() {
 }
 function next_use() {
 
-	// if (inspection_cursor.base.kind == Code_Kind.IDENT) {
-	if (inspection_cursor.base.pointer) {
+	if (inspection_cursor.base.pointer >= 0) {
 
-		// let indices = map_ident_to_uses.get(inspection_cursor.declaration.ident);
 		let indices = map_memory_to_uses.get(inspection_cursor.base.pointer);
+		if (!indices) return;
 		let index = find_next_index_in_array(indices, execution_index);
-
-		if (index >= indices.length) {
-
-			return;
-		}
+		if (index >= indices.length) return;
 
 		execution_index = indices[index];
 		slider_element.value = execution_index;
 		inspection_cursor = execution_stack[execution_index];
 	}
 }
-function previous_original() {
+function prev_original() {
 	let indices = map_original_to_indices.get(inspection_cursor.original);
-	let index = find_previous_index_in_array(indices, execution_index);
+	let index = find_prev_index_in_array(indices, execution_index);
 	
 	if (index < 0) {
 
@@ -510,7 +499,7 @@ function find_next_index_in_array_inclusive(array, index) {
 
 	return i;
 }
-function find_previous_index_in_array(array, index) {
+function find_prev_index_in_array(array, index) {
 
 	let i = array.length-1;
 	while (i >= 0) {
@@ -525,7 +514,7 @@ function find_previous_index_in_array(array, index) {
 
 	return i;
 }
-function find_previous_index_in_array_inclusive(array, elem) {
+function find_prev_index_in_array_inclusive(array, elem) {
 
 	let i = array.length-1;
 	while (i >= 0) {
@@ -542,7 +531,7 @@ function find_previous_index_in_array_inclusive(array, elem) {
 }
 function hide_flowzone() {
 
-	let flowpoint = flowpoints[find_previous_index_in_array_inclusive(flowpoints, execution_index)];
+	let flowpoint = flowpoints[find_prev_index_in_array_inclusive(flowpoints, execution_index)];
 
 	if (hidden_flowzones[active_dataflow].indexOf(flowpoint) >= 0) {
 
@@ -553,7 +542,7 @@ function hide_flowzone() {
 }
 function unhide_flowzone() {
 
-	let flowpoint = flowpoints[find_previous_index_in_array_inclusive(flowpoints, execution_index)];
+	let flowpoint = flowpoints[find_prev_index_in_array_inclusive(flowpoints, execution_index)];
 
 	let index = hidden_flowzones[active_dataflow].indexOf(flowpoint);
 
@@ -596,21 +585,36 @@ let stack_buffer = new ArrayBuffer(64 * 64 * 64);
 let stack_view = new DataView(stack_buffer);
 let heap_buffer = new ArrayBuffer(64 * 64 * 64);
 let heap_view = new DataView(heap_buffer);
-function get_memory(offset, type, node) {
+function add_memory_use(offset, node) {
 	let uses = map_memory_to_uses.get(offset);
 	if (!uses) {
 		uses = new Array();
 		map_memory_to_uses.set(offset, uses);
 	}
-	if (node) {
-		node.base.pointer = offset;
-		if (node.execution_index >= 0) {
-			uses.push(node.execution_index);
-		}
-		else {
-			uses.push(execution_index);
-		}
+	node.base.pointer = offset;
+	if (node.execution_index >= 0) {
+		uses.push(node.execution_index);
 	}
+	else {
+		// @Audit
+		debugger;
+	}
+}
+function add_memory_change(offset, node) {
+	let changes = map_memory_to_changes.get(offset);
+	if (!changes) {
+		changes = new Array();
+		map_memory_to_changes.set(offset, changes);
+	}
+	node.base.pointer = offset;
+	if (node.execution_index >= 0) {
+		changes.push(node.execution_index);
+	}
+	else {
+		debugger;
+	}
+}
+function get_memory(offset, type) {
 	if (type.base.kind == Type_Kind.INTEGER) {
 		if (type.size_in_bytes == 1) {
 			if (type.signed) {
@@ -653,21 +657,7 @@ function get_memory(offset, type, node) {
 		return get_memory(offset, Types.size_t);
 	}
 }
-function set_memory(offset, type, value, node) {
-	let changes = map_memory_to_changes.get(offset);
-	if (!changes) {
-		changes = new Array();
-		map_memory_to_changes.set(offset, changes);
-	}
-	if (node) {
-		node.base.pointer = offset;
-		if (node.execution_index >= 0) {
-			changes.push(node.execution_index);
-		}
-		else {
-			changes.push(execution_index);
-		}
-	}
+function set_memory(offset, type, value) {
 	if (type.base.kind == Type_Kind.INTEGER) {
 		if (type.size_in_bytes == 1) {
 			if (type.signed) {
@@ -707,7 +697,7 @@ function set_memory(offset, type, value, node) {
 		// 80bit float has to be faked
 	}
 	else if (type.base.kind == Type_Kind.POINTER) {
-		return set_memory(offset, Types.size_t, value, node);
+		return set_memory(offset, Types.size_t, value);
 	}
 }
 
@@ -791,13 +781,13 @@ int factorial(short number) {
 void fizzbuzz(ushort number) {
 	for (uint i = 1; i <= number; i += 1) {
 		if (i % 15 == 0) {
-			print(1234);
+			print(1515);
 		}
 		else if (i % 5 == 0) {
-			print(4321);
+			print(5555);
 		}
 		else if (i % 3 == 0) {
-			print(9999);
+			print(3333);
 		}
 		else {
 			print(i);
@@ -831,11 +821,11 @@ void pointers() {
 	d = **c;
 	assert(a == d);
 }
-struct List_Node {
-	void* data;
-	List_Node*[2] links;
-};
 void linked_list() {
+	struct List_Node {
+		void* data;
+		List_Node*[2] links;
+	};
 	List_Node first;
 }
 void structs() {
@@ -853,7 +843,23 @@ void structs() {
 	steve.age += 4;
 	steve.car.age += 4;
 }
+int test_struct_array() {
+	struct Person {
+		uint age;
+	}
+	Person[2] people;
+	for (int i = 0; i < people.length; i += 1) {
+		people[i].age = (i + 1) * 10;
+	}
+	assert(people[0].age == 10);
+	assert(people[1].age == 20);
+	return 0;
+}
+void tests() {
+	test_struct_array();
+}
 int main() {
+	// tests();
     int local_variable = 3;
 	some_function(local_variable);
 	factorial(local_variable);
@@ -948,7 +954,12 @@ function print() {
 		position_y < (midpoint_y - radius_y) ||
 		position_y > (midpoint_y + radius_y)) {
 
-		printed_cursor.scrollIntoView(code_element.scroll_options);
+		if (instant_scroll) {
+			code_element.scrollTop = printed_cursor.offsetTop - midpoint_y;
+		}
+		else {
+			printed_cursor.scrollIntoView(code_element.scroll_options);
+		}
 	}
 	
 	prev_top = curr_top;
@@ -960,7 +971,7 @@ function start_debugging() {
 	run_statement(Main_call);
 
 	slider_element.max = execution_stack.length-1;
-	slider_element.value = 1;
+	slider_element.value = 0;
 	slider_oninput();
 
 	debugging = true;
@@ -1003,12 +1014,13 @@ function add_node_to_execution_stack(node) {
 	execution_stack.push(node);
 	execution_index += 1;
 
-	// @Audit
-	if (typeof node.original != "undefined") {
-
-		map_original_to_indices.get(node.original).push(node.execution_index);
-}
+	if (node.original) {
+		let indices = map_original_to_indices.get(node.original);
+		if (indices) {
+			indices.push(node.execution_index);
+		}
 	}
+}
 
 function run_lvalue(node, push_index = true) {
 	
@@ -1017,18 +1029,18 @@ function run_lvalue(node, push_index = true) {
 	}
 
 	let return_value;
-	
+
 	if (node.base.kind == Code_Kind.IDENT) {
 
 		if (push_index) {
 			add_node_to_execution_stack(node);
-	}
+		}
 
 		/*
 		// :Refactor
 		if (node.is_lhs != true && node.execution_index) {
 			map_ident_to_uses.get(node.declaration.ident).push(node.execution_index);
-	}
+		}
 		*/
 
 		if (node.declaration.type.name != "void") {
@@ -1046,15 +1058,17 @@ function run_lvalue(node, push_index = true) {
 		let lhs_pointer = run_lvalue(node.ident);
 
 		node.ident.last_return = get_memory(lhs_pointer, node.ident.base.type);
+		
+		set_memory(lhs_pointer, node.ident.base.type, expression_value);
+		add_memory_change(lhs_pointer, node.ident);
 
-		set_memory(lhs_pointer, node.ident.base.type, expression_value, node.ident);
 		/*
 		map_ident_to_value.set(node.ident.declaration.ident, expression_value);
 		map_ident_to_changes.get(node.ident.declaration.ident).push(node.ident.execution_index);
 		*/
 
 		return_value = expression_value;
-			}
+	}
 	else if (node.base.kind == Code_Kind.OPASSIGN) {
 		
 		let expression_value = run_rvalue(node.expression);
@@ -1062,19 +1076,31 @@ function run_lvalue(node, push_index = true) {
 		node.ident.is_lhs = true;
 		let lhs_pointer = run_lvalue(node.ident);
 		let prev_value = get_memory(lhs_pointer, node.ident.base.type);
+		add_memory_use(lhs_pointer, node.ident);
 		node.ident.last_return = prev_value;
 
 		let result = math_binop(prev_value, node.operation_type, expression_value);
 
 		set_memory(lhs_pointer, node.ident.base.type, result);
+		add_memory_change(lhs_pointer, node.ident);
 		/*
 		map_ident_to_value.set(node.ident.declaration.ident, expression_value);
 		map_ident_to_changes.get(node.ident.declaration.ident).push(node.ident.execution_index);
 		*/
 
 		return_value = expression_value;
-			}
+	}
+	else if (node.base.kind == Code_Kind.PARENS) {
+
+		if (push_index) {
+			add_node_to_execution_stack(node);
+		}
+
+		return_value = run_lvalue(node.expression);
+	}
 	else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
+
+		node.array.is_lhs = node.is_lhs;
 
 		return_value = run_lvalue(node.array) + run_rvalue(node.index) * node.base.type.size_in_bytes;
 		
@@ -1094,25 +1120,32 @@ function run_lvalue(node, push_index = true) {
 			let values = [];
 			for (let arg of node.args) {
 				values.push(run_rvalue(arg));
-}
+			}
 			return_value = proc.apply(null, values);
 			node.returned = true;
-	}
+
+			if (push_index) {
+				add_node_to_execution_stack(node);
+			}
+		}
 		else {
-			let run_result = run_statement(transform(node));
+			let transformed = transform(node);
+			let run_result = run_statement(transformed);
+
+			if (push_index) {
+				add_node_to_execution_stack(node);
+			}
+
 			if (proc.return_type.name != "void") {
+				add_memory_use(transformed.statements[0].pointer, node);
 				return_value = run_result;
 			}
 			else {
 				return_value = null;
 			}
-	}
+		}
 
 		call_stack.pop();
-
-		if (push_index) {
-			add_node_to_execution_stack(node);
-}
 	}
 	else if (node.base.kind == Code_Kind.DEREFERENCE) {
 		
@@ -1122,10 +1155,13 @@ function run_lvalue(node, push_index = true) {
 		return_value = get_memory(run_lvalue(node.expression), node.expression.base.type.elem_type);
 
 		if (push_index) {
-		add_node_to_execution_stack(node);
-	}
+			add_node_to_execution_stack(node);
+		}
 	}
 	else if (node.base.kind == Code_Kind.DOT_OPERATOR) {
+
+		node.left.is_lhs = node.is_lhs;
+		node.right.is_lhs = node.is_lhs;
 
 		// @Refactor
 		// dynamic arrays are structs
@@ -1151,31 +1187,34 @@ function run_lvalue(node, push_index = true) {
 			// and the elements might not be idents
 			// they could be pointers or lvalue expressions
 
-		let left = node.left;
-		let right = node.right;
+			let left = node.left;
+			let right = node.right;
 			let pointer = run_lvalue(node.left);
-		while (true) {
-				if (push_index) {
-					add_node_to_execution_stack(left);
-				}
-			left.is_lhs = node.is_lhs;
-			right.is_lhs = node.is_lhs;
-			if (right.base.kind == Code_Kind.DOT_OPERATOR) {
+			while (true) {
+				left.is_lhs = node.is_lhs;
+				right.is_lhs = node.is_lhs;
+				if (right.base.kind == Code_Kind.DOT_OPERATOR) {
 					pointer += left.base.type.members[right.left.name].offset;
-				left = right.left;
-				right = right.right;
-			}
-			else if (right.base.kind == Code_Kind.IDENT) {
+					add_memory_use(pointer, right);
+					left = right.left;
+					right = right.right;
 					if (push_index) {
-				add_node_to_execution_stack(right);
+						add_node_to_execution_stack(left);
+					}
+				}
+				else if (right.base.kind == Code_Kind.IDENT) {
+					if (push_index) {
+						add_node_to_execution_stack(right);
 					}
 					pointer += left.base.type.members[right.name].offset;
-				break;
+					add_memory_use(pointer, right);
+					break;
+				}
 			}
-		}
 
 			return_value = pointer;
 		}
+		add_node_to_execution_stack(node);
 	}
 	else {
 		throw Error;
@@ -1208,7 +1247,7 @@ function run_rvalue(node, push_index = true) {
 		if (push_index) {
 			add_node_to_execution_stack(node);
 		}
-			}
+	}
 	else if (node.base.kind == Code_Kind.IDENT) {
 
 		/*
@@ -1220,11 +1259,20 @@ function run_rvalue(node, push_index = true) {
 
 		if (node.declaration.type.name != "void") {
 			return_value = get_memory(run_lvalue(node), node.base.type, node);
-			}
-			else {
-			throw Error;
-			}
+			add_memory_use(node.declaration.pointer, node);
 		}
+		else {
+			throw Error;
+		}
+	}
+	else if (node.base.kind == Code_Kind.PARENS) {
+
+		if (push_index) {
+			add_node_to_execution_stack(node);
+		}
+
+		return_value = run_rvalue(node.expression);
+	}
 	else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
 
 		return_value = get_memory(run_lvalue(node), node.base.type);
@@ -1242,9 +1290,10 @@ function run_rvalue(node, push_index = true) {
 
 		let address = node.expression.declaration.pointer;
 		node.base.pointer = address;
+		add_memory_use(address, node.expression);
 
 		return_value = address;
-		}
+	}
 	else if (node.base.kind == Code_Kind.DOT_OPERATOR) {
 
 		// @Refactor
@@ -1257,16 +1306,16 @@ function run_rvalue(node, push_index = true) {
 				}
 				if (node.right.name == "length") {
 					return_value = node.left.base.type.length;
-		}
-		else {
+				}
+				else {
 					throw Error
 				}
 			}
 		}
 		else {
 			return_value = get_memory(run_lvalue(node), node.base.type);
-	}
 		}
+	}
 	else {
 		return_value = run_lvalue(node);
 	}
@@ -1274,7 +1323,7 @@ function run_rvalue(node, push_index = true) {
 	node.last_return = return_value;
 
 	return return_value;
-			}
+}
 function run_statement(node, push_index = true) {
 
 	if (node.base.kind == Code_Kind.STRUCT) {
@@ -1290,7 +1339,6 @@ function run_statement(node, push_index = true) {
 	if (node.base.kind == Code_Kind.BLOCK) {
 
 		node.index = 0;
-		node.elements = node.statements;
 		block_stack.push(node);
 		node.allocations = new Array();
 
@@ -1321,7 +1369,7 @@ function run_statement(node, push_index = true) {
 
 			node.ident.is_lhs = true;
 			if (push_index) {
-			add_node_to_execution_stack(node.ident);
+				add_node_to_execution_stack(node.ident);
 			}
 			node.ident.last_return = get_memory(stack_pointer, node.ident.base.type, node.ident);
 
@@ -1332,14 +1380,12 @@ function run_statement(node, push_index = true) {
 			if (node.expression) {
 				expression_value = run_rvalue(node.expression);
 				
-				set_memory(node.pointer, node.ident.base.type, expression_value, node.ident);
-				map_ident_to_value.set(node.ident, expression_value);
+				set_memory(node.pointer, node.ident.base.type, expression_value);
+				// @Cleanup
+				// map_ident_to_value.set(node.ident, expression_value);
 			}
-			else {
-				// @Overkill
-				// for map_memory_to_uses
-				set_memory(node.pointer, node.ident.base.type, node.ident.last_return, node.ident);
-			}
+			add_memory_use(node.pointer, node.ident);
+			add_memory_change(node.pointer, node.ident);
 		}
 		
 		idents_used.add(node.ident.name);
@@ -1359,6 +1405,7 @@ function run_statement(node, push_index = true) {
 
 		let else_expr = last_block.statements[last_block.index + 1];
 
+		// ###
 		if (else_expr && else_expr.base.kind == Code_Kind.ELSE) {
 			else_expr.if_expr = node;
 		}
@@ -1371,14 +1418,14 @@ function run_statement(node, push_index = true) {
 		
 				last_block.index += 1;
 				return_value = run_statement(else_expr);
+			}
+		}
 	}
-				}
-				}
 	else if (node.base.kind == Code_Kind.ELSE) {
 		if (node.if_expr && node.if_expr.condition.last_return == false) {
 			return_value = run_statement(node.expression);
-			}
 		}
+	}
 	else if (node.base.kind == Code_Kind.WHILE) {
 
 		loop_stack.push(node);
@@ -1394,13 +1441,13 @@ function run_statement(node, push_index = true) {
 			node.continued = false;
 			if (should_run) {
 				return_value = run_statement(cloned_expr);
-		}
+			}
 			let cycle = make_if(condition, cloned_expr);
 			cycle.loop = node;
 
 			last_block.statements.splice(block_index, 0, cycle);
 			block_index += 1;
-	}
+		}
 
 		loop_stack.pop();
 
@@ -1417,16 +1464,16 @@ function run_statement(node, push_index = true) {
 			block_index += 1;
 			// should this be run_lvalue?
 			run_statement(node.begin);
-			}
+		}
 		if (!node.condition) {
 			node.condition = make_literal(42);
 		}
 		if (node.cycle_end) {
 			if (node.expression.base.kind != Code_Kind.BLOCK) {
 				node.expression = make_block([node.expression]);
-		}
+			}
 			node.expression.statements.push(node.cycle_end);
-	}
+		}
 
 		let should_run = true;
 		node.broken = false;
@@ -1437,7 +1484,7 @@ function run_statement(node, push_index = true) {
 			node.continued = false;
 			if (should_run) {
 				return_value = run_statement(cloned_expr);
-	}
+			}
 			let cycle = make_if(condition, cloned_expr);
 			cycle.loop = node;
 
@@ -1456,13 +1503,15 @@ function run_statement(node, push_index = true) {
 	else if (node.base.kind == Code_Kind.CONTINUE) {
 
 		last_loop.continued = true;
-		}
+	}
 	else if (node.base.kind == Code_Kind.RETURN) {
 
-		return_value = run_statement(transform(node));
+		let transformed = transform(node);
+		return_value = run_statement(transformed);
+		add_memory_change(last_call.transformed.statements[0].pointer, transformed.statements[0].ident);
 		last_call.returned = true;
 		last_call.last_return = return_value;
-		}
+	}
 	else {
 		return_value = run_rvalue(node);
 	}
@@ -1474,52 +1523,52 @@ function run_statement(node, push_index = true) {
 
 function math_binop(left, operation_type, right) {
 	if (operation_type == "+") {
-			return left + right;
-		}
-	else if (operation_type == "-") {
-			return left - right;
-		}
-	else if (operation_type == "*") {
-			return left * right;
-		}
-	else if (operation_type == "/") {
-			// emulate actual int division
-			return Math.floor(left / right);
-		}
-	else if (operation_type == "%") {
-			return left % right;
-		}
-	else if (operation_type == "<") {
-			return left < right;
-		}
-	else if (operation_type == ">") {
-			return left > right;
-		}
-	else if (operation_type == "<=") {
-			return left <= right;
-		}
-	else if (operation_type == ">=") {
-			return left >= right;
-		}
-	else if (operation_type == "==") {
-			return left == right;
-		}
-	else if (operation_type == "!=") {
-			return left != right;
-		}
-	else if (operation_type == "&&") {
-			return left && right;
-		}
-	else if (operation_type == "||") {
-			return left || right;
-		}
-	else if (operation_type == "&") {
-			return left & right;
-		}
-	else if (operation_type == "|") {
-			return left | right;
-		}
+		return left + right;
 	}
+	else if (operation_type == "-") {
+		return left - right;
+	}
+	else if (operation_type == "*") {
+		return left * right;
+	}
+	else if (operation_type == "/") {
+		// emulate actual int division
+		return Math.floor(left / right);
+	}
+	else if (operation_type == "%") {
+		return left % right;
+	}
+	else if (operation_type == "<") {
+		return left < right;
+	}
+	else if (operation_type == ">") {
+		return left > right;
+	}
+	else if (operation_type == "<=") {
+		return left <= right;
+	}
+	else if (operation_type == ">=") {
+		return left >= right;
+	}
+	else if (operation_type == "==") {
+		return left == right;
+	}
+	else if (operation_type == "!=") {
+		return left != right;
+	}
+	else if (operation_type == "&&") {
+		return left && right;
+	}
+	else if (operation_type == "||") {
+		return left || right;
+	}
+	else if (operation_type == "&") {
+		return left & right;
+	}
+	else if (operation_type == "|") {
+		return left | right;
+	}
+}
 function math_solve(node) {
 	if (node.base.kind == Code_Kind.BINARY_OPERATION) {
 		let left = run_rvalue(node.left);
@@ -1633,8 +1682,16 @@ function clone(node, set_original = true) {
 		if (node.expression) {
 			expr = clone(node.expression);
 		}
+		
+		let type;
+		if (node.type && node.type.base.kind == Code_Kind.IDENT) {
+			type = clone(node.type);
+		}
+		else {
+			type = node.type;
+		}
 
-		let decl = make_declaration(clone(node.ident), expr, node.type);
+		let decl = make_declaration(clone(node.ident), expr, type);
 
 		decl.ident.name = get_final_name(node.ident.original.name);
 
@@ -1669,6 +1726,10 @@ function clone(node, set_original = true) {
 	else if (node.base.kind == Code_Kind.OPASSIGN) {
 
 		cloned = make_opassign(clone(node.ident), node.operation_type, clone(node.expression));
+	}
+	else if (node.base.kind == Code_Kind.PARENS) {
+
+		cloned = make_parens(clone(node.expression));
 	}
 	else if (node.base.kind == Code_Kind.BINARY_OPERATION) {
 
@@ -1741,7 +1802,7 @@ function transform(node) {
 
 			procedure.transformed = make_block();
 
-			let return_ident = make_ident(node.ident.name +"_return");
+			let return_ident = make_ident("return_"+ node.ident.name);
 			procedure.transformed.return_ident = return_ident;
 
 			let return_decl = infer(make_declaration(return_ident, null, procedure.return_type));
@@ -1785,7 +1846,19 @@ function transform(node) {
 
 		let ident = last_call.transformed.statements[0].ident;
 
-		let assign = make_assign(clone(ident), node.expression);
+		// @Hack
+		code_composed = false;
+		let cloned_ident = clone(ident);
+		code_composed = true;
+		cloned_ident.original = node.original;
+		// @Copypaste
+		let indices = map_original_to_indices.get(cloned_ident.original);
+		if (typeof indices == "undefined") {
+			indices = new Array();
+			map_original_to_indices.set(cloned_ident.original, indices);
+		}
+
+		let assign = make_assign(cloned_ident, node.expression);
 
 		replacement.statements.push(assign);
 	}
@@ -1803,7 +1876,7 @@ function transform(node) {
 function mark_containment(node) {
 
 	node.is_inspection = Object.is(node, inspection_cursor);
-	// node.is_flowpoint = flowpoints.indexOf(node.execution_index) >= 0;
+	node.is_flowpoint = flowpoints.indexOf(node.execution_index) >= 0;
 
 	node.contains_flowpoint = 0;
 	node.contains_inspection = 0;
@@ -1921,6 +1994,14 @@ function mark_containment(node) {
 		node.contains_execution = node.left.contains_execution || node.left.is_execution ||
 		                          node.right.contains_execution || node.right.is_execution;
 	}
+	else if (node.base.kind == Code_Kind.PARENS) {
+
+		mark_containment(node.expression);
+
+		node.contains_flowpoint = node.expression.contains_flowpoint || node.expression.is_flowpoint;
+		node.contains_inspection = node.expression.contains_inspection || node.expression.is_inspection;
+		node.contains_execution = node.expression.contains_execution || node.expression.is_execution;
+	}
 	else if (node.base.kind == Code_Kind.IF) {
 
 		mark_containment(node.condition);
@@ -2016,7 +2097,7 @@ function should_hide(node) {
 
 	if (node.base.kind == Code_Kind.ELSE) {
 
-		return !node.if_expr || node.if_expr.condition.last_return;
+		return !node.if_expr || node.if_expr.condition.last_return || should_hide(node.if_expr);
 	}
 
 	if (node.base.kind == Code_Kind.DOT_OPERATOR) {
@@ -2035,7 +2116,7 @@ function should_hide(node) {
 
 		for (let j = 0; j < dataflows.length; j += 1) {
 
-			let flowpoint = dataflows[j][find_previous_index_in_array(dataflows[j], node.execution_index)];
+			let flowpoint = dataflows[j][find_prev_index_in_array(dataflows[j], node.execution_index)];
 
 			if (hidden_flowzones[i].indexOf(flowpoint) >= 0) {
 
@@ -2172,15 +2253,23 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	}
 	else if (node.base.kind == Code_Kind.CALL) {
 
-		if (values_shown && node.last_return !== null &&
+		if ((should_expand_node || expand_all) && node.transformed) {
+
+			if (last_expression.base.kind != Code_Kind.BLOCK) {
+
+				print_to_dom(node.transformed.return_ident, expr, block_print_target);
+				expr.classList.add("code-return");
+
+				print_target.appendChild(expr);
+			}
+		}
+		else if (values_shown && node.last_return !== null &&
 			typeof node.last_return !== "undefined") {
 
 			expr.classList.add("code-literal");
 			expr.appendChild(document.createTextNode(node.last_return));
-		}
-		else if ((should_expand_node || expand_all) && node.transformed) {
-				
-			print_to_dom(node.transformed.return_ident, expr, block_print_target);
+
+			print_target.appendChild(expr);
 		}
 		else {
 
@@ -2201,9 +2290,9 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 			}
 
 			expr.appendChild(document.createTextNode(")"));
+			
+			print_target.appendChild(expr);
 		}
-
-		print_target.appendChild(expr);
 	}
 	else if (node.base.kind == Code_Kind.IF) {
 
@@ -2454,6 +2543,14 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		print_target.appendChild(expr);
 	}
+	else if (node.base.kind == Code_Kind.PARENS) {
+
+		expr.appendChild(document.createTextNode("("));
+		print_to_dom(node.expression, expr, block_print_target);
+		expr.appendChild(document.createTextNode(")"));
+
+		print_target.appendChild(expr);
+	}
 	else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
 
 		// @Copypaste
@@ -2515,7 +2612,11 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		if (node.transformed) {
 
-			print_to_dom(node.transformed.statements[0], print_target, block_print_target);
+			let assign_expr = document.createElement("expr");
+			print_to_dom(node.transformed.statements[0], assign_expr, block_print_target);
+			assign_expr.children[0].children[0].classList.add("code-return");
+
+			print_target.appendChild(assign_expr);
 		}
 	}
 	else if (node.base.kind == Type_Kind.POINTER) {

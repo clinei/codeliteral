@@ -19,7 +19,8 @@ let Code_Kind = {
 	CALL: "call",
 	RETURN: "return",
 	BINARY_OPERATION: "binop",
-	LITERAL: "literal",
+    LITERAL: "literal",
+    PARENS: "parens",
 };
 
 let Code_Node = {
@@ -194,7 +195,8 @@ let Code_Return = {
 
 	base: null,
 
-	expression: null
+    expression: null,
+    original: null,
 };
 function make_return(expression) {
 
@@ -202,7 +204,8 @@ function make_return(expression) {
 	return_.base = make_node();
 	return_.base.kind = Code_Kind.RETURN;
 
-	return_.expression = expression;
+    return_.expression = expression;
+    return_.original = return_;
 
 	return return_;
 }
@@ -425,6 +428,23 @@ function make_literal(value) {
 	literal.value = value;
 
 	return literal;
+}
+
+let Code_Parens = {
+
+	base: null,
+
+	expression: null,
+};
+function make_parens(expression) {
+
+	let parens = Object.assign({}, Code_Parens);
+	parens.base = make_node();
+	parens.base.kind = Code_Kind.PARENS;
+
+	parens.expression = expression;
+
+	return parens;
 }
 
 let Type_Kind = {
@@ -654,7 +674,6 @@ function infer(node) {
                 let dummy = make_type_info_struct_dummy();
                 node.expression.base.type = dummy;
                 node.ident.base.type = dummy;
-                node.type = dummy;
             }
             infer(node.expression);
         }
@@ -667,17 +686,17 @@ function infer(node) {
         infer(node.ident);
         infer(node.expression);
     }
+	else if (node.base.kind == Code_Kind.PARENS) {
+        infer(node.expression);
+        node.base.type = node.expression.base.type;
+	}
     else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
         infer(node.array);
+        infer(node.index);
         node.base.type = node.array.base.type.elem_type;
     }
     else if (node.base.kind == Code_Kind.DOT_OPERATOR) {
-        /*
-        Steve uint
-        steve.age
-        Steve Car uint
-        steve.car.age
-        */
+
         let left = node.left;
         let right = node.right;
         
@@ -687,6 +706,8 @@ function infer(node) {
             infer(left);
             if (right.base.kind == Code_Kind.DOT_OPERATOR) {
                 right.base.type = left.base.type.members[right.left.name].type;
+                // ###
+                // left.base.type = ;
                 left = right.left;
                 right = right.right;
             }
@@ -854,6 +875,7 @@ function parse(tokens) {
         "+": 4, "-": 4,
         "*": 3, "/": 3, "%": 3,
     };
+    let prev_prec = 99;
     const binary_ops = Object.getOwnPropertyNames(operator_precedence);
     function parse_atom() {
         let curr_token = tokens[token_index];
@@ -875,18 +897,22 @@ function parse(tokens) {
             }
         }
     }
-    function maybe_binary(left, prev_prec) {
+    function maybe_binary(left) {
         let curr_token = tokens[token_index];
         let curr_prec = operator_precedence[curr_token.str];
-        if (curr_prec && prev_prec >= curr_prec) {
+        if (curr_prec && curr_prec < prev_prec) {
             token_index += 1;
-            let right = maybe_binary(parse_atom(), curr_prec);
+            let temp_prec = prev_prec;
+            prev_prec = curr_prec;
+            let right = maybe_binary(parse_rvalue());
+            prev_prec = temp_prec;
             let binop = make_binary_operation(left, curr_token.str, right);
-            return maybe_binary(binop, prev_prec);
+            return maybe_binary(binop);
         }
         return left;
     }
     function parse_statement() {
+        prev_prec = 99;
         let curr_token = tokens[token_index];
         let next_token = tokens[token_index + 1];
         if (curr_token.str == "{") {
@@ -954,12 +980,26 @@ function parse(tokens) {
     }
     function parse_rvalue() {
         let prev_index = token_index;
-        let left = parse_lvalue();
+        let left;
+        if (tokens[token_index].str == "(") {
+            token_index += 1;
+            let expression = parse_rvalue();
+            if (tokens[token_index].str == ")") {
+                token_index += 1;
+                left = make_parens(expression);
+            }
+        }
+        if (!left) {
+            left = parse_lvalue();
+        }
         let curr_token = tokens[token_index];
         if (!left) {
             if (curr_token.kind == "literal") {
                 left = parse_literal();
                 curr_token = tokens[token_index];
+            }
+            else if (curr_token.str == "&") {
+                left = parse_reference();
             }
             else {
                 debugger;
@@ -977,43 +1017,41 @@ function parse(tokens) {
             return left;
         }
     }
+    /*
+    person;
+    person.cars[0];
+    arr[0].age;
+    arr[0]();
+    person.func()[0];
+    */
     function parse_lvalue() {
         let curr_token = tokens[token_index];
-        if (curr_token.str == "&") {
-            return parse_reference();
-        }
-        else if (curr_token.str[0] == "*") {
+        if (curr_token.str[0] == "*") {
             return parse_dereference();
         }
-        let prev_index = token_index;
-        if (curr_token.kind == "ident") {
-            let left = parse_ident();
-            curr_token = tokens[token_index];
-            if (curr_token.str == ".") {
-                return parse_dot_operator(left);
-            }
-            else if (curr_token.str == "(") {
-                return parse_call(left);
-            }
-            else if (curr_token.str == "[") {
-                return parse_array_index(left);
-            }
-            else if (left) {
-                return left;
-            }
-        }
-        else {
-            token_index = prev_index;
-            return;
-        }
+        let last;
+        let prev_index;
+        do {
+            prev_index = token_index;
+            last = parse_ident(last);
+            last = parse_array_index(last);
+            last = parse_call(last);
+            last = parse_dot_operator(last);
+        } while (prev_index < token_index)
+        return last;
     }
     function parse_literal() {
         let curr_token = tokens[token_index];
         token_index += 1;
         return make_literal(parseInt(curr_token.str));
     }
-    function parse_call(atom) {
-        return make_call(atom, delimited("(", ")", ",", parse_rvalue));
+    function parse_call(left) {
+        if (tokens[token_index].str == "(") {
+            return make_call(left, delimited("(", ")", ",", parse_rvalue));
+        }
+        else {
+            return left;
+        }
     }
     function parse_reference() {
         token_index += 1;
@@ -1036,18 +1074,31 @@ function parse(tokens) {
         return node;
     }
     function parse_array_index(left) {
-        token_index += 1;
-        let index = parse_literal();
-        token_index += 1;
-        return make_array_index(left, index);
+        let prev_index = token_index;
+        if (tokens[token_index].str == "[") {
+            token_index += 1;
+            let index = parse_rvalue();
+            if (index) {
+                if (tokens[token_index].str == "]") {
+                    token_index += 1;
+                    return make_array_index(left, index);
+                }
+            }
+        }
+        token_index = prev_index;
+        return left;
     }
     function parse_dot_operator(left) {
-        token_index += 1;
-        let right = parse_ident();
-        while (tokens[token_index].str == ".") {
-            right = parse_dot_operator(right);
+        let prev_index = token_index;
+        if (tokens[token_index].str == ".") {
+            token_index += 1;
+            let right = parse_ident();
+            if (right) {
+                return make_dot_operator(left, right);
+            }
         }
-        return make_dot_operator(left, right);
+        token_index = prev_index;
+        return left;
     }
     function parse_while() {
         token_index += 2;
@@ -1119,10 +1170,15 @@ function parse(tokens) {
         token_index += 1;
         return make_return(parse_rvalue());
     }
-    function parse_ident() {
+    function parse_ident(last) {
         let curr_token = tokens[token_index];
-        token_index += 1;
-        return make_ident(curr_token.str);
+        if (curr_token.kind == "ident") {
+            token_index += 1;
+            return make_ident(curr_token.str);
+        }
+        else {
+            return last;
+        }
     }
     function parse_struct_declaration() {
         token_index += 1;
@@ -1168,6 +1224,7 @@ function parse(tokens) {
         return make_declaration(ident, make_procedure(parameters, type, block));
     }
     function parse_array_type(elem_type) {
+        let prev_index = token_index;
         token_index +=1;
         let curr_token = tokens[token_index];
         if (curr_token.kind == "literal") {
@@ -1178,6 +1235,8 @@ function parse(tokens) {
             token_index += 1;
             return make_type_info_array(elem_type, null);
         }
+        token_index = prev_index;
+        return;
     }
     function parse_pointer_type(elem_type) {
         let curr_token = tokens[token_index];
@@ -1230,6 +1289,10 @@ function parse(tokens) {
         }
         while (curr_token.str == "[") {
             curr_type = parse_array_type(curr_type);
+            if (!curr_type) {
+                token_index = prev_index;
+                return;
+            }
             curr_token = tokens[token_index];
         }
         if (curr_token.kind == "ident") {
@@ -1313,6 +1376,7 @@ function tokenize(input) {
                 else if (next_ch == "*") {
                     // multi-line comment
                     read_while(is_not_mlc_end);
+                    input_index += 2;
                     return null;
                 }
             }
@@ -1368,7 +1432,7 @@ function tokenize(input) {
 
     // single lookahead
     function is_not_mlc_end(ch) {
-        return !(ch == "*" || input[input_index + 1] == "/");
+        return !(ch == "*" && input[input_index + 1] == "/");
     }
 
     function is_punc(ch) {
