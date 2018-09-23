@@ -14,12 +14,7 @@ malloc and free
 dynamic arrays as structs,
 static arrays as pointers
 
-do while loop not implemented, use an if (true) for the first cycle
-
-true and false keywords not implemented
-
-increment and decrement, and unary minus and not operators not implemented
-bitwise & and bitwise |
+unary minus and not operators not implemented
 
 someday port to C through WebAssembly, for faster running and printing
 
@@ -30,13 +25,14 @@ maybe showing changes should show the result of the change, not the value before
 make a comma operator, see how parsing looks like
 
 add page up and page down
-speed up scrolling when holding down W or D
 
 pressing M makes the prev/next use/change check memory instead of ident
 needs visual feedback
 
 pressing Q will show the value of the ident under the inspection cursor or a repeated expression
 useful for seeing where an ident or memory address or expression was used
+
+pressing P will make the current dataflow hide points affect other dataflows
 
 make an example that uses a lot of binary operations in a conditional
 

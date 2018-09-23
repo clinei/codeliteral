@@ -843,7 +843,8 @@ void structs() {
 	steve.age += 4;
 	steve.car.age += 4;
 }
-int test_struct_array() {
+bool test_struct_array() {
+	bool passed = true;
 	struct Person {
 		uint age;
 	}
@@ -851,12 +852,41 @@ int test_struct_array() {
 	for (int i = 0; i < people.length; i += 1) {
 		people[i].age = (i + 1) * 10;
 	}
-	assert(people[0].age == 10);
-	assert(people[1].age == 20);
-	return 0;
+	passed &= people[0].age == 10;
+	passed &= people[1].age == 20;
+	return passed;
 }
+bool test_do_while() {
+	bool passed = true;
+	int n = 1;
+	do {
+		n += 1;
+	} while (n < 1)
+	passed &= n == 2;
+	return passed;
+}
+bool test_inc_dec() {
+	bool passed = true;
+	int m = 0;
+	m++;
+	passed &= m == 1;
+	m--;
+	passed &= m == 0;
+	return passed;
+}
+/*
+bool test_unary() {
+	bool passed = true;
+	int n = 1;
+	passed &= -n == -1;
+	return passed;
+}
+*/
 void tests() {
 	test_struct_array();
+	test_do_while();
+	test_inc_dec();
+	// test_unary();
 }
 int main() {
 	// tests();
@@ -1265,6 +1295,48 @@ function run_rvalue(node, push_index = true) {
 			throw Error;
 		}
 	}
+	else if (node.base.kind == Code_Kind.MINUS) {
+
+		return_value = -run_rvalue(node.ident);
+	}
+	else if (node.base.kind == Code_Kind.NOT) {
+
+		return_value = !run_rvalue(node.ident);
+	}
+	else if (node.base.kind == Code_Kind.INCREMENT) {
+
+		node.ident.is_lhs = true;
+		let lhs_pointer = run_lvalue(node.ident);
+		let prev_value = get_memory(lhs_pointer, node.ident.base.type);
+		add_memory_use(lhs_pointer, node.ident);
+		node.ident.last_return = prev_value;
+
+		// @Incomplete
+		// pointer types work differently
+		let result = prev_value + 1;
+
+		set_memory(lhs_pointer, node.ident.base.type, result);
+		add_memory_change(lhs_pointer, node.ident);
+
+		return_value = result;
+	}
+	else if (node.base.kind == Code_Kind.DECREMENT) {
+
+		node.ident.is_lhs = true;
+		let lhs_pointer = run_lvalue(node.ident);
+		let prev_value = get_memory(lhs_pointer, node.ident.base.type);
+		add_memory_use(lhs_pointer, node.ident);
+		node.ident.last_return = prev_value;
+
+		// @Incomplete
+		// pointer types work differently
+		let result = prev_value - 1;
+
+		set_memory(lhs_pointer, node.ident.base.type, result);
+		add_memory_change(lhs_pointer, node.ident);
+
+		return_value = result;
+	}
 	else if (node.base.kind == Code_Kind.PARENS) {
 
 		if (push_index) {
@@ -1453,6 +1525,41 @@ function run_statement(node, push_index = true) {
 
 		last_block.index = block_index;
 	}
+	else if (node.base.kind == Code_Kind.DO_WHILE) {
+
+		loop_stack.push(node);
+
+		let block_index = last_block.statements.indexOf(node);
+
+		let should_run = true;
+		node.broken = false;
+		let first = true;
+		while (should_run && node.broken == false && last_call.returned == false) {
+			let condition;
+			if (first) {
+				first = false;
+				condition = make_literal(true);
+			}
+			else {
+				condition = clone(node.condition);
+			}
+			should_run = run_rvalue(condition);
+			let cloned_expr = clone(node.expression);
+			node.continued = false;
+			if (should_run) {
+				return_value = run_statement(cloned_expr);
+			}
+			let cycle = make_if(condition, cloned_expr);
+			cycle.loop = node;
+
+			last_block.statements.splice(block_index, 0, cycle);
+			block_index += 1;
+		}
+
+		loop_stack.pop();
+
+		last_block.index = block_index;
+	}
 	else if (node.base.kind == Code_Kind.FOR) {
 
 		loop_stack.push(node);
@@ -1466,7 +1573,7 @@ function run_statement(node, push_index = true) {
 			run_statement(node.begin);
 		}
 		if (!node.condition) {
-			node.condition = make_literal(42);
+			node.condition = make_literal(true);
 		}
 		if (node.cycle_end) {
 			if (node.expression.base.kind != Code_Kind.BLOCK) {
@@ -1580,7 +1687,7 @@ function math_solve(node) {
 		return map_ident_to_value.get(ident.declaration.ident);
 	}
 	else if (node.base.kind == Code_Kind.LITERAL) {
-		return parseInt(node.value);
+		return node.value;
 	}
 	else if (node.base.kind == Code_Kind.CALL) {
 		return run_rvalue(node);
@@ -1654,6 +1761,10 @@ function clone(node, set_original = true) {
 
 		cloned = make_while(clone(node.condition), clone(node.expression));
 	}
+	else if (node.base.kind == Code_Kind.DO_WHILE) {
+
+		cloned = make_do_while(clone(node.expression), clone(node.condition));
+	}
 	else if (node.base.kind == Code_Kind.FOR) {
 
 		let begin, condition, cycle_end;
@@ -1718,6 +1829,22 @@ function clone(node, set_original = true) {
 		}
 
 		cloned = ident;
+	}
+	else if (node.base.kind == Code_Kind.MINUS) {
+
+		cloned = make_minus(clone(node.ident));
+	}
+	else if (node.base.kind == Code_Kind.NOT) {
+
+		cloned = make_not(clone(node.ident));
+	}
+	else if (node.base.kind == Code_Kind.INCREMENT) {
+
+		cloned = make_increment(clone(node.ident));
+	}
+	else if (node.base.kind == Code_Kind.DECREMENT) {
+
+		cloned = make_decrement(clone(node.ident));
 	}
 	else if (node.base.kind == Code_Kind.ASSIGN) {
 
@@ -2073,6 +2200,7 @@ function should_hide(node) {
 	}
 
 	if (node.base.kind == Code_Kind.WHILE ||
+		node.base.kind == Code_Kind.DO_WHILE ||
 	    node.base.kind == Code_Kind.FOR) {
 
 		return true;
@@ -2145,9 +2273,10 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 	let last_expression = print_expression_stack[print_expression_stack.length-1];
 	let should_expand_node = should_expand(node) || force_expand;
+	let should_hide_node = should_hide(node);
 	
 	if (last_expression && last_expression.base.kind == Code_Kind.BLOCK &&
-	    should_hide(node) && should_expand_node != true) {
+	    should_hide_node && should_expand_node != true) {
 
 		return;
 	}
@@ -2181,7 +2310,8 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		order_last = true;
 	}
 	
-	if (push_index && order_last == false && node.execution_index >= 0) {
+	if (push_index && order_last == false && node.execution_index >= 0 &&
+		!(node.base.kind == Code_Kind.CALL && last_expression.base.kind != Code_Kind.BLOCK)) {
 		if (map_line_to_execution_indices[line_count]) {
 			map_line_to_execution_indices[line_count].push(node.execution_index);
 		}
@@ -2429,6 +2559,50 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		print_target.appendChild(expr);
 	}
+	else if (node.base.kind == Code_Kind.MINUS) {
+
+		let op = document.createElement("expr");
+		op.appendChild(document.createTextNode("-"));
+		op.classList.add("code-op");
+		expr.appendChild(op);
+
+		print_to_dom(node.ident, expr, block_print_target);
+
+		print_target.appendChild(expr);
+	}
+	else if (node.base.kind == Code_Kind.NOT) {
+
+		let op = document.createElement("expr");
+		op.appendChild(document.createTextNode("!"));
+		op.classList.add("code-op");
+		expr.appendChild(op);
+
+		print_to_dom(node.ident, expr, block_print_target);
+
+		print_target.appendChild(expr);
+	}
+	else if (node.base.kind == Code_Kind.INCREMENT) {
+
+		print_to_dom(node.ident, expr, block_print_target);
+
+		let op = document.createElement("expr");
+		op.appendChild(document.createTextNode("++"));
+		op.classList.add("code-op");
+		expr.appendChild(op);
+
+		print_target.appendChild(expr);
+	}
+	else if (node.base.kind == Code_Kind.DECREMENT) {
+
+		print_to_dom(node.ident, expr, block_print_target);
+
+		let op = document.createElement("expr");
+		op.appendChild(document.createTextNode("--"));
+		op.classList.add("code-op");
+		expr.appendChild(op);
+
+		print_target.appendChild(expr);
+	}
 	else if (node.base.kind == Code_Kind.ASSIGN) {
 
 		// if we print the expression after the ident, up_line will be incorrect
@@ -2647,7 +2821,8 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 	map_expr_to_printed.set(node, expr);
 
-	if (push_index && order_last && node.execution_index >= 0) {
+	if (push_index && order_last && node.execution_index >= 0 &&
+		!(node.base.kind == Code_Kind.CALL || last_expression.base.kind != Code_Kind.BLOCK)) {
 		if (map_line_to_execution_indices[line_count]) {
 			map_line_to_execution_indices[line_count].push(node.execution_index);
 		}

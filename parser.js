@@ -2,10 +2,15 @@ let Code_Kind = {
 	IF: "if",
 	ELSE: "else",
 	WHILE: "while",
+	DO_WHILE: "do while",
 	FOR: "for",
 	BREAK: "break",
 	CONTINUE: "continue",
-	IDENT: "ident",
+    IDENT: "ident",
+    INCREMENT: "increment",
+    DECREMENT: "decrement",
+    MINUS: "minus",
+    NOT: "NOT",
 	ASSIGN: "assign",
 	OPASSIGN: "opassign",
 	BLOCK: "block",
@@ -282,6 +287,25 @@ function make_while(condition, expression) {
 	return while_;
 }
 
+let Code_Do_While = {
+
+	base: null,
+
+	expression: null,
+	condition: null,
+};
+function make_do_while(expression, condition) {
+
+	let while_ = Object.assign({}, Code_Do_While);
+	while_.base = make_node();
+	while_.base.kind = Code_Kind.DO_WHILE;
+
+	while_.expression = expression;
+	while_.condition = condition;
+
+	return while_;
+}
+
 let Code_For = {
 
 	base: null,
@@ -329,6 +353,74 @@ function make_continue() {
 	continue_.base.kind = Code_Kind.CONTINUE;
 
 	return continue_;
+}
+
+let Code_Minus = {
+
+	base: null,
+
+	ident: null,
+};
+function make_minus(ident) {
+
+	let minus = Object.assign({}, Code_Minus);
+	minus.base = make_node();
+	minus.base.kind = Code_Kind.MINUS;
+
+	minus.ident = ident;
+
+	return minus;
+}
+
+let Code_Not = {
+
+	base: null,
+
+	ident: null,
+};
+function make_not(ident) {
+
+	let not = Object.assign({}, Code_Not);
+	not.base = make_node();
+	not.base.kind = Code_Kind.NOT;
+
+	not.ident = ident;
+
+	return not;
+}
+
+let Code_Increment = {
+
+	base: null,
+
+	ident: null,
+};
+function make_increment(ident) {
+
+	let increment = Object.assign({}, Code_Increment);
+	increment.base = make_node();
+	increment.base.kind = Code_Kind.INCREMENT;
+
+	increment.ident = ident;
+
+	return increment;
+}
+
+let Code_Decrement = {
+
+	base: null,
+
+	ident: null,
+};
+function make_decrement(ident) {
+
+	let decrement = Object.assign({}, Code_Decrement);
+	decrement.base = make_node();
+	decrement.base.kind = Code_Kind.DECREMENT;
+
+	decrement.ident = ident;
+
+	return decrement;
 }
 
 let Code_Assign = {
@@ -620,6 +712,7 @@ function make_type_info_void() {
 let Types = {
     "char": make_type_info_integer(1, false),
     "uchar": make_type_info_integer(1, false),
+    "bool": make_type_info_integer(1, false),
     "short": make_type_info_integer(2, true),
     "ushort": make_type_info_integer(2, false),
     "int": make_type_info_integer(4, true),
@@ -678,6 +771,18 @@ function infer(node) {
             infer(node.expression);
         }
     }
+    else if (node.base.kind == Code_Kind.MINUS) {
+        infer(node.ident);
+    }
+    else if (node.base.kind == Code_Kind.NOT) {
+        infer(node.ident);
+    }
+    else if (node.base.kind == Code_Kind.INCREMENT) {
+        infer(node.ident);
+    }
+    else if (node.base.kind == Code_Kind.DECREMENT) {
+        infer(node.ident);
+    }
     else if (node.base.kind == Code_Kind.ASSIGN) {
         infer(node.ident);
         infer(node.expression);
@@ -715,9 +820,7 @@ function infer(node) {
                 if (right.name == "length") {
                     right.base.type = Types.size_t;
                 }
-                else {
-                    debugger;
-                }
+                else debugger;
                 break;
             }
             else if (right.base.kind == Code_Kind.IDENT) {
@@ -726,24 +829,6 @@ function infer(node) {
             }
         }
         node.base.type = right.base.type;
-        /*
-        if (node.right.base.kind == Code_Kind.DOT_OPERATOR) {
-            infer(node.right);
-        }
-        else if (node.right.base.kind == Code_Kind.IDENT) {
-            let type;
-            if (node.left.base.type.base.kind == Type_Kind.STRUCT) {
-                type = node.left.base.type.members[node.right.name].type;
-            }
-            else if (node.left.base.type.base.kind == Type_Kind.ARRAY) {
-                if (node.right.name == "length") {
-                    type = Types.size_t;
-                }
-            }
-            node.base.type = type;
-            node.right.base.type = type;
-        }
-        */
     }
     else if (node.base.kind == Code_Kind.STRUCT) {
         infer_type(node);
@@ -767,6 +852,10 @@ function infer(node) {
     else if (node.base.kind == Code_Kind.WHILE) {
         infer(node.condition);
         infer(node.expression);
+    }
+    else if (node.base.kind == Code_Kind.DO_WHILE) {
+        infer(node.expression);
+        infer(node.condition);
     }
     else if (node.base.kind == Code_Kind.FOR) {
         if (node.begin) {
@@ -819,9 +908,7 @@ function infer_type(node) {
             if (user_type.base.kind == Type_Kind.STRUCT) {
                 return user_type;
             }
-            else {
-                debugger;
-            }
+            else debugger;
         }
     }
     else if (node.base.kind == Code_Kind.REFERENCE) {
@@ -877,27 +964,13 @@ function parse(tokens) {
     };
     let prev_prec = 99;
     const binary_ops = Object.getOwnPropertyNames(operator_precedence);
-    function parse_atom() {
-        let curr_token = tokens[token_index];
-        if (curr_token.kind == "literal") {
-            return parse_literal();
-        }
-        else if (curr_token.kind == "ident") {
-            return parse_ident();
-        }
-        else if (curr_token.str == "(") {
-            token_index += 1;
-            let ret = parse_rvalue();
-            curr_token = tokens[token_index];
-            if (curr_token.str == ")") {
-                return ret;
-            }
-            else {
-                debugger;
-            }
-        }
-    }
     function maybe_binary(left) {
+        /*
+        // unary not
+        if (left.base.kind == Code_Kind.NOT) {
+            prev_prec = 
+        }
+        */
         let curr_token = tokens[token_index];
         let curr_prec = operator_precedence[curr_token.str];
         if (curr_prec && curr_prec < prev_prec) {
@@ -927,6 +1000,9 @@ function parse(tokens) {
             }
             else if (curr_token.str == "while" && next_token.str == "(") {
                 return parse_while();
+            }
+            else if (curr_token.str == "do" && next_token.str == "{") {
+                return parse_do_while();
             }
             else if (curr_token.str == "for" && next_token.str == "(") {
                 return parse_for();
@@ -961,7 +1037,13 @@ function parse(tokens) {
         if (left) {
             curr_token = tokens[token_index];
             if (curr_token.kind == "op") {
-                if (curr_token.str == "=") {
+                if (curr_token.str == "++") {
+                    return parse_increment(left);
+                }
+                else if (curr_token.str == "--") {
+                    return parse_decrement(left);
+                }
+                else if (curr_token.str == "=") {
                     return parse_assign(left);
                 }
                 else if (curr_token.str[curr_token.str.length-1] == "=") {
@@ -989,9 +1071,6 @@ function parse(tokens) {
                 left = make_parens(expression);
             }
         }
-        if (!left) {
-            left = parse_lvalue();
-        }
         let curr_token = tokens[token_index];
         if (!left) {
             if (curr_token.kind == "literal") {
@@ -1001,29 +1080,42 @@ function parse(tokens) {
             else if (curr_token.str == "&") {
                 left = parse_reference();
             }
+            else if (curr_token.str == "true") {
+                left = make_literal(true);
+                token_index += 1;
+            }
+            else if (curr_token.str == "false") {
+                left = make_literal(false);
+                token_index += 1;
+            }
             else {
-                debugger;
+                left = parse_lvalue();
             }
         }
+        curr_token = tokens[token_index];
+        /*
+        // unary op
+        if (curr_token.str == "-") {
+            token_index += 1;
+            left = make_minus();
+        }
+        if (curr_token.str == "!") {
+            token_index += 1;
+            left = make_not(expression);
+        }
+        */
         if (!left) {
             token_index = prev_index;
             return;
         }
         else if (binary_ops.indexOf(curr_token.str) >= 0) {
-            let maybin = maybe_binary(left, 99);
+            let maybin = maybe_binary(left);
             return maybin;
         }
         else {
             return left;
         }
     }
-    /*
-    person;
-    person.cars[0];
-    arr[0].age;
-    arr[0]();
-    person.func()[0];
-    */
     function parse_lvalue() {
         let curr_token = tokens[token_index];
         if (curr_token.str[0] == "*") {
@@ -1103,15 +1195,30 @@ function parse(tokens) {
     function parse_while() {
         token_index += 2;
         let condition = parse_rvalue();
-        let curr_token = tokens[token_index];
-        if (curr_token.str == ")") {
+        if (tokens[token_index].str == ")") {
             token_index += 1;
         }
-        else {
-            debugger;
-        }
+        else debugger;
         let block = parse_block();
         return make_while(condition, block);
+    }
+    function parse_do_while() {
+        token_index += 1;
+        let block = parse_block();
+        if (tokens[token_index].str == "while") {
+            token_index += 1;
+        }
+        else debugger;
+        if (tokens[token_index].str == "(") {
+            token_index += 1;
+        }
+        else debugger;
+        let condition = parse_rvalue();
+        if (tokens[token_index].str == ")") {
+            token_index += 1;
+        }
+        else debugger;
+        return make_do_while(block, condition);
     }
     function parse_for() {
         token_index += 2;
@@ -1203,6 +1310,14 @@ function parse(tokens) {
     }
     function parse_block() {
         return make_block(delimited("{", "}", ";", parse_statement));
+    }
+    function parse_increment(left) {
+        token_index += 1;
+        return make_increment(left);
+    }
+    function parse_decrement(left) {
+        token_index += 1;
+        return make_decrement(left);
     }
     function parse_assign(left) {
         token_index += 1;
