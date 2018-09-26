@@ -848,8 +848,11 @@ bool test_pointer() {
 	bool passed = true;
 	int a = 0;
 	int* b;
-	int** c;
 	b = &a;
+	*b = 12345;
+	passed &= a == 12345;
+	a = 0;
+	int** c;
 	c = &b;
 	**c = 12345;
 	passed &= a == 12345;
@@ -951,7 +954,6 @@ bool test_string() {
 	return passed;
 }
 void tests() {
-	test_nested_loop();
 	test_array();
 	test_pointer();
 	test_malloc_free();
@@ -960,6 +962,7 @@ void tests() {
 	test_struct();
 	test_struct_array();
 	test_do_while();
+	test_nested_loop();
 	test_inc_dec();
 	// test_unary();
 	test_string();
@@ -1322,6 +1325,9 @@ function run_lvalue(node, push_index = true) {
 				values.push(run_rvalue(arg));
 			}
 			return_value = proc.apply(null, values);
+			if (return_value) {
+				return_node = make_literal(return_value);
+			}
 			node.returned = true;
 
 			if (push_index) {
@@ -1352,8 +1358,8 @@ function run_lvalue(node, push_index = true) {
 		
 		node.expression.is_lhs = node.is_lhs;
 		
-		// should do this in infer_type
-		return_value = get_memory(run_lvalue(node.expression), node.expression.base.type.elem_type);
+		let pointer = run_lvalue(node.expression);
+		return_value = get_memory(pointer, Types.size_t);
 		return_node = make_literal(return_value);
 
 		if (push_index) {
