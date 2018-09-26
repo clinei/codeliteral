@@ -5,7 +5,6 @@ function main() {
 	map_controls();
 
 	start_debugging();
-	print();
 }
 
 let values_shown = false;
@@ -581,10 +580,10 @@ let block_stack = new Array();
 let loop_stack = new Array();
 let execution_stack = new Array();
 let stack_pointer = 0;
-let stack_buffer = new ArrayBuffer(64 * 64 * 64);
-let stack_view = new DataView(stack_buffer);
-let heap_buffer = new ArrayBuffer(64 * 64 * 64);
-let heap_view = new DataView(heap_buffer);
+let memory_buffer = new ArrayBuffer(64 * 64 * 64);
+let memory_view = new DataView(memory_buffer);
+let heap_start = memory_buffer.byteLength / 2;
+let heap_allocations = new Array();
 function add_memory_use(offset, node) {
 	let uses = map_memory_to_uses.get(offset);
 	if (!uses) {
@@ -618,26 +617,26 @@ function get_memory(offset, type) {
 	if (type.base.kind == Type_Kind.INTEGER) {
 		if (type.size_in_bytes == 1) {
 			if (type.signed) {
-				return stack_view.getInt8(offset);
+				return memory_view.getInt8(offset);
 			}
 			else {
-				return stack_view.getUint8(offset);
+				return memory_view.getUint8(offset);
 			}
 		}
 		else if (type.size_in_bytes == 2) {
 			if (type.signed) {
-				return stack_view.getInt16(offset);
+				return memory_view.getInt16(offset);
 			}
 			else {
-				return stack_view.getUint16(offset);
+				return memory_view.getUint16(offset);
 			}
 		}
 		else if (type.size_in_bytes == 4) {
 			if (type.signed) {
-				return stack_view.getInt32(offset);
+				return memory_view.getInt32(offset);
 			}
 			else {
-				return stack_view.getUint32(offset);
+				return memory_view.getUint32(offset);
 			}
 		}
 		// @Incomplete
@@ -645,10 +644,10 @@ function get_memory(offset, type) {
 	}
 	else if (type.base.kind == Type_Kind.FLOAT) {
 		if (type.size_in_bytes == 4) {
-			return stack_view.getFloat32(offset);
+			return memory_view.getFloat32(offset);
 		}
 		else if (type.size_in_bytes == 8) {
-			return stack_view.getFloat64(offset);
+			return memory_view.getFloat64(offset);
 		}
 		// @Incomplete
 		// 80bit float has to be faked
@@ -661,26 +660,26 @@ function set_memory(offset, type, value) {
 	if (type.base.kind == Type_Kind.INTEGER) {
 		if (type.size_in_bytes == 1) {
 			if (type.signed) {
-				return stack_view.setInt8(offset, value);
+				return memory_view.setInt8(offset, value);
 			}
 			else {
-				return stack_view.setUint8(offset, value);
+				return memory_view.setUint8(offset, value);
 			}
 		}
 		else if (type.size_in_bytes == 2) {
 			if (type.signed) {
-				return stack_view.setInt16(offset, value);
+				return memory_view.setInt16(offset, value);
 			}
 			else {
-				return stack_view.setUint16(offset, value);
+				return memory_view.setUint16(offset, value);
 			}
 		}
 		else if (type.size_in_bytes == 4) {
 			if (type.signed) {
-				return stack_view.setInt32(offset, value);
+				return memory_view.setInt32(offset, value);
 			}
 			else {
-				return stack_view.setUint32(offset, value);
+				return memory_view.setUint32(offset, value);
 			}
 		}
 		// @Incomplete
@@ -688,10 +687,10 @@ function set_memory(offset, type, value) {
 	}
 	else if (type.base.kind == Type_Kind.FLOAT) {
 		if (type.size_in_bytes == 4) {
-			return stack_view.setFloat32(offset, value);
+			return memory_view.setFloat32(offset, value);
 		}
 		else if (type.size_in_bytes == 8) {
-			return stack_view.setFloat64(offset, value);
+			return memory_view.setFloat64(offset, value);
 		}
 		// @Incomplete
 		// 80bit float has to be faked
@@ -699,6 +698,56 @@ function set_memory(offset, type, value) {
 	else if (type.base.kind == Type_Kind.POINTER) {
 		return set_memory(offset, Types.size_t, value);
 	}
+}
+function get_memory_array(offset, type, length) {
+	let array = new Array(length);
+	for (let i = 0; i < length; i += 1) {
+		array[i] = get_memory(offset + type.size_in_bytes * i, type);
+	}
+	return array;
+}
+function set_memory_array(offset, type, length, array) {
+	for (let i = 0; i < length; i += 1) {
+		set_memory(offset + type.size_in_bytes * i, type, array[i]);
+	}
+}
+function get_memory_bytes(offset, length) {
+	let array = new Array(length);
+	for (let i = 0; i < length; i += 1) {
+		array[i] = memory_view.getUint8(offset + i);
+	}
+	return array;
+}
+function set_memory_bytes(offset, length, array) {
+	for (let i = 0; i < length; i += 1) {
+		memory_view.setUint8(offset + i, array[i]);
+	}
+}
+// @Audit
+function allocate_memory(size_in_bytes) {
+	let pointer = heap_start;
+	if (heap_allocations.length == 0) {
+		heap_allocations[pointer] = size_in_bytes;
+		return pointer;
+	}
+	while (pointer < memory_buffer.byteLength) {
+		// @Bug
+		// if we allocate twice, and then deallocate and allocate again and repeat,
+		// we will run out of memory
+		let foo = find_prev_index_in_array_inclusive(heap_allocations, pointer);
+		let bar = find_prev_index_in_array_inclusive(heap_allocations, pointer + size_in_bytes);
+		if (foo == bar) {
+			heap_allocations[foo] = size_in_bytes;
+			return pointer;
+		}
+		else {
+			pointer += heap_allocations[bar];
+		}
+	}
+	return pointer;
+}
+function deallocate_memory(pointer) {
+	heap_allocations.splice(pointer, 1);
 }
 
 let inspection_cursor = null;
@@ -743,92 +792,94 @@ function assert_procedure(arg) {
 	}
 }
 let assert_declaration = make_declaration(make_ident("assert"), assert_procedure);
-let stdlib = [
+
+let malloc_procedure = allocate_memory;
+let malloc_declaration = make_declaration(make_ident("malloc"), malloc_procedure);
+
+let free_procedure = deallocate_memory;
+let free_declaration = make_declaration(make_ident("free"), free_procedure);
+let Stdlib_Block = make_block();
+Stdlib_Block.statements = [
 	print_declaration,
 	assert_declaration,
+	malloc_declaration,
+	free_declaration,
 ];
+{
+    let string_code = `
+    struct string {
+        char* pointer;
+        size_t length;
+    }
+    `;
+	Stdlib_Block.statements.push(infer(parse(tokenize(string_code))).statements[0]);
+}
 
 let code = `
-int some_other_function(char number) {
-	while (number > 0) {
-		if (number > 50) {
-			number -= 5;
-			continue;
-		}
-		if (number < 40) {
-			number = 5;
-			break;
-		}
-		number -= 10;
-	}
-	return number;
-}
-int some_function(uchar num_iters) {
-	int sum = 0;
-	for (int i = 0; i < num_iters; i += 1) {
-		sum += i * 20;
-	}
-	return some_other_function(sum);
-}
-int factorial(short number) {
-	if (number > 1) {
-		return factorial(number - 1) * number;
-	}
-	else {
-		return 1;
-	}
-}
-void fizzbuzz(ushort number) {
-	for (uint i = 1; i <= number; i += 1) {
-		if (i % 15 == 0) {
-			print(1515);
-		}
-		else if (i % 5 == 0) {
-			print(5555);
-		}
-		else if (i % 3 == 0) {
-			print(3333);
-		}
-		else {
-			print(i);
-		}
-	}
-}
-int nested_loops(int width, int height) {
+bool test_nested_loop() {
+	bool passed = true;
+	int[6] results;
+	int width = 2;
+	int height = 3;
+	int i = 0;
 	for (int width_iter = 0; width_iter < width; width_iter += 1) {
 		for (int height_iter = 0; height_iter < height; height_iter += 1) {
-			int d = width_iter * width + height_iter;
-			print(d);
-			factorial(d);
+			int d = width_iter * height + height_iter;
+			results[i] = d;
+			i += 1;
 		}
 	}
-	return 64;
+	for (int j = 0; j < 6; j += 1) {
+		passed &= results[j] == j;
+	}
+	return passed;
 }
-void arrays() {
+bool test_array() {
+	bool passed = true;
 	int[8] arr;
-	arr[7] = 4444;
+	passed &= arr.length == 8;
+	arr[7] = 12345;
+	passed &= arr[7] == 12345;
 	arr[0] = arr[7];
-	print(arr.length);
+	passed &= arr[0] == 12345;
+	return passed;
 }
-void pointers() {
-	int a;
+bool test_pointer() {
+	bool passed = true;
+	int a = 0;
 	int* b;
 	int** c;
 	b = &a;
 	c = &b;
-	**c = 123;
-	int d
+	**c = 12345;
+	passed &= a == 12345;
+	int d = 0;
 	d = **c;
-	assert(a == d);
+	passed &= d == 12345;
+	return passed;
 }
-void linked_list() {
-	struct List_Node {
-		void* data;
-		List_Node*[2] links;
-	};
-	List_Node first;
+bool test_malloc_free() {
+	bool passed = true;
+	uchar* ptr = malloc(1);
+	*ptr = 123;
+	passed &= *ptr == 123;
+	free(ptr);
+	uint* ptr2 = malloc(4);
+	*ptr2 = 12345;
+	passed &= *ptr2 == 12345;
+	free(ptr2);
+	return passed;
 }
-void structs() {
+bool test_heap() {
+	bool passed = true;
+	for (uint i = 0; i < 100; i += 1) {
+		void* ptr  = malloc(1);
+		free(ptr);
+	}
+	return passed;
+}
+bool test_struct() {
+	bool passed = true;
 	struct Car {
 		uint type;
 		uint age;
@@ -839,9 +890,14 @@ void structs() {
 	}
 	Person steve;
 	steve.age = 20;
+	passed &= steve.age == 20;
 	steve.car.age = 2;
+	passed &= steve.car.age == 2;
 	steve.age += 4;
+	passed &= steve.age == 24;
 	steve.car.age += 4;
+	passed &= steve.car.age == 6;
+	return passed;
 }
 bool test_struct_array() {
 	bool passed = true;
@@ -882,30 +938,112 @@ bool test_unary() {
 	return passed;
 }
 */
+bool test_string() {
+	bool passed = true;
+	string str = "Hello, World!";
+	passed &= str == "Hello, World!";
+	str = "Hi there.";
+	passed &= str == "Hi there.";
+	string str2 = "I'm here, too!";
+	passed &= str2 == "I'm here, too!";
+	str = str2;
+	passed &= str == "I'm here, too!";
+	return passed;
+}
 void tests() {
+	test_nested_loop();
+	test_array();
+	test_pointer();
+	test_malloc_free();
+	// test_heap();
+	// test_dynamic_array();
+	test_struct();
 	test_struct_array();
 	test_do_while();
 	test_inc_dec();
 	// test_unary();
+	test_string();
+}
+int some_other_function(char number) {
+	while (number > 0) {
+		if (number > 50) {
+			number -= 5;
+			continue;
+		}
+		if (number < 40) {
+			number = 5;
+			break;
+		}
+		number -= 10;
+	}
+	return number;
+}
+int some_function(uchar num_iters) {
+	int sum = 0;
+	for (int i = 0; i < num_iters; i += 1) {
+		sum += i * 20;
+	}
+	return some_other_function(sum);
+}
+int factorial(short number) {
+	if (number > 1) {
+		return factorial(number - 1) * number;
+	}
+	else {
+		return 1;
+	}
+}
+void fizzbuzz(ushort number) {
+	for (uint i = 1; i <= number; i += 1) {
+		if (i % 15 == 0) {
+			print("FizzBuzz");
+		}
+		else if (i % 5 == 0) {
+			print("Buzz");
+		}
+		else if (i % 3 == 0) {
+			print("Fizz");
+		}
+		else {
+			print(i);
+		}
+	}
+}
+void linked_list() {
+	struct List_Node {
+		void* data;
+		List_Node*[2] links;
+	};
+	List_Node first;
 }
 int main() {
-	// tests();
+	tests();
     int local_variable = 3;
 	some_function(local_variable);
 	factorial(local_variable);
 	fizzbuzz(15);
-	arrays();
-	pointers();
-	linked_list();
-	structs();
-	nested_loops(2, 2);
+	// linked_list();
 	return local_variable;
 }
 main();
 `;
-let parsed = parse(tokenize(code));
-parsed.statements = stdlib.concat(parsed.statements);
-let Global_Block = infer(parsed);
+let Global_Block = parse(tokenize(code));
+Stdlib_Block.statements.push(Global_Block);
+infer(Stdlib_Block);
+fill_rodata();
+function fill_rodata() {
+	for (let i = 0; i < strings.length; i += 1) {
+		let string = strings[i];
+		let elem_type = Types.char;
+		string.pointer = stack_pointer;
+		let char_array = new Array(string.length);
+		for (let j = 0; j < string.length; j += 1) {
+			char_array[j] = string.str.charCodeAt(j);
+		}
+		set_memory_array(stack_pointer, elem_type, string.length, char_array);
+		stack_pointer += elem_type.size_in_bytes * string.length;
+	}
+}
 let Main_call = Global_Block.statements[Global_Block.statements.length-1];
 code_composed = true;
 
@@ -943,7 +1081,6 @@ function print() {
 	slider_element.value = execution_index;
 
 	while (code_element.firstChild) {
-
 		code_element.removeChild(code_element.firstChild);
 	}
 
@@ -955,7 +1092,7 @@ function print() {
 
 	mark_containment(Main_call);
 	
-	print_to_dom(Main_call, code_element, code_element);
+	print_to_dom(Global_Block, code_element, code_element, true, false);
 	
 	column_index = map_line_to_execution_indices[current_line].indexOf(execution_index);
 
@@ -997,8 +1134,8 @@ function print() {
 
 function start_debugging() {
 
-	execution_cursor = Main_call;
-	run_statement(Main_call);
+	execution_cursor = Global_Block;
+	run_statement(Global_Block);
 
 	slider_element.max = execution_stack.length-1;
 	slider_element.value = 0;
@@ -1059,6 +1196,7 @@ function run_lvalue(node, push_index = true) {
 	}
 
 	let return_value;
+	let return_node;
 
 	if (node.base.kind == Code_Kind.IDENT) {
 
@@ -1081,23 +1219,53 @@ function run_lvalue(node, push_index = true) {
 		}
 	}
 	else if (node.base.kind == Code_Kind.ASSIGN) {
-		
-		let expression_value = run_rvalue(node.expression);
-		
-		node.ident.is_lhs = true;
-		let lhs_pointer = run_lvalue(node.ident);
 
-		node.ident.last_return = get_memory(lhs_pointer, node.ident.base.type);
+		if (node.ident.base.kind == Code_Kind.IDENT &&
+		    node.ident.declaration.type.name == "string") {
+			if (node.expression.base.type.base.kind == Type_Kind.STRING) {
+				let lhs_pointer = run_lvalue(node.ident);
+				let length = node.expression.length;
+				let length_type = node.ident.base.type.members.length.type;
+				let length_offset = node.ident.base.type.members.length.offset;
+				set_memory(lhs_pointer, Types.size_t, node.expression.pointer);
+				set_memory(lhs_pointer + length_offset, length_type, length);
+	
+				return_value = node.ident.declaration.pointer;
+			}
+			else if (node.expression.base.kind == Code_Kind.IDENT && 
+			         node.expression.declaration.type.name == "string") {
+
+				let lhs_pointer = run_lvalue(node.ident);
+				let rhs_pointer = run_lvalue(node.expression, false);
+				let rhs_memory = get_memory_bytes(rhs_pointer, node.expression.base.type.size_in_bytes);
+				set_memory_bytes(lhs_pointer, node.ident.base.type.size_in_bytes, rhs_memory);
+				
+				run_rvalue(node.expression);
+
+				return_value = node.ident.declaration.pointer;
+			}
+		}
+		else {
+
+			let expression_value = run_rvalue(node.expression);
 		
-		set_memory(lhs_pointer, node.ident.base.type, expression_value);
-		add_memory_change(lhs_pointer, node.ident);
-
-		/*
-		map_ident_to_value.set(node.ident.declaration.ident, expression_value);
-		map_ident_to_changes.get(node.ident.declaration.ident).push(node.ident.execution_index);
-		*/
-
-		return_value = expression_value;
+			node.ident.is_lhs = true;
+			let lhs_pointer = run_lvalue(node.ident);
+	
+			let prev_value = get_memory(lhs_pointer, node.ident.base.type);
+			node.ident.last_return = prev_value;
+			node.ident.last_return_node = make_literal(prev_value);
+			
+			set_memory(lhs_pointer, node.ident.base.type, expression_value);
+			add_memory_change(lhs_pointer, node.ident);
+	
+			/*
+			map_ident_to_value.set(node.ident.declaration.ident, expression_value);
+			map_ident_to_changes.get(node.ident.declaration.ident).push(node.ident.execution_index);
+			*/
+	
+			return_value = expression_value;
+		}
 	}
 	else if (node.base.kind == Code_Kind.OPASSIGN) {
 		
@@ -1108,6 +1276,7 @@ function run_lvalue(node, push_index = true) {
 		let prev_value = get_memory(lhs_pointer, node.ident.base.type);
 		add_memory_use(lhs_pointer, node.ident);
 		node.ident.last_return = prev_value;
+		node.ident.last_return_node = make_literal(prev_value);
 
 		let result = math_binop(prev_value, node.operation_type, expression_value);
 
@@ -1133,6 +1302,7 @@ function run_lvalue(node, push_index = true) {
 		node.array.is_lhs = node.is_lhs;
 
 		return_value = run_lvalue(node.array) + run_rvalue(node.index) * node.base.type.size_in_bytes;
+		return_node = make_literal(return_value);
 		
 		if (push_index) {
 			add_node_to_execution_stack(node);
@@ -1169,6 +1339,7 @@ function run_lvalue(node, push_index = true) {
 			if (proc.return_type.name != "void") {
 				add_memory_use(transformed.statements[0].pointer, node);
 				return_value = run_result;
+				return_node = node.last_return_node;
 			}
 			else {
 				return_value = null;
@@ -1183,6 +1354,7 @@ function run_lvalue(node, push_index = true) {
 		
 		// should do this in infer_type
 		return_value = get_memory(run_lvalue(node.expression), node.expression.base.type.elem_type);
+		return_node = make_literal(return_value);
 
 		if (push_index) {
 			add_node_to_execution_stack(node);
@@ -1203,7 +1375,17 @@ function run_lvalue(node, push_index = true) {
 					add_node_to_execution_stack(node.right);
 				}
 				if (node.right.name == "length") {
-					return_value = node.left.base.type.length;
+					if (node.left.base.type.length) {
+						return_value = node.left.base.type.length;
+						return_node = make_literal(return_value);
+					}
+					else {
+						let base_pointer = node.left.base.pointer;
+						let length_offset = node.left.base.type.members.length.offset;
+						let length_type = node.left.base.type.members.length.type;
+						return_value = get_memory(base_pointer + length_offset, length_type);
+						return_node = make_literal(return_value);
+					}
 				}
 				else {
 					throw Error
@@ -1243,6 +1425,7 @@ function run_lvalue(node, push_index = true) {
 			}
 
 			return_value = pointer;
+			return_node = make_literal(return_value);
 		}
 		add_node_to_execution_stack(node);
 	}
@@ -1251,6 +1434,7 @@ function run_lvalue(node, push_index = true) {
 	}
 
 	node.last_return = return_value;
+	node.last_return_node = return_node;
 
 	return return_value;
 }
@@ -1261,6 +1445,7 @@ function run_rvalue(node, push_index = true) {
 	}
 
 	let return_value;
+	let return_node;
 
 	if (node.base.kind == Code_Kind.LITERAL) {
 
@@ -1269,10 +1454,27 @@ function run_rvalue(node, push_index = true) {
 		}
 
 		return_value = math_solve(node);
+		return_node = node;
+	}
+	else if (node.base.kind == Code_Kind.STRING) {
+
+		if (push_index) {
+			add_node_to_execution_stack(node);
+		}
+
+		let chars = get_memory_array(node.pointer, Types.char, node.length);
+		let char_array = new Array(node.length);
+		for (let i = 0; i < node.length; i += 1) {
+			char_array[i] = String.fromCharCode(chars[i]);
+		}
+
+		return_value = char_array.join("");
+		return_node = make_string(return_value);
 	}
 	else if (node.base.kind == Code_Kind.BINARY_OPERATION) {
 
 		return_value = math_solve(node);
+		return_node = make_literal(return_value);
 
 		if (push_index) {
 			add_node_to_execution_stack(node);
@@ -1287,21 +1489,40 @@ function run_rvalue(node, push_index = true) {
 		}
 		*/
 
-		if (node.declaration.type.name != "void") {
-			return_value = get_memory(run_lvalue(node), node.base.type, node);
+		if (node.declaration.type.name == "void") {	
+			throw Error;
+		}
+		else if (node.declaration.type.name == "string") {
+
+			let base_pointer = run_lvalue(node);
+			let char_type = node.base.type.members.pointer.type.elem_type;
+			let pointer = get_memory(base_pointer + node.base.type.members.pointer.offset, Types.size_t);
+			let length = get_memory(base_pointer + node.base.type.members.length.offset, Types.size_t);
+			let chars = get_memory_array(pointer, char_type, length);
+			let char_array = new Array(length);
+			for (let i = 0; i < length; i += 1) {
+				char_array[i] = String.fromCharCode(chars[i]);
+			}
+	
+			return_value = char_array.join("");
+			return_node = make_string(return_value);
 			add_memory_use(node.declaration.pointer, node);
 		}
 		else {
-			throw Error;
+			return_value = get_memory(run_lvalue(node), node.base.type);
+			return_node = make_literal(return_value);
+			add_memory_use(node.declaration.pointer, node);
 		}
 	}
 	else if (node.base.kind == Code_Kind.MINUS) {
 
 		return_value = -run_rvalue(node.ident);
+		return_node = make_literal(return_value);
 	}
 	else if (node.base.kind == Code_Kind.NOT) {
 
 		return_value = !run_rvalue(node.ident);
+		return_node = make_literal(return_value);
 	}
 	else if (node.base.kind == Code_Kind.INCREMENT) {
 
@@ -1319,6 +1540,7 @@ function run_rvalue(node, push_index = true) {
 		add_memory_change(lhs_pointer, node.ident);
 
 		return_value = result;
+		return_node = make_literal(result);
 	}
 	else if (node.base.kind == Code_Kind.DECREMENT) {
 
@@ -1336,6 +1558,7 @@ function run_rvalue(node, push_index = true) {
 		add_memory_change(lhs_pointer, node.ident);
 
 		return_value = result;
+		return_node = make_literal(result);
 	}
 	else if (node.base.kind == Code_Kind.PARENS) {
 
@@ -1344,14 +1567,17 @@ function run_rvalue(node, push_index = true) {
 		}
 
 		return_value = run_rvalue(node.expression);
+		return_node = make_literal(return_value);
 	}
 	else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
 
 		return_value = get_memory(run_lvalue(node), node.base.type);
+		return_node = make_literal(return_value);
 	}
 	else if (node.base.kind == Code_Kind.DEREFERENCE) {
 
 		return_value = get_memory(run_lvalue(node), node.base.type);
+		return_node = make_literal(return_value);
 	}
 	else if (node.base.kind == Code_Kind.REFERENCE) {
 
@@ -1365,6 +1591,7 @@ function run_rvalue(node, push_index = true) {
 		add_memory_use(address, node.expression);
 
 		return_value = address;
+		return_node = make_literal(return_value);
 	}
 	else if (node.base.kind == Code_Kind.DOT_OPERATOR) {
 
@@ -1387,22 +1614,30 @@ function run_rvalue(node, push_index = true) {
 		else {
 			return_value = get_memory(run_lvalue(node), node.base.type);
 		}
+		
+		return_node = make_literal(return_value);
 	}
 	else {
 		return_value = run_lvalue(node);
+		return_node = node.last_return_node;
 	}
 
 	node.last_return = return_value;
+	node.last_return_node = return_node;
 
 	return return_value;
 }
 function run_statement(node, push_index = true) {
 
-	if (node.base.kind == Code_Kind.STRUCT) {
+	if (node.base.kind == Code_Kind.DECLARATION && node.expression && 
+		(typeof node.expression == "function" ||
+		 node.expression.base.kind == Code_Kind.PROCEDURE)) {
+
 		return;
-		}
+	}
 
 	let return_value;
+	let return_node;
 
 	let last_block = block_stack[block_stack.length-1];
 	let last_loop = loop_stack[loop_stack.length-1];
@@ -1418,18 +1653,19 @@ function run_statement(node, push_index = true) {
 
 			let stmt = node.statements[node.index];
 			return_value = run_statement(stmt);
+			return_node = stmt.last_return_node;
 			node.index += 1;
 
-			if (last_call.returned || (last_loop && (last_loop.broken || last_loop.continued))) {
+			if ((last_call && last_call.returned) || (last_loop && (last_loop.broken || last_loop.continued))) {
 
 				break;
-	}
-	}
+			}
+		}
 
 		for (let i = 0; i < node.allocations.length; i += 1) {
 			let decl = node.allocations[i];
 			stack_pointer -= decl.ident.base.type.size_in_bytes;
-	}
+		}
 		
 		block_stack.pop();
 	}
@@ -1437,24 +1673,39 @@ function run_statement(node, push_index = true) {
 
 		let expression_value = null;
 
+		node.ident.is_lhs = true;
+		if (push_index) {
+			add_node_to_execution_stack(node.ident);
+		}
+
 		if (node.ident.base.type.base.kind != "void") {
 
-			node.ident.is_lhs = true;
-			if (push_index) {
-				add_node_to_execution_stack(node.ident);
-			}
-			node.ident.last_return = get_memory(stack_pointer, node.ident.base.type, node.ident);
+			let prev_value = get_memory(stack_pointer, node.ident.base.type, node.ident);
+			node.ident.last_return = prev_value;
 
 			node.pointer = stack_pointer;
 			stack_pointer += node.ident.base.type.size_in_bytes;
 			last_block.allocations.push(node);
 
-			if (node.expression) {
+			if (node.expression && node.type) {
 				expression_value = run_rvalue(node.expression);
-				
-				set_memory(node.pointer, node.ident.base.type, expression_value);
-				// @Cleanup
-				// map_ident_to_value.set(node.ident, expression_value);
+				if (node.type.name == "string") {
+					let length = expression_value.length;
+					let length_type = node.ident.base.type.members.length.type;
+					let length_offset = node.ident.base.type.members.length.offset;
+					let elem_type = node.ident.base.type.members.pointer.type.elem_type;
+					let array_pointer = allocate_memory(length * elem_type.size_in_bytes);
+					let char_array = new Array(expression_value.length);
+					for (let j = 0; j < expression_value.length; j += 1) {
+						char_array[j] = expression_value.charCodeAt(j);
+					}
+					set_memory_array(array_pointer, elem_type, length, char_array);
+					set_memory(node.pointer, Types.size_t, array_pointer);
+					set_memory(node.pointer + length_offset, length_type, length);
+				}
+				else {
+					set_memory(node.pointer, node.ident.base.type, expression_value);
+				}
 			}
 			add_memory_use(node.pointer, node.ident);
 			add_memory_change(node.pointer, node.ident);
@@ -1462,16 +1713,10 @@ function run_statement(node, push_index = true) {
 		
 		idents_used.add(node.ident.name);
 
-		/*
-		let changes = new Array();
-		changes.push(node.ident.execution_index);
-		map_ident_to_changes.set(node.ident, changes);
-
-		let uses = new Array();
-		map_ident_to_uses.set(node.ident, uses);
-		*/
-
 		return_value = expression_value;
+	}
+	else if (node.base.kind == Code_Kind.STRUCT) {
+		// @@@
 	}
 	else if (node.base.kind == Code_Kind.IF) {
 
@@ -1501,12 +1746,13 @@ function run_statement(node, push_index = true) {
 	else if (node.base.kind == Code_Kind.WHILE) {
 
 		loop_stack.push(node);
+		last_loop = node;
 
 		let block_index = last_block.statements.indexOf(node);
 
 		let should_run = true;
 		node.broken = false;
-		while (should_run && node.broken == false && last_call.returned == false) {
+		while (should_run) {
 			let condition = clone(node.condition);
 			should_run = run_rvalue(condition);
 			let cloned_expr = clone(node.expression);
@@ -1519,6 +1765,12 @@ function run_statement(node, push_index = true) {
 
 			last_block.statements.splice(block_index, 0, cycle);
 			block_index += 1;
+
+			if ((last_call && last_call.returned) ||
+			    (last_loop && last_loop.broken)) {
+
+				break;
+			}
 		}
 
 		loop_stack.pop();
@@ -1528,13 +1780,14 @@ function run_statement(node, push_index = true) {
 	else if (node.base.kind == Code_Kind.DO_WHILE) {
 
 		loop_stack.push(node);
+		last_loop = node;
 
 		let block_index = last_block.statements.indexOf(node);
 
 		let should_run = true;
 		node.broken = false;
 		let first = true;
-		while (should_run && node.broken == false && last_call.returned == false) {
+		while (should_run) {
 			let condition;
 			if (first) {
 				first = false;
@@ -1554,6 +1807,12 @@ function run_statement(node, push_index = true) {
 
 			last_block.statements.splice(block_index, 0, cycle);
 			block_index += 1;
+
+			if ((last_call && last_call.returned) ||
+			    (last_loop && last_loop.broken)) {
+
+				break;
+			}
 		}
 
 		loop_stack.pop();
@@ -1605,9 +1864,17 @@ function run_statement(node, push_index = true) {
 	}
 	else if (node.base.kind == Code_Kind.BREAK) {
 
+		if (push_index) {
+			add_node_to_execution_stack(node);
+		}
+
 		last_loop.broken = true;
 	}
 	else if (node.base.kind == Code_Kind.CONTINUE) {
+
+		if (push_index) {
+			add_node_to_execution_stack(node);
+		}
 
 		last_loop.continued = true;
 	}
@@ -1615,20 +1882,30 @@ function run_statement(node, push_index = true) {
 
 		let transformed = transform(node);
 		return_value = run_statement(transformed);
+		return_node = transformed.statements[0].expression.last_return_node;
 		add_memory_change(last_call.transformed.statements[0].pointer, transformed.statements[0].ident);
 		last_call.returned = true;
 		last_call.last_return = return_value;
+		last_call.last_return_node = return_node;
 	}
 	else {
 		return_value = run_rvalue(node);
+		return_node = node.last_return_node;
 	}
 
 	node.last_return = return_value;
+	node.last_return_node = return_node;
 
 	return return_value;
 }
 
 function math_binop(left, operation_type, right) {
+	let is_array = left.base && (left.base.type.base.kind == Type_Kind.STRING ||
+	                             left.base.type.base.kind == Type_Kind.ARRAY) ||
+				   right.base && (right.base.type.base.kind == Type_Kind.STRING ||
+								  right.base.type.base.kind == Type_Kind.ARRAY);
+	// we are piggybacking on Javascript's operations,
+	// especially string compare, need to rewrite when porting to C
 	if (operation_type == "+") {
 		return left + right;
 	}
@@ -1865,6 +2142,11 @@ function clone(node, set_original = true) {
 	else if (node.base.kind == Code_Kind.LITERAL) {
 
 		cloned = make_literal(node.value);
+	}
+	else if (node.base.kind == Code_Kind.STRING) {
+
+		cloned = make_string(node.str);
+		cloned.pointer = node.pointer;
 	}
 	else if (node.base.kind == Code_Kind.RETURN) {
 
@@ -2192,6 +2474,11 @@ function should_hide(node) {
 		return false;
 	}
 
+	if (Object.is(node, Global_Block)) {
+
+		return false;
+	}
+
 	if (node.base.kind == Code_Kind.DECLARATION ||
 		node.base.kind == Code_Kind.ASSIGN ||
 		node.base.kind == Code_Kind.OPASSIGN) {
@@ -2225,7 +2512,13 @@ function should_hide(node) {
 
 	if (node.base.kind == Code_Kind.ELSE) {
 
-		return !node.if_expr || node.if_expr.condition.last_return || should_hide(node.if_expr);
+		let if_expr_was_run = false;
+		if (node.if_expr) {
+			if_expr_was_run = node.if_expr.condition.last_return;
+		}
+		// @Cleanup
+		// last element might be redundant
+		return !node.if_expr || if_expr_was_run || should_hide(node.if_expr);
 	}
 
 	if (node.base.kind == Code_Kind.DOT_OPERATOR) {
@@ -2274,6 +2567,8 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	let last_expression = print_expression_stack[print_expression_stack.length-1];
 	let should_expand_node = should_expand(node) || force_expand;
 	let should_hide_node = should_hide(node);
+	let is_blocklevel_expanded_call = node.base.kind == Code_Kind.CALL && should_expand_node &&
+	                                  last_expression && last_expression.base.kind == Code_Kind.BLOCK;
 	
 	if (last_expression && last_expression.base.kind == Code_Kind.BLOCK &&
 	    should_hide_node && should_expand_node != true) {
@@ -2310,8 +2605,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		order_last = true;
 	}
 	
-	if (push_index && order_last == false && node.execution_index >= 0 &&
-		!(node.base.kind == Code_Kind.CALL && last_expression.base.kind != Code_Kind.BLOCK)) {
+	if (push_index && order_last == false && node.execution_index >= 0 && !is_blocklevel_expanded_call) {
 		if (map_line_to_execution_indices[line_count]) {
 			map_line_to_execution_indices[line_count].push(node.execution_index);
 		}
@@ -2393,11 +2687,11 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 				print_target.appendChild(expr);
 			}
 		}
-		else if (values_shown && node.last_return !== null &&
-			typeof node.last_return !== "undefined") {
+		else if ((node.is_lhs ? lhs_values_shown : values_shown) &&
+		    node.last_return_node !== null &&
+			typeof node.last_return_node !== "undefined") {
 
-			expr.classList.add("code-literal");
-			expr.appendChild(document.createTextNode(node.last_return));
+			print_to_dom(node.last_return_node, expr, block_print_target, false, false);
 
 			print_target.appendChild(expr);
 		}
@@ -2470,10 +2764,12 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		if (values_shown && binop_values_shown && should_expand_node != true) {
 
 			// ###
+			// @Incomplete
 			if (true) {
 
-				expr.classList.add("code-literal");
-				expr.appendChild(document.createTextNode(node.last_return));
+				// expr.classList.add("code-literal");
+				// expr.appendChild(document.createTextNode(node.last_return));
+				print_to_dom(node.last_return_node, expr, block_print_target, false, false);
 			}
 			if (expand_all) {
 				let temp_expr = document.createElement("expr");
@@ -2654,18 +2950,15 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	}
 	else if (node.base.kind == Code_Kind.IDENT) {
 
-		let text = null;
-
 		// @Copypaste
-		if ((node.is_lhs ? lhs_values_shown : values_shown) && node.last_return !== null &&
-			typeof node.last_return !== "undefined") {
+		if ((node.is_lhs ? lhs_values_shown : values_shown) &&
+		    node.last_return_node !== null &&
+			typeof node.last_return_node !== "undefined") {
 
-			text = node.last_return;
-			expr.classList.add("code-literal");
+			print_to_dom(node.last_return_node, expr, block_print_target, false, false);
 		}
 		else {
 
-			text = node.name;
 			if (Object.getOwnPropertyNames(Types).indexOf(node.name) >= 0) {
 				expr.classList.add("code-type");
 			}
@@ -2678,20 +2971,20 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 			else {
 				expr.classList.add("code-ident");
 			}
+			
+			expr.appendChild(document.createTextNode(node.name));
 		}
-
-		expr.appendChild(document.createTextNode(text));
 
 		print_target.appendChild(expr);
 	}
 	else if (node.base.kind == Code_Kind.REFERENCE) {
 
 		// @Copypaste
-		if ((node.is_lhs ? lhs_values_shown : values_shown) && node.last_return !== null &&
-			typeof node.last_return !== "undefined") {
+		if ((node.is_lhs ? lhs_values_shown : values_shown) &&
+		    node.last_return_node !== null &&
+		    typeof node.last_return_node !== "undefined") {
 
-			expr.appendChild(document.createTextNode(node.last_return));
-			expr.classList.add("code-literal");
+			print_to_dom(node.last_return_node, expr, block_print_target, false, false);
 		}
 		else {
 
@@ -2704,11 +2997,11 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	else if (node.base.kind == Code_Kind.DEREFERENCE) {
 		
 		// @Copypaste
-		if ((node.is_lhs ? lhs_values_shown : values_shown) && node.last_return !== null &&
-			typeof node.last_return !== "undefined") {
+		if ((node.is_lhs ? lhs_values_shown : values_shown) &&
+		    node.last_return_node !== null &&
+		    typeof node.last_return_node !== "undefined") {
 
-			expr.appendChild(document.createTextNode(node.last_return));
-			expr.classList.add("code-literal");
+			print_to_dom(node.last_return_node, expr, block_print_target, false, false);
 		}
 		else {
 			expr.appendChild(document.createTextNode("*"));
@@ -2728,11 +3021,11 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
 
 		// @Copypaste
-		if ((node.is_lhs ? lhs_values_shown : values_shown) && node.last_return !== null &&
-			typeof node.last_return !== "undefined") {
-			
-			expr.appendChild(document.createTextNode(node.last_return));
-			expr.classList.add("code-literal");
+		if ((node.is_lhs ? lhs_values_shown : values_shown) &&
+		    node.last_return_node !== null &&
+		    typeof node.last_return_node !== "undefined") {
+
+			print_to_dom(node.last_return_node, expr, block_print_target, false, false);
 		}
 		else {
 			print_to_dom(node.array, expr, block_print_target);
@@ -2747,11 +3040,11 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	else if (node.base.kind == Code_Kind.DOT_OPERATOR) {
 		
 		// @Copypaste
-		if ((node.is_lhs ? lhs_values_shown : values_shown) && node.last_return !== null &&
-			typeof node.last_return !== "undefined") {
-			
-			expr.appendChild(document.createTextNode(node.last_return));
-			expr.classList.add("code-literal");
+		if ((node.is_lhs ? lhs_values_shown : values_shown) &&
+		    node.last_return_node !== null &&
+		    typeof node.last_return_node !== "undefined") {
+
+			print_to_dom(node.last_return_node, expr, block_print_target, false, false);
 		}
 		else {
 			print_to_dom(node.left, expr, block_print_target);
@@ -2765,6 +3058,15 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		expr.classList.add("code-literal");
 		expr.appendChild(document.createTextNode(node.value));
+
+		print_target.appendChild(expr);
+	}
+	else if (node.base.kind == Code_Kind.STRING) {
+
+		expr.classList.add("code-string");
+		expr.appendChild(document.createTextNode("\""));
+		expr.appendChild(document.createTextNode(node.str));
+		expr.appendChild(document.createTextNode("\""));
 
 		print_target.appendChild(expr);
 	}
@@ -2821,8 +3123,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 	map_expr_to_printed.set(node, expr);
 
-	if (push_index && order_last && node.execution_index >= 0 &&
-		!(node.base.kind == Code_Kind.CALL || last_expression.base.kind != Code_Kind.BLOCK)) {
+	if (push_index && order_last && node.execution_index >= 0 && !is_blocklevel_expanded_call) {
 		if (map_line_to_execution_indices[line_count]) {
 			map_line_to_execution_indices[line_count].push(node.execution_index);
 		}

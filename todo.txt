@@ -7,16 +7,17 @@ and when we go back and haven't moved, set the cursor back to the previous one
 `m = a.[b].c` (F) `m = [42]` (F) `m = a.[b].c`
 `m = a.[b].c` (F) `m = [42]` (A) `[m] = 42` (F) `[m] = a.b.c`
 
-implement strings, then test combinations of arrays, structs, pointers, and strings
-casts
-
 malloc and free
 dynamic arrays as structs,
 static arrays as pointers
+array concatenation
+
+casts
 
 unary minus and not operators not implemented
 
 someday port to C through WebAssembly, for faster running and printing
+codegen
 
 Ideas:
 

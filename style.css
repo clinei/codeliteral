@@ -163,6 +163,9 @@ block {
 .code-literal {
 	color: rgb(15, 218, 184);
 }
+.code-string {
+	color: rgb(15, 218, 184);
+}
 .code-ident {
 	color: rgb(220, 220, 220);
 }

@@ -25,6 +25,7 @@ let Code_Kind = {
 	RETURN: "return",
 	BINARY_OPERATION: "binop",
     LITERAL: "literal",
+    STRING: "string",
     PARENS: "parens",
 };
 
@@ -515,11 +516,39 @@ function make_literal(value) {
 
 	let literal = Object.assign({}, Code_Literal);
 	literal.base = make_node();
-	literal.base.kind = Code_Kind.LITERAL;
+    literal.base.kind = Code_Kind.LITERAL;
+    // should get inferred from left hand side
+    literal.base.type = Types.size_t;
 
 	literal.value = value;
 
 	return literal;
+}
+
+let Code_String = {
+
+	base: null,
+
+    pointer: null,
+    length: null,
+    str: null,
+};
+let strings = [];
+function make_string(str) {
+
+	let string = Object.assign({}, Code_String);
+	string.base = make_node();
+    string.base.kind = Code_Kind.STRING;
+    string.base.type = Type_Info_String;
+
+    string.str = str;
+    string.length = str.length;
+    
+    if (code_composed != true) {
+        strings.push(string);
+    }
+
+	return string;
 }
 
 let Code_Parens = {
@@ -539,6 +568,8 @@ function make_parens(expression) {
 	return parens;
 }
 
+let infer_block_stack = new Array();
+
 let Type_Kind = {
     INTEGER: "integer",
     FLOAT: "float",
@@ -546,6 +577,7 @@ let Type_Kind = {
     ARRAY: "array",
     POINTER: "pointer",
     STRUCT: "struct",
+    STRING: "string",
     FUNCTION_POINTER: "function pointer",
 };
 let Type_Info = {
@@ -568,6 +600,11 @@ let Type_Info_Array = {
     size_in_bytes: null,
     elem_type: null,
     length: null,
+};
+let Type_Info_String = {
+    base: {
+        kind: "string",
+    },
 };
 let Type_Info_Pointer = {
     base: null,
@@ -621,6 +658,13 @@ function make_type_info_array(elem_type, length) {
     info.length = length;
     info.size_in_bytes = elem_type.size_in_bytes * length;
 
+    return info;
+}
+function make_type_info_string() {
+    let info = Object.assign({}, Type_Info_Float);
+    info.base = make_type_info();
+    info.base.kind = Type_Kind.STRING;
+    
     return info;
 }
 function make_type_info_pointer(elem_type) {
@@ -679,27 +723,10 @@ function fill_type_info_struct(struct) {
     return info;
 }
 function make_type_info_struct(struct) {
-    let info = Object.assign({}, Type_Info_Struct);
-    info.base = make_type_info();
-    info.base.kind = Type_Kind.STRUCT;
 
-    let members = new Object();
-    let size_in_bytes = 0;
+    make_type_info_struct_dummy(struct);
 
-    for (let i = 0; i < struct.block.statements.length; i += 1) {
-        let stmt = struct.block.statements[i];
-        if (stmt.base.kind == Code_Kind.DECLARATION) {
-            infer(stmt);
-            let type = stmt.ident.base.type;
-            members[stmt.ident.name] = type;
-            size_in_bytes += type.size_in_bytes;
-        }
-    }
-
-    info.size_in_bytes = size_in_bytes;
-    info.members = members;
-
-    return info;
+    return fill_type_info_struct(struct);
 }
 function make_type_info_void() {
     let info = Object.assign({}, Type_Info_Struct);
@@ -739,7 +766,6 @@ function infer_decl_of_ident(ident) {
         }
     }
 }
-let infer_block_stack = new Array();
 function infer(node) {
     let last_block = infer_block_stack[infer_block_stack.length-1];
     if (node.base.kind == Code_Kind.BLOCK) {
@@ -833,6 +859,8 @@ function infer(node) {
     else if (node.base.kind == Code_Kind.STRUCT) {
         infer_type(node);
     }
+    else if (node.base.kind == Code_Kind.STRING) {
+    }
     else if (node.base.kind == Code_Kind.PROCEDURE) {
         infer_block_stack.push(node.block);
         node.block.declarations = new Array();
@@ -874,6 +902,7 @@ function infer(node) {
         for (let arg of node.args) {
             infer(arg);
         }
+        node.base.type = node.ident.declaration.expression.return_type;
     }
     else if (node.base.kind == Code_Kind.RETURN) {
         infer(node.expression);
@@ -893,6 +922,9 @@ function infer(node) {
     else if (node.base.kind == Code_Kind.BINARY_OPERATION) {
         infer(node.left);
         infer(node.right);
+        // @Incomplete
+        // should compromise between left and right
+        node.base.type = node.left.base.type;
     }
     return node;
 }
@@ -941,6 +973,10 @@ function infer_type(node) {
         let type = make_type_info_array(elem_type, node.length);
         type.size_in_bytes = elem_type.size_in_bytes * node.length;
         return type;
+    }
+    else if (node.base.kind == Code_Kind.STRING) {
+        node.base.type = User_Types.string;
+        return node.base.type;
     }
 }
 
@@ -1070,12 +1106,15 @@ function parse(tokens) {
                 token_index += 1;
                 left = make_parens(expression);
             }
+            else debugger;
         }
         let curr_token = tokens[token_index];
         if (!left) {
             if (curr_token.kind == "literal") {
                 left = parse_literal();
-                curr_token = tokens[token_index];
+            }
+            else if (curr_token.kind == "string") {
+                left = parse_string();
             }
             else if (curr_token.str == "&") {
                 left = parse_reference();
@@ -1136,6 +1175,11 @@ function parse(tokens) {
         let curr_token = tokens[token_index];
         token_index += 1;
         return make_literal(parseInt(curr_token.str));
+    }
+    function parse_string() {
+        let curr_token = tokens[token_index];
+        token_index += 1;
+        return make_string(curr_token.str);
     }
     function parse_call(left) {
         if (tokens[token_index].str == "(") {
@@ -1348,7 +1392,7 @@ function parse(tokens) {
         }
         else if (curr_token.str == "]") {
             token_index += 1;
-            return make_type_info_array(elem_type, null);
+            return make_type_info_array(elem_type, 0);
         }
         token_index = prev_index;
         return;
@@ -1376,28 +1420,8 @@ function parse(tokens) {
         if (curr_token.kind == "ident") {
             return curr_type;
         }
-        else if (curr_token.str == "(") {
-            token_index += 1;
-            curr_token = tokens[token_index];
-            let fp_ident;
-            if (curr_token.str == "*") {
-                fp_ident = parse_ident();
-            }
-            else {
-                // not a function pointer
-                // probably a call
-                token_index = prev_index;
-                return;
-            }
-            if (curr_token.str == ")") {
-                token_index += 1;
-            }
-            else {
-                debugger;
-            }
-            let param_types = delimited("(", ")", ",", parse_type);
-            curr_type = make_type_info_function_pointer(curr_type, param_types);
-        }
+        // cdecl function pointer syntax is dumb
+        // not gonna implement
         while (curr_token.str[0] == "*") {
             curr_type = parse_pointer_type(curr_type);
             curr_token = tokens[token_index];
@@ -1502,6 +1526,15 @@ function tokenize(input) {
                 str: read_while(is_ident_char)
             };
         }
+        else if (is_string_start(ch)) {
+            input_index += 1;
+            let str = {
+                kind: "string",
+                str: read_while(is_not_string_end)
+            };
+            input_index += 1;
+            return str;
+        }
         else if (is_punc(ch)) {
             input_index += 1;
             return {
@@ -1550,8 +1583,15 @@ function tokenize(input) {
         return !(ch == "*" && input[input_index + 1] == "/");
     }
 
+    function is_string_start(ch) {
+        return ch == "\"";
+    }
+    function is_not_string_end(ch) {
+        return ch != "\"";
+    }
+
     function is_punc(ch) {
-        return ".,;:(){}[]".indexOf(ch) >= 0;
+        return ".,;:(){}[]\"\'".indexOf(ch) >= 0;
     }
 
     function is_ident_start(ch) {
