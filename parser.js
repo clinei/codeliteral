@@ -1174,7 +1174,14 @@ function parse(tokens) {
     function parse_literal() {
         let curr_token = tokens[token_index];
         token_index += 1;
-        return make_literal(parseInt(curr_token.str));
+        let value;
+        if (curr_token.str.indexOf(".") >= 1) {
+            value = parseFloat(curr_token.str);
+        }
+        else {
+            value = parseInt(curr_token.str);
+        }
+        return make_literal(value);
     }
     function parse_string() {
         let curr_token = tokens[token_index];
@@ -1551,7 +1558,7 @@ function tokenize(input) {
         else if (is_digit(ch)) {
             return {
                 kind: "literal",
-                str: read_while(is_digit)
+                str: read_while(is_digit_or_dot)
             };
         }
     }
@@ -1604,6 +1611,10 @@ function tokenize(input) {
 
     function is_digit(ch) {
         return /[0-9]/.test(ch);
+    }
+
+    function is_digit_or_dot(ch) {
+        return is_digit(ch) || ch == ".";
     }
 
     function is_op_char(ch) {

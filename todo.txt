@@ -2,22 +2,22 @@ Bugs:
 
 we should have a comment on the general design
 
+floats are broken, running and printing is slow,
+port to C through WebAssembly and implement codegen
+
 when we show values or changes, save the previous cursor, 
 and when we go back and haven't moved, set the cursor back to the previous one
 `m = a.[b].c` (F) `m = [42]` (F) `m = a.[b].c`
 `m = a.[b].c` (F) `m = [42]` (A) `[m] = 42` (F) `[m] = a.b.c`
 
-malloc and free
 dynamic arrays as structs,
 static arrays as pointers
 array concatenation
 
 casts
+test ints
 
 unary minus and not operators not implemented
-
-someday port to C through WebAssembly, for faster running and printing
-codegen
 
 Ideas:
 
