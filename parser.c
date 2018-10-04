@@ -166,7 +166,7 @@ struct Code_Node* make_return(struct Code_Node_Array* code_node_array,
 }
 
 struct Code_Node* make_struct(struct Code_Node_Array* code_node_array,
-                              struct Code_Block* block) {
+                              struct Code_Node* block) {
 
 	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
 	node->kind = CODE_KIND_STRUCT;
@@ -1653,7 +1653,7 @@ bool parse_struct_declaration(struct Token_Array* token_array,
     parse_ident(token_array, code_node_array);
     struct Code_Node* ident = code_node_array->last;
     parse_block(token_array, code_node_array);
-    struct Code_Block* block = &(code_node_array->last->block);
+    struct Code_Node* block = code_node_array->last;
     struct Code_Node* expression = make_struct(code_node_array, block);
     make_declaration(code_node_array, NULL, ident, expression);
     return true;
@@ -1761,44 +1761,45 @@ struct Token_Array* tokenize(char* input) {
     // we can use the input length to assume a mostly optimal starting capacity
     size_t input_length = strlen(input);
 
-    size_t capacity = 1000;
     struct Token_Array* token_array = malloc(sizeof(struct Token_Array));
-    token_array->first = malloc(sizeof(struct Token) * capacity);
+    token_array->length = 0;
+    token_array->capacity = 10000;
+    token_array->first = malloc(sizeof(struct Token) * token_array->capacity);
+    token_array->curr_token = token_array->first;
 
-    size_t length = 0;
-    struct Token* token = token_array->first;
     char* prev = input;
     for (size_t i = 0; *input; i += 1) {
-        read_token(token, &input);
+        read_token(token_array->curr_token, &input);
         if (input == prev) {
             printf("lexing error!\n");
             break;
         }
 
-        if (token->kind == TOKEN_KIND_COMMENT_SINGLE ||
-            token->kind == TOKEN_KIND_COMMENT_MULTI) {
+        if (token_array->curr_token->kind == TOKEN_KIND_COMMENT_SINGLE ||
+            token_array->curr_token->kind == TOKEN_KIND_COMMENT_MULTI) {
 
         }
         else {
 
-            token++;
-            length += 1;
+            token_array->curr_token++;
+            token_array->length += 1;
             prev = input;
         }
 
+        // @Bug
         // @Audit
-        if (length == capacity) {
-            capacity *= 2;
-            realloc(token_array->first, capacity);
-            token = &token_array->first[length];
+        if (token_array->length == token_array->capacity) {
+            token_array->capacity *= 2;
+            realloc(token_array->first, token_array->capacity);
+            token_array->curr_token = &token_array->first[token_array->length];
         }
     }
 
     // @Weird
     // we have to do this twice to have a valid pointer
-    token--;
-    token--;
-    token_array-> last = token;
+    token_array->curr_token--;
+    token_array->curr_token--;
+    token_array->last = token_array->curr_token;
 
     return token_array;
 }
@@ -1840,9 +1841,9 @@ void read_token(struct Token* token, char** input) {
                 (*input)++;
             }
         }
-        ch = **input;
         // skip whitespace
         read_while(&is_whitespace, input);
+        ch = **input;
         if (**input == '\0') {
             return;
         }
@@ -1897,6 +1898,12 @@ char* read_while(bool (*func)(char), char** input) {
         str[length] = **input;
         (*input)++;
         length += 1;
+        // @Realloc
+        // @Audit
+        if (length == capacity) {
+            capacity *= 2;
+            str = realloc(str, sizeof(char) * capacity);
+        }
     }
     str[length] = '\0';
     str = realloc(str, sizeof(char) * length);
@@ -1912,6 +1919,12 @@ char* read_while_lookahead(bool (*func)(char, char), char** input) {
         str[length] = **input;
         (*input)++;
         length += 1;
+        // @Realloc
+        // @Audit
+        if (length == capacity) {
+            capacity *= 2;
+            str = realloc(str, sizeof(char) * capacity);
+        }
     }
     str[length] = '\0';
     str = realloc(str, sizeof(char) * length);

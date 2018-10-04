@@ -29,6 +29,7 @@ const code = `
 struct Dude {
 	int bro;
 };
+/*
 bool test_nested_loop() {
 	bool passed = true;
 	int[6] results;
@@ -100,11 +101,11 @@ bool test_struct() {
 	struct Car {
 		uint type;
 		uint age;
-	}
+	};
 	struct Person {
 		uint age;
 		Car car;
-	}
+	};
 	Person steve;
 	steve.age = 20;
 	passed &= steve.age == 20;
@@ -120,11 +121,11 @@ bool test_struct_array() {
 	bool passed = true;
 	struct Person {
 		uint age;
-	}
+	};
 	Person[2] people;
 	for (int i = 0; i < people.length; i += 1) {
 		people[i].age = (i + 1) * 10;
-	}
+	};
 	passed &= people[0].age == 10;
 	passed &= people[1].age == 20;
 	return passed;
@@ -193,6 +194,9 @@ int some_other_function(char number) {
 	}
 	return number;
 }
+/*
+*/
+/*
 int some_function(uchar num_iters) {
 	int sum = 0;
 	for (int i = 0; i < num_iters; i += 1) {

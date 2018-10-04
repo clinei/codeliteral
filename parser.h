@@ -26,7 +26,6 @@ struct Token {
     char* str;
 };
 struct Token_Array {
-    // use these!
     size_t length;
     size_t capacity;
     struct Token* first;
@@ -107,7 +106,7 @@ struct Code_Return {
     struct Code_Node* expression;
 };
 struct Code_Struct {
-    struct Code_Block* block;
+    struct Code_Node* block;
 };
 struct Code_If {
     struct Code_Node* condition;
@@ -261,7 +260,7 @@ struct Code_Node* make_block(struct Code_Node_Array* code_node_array,
 struct Code_Node* make_return(struct Code_Node_Array* code_node_array,
                               struct Code_Node* expression);
 struct Code_Node* make_struct(struct Code_Node_Array* code_node_array,
-                              struct Code_Block* block);
+                              struct Code_Node* block);
 struct Code_Node* make_if(struct Code_Node_Array* code_node_array,
                           struct Code_Node* condition,
                           struct Code_Node* expression);
