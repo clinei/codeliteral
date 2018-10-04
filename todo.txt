@@ -2,8 +2,18 @@ Bugs:
 
 we should have a comment on the general design
 
-floats are broken, running and printing is slow,
-port to C through WebAssembly and implement codegen
+existing code doesn't compile
+
+we call the left hand side "ident",
+that is wrong, it's an lvalue
+we should rename it
+
+unary minus and not operators not implemented
+
+parens don't work with binary ops yet
+tokenizer should have a get_new_token function that reallocates if needed
+all memory should be contiguous
+scrolling and selecting
 
 when we show values or changes, save the previous cursor, 
 and when we go back and haven't moved, set the cursor back to the previous one
@@ -17,9 +27,26 @@ array concatenation
 casts
 test ints
 
-unary minus and not operators not implemented
+Graphics Ideas:
+
+we could construct the coords array and render only once
+we could store the color in a vertex attribute, 
+and create gradients, but rendering tris might ruin it
+
+we could clip
 
 Ideas:
+
+pressing P shows parens around binary operation,
+so operation order can be understood at a glance
+
+we could have comments show up when we press a button,
+it might provide helpful information when debugging
+what do we need to make this happen?
+
+we could have the original whitespace show up in the code
+it might increase comprehension
+what do we need to make this happen?
 
 maybe showing changes should show the result of the change, not the value before it
 
