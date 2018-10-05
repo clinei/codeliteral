@@ -341,9 +341,13 @@ struct Type_Info_Pointer {
 struct Type_Info_Function_Pointer {
     struct Type_Info* return_type;
     struct Type_Info** param_types;
+    size_t param_types_capacity;
+    size_t param_types_length;
 };
 struct Type_Info_Struct {
     struct Type_Info** members;
+    size_t members_capacity;
+    size_t members_length;
 };
 struct Type_Info_Ident {
     char* name;

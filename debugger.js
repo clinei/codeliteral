@@ -39,7 +39,9 @@ Module.expectedDataFileDownloads++;
       Module['locateFile'] = Module['locateFilePackage'];
       err('warning: you defined Module.locateFilePackage, that has been renamed to Module.locateFile (using your locateFilePackage for now)');
     }
-    var REMOTE_PACKAGE_NAME = Module['locateFile'] ? Module['locateFile'](REMOTE_PACKAGE_BASE, '') : REMOTE_PACKAGE_BASE;
+    var REMOTE_PACKAGE_NAME = typeof Module['locateFile'] === 'function' ?
+                              Module['locateFile'](REMOTE_PACKAGE_BASE) :
+                              ((Module['filePackagePrefixURL'] || '') + REMOTE_PACKAGE_BASE);
   
     var REMOTE_PACKAGE_SIZE = metadata.remote_package_size;
     var PACKAGE_UUID = metadata.package_uuid;
@@ -117,9 +119,10 @@ Module['FS_createPath']('/', 'assets', true, true);
 Module['FS_createPath']('/assets', 'fonts', true, true);
 Module['FS_createPath']('/assets', 'shaders', true, true);
 
-    function DataRequest(start, end, audio) {
+    function DataRequest(start, end, crunched, audio) {
       this.start = start;
       this.end = end;
+      this.crunched = crunched;
       this.audio = audio;
     }
     DataRequest.prototype = {
@@ -132,7 +135,9 @@ Module['FS_createPath']('/assets', 'shaders', true, true);
       send: function() {},
       onload: function() {
         var byteArray = this.byteArray.subarray(this.start, this.end);
-        this.finish(byteArray);
+
+          this.finish(byteArray);
+
       },
       finish: function(byteArray) {
         var that = this;
@@ -146,7 +151,7 @@ Module['FS_createPath']('/assets', 'shaders', true, true);
 
         var files = metadata.files;
         for (var i = 0; i < files.length; ++i) {
-          new DataRequest(files[i].start, files[i].end, files[i].audio).open('GET', files[i].filename);
+          new DataRequest(files[i].start, files[i].end, files[i].crunched, files[i].audio).open('GET', files[i].filename);
         }
 
   
@@ -188,7 +193,7 @@ Module['FS_createPath']('/assets', 'shaders', true, true);
   }
 
  }
- loadPackage({"files": [{"start": 0, "audio": 0, "end": 285388, "filename": "/assets/fonts/SourceCodeVariable-Roman.ttf"}, {"start": 285388, "audio": 0, "end": 285793, "filename": "/assets/shaders/texture_atlas.frag.glsl"}, {"start": 285793, "audio": 0, "end": 285953, "filename": "/assets/shaders/texture_atlas.vert.glsl"}], "remote_package_size": 285953, "package_uuid": "35976bd7-a2b0-492f-a8e0-57651f913ab8"});
+ loadPackage({"files": [{"audio": 0, "start": 0, "crunched": 0, "end": 285388, "filename": "/assets/fonts/SourceCodeVariable-Roman.ttf"}, {"audio": 0, "start": 285388, "crunched": 0, "end": 285641, "filename": "/assets/shaders/texture_atlas.frag.glsl"}, {"audio": 0, "start": 285641, "crunched": 0, "end": 285877, "filename": "/assets/shaders/texture_atlas.vert.glsl"}], "remote_package_size": 285877, "package_uuid": "0161251d-930a-4efd-bf40-9b061c49de04"});
 
 })();
 
@@ -215,8 +220,8 @@ Module['quit'] = function(status, toThrow) {
 Module['preRun'] = [];
 Module['postRun'] = [];
 
-// Determine the runtime environment we are in. You can customize this by
-// setting the ENVIRONMENT setting at compile time (see settings.js).
+// The environment setup code below is customized to use Module.
+// *** Environment setup code ***
 
 var ENVIRONMENT_IS_WEB = false;
 var ENVIRONMENT_IS_WORKER = false;
@@ -236,23 +241,8 @@ if (Module['ENVIRONMENT']) {
 // 2) We could be the application main() thread proxied to worker. (with Emscripten -s PROXY_TO_WORKER=1) (ENVIRONMENT_IS_WORKER == true, ENVIRONMENT_IS_PTHREAD == false)
 // 3) We could be an application pthread running in a worker. (ENVIRONMENT_IS_WORKER == true and ENVIRONMENT_IS_PTHREAD == true)
 
-assert(typeof Module['memoryInitializerPrefixURL'] === 'undefined', 'Module.memoryInitializerPrefixURL option was removed, use Module.locateFile instead');
-assert(typeof Module['pthreadMainPrefixURL'] === 'undefined', 'Module.pthreadMainPrefixURL option was removed, use Module.locateFile instead');
-assert(typeof Module['cdInitializerPrefixURL'] === 'undefined', 'Module.cdInitializerPrefixURL option was removed, use Module.locateFile instead');
-assert(typeof Module['filePackagePrefixURL'] === 'undefined', 'Module.filePackagePrefixURL option was removed, use Module.locateFile instead');
-
-// `/` should be present at the end if `scriptDirectory` is not empty
-var scriptDirectory = '';
-function locateFile(path) {
-  if (Module['locateFile']) {
-    return Module['locateFile'](path, scriptDirectory);
-  } else {
-    return scriptDirectory + path;
-  }
-}
-
 if (ENVIRONMENT_IS_NODE) {
-  scriptDirectory = __dirname + '/';
+
 
   // Expose functionality in the same simple way that the shells work
   // Note that we pollute the global namespace here, otherwise we break in node
@@ -338,22 +328,6 @@ if (ENVIRONMENT_IS_SHELL) {
   }
 } else
 if (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) {
-  if (ENVIRONMENT_IS_WEB) {
-    if (document.currentScript) {
-      scriptDirectory = document.currentScript.src;
-    }
-  } else { // worker
-    scriptDirectory = self.location.href;
-  }
-  // blob urls look like blob:http://site.com/etc/etc and we cannot infer anything from them.
-  // otherwise, slice off the final part of the url to find the script directory.
-  // if scriptDirectory does not contain a slash, lastIndexOf will return -1,
-  // and scriptDirectory will correctly be replaced with an empty string.
-  if (scriptDirectory.indexOf('blob:') !== 0) {
-    scriptDirectory = scriptDirectory.substr(0, scriptDirectory.lastIndexOf('/')+1);
-  } else {
-    scriptDirectory = '';
-  }
 
 
   Module['read'] = function shell_read(url) {
@@ -402,6 +376,8 @@ if (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) {
 // bind(console) is necessary to fix IE/Edge closed dev tools panel behavior.
 var out = Module['print'] || (typeof console !== 'undefined' ? console.log.bind(console) : (typeof print !== 'undefined' ? print : null));
 var err = Module['printErr'] || (typeof printErr !== 'undefined' ? printErr : ((typeof console !== 'undefined' && console.warn.bind(console)) || out));
+
+// *** Environment setup code ***
 
 // Merge back in the overrides
 for (key in moduleOverrides) {
@@ -597,18 +573,75 @@ var GLOBAL_BASE = 1024;
 //    is up at http://kripken.github.io/emscripten-site/docs/api_reference/preamble.js.html
 
 
+function getSafeHeapType(bytes, isFloat) {
+  switch (bytes) {
+    case 1: return 'i8';
+    case 2: return 'i16';
+    case 4: return isFloat ? 'float' : 'i32';
+    case 8: return 'double';
+    default: assert(0);
+  }
+}
+
+
+function SAFE_HEAP_STORE(dest, value, bytes, isFloat) {
+  if (dest <= 0) abort('segmentation fault storing ' + bytes + ' bytes to address ' + dest);
+  if (dest % bytes !== 0) abort('alignment error storing to address ' + dest + ', which was expected to be aligned to a multiple of ' + bytes);
+  if (staticSealed) {
+    if (dest + bytes > HEAP32[DYNAMICTOP_PTR>>2]) abort('segmentation fault, exceeded the top of the available dynamic heap when storing ' + bytes + ' bytes to address ' + dest + '. STATICTOP=' + STATICTOP + ', DYNAMICTOP=' + HEAP32[DYNAMICTOP_PTR>>2]);
+    assert(DYNAMICTOP_PTR);
+    assert(HEAP32[DYNAMICTOP_PTR>>2] <= TOTAL_MEMORY);
+  } else {
+    if (dest + bytes > STATICTOP) abort('segmentation fault, exceeded the top of the available static heap when storing ' + bytes + ' bytes to address ' + dest + '. STATICTOP=' + STATICTOP);
+  }
+  setValue(dest, value, getSafeHeapType(bytes, isFloat), 1);
+}
+function SAFE_HEAP_STORE_D(dest, value, bytes) {
+  SAFE_HEAP_STORE(dest, value, bytes, true);
+}
+
+function SAFE_HEAP_LOAD(dest, bytes, unsigned, isFloat) {
+  if (dest <= 0) abort('segmentation fault loading ' + bytes + ' bytes from address ' + dest);
+  if (dest % bytes !== 0) abort('alignment error loading from address ' + dest + ', which was expected to be aligned to a multiple of ' + bytes);
+  if (staticSealed) {
+    if (dest + bytes > HEAP32[DYNAMICTOP_PTR>>2]) abort('segmentation fault, exceeded the top of the available dynamic heap when loading ' + bytes + ' bytes from address ' + dest + '. STATICTOP=' + STATICTOP + ', DYNAMICTOP=' + HEAP32[DYNAMICTOP_PTR>>2]);
+    assert(DYNAMICTOP_PTR);
+    assert(HEAP32[DYNAMICTOP_PTR>>2] <= TOTAL_MEMORY);
+  } else {
+    if (dest + bytes > STATICTOP) abort('segmentation fault, exceeded the top of the available static heap when loading ' + bytes + ' bytes from address ' + dest + '. STATICTOP=' + STATICTOP);
+  }
+  var type = getSafeHeapType(bytes, isFloat);
+  var ret = getValue(dest, type, 1);
+  if (unsigned) ret = unSign(ret, parseInt(type.substr(1)), 1);
+  return ret;
+}
+function SAFE_HEAP_LOAD_D(dest, bytes, unsigned) {
+  return SAFE_HEAP_LOAD(dest, bytes, unsigned, true);
+}
+
+function SAFE_FT_MASK(value, mask) {
+  var ret = value & mask;
+  if (ret !== value) {
+    abort('Function table mask error: function pointer is ' + value + ' which is masked by ' + mask + ', the likely cause of this is that the function pointer is being called by the wrong type.');
+  }
+  return ret;
+}
+
+function segfault() {
+  abort('segmentation fault');
+}
+function alignfault() {
+  abort('alignment fault');
+}
+function ftfault() {
+  abort('Function table mask error');
+}
 
 //========================================
 // Runtime essentials
 //========================================
 
-// whether we are quitting the application. no code should run after this.
-// set in exit() and abort()
-var ABORT = false;
-
-// set by exit() and abort().  Passed to 'onExit' handler.
-// NOTE: This is also used as the process return code code in shell environments
-// but only when noExitRuntime is false.
+var ABORT = 0; // whether we are quitting the application. no code should run after this. set in exit() and abort()
 var EXITSTATUS = 0;
 
 /** @type {function(*, string=)} */
@@ -700,6 +733,7 @@ function cwrap(ident, returnType, argTypes, opts) {
 function setValue(ptr, value, type, noSafe) {
   type = type || 'i8';
   if (type.charAt(type.length-1) === '*') type = 'i32'; // pointers are 32-bit
+  if (noSafe) {
     switch(type) {
       case 'i1': HEAP8[((ptr)>>0)]=value; break;
       case 'i8': HEAP8[((ptr)>>0)]=value; break;
@@ -710,12 +744,25 @@ function setValue(ptr, value, type, noSafe) {
       case 'double': HEAPF64[((ptr)>>3)]=value; break;
       default: abort('invalid type for setValue: ' + type);
     }
+  } else {
+    switch(type) {
+      case 'i1': SAFE_HEAP_STORE(((ptr)|0), ((value)|0), 1); break;
+      case 'i8': SAFE_HEAP_STORE(((ptr)|0), ((value)|0), 1); break;
+      case 'i16': SAFE_HEAP_STORE(((ptr)|0), ((value)|0), 2); break;
+      case 'i32': SAFE_HEAP_STORE(((ptr)|0), ((value)|0), 4); break;
+      case 'i64': (tempI64 = [value>>>0,(tempDouble=value,(+(Math_abs(tempDouble))) >= 1.0 ? (tempDouble > 0.0 ? ((Math_min((+(Math_floor((tempDouble)/4294967296.0))), 4294967295.0))|0)>>>0 : (~~((+(Math_ceil((tempDouble - +(((~~(tempDouble)))>>>0))/4294967296.0)))))>>>0) : 0)],SAFE_HEAP_STORE(((ptr)|0), ((tempI64[0])|0), 4),SAFE_HEAP_STORE((((ptr)+(4))|0), ((tempI64[1])|0), 4)); break;
+      case 'float': SAFE_HEAP_STORE_D(((ptr)|0), Math_fround(value), 4); break;
+      case 'double': SAFE_HEAP_STORE_D(((ptr)|0), (+(value)), 8); break;
+      default: abort('invalid type for setValue: ' + type);
+    }
+  }
 }
 
 /** @type {function(number, string, boolean=)} */
 function getValue(ptr, type, noSafe) {
   type = type || 'i8';
   if (type.charAt(type.length-1) === '*') type = 'i32'; // pointers are 32-bit
+  if (noSafe) {
     switch(type) {
       case 'i1': return HEAP8[((ptr)>>0)];
       case 'i8': return HEAP8[((ptr)>>0)];
@@ -726,6 +773,18 @@ function getValue(ptr, type, noSafe) {
       case 'double': return HEAPF64[((ptr)>>3)];
       default: abort('invalid type for getValue: ' + type);
     }
+  } else {
+    switch(type) {
+      case 'i1': return ((SAFE_HEAP_LOAD(((ptr)|0), 1, 0))|0);
+      case 'i8': return ((SAFE_HEAP_LOAD(((ptr)|0), 1, 0))|0);
+      case 'i16': return ((SAFE_HEAP_LOAD(((ptr)|0), 2, 0))|0);
+      case 'i32': return ((SAFE_HEAP_LOAD(((ptr)|0), 4, 0))|0);
+      case 'i64': return ((SAFE_HEAP_LOAD(((ptr)|0), 8, 0))|0);
+      case 'float': return Math_fround(SAFE_HEAP_LOAD_D(((ptr)|0), 4, 0));
+      case 'double': return (+(SAFE_HEAP_LOAD_D(((ptr)|0), 8, 0)));
+      default: abort('invalid type for getValue: ' + type);
+    }
+  }
   return null;
 }
 
@@ -834,7 +893,7 @@ function Pointer_stringify(ptr, length) {
   var i = 0;
   while (1) {
     assert(ptr + i < TOTAL_MEMORY);
-    t = HEAPU8[(((ptr)+(i))>>0)];
+    t = ((SAFE_HEAP_LOAD((((ptr)+(i))|0), 1, 1))|0);
     hasUtf |= t;
     if (t == 0 && !length) break;
     i++;
@@ -864,7 +923,7 @@ function Pointer_stringify(ptr, length) {
 function AsciiToString(ptr) {
   var str = '';
   while (1) {
-    var ch = HEAP8[((ptr++)>>0)];
+    var ch = ((SAFE_HEAP_LOAD(((ptr++)|0), 1, 0))|0);
     if (!ch) return str;
     str += String.fromCharCode(ch);
   }
@@ -894,10 +953,7 @@ function UTF8ArrayToString(u8Array, idx) {
 
     var str = '';
     while (1) {
-      // For UTF8 byte structure, see:
-      // http://en.wikipedia.org/wiki/UTF-8#Description
-      // https://www.ietf.org/rfc/rfc2279.txt
-      // https://tools.ietf.org/html/rfc3629
+      // For UTF8 byte structure, see http://en.wikipedia.org/wiki/UTF-8#Description and https://www.ietf.org/rfc/rfc2279.txt and https://tools.ietf.org/html/rfc3629
       u0 = u8Array[idx++];
       if (!u0) return str;
       if (!(u0 & 0x80)) { str += String.fromCharCode(u0); continue; }
@@ -944,9 +1000,8 @@ function UTF8ToString(ptr) {
 //   str: the Javascript string to copy.
 //   outU8Array: the array to copy to. Each index in this array is assumed to be one 8-byte element.
 //   outIdx: The starting offset in the array to begin the copying.
-//   maxBytesToWrite: The maximum number of bytes this function can write to the array.
-//                    This count should include the null terminator,
-//                    i.e. if maxBytesToWrite=1, only the null terminator will be written and nothing else.
+//   maxBytesToWrite: The maximum number of bytes this function can write to the array. This count should include the null
+//                    terminator, i.e. if maxBytesToWrite=1, only the null terminator will be written and nothing else.
 //                    maxBytesToWrite=0 does not write any bytes to the output, not even the null terminator.
 // Returns the number of bytes written, EXCLUDING the null terminator.
 
@@ -961,10 +1016,7 @@ function stringToUTF8Array(str, outU8Array, outIdx, maxBytesToWrite) {
     // See http://unicode.org/faq/utf_bom.html#utf16-3
     // For UTF8 byte structure, see http://en.wikipedia.org/wiki/UTF-8#Description and https://www.ietf.org/rfc/rfc2279.txt and https://tools.ietf.org/html/rfc3629
     var u = str.charCodeAt(i); // possibly a lead surrogate
-    if (u >= 0xD800 && u <= 0xDFFF) {
-      var u1 = str.charCodeAt(++i);
-      u = 0x10000 + ((u & 0x3FF) << 10) | (u1 & 0x3FF);
-    }
+    if (u >= 0xD800 && u <= 0xDFFF) u = 0x10000 + ((u & 0x3FF) << 10) | (str.charCodeAt(++i) & 0x3FF);
     if (u <= 0x7F) {
       if (outIdx >= endIdx) break;
       outU8Array[outIdx++] = u;
@@ -1061,7 +1113,7 @@ function UTF16ToString(ptr) {
 
     var str = '';
     while (1) {
-      var codeUnit = HEAP16[(((ptr)+(i*2))>>1)];
+      var codeUnit = ((SAFE_HEAP_LOAD((((ptr)+(i*2))|0), 2, 0))|0);
       if (codeUnit == 0) return str;
       ++i;
       // fromCharCode constructs a character from a UTF-16 code unit, so we can pass the UTF16 string right through.
@@ -1095,11 +1147,11 @@ function stringToUTF16(str, outPtr, maxBytesToWrite) {
   for (var i = 0; i < numCharsToWrite; ++i) {
     // charCodeAt returns a UTF-16 encoded code unit, so it can be directly written to the HEAP.
     var codeUnit = str.charCodeAt(i); // possibly a lead surrogate
-    HEAP16[((outPtr)>>1)]=codeUnit;
+    SAFE_HEAP_STORE(((outPtr)|0), ((codeUnit)|0), 2);
     outPtr += 2;
   }
   // Null-terminate the pointer to the HEAP.
-  HEAP16[((outPtr)>>1)]=0;
+  SAFE_HEAP_STORE(((outPtr)|0), ((0)|0), 2);
   return outPtr - startPtr;
 }
 
@@ -1115,7 +1167,7 @@ function UTF32ToString(ptr) {
 
   var str = '';
   while (1) {
-    var utf32 = HEAP32[(((ptr)+(i*4))>>2)];
+    var utf32 = ((SAFE_HEAP_LOAD((((ptr)+(i*4))|0), 4, 0))|0);
     if (utf32 == 0)
       return str;
     ++i;
@@ -1159,12 +1211,12 @@ function stringToUTF32(str, outPtr, maxBytesToWrite) {
       var trailSurrogate = str.charCodeAt(++i);
       codeUnit = 0x10000 + ((codeUnit & 0x3FF) << 10) | (trailSurrogate & 0x3FF);
     }
-    HEAP32[((outPtr)>>2)]=codeUnit;
+    SAFE_HEAP_STORE(((outPtr)|0), ((codeUnit)|0), 4);
     outPtr += 4;
     if (outPtr + 4 > endPtr) break;
   }
   // Null-terminate the pointer to the HEAP.
-  HEAP32[((outPtr)>>2)]=0;
+  SAFE_HEAP_STORE(((outPtr)|0), ((0)|0), 4);
   return outPtr - startPtr;
 }
 
@@ -1322,10 +1374,14 @@ function abortOnCannotGrowMemory() {
 if (!Module['reallocBuffer']) Module['reallocBuffer'] = function(size) {
   var ret;
   try {
-    var oldHEAP8 = HEAP8;
-    ret = new ArrayBuffer(size);
-    var temp = new Int8Array(ret);
-    temp.set(oldHEAP8);
+    if (ArrayBuffer.transfer) {
+      ret = ArrayBuffer.transfer(buffer, size);
+    } else {
+      var oldHEAP8 = HEAP8;
+      ret = new ArrayBuffer(size);
+      var temp = new Int8Array(ret);
+      temp.set(oldHEAP8);
+    }
   } catch(e) {
     return false;
   }
@@ -1361,7 +1417,6 @@ function enlargeMemory() {
       }
     }
   }
-
 
   var start = Date.now();
 
@@ -1556,10 +1611,10 @@ function writeArrayToMemory(array, buffer) {
 function writeAsciiToMemory(str, buffer, dontAddNull) {
   for (var i = 0; i < str.length; ++i) {
     assert(str.charCodeAt(i) === str.charCodeAt(i)&0xff);
-    HEAP8[((buffer++)>>0)]=str.charCodeAt(i);
+    SAFE_HEAP_STORE(((buffer++)|0), ((str.charCodeAt(i))|0), 1);
   }
   // Null-terminate the pointer to the HEAP.
-  if (!dontAddNull) HEAP8[((buffer)>>0)]=0;
+  if (!dontAddNull) SAFE_HEAP_STORE(((buffer)|0), ((0)|0), 1);
 }
 
 function unSign(value, bits, ignore) {
@@ -1610,7 +1665,7 @@ var Math_trunc = Math.trunc;
 // A counter of dependencies for calling run(). If we need to
 // do asynchronous work before running, increment this and
 // decrement it. Incrementing must happen in a place like
-// Module.preRun (used by emcc to add file preloading).
+// PRE_RUN_ADDITIONS (used by emcc to add file preloading).
 // Note that you can add dependencies in preRun, even though
 // it happens right before run - run will be postponed until
 // the dependencies are met.
@@ -1731,14 +1786,16 @@ function integrateWasmJS() {
   var wasmBinaryFile = 'debugger.wasm';
   var asmjsCodeFile = 'debugger.temp.asm.js';
 
-  if (!isDataURI(wasmTextFile)) {
-    wasmTextFile = locateFile(wasmTextFile);
-  }
-  if (!isDataURI(wasmBinaryFile)) {
-    wasmBinaryFile = locateFile(wasmBinaryFile);
-  }
-  if (!isDataURI(asmjsCodeFile)) {
-    asmjsCodeFile = locateFile(asmjsCodeFile);
+  if (typeof Module['locateFile'] === 'function') {
+    if (!isDataURI(wasmTextFile)) {
+      wasmTextFile = Module['locateFile'](wasmTextFile);
+    }
+    if (!isDataURI(wasmBinaryFile)) {
+      wasmBinaryFile = Module['locateFile'](wasmBinaryFile);
+    }
+    if (!isDataURI(asmjsCodeFile)) {
+      asmjsCodeFile = Module['locateFile'](asmjsCodeFile);
+    }
   }
 
   // utilities
@@ -1785,7 +1842,7 @@ function integrateWasmJS() {
       if (Module['readBinary']) {
         return Module['readBinary'](wasmBinaryFile);
       } else {
-        throw "both async and sync fetching of the wasm failed";
+        throw "on the web, we need the wasm binary to be preloaded and set on Module['wasmBinary']. emcc.py will do that for you when generating HTML (but not JS)";
       }
     }
     catch (err) {
@@ -1974,7 +2031,7 @@ function integrateWasmJS() {
     var exports;
     exports = doNativeWasm(global, env, providedBuffer);
 
-    assert(exports, 'no binaryen method succeeded. consider enabling more options, like interpreting, if you want that: http://kripken.github.io/emscripten-site/docs/compiling/WebAssembly.html#binaryen-methods');
+    assert(exports, 'no binaryen method succeeded. consider enabling more options, like interpreting, if you want that: https://github.com/kripken/emscripten/wiki/WebAssembly#binaryen-methods');
 
 
     return exports;
@@ -1995,7 +2052,7 @@ var ASM_CONSTS = [];
 
 STATIC_BASE = GLOBAL_BASE;
 
-STATICTOP = STATIC_BASE + 7312;
+STATICTOP = STATIC_BASE + 7568;
 /* global initializers */  __ATINIT__.push();
 
 
@@ -2004,7 +2061,7 @@ STATICTOP = STATIC_BASE + 7312;
 
 
 
-var STATIC_BUMP = 7312;
+var STATIC_BUMP = 7568;
 Module["STATIC_BASE"] = STATIC_BASE;
 Module["STATIC_BUMP"] = STATIC_BUMP;
 
@@ -2062,7 +2119,7 @@ function copyTempDouble(ptr) {
   var ERRNO_MESSAGES={0:"Success",1:"Not super-user",2:"No such file or directory",3:"No such process",4:"Interrupted system call",5:"I/O error",6:"No such device or address",7:"Arg list too long",8:"Exec format error",9:"Bad file number",10:"No children",11:"No more processes",12:"Not enough core",13:"Permission denied",14:"Bad address",15:"Block device required",16:"Mount device busy",17:"File exists",18:"Cross-device link",19:"No such device",20:"Not a directory",21:"Is a directory",22:"Invalid argument",23:"Too many open files in system",24:"Too many open files",25:"Not a typewriter",26:"Text file busy",27:"File too large",28:"No space left on device",29:"Illegal seek",30:"Read only file system",31:"Too many links",32:"Broken pipe",33:"Math arg out of domain of func",34:"Math result not representable",35:"File locking deadlock error",36:"File or path name too long",37:"No record locks available",38:"Function not implemented",39:"Directory not empty",40:"Too many symbolic links",42:"No message of desired type",43:"Identifier removed",44:"Channel number out of range",45:"Level 2 not synchronized",46:"Level 3 halted",47:"Level 3 reset",48:"Link number out of range",49:"Protocol driver not attached",50:"No CSI structure available",51:"Level 2 halted",52:"Invalid exchange",53:"Invalid request descriptor",54:"Exchange full",55:"No anode",56:"Invalid request code",57:"Invalid slot",59:"Bad font file fmt",60:"Device not a stream",61:"No data (for no delay io)",62:"Timer expired",63:"Out of streams resources",64:"Machine is not on the network",65:"Package not installed",66:"The object is remote",67:"The link has been severed",68:"Advertise error",69:"Srmount error",70:"Communication error on send",71:"Protocol error",72:"Multihop attempted",73:"Cross mount point (not really error)",74:"Trying to read unreadable message",75:"Value too large for defined data type",76:"Given log. name not unique",77:"f.d. invalid for this operation",78:"Remote address changed",79:"Can   access a needed shared lib",80:"Accessing a corrupted shared lib",81:".lib section in a.out corrupted",82:"Attempting to link in too many libs",83:"Attempting to exec a shared library",84:"Illegal byte sequence",86:"Streams pipe error",87:"Too many users",88:"Socket operation on non-socket",89:"Destination address required",90:"Message too long",91:"Protocol wrong type for socket",92:"Protocol not available",93:"Unknown protocol",94:"Socket type not supported",95:"Not supported",96:"Protocol family not supported",97:"Address family not supported by protocol family",98:"Address already in use",99:"Address not available",100:"Network interface is not configured",101:"Network is unreachable",102:"Connection reset by network",103:"Connection aborted",104:"Connection reset by peer",105:"No buffer space available",106:"Socket is already connected",107:"Socket is not connected",108:"Can't send after socket shutdown",109:"Too many references",110:"Connection timed out",111:"Connection refused",112:"Host is down",113:"Host is unreachable",114:"Socket already connected",115:"Connection already in progress",116:"Stale file handle",122:"Quota exceeded",123:"No medium (in tape drive)",125:"Operation canceled",130:"Previous owner died",131:"State not recoverable"};
   
   function ___setErrNo(value) {
-      if (Module['___errno_location']) HEAP32[((Module['___errno_location']())>>2)]=value;
+      if (Module['___errno_location']) SAFE_HEAP_STORE(((Module['___errno_location']())|0), ((value)|0), 4);
       else err('failed to set errno from JS');
       return value;
     }
@@ -5028,25 +5085,25 @@ function copyTempDouble(ptr) {
           }
           throw e;
         }
-        HEAP32[((buf)>>2)]=stat.dev;
-        HEAP32[(((buf)+(4))>>2)]=0;
-        HEAP32[(((buf)+(8))>>2)]=stat.ino;
-        HEAP32[(((buf)+(12))>>2)]=stat.mode;
-        HEAP32[(((buf)+(16))>>2)]=stat.nlink;
-        HEAP32[(((buf)+(20))>>2)]=stat.uid;
-        HEAP32[(((buf)+(24))>>2)]=stat.gid;
-        HEAP32[(((buf)+(28))>>2)]=stat.rdev;
-        HEAP32[(((buf)+(32))>>2)]=0;
-        HEAP32[(((buf)+(36))>>2)]=stat.size;
-        HEAP32[(((buf)+(40))>>2)]=4096;
-        HEAP32[(((buf)+(44))>>2)]=stat.blocks;
-        HEAP32[(((buf)+(48))>>2)]=(stat.atime.getTime() / 1000)|0;
-        HEAP32[(((buf)+(52))>>2)]=0;
-        HEAP32[(((buf)+(56))>>2)]=(stat.mtime.getTime() / 1000)|0;
-        HEAP32[(((buf)+(60))>>2)]=0;
-        HEAP32[(((buf)+(64))>>2)]=(stat.ctime.getTime() / 1000)|0;
-        HEAP32[(((buf)+(68))>>2)]=0;
-        HEAP32[(((buf)+(72))>>2)]=stat.ino;
+        SAFE_HEAP_STORE(((buf)|0), ((stat.dev)|0), 4);
+        SAFE_HEAP_STORE((((buf)+(4))|0), ((0)|0), 4);
+        SAFE_HEAP_STORE((((buf)+(8))|0), ((stat.ino)|0), 4);
+        SAFE_HEAP_STORE((((buf)+(12))|0), ((stat.mode)|0), 4);
+        SAFE_HEAP_STORE((((buf)+(16))|0), ((stat.nlink)|0), 4);
+        SAFE_HEAP_STORE((((buf)+(20))|0), ((stat.uid)|0), 4);
+        SAFE_HEAP_STORE((((buf)+(24))|0), ((stat.gid)|0), 4);
+        SAFE_HEAP_STORE((((buf)+(28))|0), ((stat.rdev)|0), 4);
+        SAFE_HEAP_STORE((((buf)+(32))|0), ((0)|0), 4);
+        SAFE_HEAP_STORE((((buf)+(36))|0), ((stat.size)|0), 4);
+        SAFE_HEAP_STORE((((buf)+(40))|0), ((4096)|0), 4);
+        SAFE_HEAP_STORE((((buf)+(44))|0), ((stat.blocks)|0), 4);
+        SAFE_HEAP_STORE((((buf)+(48))|0), (((stat.atime.getTime() / 1000)|0)|0), 4);
+        SAFE_HEAP_STORE((((buf)+(52))|0), ((0)|0), 4);
+        SAFE_HEAP_STORE((((buf)+(56))|0), (((stat.mtime.getTime() / 1000)|0)|0), 4);
+        SAFE_HEAP_STORE((((buf)+(60))|0), ((0)|0), 4);
+        SAFE_HEAP_STORE((((buf)+(64))|0), (((stat.ctime.getTime() / 1000)|0)|0), 4);
+        SAFE_HEAP_STORE((((buf)+(68))|0), ((0)|0), 4);
+        SAFE_HEAP_STORE((((buf)+(72))|0), ((stat.ino)|0), 4);
         return 0;
       },doMsync:function (addr, stream, len, flags) {
         var buffer = new Uint8Array(HEAPU8.subarray(addr, addr + len));
@@ -5106,8 +5163,8 @@ function copyTempDouble(ptr) {
       },doReadv:function (stream, iov, iovcnt, offset) {
         var ret = 0;
         for (var i = 0; i < iovcnt; i++) {
-          var ptr = HEAP32[(((iov)+(i*8))>>2)];
-          var len = HEAP32[(((iov)+(i*8 + 4))>>2)];
+          var ptr = ((SAFE_HEAP_LOAD((((iov)+(i*8))|0), 4, 0))|0);
+          var len = ((SAFE_HEAP_LOAD((((iov)+(i*8 + 4))|0), 4, 0))|0);
           var curr = FS.read(stream, HEAP8,ptr, len, offset);
           if (curr < 0) return -1;
           ret += curr;
@@ -5117,8 +5174,8 @@ function copyTempDouble(ptr) {
       },doWritev:function (stream, iov, iovcnt, offset) {
         var ret = 0;
         for (var i = 0; i < iovcnt; i++) {
-          var ptr = HEAP32[(((iov)+(i*8))>>2)];
-          var len = HEAP32[(((iov)+(i*8 + 4))>>2)];
+          var ptr = ((SAFE_HEAP_LOAD((((iov)+(i*8))|0), 4, 0))|0);
+          var len = ((SAFE_HEAP_LOAD((((iov)+(i*8 + 4))|0), 4, 0))|0);
           var curr = FS.write(stream, HEAP8,ptr, len, offset);
           if (curr < 0) return -1;
           ret += curr;
@@ -5126,7 +5183,7 @@ function copyTempDouble(ptr) {
         return ret;
       },varargs:0,get:function (varargs) {
         SYSCALLS.varargs += 4;
-        var ret = HEAP32[(((SYSCALLS.varargs)-(4))>>2)];
+        var ret = ((SAFE_HEAP_LOAD((((SYSCALLS.varargs)-(4))|0), 4, 0))|0);
         return ret;
       },getStr:function () {
         var ret = Pointer_stringify(SYSCALLS.get());
@@ -5160,7 +5217,7 @@ function copyTempDouble(ptr) {
       // NOTE: offset_high is unused - Emscripten's off_t is 32-bit
       var offset = offset_low;
       FS.llseek(stream, offset, whence);
-      HEAP32[((result)>>2)]=stream.position;
+      SAFE_HEAP_STORE(((result)|0), ((stream.position)|0), 4);
       if (stream.getdents && offset === 0 && whence === 0) stream.getdents = null; // reset readdir state
       return 0;
     } catch (e) {
@@ -5220,7 +5277,7 @@ function copyTempDouble(ptr) {
           var arg = SYSCALLS.get();
           var offset = 0;
           // We're always unlocked.
-          HEAP16[(((arg)+(offset))>>1)]=2;
+          SAFE_HEAP_STORE((((arg)+(offset))|0), ((2)|0), 2);
           return 0;
         }
         case 13:
@@ -5279,7 +5336,7 @@ function copyTempDouble(ptr) {
         case 21519: {
           if (!stream.tty) return -ERRNO_CODES.ENOTTY;
           var argp = SYSCALLS.get();
-          HEAP32[((argp)>>2)]=0;
+          SAFE_HEAP_STORE(((argp)|0), ((0)|0), 4);
           return 0;
         }
         case 21520: {
@@ -5423,10 +5480,10 @@ function copyTempDouble(ptr) {
           }
           console.log('main loop blocker "' + blocker.name + '" took ' + (Date.now() - start) + ' ms'); //, left: ' + Browser.mainLoop.remainingBlockers);
           Browser.mainLoop.updateStatus();
-  
+          
           // catches pause/resume main loop from blocker execution
           if (thisMainLoopId < Browser.mainLoop.currentlyRunningMainloop) return;
-  
+          
           setTimeout(Browser.mainLoop.runner, 0);
           return;
         }
@@ -5446,7 +5503,6 @@ function copyTempDouble(ptr) {
   
         // Signal GL rendering layer that processing of a new frame is about to start. This helps it optimize
         // VBO double-buffering and reduce GPU stalls.
-  
   
   
         if (Browser.mainLoop.method === 'timeout' && Module.ctx) {
@@ -5667,7 +5723,6 @@ function copyTempDouble(ptr) {
         };
         Module['preloadPlugins'].push(audioPlugin);
   
-  
         // Canvas event setup
   
         function pointerLockChange() {
@@ -5680,7 +5735,7 @@ function copyTempDouble(ptr) {
         if (canvas) {
           // forced aspect ratio can be enabled by defining 'forcedAspectRatio' on Module
           // Module['forcedAspectRatio'] = 4 / 3;
-  
+          
           canvas.requestPointerLock = canvas['requestPointerLock'] ||
                                       canvas['mozRequestPointerLock'] ||
                                       canvas['webkitRequestPointerLock'] ||
@@ -5917,13 +5972,13 @@ function copyTempDouble(ptr) {
       },getMouseWheelDelta:function (event) {
         var delta = 0;
         switch (event.type) {
-          case 'DOMMouseScroll':
+          case 'DOMMouseScroll': 
             delta = event.detail;
             break;
-          case 'mousewheel':
+          case 'mousewheel': 
             delta = event.wheelDelta;
             break;
-          case 'wheel':
+          case 'wheel': 
             delta = event['deltaY'];
             break;
           default:
@@ -5942,7 +5997,7 @@ function copyTempDouble(ptr) {
             Browser.mouseMovementX = Browser.getMovementX(event);
             Browser.mouseMovementY = Browser.getMovementY(event);
           }
-  
+          
           // check if SDL is available
           if (typeof SDL != "undefined") {
             Browser.mouseX = SDL.mouseX + Browser.mouseMovementX;
@@ -5952,7 +6007,7 @@ function copyTempDouble(ptr) {
             // FIXME: ideally this should be clamped against the canvas size and zero
             Browser.mouseX += Browser.mouseMovementX;
             Browser.mouseY += Browser.mouseMovementY;
-          }
+          }        
         } else {
           // Otherwise, calculate the movement based on the changes
           // in the coordinates.
@@ -5982,7 +6037,7 @@ function copyTempDouble(ptr) {
             adjustedY = adjustedY * (ch / rect.height);
   
             var coords = { x: adjustedX, y: adjustedY };
-  
+            
             if (event.type === 'touchstart') {
               Browser.lastTouches[touch.identifier] = coords;
               Browser.touches[touch.identifier] = coords;
@@ -5991,7 +6046,7 @@ function copyTempDouble(ptr) {
               if (!last) last = coords;
               Browser.lastTouches[touch.identifier] = last;
               Browser.touches[touch.identifier] = coords;
-            }
+            } 
             return;
           }
   
@@ -6035,18 +6090,18 @@ function copyTempDouble(ptr) {
       },windowedWidth:0,windowedHeight:0,setFullscreenCanvasSize:function () {
         // check if SDL is available
         if (typeof SDL != "undefined") {
-          var flags = HEAPU32[((SDL.screen)>>2)];
+          var flags = ((SAFE_HEAP_LOAD(((SDL.screen)|0), 4, 1))|0);
           flags = flags | 0x00800000; // set SDL_FULLSCREEN flag
-          HEAP32[((SDL.screen)>>2)]=flags
+          SAFE_HEAP_STORE(((SDL.screen)|0), ((flags)|0), 4)
         }
         Browser.updateCanvasDimensions(Module['canvas']);
         Browser.updateResizeListeners();
       },setWindowedCanvasSize:function () {
         // check if SDL is available
         if (typeof SDL != "undefined") {
-          var flags = HEAPU32[((SDL.screen)>>2)];
+          var flags = ((SAFE_HEAP_LOAD(((SDL.screen)|0), 4, 1))|0);
           flags = flags & ~0x00800000; // clear SDL_FULLSCREEN flag
-          HEAP32[((SDL.screen)>>2)]=flags
+          SAFE_HEAP_STORE(((SDL.screen)|0), ((flags)|0), 4)
         }
         Browser.updateCanvasDimensions(Module['canvas']);
         Browser.updateResizeListeners();
@@ -6131,14 +6186,14 @@ function copyTempDouble(ptr) {
         for (var i = 0; i < count; ++i) {
           var frag;
           if (length) {
-            var len = HEAP32[(((length)+(i*4))>>2)];
+            var len = ((SAFE_HEAP_LOAD((((length)+(i*4))|0), 4, 0))|0);
             if (len < 0) {
-              frag = Pointer_stringify(HEAP32[(((string)+(i*4))>>2)]);
+              frag = Pointer_stringify(((SAFE_HEAP_LOAD((((string)+(i*4))|0), 4, 0))|0));
             } else {
-              frag = Pointer_stringify(HEAP32[(((string)+(i*4))>>2)], len);
+              frag = Pointer_stringify(((SAFE_HEAP_LOAD((((string)+(i*4))|0), 4, 0))|0), len);
             }
           } else {
-            frag = Pointer_stringify(HEAP32[(((string)+(i*4))>>2)]);
+            frag = Pointer_stringify(((SAFE_HEAP_LOAD((((string)+(i*4))|0), 4, 0))|0));
           }
           source += frag;
         }
@@ -6152,7 +6207,6 @@ function copyTempDouble(ptr) {
           else webGLContextAttributes['majorVersion'] = 1;
           webGLContextAttributes['minorVersion'] = 0;
         }
-  
   
   
         var ctx;
@@ -6205,9 +6259,6 @@ function copyTempDouble(ptr) {
         if (typeof webGLContextAttributes['enableExtensionsByDefault'] === 'undefined' || webGLContextAttributes['enableExtensionsByDefault']) {
           GL.initExtensions(context);
         }
-  
-  
-  
         return handle;
       },makeContextCurrent:function (contextHandle) {
         var context = GL.contexts[contextHandle];
@@ -6266,17 +6317,13 @@ function copyTempDouble(ptr) {
         // As new extensions are ratified at http://www.khronos.org/registry/webgl/extensions/ , feel free to add your new extensions
         // here, as long as they don't produce a performance impact for users that might not be using those extensions.
         // E.g. debugging-related extensions should probably be off by default.
-        var automaticallyEnabledExtensions = [ // Khronos ratified WebGL extensions ordered by number (no debug extensions):
-                                               "OES_texture_float", "OES_texture_half_float", "OES_standard_derivatives",
+        var automaticallyEnabledExtensions = [ "OES_texture_float", "OES_texture_half_float", "OES_standard_derivatives",
                                                "OES_vertex_array_object", "WEBGL_compressed_texture_s3tc", "WEBGL_depth_texture",
-                                               "OES_element_index_uint", "EXT_texture_filter_anisotropic", "EXT_frag_depth",
-                                               "WEBGL_draw_buffers", "ANGLE_instanced_arrays", "OES_texture_float_linear",
-                                               "OES_texture_half_float_linear", "EXT_blend_minmax", "EXT_shader_texture_lod",
-                                               // Community approved WebGL extensions ordered by number:
-                                               "WEBGL_compressed_texture_pvrtc", "EXT_color_buffer_half_float", "WEBGL_color_buffer_float",
-                                               "EXT_sRGB", "WEBGL_compressed_texture_etc1", "EXT_disjoint_timer_query",
-                                               "WEBGL_compressed_texture_etc", "WEBGL_compressed_texture_astc", "EXT_color_buffer_float",
-                                               "WEBGL_compressed_texture_s3tc_srgb", "EXT_disjoint_timer_query_webgl2"];
+                                               "OES_element_index_uint", "EXT_texture_filter_anisotropic", "ANGLE_instanced_arrays",
+                                               "OES_texture_float_linear", "OES_texture_half_float_linear", "WEBGL_compressed_texture_atc",
+                                               "WEBKIT_WEBGL_compressed_texture_pvrtc", "WEBGL_compressed_texture_pvrtc",
+                                               "EXT_color_buffer_half_float", "WEBGL_color_buffer_float", "EXT_frag_depth", "EXT_sRGB",
+                                               "WEBGL_draw_buffers", "WEBGL_shared_resources", "EXT_shader_texture_lod", "EXT_color_buffer_float"];
   
         function shouldEnableAutomatically(extension) {
           var ret = false;
@@ -6471,17 +6518,17 @@ function copyTempDouble(ptr) {
           var e = event || window.event;
           stringToUTF8(e.key ? e.key : "", JSEvents.keyEvent + 0, 32);
           stringToUTF8(e.code ? e.code : "", JSEvents.keyEvent + 32, 32);
-          HEAP32[(((JSEvents.keyEvent)+(64))>>2)]=e.location;
-          HEAP32[(((JSEvents.keyEvent)+(68))>>2)]=e.ctrlKey;
-          HEAP32[(((JSEvents.keyEvent)+(72))>>2)]=e.shiftKey;
-          HEAP32[(((JSEvents.keyEvent)+(76))>>2)]=e.altKey;
-          HEAP32[(((JSEvents.keyEvent)+(80))>>2)]=e.metaKey;
-          HEAP32[(((JSEvents.keyEvent)+(84))>>2)]=e.repeat;
+          SAFE_HEAP_STORE((((JSEvents.keyEvent)+(64))|0), ((e.location)|0), 4);
+          SAFE_HEAP_STORE((((JSEvents.keyEvent)+(68))|0), ((e.ctrlKey)|0), 4);
+          SAFE_HEAP_STORE((((JSEvents.keyEvent)+(72))|0), ((e.shiftKey)|0), 4);
+          SAFE_HEAP_STORE((((JSEvents.keyEvent)+(76))|0), ((e.altKey)|0), 4);
+          SAFE_HEAP_STORE((((JSEvents.keyEvent)+(80))|0), ((e.metaKey)|0), 4);
+          SAFE_HEAP_STORE((((JSEvents.keyEvent)+(84))|0), ((e.repeat)|0), 4);
           stringToUTF8(e.locale ? e.locale : "", JSEvents.keyEvent + 88, 32);
           stringToUTF8(e.char ? e.char : "", JSEvents.keyEvent + 120, 32);
-          HEAP32[(((JSEvents.keyEvent)+(152))>>2)]=e.charCode;
-          HEAP32[(((JSEvents.keyEvent)+(156))>>2)]=e.keyCode;
-          HEAP32[(((JSEvents.keyEvent)+(160))>>2)]=e.which;
+          SAFE_HEAP_STORE((((JSEvents.keyEvent)+(152))|0), ((e.charCode)|0), 4);
+          SAFE_HEAP_STORE((((JSEvents.keyEvent)+(156))|0), ((e.keyCode)|0), 4);
+          SAFE_HEAP_STORE((((JSEvents.keyEvent)+(160))|0), ((e.which)|0), 4);
           var shouldCancel = Module['dynCall_iiii'](callbackfunc, eventTypeId, JSEvents.keyEvent, userData);
           if (shouldCancel) {
             e.preventDefault();
@@ -6500,35 +6547,35 @@ function copyTempDouble(ptr) {
       },getBoundingClientRectOrZeros:function (target) {
         return target.getBoundingClientRect ? target.getBoundingClientRect() : { left: 0, top: 0 };
       },fillMouseEventData:function (eventStruct, e, target) {
-        HEAPF64[((eventStruct)>>3)]=JSEvents.tick();
-        HEAP32[(((eventStruct)+(8))>>2)]=e.screenX;
-        HEAP32[(((eventStruct)+(12))>>2)]=e.screenY;
-        HEAP32[(((eventStruct)+(16))>>2)]=e.clientX;
-        HEAP32[(((eventStruct)+(20))>>2)]=e.clientY;
-        HEAP32[(((eventStruct)+(24))>>2)]=e.ctrlKey;
-        HEAP32[(((eventStruct)+(28))>>2)]=e.shiftKey;
-        HEAP32[(((eventStruct)+(32))>>2)]=e.altKey;
-        HEAP32[(((eventStruct)+(36))>>2)]=e.metaKey;
-        HEAP16[(((eventStruct)+(40))>>1)]=e.button;
-        HEAP16[(((eventStruct)+(42))>>1)]=e.buttons;
-        HEAP32[(((eventStruct)+(44))>>2)]=e["movementX"] || e["mozMovementX"] || e["webkitMovementX"] || (e.screenX-JSEvents.previousScreenX);
-        HEAP32[(((eventStruct)+(48))>>2)]=e["movementY"] || e["mozMovementY"] || e["webkitMovementY"] || (e.screenY-JSEvents.previousScreenY);
+        SAFE_HEAP_STORE_D(((eventStruct)|0), (+(JSEvents.tick())), 8);
+        SAFE_HEAP_STORE((((eventStruct)+(8))|0), ((e.screenX)|0), 4);
+        SAFE_HEAP_STORE((((eventStruct)+(12))|0), ((e.screenY)|0), 4);
+        SAFE_HEAP_STORE((((eventStruct)+(16))|0), ((e.clientX)|0), 4);
+        SAFE_HEAP_STORE((((eventStruct)+(20))|0), ((e.clientY)|0), 4);
+        SAFE_HEAP_STORE((((eventStruct)+(24))|0), ((e.ctrlKey)|0), 4);
+        SAFE_HEAP_STORE((((eventStruct)+(28))|0), ((e.shiftKey)|0), 4);
+        SAFE_HEAP_STORE((((eventStruct)+(32))|0), ((e.altKey)|0), 4);
+        SAFE_HEAP_STORE((((eventStruct)+(36))|0), ((e.metaKey)|0), 4);
+        SAFE_HEAP_STORE((((eventStruct)+(40))|0), ((e.button)|0), 2);
+        SAFE_HEAP_STORE((((eventStruct)+(42))|0), ((e.buttons)|0), 2);
+        SAFE_HEAP_STORE((((eventStruct)+(44))|0), ((e["movementX"] || e["mozMovementX"] || e["webkitMovementX"] || (e.screenX-JSEvents.previousScreenX))|0), 4);
+        SAFE_HEAP_STORE((((eventStruct)+(48))|0), ((e["movementY"] || e["mozMovementY"] || e["webkitMovementY"] || (e.screenY-JSEvents.previousScreenY))|0), 4);
   
         if (Module['canvas']) {
           var rect = Module['canvas'].getBoundingClientRect();
-          HEAP32[(((eventStruct)+(60))>>2)]=e.clientX - rect.left;
-          HEAP32[(((eventStruct)+(64))>>2)]=e.clientY - rect.top;
+          SAFE_HEAP_STORE((((eventStruct)+(60))|0), ((e.clientX - rect.left)|0), 4);
+          SAFE_HEAP_STORE((((eventStruct)+(64))|0), ((e.clientY - rect.top)|0), 4);
         } else { // Canvas is not initialized, return 0.
-          HEAP32[(((eventStruct)+(60))>>2)]=0;
-          HEAP32[(((eventStruct)+(64))>>2)]=0;
+          SAFE_HEAP_STORE((((eventStruct)+(60))|0), ((0)|0), 4);
+          SAFE_HEAP_STORE((((eventStruct)+(64))|0), ((0)|0), 4);
         }
         if (target) {
           var rect = JSEvents.getBoundingClientRectOrZeros(target);
-          HEAP32[(((eventStruct)+(52))>>2)]=e.clientX - rect.left;
-          HEAP32[(((eventStruct)+(56))>>2)]=e.clientY - rect.top;        
+          SAFE_HEAP_STORE((((eventStruct)+(52))|0), ((e.clientX - rect.left)|0), 4);
+          SAFE_HEAP_STORE((((eventStruct)+(56))|0), ((e.clientY - rect.top)|0), 4);        
         } else { // No specific target passed, return 0.
-          HEAP32[(((eventStruct)+(52))>>2)]=0;
-          HEAP32[(((eventStruct)+(56))>>2)]=0;
+          SAFE_HEAP_STORE((((eventStruct)+(52))|0), ((0)|0), 4);
+          SAFE_HEAP_STORE((((eventStruct)+(56))|0), ((0)|0), 4);
         }
         // wheel and mousewheel events contain wrong screenX/screenY on chrome/opera
         // https://github.com/kripken/emscripten/pull/4997
@@ -6571,10 +6618,10 @@ function copyTempDouble(ptr) {
         var wheelHandlerFunc = function(event) {
           var e = event || window.event;
           JSEvents.fillMouseEventData(JSEvents.wheelEvent, e, target);
-          HEAPF64[(((JSEvents.wheelEvent)+(72))>>3)]=e["deltaX"];
-          HEAPF64[(((JSEvents.wheelEvent)+(80))>>3)]=e["deltaY"];
-          HEAPF64[(((JSEvents.wheelEvent)+(88))>>3)]=e["deltaZ"];
-          HEAP32[(((JSEvents.wheelEvent)+(96))>>2)]=e["deltaMode"];
+          SAFE_HEAP_STORE_D((((JSEvents.wheelEvent)+(72))|0), (+(e["deltaX"])), 8);
+          SAFE_HEAP_STORE_D((((JSEvents.wheelEvent)+(80))|0), (+(e["deltaY"])), 8);
+          SAFE_HEAP_STORE_D((((JSEvents.wheelEvent)+(88))|0), (+(e["deltaZ"])), 8);
+          SAFE_HEAP_STORE((((JSEvents.wheelEvent)+(96))|0), ((e["deltaMode"])|0), 4);
           var shouldCancel = Module['dynCall_iiii'](callbackfunc, eventTypeId, JSEvents.wheelEvent, userData);
           if (shouldCancel) {
             e.preventDefault();
@@ -6584,10 +6631,10 @@ function copyTempDouble(ptr) {
         var mouseWheelHandlerFunc = function(event) {
           var e = event || window.event;
           JSEvents.fillMouseEventData(JSEvents.wheelEvent, e, target);
-          HEAPF64[(((JSEvents.wheelEvent)+(72))>>3)]=e["wheelDeltaX"] || 0;
-          HEAPF64[(((JSEvents.wheelEvent)+(80))>>3)]=-(e["wheelDeltaY"] ? e["wheelDeltaY"] : e["wheelDelta"]) /* 1. Invert to unify direction with the DOM Level 3 wheel event. 2. MSIE does not provide wheelDeltaY, so wheelDelta is used as a fallback. */;
-          HEAPF64[(((JSEvents.wheelEvent)+(88))>>3)]=0 /* Not available */;
-          HEAP32[(((JSEvents.wheelEvent)+(96))>>2)]=0 /* DOM_DELTA_PIXEL */;
+          SAFE_HEAP_STORE_D((((JSEvents.wheelEvent)+(72))|0), (+(e["wheelDeltaX"] || 0)), 8);
+          SAFE_HEAP_STORE_D((((JSEvents.wheelEvent)+(80))|0), (+(-(e["wheelDeltaY"] ? e["wheelDeltaY"] : e["wheelDelta"]) /* 1. Invert to unify direction with the DOM Level 3 wheel event. 2. MSIE does not provide wheelDeltaY, so wheelDelta is used as a fallback. */)), 8);
+          SAFE_HEAP_STORE_D((((JSEvents.wheelEvent)+(88))|0), (+(0 /* Not available */)), 8);
+          SAFE_HEAP_STORE((((JSEvents.wheelEvent)+(96))|0), ((0 /* DOM_DELTA_PIXEL */)|0), 4);
           var shouldCancel = Module['dynCall_iiii'](callbackfunc, eventTypeId, JSEvents.wheelEvent, userData);
           if (shouldCancel) {
             e.preventDefault();
@@ -6632,15 +6679,15 @@ function copyTempDouble(ptr) {
             return;
           }
           var scrollPos = JSEvents.pageScrollPos();
-          HEAP32[((JSEvents.uiEvent)>>2)]=e.detail;
-          HEAP32[(((JSEvents.uiEvent)+(4))>>2)]=document.body.clientWidth;
-          HEAP32[(((JSEvents.uiEvent)+(8))>>2)]=document.body.clientHeight;
-          HEAP32[(((JSEvents.uiEvent)+(12))>>2)]=window.innerWidth;
-          HEAP32[(((JSEvents.uiEvent)+(16))>>2)]=window.innerHeight;
-          HEAP32[(((JSEvents.uiEvent)+(20))>>2)]=window.outerWidth;
-          HEAP32[(((JSEvents.uiEvent)+(24))>>2)]=window.outerHeight;
-          HEAP32[(((JSEvents.uiEvent)+(28))>>2)]=scrollPos[0];
-          HEAP32[(((JSEvents.uiEvent)+(32))>>2)]=scrollPos[1];
+          SAFE_HEAP_STORE(((JSEvents.uiEvent)|0), ((e.detail)|0), 4);
+          SAFE_HEAP_STORE((((JSEvents.uiEvent)+(4))|0), ((document.body.clientWidth)|0), 4);
+          SAFE_HEAP_STORE((((JSEvents.uiEvent)+(8))|0), ((document.body.clientHeight)|0), 4);
+          SAFE_HEAP_STORE((((JSEvents.uiEvent)+(12))|0), ((window.innerWidth)|0), 4);
+          SAFE_HEAP_STORE((((JSEvents.uiEvent)+(16))|0), ((window.innerHeight)|0), 4);
+          SAFE_HEAP_STORE((((JSEvents.uiEvent)+(20))|0), ((window.outerWidth)|0), 4);
+          SAFE_HEAP_STORE((((JSEvents.uiEvent)+(24))|0), ((window.outerHeight)|0), 4);
+          SAFE_HEAP_STORE((((JSEvents.uiEvent)+(28))|0), ((scrollPos[0])|0), 4);
+          SAFE_HEAP_STORE((((JSEvents.uiEvent)+(32))|0), ((scrollPos[1])|0), 4);
           var shouldCancel = Module['dynCall_iiii'](callbackfunc, eventTypeId, JSEvents.uiEvent, userData);
           if (shouldCancel) {
             e.preventDefault();
@@ -6697,11 +6744,11 @@ function copyTempDouble(ptr) {
         var handlerFunc = function(event) {
           var e = event || window.event;
   
-          HEAPF64[((JSEvents.deviceOrientationEvent)>>3)]=JSEvents.tick();
-          HEAPF64[(((JSEvents.deviceOrientationEvent)+(8))>>3)]=e.alpha;
-          HEAPF64[(((JSEvents.deviceOrientationEvent)+(16))>>3)]=e.beta;
-          HEAPF64[(((JSEvents.deviceOrientationEvent)+(24))>>3)]=e.gamma;
-          HEAP32[(((JSEvents.deviceOrientationEvent)+(32))>>2)]=e.absolute;
+          SAFE_HEAP_STORE_D(((JSEvents.deviceOrientationEvent)|0), (+(JSEvents.tick())), 8);
+          SAFE_HEAP_STORE_D((((JSEvents.deviceOrientationEvent)+(8))|0), (+(e.alpha)), 8);
+          SAFE_HEAP_STORE_D((((JSEvents.deviceOrientationEvent)+(16))|0), (+(e.beta)), 8);
+          SAFE_HEAP_STORE_D((((JSEvents.deviceOrientationEvent)+(24))|0), (+(e.gamma)), 8);
+          SAFE_HEAP_STORE((((JSEvents.deviceOrientationEvent)+(32))|0), ((e.absolute)|0), 4);
   
           var shouldCancel = Module['dynCall_iiii'](callbackfunc, eventTypeId, JSEvents.deviceOrientationEvent, userData);
           if (shouldCancel) {
@@ -6725,16 +6772,16 @@ function copyTempDouble(ptr) {
         var handlerFunc = function(event) {
           var e = event || window.event;
   
-          HEAPF64[((JSEvents.deviceMotionEvent)>>3)]=JSEvents.tick();
-          HEAPF64[(((JSEvents.deviceMotionEvent)+(8))>>3)]=e.acceleration.x;
-          HEAPF64[(((JSEvents.deviceMotionEvent)+(16))>>3)]=e.acceleration.y;
-          HEAPF64[(((JSEvents.deviceMotionEvent)+(24))>>3)]=e.acceleration.z;
-          HEAPF64[(((JSEvents.deviceMotionEvent)+(32))>>3)]=e.accelerationIncludingGravity.x;
-          HEAPF64[(((JSEvents.deviceMotionEvent)+(40))>>3)]=e.accelerationIncludingGravity.y;
-          HEAPF64[(((JSEvents.deviceMotionEvent)+(48))>>3)]=e.accelerationIncludingGravity.z;
-          HEAPF64[(((JSEvents.deviceMotionEvent)+(56))>>3)]=e.rotationRate.alpha;
-          HEAPF64[(((JSEvents.deviceMotionEvent)+(64))>>3)]=e.rotationRate.beta;
-          HEAPF64[(((JSEvents.deviceMotionEvent)+(72))>>3)]=e.rotationRate.gamma;
+          SAFE_HEAP_STORE_D(((JSEvents.deviceMotionEvent)|0), (+(JSEvents.tick())), 8);
+          SAFE_HEAP_STORE_D((((JSEvents.deviceMotionEvent)+(8))|0), (+(e.acceleration.x)), 8);
+          SAFE_HEAP_STORE_D((((JSEvents.deviceMotionEvent)+(16))|0), (+(e.acceleration.y)), 8);
+          SAFE_HEAP_STORE_D((((JSEvents.deviceMotionEvent)+(24))|0), (+(e.acceleration.z)), 8);
+          SAFE_HEAP_STORE_D((((JSEvents.deviceMotionEvent)+(32))|0), (+(e.accelerationIncludingGravity.x)), 8);
+          SAFE_HEAP_STORE_D((((JSEvents.deviceMotionEvent)+(40))|0), (+(e.accelerationIncludingGravity.y)), 8);
+          SAFE_HEAP_STORE_D((((JSEvents.deviceMotionEvent)+(48))|0), (+(e.accelerationIncludingGravity.z)), 8);
+          SAFE_HEAP_STORE_D((((JSEvents.deviceMotionEvent)+(56))|0), (+(e.rotationRate.alpha)), 8);
+          SAFE_HEAP_STORE_D((((JSEvents.deviceMotionEvent)+(64))|0), (+(e.rotationRate.beta)), 8);
+          SAFE_HEAP_STORE_D((((JSEvents.deviceMotionEvent)+(72))|0), (+(e.rotationRate.gamma)), 8);
   
           var shouldCancel = Module['dynCall_iiii'](callbackfunc, eventTypeId, JSEvents.deviceMotionEvent, userData);
           if (shouldCancel) {
@@ -6764,8 +6811,8 @@ function copyTempDouble(ptr) {
           orientation = orientations2.indexOf(orientationString);
         }
   
-        HEAP32[((eventStruct)>>2)]=1 << orientation;
-        HEAP32[(((eventStruct)+(4))>>2)]=window.orientation;
+        SAFE_HEAP_STORE(((eventStruct)|0), ((1 << orientation)|0), 4);
+        SAFE_HEAP_STORE((((eventStruct)+(4))|0), ((window.orientation)|0), 4);
       },registerOrientationChangeEventCallback:function (target, userData, useCapture, callbackfunc, eventTypeId, eventTypeString) {
         if (!JSEvents.orientationChangeEvent) {
           JSEvents.orientationChangeEvent = _malloc( 8 );
@@ -6806,8 +6853,8 @@ function copyTempDouble(ptr) {
       },fillFullscreenChangeEventData:function (eventStruct, e) {
         var fullscreenElement = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
         var isFullscreen = !!fullscreenElement;
-        HEAP32[((eventStruct)>>2)]=isFullscreen;
-        HEAP32[(((eventStruct)+(4))>>2)]=JSEvents.fullscreenEnabled();
+        SAFE_HEAP_STORE(((eventStruct)|0), ((isFullscreen)|0), 4);
+        SAFE_HEAP_STORE((((eventStruct)+(4))|0), ((JSEvents.fullscreenEnabled())|0), 4);
         // If transitioning to fullscreen, report info about the element that is now fullscreen.
         // If transitioning to windowed mode, report info about the element that just was fullscreen.
         var reportedElement = isFullscreen ? fullscreenElement : JSEvents.previousFullscreenElement;
@@ -6815,10 +6862,10 @@ function copyTempDouble(ptr) {
         var id = (reportedElement && reportedElement.id) ? reportedElement.id : '';
         stringToUTF8(nodeName, eventStruct + 8, 128);
         stringToUTF8(id, eventStruct + 136, 128);
-        HEAP32[(((eventStruct)+(264))>>2)]=reportedElement ? reportedElement.clientWidth : 0;
-        HEAP32[(((eventStruct)+(268))>>2)]=reportedElement ? reportedElement.clientHeight : 0;
-        HEAP32[(((eventStruct)+(272))>>2)]=screen.width;
-        HEAP32[(((eventStruct)+(276))>>2)]=screen.height;
+        SAFE_HEAP_STORE((((eventStruct)+(264))|0), ((reportedElement ? reportedElement.clientWidth : 0)|0), 4);
+        SAFE_HEAP_STORE((((eventStruct)+(268))|0), ((reportedElement ? reportedElement.clientHeight : 0)|0), 4);
+        SAFE_HEAP_STORE((((eventStruct)+(272))|0), ((screen.width)|0), 4);
+        SAFE_HEAP_STORE((((eventStruct)+(276))|0), ((screen.height)|0), 4);
         if (isFullscreen) {
           JSEvents.previousFullscreenElement = fullscreenElement;
         }
@@ -6938,7 +6985,7 @@ function copyTempDouble(ptr) {
       },fillPointerlockChangeEventData:function (eventStruct, e) {
         var pointerLockElement = document.pointerLockElement || document.mozPointerLockElement || document.webkitPointerLockElement || document.msPointerLockElement;
         var isPointerlocked = !!pointerLockElement;
-        HEAP32[((eventStruct)>>2)]=isPointerlocked;
+        SAFE_HEAP_STORE(((eventStruct)|0), ((isPointerlocked)|0), 4);
         var nodeName = JSEvents.getNodeNameForTarget(pointerLockElement);
         var id = (pointerLockElement && pointerLockElement.id) ? pointerLockElement.id : '';
         stringToUTF8(nodeName, eventStruct + 4, 128);
@@ -7022,8 +7069,8 @@ function copyTempDouble(ptr) {
         var visibilityStates = [ "hidden", "visible", "prerender", "unloaded" ];
         var visibilityState = visibilityStates.indexOf(document.visibilityState);
   
-        HEAP32[((eventStruct)>>2)]=document.hidden;
-        HEAP32[(((eventStruct)+(4))>>2)]=visibilityState;
+        SAFE_HEAP_STORE(((eventStruct)|0), ((document.hidden)|0), 4);
+        SAFE_HEAP_STORE((((eventStruct)+(4))|0), ((visibilityState)|0), 4);
       },registerVisibilityChangeEventCallback:function (target, userData, useCapture, callbackfunc, eventTypeId, eventTypeString) {
         if (!JSEvents.visibilityChangeEvent) {
           JSEvents.visibilityChangeEvent = _malloc( 8 );
@@ -7081,34 +7128,34 @@ function copyTempDouble(ptr) {
           }
           
           var ptr = JSEvents.touchEvent;
-          HEAP32[(((ptr)+(4))>>2)]=e.ctrlKey;
-          HEAP32[(((ptr)+(8))>>2)]=e.shiftKey;
-          HEAP32[(((ptr)+(12))>>2)]=e.altKey;
-          HEAP32[(((ptr)+(16))>>2)]=e.metaKey;
+          SAFE_HEAP_STORE((((ptr)+(4))|0), ((e.ctrlKey)|0), 4);
+          SAFE_HEAP_STORE((((ptr)+(8))|0), ((e.shiftKey)|0), 4);
+          SAFE_HEAP_STORE((((ptr)+(12))|0), ((e.altKey)|0), 4);
+          SAFE_HEAP_STORE((((ptr)+(16))|0), ((e.metaKey)|0), 4);
           ptr += 20; // Advance to the start of the touch array.
           var canvasRect = Module['canvas'] ? Module['canvas'].getBoundingClientRect() : undefined;
           var targetRect = JSEvents.getBoundingClientRectOrZeros(target);
           var numTouches = 0;
           for(var i in touches) {
             var t = touches[i];
-            HEAP32[((ptr)>>2)]=t.identifier;
-            HEAP32[(((ptr)+(4))>>2)]=t.screenX;
-            HEAP32[(((ptr)+(8))>>2)]=t.screenY;
-            HEAP32[(((ptr)+(12))>>2)]=t.clientX;
-            HEAP32[(((ptr)+(16))>>2)]=t.clientY;
-            HEAP32[(((ptr)+(20))>>2)]=t.pageX;
-            HEAP32[(((ptr)+(24))>>2)]=t.pageY;
-            HEAP32[(((ptr)+(28))>>2)]=t.changed;
-            HEAP32[(((ptr)+(32))>>2)]=t.onTarget;
+            SAFE_HEAP_STORE(((ptr)|0), ((t.identifier)|0), 4);
+            SAFE_HEAP_STORE((((ptr)+(4))|0), ((t.screenX)|0), 4);
+            SAFE_HEAP_STORE((((ptr)+(8))|0), ((t.screenY)|0), 4);
+            SAFE_HEAP_STORE((((ptr)+(12))|0), ((t.clientX)|0), 4);
+            SAFE_HEAP_STORE((((ptr)+(16))|0), ((t.clientY)|0), 4);
+            SAFE_HEAP_STORE((((ptr)+(20))|0), ((t.pageX)|0), 4);
+            SAFE_HEAP_STORE((((ptr)+(24))|0), ((t.pageY)|0), 4);
+            SAFE_HEAP_STORE((((ptr)+(28))|0), ((t.changed)|0), 4);
+            SAFE_HEAP_STORE((((ptr)+(32))|0), ((t.onTarget)|0), 4);
             if (canvasRect) {
-              HEAP32[(((ptr)+(44))>>2)]=t.clientX - canvasRect.left;
-              HEAP32[(((ptr)+(48))>>2)]=t.clientY - canvasRect.top;
+              SAFE_HEAP_STORE((((ptr)+(44))|0), ((t.clientX - canvasRect.left)|0), 4);
+              SAFE_HEAP_STORE((((ptr)+(48))|0), ((t.clientY - canvasRect.top)|0), 4);
             } else {
-              HEAP32[(((ptr)+(44))>>2)]=0;
-              HEAP32[(((ptr)+(48))>>2)]=0;            
+              SAFE_HEAP_STORE((((ptr)+(44))|0), ((0)|0), 4);
+              SAFE_HEAP_STORE((((ptr)+(48))|0), ((0)|0), 4);            
             }
-            HEAP32[(((ptr)+(36))>>2)]=t.clientX - targetRect.left;
-            HEAP32[(((ptr)+(40))>>2)]=t.clientY - targetRect.top;
+            SAFE_HEAP_STORE((((ptr)+(36))|0), ((t.clientX - targetRect.left)|0), 4);
+            SAFE_HEAP_STORE((((ptr)+(40))|0), ((t.clientY - targetRect.top)|0), 4);
             
             ptr += 52;
   
@@ -7116,7 +7163,7 @@ function copyTempDouble(ptr) {
               break;
             }
           }
-          HEAP32[((JSEvents.touchEvent)>>2)]=numTouches;
+          SAFE_HEAP_STORE(((JSEvents.touchEvent)|0), ((numTouches)|0), 4);
   
           var shouldCancel = Module['dynCall_iiii'](callbackfunc, eventTypeId, JSEvents.touchEvent, userData);
           if (shouldCancel) {
@@ -7134,28 +7181,28 @@ function copyTempDouble(ptr) {
         };
         JSEvents.registerOrRemoveHandler(eventHandler);
       },fillGamepadEventData:function (eventStruct, e) {
-        HEAPF64[((eventStruct)>>3)]=e.timestamp;
+        SAFE_HEAP_STORE_D(((eventStruct)|0), (+(e.timestamp)), 8);
         for(var i = 0; i < e.axes.length; ++i) {
-          HEAPF64[(((eventStruct+i*8)+(16))>>3)]=e.axes[i];
+          SAFE_HEAP_STORE_D((((eventStruct+i*8)+(16))|0), (+(e.axes[i])), 8);
         }
         for(var i = 0; i < e.buttons.length; ++i) {
           if (typeof(e.buttons[i]) === 'object') {
-            HEAPF64[(((eventStruct+i*8)+(528))>>3)]=e.buttons[i].value;
+            SAFE_HEAP_STORE_D((((eventStruct+i*8)+(528))|0), (+(e.buttons[i].value)), 8);
           } else {
-            HEAPF64[(((eventStruct+i*8)+(528))>>3)]=e.buttons[i];
+            SAFE_HEAP_STORE_D((((eventStruct+i*8)+(528))|0), (+(e.buttons[i])), 8);
           }
         }
         for(var i = 0; i < e.buttons.length; ++i) {
           if (typeof(e.buttons[i]) === 'object') {
-            HEAP32[(((eventStruct+i*4)+(1040))>>2)]=e.buttons[i].pressed;
+            SAFE_HEAP_STORE((((eventStruct+i*4)+(1040))|0), ((e.buttons[i].pressed)|0), 4);
           } else {
-            HEAP32[(((eventStruct+i*4)+(1040))>>2)]=e.buttons[i] == 1.0;
+            SAFE_HEAP_STORE((((eventStruct+i*4)+(1040))|0), ((e.buttons[i] == 1.0)|0), 4);
           }
         }
-        HEAP32[(((eventStruct)+(1296))>>2)]=e.connected;
-        HEAP32[(((eventStruct)+(1300))>>2)]=e.index;
-        HEAP32[(((eventStruct)+(8))>>2)]=e.axes.length;
-        HEAP32[(((eventStruct)+(12))>>2)]=e.buttons.length;
+        SAFE_HEAP_STORE((((eventStruct)+(1296))|0), ((e.connected)|0), 4);
+        SAFE_HEAP_STORE((((eventStruct)+(1300))|0), ((e.index)|0), 4);
+        SAFE_HEAP_STORE((((eventStruct)+(8))|0), ((e.axes.length)|0), 4);
+        SAFE_HEAP_STORE((((eventStruct)+(12))|0), ((e.buttons.length)|0), 4);
         stringToUTF8(e.id, eventStruct + 1304, 64);
         stringToUTF8(e.mapping, eventStruct + 1368, 64);
       },registerGamepadEventCallback:function (target, userData, useCapture, callbackfunc, eventTypeId, eventTypeString) {
@@ -7209,10 +7256,10 @@ function copyTempDouble(ptr) {
         };
         JSEvents.registerOrRemoveHandler(eventHandler);
       },battery:function () { return navigator.battery || navigator.mozBattery || navigator.webkitBattery; },fillBatteryEventData:function (eventStruct, e) {
-        HEAPF64[((eventStruct)>>3)]=e.chargingTime;
-        HEAPF64[(((eventStruct)+(8))>>3)]=e.dischargingTime;
-        HEAPF64[(((eventStruct)+(16))>>3)]=e.level;
-        HEAP32[(((eventStruct)+(24))>>2)]=e.charging;
+        SAFE_HEAP_STORE_D(((eventStruct)|0), (+(e.chargingTime)), 8);
+        SAFE_HEAP_STORE_D((((eventStruct)+(8))|0), (+(e.dischargingTime)), 8);
+        SAFE_HEAP_STORE_D((((eventStruct)+(16))|0), (+(e.level)), 8);
+        SAFE_HEAP_STORE((((eventStruct)+(24))|0), ((e.charging)|0), 4);
       },registerBatteryEventCallback:function (target, userData, useCapture, callbackfunc, eventTypeId, eventTypeString) {
         if (!JSEvents.batteryEvent) {
           JSEvents.batteryEvent = _malloc( 32 );
@@ -7262,19 +7309,18 @@ function copyTempDouble(ptr) {
         JSEvents.registerOrRemoveHandler(eventHandler);
       }};function _emscripten_webgl_create_context(target, attributes) {
       var contextAttributes = {};
-      contextAttributes['alpha'] = !!HEAP32[((attributes)>>2)];
-      contextAttributes['depth'] = !!HEAP32[(((attributes)+(4))>>2)];
-      contextAttributes['stencil'] = !!HEAP32[(((attributes)+(8))>>2)];
-      contextAttributes['antialias'] = !!HEAP32[(((attributes)+(12))>>2)];
-      contextAttributes['premultipliedAlpha'] = !!HEAP32[(((attributes)+(16))>>2)];
-      contextAttributes['preserveDrawingBuffer'] = !!HEAP32[(((attributes)+(20))>>2)];
-      contextAttributes['preferLowPowerToHighPerformance'] = !!HEAP32[(((attributes)+(24))>>2)];
-      contextAttributes['failIfMajorPerformanceCaveat'] = !!HEAP32[(((attributes)+(28))>>2)];
-      contextAttributes['majorVersion'] = HEAP32[(((attributes)+(32))>>2)];
-      contextAttributes['minorVersion'] = HEAP32[(((attributes)+(36))>>2)];
-      var enableExtensionsByDefault = HEAP32[(((attributes)+(40))>>2)];
-      contextAttributes['explicitSwapControl'] = HEAP32[(((attributes)+(44))>>2)];
-      contextAttributes['renderViaOffscreenBackBuffer'] = HEAP32[(((attributes)+(48))>>2)];
+      contextAttributes['alpha'] = !!((SAFE_HEAP_LOAD(((attributes)|0), 4, 0))|0);
+      contextAttributes['depth'] = !!((SAFE_HEAP_LOAD((((attributes)+(4))|0), 4, 0))|0);
+      contextAttributes['stencil'] = !!((SAFE_HEAP_LOAD((((attributes)+(8))|0), 4, 0))|0);
+      contextAttributes['antialias'] = !!((SAFE_HEAP_LOAD((((attributes)+(12))|0), 4, 0))|0);
+      contextAttributes['premultipliedAlpha'] = !!((SAFE_HEAP_LOAD((((attributes)+(16))|0), 4, 0))|0);
+      contextAttributes['preserveDrawingBuffer'] = !!((SAFE_HEAP_LOAD((((attributes)+(20))|0), 4, 0))|0);
+      contextAttributes['preferLowPowerToHighPerformance'] = !!((SAFE_HEAP_LOAD((((attributes)+(24))|0), 4, 0))|0);
+      contextAttributes['failIfMajorPerformanceCaveat'] = !!((SAFE_HEAP_LOAD((((attributes)+(28))|0), 4, 0))|0);
+      contextAttributes['majorVersion'] = ((SAFE_HEAP_LOAD((((attributes)+(32))|0), 4, 0))|0);
+      contextAttributes['minorVersion'] = ((SAFE_HEAP_LOAD((((attributes)+(36))|0), 4, 0))|0);
+      var enableExtensionsByDefault = ((SAFE_HEAP_LOAD((((attributes)+(40))|0), 4, 0))|0);
+      contextAttributes['explicitSwapControl'] = ((SAFE_HEAP_LOAD((((attributes)+(44))|0), 4, 0))|0);
   
       target = Pointer_stringify(target);
       var canvas;
@@ -7287,9 +7333,9 @@ function copyTempDouble(ptr) {
         return 0;
       }
       if (contextAttributes['explicitSwapControl']) {
+        console.error('emscripten_webgl_create_context failed: explicitSwapControl is not supported, please rebuild with -s OFFSCREENCANVAS_SUPPORT=1 to enable targeting the experimental OffscreenCanvas specification!');
         return 0;
       }
-  
   
       var contextHandle = GL.createContext(canvas, contextAttributes);
       return contextHandle;
@@ -7311,8 +7357,40 @@ function copyTempDouble(ptr) {
                               GL.shaders[shader]);
     }
 
+  function _glBindBuffer(target, buffer) {
+      var bufferObj = buffer ? GL.buffers[buffer] : null;
+  
+  
+      if (target == 0x88EB /*GL_PIXEL_PACK_BUFFER*/) {
+        // In WebGL 2 glReadPixels entry point, we need to use a different WebGL 2 API function call when a buffer is bound to
+        // GL_PIXEL_PACK_BUFFER_BINDING point, so must keep track whether that binding point is non-null to know what is
+        // the proper API function to call.
+        GLctx.currentPixelPackBufferBinding = buffer;
+      } else if (target == 0x88EC /*GL_PIXEL_UNPACK_BUFFER*/) {
+        // In WebGL 2 glTexImage2D, glTexSubImage2D, glTexImage3D and glTexSubImage3D entry points, we need to use a different WebGL 2 API function
+        // call when a buffer is bound to GL_PIXEL_UNPACK_BUFFER_BINDING point, so must keep track whether that binding point is non-null to know what
+        // is the proper API function to call.
+        GLctx.currentPixelUnpackBufferBinding = buffer;
+      }
+      GLctx.bindBuffer(target, bufferObj);
+    }
+
   function _glBindTexture(target, texture) {
       GLctx.bindTexture(target, texture ? GL.textures[texture] : null);
+    }
+
+  function _glBlendFunc(x0, x1) { GLctx['blendFunc'](x0, x1) }
+
+  function _glBufferData(target, size, data, usage) {
+      if (!data) {
+        GLctx.bufferData(target, size, usage);
+      } else {
+        if (GL.currentContext.supportsWebGL2EntryPoints) { // WebGL 2 provides new garbage-free entry points to call to WebGL. Use those always when possible.
+          GLctx.bufferData(target, HEAPU8, usage, data, size);
+          return;
+        }
+        GLctx.bufferData(target, HEAPU8.subarray(data, data+size), usage);
+      }
     }
 
   function _glClear(x0) { GLctx['clear'](x0) }
@@ -7350,18 +7428,30 @@ function copyTempDouble(ptr) {
       GL.programInfos[id] = null;
     }
 
+  function _glDrawElements(mode, count, type, indices) {
+  
+      GLctx.drawElements(mode, count, type, indices);
+  
+    }
+
+  function _glEnable(x0) { GLctx['enable'](x0) }
+
+  function _glEnableVertexAttribArray(index) {
+      GLctx.enableVertexAttribArray(index);
+    }
+
   function _glGenBuffers(n, buffers) {
       for (var i = 0; i < n; i++) {
         var buffer = GLctx.createBuffer();
         if (!buffer) {
           GL.recordError(0x0502 /* GL_INVALID_OPERATION */);
-          while(i < n) HEAP32[(((buffers)+(i++*4))>>2)]=0;
+          while(i < n) SAFE_HEAP_STORE((((buffers)+(i++*4))|0), ((0)|0), 4);
           return;
         }
         var id = GL.getNewId(GL.buffers);
         buffer.name = id;
         GL.buffers[id] = buffer;
-        HEAP32[(((buffers)+(i*4))>>2)]=id;
+        SAFE_HEAP_STORE((((buffers)+(i*4))|0), ((id)|0), 4);
       }
     }
 
@@ -7370,13 +7460,13 @@ function copyTempDouble(ptr) {
         var texture = GLctx.createTexture();
         if (!texture) {
           GL.recordError(0x0502 /* GL_INVALID_OPERATION */); // GLES + EGL specs don't specify what should happen here, so best to issue an error and create IDs with 0.
-          while(i < n) HEAP32[(((textures)+(i++*4))>>2)]=0;
+          while(i < n) SAFE_HEAP_STORE((((textures)+(i++*4))|0), ((0)|0), 4);
           return;
         }
         var id = GL.getNewId(GL.textures);
         texture.name = id;
         GL.textures[id] = texture;
-        HEAP32[(((textures)+(i*4))>>2)]=id;
+        SAFE_HEAP_STORE((((textures)+(i*4))|0), ((id)|0), 4);
       }
     }
 
@@ -7392,9 +7482,9 @@ function copyTempDouble(ptr) {
   
       if (maxLength > 0 && infoLog) {
         var numBytesWrittenExclNull = stringToUTF8(log, infoLog, maxLength);
-        if (length) HEAP32[((length)>>2)]=numBytesWrittenExclNull;
+        if (length) SAFE_HEAP_STORE(((length)|0), ((numBytesWrittenExclNull)|0), 4);
       } else {
-        if (length) HEAP32[((length)>>2)]=0;
+        if (length) SAFE_HEAP_STORE(((length)|0), ((0)|0), 4);
       }
     }
 
@@ -7420,9 +7510,9 @@ function copyTempDouble(ptr) {
       if (pname == 0x8B84) { // GL_INFO_LOG_LENGTH
         var log = GLctx.getProgramInfoLog(GL.programs[program]);
         if (log === null) log = '(unknown error)';
-        HEAP32[((p)>>2)]=log.length + 1;
+        SAFE_HEAP_STORE(((p)|0), ((log.length + 1)|0), 4);
       } else if (pname == 0x8B87 /* GL_ACTIVE_UNIFORM_MAX_LENGTH */) {
-        HEAP32[((p)>>2)]=ptable.maxUniformLength;
+        SAFE_HEAP_STORE(((p)|0), ((ptable.maxUniformLength)|0), 4);
       } else if (pname == 0x8B8A /* GL_ACTIVE_ATTRIBUTE_MAX_LENGTH */) {
         if (ptable.maxAttributeLength == -1) {
           program = GL.programs[program];
@@ -7433,7 +7523,7 @@ function copyTempDouble(ptr) {
             ptable.maxAttributeLength = Math.max(ptable.maxAttributeLength, activeAttrib.name.length+1);
           }
         }
-        HEAP32[((p)>>2)]=ptable.maxAttributeLength;
+        SAFE_HEAP_STORE(((p)|0), ((ptable.maxAttributeLength)|0), 4);
       } else if (pname == 0x8A35 /* GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH */) {
         if (ptable.maxUniformBlockNameLength == -1) {
           program = GL.programs[program];
@@ -7444,9 +7534,9 @@ function copyTempDouble(ptr) {
             ptable.maxUniformBlockNameLength = Math.max(ptable.maxUniformBlockNameLength, activeBlockName.length+1);
           }
         }
-        HEAP32[((p)>>2)]=ptable.maxUniformBlockNameLength;
+        SAFE_HEAP_STORE(((p)|0), ((ptable.maxUniformBlockNameLength)|0), 4);
       } else {
-        HEAP32[((p)>>2)]=GLctx.getProgramParameter(GL.programs[program], pname);
+        SAFE_HEAP_STORE(((p)|0), ((GLctx.getProgramParameter(GL.programs[program], pname))|0), 4);
       }
     }
 
@@ -7455,9 +7545,9 @@ function copyTempDouble(ptr) {
       if (log === null) log = '(unknown error)';
       if (maxLength > 0 && infoLog) {
         var numBytesWrittenExclNull = stringToUTF8(log, infoLog, maxLength);
-        if (length) HEAP32[((length)>>2)]=numBytesWrittenExclNull;
+        if (length) SAFE_HEAP_STORE(((length)|0), ((numBytesWrittenExclNull)|0), 4);
       } else {
-        if (length) HEAP32[((length)>>2)]=0;
+        if (length) SAFE_HEAP_STORE(((length)|0), ((0)|0), 4);
       }
     }
 
@@ -7471,13 +7561,13 @@ function copyTempDouble(ptr) {
       if (pname == 0x8B84) { // GL_INFO_LOG_LENGTH
         var log = GLctx.getShaderInfoLog(GL.shaders[shader]);
         if (log === null) log = '(unknown error)';
-        HEAP32[((p)>>2)]=log.length + 1;
+        SAFE_HEAP_STORE(((p)|0), ((log.length + 1)|0), 4);
       } else if (pname == 0x8B88) { // GL_SHADER_SOURCE_LENGTH
         var source = GLctx.getShaderSource(GL.shaders[shader]);
         var sourceLength = (source === null || source.length == 0) ? 0 : source.length + 1;
-        HEAP32[((p)>>2)]=sourceLength;
+        SAFE_HEAP_STORE(((p)|0), ((sourceLength)|0), 4);
       } else {
-        HEAP32[((p)>>2)]=GLctx.getShaderParameter(GL.shaders[shader], pname);
+        SAFE_HEAP_STORE(((p)|0), ((GLctx.getShaderParameter(GL.shaders[shader], pname))|0), 4);
       }
     }
 
@@ -7733,6 +7823,10 @@ function copyTempDouble(ptr) {
       GLctx.useProgram(program ? GL.programs[program] : null);
     }
 
+  function _glVertexAttribPointer(index, size, type, normalized, stride, ptr) {
+      GLctx.vertexAttribPointer(index, size, type, !!normalized, stride, ptr);
+    }
+
    
 
   var _llvm_ceil_f64=Math_ceil;
@@ -7880,7 +7974,7 @@ function invoke_v(index) {
 
 Module.asmGlobalArg = {};
 
-Module.asmLibraryArg = { "abort": abort, "assert": assert, "enlargeMemory": enlargeMemory, "getTotalMemory": getTotalMemory, "abortOnCannotGrowMemory": abortOnCannotGrowMemory, "abortStackOverflow": abortStackOverflow, "nullFunc_ii": nullFunc_ii, "nullFunc_iii": nullFunc_iii, "nullFunc_iiii": nullFunc_iiii, "nullFunc_v": nullFunc_v, "invoke_ii": invoke_ii, "invoke_iii": invoke_iii, "invoke_iiii": invoke_iiii, "invoke_v": invoke_v, "___assert_fail": ___assert_fail, "___lock": ___lock, "___setErrNo": ___setErrNo, "___syscall140": ___syscall140, "___syscall145": ___syscall145, "___syscall146": ___syscall146, "___syscall221": ___syscall221, "___syscall5": ___syscall5, "___syscall54": ___syscall54, "___syscall6": ___syscall6, "___unlock": ___unlock, "_abort": _abort, "_emscripten_cancel_main_loop": _emscripten_cancel_main_loop, "_emscripten_get_now": _emscripten_get_now, "_emscripten_memcpy_big": _emscripten_memcpy_big, "_emscripten_set_main_loop": _emscripten_set_main_loop, "_emscripten_set_main_loop_timing": _emscripten_set_main_loop_timing, "_emscripten_webgl_create_context": _emscripten_webgl_create_context, "_emscripten_webgl_destroy_context": _emscripten_webgl_destroy_context, "_emscripten_webgl_make_context_current": _emscripten_webgl_make_context_current, "_glActiveTexture": _glActiveTexture, "_glAttachShader": _glAttachShader, "_glBindTexture": _glBindTexture, "_glClear": _glClear, "_glClearColor": _glClearColor, "_glCompileShader": _glCompileShader, "_glCreateProgram": _glCreateProgram, "_glCreateShader": _glCreateShader, "_glDeleteProgram": _glDeleteProgram, "_glGenBuffers": _glGenBuffers, "_glGenTextures": _glGenTextures, "_glGetAttribLocation": _glGetAttribLocation, "_glGetProgramInfoLog": _glGetProgramInfoLog, "_glGetProgramiv": _glGetProgramiv, "_glGetShaderInfoLog": _glGetShaderInfoLog, "_glGetShaderiv": _glGetShaderiv, "_glGetUniformLocation": _glGetUniformLocation, "_glIsProgram": _glIsProgram, "_glIsShader": _glIsShader, "_glLinkProgram": _glLinkProgram, "_glPixelStorei": _glPixelStorei, "_glShaderSource": _glShaderSource, "_glTexImage2D": _glTexImage2D, "_glTexParameteri": _glTexParameteri, "_glUniform1i": _glUniform1i, "_glUseProgram": _glUseProgram, "_llvm_ceil_f64": _llvm_ceil_f64, "_llvm_fabs_f64": _llvm_fabs_f64, "_llvm_floor_f64": _llvm_floor_f64, "_llvm_sqrt_f64": _llvm_sqrt_f64, "emscriptenWebGLComputeImageSize": emscriptenWebGLComputeImageSize, "emscriptenWebGLGetHeapForType": emscriptenWebGLGetHeapForType, "emscriptenWebGLGetShiftForType": emscriptenWebGLGetShiftForType, "emscriptenWebGLGetTexPixelData": emscriptenWebGLGetTexPixelData, "DYNAMICTOP_PTR": DYNAMICTOP_PTR, "tempDoublePtr": tempDoublePtr, "STACKTOP": STACKTOP, "STACK_MAX": STACK_MAX };
+Module.asmLibraryArg = { "abort": abort, "assert": assert, "enlargeMemory": enlargeMemory, "getTotalMemory": getTotalMemory, "abortOnCannotGrowMemory": abortOnCannotGrowMemory, "abortStackOverflow": abortStackOverflow, "segfault": segfault, "alignfault": alignfault, "ftfault": ftfault, "nullFunc_ii": nullFunc_ii, "nullFunc_iii": nullFunc_iii, "nullFunc_iiii": nullFunc_iiii, "nullFunc_v": nullFunc_v, "invoke_ii": invoke_ii, "invoke_iii": invoke_iii, "invoke_iiii": invoke_iiii, "invoke_v": invoke_v, "___assert_fail": ___assert_fail, "___lock": ___lock, "___setErrNo": ___setErrNo, "___syscall140": ___syscall140, "___syscall145": ___syscall145, "___syscall146": ___syscall146, "___syscall221": ___syscall221, "___syscall5": ___syscall5, "___syscall54": ___syscall54, "___syscall6": ___syscall6, "___unlock": ___unlock, "_abort": _abort, "_emscripten_cancel_main_loop": _emscripten_cancel_main_loop, "_emscripten_get_now": _emscripten_get_now, "_emscripten_memcpy_big": _emscripten_memcpy_big, "_emscripten_set_main_loop": _emscripten_set_main_loop, "_emscripten_set_main_loop_timing": _emscripten_set_main_loop_timing, "_emscripten_webgl_create_context": _emscripten_webgl_create_context, "_emscripten_webgl_destroy_context": _emscripten_webgl_destroy_context, "_emscripten_webgl_make_context_current": _emscripten_webgl_make_context_current, "_glActiveTexture": _glActiveTexture, "_glAttachShader": _glAttachShader, "_glBindBuffer": _glBindBuffer, "_glBindTexture": _glBindTexture, "_glBlendFunc": _glBlendFunc, "_glBufferData": _glBufferData, "_glClear": _glClear, "_glClearColor": _glClearColor, "_glCompileShader": _glCompileShader, "_glCreateProgram": _glCreateProgram, "_glCreateShader": _glCreateShader, "_glDeleteProgram": _glDeleteProgram, "_glDrawElements": _glDrawElements, "_glEnable": _glEnable, "_glEnableVertexAttribArray": _glEnableVertexAttribArray, "_glGenBuffers": _glGenBuffers, "_glGenTextures": _glGenTextures, "_glGetAttribLocation": _glGetAttribLocation, "_glGetProgramInfoLog": _glGetProgramInfoLog, "_glGetProgramiv": _glGetProgramiv, "_glGetShaderInfoLog": _glGetShaderInfoLog, "_glGetShaderiv": _glGetShaderiv, "_glGetUniformLocation": _glGetUniformLocation, "_glIsProgram": _glIsProgram, "_glIsShader": _glIsShader, "_glLinkProgram": _glLinkProgram, "_glPixelStorei": _glPixelStorei, "_glShaderSource": _glShaderSource, "_glTexImage2D": _glTexImage2D, "_glTexParameteri": _glTexParameteri, "_glUniform1i": _glUniform1i, "_glUseProgram": _glUseProgram, "_glVertexAttribPointer": _glVertexAttribPointer, "_llvm_ceil_f64": _llvm_ceil_f64, "_llvm_fabs_f64": _llvm_fabs_f64, "_llvm_floor_f64": _llvm_floor_f64, "_llvm_sqrt_f64": _llvm_sqrt_f64, "emscriptenWebGLComputeImageSize": emscriptenWebGLComputeImageSize, "emscriptenWebGLGetHeapForType": emscriptenWebGLGetHeapForType, "emscriptenWebGLGetShiftForType": emscriptenWebGLGetShiftForType, "emscriptenWebGLGetTexPixelData": emscriptenWebGLGetTexPixelData, "DYNAMICTOP_PTR": DYNAMICTOP_PTR, "tempDoublePtr": tempDoublePtr, "ABORT": ABORT, "STACKTOP": STACKTOP, "STACK_MAX": STACK_MAX };
 // EMSCRIPTEN_START_ASM
 var asm =Module["asm"]// EMSCRIPTEN_END_ASM
 (Module.asmGlobalArg, Module.asmLibraryArg, buffer);
@@ -7967,6 +8061,12 @@ var real_getTempRet0 = asm["getTempRet0"]; asm["getTempRet0"] = function() {
   assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
   assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
   return real_getTempRet0.apply(null, arguments);
+};
+
+var real_setDynamicTop = asm["setDynamicTop"]; asm["setDynamicTop"] = function() {
+  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+  return real_setDynamicTop.apply(null, arguments);
 };
 
 var real_setTempRet0 = asm["setTempRet0"]; asm["setTempRet0"] = function() {
@@ -8071,6 +8171,10 @@ var runPostSets = Module["runPostSets"] = function() {
   assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
   assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
   return Module["asm"]["runPostSets"].apply(null, arguments) };
+var setDynamicTop = Module["setDynamicTop"] = function() {
+  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+  return Module["asm"]["setDynamicTop"].apply(null, arguments) };
 var setTempRet0 = Module["setTempRet0"] = function() {
   assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
   assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
@@ -8149,7 +8253,6 @@ Module["writeArrayToMemory"] = writeArrayToMemory;
 Module["writeAsciiToMemory"] = writeAsciiToMemory;
 Module["addRunDependency"] = addRunDependency;
 Module["removeRunDependency"] = removeRunDependency;
-if (!Module["ENV"]) Module["ENV"] = function() { abort("'ENV' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") };
 if (!Module["FS"]) Module["FS"] = function() { abort("'FS' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") };
 Module["FS_createFolder"] = FS.createFolder;
 Module["FS_createPath"] = FS.createPath;
@@ -8411,6 +8514,8 @@ function abort(what) {
 }
 Module['abort'] = abort;
 
+// {{PRE_RUN_ADDITIONS}}
+
 if (Module['preInit']) {
   if (typeof Module['preInit'] == 'function') Module['preInit'] = [Module['preInit']];
   while (Module['preInit'].length > 0) {
@@ -8427,6 +8532,8 @@ if (Module['noInitialRun']) {
 Module["noExitRuntime"] = true;
 
 run();
+
+// {{POST_RUN_ADDITIONS}}
 
 
 

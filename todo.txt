@@ -2,7 +2,7 @@ Bugs:
 
 we should have a comment on the general design
 
-existing code doesn't compile
+type inference not implemented
 
 we call the left hand side "ident",
 that is wrong, it's an lvalue
@@ -29,9 +29,7 @@ test ints
 
 Graphics Ideas:
 
-we could construct the coords array and render only once
-we could store the color in a vertex attribute, 
-and create gradients, but rendering tris might ruin it
+draw a rect around each text piece
 
 we could clip
 

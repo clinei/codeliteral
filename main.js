@@ -21,15 +21,11 @@ function writeAsciiToMemory(str, ptr){
     Module.HEAP8[ptr>>0] = 0;
 }
 function set_text(new_text) {
-    const ptr = call_malloc(new_text.length);
+    const ptr = call_malloc(new_text.length + 1);
     writeAsciiToMemory(new_text, ptr);
     call_set_text(ptr);
 }
 const code = `
-struct Dude {
-	int bro;
-};
-/*
 bool test_nested_loop() {
 	bool passed = true;
 	int[6] results;
@@ -48,7 +44,6 @@ bool test_nested_loop() {
 	}
 	return passed;
 }
-/*
 bool test_array() {
 	bool passed = true;
 	int[8] arr;
@@ -194,9 +189,6 @@ int some_other_function(char number) {
 	}
 	return number;
 }
-/*
-*/
-/*
 int some_function(uchar num_iters) {
 	int sum = 0;
 	for (int i = 0; i < num_iters; i += 1) {
@@ -248,7 +240,6 @@ int main() {
 	return local_variable;
 }
 main();
-*/
 `;
 /*
 const code = `

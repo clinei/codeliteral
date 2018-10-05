@@ -17,11 +17,12 @@ typedef unsigned char pixel;
 
 struct Atlas_Program {
     GLuint program_id;
-    GLuint vbo_id;
+    GLuint coord_buffer_id;
+    GLuint fg_coord_buffer_id;
+    GLuint index_buffer_id;
     GLint attrib_coord_loc;
+    GLint attrib_fg_coord_loc;
     GLint uniform_tex_loc;
-    GLint uniform_fg_color_loc;
-    GLint uniform_bg_color_loc;
 };
 struct Atlas_Program atlas_program;
 
@@ -32,12 +33,13 @@ void init_atlas_program() {
     atlas_program.program_id = program_id;
 
     glUseProgram(program_id);
-	atlas_program.attrib_coord_loc  = glGetAttribLocation(program_id, "coord");
-	atlas_program.uniform_tex_loc   = glGetUniformLocation(program_id, "tex");
-	atlas_program.uniform_fg_color_loc = glGetUniformLocation(program_id, "fg_color");
-	atlas_program.uniform_bg_color_loc = glGetUniformLocation(program_id, "bg_color");
+	atlas_program.attrib_coord_loc    = glGetAttribLocation(program_id, "coord");
+	atlas_program.attrib_fg_coord_loc = glGetAttribLocation(program_id, "fg_coord");
+	atlas_program.uniform_tex_loc     = glGetUniformLocation(program_id, "tex");
 
-    glGenBuffers(1, &atlas_program.vbo_id);
+    glGenBuffers(1, &atlas_program.coord_buffer_id);
+    glGenBuffers(1, &atlas_program.fg_coord_buffer_id);
+    glGenBuffers(1, &atlas_program.index_buffer_id);
 }
 
 struct Atlas {
@@ -77,19 +79,6 @@ void init_atlas(struct Atlas* atlas, char* font_filename, float font_size, size_
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    /*
-    pixel* rgba_map = malloc(bake_width * bake_height * 4);
-    size_t sum = 0;
-    for (size_t i = 0; i < bake_width * bake_height; i += 1) {
-        pixel value = bake_bitmap[i];
-        rgba_map[i * 4 + 0] = value;
-        rgba_map[i * 4 + 1] = value;
-        rgba_map[i * 4 + 2] = value;
-        rgba_map[i * 4 + 3] = value;
-        sum += value;
-    }
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bake_width, bake_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgba_map);
-    */
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, bake_width, bake_height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, bake_bitmap);
     free(bake_bitmap);
@@ -110,13 +99,6 @@ int height;
 
 EMSCRIPTEN_WEBGL_CONTEXT_HANDLE debugger_context;
 
-struct point {
-    GLfloat x;
-    GLfloat y;
-    GLfloat s;
-    GLfloat t;
-};
-
 struct Render_Data {
     struct Atlas* font_atlas;
     float xpos;
@@ -124,25 +106,60 @@ struct Render_Data {
     float line_height;
     size_t indent_level;
 
-    size_t coords_count;
+    size_t coords_length;
     size_t coords_capacity;
-    struct point* coords;
+    GLfloat* coords;
+    GLfloat* fg_coords;
+    size_t indices_length;
+    size_t indices_capacity;
+    GLuint* indices;
 
-    GLfloat fg_color[4];
-    GLfloat bg_color[4];
+    GLfloat* fg_color;
+    GLfloat* bg_color;
+
+    GLfloat* hilite_literal_fg_color;
+    GLfloat* hilite_string_fg_color;
+    GLfloat* hilite_ident_fg_color;
+    GLfloat* hilite_type_fg_color;
+    GLfloat* hilite_proc_fg_color;
+    GLfloat* hilite_return_fg_color;
+    GLfloat* hilite_keyword_fg_color;
+    GLfloat* hilite_op_fg_color;
 };
 
 char* my_text;
 struct Code_Node_Array* my_code_node_array;
 struct Render_Data* my_render_data;
-GLfloat hilite_literal_fg_color[4] = { 15/255.0f,  218/255.0f, 184/255.0f, 1.0 };
-GLfloat hilite_string_fg_color[4]  = { 15/255.0f,  218/255.0f, 184/255.0f, 1.0 };
-GLfloat hilite_ident_fg_color[4]   = { 220/255.0f, 220/255.0f, 220/255.0f, 1.0 };
-GLfloat hilite_type_fg_color[4]    = { 118/255.0f, 140/255.0f, 252/255.0f, 1.0 };
-GLfloat hilite_proc_fg_color[4]    = { 220/255.0f, 221/255.0f, 140/255.0f, 1.0 };
-GLfloat hilite_return_fg_color[4]  = { 231/255.0f, 250/255.0f, 236/255.0f, 1.0 };
-GLfloat hilite_keyword_fg_color[4] = { 248/255.0f, 130/255.0f, 248/255.0f, 1.0 };
-GLfloat hilite_op_fg_color[4]      = { 80/255.0f,  240/255.0f,  80/255.0f, 1.0 };
+
+void init_hilite() {
+    
+    GLfloat hilite_literal_fg_color[4] = { 15/255.0f,  218/255.0f, 184/255.0f, 1.0 };
+    GLfloat hilite_string_fg_color[4]  = { 15/255.0f,  218/255.0f, 184/255.0f, 1.0 };
+    GLfloat hilite_ident_fg_color[4]   = { 220/255.0f, 220/255.0f, 220/255.0f, 1.0 };
+    GLfloat hilite_type_fg_color[4]    = { 118/255.0f, 140/255.0f, 252/255.0f, 1.0 };
+    GLfloat hilite_proc_fg_color[4]    = { 220/255.0f, 221/255.0f, 140/255.0f, 1.0 };
+    GLfloat hilite_return_fg_color[4]  = { 231/255.0f, 250/255.0f, 236/255.0f, 1.0 };
+    GLfloat hilite_keyword_fg_color[4] = { 248/255.0f, 130/255.0f, 248/255.0f, 1.0 };
+    GLfloat hilite_op_fg_color[4]      = { 80/255.0f,  240/255.0f,  80/255.0f, 1.0 };
+
+    my_render_data->hilite_literal_fg_color = malloc(sizeof(GLfloat) * 4);
+    my_render_data->hilite_string_fg_color  = malloc(sizeof(GLfloat) * 4);
+    my_render_data->hilite_ident_fg_color   = malloc(sizeof(GLfloat) * 4);
+    my_render_data->hilite_type_fg_color    = malloc(sizeof(GLfloat) * 4);
+    my_render_data->hilite_proc_fg_color    = malloc(sizeof(GLfloat) * 4);
+    my_render_data->hilite_return_fg_color  = malloc(sizeof(GLfloat) * 4);
+    my_render_data->hilite_keyword_fg_color = malloc(sizeof(GLfloat) * 4);
+    my_render_data->hilite_op_fg_color      = malloc(sizeof(GLfloat) * 4);
+
+    memcpy(my_render_data->hilite_literal_fg_color, &hilite_literal_fg_color, sizeof(GLfloat) * 4);
+    memcpy(my_render_data->hilite_string_fg_color,  &hilite_string_fg_color,  sizeof(GLfloat) * 4);
+    memcpy(my_render_data->hilite_ident_fg_color,   &hilite_ident_fg_color,   sizeof(GLfloat) * 4);
+    memcpy(my_render_data->hilite_type_fg_color,    &hilite_type_fg_color,    sizeof(GLfloat) * 4);
+    memcpy(my_render_data->hilite_proc_fg_color,    &hilite_proc_fg_color,    sizeof(GLfloat) * 4);
+    memcpy(my_render_data->hilite_return_fg_color,  &hilite_return_fg_color,  sizeof(GLfloat) * 4);
+    memcpy(my_render_data->hilite_keyword_fg_color, &hilite_keyword_fg_color, sizeof(GLfloat) * 4);
+    memcpy(my_render_data->hilite_op_fg_color,      &hilite_op_fg_color,      sizeof(GLfloat) * 4);
+}
 
 void convert_screen_coords_to_view_coords(float x, float y,
                                           float width, float height,
@@ -151,9 +168,14 @@ void convert_screen_coords_to_view_coords(float x, float y,
     *out_y = -(y * 2 / height - 1);
 }
 void render_text(char* text, float* xpos, float* ypos,
-                 GLfloat fg_color[4],
-                 GLfloat bg_color[4],
+                 GLfloat* fg_color,
+                 GLfloat* bg_color,
                  struct Render_Data* render_data) {
+
+    // clip
+    if (*ypos > height) {
+        return;
+    }
 
     for (char* p = text; *p; p++) {
 
@@ -165,6 +187,21 @@ void render_text(char* text, float* xpos, float* ypos,
         if (*p =='\t') {
             *xpos += render_data->font_atlas->char_width * 4;
             continue;
+        }
+        
+        // clip
+        if (*xpos > width) {
+            continue;
+        }
+        if (*ypos > height) {
+            break;
+        }
+
+        for (size_t i = 0; i < 4; i += 1) {
+            render_data->fg_coords[render_data->coords_length + i * 4 + 0] = fg_color[0];
+            render_data->fg_coords[render_data->coords_length + i * 4 + 1] = fg_color[1];
+            render_data->fg_coords[render_data->coords_length + i * 4 + 2] = fg_color[2];
+            render_data->fg_coords[render_data->coords_length + i * 4 + 3] = fg_color[3];
         }
 
         stbtt_aligned_quad q;
@@ -181,20 +218,51 @@ void render_text(char* text, float* xpos, float* ypos,
         float bottom_left_x, bottom_left_y;
         convert_screen_coords_to_view_coords(q.x0, q.y1, width, height, &bottom_left_x, &bottom_left_y);
 
-        // first triangle
-        render_data->coords[render_data->coords_count++] = (struct point) {  top_left_x,     top_left_y,     q.s0,  q.t0 };
-        render_data->coords[render_data->coords_count++] = (struct point) {  top_right_x,    top_right_y,    q.s1,  q.t0 };
-        render_data->coords[render_data->coords_count++] = (struct point) {  bottom_right_x, bottom_right_y, q.s1,  q.t1 };
+        render_data->coords[render_data->coords_length + 4 * 0 + 0] = top_left_x;
+        render_data->coords[render_data->coords_length + 4 * 0 + 1] = top_left_y;
+        render_data->coords[render_data->coords_length + 4 * 0 + 2] = q.s0;
+        render_data->coords[render_data->coords_length + 4 * 0 + 3] = q.t0;
+        
+        render_data->coords[render_data->coords_length + 4 * 1 + 0] = top_right_x;
+        render_data->coords[render_data->coords_length + 4 * 1 + 1] = top_right_y;
+        render_data->coords[render_data->coords_length + 4 * 1 + 2] = q.s1;
+        render_data->coords[render_data->coords_length + 4 * 1 + 3] = q.t0;
+        
+        render_data->coords[render_data->coords_length + 4 * 2 + 0] = bottom_right_x;
+        render_data->coords[render_data->coords_length + 4 * 2 + 1] = bottom_right_y;
+        render_data->coords[render_data->coords_length + 4 * 2 + 2] = q.s1;
+        render_data->coords[render_data->coords_length + 4 * 2 + 3] = q.t1;
+        
+        render_data->coords[render_data->coords_length + 4 * 3 + 0] = bottom_left_x;
+        render_data->coords[render_data->coords_length + 4 * 3 + 1] = bottom_left_y;
+        render_data->coords[render_data->coords_length + 4 * 3 + 2] = q.s0;
+        render_data->coords[render_data->coords_length + 4 * 3 + 3] = q.t1;
 
-        // second triangle
-        render_data->coords[render_data->coords_count++] = (struct point) {  bottom_right_x, bottom_right_y, q.s1,  q.t1 };
-        render_data->coords[render_data->coords_count++] = (struct point) {  bottom_left_x,  bottom_left_y,  q.s0,  q.t1 };
-        render_data->coords[render_data->coords_count++] = (struct point) {  top_left_x,     top_left_y,     q.s0,  q.t0 };
+        render_data->indices[render_data->indices_length + 0] = render_data->coords_length / 4 + 0;
+        render_data->indices[render_data->indices_length + 1] = render_data->coords_length / 4 + 1;
+        render_data->indices[render_data->indices_length + 2] = render_data->coords_length / 4 + 2;
+        render_data->indices[render_data->indices_length + 3] = render_data->coords_length / 4 + 2;
+        render_data->indices[render_data->indices_length + 4] = render_data->coords_length / 4 + 3;
+        render_data->indices[render_data->indices_length + 5] = render_data->coords_length / 4 + 0;
+
+        render_data->indices_length += 6;
+        render_data->coords_length += 4 * 4;
 
         // @Realloc
-        if (render_data->coords_count == render_data->coords_capacity) {
+        // @Bug
+        // breaks after a few reallocs
+        // looks like the problem is on Emscripten's side
+        // setting the capacity high enough in the beginning for now
+        if (render_data->indices_length == render_data->indices_capacity) {
+            render_data->indices_capacity *= 2;
+            render_data->indices = realloc(render_data->indices, render_data->indices_capacity);
+        }
+        // @Realloc
+        if (render_data->coords_length == render_data->coords_capacity) {
             render_data->coords_capacity *= 2;
             render_data->coords = realloc(render_data->coords, render_data->coords_capacity);
+
+            render_data->fg_coords = realloc(render_data->fg_coords, render_data->coords_capacity);
         }
     }
 }
@@ -205,7 +273,7 @@ void render_type(struct Type_Info* type,
     switch (type->kind) {
         case TYPE_INFO_TAG_IDENT:
             render_text(type->ident.name, &render_data->xpos, &render_data->ypos,
-                        hilite_type_fg_color,
+                        render_data->hilite_type_fg_color,
                         render_data->bg_color,
                         render_data);
             break;
@@ -218,7 +286,7 @@ void render_type(struct Type_Info* type,
             char* length = malloc(sizeof(char) * 19);
             snprintf(length, 19, "%zu", type->array.length);
             render_text(length, &render_data->xpos, &render_data->ypos,
-                        hilite_literal_fg_color,
+                        render_data->hilite_literal_fg_color,
                         render_data->bg_color,
                         render_data);
             free(length);
@@ -251,10 +319,14 @@ void render_newline(struct Render_Data* render_data) {
 void render_node(struct Code_Node* node,
                  struct Render_Data* render_data) {
 
+    // clip
+    if (render_data->ypos > height) {
+        return;
+    }
     switch (node->kind) {
         case CODE_KIND_IF:
             render_text("if", &render_data->xpos, &render_data->ypos,
-                        hilite_keyword_fg_color,
+                        render_data->hilite_keyword_fg_color,
                         render_data->bg_color,
                         render_data);
             render_space(render_data);
@@ -272,7 +344,7 @@ void render_node(struct Code_Node* node,
             break;
         case CODE_KIND_ELSE:
             render_text("else", &render_data->xpos, &render_data->ypos,
-                        hilite_keyword_fg_color,
+                        render_data->hilite_keyword_fg_color,
                         render_data->bg_color,
                         render_data);
             render_space(render_data);
@@ -280,7 +352,7 @@ void render_node(struct Code_Node* node,
             break;
         case CODE_KIND_WHILE:
             render_text("while", &render_data->xpos, &render_data->ypos,
-                        hilite_keyword_fg_color,
+                        render_data->hilite_keyword_fg_color,
                         render_data->bg_color,
                         render_data);
             render_space(render_data);
@@ -298,14 +370,14 @@ void render_node(struct Code_Node* node,
             break;
         case CODE_KIND_DO_WHILE:
             render_text("do", &render_data->xpos, &render_data->ypos,
-                        hilite_keyword_fg_color,
+                        render_data->hilite_keyword_fg_color,
                         render_data->bg_color,
                         render_data);
             render_space(render_data);
             render_node(node->do_while_.expression, render_data);
             render_space(render_data);
             render_text("while", &render_data->xpos, &render_data->ypos,
-                        hilite_keyword_fg_color,
+                        render_data->hilite_keyword_fg_color,
                         render_data->bg_color,
                         render_data);
             render_space(render_data);
@@ -321,7 +393,7 @@ void render_node(struct Code_Node* node,
             break;
         case CODE_KIND_FOR:
             render_text("for", &render_data->xpos, &render_data->ypos,
-                        hilite_keyword_fg_color,
+                        render_data->hilite_keyword_fg_color,
                         render_data->bg_color,
                         render_data);
             render_space(render_data);
@@ -351,91 +423,93 @@ void render_node(struct Code_Node* node,
             break;
         case CODE_KIND_BREAK:
             render_text("break", &render_data->xpos, &render_data->ypos,
-                        hilite_keyword_fg_color,
+                        render_data->hilite_keyword_fg_color,
                         render_data->bg_color,
                         render_data);
             break;
         case CODE_KIND_CONTINUE:
             render_text("continue", &render_data->xpos, &render_data->ypos,
-                        hilite_keyword_fg_color,
+                        render_data->hilite_keyword_fg_color,
                         render_data->bg_color,
                         render_data);
             break;
         case CODE_KIND_INCREMENT:
             render_node(node->increment.ident, render_data);
             render_text("++", &render_data->xpos, &render_data->ypos,
-                        hilite_op_fg_color,
+                        render_data->hilite_op_fg_color,
                         render_data->bg_color,
                         render_data);
             break;
         case CODE_KIND_DECREMENT:
             render_node(node->decrement.ident, render_data);
             render_text("--", &render_data->xpos, &render_data->ypos,
-                        hilite_op_fg_color,
+                        render_data->hilite_op_fg_color,
                         render_data->bg_color,
                         render_data);
             break;
         case CODE_KIND_DECLARATION:
-            if (node->declaration.expression->kind == CODE_KIND_PROCEDURE) {
-                struct Code_Procedure* proc = &(node->declaration.expression->procedure);
-                render_type(proc->return_type, render_data);
-                render_space(render_data);
-                render_node(node->declaration.ident, render_data);
-                render_text("(", &render_data->xpos, &render_data->ypos,
-                            render_data->fg_color,
-                            render_data->bg_color,
-                            render_data);
-                bool first = true;
-                for (size_t i = 0; i < proc->params_length; i += 1) {
-                    if (first == false) {
-                        render_text(",", &render_data->xpos, &render_data->ypos,
-                                    render_data->fg_color,
-                                    render_data->bg_color,
-                                    render_data);
-                        render_space(render_data);
-                    }
-                    else {
-                        first = true;
-                    }
-                    render_node(proc->params[i], render_data);
-                }
-                render_text(")", &render_data->xpos, &render_data->ypos,
-                            render_data->fg_color,
-                            render_data->bg_color,
-                            render_data);
-                render_space(render_data);
-                render_node(proc->block, render_data);
-            }
-            else if (node->declaration.expression->kind == CODE_KIND_STRUCT) {
-                render_text("struct", &render_data->xpos, &render_data->ypos,
-                            hilite_type_fg_color,
-                            render_data->bg_color,
-                            render_data);
-                render_space(render_data);
-                render_node(node->declaration.ident, render_data);
-                render_space(render_data);
-                render_node(node->declaration.expression->struct_.block, render_data);
-            }
-            else {
-                render_type(node->declaration.type, render_data);
-                render_space(render_data);
-                render_node(node->declaration.ident, render_data);
-                if (node->declaration.expression != NULL) {
+            if (node->declaration.expression != NULL) {
+                if (node->declaration.expression->kind == CODE_KIND_PROCEDURE) {
+                    struct Code_Procedure* proc = &(node->declaration.expression->procedure);
+                    render_type(proc->return_type, render_data);
                     render_space(render_data);
-                    render_text("=", &render_data->xpos, &render_data->ypos,
-                                hilite_op_fg_color,
+                    render_node(node->declaration.ident, render_data);
+                    render_text("(", &render_data->xpos, &render_data->ypos,
+                                render_data->fg_color,
+                                render_data->bg_color,
+                                render_data);
+                    bool first = true;
+                    for (size_t i = 0; i < proc->params_length; i += 1) {
+                        if (first == false) {
+                            render_text(",", &render_data->xpos, &render_data->ypos,
+                                        render_data->fg_color,
+                                        render_data->bg_color,
+                                        render_data);
+                            render_space(render_data);
+                        }
+                        else {
+                            first = false;
+                        }
+                        render_node(proc->params[i], render_data);
+                    }
+                    render_text(")", &render_data->xpos, &render_data->ypos,
+                                render_data->fg_color,
                                 render_data->bg_color,
                                 render_data);
                     render_space(render_data);
-                    render_node(node->declaration.expression, render_data);
+                    render_node(proc->block, render_data);
+                    break;
                 }
+                else if (node->declaration.expression->kind == CODE_KIND_STRUCT) {
+                    render_text("struct", &render_data->xpos, &render_data->ypos,
+                                render_data->hilite_type_fg_color,
+                                render_data->bg_color,
+                                render_data);
+                    render_space(render_data);
+                    render_node(node->declaration.ident, render_data);
+                    render_space(render_data);
+                    render_node(node->declaration.expression->struct_.block, render_data);
+                    break;
+                }
+            }
+            render_type(node->declaration.type, render_data);
+            render_space(render_data);
+            render_node(node->declaration.ident, render_data);
+            if (node->declaration.expression != NULL) {
+                render_space(render_data);
+                render_text("=", &render_data->xpos, &render_data->ypos,
+                            render_data->hilite_op_fg_color,
+                            render_data->bg_color,
+                            render_data);
+                render_space(render_data);
+                render_node(node->declaration.expression, render_data);
             }
             break;
         case CODE_KIND_ASSIGN:
             render_node(node->assign.ident, render_data);
             render_space(render_data);
             render_text("=", &render_data->xpos, &render_data->ypos,
-                        hilite_op_fg_color,
+                        render_data->hilite_op_fg_color,
                         render_data->bg_color,
                         render_data);
             render_space(render_data);
@@ -445,11 +519,11 @@ void render_node(struct Code_Node* node,
             render_node(node->opassign.ident, render_data);
             render_space(render_data);
             render_text(node->opassign.operation_type, &render_data->xpos, &render_data->ypos,
-                        hilite_op_fg_color,
+                        render_data->hilite_op_fg_color,
                         render_data->bg_color,
                         render_data);
             render_text("=", &render_data->xpos, &render_data->ypos,
-                        hilite_op_fg_color,
+                        render_data->hilite_op_fg_color,
                         render_data->bg_color,
                         render_data);
             render_space(render_data);
@@ -495,13 +569,19 @@ void render_node(struct Code_Node* node,
                         render_data->fg_color,
                         render_data->bg_color,
                         render_data);
+            bool first = true;
             for (size_t i = 0; i < node->call.args_length; i += 1) {
                 render_node(node->call.args[i], render_data);
-                render_text(",", &render_data->xpos, &render_data->ypos,
-                            render_data->fg_color,
-                            render_data->bg_color,
-                            render_data);
-                render_space(render_data);
+                if (first == false) {
+                    render_text(",", &render_data->xpos, &render_data->ypos,
+                                render_data->fg_color,
+                                render_data->bg_color,
+                                render_data);
+                    render_space(render_data);
+                }
+                else {
+                    first = false;
+                }
             }
             render_text(")", &render_data->xpos, &render_data->ypos,
                         render_data->fg_color,
@@ -510,7 +590,7 @@ void render_node(struct Code_Node* node,
             break;
         case CODE_KIND_RETURN:
             render_text("return", &render_data->xpos, &render_data->ypos,
-                        hilite_keyword_fg_color,
+                        render_data->hilite_keyword_fg_color,
                         render_data->bg_color,
                         render_data);
             if (node->return_.expression != NULL) {
@@ -530,7 +610,7 @@ void render_node(struct Code_Node* node,
             render_node(node->binary_operation.left, render_data);
             render_space(render_data);
             render_text(node->binary_operation.operation_type, &render_data->xpos, &render_data->ypos,
-                        hilite_op_fg_color,
+                        render_data->hilite_op_fg_color,
                         render_data->bg_color,
                         render_data);
             render_space(render_data);
@@ -553,7 +633,7 @@ void render_node(struct Code_Node* node,
             break;
         case CODE_KIND_IDENT:
             render_text(node->ident.name, &render_data->xpos, &render_data->ypos,
-                        hilite_ident_fg_color,
+                        render_data->hilite_ident_fg_color,
                         render_data->bg_color,
                         render_data);
             break;
@@ -562,9 +642,8 @@ void render_node(struct Code_Node* node,
             42;
             char* literal_int = malloc(sizeof(char) * 19);
             snprintf(literal_int, 19, "%d", node->literal_int.value);
-            // printf("literal_int: %s\n", literal_int);
             render_text(literal_int, &render_data->xpos, &render_data->ypos,
-                        hilite_literal_fg_color,
+                        render_data->hilite_literal_fg_color,
                         render_data->bg_color,
                         render_data);
             free(literal_int);
@@ -575,7 +654,7 @@ void render_node(struct Code_Node* node,
             char* literal_float = malloc(sizeof(char) * 19);
             snprintf(literal_float, 19, "%f", node->literal_float.value);
             render_text(literal_float, &render_data->xpos, &render_data->ypos,
-                        hilite_literal_fg_color,
+                        render_data->hilite_literal_fg_color,
                         render_data->bg_color,
                         render_data);
             free(literal_float);
@@ -591,21 +670,21 @@ void render_node(struct Code_Node* node,
                 literal_bool = "false";
             }
             render_text(literal_bool, &render_data->xpos, &render_data->ypos,
-                        hilite_literal_fg_color,
+                        render_data->hilite_literal_fg_color,
                         render_data->bg_color,
                         render_data);
             break;
         case CODE_KIND_STRING:
             render_text("\"", &render_data->xpos, &render_data->ypos,
-                        hilite_literal_fg_color,
+                        render_data->hilite_literal_fg_color,
                         render_data->bg_color,
                         render_data);
             render_text(node->string_.pointer, &render_data->xpos, &render_data->ypos,
-                        hilite_literal_fg_color,
+                        render_data->hilite_literal_fg_color,
                         render_data->bg_color,
                         render_data);
             render_text("\"", &render_data->xpos, &render_data->ypos,
-                        hilite_literal_fg_color,
+                        render_data->hilite_literal_fg_color,
                         render_data->bg_color,
                         render_data);
             break;
@@ -660,53 +739,53 @@ void render_node(struct Code_Node* node,
 EMSCRIPTEN_KEEPALIVE
 void render() {
 
-    GLfloat white[4] = { 230 / 255.0f, 230 / 255.0f, 230 / 255.0f, 1 };
+    GLfloat white[4] =       { 230 / 255.0f, 230 / 255.0f, 230 / 255.0f, 1 };
+    GLfloat clear_color[4] = { 37 / 255.0f, 37 / 255.0f, 37 / 255.0f, 1 };
+    GLfloat bg_color[4] =    { 0 / 255.0f, 0 / 255.0f, 0 / 255.0f, 0 };
+
     GLfloat red[4] = { 255 / 255.0f, 0 / 255.0f, 0 / 255.0f, 1 };
     GLfloat green[4] = { 0 / 255.0f, 255 / 255.0f, 0 / 255.0f, 1 };
     GLfloat blue[4] = { 0 / 255.0f, 0 / 255.0f, 255 / 255.0f, 1 };
-    GLfloat bg_color[4] = { 37 / 255.0f, 37 / 255.0f, 37 / 255.0f, 1 };
 
     emscripten_webgl_make_context_current(debugger_context);
 
-	glClearColor(bg_color[0], bg_color[1], bg_color[2], bg_color[3]);
+	glClearColor(clear_color[0], clear_color[1], clear_color[2], clear_color[3]);
 	glClear(GL_COLOR_BUFFER_BIT);
-    /*
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glUseProgram(atlas_program.program_id);
+
+    glBindTexture(GL_TEXTURE_2D, my_render_data->font_atlas->tex);
+    glUniform1i(atlas_program.uniform_tex_loc, 0);
 
     my_render_data->xpos = 0;
     my_render_data->ypos = my_render_data->font_atlas->font_size;
     my_render_data->indent_level = 0;
     my_render_data->line_height = 1.01;
 
-    my_render_data->coords_count = 0;
+    my_render_data->coords_length = 0;
+    my_render_data->indices_length = 0;
     
-    memcpy(&my_render_data->fg_color, &white, sizeof(GLfloat) * 4);
-    memcpy(&my_render_data->bg_color, &bg_color, sizeof(GLfloat) * 4);
+    memcpy(my_render_data->fg_color, &white, sizeof(GLfloat) * 4);
+    memcpy(my_render_data->bg_color, &bg_color, sizeof(GLfloat) * 4);
 
-    // render_node(my_code_node_array->last, my_render_data);
-    /*
-    render_text("text\nmore\ntext", &my_render_data->xpos, &my_render_data->ypos,
-                my_render_data->fg_color,
-                my_render_data->bg_color,
-                my_render_data);
+    render_node(my_code_node_array->last, my_render_data);
 
-    */
-    /*
-    glUseProgram(atlas_program.program_id);
-
-    glBindTexture(GL_TEXTURE_2D, my_render_data->font_atlas->tex);
-    glUniform1i(atlas_program.uniform_tex_loc, 0);
-    glUniform4fv(atlas_program.uniform_fg_color_loc, 1, my_render_data->fg_color);
-    glUniform4fv(atlas_program.uniform_bg_color_loc, 1, my_render_data->bg_color);
-
-    glBindBuffer(GL_ARRAY_BUFFER, atlas_program.vbo_id);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(struct point) * my_render_data->coords_count, my_render_data->coords, GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, atlas_program.coord_buffer_id);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * my_render_data->coords_length, my_render_data->coords, GL_DYNAMIC_DRAW);
     glEnableVertexAttribArray(atlas_program.attrib_coord_loc);
     glVertexAttribPointer(atlas_program.attrib_coord_loc, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
-    glDrawArrays(GL_TRIANGLES, 0, my_render_data->coords_count);
-    */
+    glBindBuffer(GL_ARRAY_BUFFER, atlas_program.fg_coord_buffer_id);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * my_render_data->coords_length, my_render_data->fg_coords, GL_DYNAMIC_DRAW);
+    glEnableVertexAttribArray(atlas_program.attrib_fg_coord_loc);
+    glVertexAttribPointer(atlas_program.attrib_fg_coord_loc, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, atlas_program.index_buffer_id);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * my_render_data->indices_length, my_render_data->indices, GL_DYNAMIC_DRAW);
+
+    glDrawElements(GL_TRIANGLES, my_render_data->indices_length, GL_UNSIGNED_INT, 0);
 }
 
 
@@ -725,8 +804,8 @@ void set_text(char* new_text) {
     
     struct Token_Array* token_array = tokenize(my_text);
     
-    /*
     token_array->curr_token = token_array->first;
+    /*
     // print all tokens
     while (token_array->curr_token <= token_array->last) {
         printf("token: %d, %s\n", token_array->curr_token->kind, token_array->curr_token->str);
@@ -770,11 +849,20 @@ int init(int start_width, int start_height) {
     my_render_data = malloc(sizeof(struct Render_Data));
     my_render_data->font_atlas = malloc(sizeof(struct Atlas));
     init_atlas(my_render_data->font_atlas, "assets/fonts/SourceCodeVariable-Roman.ttf", 20.0, 128);
-    
-    my_render_data->coords_capacity = 10000 * 6;
-    my_render_data->coords = malloc(sizeof(struct point) * my_render_data->coords_capacity);
+    my_render_data->fg_color = malloc(sizeof(GLfloat) * 4);
+    my_render_data->bg_color = malloc(sizeof(GLfloat) * 4);
+
+    my_render_data->coords_length = 0;
+    my_render_data->coords_capacity = 1000 * 4;
+    my_render_data->coords = malloc(sizeof(GLfloat) * 4 * my_render_data->coords_capacity);
+    my_render_data->fg_coords = malloc(sizeof(GLfloat) * 4 * my_render_data->coords_capacity);
+    my_render_data->indices_length = 0;
+    my_render_data->indices_capacity = 1000 * 6;
+    my_render_data->indices = malloc(sizeof(GLuint) * my_render_data->indices_capacity);
 
     resize(start_width, start_height);
+
+    init_hilite();
 
     emscripten_set_main_loop(&render, 12, 0);
 

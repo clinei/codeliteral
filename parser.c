@@ -457,6 +457,10 @@ struct Code_Node* make_parens(struct Code_Node_Array* code_node_array,
 
 void init_type_infos() {
     type_infos = malloc(sizeof(struct Type_Infos));
+    type_infos->length = 0;
+    type_infos->capacity = 1000;
+    type_infos->first = malloc(sizeof(struct Type_Info) * type_infos->capacity);
+    type_infos->last = type_infos->first--;
     Native_Type_Char = make_type_info_integer(1, false);
     Native_Type_UChar = make_type_info_integer(1, false);
     Native_Type_Bool = make_type_info_integer(1, false);
@@ -476,22 +480,24 @@ void init_type_infos() {
 void init_user_types() {
     user_types = malloc(sizeof(struct User_Types));
     user_types->length = 0;
-    // @Realloc
     user_types->capacity = 100;
     user_types->names = malloc(sizeof(char*) * user_types->capacity);
     user_types->types = malloc(sizeof(struct Type_Info*) * user_types->capacity);
 }
 void add_user_type(char* name, struct Type_Info* user_type) {
     
+    user_types->names[user_types->length] = name;
+    user_types->types[user_types->length] = user_type;
+    user_types->length += 1;
+
     // @Audit
+    // @Realloc
     // pointers might be invalid
     if (user_types->capacity == user_types->length) {
         user_types->capacity *= 2;
-        realloc(user_types->names, user_types->capacity);
-        realloc(user_types->types, user_types->capacity);
+        user_types->names = realloc(user_types->names, user_types->capacity);
+        user_types->types = realloc(user_types->types, user_types->capacity);
     }
-
-    user_types->length += 1;
 }
 struct Type_Info* map_name_to_type(char* name) {
     for (size_t i = 0; i < user_types->length; i += 1) {
@@ -549,10 +555,11 @@ struct Type_Info* map_name_to_native_type(char* name) {
 struct Type_Info* get_new_type_info() {
 
     // @Audit
+    // @Realloc
     // might have to fix pointers for the entire tree
     if (type_infos->capacity == type_infos->length) {
         type_infos->capacity *= 2;
-        realloc(type_infos->first, type_infos->capacity);
+        type_infos->first = realloc(type_infos->first, type_infos->capacity);
     }
 
     type_infos->length += 1;
@@ -617,7 +624,9 @@ struct Type_Info* make_type_info_struct_dummy() {
     struct Type_Info* info = get_new_type_info();
     info->kind = TYPE_INFO_TAG_STRUCT;
 
-    // info->struct_.members = get_new_type_info();
+    info->struct_.members_length = 0;
+    info->struct_.members_capacity = 10;
+    info->struct_.members = malloc(sizeof(struct Type_Info*) * info->struct_.members_capacity);
 
     return info;
 }
@@ -1065,6 +1074,10 @@ bool parse_statement(struct Token_Array* token_array,
             else if (token_array->curr_token->str[strlen(token_array->curr_token->str)-1] == '=') {
                 return parse_opassign(token_array, code_node_array);
             }
+            else {
+                // actually, we have a problem
+                return true;
+            }
         }
         else {
             return true;
@@ -1073,7 +1086,6 @@ bool parse_statement(struct Token_Array* token_array,
     else {
         return parse_rvalue(token_array, code_node_array);
     }
-    abort();
 }
 bool parse_rvalue_atom(struct Token_Array* token_array,
                        struct Code_Node_Array* code_node_array) {
@@ -1547,7 +1559,6 @@ bool parse_type(struct Token_Array* token_array,
     code_node_array->last--;
     struct Type_Info* prev_type = map_name_to_type(ident_name);
     if (prev_type == NULL) {
-        // abort();
         code_node_array->last = prev_node;
         code_node_array->length = prev_length;
         token_array->curr_token = prev_token;
@@ -1652,6 +1663,7 @@ bool parse_struct_declaration(struct Token_Array* token_array,
     token_array->curr_token++;
     parse_ident(token_array, code_node_array);
     struct Code_Node* ident = code_node_array->last;
+    add_user_type(ident->ident.name, make_type_info_struct_dummy());
     parse_block(token_array, code_node_array);
     struct Code_Node* block = code_node_array->last;
     struct Code_Node* expression = make_struct(code_node_array, block);
@@ -1673,7 +1685,6 @@ bool delimited(char* start, char* stop, char* separator,
     printf("start delim %d\n", delim);
     delim++;
     #endif
-    // @Realloc
     size_t capacity = 100;
     size_t length = 0;
     struct Code_Node** nodes = malloc(sizeof(struct Code_Node*) * capacity);
@@ -1746,10 +1757,11 @@ bool delimited(char* start, char* stop, char* separator,
 struct Code_Node* get_new_node_from_code_node_array(struct Code_Node_Array* code_node_array) {
 
     // @Audit
+    // @Realloc
     // might have to fix pointers for the entire tree
-    if (code_node_array->capacity == code_node_array->length) {
+    if (code_node_array->length == code_node_array->capacity) {
         code_node_array->capacity *= 2;
-        realloc(code_node_array->first, code_node_array->capacity);
+        code_node_array->first = realloc(code_node_array->first, code_node_array->capacity);
     }
 
     code_node_array->length += 1;
@@ -1788,9 +1800,10 @@ struct Token_Array* tokenize(char* input) {
 
         // @Bug
         // @Audit
+        // @Realloc
         if (token_array->length == token_array->capacity) {
             token_array->capacity *= 2;
-            realloc(token_array->first, token_array->capacity);
+            token_array->first = realloc(token_array->first, token_array->capacity);
             token_array->curr_token = &token_array->first[token_array->length];
         }
     }
@@ -1906,7 +1919,7 @@ char* read_while(bool (*func)(char), char** input) {
         }
     }
     str[length] = '\0';
-    str = realloc(str, sizeof(char) * length);
+    str = realloc(str, sizeof(char) * length + 1);
     return str;
 }
 char* read_while_lookahead(bool (*func)(char, char), char** input) {
