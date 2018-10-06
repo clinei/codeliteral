@@ -1083,6 +1083,7 @@ struct Code_Node_Array* parse(struct Token_Array* token_array) {
 bool parse_statement(struct Token_Array* token_array,
                      struct Code_Node_Array* code_node_array) {
 
+    // printf("stmt: %s\n", token_array->curr_token->str);
     struct Token* next_token = &token_array->curr_token[1];
     if (strcmp(token_array->curr_token->str, "{") == 0) {
         return parse_block(token_array, code_node_array);
@@ -1202,10 +1203,7 @@ bool parse_rvalue(struct Token_Array* token_array,
                   struct Code_Node_Array* code_node_array) {
 
     struct Token* prev_token = token_array->curr_token;
-    parse_rvalue_atom(token_array, code_node_array);
-    // where do we use this?
-    if (prev_token == token_array->curr_token) {
-        token_array->curr_token = prev_token;
+    if (parse_rvalue_atom(token_array, code_node_array) == false) {
         return false;
     }
     enum Operator_Precedence prec = map_operator_to_precedence(token_array->curr_token->str);
@@ -1213,8 +1211,9 @@ bool parse_rvalue(struct Token_Array* token_array,
         maybe_binary(OPERATOR_PRECEDENCE_LAST, token_array, code_node_array);
         return true;
     }
-
-    return true;
+    else {
+        return true;
+    }
 }
 bool parse_lvalue(struct Token_Array* token_array,
                   struct Code_Node_Array* code_node_array) {
@@ -1334,7 +1333,18 @@ bool parse_array_index(struct Token_Array* token_array,
     struct Code_Node* array = code_node_array->last;
     if (token_array->curr_token->str[0] == '[') {
         token_array->curr_token++;
-        bool had_index = parse_rvalue(token_array, code_node_array);
+        bool had_index = false;
+        bool was_lvalue = parse_lvalue(token_array, code_node_array);
+        if (was_lvalue) {
+            had_index = true;
+        }
+        else {
+            bool was_rvalue = parse_rvalue(token_array, code_node_array);
+            if (was_rvalue) {
+                had_index = true;
+            }
+            else abort();
+        }
         if (had_index) {
             struct Code_Node* index = code_node_array->last;
             if (token_array->curr_token->str[0] == ']') {
@@ -1447,80 +1457,105 @@ bool parse_do_while(struct Token_Array* token_array,
 bool parse_for(struct Token_Array* token_array,
                struct Code_Node_Array* code_node_array) {
 
-    token_array->curr_token++;
-    token_array->curr_token++;
     struct Code_Node* begin = NULL;
     struct Code_Node* condition = NULL;
     struct Code_Node* cycle_end = NULL;
     struct Code_Node* expression = NULL;
+    token_array->curr_token++;
+    if (token_array->curr_token->str[0] == '(') {
+        token_array->curr_token++;
+    }
+    else {
+        printf("for starting paren missing!");
+        abort();
+    }
     #if DEBUG_FOR
-    printf("begin\n");
+    printf("for begin\n");
     #endif
     if (token_array->curr_token->str[0] != ';') {
         bool was_stmt = parse_statement(token_array, code_node_array);
-        if (was_stmt == false) {
+        if (was_stmt) {
             #if DEBUG_FOR
-            printf("begin false\n");
+            printf("for begin true\n");
             #endif
-            abort();
-        }
-        begin = code_node_array->last;
-        if (token_array->curr_token->str[0] == ';') {
-            token_array->curr_token++;
+            begin = code_node_array->last;
+            if (token_array->curr_token->str[0] == ';') {
+                token_array->curr_token++;
+            }
+            else abort();
         }
         else abort();
     }
     else {
+        #if DEBUG_FOR
+        printf("for begin false\n");
+        #endif
         token_array->curr_token++;
     }
     #if DEBUG_FOR
-    printf("cond\n");
+    printf("for cond\n");
     #endif
     if (token_array->curr_token->str[0] != ';') {
         bool was_rvalue = parse_rvalue(token_array, code_node_array);
-        if (was_rvalue == false) {
+        if (was_rvalue) {
             #if DEBUG_FOR
-            printf("cond false\n");
+            printf("for cond true\n");
             #endif
-            abort();
-        }
-        condition = code_node_array->last;
-        if (token_array->curr_token->str[0] == ';') {
-            token_array->curr_token++;
+            condition = code_node_array->last;
+            if (token_array->curr_token->str[0] == ';') {
+                token_array->curr_token++;
+            }
+            else abort();
         }
         else abort();
     }
     else {
+        #if DEBUG_FOR
+        printf("for cond false\n");
+        #endif
         token_array->curr_token++;
     }
     #if DEBUG_FOR
-    printf("end\n");
+    printf("for end\n");
     #endif
-    if (token_array->curr_token->str[0] != ';') {
+    if (token_array->curr_token->str[0] != ')') {
         bool was_stmt = parse_statement(token_array, code_node_array);
-        if (was_stmt == false) {
+        if (was_stmt) {
             #if DEBUG_FOR
-            printf("end false\n");
+            printf("for end true\n");
             #endif
-            abort();
-        }
-        cycle_end = code_node_array->last;
-        if (token_array->curr_token->str[0] == ')') {
-            token_array->curr_token++;
+            cycle_end = code_node_array->last;
         }
         else abort();
     }
+    else {
+        #if DEBUG_FOR
+        printf("for end false\n");
+        #endif
+    }
+    if (token_array->curr_token->str[0] == ')') {
+        token_array->curr_token++;
+    }
+    else {
+        printf("for ending paren missing!");
+        abort();
+    }
     #if DEBUG_FOR
-    printf("expr\n");
+    printf("for expr\n");
     #endif
     bool was_stmt = parse_statement(token_array, code_node_array);
-    if (was_stmt == false) {
+    if (was_stmt) {
         #if DEBUG_FOR
-        printf("expr false\n");
+        printf("for expr true\n");
+        #endif
+        expression = code_node_array->last;
+    }
+    else {
+        #if DEBUG_FOR
+        printf("for expr false\n");
         #endif
         abort();
     }
-    expression = code_node_array->last;
     make_for(code_node_array, begin, condition, cycle_end, expression);
     return true;
 }

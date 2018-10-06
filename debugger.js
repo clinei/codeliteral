@@ -193,7 +193,7 @@ Module['FS_createPath']('/assets', 'shaders', true, true);
   }
 
  }
- loadPackage({"files": [{"audio": 0, "start": 0, "crunched": 0, "end": 285388, "filename": "/assets/fonts/SourceCodeVariable-Roman.ttf"}, {"audio": 0, "start": 285388, "crunched": 0, "end": 285496, "filename": "/assets/shaders/quad.frag.glsl"}, {"audio": 0, "start": 285496, "crunched": 0, "end": 285684, "filename": "/assets/shaders/quad.vert.glsl"}, {"audio": 0, "start": 285684, "crunched": 0, "end": 285937, "filename": "/assets/shaders/texture_atlas.frag.glsl"}, {"audio": 0, "start": 285937, "crunched": 0, "end": 286173, "filename": "/assets/shaders/texture_atlas.vert.glsl"}], "remote_package_size": 286173, "package_uuid": "320a4915-1243-4302-b246-6ea66b51c727"});
+ loadPackage({"files": [{"audio": 0, "start": 0, "crunched": 0, "end": 285388, "filename": "/assets/fonts/SourceCodeVariable-Roman.ttf"}, {"audio": 0, "start": 285388, "crunched": 0, "end": 285496, "filename": "/assets/shaders/quad.frag.glsl"}, {"audio": 0, "start": 285496, "crunched": 0, "end": 285684, "filename": "/assets/shaders/quad.vert.glsl"}, {"audio": 0, "start": 285684, "crunched": 0, "end": 285937, "filename": "/assets/shaders/texture_atlas.frag.glsl"}, {"audio": 0, "start": 285937, "crunched": 0, "end": 286173, "filename": "/assets/shaders/texture_atlas.vert.glsl"}], "remote_package_size": 286173, "package_uuid": "ba9b05a2-b648-49e5-a71b-1601709c2dea"});
 
 })();
 
@@ -2052,7 +2052,7 @@ var ASM_CONSTS = [];
 
 STATIC_BASE = GLOBAL_BASE;
 
-STATICTOP = STATIC_BASE + 7824;
+STATICTOP = STATIC_BASE + 7872;
 /* global initializers */  __ATINIT__.push();
 
 
@@ -2061,7 +2061,7 @@ STATICTOP = STATIC_BASE + 7824;
 
 
 
-var STATIC_BUMP = 7824;
+var STATIC_BUMP = 7872;
 Module["STATIC_BASE"] = STATIC_BASE;
 Module["STATIC_BUMP"] = STATIC_BUMP;
 
@@ -8040,12 +8040,6 @@ var real__malloc = asm["_malloc"]; asm["_malloc"] = function() {
   return real__malloc.apply(null, arguments);
 };
 
-var real__render = asm["_render"]; asm["_render"] = function() {
-  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
-  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
-  return real__render.apply(null, arguments);
-};
-
 var real__resize = asm["_resize"]; asm["_resize"] = function() {
   assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
   assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
@@ -8062,6 +8056,12 @@ var real__set_text = asm["_set_text"]; asm["_set_text"] = function() {
   assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
   assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
   return real__set_text.apply(null, arguments);
+};
+
+var real__step = asm["_step"]; asm["_step"] = function() {
+  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+  return real__step.apply(null, arguments);
 };
 
 var real_establishStackSpace = asm["establishStackSpace"]; asm["establishStackSpace"] = function() {
@@ -8156,10 +8156,6 @@ var _memset = Module["_memset"] = function() {
   assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
   assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
   return Module["asm"]["_memset"].apply(null, arguments) };
-var _render = Module["_render"] = function() {
-  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
-  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
-  return Module["asm"]["_render"].apply(null, arguments) };
 var _resize = Module["_resize"] = function() {
   assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
   assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
@@ -8172,6 +8168,10 @@ var _set_text = Module["_set_text"] = function() {
   assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
   assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
   return Module["asm"]["_set_text"].apply(null, arguments) };
+var _step = Module["_step"] = function() {
+  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+  return Module["asm"]["_step"].apply(null, arguments) };
 var establishStackSpace = Module["establishStackSpace"] = function() {
   assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
   assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');

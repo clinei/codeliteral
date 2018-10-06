@@ -95,7 +95,6 @@ bool test_struct() {
 		Car car;
 	};
 	Person steve;
-	/*
 	steve.age = 20;
 	passed &= steve.age == 20;
 	steve.car.age = 2;

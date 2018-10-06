@@ -7,8 +7,19 @@ we have to calculate the diff of the last block and then add that to every point
 
 type inference not implemented
 
-for (;;) is broken
 printf needs varargs
+
+mark_containment is now find_expanded_nodes
+we go into a block,
+init an array of an array of nodes,
+an array of indices,
+and an array of array lengths.
+we keep a block stack.
+when we hit an expansion demanding node,
+like the cursor or a flowpoint,
+we add the block to the array of array of nodes,
+and increase the length at the statement index,
+and store the statement index,
 
 scrolling not implemented
 
