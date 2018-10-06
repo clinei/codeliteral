@@ -2,17 +2,10 @@ const canvas = document.getElementById("debugger");
 
 const call_init = Module.cwrap("init", "number", ["number", "number"]);
 const call_deinit = Module.cwrap("deinit", "number");
-const call_get_framebuffer = Module.cwrap("get_framebuffer", 'number');
 const call_render = Module.cwrap("render");
 const call_set_text = Module.cwrap("set_text", null, ["number"]);
 const call_resize = Module.cwrap("resize", null, ["number", "number"]);
 const call_malloc = Module.cwrap("malloc", "number", ["number"]);
-
-function get_framebuffer() {
-    const offset = call_get_framebuffer();
-
-    return new Uint8ClampedArray(Module.HEAP32.buffer, offset, canvas.height * canvas.width * 4);
-}
 
 function writeAsciiToMemory(str, ptr){
     for (let i = 0; i < str.length; i += 1) {
@@ -102,6 +95,7 @@ bool test_struct() {
 		Car car;
 	};
 	Person steve;
+	/*
 	steve.age = 20;
 	passed &= steve.age == 20;
 	steve.car.age = 2;
@@ -151,11 +145,11 @@ bool test_inc_dec() {
 // }
 bool test_string() {
 	bool passed = true;
-	string str = "Hello, World!";
+	char* str = "Hello, World!";
 	passed &= str == "Hello, World!";
 	str = "Hi there.";
 	passed &= str == "Hi there.";
-	string str2 = "I'm here, too!";
+	char* str2 = "I'm here, too!";
 	passed &= str2 == "I'm here, too!";
 	str = str2;
 	passed &= str == "I'm here, too!";
@@ -207,16 +201,16 @@ int factorial(short number) {
 void fizzbuzz(ushort number) {
 	for (uint i = 1; i <= number; i += 1) {
 		if (i % 15 == 0) {
-			print("FizzBuzz");
+			printf("%s\n", "FizzBuzz");
 		}
 		else if (i % 5 == 0) {
-			print("Buzz");
+			printf("%s\n", "Buzz");
 		}
 		else if (i % 3 == 0) {
-			print("Fizz");
+			printf("%s\n", "Fizz");
 		}
 		else {
-			print(i);
+			printf("%u\n", i);
 		}
 	}
 }
@@ -230,7 +224,7 @@ void linked_list() {
 int main() {
 	float f;
 	f = 0.3 - 0.2;
-	print(f);
+	printf("%f\n", f);
 	tests();
     int local_variable = 3;
 	some_function(local_variable);

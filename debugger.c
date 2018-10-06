@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 #include <string.h>
 #include <emscripten.h>
 #include <emscripten/html5.h>
@@ -12,6 +13,31 @@
 
 #define FONT_BYTE_COUNT 290816
 #define CHAR_COUNT 96
+
+struct Quad_Program {
+    GLuint program_id;
+    GLuint coord_buffer_id;
+    GLuint color_buffer_id;
+    GLuint index_buffer_id;
+    GLint attrib_coord_loc;
+    GLint attrib_color_loc;
+};
+struct Quad_Program quad_program;
+
+void init_quad_program() {
+    GLuint program_id = create_program("assets/shaders/quad.vert.glsl",
+                                       "assets/shaders/quad.frag.glsl");
+
+    quad_program.program_id = program_id;
+
+    glUseProgram(program_id);
+	quad_program.attrib_coord_loc = glGetAttribLocation(program_id, "coord");
+	quad_program.attrib_color_loc = glGetAttribLocation(program_id, "color");
+
+    glGenBuffers(1, &quad_program.coord_buffer_id);
+    glGenBuffers(1, &quad_program.color_buffer_id);
+    glGenBuffers(1, &quad_program.index_buffer_id);
+}
 
 typedef unsigned char pixel;
 
@@ -47,6 +73,7 @@ struct Atlas {
 
     uint width;
     uint height;
+    float scale;
     float font_size;
     float char_width;
 
@@ -54,23 +81,23 @@ struct Atlas {
     stbtt_fontinfo font_info;
     stbtt_bakedchar* chars;
 };
-void init_atlas(struct Atlas* atlas, char* font_filename, float font_size, size_t char_count) {
+void init_atlas(struct Atlas* atlas, char* font_filename, float font_size, float scale, size_t char_count) {
     const unsigned char* font_source = (const unsigned char*)read_file(font_filename);
     stbtt_fontinfo font_info;
     stbtt_InitFont(&font_info, font_source, stbtt_GetFontOffsetForIndex(font_source, 0));
     
     int advance, lsb;
-    float scale = stbtt_ScaleForPixelHeight(&font_info, font_size);
+    float px_scale = stbtt_ScaleForPixelHeight(&font_info, font_size);
     stbtt_GetCodepointHMetrics(&font_info, 'm', &advance, &lsb);
+    float char_width = advance * px_scale;
 
-    float char_width = advance * scale;
-
-    uint bake_width = 512;
-    uint bake_height = 512;
+    uint bake_width = 512 * scale;
+    uint bake_height = 512 * scale;
     pixel* bake_bitmap = malloc(sizeof(pixel) * bake_width * bake_height);
     stbtt_bakedchar* chars = malloc(sizeof(stbtt_bakedchar) * char_count);
-    stbtt_BakeFontBitmap(font_source, 0, font_size, bake_bitmap, (int)bake_width, (int)bake_height, 0, char_count, chars);
+    stbtt_BakeFontBitmap(font_source, 0, font_size * scale, bake_bitmap, (int)bake_width, (int)bake_height, 0, char_count, chars);
 
+    glUseProgram(atlas_program.program_id);
     GLuint tex;
     glActiveTexture(GL_TEXTURE0);
     glGenTextures(1, &tex);
@@ -86,6 +113,7 @@ void init_atlas(struct Atlas* atlas, char* font_filename, float font_size, size_
     atlas->tex = tex;
     atlas->width = bake_width;
     atlas->height = bake_height;
+    atlas->scale = scale;
     atlas->font_size = font_size;
     atlas->char_width = char_width;
     atlas->font_info = font_info;
@@ -125,6 +153,12 @@ struct Render_Data {
     GLfloat* hilite_return_fg_color;
     GLfloat* hilite_keyword_fg_color;
     GLfloat* hilite_op_fg_color;
+    GLfloat* hilite_comment_fg_color;
+
+    size_t bg_coords_length;
+    size_t bg_coords_capacity;
+    GLfloat* bg_coords;
+    GLfloat* bg_colors;
 };
 
 char* my_text;
@@ -141,6 +175,7 @@ void init_hilite() {
     GLfloat hilite_return_fg_color[4]  = { 231/255.0f, 250/255.0f, 236/255.0f, 1.0 };
     GLfloat hilite_keyword_fg_color[4] = { 248/255.0f, 130/255.0f, 248/255.0f, 1.0 };
     GLfloat hilite_op_fg_color[4]      = { 80/255.0f,  240/255.0f,  80/255.0f, 1.0 };
+    GLfloat hilite_comment_fg_color[4] = { 80/255.0f,  180/255.0f,  80/255.0f, 1.0 };
 
     my_render_data->hilite_literal_fg_color = malloc(sizeof(GLfloat) * 4);
     my_render_data->hilite_string_fg_color  = malloc(sizeof(GLfloat) * 4);
@@ -150,6 +185,7 @@ void init_hilite() {
     my_render_data->hilite_return_fg_color  = malloc(sizeof(GLfloat) * 4);
     my_render_data->hilite_keyword_fg_color = malloc(sizeof(GLfloat) * 4);
     my_render_data->hilite_op_fg_color      = malloc(sizeof(GLfloat) * 4);
+    my_render_data->hilite_comment_fg_color = malloc(sizeof(GLfloat) * 4);
 
     memcpy(my_render_data->hilite_literal_fg_color, &hilite_literal_fg_color, sizeof(GLfloat) * 4);
     memcpy(my_render_data->hilite_string_fg_color,  &hilite_string_fg_color,  sizeof(GLfloat) * 4);
@@ -159,6 +195,7 @@ void init_hilite() {
     memcpy(my_render_data->hilite_return_fg_color,  &hilite_return_fg_color,  sizeof(GLfloat) * 4);
     memcpy(my_render_data->hilite_keyword_fg_color, &hilite_keyword_fg_color, sizeof(GLfloat) * 4);
     memcpy(my_render_data->hilite_op_fg_color,      &hilite_op_fg_color,      sizeof(GLfloat) * 4);
+    memcpy(my_render_data->hilite_comment_fg_color, &hilite_comment_fg_color, sizeof(GLfloat) * 4);
 }
 
 void convert_screen_coords_to_view_coords(float x, float y,
@@ -166,6 +203,33 @@ void convert_screen_coords_to_view_coords(float x, float y,
                                           float* out_x, float* out_y) {
     *out_x = x * 2 / width - 1;
     *out_y = -(y * 2 / height - 1);
+}
+
+void get_baked_quad_scaled(const stbtt_bakedchar *chardata,
+                           int pw, int ph,
+                           int char_index,
+                           float *xpos, float *ypos,
+                           float scale,
+                           stbtt_aligned_quad *q,
+                           int opengl_fillrule) {
+
+   float d3d_bias = opengl_fillrule ? 0 : -0.5f;
+   float ipw = 1.0f / pw, iph = 1.0f / ph;
+   const stbtt_bakedchar *b = chardata + char_index;
+   int round_x = (int)floor(*xpos + b->xoff / scale + 0.5f);
+   int round_y = (int)floor(*ypos + b->yoff / scale + 0.5f);
+
+   q->x0 = round_x + d3d_bias;
+   q->y0 = round_y + d3d_bias;
+   q->x1 = round_x + (b->x1 - b->x0) / scale + d3d_bias;
+   q->y1 = round_y + (b->y1 - b->y0) / scale + d3d_bias;
+
+   q->s0 = b->x0 * ipw;
+   q->t0 = b->y0 * iph;
+   q->s1 = b->x1 * ipw;
+   q->t1 = b->y1 * iph;
+
+   *xpos += b->xadvance / scale;
 }
 void render_text(char* text, float* xpos, float* ypos,
                  GLfloat* fg_color,
@@ -176,6 +240,16 @@ void render_text(char* text, float* xpos, float* ypos,
     if (*ypos > height) {
         return;
     }
+
+    for (size_t i = 0; i < 4; i += 1) {
+        render_data->bg_colors[render_data->bg_coords_length + 4 * i + 0] = bg_color[0];
+        render_data->bg_colors[render_data->bg_coords_length + 4 * i + 1] = bg_color[1];
+        render_data->bg_colors[render_data->bg_coords_length + 4 * i + 2] = bg_color[2];
+        render_data->bg_colors[render_data->bg_coords_length + 4 * i + 3] = bg_color[3];
+    }
+
+    float start_xpos = *xpos;
+    float start_ypos = *ypos - render_data->font_atlas->font_size + 4;
 
     for (char* p = text; *p; p++) {
 
@@ -205,9 +279,10 @@ void render_text(char* text, float* xpos, float* ypos,
         }
 
         stbtt_aligned_quad q;
-        stbtt_GetBakedQuad(render_data->font_atlas->chars,
-                           render_data->font_atlas->width, render_data->font_atlas->height,
-                           *p, xpos, ypos, &q, 1);
+        get_baked_quad_scaled(render_data->font_atlas->chars,
+                              render_data->font_atlas->width, render_data->font_atlas->height,
+                              *p, xpos, ypos,
+                              render_data->font_atlas->scale, &q, 1);
 
         float top_left_x, top_left_y;
         convert_screen_coords_to_view_coords(q.x0, q.y0, width, height, &top_left_x, &top_left_y);
@@ -255,15 +330,49 @@ void render_text(char* text, float* xpos, float* ypos,
         // setting the capacity high enough in the beginning for now
         if (render_data->indices_length == render_data->indices_capacity) {
             render_data->indices_capacity *= 2;
-            render_data->indices = realloc(render_data->indices, render_data->indices_capacity);
+            render_data->indices = realloc(render_data->indices, sizeof(GLuint) * render_data->indices_capacity);
         }
         // @Realloc
         if (render_data->coords_length == render_data->coords_capacity) {
             render_data->coords_capacity *= 2;
-            render_data->coords = realloc(render_data->coords, render_data->coords_capacity);
-
-            render_data->fg_coords = realloc(render_data->fg_coords, render_data->coords_capacity);
+            render_data->coords = realloc(render_data->coords, sizeof(GLfloat) * 4 * render_data->coords_capacity);
+            render_data->fg_coords = realloc(render_data->fg_coords, sizeof(GLfloat) * 4 * render_data->coords_capacity);
         }
+    }
+
+    float end_xpos = *xpos;
+    float end_ypos = *ypos + 6;
+
+    convert_screen_coords_to_view_coords(start_xpos, start_ypos, width, height, &start_xpos, &start_ypos);
+    convert_screen_coords_to_view_coords(end_xpos, end_ypos, width, height, &end_xpos, &end_ypos);
+    
+    render_data->bg_coords[render_data->bg_coords_length + 4 * 0 + 0] = start_xpos;
+    render_data->bg_coords[render_data->bg_coords_length + 4 * 0 + 1] = start_ypos;
+    render_data->bg_coords[render_data->bg_coords_length + 4 * 0 + 2] = 0;
+    render_data->bg_coords[render_data->bg_coords_length + 4 * 0 + 3] = 0;
+    
+    render_data->bg_coords[render_data->bg_coords_length + 4 * 1 + 0] = end_xpos;
+    render_data->bg_coords[render_data->bg_coords_length + 4 * 1 + 1] = start_ypos;
+    render_data->bg_coords[render_data->bg_coords_length + 4 * 1 + 2] = 0;
+    render_data->bg_coords[render_data->bg_coords_length + 4 * 1 + 3] = 0;
+    
+    render_data->bg_coords[render_data->bg_coords_length + 4 * 2 + 0] = end_xpos;
+    render_data->bg_coords[render_data->bg_coords_length + 4 * 2 + 1] = end_ypos;
+    render_data->bg_coords[render_data->bg_coords_length + 4 * 2 + 2] = 0;
+    render_data->bg_coords[render_data->bg_coords_length + 4 * 2 + 3] = 0;
+    
+    render_data->bg_coords[render_data->bg_coords_length + 4 * 3 + 0] = start_xpos;
+    render_data->bg_coords[render_data->bg_coords_length + 4 * 3 + 1] = end_ypos;
+    render_data->bg_coords[render_data->bg_coords_length + 4 * 3 + 2] = 0;
+    render_data->bg_coords[render_data->bg_coords_length + 4 * 3 + 3] = 0;
+
+    render_data->bg_coords_length += 4 * 4;
+
+    // @Realloc
+    if (render_data->bg_coords_length == render_data->bg_coords_capacity) {
+        render_data->bg_coords_capacity *= 2;
+        render_data->bg_coords = realloc(render_data->bg_coords, sizeof(GLfloat) * 4 * render_data->bg_coords_capacity);
+        render_data->bg_colors = realloc(render_data->bg_colors, sizeof(GLfloat) * 4 * render_data->bg_coords_capacity);
     }
 }
 
@@ -471,6 +580,22 @@ void render_node(struct Code_Node* node,
                             first = false;
                         }
                         render_node(proc->params[i], render_data);
+                    }
+                    if (proc->has_varargs) {
+                        if (first == false) {
+                            render_text(",", &render_data->xpos, &render_data->ypos,
+                                        render_data->fg_color,
+                                        render_data->bg_color,
+                                        render_data);
+                            render_space(render_data);
+                        }
+                        else {
+                            first = false;
+                        }
+                        render_text("...", &render_data->xpos, &render_data->ypos,
+                                    render_data->hilite_ident_fg_color,
+                                    render_data->bg_color,
+                                    render_data);
                     }
                     render_text(")", &render_data->xpos, &render_data->ypos,
                                 render_data->fg_color,
@@ -730,6 +855,25 @@ void render_node(struct Code_Node* node,
                             render_data);
             }
             break;
+        case CODE_KIND_NATIVE_CODE:
+            render_text("{", &render_data->xpos, &render_data->ypos,
+                        render_data->fg_color,
+                        render_data->bg_color,
+                        render_data);
+            render_newline(render_data);
+            render_data->indent_level += 1;
+            render_indent(render_data);
+            render_text("[native code]", &render_data->xpos, &render_data->ypos,
+                        render_data->hilite_comment_fg_color,
+                        render_data->bg_color,
+                        render_data);
+            render_data->indent_level -= 1;
+            render_newline(render_data);
+            render_text("}", &render_data->xpos, &render_data->ypos,
+                        render_data->fg_color,
+                        render_data->bg_color,
+                        render_data);
+            break;
         default:
             printf("render not implemented for node kind: %u\n", node->kind);
             abort();
@@ -739,25 +883,14 @@ void render_node(struct Code_Node* node,
 EMSCRIPTEN_KEEPALIVE
 void render() {
 
-    GLfloat white[4] =       { 230 / 255.0f, 230 / 255.0f, 230 / 255.0f, 1 };
-    GLfloat clear_color[4] = { 37 / 255.0f, 37 / 255.0f, 37 / 255.0f, 1 };
-    GLfloat bg_color[4] =    { 0 / 255.0f, 0 / 255.0f, 0 / 255.0f, 0 };
+    GLfloat white[4] =        { 230 / 255.0f, 230 / 255.0f, 230 / 255.0f, 1 };
+    GLfloat clear_color[4] =  { 37 / 255.0f, 37 / 255.0f, 37 / 255.0f, 1 };
+    GLfloat bg_color[4] =     { 120 / 255.0f, 60 / 255.0f, 20 / 255.0f, 0 };
+    GLfloat cursor_color[4] = { 120 / 255.0f, 60 / 255.0f, 20 / 255.0f, 1 };
 
     GLfloat red[4] = { 255 / 255.0f, 0 / 255.0f, 0 / 255.0f, 1 };
     GLfloat green[4] = { 0 / 255.0f, 255 / 255.0f, 0 / 255.0f, 1 };
     GLfloat blue[4] = { 0 / 255.0f, 0 / 255.0f, 255 / 255.0f, 1 };
-
-    emscripten_webgl_make_context_current(debugger_context);
-
-	glClearColor(clear_color[0], clear_color[1], clear_color[2], clear_color[3]);
-	glClear(GL_COLOR_BUFFER_BIT);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    glUseProgram(atlas_program.program_id);
-
-    glBindTexture(GL_TEXTURE_2D, my_render_data->font_atlas->tex);
-    glUniform1i(atlas_program.uniform_tex_loc, 0);
 
     my_render_data->xpos = 0;
     my_render_data->ypos = my_render_data->font_atlas->font_size;
@@ -766,11 +899,43 @@ void render() {
 
     my_render_data->coords_length = 0;
     my_render_data->indices_length = 0;
+    my_render_data->bg_coords_length = 0;
     
     memcpy(my_render_data->fg_color, &white, sizeof(GLfloat) * 4);
     memcpy(my_render_data->bg_color, &bg_color, sizeof(GLfloat) * 4);
 
-    render_node(my_code_node_array->last, my_render_data);
+    render_node(my_code_node_array->first, my_render_data);
+
+    emscripten_webgl_make_context_current(debugger_context);
+
+	glClearColor(clear_color[0], clear_color[1], clear_color[2], clear_color[3]);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    // draw backgrounds
+    glUseProgram(quad_program.program_id);
+
+    glBindBuffer(GL_ARRAY_BUFFER, quad_program.coord_buffer_id);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * my_render_data->bg_coords_length, my_render_data->bg_coords, GL_DYNAMIC_DRAW);
+    glEnableVertexAttribArray(quad_program.attrib_coord_loc);
+    glVertexAttribPointer(quad_program.attrib_coord_loc, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, quad_program.color_buffer_id);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * my_render_data->bg_coords_length, my_render_data->bg_colors, GL_DYNAMIC_DRAW);
+    glEnableVertexAttribArray(quad_program.attrib_color_loc);
+    glVertexAttribPointer(quad_program.attrib_color_loc, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, atlas_program.index_buffer_id);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * my_render_data->coords_length / 4 / 4 * 6, my_render_data->indices, GL_DYNAMIC_DRAW);
+
+    glDrawElements(GL_TRIANGLES, my_render_data->bg_coords_length / 4 / 4 * 6, GL_UNSIGNED_INT, 0);
+    
+    // draw text
+    glUseProgram(atlas_program.program_id);
+
+    glBindTexture(GL_TEXTURE_2D, my_render_data->font_atlas->tex);
+    glUniform1i(atlas_program.uniform_tex_loc, 0);
 
     glBindBuffer(GL_ARRAY_BUFFER, atlas_program.coord_buffer_id);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * my_render_data->coords_length, my_render_data->coords, GL_DYNAMIC_DRAW);
@@ -815,6 +980,8 @@ void set_text(char* new_text) {
 
     struct Code_Node_Array* code_node_array = parse(token_array);
 
+    infer(code_node_array->first);
+
     /*
     // print all nodes
     code_node_array->curr_node = code_node_array->first;
@@ -845,10 +1012,11 @@ int init(int start_width, int start_height) {
     init_gl();
     emscripten_webgl_make_context_current(debugger_context);
     init_atlas_program();
+    init_quad_program();
 
     my_render_data = malloc(sizeof(struct Render_Data));
     my_render_data->font_atlas = malloc(sizeof(struct Atlas));
-    init_atlas(my_render_data->font_atlas, "assets/fonts/SourceCodeVariable-Roman.ttf", 20.0, 128);
+    init_atlas(my_render_data->font_atlas, "assets/fonts/SourceCodeVariable-Roman.ttf", 20.0, 3, 128);
     my_render_data->fg_color = malloc(sizeof(GLfloat) * 4);
     my_render_data->bg_color = malloc(sizeof(GLfloat) * 4);
 
@@ -859,6 +1027,12 @@ int init(int start_width, int start_height) {
     my_render_data->indices_length = 0;
     my_render_data->indices_capacity = 1000 * 6;
     my_render_data->indices = malloc(sizeof(GLuint) * my_render_data->indices_capacity);
+
+    my_render_data->bg_coords_length = 0;
+    my_render_data->bg_coords_capacity = 100 * 4;
+    my_render_data->bg_coords = malloc(sizeof(GLfloat) * 4 * my_render_data->bg_coords_capacity);
+    my_render_data->bg_colors = malloc(sizeof(GLfloat) * 4 * my_render_data->bg_coords_capacity);
+    // we reuse indices
 
     resize(start_width, start_height);
 

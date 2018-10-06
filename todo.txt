@@ -2,18 +2,21 @@ Bugs:
 
 we should have a comment on the general design
 
+reallocation of type_infos and code_node_array means we have to fix pointers in the tree
+we have to calculate the diff of the last block and then add that to every pointer
+
 type inference not implemented
+
+for (;;) is broken
+printf needs varargs
+
+scrolling not implemented
 
 we call the left hand side "ident",
 that is wrong, it's an lvalue
 we should rename it
 
 unary minus and not operators not implemented
-
-parens don't work with binary ops yet
-tokenizer should have a get_new_token function that reallocates if needed
-all memory should be contiguous
-scrolling and selecting
 
 when we show values or changes, save the previous cursor, 
 and when we go back and haven't moved, set the cursor back to the previous one
@@ -29,9 +32,9 @@ test ints
 
 Graphics Ideas:
 
-draw a rect around each text piece
-
-we could clip
+render fonts ourself
+render direct font vertices
+try font hinting
 
 Ideas:
 

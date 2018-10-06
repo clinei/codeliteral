@@ -10,6 +10,7 @@
 void init_parser();
 void init_type_infos();
 void init_user_types();
+void init_infer();
 
 enum Token_Kind {
     TOKEN_KIND_KEYWORD = 0,
@@ -65,11 +66,13 @@ enum Code_Kind {
     CODE_KIND_LITERAL_INT = 28,
     CODE_KIND_LITERAL_FLOAT = 29,
     CODE_KIND_LITERAL_BOOL = 30,
+    CODE_KIND_NATIVE_CODE = 31,
 };
 
 struct Code_Procedure {
 	struct Code_Node** params;
     size_t params_length;
+    bool has_varargs;
 	struct Type_Info* return_type;
 	struct Code_Node* block;
 };
@@ -100,6 +103,9 @@ struct Code_Dot_Operator {
 struct Code_Block {
     struct Code_Node** statements;
     size_t statements_length;
+    struct Code_Node** declarations;
+    size_t declarations_length;
+    size_t declarations_capacity;
     bool is_transformed_block;
 };
 struct Code_Return {
@@ -175,6 +181,9 @@ struct Code_String {
 struct Code_Parens {
     struct Code_Node* expression;
 };
+struct Code_Native_Code {
+    void* func_ptr;
+};
 struct Code_Node {
 	enum Code_Kind kind;
 	struct Type_Info* type;
@@ -209,6 +218,7 @@ struct Code_Node {
         struct Code_Literal_Int literal_int;
         struct Code_Literal_Float literal_float;
         struct Code_Literal_Bool literal_bool;
+        struct Code_Native_Code native_code;
     };
 };
 struct Code_Node_Array {
@@ -234,6 +244,7 @@ struct Type_Info* make_type_info_void();
 struct Code_Node* make_procedure(struct Code_Node_Array* code_node_array,
                                  struct Code_Node** params,
                                  size_t params_length,
+                                 bool has_varargs,
                                  struct Type_Info* return_type,
                                  struct Code_Node* block);
 struct Code_Node* make_call(struct Code_Node_Array* code_node_array,
@@ -311,6 +322,8 @@ struct Code_Node* make_string(struct Code_Node_Array* code_node_array,
                               char* pointer);
 struct Code_Node* make_parens(struct Code_Node_Array* code_node_array,
                               struct Code_Node* expression);
+struct Code_Node* make_native_code(struct Code_Node_Array* code_node_array,
+                                   void* func_ptr);
 
 enum Type_Info_Tag {
     TYPE_INFO_TAG_INTEGER = 0,
@@ -346,6 +359,8 @@ struct Type_Info_Function_Pointer {
 };
 struct Type_Info_Struct {
     struct Type_Info** members;
+    char** member_names;
+    size_t* offsets;
     size_t members_capacity;
     size_t members_length;
 };
@@ -397,8 +412,18 @@ struct User_Types {
 };
 struct User_Types* user_types;
 void add_user_type(char* name, struct Type_Info* user_type);
+size_t index_of_string(char* str, char** strings, size_t length);
 struct Type_Info* map_name_to_type(char* name);
 struct Type_Info* map_name_to_native_type(char* name);
+
+struct Code_Node* infer(struct Code_Node* node);
+struct Type_Info* infer_type(struct Code_Node* node);
+
+struct Infer_Data {
+    size_t block_stack_length;
+    size_t block_stack_capacity;
+    struct Code_Node** block_stack;
+};
 
 struct Code_Node_Array* parse(struct Token_Array* token_array);
 bool parse_statement(struct Token_Array* token_array,
@@ -434,6 +459,8 @@ bool parse_lvalue(struct Token_Array* token_array,
 bool parse_procedure_declaration(struct Token_Array* token_array,
                                  struct Code_Node_Array* code_node_array,
                                  struct Type_Info* return_type);
+bool parse_param(struct Token_Array* token_array,
+                 struct Code_Node_Array* code_node_array);
 bool parse_declaration(struct Token_Array* token_array,
                        struct Code_Node_Array* code_node_array);
 bool parse_declaration_precomputed_type(struct Token_Array* token_array,
@@ -472,8 +499,9 @@ bool parse_dot_operator(struct Token_Array* token_array,
                         struct Code_Node_Array* code_node_array);
 bool delimited(char* start, char* stop, char* separator,
                bool (*elem_func)(struct Token_Array*, struct Code_Node_Array*),
-               size_t* out_length,
-               struct Code_Node*** out_nodes,
+               struct Code_Node*** nodes,
+               size_t* length,
+               size_t* capacity,
                struct Token_Array* token_array,
                struct Code_Node_Array* code_node_array);
 

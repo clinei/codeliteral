@@ -2,6 +2,7 @@
 
 void init_parser() {
     init_type_infos();
+    init_infer();
 }
 
 const char* keyword_strings[11] = {
@@ -28,6 +29,7 @@ void set_serial(struct Code_Node* node) {
 struct Code_Node* make_procedure(struct Code_Node_Array* code_node_array,
                                  struct Code_Node** params,
                                  size_t params_length,
+                                 bool has_varargs,
                                  struct Type_Info* return_type,
                                  struct Code_Node* block) {
 
@@ -36,6 +38,7 @@ struct Code_Node* make_procedure(struct Code_Node_Array* code_node_array,
 
 	node->procedure.params = params;
 	node->procedure.params_length = params_length;
+	node->procedure.has_varargs = has_varargs;
 	node->procedure.return_type = return_type;
 	node->procedure.block = block;
 
@@ -145,6 +148,7 @@ struct Code_Node* make_block(struct Code_Node_Array* code_node_array,
 
 	node->block.statements = statements;
 	node->block.statements_length = statements_length;
+    node->block.declarations = NULL;
     node->block.is_transformed_block = false;
 
 	set_serial(node);
@@ -455,12 +459,26 @@ struct Code_Node* make_parens(struct Code_Node_Array* code_node_array,
 	return node;
 }
 
+struct Code_Node* make_native_code(struct Code_Node_Array* code_node_array,
+                                   void* func_ptr) {
+    
+	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	node->kind = CODE_KIND_NATIVE_CODE;
+
+	node->native_code.func_ptr = func_ptr;
+
+	set_serial(node);
+
+	return node;
+}
+
 void init_type_infos() {
     type_infos = malloc(sizeof(struct Type_Infos));
     type_infos->length = 0;
     type_infos->capacity = 1000;
     type_infos->first = malloc(sizeof(struct Type_Info) * type_infos->capacity);
-    type_infos->last = type_infos->first--;
+    type_infos->last = type_infos->first;
+    type_infos->last--;
     Native_Type_Char = make_type_info_integer(1, false);
     Native_Type_UChar = make_type_info_integer(1, false);
     Native_Type_Bool = make_type_info_integer(1, false);
@@ -480,7 +498,7 @@ void init_type_infos() {
 void init_user_types() {
     user_types = malloc(sizeof(struct User_Types));
     user_types->length = 0;
-    user_types->capacity = 100;
+    user_types->capacity = 1000;
     user_types->names = malloc(sizeof(char*) * user_types->capacity);
     user_types->types = malloc(sizeof(struct Type_Info*) * user_types->capacity);
 }
@@ -495,9 +513,17 @@ void add_user_type(char* name, struct Type_Info* user_type) {
     // pointers might be invalid
     if (user_types->capacity == user_types->length) {
         user_types->capacity *= 2;
-        user_types->names = realloc(user_types->names, user_types->capacity);
-        user_types->types = realloc(user_types->types, user_types->capacity);
+        user_types->names = realloc(user_types->names, sizeof(char*) * user_types->capacity);
+        user_types->types = realloc(user_types->types, sizeof(struct Type_Info*) * user_types->capacity);
     }
+}
+size_t index_of_string(char* str, char** strings, size_t length) {
+    for (size_t i = 0; i < length; i += 1) {
+        if (strcmp(str, strings[i]) == 0) {
+            return i;
+        }
+    }
+    return length;
 }
 struct Type_Info* map_name_to_type(char* name) {
     for (size_t i = 0; i < user_types->length; i += 1) {
@@ -554,15 +580,21 @@ struct Type_Info* map_name_to_native_type(char* name) {
 // let User_Types = {};
 struct Type_Info* get_new_type_info() {
 
+    type_infos->length += 1;
+
     // @Audit
     // @Realloc
     // might have to fix pointers for the entire tree
     if (type_infos->capacity == type_infos->length) {
         type_infos->capacity *= 2;
-        type_infos->first = realloc(type_infos->first, type_infos->capacity);
+        struct Type_Info* before_first = type_infos->first;
+        type_infos->first = realloc(type_infos->first, sizeof(struct Type_Info) * type_infos->capacity);
+        struct Type_Info* after_first = type_infos->first;
+        struct Type_Info* before_last = type_infos->last;
+        type_infos->last = &(type_infos->first[type_infos->length - 2]);
+        struct Type_Info* after_last = type_infos->last;
     }
 
-    type_infos->length += 1;
     type_infos->last++;
     return type_infos->last;
 }
@@ -619,7 +651,6 @@ struct Type_Info* make_type_info_function_pointer(struct Type_Info* return_type,
 
     return info;
 }
-// no need to create dummies anymore
 struct Type_Info* make_type_info_struct_dummy() {
     struct Type_Info* info = get_new_type_info();
     info->kind = TYPE_INFO_TAG_STRUCT;
@@ -627,42 +658,36 @@ struct Type_Info* make_type_info_struct_dummy() {
     info->struct_.members_length = 0;
     info->struct_.members_capacity = 10;
     info->struct_.members = malloc(sizeof(struct Type_Info*) * info->struct_.members_capacity);
+    info->struct_.member_names = malloc(sizeof(char*) * info->struct_.members_capacity);
+    info->struct_.offsets = malloc(sizeof(size_t*) * info->struct_.members_capacity);
+    // we don't resize yet
 
     return info;
 }
-/*
-struct Type_Info* fill_type_info_struct(struct Type_Info* struct_) {
-    let info = struct_.base.type;
+struct Type_Info* fill_type_info_struct(struct Code_Node* struct_) {
+    struct Type_Info* info = struct_->type;
 
-    let members = info.members;
-    let size_in_bytes = 0;
+    size_t size_in_bytes = 0;
 
-    for (let i = 0; i < struct.block.statements.length; i += 1) {
-        let stmt = struct.block.statements[i];
-        if (stmt.base.kind == CODE_KIND_DECLARATION) {
+    for (size_t i = 0; i < struct_->struct_.block->block.statements_length; i += 1) {
+        struct Code_Node* stmt = struct_->struct_.block->block.statements[i];
+        if (stmt->kind == CODE_KIND_DECLARATION) {
             infer(stmt);
-            let member = new Object();
-            member.offset = size_in_bytes;
-            member.type = stmt.ident.base.type;
-            members[stmt.ident.name] = member;
-            size_in_bytes += member.type.size_in_bytes;
+            info->struct_.offsets[i] = size_in_bytes;
+            info->struct_.members[i] = stmt->declaration.type;
+            info->struct_.member_names[i] = stmt->declaration.ident->ident.name;
+            size_in_bytes += stmt->declaration.type->size_in_bytes;
+            info->struct_.members_length += 1;
         }
         else {
             abort();
         }
     }
 
-    info.size_in_bytes = size_in_bytes;
+    info->size_in_bytes = size_in_bytes;
 
     return info;
 }
-struct Type_Info* make_type_info_struct(struct) {
-
-    make_type_info_struct_dummy(struct);
-
-    return fill_type_info_struct(struct);
-}
-*/
 struct Type_Info* make_type_info_ident(char* name,
                                        struct Type_Info* type) {
 
@@ -681,234 +706,209 @@ struct Type_Info* make_type_info_void() {
 
     return info;
 }
-/*
 
-// let infer_block_stack = new Array();
-function infer_decl_of_ident(ident) {
-    for (let i = infer_block_stack.length-1; i >= 0; i -= 1) {
-        let block = infer_block_stack[i];
-        for (let j = 0; j < block.declarations.length; j += 1) {
-            let decl = block.declarations[j];
-            if (decl.ident.name == ident.name) {
-                return decl;
-            }
-        }
-    }
+struct Infer_Data infer_data;
+void init_infer() {
+    infer_data.block_stack_length = 0;
+    infer_data.block_stack_capacity = 10;
+    infer_data.block_stack = malloc(sizeof(struct Code_Node*) * infer_data.block_stack_capacity);
+    // we don't resize yet
 }
-function infer(node) {
-    let last_block = infer_block_stack[infer_block_stack.length-1];
-    if (node.base.kind == CODE_KIND_BLOCK) {
-        if (!node.declarations) {
-            node.declarations = new Array();
-        }
-        infer_block_stack.push(node);
-        for (let stmt of node.statements) {
-            infer(stmt);
-        }
-        infer_block_stack.pop();
+void init_infer_block_declarations(size_t index) {
+    struct Code_Node* block = infer_data.block_stack[index];
+    block->block.declarations_length = 0;
+    block->block.declarations_capacity = 10;
+    block->block.declarations = malloc(sizeof(struct Code_Node*) * block->block.declarations_capacity);
+}
+void infer_push_block(struct Code_Node* block) {
+    infer_data.block_stack[infer_data.block_stack_length] = block;
+    if (block->block.declarations == NULL) {
+        init_infer_block_declarations(infer_data.block_stack_length);
     }
-    else if (node.base.kind == CODE_KIND_DECLARATION) {
-        // should error here when ident already declared in current scope
-        if (last_block) {
-            last_block.declarations.push(node);
-        }
-        if (node.type) {
-            node.ident.base.type = infer_type(node.type);
-        }
-        if (node.expression && node.expression.base) {
-            if (node.expression.base.kind == CODE_KIND_STRUCT) {
-                // implicit declaration so we can refer to the type inside the struct
-                // when the struct type itself has not been declared yet
-                let dummy = make_type_info_struct_dummy();
-                node.expression.base.type = dummy;
-                node.ident.base.type = dummy;
-            }
-            infer(node.expression);
-        }
-    }
-    else if (node.base.kind == CODE_KIND_MINUS) {
-        infer(node.ident);
-    }
-    else if (node.base.kind == CODE_KIND_NOT) {
-        infer(node.ident);
-    }
-    else if (node.base.kind == CODE_KIND_INCREMENT) {
-        infer(node.ident);
-    }
-    else if (node.base.kind == CODE_KIND_DECREMENT) {
-        infer(node.ident);
-    }
-    else if (node.base.kind == CODE_KIND_ASSIGN) {
-        infer(node.ident);
-        infer(node.expression);
-    }
-    else if (node.base.kind == CODE_KIND_OPASSIGN) {
-        infer(node.ident);
-        infer(node.expression);
-    }
-	else if (node.base.kind == CODE_KIND_PARENS) {
-        infer(node.expression);
-        node.base.type = node.expression.base.type;
-	}
-    else if (node.base.kind == CODE_KIND_ARRAY_INDEX) {
-        infer(node.array);
-        infer(node.index);
-        node.base.type = node.array.base.type.elem_type;
-    }
-    else if (node.base.kind == CODE_KIND_DOT_OPERATOR) {
+    infer_data.block_stack_length += 1;
+}
+void infer_pop_block() {
+    infer_data.block_stack_length -= 1;
+}
+void infer_push_block_declaration(size_t index, struct Code_Node* decl) {
+    struct Code_Node* block = infer_data.block_stack[index];
+    block->block.declarations[block->block.declarations_length] = decl;
+    block->block.declarations_length += 1;
+}
 
-        let left = node.left;
-        let right = node.right;
-        
-        while (true) {
-            left.is_lhs = node.is_lhs;
-            right.is_lhs = node.is_lhs;
-            infer(left);
-            if (right.base.kind == CODE_KIND_DOT_OPERATOR) {
-                right.base.type = left.base.type.members[right.left.name].type;
-                // ###
-                // left.base.type = ;
-                left = right.left;
-                right = right.right;
-            }
-            else if (left.base.type.base.kind == TYPE_INFO_TAG_ARRAY) {
-                if (right.name == "length") {
-                    right.base.type = Native_Type_Size_t;
+struct Code_Node* infer_decl_of_ident(struct Code_Node* ident) {
+    for (size_t i = infer_data.block_stack_length - 1; i >= 0; i -= 1) {
+        struct Code_Node* block = infer_data.block_stack[i];
+        for (size_t j = 0; j < block->block.declarations_length; j += 1) {
+            struct Code_Node* decl = block->block.declarations[j];
+            // printf("%s, %s\n", decl->declaration.ident->ident.name, ident->ident.name);
+            if (decl->kind == CODE_KIND_DECLARATION) {
+                if (strcmp(decl->declaration.ident->ident.name, ident->ident.name) == 0) {
+                    return decl;
                 }
-                else abort();
-                break;
-            }
-            else if (right.base.kind == CODE_KIND_IDENT) {
-                right.base.type = left.base.type.members[right.name].type;
-                break;
-            }
-        }
-        node.base.type = right.base.type;
-    }
-    else if (node.base.kind == CODE_KIND_STRUCT) {
-        infer_type(node);
-    }
-    else if (node.base.kind == CODE_KIND_STRING) {
-    }
-    else if (node.base.kind == CODE_KIND_PROCEDURE) {
-        infer_block_stack.push(node.block);
-        node.block.declarations = new Array();
-        for (let param of node.parameters) {
-            infer(param);
-        }
-        infer_block_stack.pop();
-        infer(node.block);
-    }
-    else if (node.base.kind == CODE_KIND_IF) {
-        infer(node.condition);
-        infer(node.expression);
-    }
-    else if (node.base.kind == CODE_KIND_ELSE) {
-        infer(node.expression);
-    }
-    else if (node.base.kind == CODE_KIND_WHILE) {
-        infer(node.condition);
-        infer(node.expression);
-    }
-    else if (node.base.kind == CODE_KIND_DO_WHILE) {
-        infer(node.expression);
-        infer(node.condition);
-    }
-    else if (node.base.kind == CODE_KIND_FOR) {
-        if (node.begin) {
-            infer(node.begin);
-        }
-        if (node.condition) {
-            infer(node.condition);
-        }
-        if (node.cycle_end) {
-            infer(node.cycle_end);
-        }
-        infer(node.expression);
-    }
-    else if (node.base.kind == CODE_KIND_CALL) {
-        infer(node.ident);
-        for (let arg of node.args) {
-            infer(arg);
-        }
-        node.base.type = node.ident.declaration.expression.return_type;
-    }
-    else if (node.base.kind == CODE_KIND_RETURN) {
-        infer(node.expression);
-    }
-    else if (node.base.kind == CODE_KIND_IDENT) {
-        node.declaration = infer_decl_of_ident(node);
-        node.base.type = node.declaration.ident.base.type;
-    }
-	else if (node.base.kind == CODE_KIND_REFERENCE) {
-        node.base.type = infer_type(node);
-        infer(node.expression);
-	}
-	else if (node.base.kind == CODE_KIND_DEREFERENCE) {
-        node.base.type = infer_type(node);
-        infer(node.expression);
-	}
-    else if (node.base.kind == CODE_KIND_BINARY_OPERATION) {
-        infer(node.left);
-        infer(node.right);
-        // @Incomplete
-        // should compromise between left and right
-        node.base.type = node.left.base.type;
-    }
-    return node;
-}
-function infer_type(node) {
-    if (node.base.kind == CODE_KIND_IDENT) {
-        let primitive = Types[node.name];
-        if (primitive) {
-            return primitive;
-        }
-        else {
-            infer(node);
-            let user_type = node.declaration.ident.base.type;
-            if (user_type.base.kind == TYPE_INFO_TAG_STRUCT) {
-                return user_type;
             }
             else abort();
         }
     }
-    else if (node.base.kind == CODE_KIND_REFERENCE) {
-        infer(node.expression);
-        if (node.expression.base.kind == CODE_KIND_REFERENCE) {
-            abort();
-        }
-        return make_type_info_pointer(node.expression.base.type);
-    }
-    else if (node.base.kind == CODE_KIND_DEREFERENCE) {
-        infer(node.expression);
-        if (node.expression.base.type.base.kind == TYPE_INFO_TAG_POINTER) {
-            return node.expression.base.type.elem_type;
-        }
-        else {
-            abort();
-        }
-
-    }
-    else if (node.base.kind == TYPE_INFO_TAG_STRUCT) {
-        return fill_type_info_struct(node);
-    }
-    else if (node.base.kind == TYPE_INFO_TAG_POINTER) {
-        let elem_type = infer_type(node.elem_type);
-        let type = make_type_info_pointer(elem_type);
-        return type;
-    }
-    else if (node.base.kind == TYPE_INFO_TAG_ARRAY) {
-        let elem_type = infer_type(node.elem_type);
-        let type = make_type_info_array(elem_type, node.length);
-        type.size_in_bytes = elem_type.size_in_bytes * node.length;
-        return type;
-    }
-    else if (node.base.kind == CODE_KIND_STRING) {
-        node.base.type = User_Types.string;
-        return node.base.type;
-    }
+    return NULL;
 }
-*/
+struct Code_Node* infer(struct Code_Node* node) {
+    // printf("kind: %zu\n", node->kind);
+    switch (node->kind) {
+        case CODE_KIND_BLOCK:
+            infer_push_block(node);
+            for (size_t i = 0; i < node->block.statements_length; i += 1) {
+                infer(node->block.statements[i]);
+            }
+            infer_pop_block();
+            break;
+        case CODE_KIND_DECLARATION:
+            // should error here when ident already declared in current scope
+            infer_push_block_declaration(infer_data.block_stack_length - 1, node);
+            if (node->declaration.expression != NULL) {
+                infer(node->declaration.expression);
+            }
+            break;
+        case CODE_KIND_MINUS:
+            infer(node->minus.expression);
+            break;
+        case CODE_KIND_NOT:
+            infer(node->not.expression);
+            break;
+        case CODE_KIND_INCREMENT:
+            infer(node->increment.ident);
+            break;
+        case CODE_KIND_DECREMENT:
+            infer(node->decrement.ident);
+            break;
+        case CODE_KIND_ASSIGN:
+            infer(node->assign.ident);
+            infer(node->assign.expression);
+            break;
+        case CODE_KIND_OPASSIGN:
+            infer(node->opassign.ident);
+            infer(node->opassign.expression);
+            break;
+        case CODE_KIND_PARENS:
+            infer(node->parens.expression);
+            node->type = node->parens.expression->type;
+            break;
+        case CODE_KIND_ARRAY_INDEX:
+            infer(node->array_index.array);
+            infer(node->array_index.index);
+            node->type = node->array_index.array->type->array.elem_type;
+            break;
+        case CODE_KIND_DOT_OPERATOR:
+            // compiler bug workaround
+            42;
+            // node->type = infer_dot_operator(node);
+            struct Code_Node* left = node->dot_operator.left;
+            struct Code_Node* right = node->dot_operator.right;
+            infer(left);
+            // steve.car.age
+            if (right->kind == CODE_KIND_IDENT) {
+                if (left->type->kind == TYPE_INFO_TAG_IDENT) {
+                    if (left->type->ident.type->kind == TYPE_INFO_TAG_STRUCT) {
+                        struct Type_Info_Struct* struct_ = &(left->type->ident.type->struct_);
+                        size_t member_index = index_of_string(right->ident.name, struct_->member_names, struct_->members_length);
+                        right->type = struct_->members[member_index];
+                    }
+                }
+                else if (left->type->kind == TYPE_INFO_TAG_ARRAY) {
+                    if (strcmp(right->ident.name, "length") == 0) {
+                        right->type = Native_Type_Size_t;
+                    }
+                    else abort();
+                }
+                else abort();
+            }
+            else abort();
+            node->type = right->type;
+            break;
+        case CODE_KIND_STRUCT:
+            fill_type_info_struct(node);
+            break;
+        case CODE_KIND_STRING:
+            break;
+        case CODE_KIND_PROCEDURE:
+            // native code should not add declarations
+            if (node->procedure.block->kind == CODE_KIND_BLOCK) {
+                infer_push_block(node->procedure.block);
+                for (size_t i = 0; i < node->procedure.params_length; i += 1) {
+                    infer(node->procedure.params[i]);
+                }
+                infer_pop_block();
+                infer(node->procedure.block);
+            }
+            break;
+        case CODE_KIND_IF:
+            infer(node->if_.condition);
+            infer(node->if_.expression);
+            break;
+        case CODE_KIND_ELSE:
+            infer(node->else_.expression);
+            break;
+        case CODE_KIND_WHILE:
+            infer(node->while_.condition);
+            infer(node->while_.expression);
+            break;
+        case CODE_KIND_DO_WHILE:
+            infer(node->do_while_.expression);
+            infer(node->do_while_.condition);
+            break;
+        case CODE_KIND_FOR:
+            if (node->for_.begin != NULL) {
+                infer(node->for_.begin);
+            }
+            if (node->for_.condition != NULL) {
+                infer(node->for_.condition);
+            }
+            if (node->for_.cycle_end != NULL) {
+                infer(node->for_.cycle_end);
+            }
+            infer(node->for_.expression);
+            break;
+        case CODE_KIND_CALL:
+            infer(node->call.ident);
+            for (size_t i = 0; i < node->call.args_length; i += 1) {
+                infer(node->call.args[i]);
+            }
+            node->type = node->call.ident->ident.declaration->declaration.expression->procedure.return_type;
+            break;
+        case CODE_KIND_RETURN:
+            infer(node->return_.expression);
+            break;
+        case CODE_KIND_IDENT:
+            node->ident.declaration = infer_decl_of_ident(node);
+            node->type = node->ident.declaration->declaration.type;
+            break;
+        case CODE_KIND_REFERENCE:
+            infer(node->reference.expression);
+            if (node->reference.expression->kind == CODE_KIND_REFERENCE) {
+                abort();
+            }
+            node->type = make_type_info_pointer(node->reference.expression->type);
+            break;
+        case CODE_KIND_DEREFERENCE:
+            infer(node->dereference.expression);
+            if (node->dereference.expression->type->kind != TYPE_INFO_TAG_POINTER) {
+                abort();
+            }
+            node->type = node->dereference.expression->type->pointer.elem_type;
+            break;
+        case CODE_KIND_BINARY_OPERATION:
+            infer(node->binary_operation.left);
+            infer(node->binary_operation.right);
+            // @Incomplete
+            // should compromise between left and right
+            node->type = node->binary_operation.left->type;
+            break;
+        default:
+            break;
+    }
+    return node;
+}
+
 enum Operator_Precedence map_operator_to_precedence(char* operator) {
     if (strcmp(operator, "*") == 0) {
         return OPERATOR_PRECEDENCE_MULTIPLY;
@@ -989,6 +989,75 @@ bool maybe_binary(enum Operator_Precedence prev_prec,
     }
     return false;
 }
+void inject_stdlib(struct Code_Node_Array* code_node_array,
+                   struct Code_Node*** statements,
+                   size_t* length,
+                   size_t* capacity) {
+
+    // void* malloc(size_t num_bytes)
+    struct Type_Info* malloc_return_type = make_type_info_ident("void*", Native_Type_Size_t);
+
+    size_t malloc_params_length = 1;
+    bool malloc_has_varargs = false;
+    struct Code_Node** malloc_params = malloc(sizeof(struct Code_Node*) * malloc_params_length);
+
+    struct Type_Info* num_bytes_type = make_type_info_ident("size_t", Native_Type_Size_t);
+    struct Code_Node* num_bytes_ident = make_ident(code_node_array, "num_bytes", NULL);
+    struct Code_Node* num_bytes_param = make_declaration(code_node_array, num_bytes_type, num_bytes_ident, NULL);
+    
+    malloc_params[0] = num_bytes_param;
+
+    struct Code_Node* malloc_block = make_native_code(code_node_array, &malloc);
+    struct Code_Node* malloc_proc = make_procedure(code_node_array, malloc_params, malloc_params_length, malloc_has_varargs, malloc_return_type, malloc_block);
+    struct Code_Node* malloc_ident = make_ident(code_node_array, "malloc", NULL);
+    struct Code_Node* malloc_decl = make_declaration(code_node_array, NULL, malloc_ident, malloc_proc);
+
+    (*statements)[*length] = malloc_decl;
+    *length += 1;
+
+    // void free(void* ptr)
+    struct Type_Info* free_return_type = make_type_info_ident("void", Native_Type_Void);
+
+    size_t free_params_length = 1;
+    bool free_has_varargs = false;
+    struct Code_Node** free_params = malloc(sizeof(struct Code_Node*) * free_params_length);
+
+    struct Type_Info* ptr_type = make_type_info_ident("void*", Native_Type_Size_t);
+    struct Code_Node* ptr_ident = make_ident(code_node_array, "ptr", NULL);
+    struct Code_Node* ptr_param = make_declaration(code_node_array, ptr_type, ptr_ident, NULL);
+    
+    free_params[0] = ptr_param;
+
+    struct Code_Node* free_block = make_native_code(code_node_array, &free);
+    struct Code_Node* free_proc = make_procedure(code_node_array, free_params, free_params_length, free_has_varargs, free_return_type, free_block);
+    struct Code_Node* free_ident = make_ident(code_node_array, "free", NULL);
+    struct Code_Node* free_decl = make_declaration(code_node_array, NULL, free_ident, free_proc);
+
+    (*statements)[*length] = free_decl;
+    *length += 1;
+    
+    // void printf(char* fmt, ...)
+    struct Type_Info* printf_return_type = make_type_info_ident("void", Native_Type_Void);
+
+    size_t printf_params_length = 1;
+    bool printf_has_varargs = true;
+    struct Code_Node** printf_params = malloc(sizeof(struct Code_Node*) * printf_params_length);
+
+    struct Type_Info* fmt_type = make_type_info_ident("char*", Native_Type_Size_t);
+    struct Code_Node* fmt_ident = make_ident(code_node_array, "fmt", NULL);
+    struct Code_Node* fmt_param = make_declaration(code_node_array, fmt_type, fmt_ident, NULL);
+    
+    printf_params[0] = fmt_param;
+
+    struct Code_Node* printf_block = make_native_code(code_node_array, &printf);
+    struct Code_Node* printf_proc = make_procedure(code_node_array, printf_params, printf_params_length, printf_has_varargs, printf_return_type, printf_block);
+
+    struct Code_Node* printf_ident = make_ident(code_node_array, "printf", NULL);
+    struct Code_Node* printf_decl = make_declaration(code_node_array, NULL, printf_ident, printf_proc);
+
+    (*statements)[*length] = printf_decl;
+    *length += 1;
+}
 struct Code_Node_Array* parse(struct Token_Array* token_array) {
     struct Code_Node_Array* code_node_array = malloc(sizeof(struct Code_Node_Array));
     code_node_array->length = 0;
@@ -998,11 +1067,16 @@ struct Code_Node_Array* parse(struct Token_Array* token_array) {
     code_node_array->last--;
     token_array->curr_token = token_array->first;
 
-    size_t length = 0;
-    struct Code_Node** statements;
-    delimited(NULL, NULL, ";", &parse_statement, &length, &statements, token_array, code_node_array);
-    make_block(code_node_array, statements, length);
-    code_node_array->last->block.is_transformed_block = true;
+    struct Code_Node* global_block = make_block(code_node_array, NULL, 0);
+    size_t* length = &(global_block->block.statements_length);
+    size_t capacity = 100;
+    struct Code_Node*** statements = &(global_block->block.statements);
+    *statements = malloc(sizeof(struct Code_Node**) * capacity);
+
+    inject_stdlib(code_node_array, statements, length, &capacity);
+
+    delimited(NULL, NULL, ";", &parse_statement, statements, length, &capacity, token_array, code_node_array);
+    code_node_array->first->block.is_transformed_block = true;
 
     return code_node_array;
 }
@@ -1196,9 +1270,10 @@ bool parse_call(struct Token_Array* token_array,
         strcmp(token_array->curr_token->str, "(") == 0) {
         
         struct Code_Node* ident = code_node_array->last;
-        struct Code_Node** args;
-        size_t args_length;
-        delimited("(", ")", ",", &parse_rvalue, &args_length, &args, token_array, code_node_array);
+        struct Code_Node** args = NULL;
+        size_t args_length = 0;
+        size_t args_capacity = 0;
+        delimited("(", ")", ",", &parse_rvalue, &args, &args_length, &args_capacity, token_array, code_node_array);
         make_call(code_node_array, ident, args, args_length);
         return true;
     }
@@ -1277,7 +1352,7 @@ bool parse_dot_operator(struct Token_Array* token_array,
                         struct Code_Node_Array* code_node_array) {
 
     struct Code_Node* left = code_node_array->last;
-    if (token_array->curr_token->str[0] == '.') {
+    if (strcmp(token_array->curr_token->str, ".") == 0) {
         token_array->curr_token++;
         bool has_right = parse_ident(token_array, code_node_array);
         if (has_right) {
@@ -1478,9 +1553,10 @@ bool parse_return(struct Token_Array* token_array,
 bool parse_block(struct Token_Array* token_array,
                  struct Code_Node_Array* code_node_array) {
 
+    struct Code_Node** statements = NULL;
     size_t length = 0;
-    struct Code_Node** statements;
-    delimited("{", "}", ";", &parse_statement, &length, &statements, token_array, code_node_array);
+    size_t capacity = 0;
+    delimited("{", "}", ";", &parse_statement, &statements, &length, &capacity, token_array, code_node_array);
     make_block(code_node_array, statements, length);
     return true;
 }
@@ -1530,12 +1606,20 @@ bool parse_procedure_declaration(struct Token_Array* token_array,
 
     parse_ident(token_array, code_node_array);
     struct Code_Node* ident = code_node_array->last;
-    size_t params_length;
-    struct Code_Node** params;
-    delimited("(", ")", ",", &parse_declaration, &params_length, &params, token_array, code_node_array);
+    struct Code_Node** params = NULL;
+    size_t params_length = 0;
+    size_t params_capacity = 0;
+    token_array->curr_token++;
+    delimited("(", ")", ",", &parse_param, &params, &params_length, &params_capacity, token_array, code_node_array);
+    bool has_varargs = false;
+    if (strcmp(token_array->curr_token->str, "...") == 0) {
+        has_varargs = true;
+        token_array->curr_token++;
+    }
+    token_array->curr_token++;
     parse_block(token_array, code_node_array);
     struct Code_Node* block = code_node_array->last;
-    make_procedure(code_node_array, params, params_length, return_type, block);
+    make_procedure(code_node_array, params, params_length, has_varargs, return_type, block);
     struct Code_Node* proc = code_node_array->last;
     // @Incomplete
     // should have function pointer type
@@ -1631,6 +1715,17 @@ bool parse_pointer_type(struct Token_Array* token_array,
         return true;
     }
 }
+bool parse_param(struct Token_Array* token_array,
+                 struct Code_Node_Array* code_node_array) {
+
+    // varargs
+    if (strcmp(token_array->curr_token->str, "...") == 0) {
+        return false;
+    }
+    struct Type_Info* type;
+    parse_type(token_array, code_node_array, &type);
+    return parse_declaration_precomputed_type(token_array, code_node_array, type);
+}
 bool parse_declaration(struct Token_Array* token_array,
                        struct Code_Node_Array* code_node_array) {
 
@@ -1663,11 +1758,13 @@ bool parse_struct_declaration(struct Token_Array* token_array,
     token_array->curr_token++;
     parse_ident(token_array, code_node_array);
     struct Code_Node* ident = code_node_array->last;
-    add_user_type(ident->ident.name, make_type_info_struct_dummy());
+    struct Type_Info* type = make_type_info_struct_dummy();
+    add_user_type(ident->ident.name, type);
     parse_block(token_array, code_node_array);
     struct Code_Node* block = code_node_array->last;
     struct Code_Node* expression = make_struct(code_node_array, block);
-    make_declaration(code_node_array, NULL, ident, expression);
+    expression->type = type;
+    make_declaration(code_node_array, type, ident, expression);
     return true;
 }
 #define DEBUG_DELIM false
@@ -1676,8 +1773,9 @@ int delim = 0;
 #endif
 bool delimited(char* start, char* stop, char* separator,
                bool (*elem_func)(struct Token_Array*, struct Code_Node_Array*),
-               size_t* out_length,
-               struct Code_Node*** out_nodes,
+               struct Code_Node*** nodes,
+               size_t* length,
+               size_t* capacity,
                struct Token_Array* token_array,
                struct Code_Node_Array* code_node_array) {
 
@@ -1685,9 +1783,11 @@ bool delimited(char* start, char* stop, char* separator,
     printf("start delim %d\n", delim);
     delim++;
     #endif
-    size_t capacity = 100;
-    size_t length = 0;
-    struct Code_Node** nodes = malloc(sizeof(struct Code_Node*) * capacity);
+    if (*nodes == NULL) {
+        *length = 0;
+        *capacity = 10;
+        *nodes = malloc(sizeof(struct Code_Node*) * *capacity);
+    }
 
     if (token_array->curr_token->str != NULL && stop != NULL &&
         strcmp(token_array->curr_token->str, start) == 0) {
@@ -1724,13 +1824,18 @@ bool delimited(char* start, char* stop, char* separator,
             #if DEBUG_DELIM
             printf("delim: %d, %s\n", token_array->curr_token->kind, token_array->curr_token->str);
             #endif
-            elem_func(token_array, code_node_array);
-            nodes[length] = code_node_array->last;
-            length += 1;
-        }
-        else {
-            // @Bug
-            printf("no string\n");
+            bool was_elem = elem_func(token_array, code_node_array);
+            if (!was_elem) {
+                break;
+            }
+            else {
+                (*nodes)[*length] = code_node_array->last;
+                *length += 1;
+                if (*length == *capacity) {
+                    *capacity *= 2;
+                    *nodes = realloc(*nodes, sizeof(struct Code_Node*) * *capacity);
+                }
+            }
         }
         
         if (prev_token == token_array->curr_token) {
@@ -1749,23 +1854,31 @@ bool delimited(char* start, char* stop, char* separator,
     printf("end delim %d\n", delim);
     #endif
 
-    *out_length = length;
-    *out_nodes = nodes;
+    *nodes = realloc(*nodes, sizeof(struct Code_Node*) * *length);
     return true;
 }
 
 struct Code_Node* get_new_node_from_code_node_array(struct Code_Node_Array* code_node_array) {
+
+    code_node_array->length += 1;
 
     // @Audit
     // @Realloc
     // might have to fix pointers for the entire tree
     if (code_node_array->length == code_node_array->capacity) {
         code_node_array->capacity *= 2;
-        code_node_array->first = realloc(code_node_array->first, code_node_array->capacity);
+        struct Code_Node* before_first = code_node_array->first;
+        code_node_array->first = realloc(code_node_array->first, sizeof(struct Code_Node) * code_node_array->capacity);
+        struct Code_Node* after_first = code_node_array->first;
+        struct Code_Node* before_last = code_node_array->last;
+        code_node_array->last = &(code_node_array->first[code_node_array->length - 2]);
+        struct Code_Node* after_last = code_node_array->last;
+        printf("diff first: %ld\n", (long)after_first - (long)before_first);
+        printf("diff last: %ld\n", (long)after_last - (long)before_last);
     }
 
-    code_node_array->length += 1;
     code_node_array->last++;
+    code_node_array->last->type = NULL;
     return code_node_array->last;
 }
 
@@ -1803,8 +1916,8 @@ struct Token_Array* tokenize(char* input) {
         // @Realloc
         if (token_array->length == token_array->capacity) {
             token_array->capacity *= 2;
-            token_array->first = realloc(token_array->first, token_array->capacity);
-            token_array->curr_token = &token_array->first[token_array->length];
+            token_array->first = realloc(token_array->first, sizeof(struct Token) * token_array->capacity);
+            token_array->curr_token = &(token_array->first[token_array->length - 1]);
         }
     }
 
@@ -1880,12 +1993,22 @@ void read_token(struct Token* token, char** input) {
         (*input)++;
     }
     else if (is_punc(ch)) {
-        (*input)++;
-        token->kind = TOKEN_KIND_PUNC;
-        char* str = malloc(sizeof(char) * 2);
-        str[0] = ch;
-        str[1] = '\0';
-        token->str = str;
+        // varargs
+        if (ch == '.' && (*input)[0] == '.' && (*input)[1] == '.') {
+            (*input)++;
+            (*input)++;
+            (*input)++;
+            token->kind = TOKEN_KIND_PUNC;
+            token->str = "...";
+        }
+        else {
+            (*input)++;
+            token->kind = TOKEN_KIND_PUNC;
+            char* str = malloc(sizeof(char) * 2);
+            str[0] = ch;
+            str[1] = '\0';
+            token->str = str;
+        }
     }
     else if (is_op_char(ch)) {
         token->kind = TOKEN_KIND_OP;
@@ -1904,7 +2027,7 @@ void read_token(struct Token* token, char** input) {
 char* read_while(bool (*func)(char), char** input) {
     // @MemoryHog
     // we should start lower and reallocate
-    size_t capacity = 100;
+    size_t capacity = 1;
     char* str = malloc(sizeof(char) * capacity);
     size_t length = 0;
     while (**input && func(**input)) {
@@ -1925,7 +2048,7 @@ char* read_while(bool (*func)(char), char** input) {
 char* read_while_lookahead(bool (*func)(char, char), char** input) {
     // @MemoryHog
     // we should start lower and reallocate
-    size_t capacity = 100;
+    size_t capacity = 1;
     char* str = malloc(sizeof(char) * capacity);
     size_t length = 0;
     while (**input && func(**input, (*input)[1])) {
