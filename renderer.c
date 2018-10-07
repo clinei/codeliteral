@@ -11,7 +11,7 @@ void init_renderer() {
 
     my_render_data = malloc(sizeof(struct Render_Data));
     my_render_data->font_atlas = malloc(sizeof(struct Atlas));
-    init_atlas(my_render_data->font_atlas, "assets/fonts/SourceCodeVariable-Roman.ttf", 20.0, 3, 128);
+    init_atlas(my_render_data->font_atlas, "assets/fonts/SourceCodeVariable-Roman.ttf", 22.0, 4, 128);
     my_render_data->fg_color = malloc(sizeof(GLfloat) * 4);
     my_render_data->bg_color = malloc(sizeof(GLfloat) * 4);
 
@@ -149,7 +149,7 @@ void init_hilite() {
     memcpy(my_render_data->hilite_comment_fg_color, &hilite_comment_fg_color, sizeof(GLfloat) * 4);
 }
 
-void render(struct Code_Node_Array* code_node_array) {
+void render(struct Code_Node* node) {
     GLfloat white[4] =        { 230 / 255.0f, 230 / 255.0f, 230 / 255.0f, 1 };
     GLfloat clear_color[4] =  { 37 / 255.0f, 37 / 255.0f, 37 / 255.0f, 1 };
     GLfloat bg_color[4] =     { 120 / 255.0f, 60 / 255.0f, 20 / 255.0f, 0 };
@@ -171,7 +171,7 @@ void render(struct Code_Node_Array* code_node_array) {
     memcpy(my_render_data->fg_color, &white, sizeof(GLfloat) * 4);
     memcpy(my_render_data->bg_color, &bg_color, sizeof(GLfloat) * 4);
 
-    render_node(code_node_array->first, my_render_data);
+    render_node(node, my_render_data);
 
     emscripten_webgl_make_context_current(debugger_context);
 
@@ -179,6 +179,7 @@ void render(struct Code_Node_Array* code_node_array) {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDisable(GL_DEPTH_TEST);
 
     // draw backgrounds
     glUseProgram(quad_program.program_id);
@@ -227,6 +228,7 @@ void render_node(struct Code_Node* node,
     if (render_data->ypos > render_data->height) {
         return;
     }
+    // printf("kind: %zu\n", node->kind);
     switch (node->kind) {
         case CODE_KIND_IF:{
             render_text("if", &render_data->xpos, &render_data->ypos,
@@ -378,7 +380,7 @@ void render_node(struct Code_Node* node,
                                 render_data->bg_color,
                                 render_data);
                     bool first = true;
-                    for (size_t i = 0; i < proc->params_length; i += 1) {
+                    for (size_t i = 0; i < proc->params->length; i += 1) {
                         if (first == false) {
                             render_text(",", &render_data->xpos, &render_data->ypos,
                                         render_data->fg_color,
@@ -389,7 +391,7 @@ void render_node(struct Code_Node* node,
                         else {
                             first = false;
                         }
-                        render_node(proc->params[i], render_data);
+                        render_node(proc->params->first[i], render_data);
                     }
                     if (proc->has_varargs) {
                         if (first == false) {
@@ -512,8 +514,7 @@ void render_node(struct Code_Node* node,
                         render_data->bg_color,
                         render_data);
             bool first = true;
-            for (size_t i = 0; i < node->call.args_length; i += 1) {
-                render_node(node->call.args[i], render_data);
+            for (size_t i = 0; i < node->call.args->length; i += 1) {
                 if (first == false) {
                     render_text(",", &render_data->xpos, &render_data->ypos,
                                 render_data->fg_color,
@@ -524,6 +525,7 @@ void render_node(struct Code_Node* node,
                 else {
                     first = false;
                 }
+                render_node(node->call.args->first[i], render_data);
             }
             render_text(")", &render_data->xpos, &render_data->ypos,
                         render_data->fg_color,
@@ -644,9 +646,9 @@ void render_node(struct Code_Node* node,
                 render_newline(render_data);
                 render_data->indent_level += 1;
             }
-            for (size_t i = 0; i < node->block.statements_length; i += 1) {
+            for (size_t i = 0; i < node->block.statements->length; i += 1) {
                 render_indent(render_data);
-                struct Code_Node* stmt = node->block.statements[i];
+                struct Code_Node* stmt = node->block.statements->first[i];
                 float prev_xpos = render_data->xpos;
                 render_node(stmt, render_data);
                 if (render_data->xpos != prev_xpos) {
@@ -798,10 +800,9 @@ void render_text(char* text, float* xpos, float* ypos,
         render_data->indices_length += 6;
         render_data->coords_length += 4 * 4;
 
-        // @Realloc
         // @Bug
+        // @Realloc
         // breaks after a few reallocs
-        // looks like the problem is on Emscripten's side
         // setting the capacity high enough in the beginning for now
         if (render_data->indices_length == render_data->indices_capacity) {
             render_data->indices_capacity *= 2;

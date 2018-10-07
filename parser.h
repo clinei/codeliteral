@@ -29,6 +29,7 @@ struct Token {
 struct Token_Array {
     size_t length;
     size_t capacity;
+    size_t element_size;
     struct Token* first;
     struct Token* last;
     struct Token* curr_token;
@@ -69,17 +70,29 @@ enum Code_Kind {
     CODE_KIND_NATIVE_CODE = 31,
 };
 
+struct Code_Procedure_Params {
+    size_t length;
+    size_t capacity;
+    size_t element_size;
+    struct Code_Node** first;
+    struct Code_Node** last;
+};
 struct Code_Procedure {
-	struct Code_Node** params;
-    size_t params_length;
+    struct Code_Procedure_Params* params;
     bool has_varargs;
 	struct Type_Info* return_type;
 	struct Code_Node* block;
 };
+struct Code_Call_Args {
+    size_t length;
+    size_t capacity;
+    size_t element_size;
+    struct Code_Node** first;
+    struct Code_Node** last;
+};
 struct Code_Call {
 	struct Code_Node* ident;
-	struct Code_Node** args;
-    size_t args_length;
+    struct Code_Call_Args* args;
 };
 struct Code_Declaration {
 	struct Type_Info* type;
@@ -100,12 +113,23 @@ struct Code_Dot_Operator {
     struct Code_Node* left;
     struct Code_Node* right;
 };
+struct Code_Block_Statements {
+    size_t length;
+    size_t capacity;
+    size_t element_size;
+    struct Code_Node** first;
+    struct Code_Node** last;
+};
+struct Code_Block_Declarations {
+    size_t length;
+    size_t capacity;
+    size_t element_size;
+    struct Code_Node** first;
+    struct Code_Node** last;
+};
 struct Code_Block {
-    struct Code_Node** statements;
-    size_t statements_length;
-    struct Code_Node** declarations;
-    size_t declarations_length;
-    size_t declarations_capacity;
+    struct Code_Block_Statements* statements;
+    struct Code_Block_Declarations* declarations;
     bool is_transformed_block;
 };
 struct Code_Return {
@@ -189,6 +213,9 @@ struct Code_Node {
 	struct Type_Info* type;
 	size_t serial;
 
+    struct Code_Node* transformed;
+    struct Code_Node* result;
+
     union {
         struct Code_Procedure procedure;
         struct Code_Call call;
@@ -224,6 +251,7 @@ struct Code_Node {
 struct Code_Node_Array {
     size_t length;
     size_t capacity;
+    size_t element_size;
     struct Code_Node* first;
     struct Code_Node* last;
     struct Code_Node* curr_node;
@@ -242,15 +270,13 @@ struct Type_Info* make_type_info_ident(char* name, struct Type_Info* type);
 struct Type_Info* make_type_info_void();
 
 struct Code_Node* make_procedure(struct Code_Node_Array* code_node_array,
-                                 struct Code_Node** params,
-                                 size_t params_length,
+                                 struct Code_Procedure_Params* params,
                                  bool has_varargs,
                                  struct Type_Info* return_type,
                                  struct Code_Node* block);
 struct Code_Node* make_call(struct Code_Node_Array* code_node_array,
                             struct Code_Node* ident,
-                            struct Code_Node** args,
-                            size_t args_length);
+                            struct Code_Call_Args* args);
 struct Code_Node* make_declaration(struct Code_Node_Array* code_node_array,
                                    struct Type_Info* type,
                                    struct Code_Node* ident,
@@ -266,8 +292,7 @@ struct Code_Node* make_dot_operator(struct Code_Node_Array* code_node_array,
                                     struct Code_Node* left,
                                     struct Code_Node* right);
 struct Code_Node* make_block(struct Code_Node_Array* code_node_array,
-                             struct Code_Node** statements,
-                             size_t statements_length);
+                             struct Code_Block_Statements* statements);
 struct Code_Node* make_return(struct Code_Node_Array* code_node_array,
                               struct Code_Node* expression);
 struct Code_Node* make_struct(struct Code_Node_Array* code_node_array,
@@ -386,6 +411,7 @@ struct Type_Info {
 struct Type_Infos {
     size_t length;
     size_t capacity;
+    size_t element_size;
     struct Type_Info* first;
     struct Type_Info* last;
 };
@@ -407,10 +433,13 @@ struct Type_Info* Native_Type_Size_t;
 struct User_Types {
     size_t length;
     size_t capacity;
+    size_t members_length;
+    size_t* element_sizes;
     char** names;
     struct Type_Info** types;
 };
 struct User_Types* user_types;
+
 void add_user_type(char* name, struct Type_Info* user_type);
 size_t index_of_string(char* str, char** strings, size_t length);
 struct Type_Info* map_name_to_type(char* name);
@@ -499,9 +528,7 @@ bool parse_dot_operator(struct Token_Array* token_array,
                         struct Code_Node_Array* code_node_array);
 bool delimited(char* start, char* stop, char* separator,
                bool (*elem_func)(struct Token_Array*, struct Code_Node_Array*),
-               struct Code_Node*** nodes,
-               size_t* length,
-               size_t* capacity,
+               struct Dynamic_Array* results,
                struct Token_Array* token_array,
                struct Code_Node_Array* code_node_array);
 
@@ -528,6 +555,7 @@ enum Operator_Precedence {
     OPERATOR_PRECEDENCE_DIVIDE = 3,
     OPERATOR_PRECEDENCE_MODULO = 3,
 };
+enum Operator_Precedence map_operator_to_precedence(char* operator);
 bool maybe_binary(enum Operator_Precedence prev_prec,
                   struct Token_Array* token_array,
                   struct Code_Node_Array* code_node_array);
@@ -536,6 +564,7 @@ struct Token_Array* tokenize(char* input);
 void read_token(struct Token* token, char** input);
 char* read_while(bool (*func)(char), char** input);
 char* read_while_lookahead(bool (*func)(char, char), char** input);
+char* escape_string(char* str);
 bool is_one_of(char* options, char ch);
 bool is_one_of_strings(char** strings, size_t length, char* str);
 bool is_in_range(char start, char end, char ch);

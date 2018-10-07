@@ -3,6 +3,173 @@
 
 #include "util.h"
 
+#define DEBUG_DYNAMIC_ARRAY false
+#define DEBUG_DYNAMIC_ARRAY_INIT true
+#define DEBUG_DYNAMIC_ARRAY_PUSH true
+#define DEBUG_DYNAMIC_ARRAY_NEXT true
+#define DEBUG_DYNAMIC_ARRAY_REALLOC true
+void array_init(struct Dynamic_Array* array, size_t element_size, size_t capacity) {
+    #if DEBUG_DYNAMIC_ARRAY && DEBUG_DYNAMIC_ARRAY_INIT
+    printf("dynamic array init\n");
+    printf("element_size: %zu\n", element_size);
+    printf("capacity: %zu\n", capacity);
+    #endif
+    array->element_size = element_size;
+    array->capacity = capacity;
+    array->length = 0;
+    array->first = malloc(element_size * capacity);
+    array->last = (void*)((size_t)array->first - element_size);
+}
+bool array_push(struct Dynamic_Array* array, void* element) {
+    array->length += 1;
+    #if DEBUG_DYNAMIC_ARRAY && DEBUG_DYNAMIC_ARRAY_PUSH
+    printf("dynamic array push\n");
+    printf("length: %zu\n", array->length);
+    #endif
+    bool did_realloc = array_maybe_realloc(array);
+    array->last += array->element_size;
+    memcpy(array->last, &element, array->element_size);
+    return did_realloc;
+}
+bool array_next(struct Dynamic_Array* array) {
+    array->length += 1;
+    #if DEBUG_DYNAMIC_ARRAY && DEBUG_DYNAMIC_ARRAY_NEXT
+    printf("dynamic array next\n");
+    printf("length: %zu\n", array->length);
+    #endif
+    bool did_realloc = array_maybe_realloc(array);
+    array->last += array->element_size;
+    return did_realloc;
+}
+bool array_maybe_realloc(struct Dynamic_Array* array) {
+    if (array->length == array->capacity) {
+        array->capacity *= 2;
+        #if DEBUG_DYNAMIC_ARRAY && DEBUG_DYNAMIC_ARRAY_REALLOC
+        void* first_before = array->first;
+        printf("capacity: %zu\n", array->capacity);
+        printf("first before: %zu\n", (size_t)first_before);
+        #endif
+        array->first = realloc(array->first, array->element_size * array->capacity);
+        #if DEBUG_DYNAMIC_ARRAY && DEBUG_DYNAMIC_ARRAY_REALLOC
+        void* first_after = array->first;
+        printf("first after: %zu\n", (size_t)first_after);
+        void* last_before = array->last;
+        printf("last before: %zu\n", (size_t)last_before);
+        #endif
+        array->last = (void*)((size_t)array->first + (array->length - 2) * array->element_size);
+        #if DEBUG_DYNAMIC_ARRAY && DEBUG_DYNAMIC_ARRAY_REALLOC
+        void* last_after = array->last;
+        printf("last after: %zu\n", (size_t)last_after);
+        printf("first diff: %ld\n", (long)first_before - (long)first_after);
+        printf("last diff: %ld\n", (long)last_before - (long)last_after);
+        #endif
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+#define DEBUG_DYNAMIC_SOA false
+#define DEBUG_DYNAMIC_SOA_INIT true
+#define DEBUG_DYNAMIC_SOA_PUSH true
+#define DEBUG_DYNAMIC_SOA_REALLOC true
+void soa_init(struct Dynamic_SOA* soa, size_t capacity, size_t members_length, ...) {
+    soa->length = 0;
+    soa->capacity = capacity;
+    soa->members_length = members_length;
+
+    soa->element_sizes = malloc(sizeof(size_t) * members_length);
+
+    #if DEBUG_DYNAMIC_SOA && DEBUG_DYNAMIC_SOA_INIT
+    printf("dynamic soa init\n");
+    printf("soa ptr: %zu\n", (size_t)soa);
+    printf("capacity: %zu\n", capacity);
+    printf("members_length: %zu\n", members_length);
+    #endif
+
+    va_list args;
+    va_start(args, members_length);
+    void** member_ptr = (void**)((size_t)soa + DYNAMIC_SOA_FIRST_MEMBER_OFFSET);
+    for (size_t i = 0; i < soa->members_length; i += 1) {
+        #if DEBUG_DYNAMIC_SOA && DEBUG_DYNAMIC_SOA_INIT
+        printf("member %zu\n", i);
+        #endif
+        size_t element_size = va_arg(args, size_t);
+        soa->element_sizes[i] = element_size;
+        #if DEBUG_DYNAMIC_SOA && DEBUG_DYNAMIC_SOA_INIT
+        printf("member_ptr diff: %zu\n", (size_t)member_ptr - (size_t)&(soa->element_sizes));
+        printf("element_size: %zu\n", soa->element_sizes[i]);
+        #endif
+        *member_ptr = malloc(element_size * soa->capacity);
+        member_ptr = (void**)((size_t)member_ptr + DYNAMIC_SOA_NEXT_MEMBER_OFFSET);
+    }
+    va_end(args);
+}
+bool soa_push(struct Dynamic_SOA* soa, ...) {
+    soa->length += 1;
+
+    bool did_realloc = soa_maybe_realloc(soa);
+
+    #if DEBUG_DYNAMIC_SOA && DEBUG_DYNAMIC_SOA_PUSH
+    printf("dynamic soa push\n");
+    printf("soa ptr: %zu\n", (size_t)soa);
+    #endif
+
+    va_list args;
+    va_start(args, soa);
+    void** member_ptr = (void**)((size_t)soa + DYNAMIC_SOA_FIRST_MEMBER_OFFSET);
+    for (size_t i = 0; i < soa->members_length; i += 1) {
+        #if DEBUG_DYNAMIC_SOA && DEBUG_DYNAMIC_SOA_PUSH
+        printf("member %zu\n", i);
+        #endif
+        size_t element_size = soa->element_sizes[i];
+        void* src = va_arg(args, void*);
+        #if DEBUG_DYNAMIC_SOA && DEBUG_DYNAMIC_SOA_PUSH
+        printf("member_ptr diff: %zu\n", (size_t)member_ptr - (size_t)&(soa->element_sizes));
+        printf("element_size: %zu\n", element_size);
+        printf("src: %zu\n", (size_t)src);
+        printf("*member_ptr: %zu\n", (size_t)*member_ptr);
+        #endif
+        void* elem_ptr = (void*)((size_t)*member_ptr + (soa->length - 1) * element_size);
+        #if DEBUG_DYNAMIC_SOA && DEBUG_DYNAMIC_SOA_PUSH
+        printf("elem_ptr: %zu\n", (size_t)elem_ptr);
+        #endif
+        memcpy(elem_ptr, &src, element_size);
+        member_ptr = (void**)((size_t)member_ptr + DYNAMIC_SOA_NEXT_MEMBER_OFFSET);
+    }
+    va_end(args);
+
+    return did_realloc;
+}
+bool soa_maybe_realloc(struct Dynamic_SOA* soa) {
+    if (soa->length == soa->capacity) {
+        soa->capacity *= 2;
+        #if DEBUG_DYNAMIC_SOA && DEBUG_DYNAMIC_SOA_REALLOC
+        printf("dynamic soa realloc\n");
+        #endif
+        void** member_ptr = (void**)((size_t)soa + DYNAMIC_SOA_FIRST_MEMBER_OFFSET);
+        for (size_t i = 0; i < soa->members_length; i += 1) {
+            #if DEBUG_DYNAMIC_SOA && DEBUG_DYNAMIC_SOA_REALLOC
+            void* first_before = *member_ptr;
+            printf("capacity: %zu\n", soa->capacity);
+            printf("first before: %zu\n", (size_t)first_before);
+            #endif
+            *member_ptr = realloc(*member_ptr, soa->element_sizes[i] * soa->capacity);
+            member_ptr = (void*)((size_t)member_ptr + DYNAMIC_SOA_NEXT_MEMBER_OFFSET);
+            #if DEBUG_DYNAMIC_SOA && DEBUG_DYNAMIC_SOA_REALLOC
+            void* first_after = *member_ptr;
+            printf("first after: %zu\n", (size_t)first_after);
+            printf("diff: %ld\n", (long)first_before - (long)first_after);
+            #endif
+        }
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 GLuint compile_shader(GLenum type, const char* source) {
 
     GLuint shader = glCreateShader(type);
@@ -55,8 +222,7 @@ char* read_file(const char* filename) {
 
     return res;
 }
-void print_log(GLuint object)
-{
+void print_log(GLuint object) {
   GLint log_length = 0;
   if (glIsShader(object))
     glGetShaderiv(object, GL_INFO_LOG_LENGTH, &log_length);

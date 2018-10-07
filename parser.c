@@ -27,8 +27,7 @@ void set_serial(struct Code_Node* node) {
 }
 
 struct Code_Node* make_procedure(struct Code_Node_Array* code_node_array,
-                                 struct Code_Node** params,
-                                 size_t params_length,
+                                 struct Code_Procedure_Params* params,
                                  bool has_varargs,
                                  struct Type_Info* return_type,
                                  struct Code_Node* block) {
@@ -36,8 +35,14 @@ struct Code_Node* make_procedure(struct Code_Node_Array* code_node_array,
 	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
 	node->kind = CODE_KIND_PROCEDURE;
 
+    if (params == NULL) {
+        params = malloc(sizeof(struct Code_Procedure_Params));
+        array_init((struct Dynamic_Array*)params, sizeof(struct Code_Node*), 10);
+    }
+    if (block == NULL) {
+        block = make_block(code_node_array, NULL);
+    }
 	node->procedure.params = params;
-	node->procedure.params_length = params_length;
 	node->procedure.has_varargs = has_varargs;
 	node->procedure.return_type = return_type;
 	node->procedure.block = block;
@@ -49,15 +54,17 @@ struct Code_Node* make_procedure(struct Code_Node_Array* code_node_array,
 
 struct Code_Node* make_call(struct Code_Node_Array* code_node_array,
                             struct Code_Node* ident,
-                            struct Code_Node** args,
-                            size_t args_length) {
+                            struct Code_Call_Args* args) {
 
 	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
 	node->kind = CODE_KIND_CALL;
 
+    if (args == NULL) {
+        args = malloc(sizeof(struct Code_Call_Args));
+        array_init((struct Dynamic_Array*)args, sizeof(struct Code_Node*), 10);
+    }
 	node->call.ident = ident;
 	node->call.args = args;
-	node->call.args_length = args_length;
 
 	set_serial(node);
 
@@ -140,14 +147,16 @@ struct Code_Node* make_dot_operator(struct Code_Node_Array* code_node_array,
 }
 
 struct Code_Node* make_block(struct Code_Node_Array* code_node_array,
-                             struct Code_Node** statements,
-                             size_t statements_length) {
+                             struct Code_Block_Statements* statements) {
 
 	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
 	node->kind = CODE_KIND_BLOCK;
 
+    if (statements == NULL) {
+        statements = malloc(sizeof(struct Code_Block_Statements));
+        array_init((struct Dynamic_Array*)statements, sizeof(struct Code_Node*), 10);
+    }
 	node->block.statements = statements;
-	node->block.statements_length = statements_length;
     node->block.declarations = NULL;
     node->block.is_transformed_block = false;
 
@@ -474,11 +483,7 @@ struct Code_Node* make_native_code(struct Code_Node_Array* code_node_array,
 
 void init_type_infos() {
     type_infos = malloc(sizeof(struct Type_Infos));
-    type_infos->length = 0;
-    type_infos->capacity = 1000;
-    type_infos->first = malloc(sizeof(struct Type_Info) * type_infos->capacity);
-    type_infos->last = type_infos->first;
-    type_infos->last--;
+    array_init((struct Dynamic_Array*)type_infos, sizeof(struct Type_Info), 1000);
     Native_Type_Char = make_type_info_integer(1, false);
     Native_Type_UChar = make_type_info_integer(1, false);
     Native_Type_Bool = make_type_info_integer(1, false);
@@ -497,25 +502,10 @@ void init_type_infos() {
 }
 void init_user_types() {
     user_types = malloc(sizeof(struct User_Types));
-    user_types->length = 0;
-    user_types->capacity = 1000;
-    user_types->names = malloc(sizeof(char*) * user_types->capacity);
-    user_types->types = malloc(sizeof(struct Type_Info*) * user_types->capacity);
+    soa_init((struct Dynamic_SOA*)user_types, 1000, 2, sizeof(char*), sizeof(struct Type_Info*));
 }
 void add_user_type(char* name, struct Type_Info* user_type) {
-    
-    user_types->names[user_types->length] = name;
-    user_types->types[user_types->length] = user_type;
-    user_types->length += 1;
-
-    // @Audit
-    // @Realloc
-    // pointers might be invalid
-    if (user_types->capacity == user_types->length) {
-        user_types->capacity *= 2;
-        user_types->names = realloc(user_types->names, sizeof(char*) * user_types->capacity);
-        user_types->types = realloc(user_types->types, sizeof(struct Type_Info*) * user_types->capacity);
-    }
+    soa_push((struct Dynamic_SOA*)user_types, name, user_type);
 }
 size_t index_of_string(char* str, char** strings, size_t length) {
     for (size_t i = 0; i < length; i += 1) {
@@ -577,25 +567,8 @@ struct Type_Info* map_name_to_native_type(char* name) {
         return NULL;
     }
 }
-// let User_Types = {};
 struct Type_Info* get_new_type_info() {
-
-    type_infos->length += 1;
-
-    // @Audit
-    // @Realloc
-    // might have to fix pointers for the entire tree
-    if (type_infos->capacity == type_infos->length) {
-        type_infos->capacity *= 2;
-        struct Type_Info* before_first = type_infos->first;
-        type_infos->first = realloc(type_infos->first, sizeof(struct Type_Info) * type_infos->capacity);
-        struct Type_Info* after_first = type_infos->first;
-        struct Type_Info* before_last = type_infos->last;
-        type_infos->last = &(type_infos->first[type_infos->length - 2]);
-        struct Type_Info* after_last = type_infos->last;
-    }
-
-    type_infos->last++;
+    array_next((struct Dynamic_Array*)type_infos);
     return type_infos->last;
 }
 struct Type_Info* make_type_info_integer(size_t size_in_bytes, bool is_signed) {
@@ -669,8 +642,8 @@ struct Type_Info* fill_type_info_struct(struct Code_Node* struct_) {
 
     size_t size_in_bytes = 0;
 
-    for (size_t i = 0; i < struct_->struct_.block->block.statements_length; i += 1) {
-        struct Code_Node* stmt = struct_->struct_.block->block.statements[i];
+    for (size_t i = 0; i < struct_->struct_.block->block.statements->length; i += 1) {
+        struct Code_Node* stmt = struct_->struct_.block->block.statements->first[i];
         if (stmt->kind == CODE_KIND_DECLARATION) {
             infer(stmt);
             info->struct_.offsets[i] = size_in_bytes;
@@ -716,9 +689,8 @@ void init_infer() {
 }
 void init_infer_block_declarations(size_t index) {
     struct Code_Node* block = infer_data.block_stack[index];
-    block->block.declarations_length = 0;
-    block->block.declarations_capacity = 10;
-    block->block.declarations = malloc(sizeof(struct Code_Node*) * block->block.declarations_capacity);
+    block->block.declarations = malloc(sizeof(struct Code_Block_Declarations));
+    array_init((struct Dynamic_Array*)block->block.declarations, sizeof(struct Code_Node*), 10);
 }
 void infer_push_block(struct Code_Node* block) {
     infer_data.block_stack[infer_data.block_stack_length] = block;
@@ -732,15 +704,14 @@ void infer_pop_block() {
 }
 void infer_push_block_declaration(size_t index, struct Code_Node* decl) {
     struct Code_Node* block = infer_data.block_stack[index];
-    block->block.declarations[block->block.declarations_length] = decl;
-    block->block.declarations_length += 1;
+    array_push((struct Dynamic_Array*)block->block.declarations, decl);
 }
 
 struct Code_Node* infer_decl_of_ident(struct Code_Node* ident) {
     for (size_t i = infer_data.block_stack_length - 1; i >= 0; i -= 1) {
         struct Code_Node* block = infer_data.block_stack[i];
-        for (size_t j = 0; j < block->block.declarations_length; j += 1) {
-            struct Code_Node* decl = block->block.declarations[j];
+        for (size_t j = 0; j < block->block.declarations->length; j += 1) {
+            struct Code_Node* decl = block->block.declarations->first[j];
             // printf("%s, %s\n", decl->declaration.ident->ident.name, ident->ident.name);
             if (decl->kind == CODE_KIND_DECLARATION) {
                 if (strcmp(decl->declaration.ident->ident.name, ident->ident.name) == 0) {
@@ -757,8 +728,8 @@ struct Code_Node* infer(struct Code_Node* node) {
     switch (node->kind) {
         case CODE_KIND_BLOCK:{
             infer_push_block(node);
-            for (size_t i = 0; i < node->block.statements_length; i += 1) {
-                infer(node->block.statements[i]);
+            for (size_t i = 0; i < node->block.statements->length; i += 1) {
+                infer(node->block.statements->first[i]);
             }
             infer_pop_block();
             break;
@@ -843,8 +814,8 @@ struct Code_Node* infer(struct Code_Node* node) {
             // native code should not add declarations
             if (node->procedure.block->kind == CODE_KIND_BLOCK) {
                 infer_push_block(node->procedure.block);
-                for (size_t i = 0; i < node->procedure.params_length; i += 1) {
-                    infer(node->procedure.params[i]);
+                for (size_t i = 0; i < node->procedure.params->length; i += 1) {
+                    infer(node->procedure.params->first[i]);
                 }
                 infer_pop_block();
                 infer(node->procedure.block);
@@ -885,8 +856,8 @@ struct Code_Node* infer(struct Code_Node* node) {
         }
         case CODE_KIND_CALL:{
             infer(node->call.ident);
-            for (size_t i = 0; i < node->call.args_length; i += 1) {
-                infer(node->call.args[i]);
+            for (size_t i = 0; i < node->call.args->length; i += 1) {
+                infer(node->call.args->first[i]);
             }
             node->type = node->call.ident->ident.declaration->declaration.expression->procedure.return_type;
             break;
@@ -986,9 +957,11 @@ enum Operator_Precedence map_operator_to_precedence(char* operator) {
     else if (strcmp(operator, "?") == 0) {
         return OPERATOR_PRECEDENCE_TERNARY;
     }
+    /*
     else if (strcmp(operator, ",") == 0) {
         return OPERATOR_PRECEDENCE_COMMA;
     }
+    */
     else {
         return OPERATOR_PRECEDENCE_NONE;
     }
@@ -1012,92 +985,81 @@ bool maybe_binary(enum Operator_Precedence prev_prec,
     return false;
 }
 void inject_stdlib(struct Code_Node_Array* code_node_array,
-                   struct Code_Node*** statements,
-                   size_t* length,
-                   size_t* capacity) {
+                   struct Code_Block_Statements* statements) {
 
     // void* malloc(size_t num_bytes)
     struct Type_Info* malloc_return_type = make_type_info_ident("void*", Native_Type_Size_t);
 
-    size_t malloc_params_length = 1;
     bool malloc_has_varargs = false;
-    struct Code_Node** malloc_params = malloc(sizeof(struct Code_Node*) * malloc_params_length);
+    struct Code_Procedure_Params* malloc_params = malloc(sizeof(struct Code_Procedure_Params));
+    array_init((struct Dynamic_Array*)malloc_params, sizeof(struct Code_Node*), 1);
 
     struct Type_Info* num_bytes_type = make_type_info_ident("size_t", Native_Type_Size_t);
     struct Code_Node* num_bytes_ident = make_ident(code_node_array, "num_bytes", NULL);
     struct Code_Node* num_bytes_param = make_declaration(code_node_array, num_bytes_type, num_bytes_ident, NULL);
     
-    malloc_params[0] = num_bytes_param;
+    array_push((struct Dynamic_Array*)malloc_params, num_bytes_param);
 
     struct Code_Node* malloc_block = make_native_code(code_node_array, &malloc);
-    struct Code_Node* malloc_proc = make_procedure(code_node_array, malloc_params, malloc_params_length, malloc_has_varargs, malloc_return_type, malloc_block);
+    struct Code_Node* malloc_proc = make_procedure(code_node_array, malloc_params, malloc_has_varargs, malloc_return_type, malloc_block);
     struct Code_Node* malloc_ident = make_ident(code_node_array, "malloc", NULL);
     struct Code_Node* malloc_decl = make_declaration(code_node_array, NULL, malloc_ident, malloc_proc);
 
-    (*statements)[*length] = malloc_decl;
-    *length += 1;
+    array_push((struct Dynamic_Array*)statements, malloc_decl);
 
     // void free(void* ptr)
     struct Type_Info* free_return_type = make_type_info_ident("void", Native_Type_Void);
 
-    size_t free_params_length = 1;
     bool free_has_varargs = false;
-    struct Code_Node** free_params = malloc(sizeof(struct Code_Node*) * free_params_length);
+    struct Code_Procedure_Params* free_params = malloc(sizeof(struct Code_Procedure_Params));
+    array_init((struct Dynamic_Array*)free_params, sizeof(struct Code_Node*), 1);
 
     struct Type_Info* ptr_type = make_type_info_ident("void*", Native_Type_Size_t);
     struct Code_Node* ptr_ident = make_ident(code_node_array, "ptr", NULL);
     struct Code_Node* ptr_param = make_declaration(code_node_array, ptr_type, ptr_ident, NULL);
-    
-    free_params[0] = ptr_param;
+
+    array_push((struct Dynamic_Array*)free_params, ptr_param);
 
     struct Code_Node* free_block = make_native_code(code_node_array, &free);
-    struct Code_Node* free_proc = make_procedure(code_node_array, free_params, free_params_length, free_has_varargs, free_return_type, free_block);
+    struct Code_Node* free_proc = make_procedure(code_node_array, free_params, free_has_varargs, free_return_type, free_block);
     struct Code_Node* free_ident = make_ident(code_node_array, "free", NULL);
     struct Code_Node* free_decl = make_declaration(code_node_array, NULL, free_ident, free_proc);
 
-    (*statements)[*length] = free_decl;
-    *length += 1;
+    array_push((struct Dynamic_Array*)statements, free_decl);
     
     // void printf(char* fmt, ...)
     struct Type_Info* printf_return_type = make_type_info_ident("void", Native_Type_Void);
 
-    size_t printf_params_length = 1;
     bool printf_has_varargs = true;
-    struct Code_Node** printf_params = malloc(sizeof(struct Code_Node*) * printf_params_length);
+    struct Code_Procedure_Params* printf_params = malloc(sizeof(struct Code_Procedure_Params));
+    array_init((struct Dynamic_Array*)printf_params, sizeof(struct Code_Node*), 1);
 
     struct Type_Info* fmt_type = make_type_info_ident("char*", Native_Type_Size_t);
     struct Code_Node* fmt_ident = make_ident(code_node_array, "fmt", NULL);
     struct Code_Node* fmt_param = make_declaration(code_node_array, fmt_type, fmt_ident, NULL);
-    
-    printf_params[0] = fmt_param;
+
+    array_push((struct Dynamic_Array*)printf_params, fmt_param);
 
     struct Code_Node* printf_block = make_native_code(code_node_array, &printf);
-    struct Code_Node* printf_proc = make_procedure(code_node_array, printf_params, printf_params_length, printf_has_varargs, printf_return_type, printf_block);
+    struct Code_Node* printf_proc = make_procedure(code_node_array, printf_params, printf_has_varargs, printf_return_type, printf_block);
 
     struct Code_Node* printf_ident = make_ident(code_node_array, "printf", NULL);
     struct Code_Node* printf_decl = make_declaration(code_node_array, NULL, printf_ident, printf_proc);
 
-    (*statements)[*length] = printf_decl;
-    *length += 1;
+    array_push((struct Dynamic_Array*)statements, printf_decl);
 }
 struct Code_Node_Array* parse(struct Token_Array* token_array) {
     struct Code_Node_Array* code_node_array = malloc(sizeof(struct Code_Node_Array));
-    code_node_array->length = 0;
-    code_node_array->capacity = 1000;
-    code_node_array->first = malloc(sizeof(struct Code_Node) * code_node_array->capacity);
-    code_node_array->last = code_node_array->first;
-    code_node_array->last--;
+    array_init((struct Dynamic_Array*)code_node_array, sizeof(struct Code_Node), 1000);
     token_array->curr_token = token_array->first;
 
-    struct Code_Node* global_block = make_block(code_node_array, NULL, 0);
-    size_t* length = &(global_block->block.statements_length);
-    size_t capacity = 100;
-    struct Code_Node*** statements = &(global_block->block.statements);
-    *statements = malloc(sizeof(struct Code_Node**) * capacity);
+    struct Code_Block_Statements* statements = malloc(sizeof(struct Code_Block_Statements));
+    array_init((struct Dynamic_Array*)statements, sizeof(struct Code_Node*), 10);
+    struct Code_Node* global_block = make_block(code_node_array, statements);
 
-    inject_stdlib(code_node_array, statements, length, &capacity);
+    inject_stdlib(code_node_array, statements);
 
-    delimited(NULL, NULL, ";", &parse_statement, statements, length, &capacity, token_array, code_node_array);
+    delimited(NULL, NULL, ";", &parse_statement, (struct Dynamic_Array*)statements, token_array, code_node_array);
     code_node_array->first->block.is_transformed_block = true;
 
     return code_node_array;
@@ -1291,11 +1253,10 @@ bool parse_call(struct Token_Array* token_array,
         strcmp(token_array->curr_token->str, "(") == 0) {
         
         struct Code_Node* ident = code_node_array->last;
-        struct Code_Node** args = NULL;
-        size_t args_length = 0;
-        size_t args_capacity = 0;
-        delimited("(", ")", ",", &parse_rvalue, &args, &args_length, &args_capacity, token_array, code_node_array);
-        make_call(code_node_array, ident, args, args_length);
+        struct Code_Call_Args* args = malloc(sizeof(struct Code_Call_Args));
+        array_init((struct Dynamic_Array*)args, sizeof(struct Code_Node*), 10);
+        delimited("(", ")", ",", &parse_rvalue, (struct Dynamic_Array*)args, token_array, code_node_array);
+        make_call(code_node_array, ident, args);
         return true;
     }
     else {
@@ -1488,7 +1449,7 @@ bool parse_for(struct Token_Array* token_array,
         token_array->curr_token++;
     }
     else {
-        printf("for starting paren missing!");
+        printf("for starting paren missing!\n");
         abort();
     }
     #if DEBUG_FOR
@@ -1559,7 +1520,7 @@ bool parse_for(struct Token_Array* token_array,
         token_array->curr_token++;
     }
     else {
-        printf("for ending paren missing!");
+        printf("for ending paren missing!\n");
         abort();
     }
     #if DEBUG_FOR
@@ -1610,11 +1571,10 @@ bool parse_return(struct Token_Array* token_array,
 bool parse_block(struct Token_Array* token_array,
                  struct Code_Node_Array* code_node_array) {
 
-    struct Code_Node** statements = NULL;
-    size_t length = 0;
-    size_t capacity = 0;
-    delimited("{", "}", ";", &parse_statement, &statements, &length, &capacity, token_array, code_node_array);
-    make_block(code_node_array, statements, length);
+    struct Code_Block_Statements* statements = malloc(sizeof(struct Code_Block_Statements));
+    array_init((struct Dynamic_Array*)statements, sizeof(struct Code_Node*), 10);
+    delimited("{", "}", ";", &parse_statement, (struct Dynamic_Array*)statements, token_array, code_node_array);
+    make_block(code_node_array, statements);
     return true;
 }
 bool parse_increment(struct Token_Array* token_array,
@@ -1663,11 +1623,10 @@ bool parse_procedure_declaration(struct Token_Array* token_array,
 
     parse_ident(token_array, code_node_array);
     struct Code_Node* ident = code_node_array->last;
-    struct Code_Node** params = NULL;
-    size_t params_length = 0;
-    size_t params_capacity = 0;
     token_array->curr_token++;
-    delimited("(", ")", ",", &parse_param, &params, &params_length, &params_capacity, token_array, code_node_array);
+    struct Code_Procedure_Params* params = malloc(sizeof(struct Code_Procedure_Params));
+    array_init((struct Dynamic_Array*)params, sizeof(struct Code_Node*), 10);
+    delimited("(", ")", ",", &parse_param, (struct Dynamic_Array*)params, token_array, code_node_array);
     bool has_varargs = false;
     if (strcmp(token_array->curr_token->str, "...") == 0) {
         has_varargs = true;
@@ -1676,7 +1635,7 @@ bool parse_procedure_declaration(struct Token_Array* token_array,
     token_array->curr_token++;
     parse_block(token_array, code_node_array);
     struct Code_Node* block = code_node_array->last;
-    make_procedure(code_node_array, params, params_length, has_varargs, return_type, block);
+    make_procedure(code_node_array, params, has_varargs, return_type, block);
     struct Code_Node* proc = code_node_array->last;
     // @Incomplete
     // should have function pointer type
@@ -1700,6 +1659,8 @@ bool parse_type(struct Token_Array* token_array,
     code_node_array->last--;
     struct Type_Info* prev_type = map_name_to_type(ident_name);
     if (prev_type == NULL) {
+        // @Audit
+        // does this ever happen?
         code_node_array->last = prev_node;
         code_node_array->length = prev_length;
         token_array->curr_token = prev_token;
@@ -1830,9 +1791,7 @@ int delim = 0;
 #endif
 bool delimited(char* start, char* stop, char* separator,
                bool (*elem_func)(struct Token_Array*, struct Code_Node_Array*),
-               struct Code_Node*** nodes,
-               size_t* length,
-               size_t* capacity,
+               struct Dynamic_Array* results,
                struct Token_Array* token_array,
                struct Code_Node_Array* code_node_array) {
 
@@ -1840,11 +1799,6 @@ bool delimited(char* start, char* stop, char* separator,
     printf("start delim %d\n", delim);
     delim++;
     #endif
-    if (*nodes == NULL) {
-        *length = 0;
-        *capacity = 10;
-        *nodes = malloc(sizeof(struct Code_Node*) * *capacity);
-    }
 
     if (token_array->curr_token->str != NULL && stop != NULL &&
         strcmp(token_array->curr_token->str, start) == 0) {
@@ -1886,12 +1840,7 @@ bool delimited(char* start, char* stop, char* separator,
                 break;
             }
             else {
-                (*nodes)[*length] = code_node_array->last;
-                *length += 1;
-                if (*length == *capacity) {
-                    *capacity *= 2;
-                    *nodes = realloc(*nodes, sizeof(struct Code_Node*) * *capacity);
-                }
+                array_push(results, code_node_array->last);
             }
         }
         
@@ -1911,12 +1860,12 @@ bool delimited(char* start, char* stop, char* separator,
     printf("end delim %d\n", delim);
     #endif
 
-    *nodes = realloc(*nodes, sizeof(struct Code_Node*) * *length);
     return true;
 }
 
 struct Code_Node* get_new_node_from_code_node_array(struct Code_Node_Array* code_node_array) {
 
+    /*
     code_node_array->length += 1;
 
     // @Audit
@@ -1935,7 +1884,14 @@ struct Code_Node* get_new_node_from_code_node_array(struct Code_Node_Array* code
     }
 
     code_node_array->last++;
+    */
+
+    array_next((struct Dynamic_Array*)code_node_array);
+
     code_node_array->last->type = NULL;
+    code_node_array->last->transformed = NULL;
+    code_node_array->last->result = NULL;
+
     return code_node_array->last;
 }
 
@@ -1944,45 +1900,31 @@ struct Token_Array* tokenize(char* input) {
     size_t input_length = strlen(input);
 
     struct Token_Array* token_array = malloc(sizeof(struct Token_Array));
-    token_array->length = 0;
-    token_array->capacity = 10000;
-    token_array->first = malloc(sizeof(struct Token) * token_array->capacity);
-    token_array->curr_token = token_array->first;
+    array_init((struct Dynamic_Array*)token_array, sizeof(struct Token), 100);
 
+    // token_array->last = token_array->first;
     char* prev = input;
     for (size_t i = 0; *input; i += 1) {
-        read_token(token_array->curr_token, &input);
+        array_next((struct Dynamic_Array*)token_array);
+        read_token(token_array->last, &input);
         if (input == prev) {
             printf("lexing error!\n");
             break;
         }
 
-        if (token_array->curr_token->kind == TOKEN_KIND_COMMENT_SINGLE ||
-            token_array->curr_token->kind == TOKEN_KIND_COMMENT_MULTI) {
+        if (token_array->last->kind == TOKEN_KIND_COMMENT_SINGLE ||
+            token_array->last->kind == TOKEN_KIND_COMMENT_MULTI) {
 
         }
         else {
-
-            token_array->curr_token++;
-            token_array->length += 1;
             prev = input;
-        }
-
-        // @Bug
-        // @Audit
-        // @Realloc
-        if (token_array->length == token_array->capacity) {
-            token_array->capacity *= 2;
-            token_array->first = realloc(token_array->first, sizeof(struct Token) * token_array->capacity);
-            token_array->curr_token = &(token_array->first[token_array->length - 1]);
         }
     }
 
     // @Weird
     // we have to do this twice to have a valid pointer
-    token_array->curr_token--;
-    token_array->curr_token--;
-    token_array->last = token_array->curr_token;
+    token_array->last--;
+    token_array->last--;
 
     return token_array;
 }
@@ -2047,6 +1989,7 @@ void read_token(struct Token* token, char** input) {
         (*input)++;
         token->kind = TOKEN_KIND_STRING;
         token->str = read_while(&is_not_string_end, input);
+        token->str = escape_string(token->str);
         (*input)++;
     }
     else if (is_punc(ch)) {
@@ -2082,17 +2025,13 @@ void read_token(struct Token* token, char** input) {
 }
 
 char* read_while(bool (*func)(char), char** input) {
-    // @MemoryHog
-    // we should start lower and reallocate
-    size_t capacity = 1;
+    size_t capacity = 100;
     char* str = malloc(sizeof(char) * capacity);
     size_t length = 0;
     while (**input && func(**input)) {
         str[length] = **input;
         (*input)++;
         length += 1;
-        // @Realloc
-        // @Audit
         if (length == capacity) {
             capacity *= 2;
             str = realloc(str, sizeof(char) * capacity);
@@ -2103,17 +2042,13 @@ char* read_while(bool (*func)(char), char** input) {
     return str;
 }
 char* read_while_lookahead(bool (*func)(char, char), char** input) {
-    // @MemoryHog
-    // we should start lower and reallocate
-    size_t capacity = 1;
+    size_t capacity = 100;
     char* str = malloc(sizeof(char) * capacity);
     size_t length = 0;
     while (**input && func(**input, (*input)[1])) {
         str[length] = **input;
         (*input)++;
         length += 1;
-        // @Realloc
-        // @Audit
         if (length == capacity) {
             capacity *= 2;
             str = realloc(str, sizeof(char) * capacity);
@@ -2122,6 +2057,40 @@ char* read_while_lookahead(bool (*func)(char, char), char** input) {
     str[length] = '\0';
     str = realloc(str, sizeof(char) * length);
     return str;
+}
+
+char* escape_string(char* str) {
+    size_t capacity = 10;
+    char* result = malloc(sizeof(char) * capacity);
+    size_t length = 0;
+    while (*str) {
+        if (*str == '\n') {
+            result[length] = '\\';
+            length += 1;
+            result[length] = 'n';
+            length += 1;
+        }
+        else if (*str == '\r') {
+            result[length] = '\\';
+            length += 1;
+            result[length] = 'r';
+            length += 1;
+        }
+        // @Incomplete
+        // there are more escape characters
+        else {
+            result[length] = *str;
+            length += 1;
+        }
+        if ((length + 1) >= capacity) {
+            capacity *= 2;
+            result = realloc(result, sizeof(char) * capacity);
+        }
+        str++;
+    }
+    result[length] = '\0';
+    result = realloc(result, sizeof(char) * length);
+    return result;
 }
 
 bool is_one_of(char* options, char ch) {

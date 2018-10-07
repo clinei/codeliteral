@@ -18,6 +18,7 @@ function set_text(new_text) {
     writeAsciiToMemory(new_text, ptr);
     call_set_text(ptr);
 }
+/*
 const code = `
 bool test_nested_loop() {
 	bool passed = true;
@@ -234,11 +235,13 @@ int main() {
 }
 main();
 `;
-/*
-const code = `
-1 + 2 * 3 + 4;
-`;
 */
+const code = `
+void main() {
+	1 + 2 * 3 + 4;
+}
+main();
+`;
 
 function main() {
 

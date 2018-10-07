@@ -92,7 +92,7 @@ void init_atlas_program();
 void init_atlas(struct Atlas* atlas, char* font_filename, float font_size, float scale, size_t char_count);
 void init_hilite();
 
-void render(struct Code_Node_Array* code_node_array);
+void render(struct Code_Node* node);
 void render_node(struct Code_Node* node,
                  struct Render_Data* render_data);
 void render_text(char* text, float* xpos, float* ypos,
