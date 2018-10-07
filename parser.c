@@ -755,57 +755,63 @@ struct Code_Node* infer_decl_of_ident(struct Code_Node* ident) {
 struct Code_Node* infer(struct Code_Node* node) {
     // printf("kind: %zu\n", node->kind);
     switch (node->kind) {
-        case CODE_KIND_BLOCK:
+        case CODE_KIND_BLOCK:{
             infer_push_block(node);
             for (size_t i = 0; i < node->block.statements_length; i += 1) {
                 infer(node->block.statements[i]);
             }
             infer_pop_block();
             break;
-        case CODE_KIND_DECLARATION:
+        }
+        case CODE_KIND_DECLARATION:{
             // should error here when ident already declared in current scope
             infer_push_block_declaration(infer_data.block_stack_length - 1, node);
             if (node->declaration.expression != NULL) {
                 infer(node->declaration.expression);
             }
             break;
-        case CODE_KIND_MINUS:
+        }
+        case CODE_KIND_MINUS:{
             infer(node->minus.expression);
             break;
-        case CODE_KIND_NOT:
+        }
+        case CODE_KIND_NOT:{
             infer(node->not.expression);
             break;
-        case CODE_KIND_INCREMENT:
+        }
+        case CODE_KIND_INCREMENT:{
             infer(node->increment.ident);
             break;
-        case CODE_KIND_DECREMENT:
+        }
+        case CODE_KIND_DECREMENT:{
             infer(node->decrement.ident);
             break;
-        case CODE_KIND_ASSIGN:
+        }
+        case CODE_KIND_ASSIGN:{
             infer(node->assign.ident);
             infer(node->assign.expression);
             break;
-        case CODE_KIND_OPASSIGN:
+        }
+        case CODE_KIND_OPASSIGN:{
             infer(node->opassign.ident);
             infer(node->opassign.expression);
             break;
-        case CODE_KIND_PARENS:
+        }
+        case CODE_KIND_PARENS:{
             infer(node->parens.expression);
             node->type = node->parens.expression->type;
             break;
-        case CODE_KIND_ARRAY_INDEX:
+        }
+        case CODE_KIND_ARRAY_INDEX:{
             infer(node->array_index.array);
             infer(node->array_index.index);
             node->type = node->array_index.array->type->array.elem_type;
             break;
-        case CODE_KIND_DOT_OPERATOR:
-            // compiler bug workaround
-            42;
-            // node->type = infer_dot_operator(node);
+        }
+        case CODE_KIND_DOT_OPERATOR:{
             struct Code_Node* left = node->dot_operator.left;
             struct Code_Node* right = node->dot_operator.right;
             infer(left);
-            // steve.car.age
             if (right->kind == CODE_KIND_IDENT) {
                 if (left->type->kind == TYPE_INFO_TAG_IDENT) {
                     if (left->type->ident.type->kind == TYPE_INFO_TAG_STRUCT) {
@@ -825,12 +831,15 @@ struct Code_Node* infer(struct Code_Node* node) {
             else abort();
             node->type = right->type;
             break;
-        case CODE_KIND_STRUCT:
+        }
+        case CODE_KIND_STRUCT:{
             fill_type_info_struct(node);
             break;
-        case CODE_KIND_STRING:
+        }
+        case CODE_KIND_STRING:{
             break;
-        case CODE_KIND_PROCEDURE:
+        }
+        case CODE_KIND_PROCEDURE:{
             // native code should not add declarations
             if (node->procedure.block->kind == CODE_KIND_BLOCK) {
                 infer_push_block(node->procedure.block);
@@ -841,22 +850,27 @@ struct Code_Node* infer(struct Code_Node* node) {
                 infer(node->procedure.block);
             }
             break;
-        case CODE_KIND_IF:
+        }
+        case CODE_KIND_IF:{
             infer(node->if_.condition);
             infer(node->if_.expression);
             break;
-        case CODE_KIND_ELSE:
+        }
+        case CODE_KIND_ELSE:{
             infer(node->else_.expression);
             break;
-        case CODE_KIND_WHILE:
+        }
+        case CODE_KIND_WHILE:{
             infer(node->while_.condition);
             infer(node->while_.expression);
             break;
-        case CODE_KIND_DO_WHILE:
+        }
+        case CODE_KIND_DO_WHILE:{
             infer(node->do_while_.expression);
             infer(node->do_while_.condition);
             break;
-        case CODE_KIND_FOR:
+        }
+        case CODE_KIND_FOR:{
             if (node->for_.begin != NULL) {
                 infer(node->for_.begin);
             }
@@ -868,43 +882,51 @@ struct Code_Node* infer(struct Code_Node* node) {
             }
             infer(node->for_.expression);
             break;
-        case CODE_KIND_CALL:
+        }
+        case CODE_KIND_CALL:{
             infer(node->call.ident);
             for (size_t i = 0; i < node->call.args_length; i += 1) {
                 infer(node->call.args[i]);
             }
             node->type = node->call.ident->ident.declaration->declaration.expression->procedure.return_type;
             break;
-        case CODE_KIND_RETURN:
+        }
+        case CODE_KIND_RETURN:{
             infer(node->return_.expression);
             break;
-        case CODE_KIND_IDENT:
+        }
+        case CODE_KIND_IDENT:{
             node->ident.declaration = infer_decl_of_ident(node);
             node->type = node->ident.declaration->declaration.type;
             break;
-        case CODE_KIND_REFERENCE:
+        }
+        case CODE_KIND_REFERENCE:{
             infer(node->reference.expression);
             if (node->reference.expression->kind == CODE_KIND_REFERENCE) {
                 abort();
             }
             node->type = make_type_info_pointer(node->reference.expression->type);
             break;
-        case CODE_KIND_DEREFERENCE:
+        }
+        case CODE_KIND_DEREFERENCE:{
             infer(node->dereference.expression);
             if (node->dereference.expression->type->kind != TYPE_INFO_TAG_POINTER) {
                 abort();
             }
             node->type = node->dereference.expression->type->pointer.elem_type;
             break;
-        case CODE_KIND_BINARY_OPERATION:
+        }
+        case CODE_KIND_BINARY_OPERATION:{
             infer(node->binary_operation.left);
             infer(node->binary_operation.right);
             // @Incomplete
             // should compromise between left and right
             node->type = node->binary_operation.left->type;
             break;
-        default:
+        }
+        default:{
             break;
+        }
     }
     return node;
 }

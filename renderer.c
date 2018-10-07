@@ -228,7 +228,7 @@ void render_node(struct Code_Node* node,
         return;
     }
     switch (node->kind) {
-        case CODE_KIND_IF:
+        case CODE_KIND_IF:{
             render_text("if", &render_data->xpos, &render_data->ypos,
                         render_data->hilite_keyword_fg_color,
                         render_data->bg_color,
@@ -246,7 +246,8 @@ void render_node(struct Code_Node* node,
             render_space(render_data);
             render_node(node->if_.expression, render_data);
             break;
-        case CODE_KIND_ELSE:
+        }
+        case CODE_KIND_ELSE:{
             render_text("else", &render_data->xpos, &render_data->ypos,
                         render_data->hilite_keyword_fg_color,
                         render_data->bg_color,
@@ -254,7 +255,8 @@ void render_node(struct Code_Node* node,
             render_space(render_data);
             render_node(node->else_.expression, render_data);
             break;
-        case CODE_KIND_WHILE:
+        }
+        case CODE_KIND_WHILE:{
             render_text("while", &render_data->xpos, &render_data->ypos,
                         render_data->hilite_keyword_fg_color,
                         render_data->bg_color,
@@ -272,7 +274,8 @@ void render_node(struct Code_Node* node,
             render_space(render_data);
             render_node(node->while_.expression, render_data);
             break;
-        case CODE_KIND_DO_WHILE:
+        }
+        case CODE_KIND_DO_WHILE:{
             render_text("do", &render_data->xpos, &render_data->ypos,
                         render_data->hilite_keyword_fg_color,
                         render_data->bg_color,
@@ -295,7 +298,8 @@ void render_node(struct Code_Node* node,
                         render_data->bg_color,
                         render_data);
             break;
-        case CODE_KIND_FOR:
+        }
+        case CODE_KIND_FOR:{
             render_text("for", &render_data->xpos, &render_data->ypos,
                         render_data->hilite_keyword_fg_color,
                         render_data->bg_color,
@@ -331,33 +335,38 @@ void render_node(struct Code_Node* node,
             render_space(render_data);
             render_node(node->for_.expression, render_data);
             break;
-        case CODE_KIND_BREAK:
+        }
+        case CODE_KIND_BREAK:{
             render_text("break", &render_data->xpos, &render_data->ypos,
                         render_data->hilite_keyword_fg_color,
                         render_data->bg_color,
                         render_data);
             break;
-        case CODE_KIND_CONTINUE:
+        }
+        case CODE_KIND_CONTINUE:{
             render_text("continue", &render_data->xpos, &render_data->ypos,
                         render_data->hilite_keyword_fg_color,
                         render_data->bg_color,
                         render_data);
             break;
-        case CODE_KIND_INCREMENT:
+        }
+        case CODE_KIND_INCREMENT:{
             render_node(node->increment.ident, render_data);
             render_text("++", &render_data->xpos, &render_data->ypos,
                         render_data->hilite_op_fg_color,
                         render_data->bg_color,
                         render_data);
             break;
-        case CODE_KIND_DECREMENT:
+        }
+        case CODE_KIND_DECREMENT:{
             render_node(node->decrement.ident, render_data);
             render_text("--", &render_data->xpos, &render_data->ypos,
                         render_data->hilite_op_fg_color,
                         render_data->bg_color,
                         render_data);
             break;
-        case CODE_KIND_DECLARATION:
+        }
+        case CODE_KIND_DECLARATION:{
             if (node->declaration.expression != NULL) {
                 if (node->declaration.expression->kind == CODE_KIND_PROCEDURE) {
                     struct Code_Procedure* proc = &(node->declaration.expression->procedure);
@@ -431,7 +440,8 @@ void render_node(struct Code_Node* node,
                 render_node(node->declaration.expression, render_data);
             }
             break;
-        case CODE_KIND_ASSIGN:
+        }
+        case CODE_KIND_ASSIGN:{
             render_node(node->assign.ident, render_data);
             render_space(render_data);
             render_text("=", &render_data->xpos, &render_data->ypos,
@@ -441,7 +451,8 @@ void render_node(struct Code_Node* node,
             render_space(render_data);
             render_node(node->assign.expression, render_data);
             break;
-        case CODE_KIND_OPASSIGN:
+        }
+        case CODE_KIND_OPASSIGN:{
             render_node(node->opassign.ident, render_data);
             render_space(render_data);
             render_text(node->opassign.operation_type, &render_data->xpos, &render_data->ypos,
@@ -455,21 +466,24 @@ void render_node(struct Code_Node* node,
             render_space(render_data);
             render_node(node->opassign.expression, render_data);
             break;
-        case CODE_KIND_REFERENCE:
+        }
+        case CODE_KIND_REFERENCE:{
             render_text("&", &render_data->xpos, &render_data->ypos,
                         render_data->fg_color,
                         render_data->bg_color,
                         render_data);
             render_node(node->reference.expression, render_data);
             break;
-        case CODE_KIND_DEREFERENCE:
+        }
+        case CODE_KIND_DEREFERENCE:{
             render_text("*", &render_data->xpos, &render_data->ypos,
                         render_data->fg_color,
                         render_data->bg_color,
                         render_data);
             render_node(node->dereference.expression, render_data);
             break;
-        case CODE_KIND_ARRAY_INDEX:
+        }
+        case CODE_KIND_ARRAY_INDEX:{
             render_node(node->array_index.array, render_data);
             render_text("[", &render_data->xpos, &render_data->ypos,
                         render_data->fg_color,
@@ -481,7 +495,8 @@ void render_node(struct Code_Node* node,
                         render_data->bg_color,
                         render_data);
             break;
-        case CODE_KIND_DOT_OPERATOR:
+        }
+        case CODE_KIND_DOT_OPERATOR:{
             render_node(node->dot_operator.left, render_data);
             render_text(".", &render_data->xpos, &render_data->ypos,
                         render_data->fg_color,
@@ -489,7 +504,8 @@ void render_node(struct Code_Node* node,
                         render_data);
             render_node(node->dot_operator.right, render_data);
             break;
-        case CODE_KIND_CALL:
+        }
+        case CODE_KIND_CALL:{
             render_node(node->call.ident, render_data);
             render_text("(", &render_data->xpos, &render_data->ypos,
                         render_data->fg_color,
@@ -514,7 +530,8 @@ void render_node(struct Code_Node* node,
                         render_data->bg_color,
                         render_data);
             break;
-        case CODE_KIND_RETURN:
+        }
+        case CODE_KIND_RETURN:{
             render_text("return", &render_data->xpos, &render_data->ypos,
                         render_data->hilite_keyword_fg_color,
                         render_data->bg_color,
@@ -524,11 +541,14 @@ void render_node(struct Code_Node* node,
                 render_node(node->return_.expression, render_data);
             }
             break;
-        case CODE_KIND_PROCEDURE:
+        }
+        case CODE_KIND_PROCEDURE:{
             break;
-        case CODE_KIND_STRUCT:
+        }
+        case CODE_KIND_STRUCT:{
             break;
-        case CODE_KIND_BINARY_OPERATION:
+        }
+        case CODE_KIND_BINARY_OPERATION:{
             render_text("(", &render_data->xpos, &render_data->ypos,
                         render_data->fg_color,
                         render_data->bg_color,
@@ -546,7 +566,8 @@ void render_node(struct Code_Node* node,
                         render_data->bg_color,
                         render_data);
             break;
-        case CODE_KIND_PARENS:
+        }
+        case CODE_KIND_PARENS:{
             render_text("(", &render_data->xpos, &render_data->ypos,
                         render_data->fg_color,
                         render_data->bg_color,
@@ -557,15 +578,15 @@ void render_node(struct Code_Node* node,
                         render_data->bg_color,
                         render_data);
             break;
-        case CODE_KIND_IDENT:
+        }
+        case CODE_KIND_IDENT:{
             render_text(node->ident.name, &render_data->xpos, &render_data->ypos,
                         render_data->hilite_ident_fg_color,
                         render_data->bg_color,
                         render_data);
             break;
-        case CODE_KIND_LITERAL_INT:
-            // compiler bug workaround
-            42;
+        }
+        case CODE_KIND_LITERAL_INT:{
             char* literal_int = malloc(sizeof(char) * 19);
             snprintf(literal_int, 19, "%d", node->literal_int.value);
             render_text(literal_int, &render_data->xpos, &render_data->ypos,
@@ -574,9 +595,8 @@ void render_node(struct Code_Node* node,
                         render_data);
             free(literal_int);
             break;
-        case CODE_KIND_LITERAL_FLOAT:
-            // compiler bug workaround
-            42;
+        }
+        case CODE_KIND_LITERAL_FLOAT:{
             char* literal_float = malloc(sizeof(char) * 19);
             snprintf(literal_float, 19, "%f", node->literal_float.value);
             render_text(literal_float, &render_data->xpos, &render_data->ypos,
@@ -585,9 +605,8 @@ void render_node(struct Code_Node* node,
                         render_data);
             free(literal_float);
             break;
-        case CODE_KIND_LITERAL_BOOL:
-            // compiler bug workaround
-            42;
+        }
+        case CODE_KIND_LITERAL_BOOL:{
             char* literal_bool;
             if (node->literal_bool.value == true) {
                 literal_bool = "true";
@@ -600,7 +619,8 @@ void render_node(struct Code_Node* node,
                         render_data->bg_color,
                         render_data);
             break;
-        case CODE_KIND_STRING:
+        }
+        case CODE_KIND_STRING:{
             render_text("\"", &render_data->xpos, &render_data->ypos,
                         render_data->hilite_literal_fg_color,
                         render_data->bg_color,
@@ -614,7 +634,8 @@ void render_node(struct Code_Node* node,
                         render_data->bg_color,
                         render_data);
             break;
-        case CODE_KIND_BLOCK:
+        }
+        case CODE_KIND_BLOCK:{
             if (node->block.is_transformed_block == false) {
                 render_text("{", &render_data->xpos, &render_data->ypos,
                             render_data->fg_color,
@@ -656,7 +677,8 @@ void render_node(struct Code_Node* node,
                             render_data);
             }
             break;
-        case CODE_KIND_NATIVE_CODE:
+        }
+        case CODE_KIND_NATIVE_CODE:{
             render_text("{", &render_data->xpos, &render_data->ypos,
                         render_data->fg_color,
                         render_data->bg_color,
@@ -675,10 +697,12 @@ void render_node(struct Code_Node* node,
                         render_data->bg_color,
                         render_data);
             break;
-        default:
+        }
+        default:{
             printf("render not implemented for node kind: %u\n", node->kind);
             abort();
             break;
+        }
     }
 }
 
@@ -831,13 +855,14 @@ void render_type(struct Type_Info* type,
                  struct Render_Data* render_data) {
 
     switch (type->kind) {
-        case TYPE_INFO_TAG_IDENT:
+        case TYPE_INFO_TAG_IDENT:{
             render_text(type->ident.name, &render_data->xpos, &render_data->ypos,
                         render_data->hilite_type_fg_color,
                         render_data->bg_color,
                         render_data);
             break;
-        case TYPE_INFO_TAG_ARRAY:
+        }
+        case TYPE_INFO_TAG_ARRAY:{
             render_type(type->array.elem_type, render_data);
             render_text("[", &render_data->xpos, &render_data->ypos,
                         render_data->fg_color,
@@ -855,15 +880,18 @@ void render_type(struct Type_Info* type,
                         render_data->bg_color,
                         render_data);
             break;
-        case TYPE_INFO_TAG_POINTER:
+        }
+        case TYPE_INFO_TAG_POINTER:{
             render_type(type->pointer.elem_type, render_data);
             render_text("*", &render_data->xpos, &render_data->ypos,
                         render_data->fg_color,
                         render_data->bg_color,
                         render_data);
             break;
-        default:
+        }
+        default:{
             break;
+        }
     }
 }
 
