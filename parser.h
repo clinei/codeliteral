@@ -106,6 +106,7 @@ struct Code_Declaration {
 	struct Code_Node* expression;
 
     size_t pointer;
+    size_t alignment_pad;
 };
 struct Code_Reference {
     struct Code_Node* expression;

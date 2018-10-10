@@ -610,19 +610,20 @@ struct Code_Node* make_native_code(struct Code_Nodes* code_nodes,
 void init_type_infos() {
     type_infos = malloc(sizeof(struct Type_Infos));
     array_init((struct Dynamic_Array*)type_infos, sizeof(struct Type_Info), 1000);
-    Native_Type_Char = make_type_info_integer(1, false);
-    Native_Type_UChar = make_type_info_integer(1, false);
-    Native_Type_Bool = make_type_info_integer(1, false);
-    Native_Type_Short = make_type_info_integer(2, true);
-    Native_Type_UShort = make_type_info_integer(2, false);
-    Native_Type_Int = make_type_info_integer(4, true);
-    Native_Type_UInt = make_type_info_integer(4, false);
-    Native_Type_Long = make_type_info_integer(8, true);
-    Native_Type_ULong = make_type_info_integer(8, false);
-    Native_Type_Float = make_type_info_float(4);
-    Native_Type_Double = make_type_info_float(8);
-    Native_Type_Void = make_type_info_void();
-    Native_Type_Size_t = make_type_info_integer(4, false);
+
+    Native_Type_Char = make_type_info_ident("char", make_type_info_integer(1, false));
+    Native_Type_UChar = make_type_info_ident("uchar", make_type_info_integer(1, false));
+    Native_Type_Bool = make_type_info_ident("bool", make_type_info_integer(1, false));
+    Native_Type_Short = make_type_info_ident("short", make_type_info_integer(2, true));
+    Native_Type_UShort = make_type_info_ident("ushort", make_type_info_integer(2, false));
+    Native_Type_Int = make_type_info_ident("int", make_type_info_integer(4, true));
+    Native_Type_UInt = make_type_info_ident("uint", make_type_info_integer(4, false));
+    Native_Type_Long = make_type_info_ident("long", make_type_info_integer(8, true));
+    Native_Type_ULong = make_type_info_ident("ulong", make_type_info_integer(8, false));
+    Native_Type_Float = make_type_info_ident("float", make_type_info_float(4));
+    Native_Type_Double = make_type_info_ident("double", make_type_info_float(8));
+    Native_Type_Void = make_type_info_ident("void", make_type_info_void());
+    Native_Type_Size_t = make_type_info_ident("size_t", make_type_info_integer(4, false));
 
     init_user_types();
 }
@@ -789,6 +790,11 @@ struct Type_Info* fill_type_info_struct(struct Code_Node* struct_) {
 }
 struct Type_Info* make_type_info_ident(char* name,
                                        struct Type_Info* type) {
+
+    if (type->kind == TYPE_INFO_TAG_IDENT) {
+        printf("double type_info_ident!\n");
+        abort();
+    }
 
     struct Type_Info* info = get_new_type_info();
     info->kind = TYPE_INFO_TAG_IDENT;
@@ -1116,13 +1122,13 @@ void inject_stdlib(struct Code_Nodes* code_nodes,
                    struct Code_Node_Array* statements) {
 
     // void* malloc(size_t num_bytes)
-    struct Type_Info* malloc_return_type = make_type_info_ident("void*", Native_Type_Size_t);
+    struct Type_Info* malloc_return_type = make_type_info_pointer(Native_Type_Void);
 
     bool malloc_has_varargs = false;
     struct Code_Procedure_Params* malloc_params = malloc(sizeof(struct Code_Procedure_Params));
     array_init((struct Dynamic_Array*)malloc_params, sizeof(struct Code_Node*), 1);
 
-    struct Type_Info* num_bytes_type = make_type_info_ident("size_t", Native_Type_Size_t);
+    struct Type_Info* num_bytes_type = Native_Type_Size_t;
     struct Code_Node* num_bytes_ident = make_ident(code_nodes, "num_bytes", NULL);
     struct Code_Node* num_bytes_param = make_declaration(code_nodes, num_bytes_type, num_bytes_ident, NULL);
     
@@ -1136,13 +1142,13 @@ void inject_stdlib(struct Code_Nodes* code_nodes,
     array_push((struct Dynamic_Array*)statements, malloc_decl);
 
     // void free(void* ptr)
-    struct Type_Info* free_return_type = make_type_info_ident("void", Native_Type_Void);
+    struct Type_Info* free_return_type = Native_Type_Void;
 
     bool free_has_varargs = false;
     struct Code_Procedure_Params* free_params = malloc(sizeof(struct Code_Procedure_Params));
     array_init((struct Dynamic_Array*)free_params, sizeof(struct Code_Node*), 1);
 
-    struct Type_Info* ptr_type = make_type_info_ident("void*", Native_Type_Size_t);
+    struct Type_Info* ptr_type = make_type_info_pointer(Native_Type_Void);
     struct Code_Node* ptr_ident = make_ident(code_nodes, "ptr", NULL);
     struct Code_Node* ptr_param = make_declaration(code_nodes, ptr_type, ptr_ident, NULL);
 
@@ -1156,13 +1162,13 @@ void inject_stdlib(struct Code_Nodes* code_nodes,
     array_push((struct Dynamic_Array*)statements, free_decl);
     
     // void printf(char* fmt, ...)
-    struct Type_Info* printf_return_type = make_type_info_ident("void", Native_Type_Void);
+    struct Type_Info* printf_return_type = Native_Type_Void;
 
     bool printf_has_varargs = true;
     struct Code_Procedure_Params* printf_params = malloc(sizeof(struct Code_Procedure_Params));
     array_init((struct Dynamic_Array*)printf_params, sizeof(struct Code_Node*), 1);
 
-    struct Type_Info* fmt_type = make_type_info_ident("char*", Native_Type_Size_t);
+    struct Type_Info* fmt_type = make_type_info_pointer(Native_Type_Char);
     struct Code_Node* fmt_ident = make_ident(code_nodes, "fmt", NULL);
     struct Code_Node* fmt_param = make_declaration(code_nodes, fmt_type, fmt_ident, NULL);
 
@@ -1811,7 +1817,9 @@ bool parse_type(struct Token_Array* token_array,
         token_array->curr_token = prev_token;
         return false;
     }
-    prev_type = make_type_info_ident(ident_name, prev_type);
+    if (prev_type->kind == TYPE_INFO_TAG_STRUCT) {
+        prev_type = make_type_info_ident(ident_name, prev_type);
+    }
 
     struct Token* prev_token_2 = 0;
     do {

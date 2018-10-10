@@ -28,18 +28,24 @@ EM_BOOL keydown(int event_type, const struct EmscriptenKeyboardEvent* event, voi
         interaction_data.show_elements = interaction_data.show_elements == false;
         consumed = true;
     }
-    else if (strcmp(event->key, "p") == 0) {
+    else if (strcmp(event->key, "v") == 0) {
         interaction_data.show_parens = interaction_data.show_parens == false;
         consumed = true;
     }
-    else if (strcmp(event->key, "b") == 0) {
+    /*
+    else if (strcmp(event->key, "c") == 0) {
+        // comments
+        consumed = true;
+    }
+    */
+    else if (strcmp(event->key, "z") == 0) {
         if (interaction_data.execution_index > 0) {
             interaction_data.execution_index -= 1;
             interaction_data.cursor = run_data.execution_stack->first[interaction_data.execution_index];
         }
         consumed = true;
     }
-    else if (strcmp(event->key, "n") == 0) {
+    else if (strcmp(event->key, "x") == 0) {
         if (interaction_data.execution_index < run_data.execution_stack->length - 1) {
             interaction_data.execution_index += 1;
             interaction_data.cursor = run_data.execution_stack->first[interaction_data.execution_index];

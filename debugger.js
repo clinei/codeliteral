@@ -39,9 +39,7 @@ Module.expectedDataFileDownloads++;
       Module['locateFile'] = Module['locateFilePackage'];
       err('warning: you defined Module.locateFilePackage, that has been renamed to Module.locateFile (using your locateFilePackage for now)');
     }
-    var REMOTE_PACKAGE_NAME = typeof Module['locateFile'] === 'function' ?
-                              Module['locateFile'](REMOTE_PACKAGE_BASE) :
-                              ((Module['filePackagePrefixURL'] || '') + REMOTE_PACKAGE_BASE);
+    var REMOTE_PACKAGE_NAME = Module['locateFile'] ? Module['locateFile'](REMOTE_PACKAGE_BASE, '') : REMOTE_PACKAGE_BASE;
   
     var REMOTE_PACKAGE_SIZE = metadata.remote_package_size;
     var PACKAGE_UUID = metadata.package_uuid;
@@ -119,10 +117,9 @@ Module['FS_createPath']('/', 'assets', true, true);
 Module['FS_createPath']('/assets', 'fonts', true, true);
 Module['FS_createPath']('/assets', 'shaders', true, true);
 
-    function DataRequest(start, end, crunched, audio) {
+    function DataRequest(start, end, audio) {
       this.start = start;
       this.end = end;
-      this.crunched = crunched;
       this.audio = audio;
     }
     DataRequest.prototype = {
@@ -135,9 +132,7 @@ Module['FS_createPath']('/assets', 'shaders', true, true);
       send: function() {},
       onload: function() {
         var byteArray = this.byteArray.subarray(this.start, this.end);
-
-          this.finish(byteArray);
-
+        this.finish(byteArray);
       },
       finish: function(byteArray) {
         var that = this;
@@ -151,7 +146,7 @@ Module['FS_createPath']('/assets', 'shaders', true, true);
 
         var files = metadata.files;
         for (var i = 0; i < files.length; ++i) {
-          new DataRequest(files[i].start, files[i].end, files[i].crunched, files[i].audio).open('GET', files[i].filename);
+          new DataRequest(files[i].start, files[i].end, files[i].audio).open('GET', files[i].filename);
         }
 
   
@@ -193,7 +188,7 @@ Module['FS_createPath']('/assets', 'shaders', true, true);
   }
 
  }
- loadPackage({"files": [{"audio": 0, "start": 0, "crunched": 0, "end": 285388, "filename": "/assets/fonts/SourceCodeVariable-Roman.ttf"}, {"audio": 0, "start": 285388, "crunched": 0, "end": 285496, "filename": "/assets/shaders/quad.frag.glsl"}, {"audio": 0, "start": 285496, "crunched": 0, "end": 285684, "filename": "/assets/shaders/quad.vert.glsl"}, {"audio": 0, "start": 285684, "crunched": 0, "end": 285937, "filename": "/assets/shaders/texture_atlas.frag.glsl"}, {"audio": 0, "start": 285937, "crunched": 0, "end": 286173, "filename": "/assets/shaders/texture_atlas.vert.glsl"}], "remote_package_size": 286173, "package_uuid": "d195fc72-ff37-41b7-a550-58fc9cfe9bf7"});
+ loadPackage({"files": [{"start": 0, "audio": 0, "end": 285388, "filename": "/assets/fonts/SourceCodeVariable-Roman.ttf"}, {"start": 285388, "audio": 0, "end": 285496, "filename": "/assets/shaders/quad.frag.glsl"}, {"start": 285496, "audio": 0, "end": 285684, "filename": "/assets/shaders/quad.vert.glsl"}, {"start": 285684, "audio": 0, "end": 285937, "filename": "/assets/shaders/texture_atlas.frag.glsl"}, {"start": 285937, "audio": 0, "end": 286173, "filename": "/assets/shaders/texture_atlas.vert.glsl"}], "remote_package_size": 286173, "package_uuid": "51e70477-a6e1-4560-b952-ebebf737ec43"});
 
 })();
 
@@ -220,8 +215,8 @@ Module['quit'] = function(status, toThrow) {
 Module['preRun'] = [];
 Module['postRun'] = [];
 
-// The environment setup code below is customized to use Module.
-// *** Environment setup code ***
+// Determine the runtime environment we are in. You can customize this by
+// setting the ENVIRONMENT setting at compile time (see settings.js).
 
 var ENVIRONMENT_IS_WEB = false;
 var ENVIRONMENT_IS_WORKER = false;
@@ -241,8 +236,23 @@ if (Module['ENVIRONMENT']) {
 // 2) We could be the application main() thread proxied to worker. (with Emscripten -s PROXY_TO_WORKER=1) (ENVIRONMENT_IS_WORKER == true, ENVIRONMENT_IS_PTHREAD == false)
 // 3) We could be an application pthread running in a worker. (ENVIRONMENT_IS_WORKER == true and ENVIRONMENT_IS_PTHREAD == true)
 
-if (ENVIRONMENT_IS_NODE) {
+assert(typeof Module['memoryInitializerPrefixURL'] === 'undefined', 'Module.memoryInitializerPrefixURL option was removed, use Module.locateFile instead');
+assert(typeof Module['pthreadMainPrefixURL'] === 'undefined', 'Module.pthreadMainPrefixURL option was removed, use Module.locateFile instead');
+assert(typeof Module['cdInitializerPrefixURL'] === 'undefined', 'Module.cdInitializerPrefixURL option was removed, use Module.locateFile instead');
+assert(typeof Module['filePackagePrefixURL'] === 'undefined', 'Module.filePackagePrefixURL option was removed, use Module.locateFile instead');
 
+// `/` should be present at the end if `scriptDirectory` is not empty
+var scriptDirectory = '';
+function locateFile(path) {
+  if (Module['locateFile']) {
+    return Module['locateFile'](path, scriptDirectory);
+  } else {
+    return scriptDirectory + path;
+  }
+}
+
+if (ENVIRONMENT_IS_NODE) {
+  scriptDirectory = __dirname + '/';
 
   // Expose functionality in the same simple way that the shells work
   // Note that we pollute the global namespace here, otherwise we break in node
@@ -328,6 +338,22 @@ if (ENVIRONMENT_IS_SHELL) {
   }
 } else
 if (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) {
+  if (ENVIRONMENT_IS_WEB) {
+    if (document.currentScript) {
+      scriptDirectory = document.currentScript.src;
+    }
+  } else { // worker
+    scriptDirectory = self.location.href;
+  }
+  // blob urls look like blob:http://site.com/etc/etc and we cannot infer anything from them.
+  // otherwise, slice off the final part of the url to find the script directory.
+  // if scriptDirectory does not contain a slash, lastIndexOf will return -1,
+  // and scriptDirectory will correctly be replaced with an empty string.
+  if (scriptDirectory.indexOf('blob:') !== 0) {
+    scriptDirectory = scriptDirectory.substr(0, scriptDirectory.lastIndexOf('/')+1);
+  } else {
+    scriptDirectory = '';
+  }
 
 
   Module['read'] = function shell_read(url) {
@@ -376,8 +402,6 @@ if (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) {
 // bind(console) is necessary to fix IE/Edge closed dev tools panel behavior.
 var out = Module['print'] || (typeof console !== 'undefined' ? console.log.bind(console) : (typeof print !== 'undefined' ? print : null));
 var err = Module['printErr'] || (typeof printErr !== 'undefined' ? printErr : ((typeof console !== 'undefined' && console.warn.bind(console)) || out));
-
-// *** Environment setup code ***
 
 // Merge back in the overrides
 for (key in moduleOverrides) {
@@ -641,7 +665,13 @@ function ftfault() {
 // Runtime essentials
 //========================================
 
-var ABORT = 0; // whether we are quitting the application. no code should run after this. set in exit() and abort()
+// whether we are quitting the application. no code should run after this.
+// set in exit() and abort()
+var ABORT = false;
+
+// set by exit() and abort().  Passed to 'onExit' handler.
+// NOTE: This is also used as the process return code code in shell environments
+// but only when noExitRuntime is false.
 var EXITSTATUS = 0;
 
 /** @type {function(*, string=)} */
@@ -953,7 +983,10 @@ function UTF8ArrayToString(u8Array, idx) {
 
     var str = '';
     while (1) {
-      // For UTF8 byte structure, see http://en.wikipedia.org/wiki/UTF-8#Description and https://www.ietf.org/rfc/rfc2279.txt and https://tools.ietf.org/html/rfc3629
+      // For UTF8 byte structure, see:
+      // http://en.wikipedia.org/wiki/UTF-8#Description
+      // https://www.ietf.org/rfc/rfc2279.txt
+      // https://tools.ietf.org/html/rfc3629
       u0 = u8Array[idx++];
       if (!u0) return str;
       if (!(u0 & 0x80)) { str += String.fromCharCode(u0); continue; }
@@ -1000,8 +1033,9 @@ function UTF8ToString(ptr) {
 //   str: the Javascript string to copy.
 //   outU8Array: the array to copy to. Each index in this array is assumed to be one 8-byte element.
 //   outIdx: The starting offset in the array to begin the copying.
-//   maxBytesToWrite: The maximum number of bytes this function can write to the array. This count should include the null
-//                    terminator, i.e. if maxBytesToWrite=1, only the null terminator will be written and nothing else.
+//   maxBytesToWrite: The maximum number of bytes this function can write to the array.
+//                    This count should include the null terminator,
+//                    i.e. if maxBytesToWrite=1, only the null terminator will be written and nothing else.
 //                    maxBytesToWrite=0 does not write any bytes to the output, not even the null terminator.
 // Returns the number of bytes written, EXCLUDING the null terminator.
 
@@ -1016,7 +1050,10 @@ function stringToUTF8Array(str, outU8Array, outIdx, maxBytesToWrite) {
     // See http://unicode.org/faq/utf_bom.html#utf16-3
     // For UTF8 byte structure, see http://en.wikipedia.org/wiki/UTF-8#Description and https://www.ietf.org/rfc/rfc2279.txt and https://tools.ietf.org/html/rfc3629
     var u = str.charCodeAt(i); // possibly a lead surrogate
-    if (u >= 0xD800 && u <= 0xDFFF) u = 0x10000 + ((u & 0x3FF) << 10) | (str.charCodeAt(++i) & 0x3FF);
+    if (u >= 0xD800 && u <= 0xDFFF) {
+      var u1 = str.charCodeAt(++i);
+      u = 0x10000 + ((u & 0x3FF) << 10) | (u1 & 0x3FF);
+    }
     if (u <= 0x7F) {
       if (outIdx >= endIdx) break;
       outU8Array[outIdx++] = u;
@@ -1374,14 +1411,10 @@ function abortOnCannotGrowMemory() {
 if (!Module['reallocBuffer']) Module['reallocBuffer'] = function(size) {
   var ret;
   try {
-    if (ArrayBuffer.transfer) {
-      ret = ArrayBuffer.transfer(buffer, size);
-    } else {
-      var oldHEAP8 = HEAP8;
-      ret = new ArrayBuffer(size);
-      var temp = new Int8Array(ret);
-      temp.set(oldHEAP8);
-    }
+    var oldHEAP8 = HEAP8;
+    ret = new ArrayBuffer(size);
+    var temp = new Int8Array(ret);
+    temp.set(oldHEAP8);
   } catch(e) {
     return false;
   }
@@ -1417,6 +1450,7 @@ function enlargeMemory() {
       }
     }
   }
+
 
   var start = Date.now();
 
@@ -1665,7 +1699,7 @@ var Math_trunc = Math.trunc;
 // A counter of dependencies for calling run(). If we need to
 // do asynchronous work before running, increment this and
 // decrement it. Incrementing must happen in a place like
-// PRE_RUN_ADDITIONS (used by emcc to add file preloading).
+// Module.preRun (used by emcc to add file preloading).
 // Note that you can add dependencies in preRun, even though
 // it happens right before run - run will be postponed until
 // the dependencies are met.
@@ -1786,16 +1820,14 @@ function integrateWasmJS() {
   var wasmBinaryFile = 'debugger.wasm';
   var asmjsCodeFile = 'debugger.temp.asm.js';
 
-  if (typeof Module['locateFile'] === 'function') {
-    if (!isDataURI(wasmTextFile)) {
-      wasmTextFile = Module['locateFile'](wasmTextFile);
-    }
-    if (!isDataURI(wasmBinaryFile)) {
-      wasmBinaryFile = Module['locateFile'](wasmBinaryFile);
-    }
-    if (!isDataURI(asmjsCodeFile)) {
-      asmjsCodeFile = Module['locateFile'](asmjsCodeFile);
-    }
+  if (!isDataURI(wasmTextFile)) {
+    wasmTextFile = locateFile(wasmTextFile);
+  }
+  if (!isDataURI(wasmBinaryFile)) {
+    wasmBinaryFile = locateFile(wasmBinaryFile);
+  }
+  if (!isDataURI(asmjsCodeFile)) {
+    asmjsCodeFile = locateFile(asmjsCodeFile);
   }
 
   // utilities
@@ -1842,7 +1874,7 @@ function integrateWasmJS() {
       if (Module['readBinary']) {
         return Module['readBinary'](wasmBinaryFile);
       } else {
-        throw "on the web, we need the wasm binary to be preloaded and set on Module['wasmBinary']. emcc.py will do that for you when generating HTML (but not JS)";
+        throw "both async and sync fetching of the wasm failed";
       }
     }
     catch (err) {
@@ -2031,7 +2063,7 @@ function integrateWasmJS() {
     var exports;
     exports = doNativeWasm(global, env, providedBuffer);
 
-    assert(exports, 'no binaryen method succeeded. consider enabling more options, like interpreting, if you want that: https://github.com/kripken/emscripten/wiki/WebAssembly#binaryen-methods');
+    assert(exports, 'no binaryen method succeeded. consider enabling more options, like interpreting, if you want that: http://kripken.github.io/emscripten-site/docs/compiling/WebAssembly.html#binaryen-methods');
 
 
     return exports;
@@ -2052,7 +2084,7 @@ var ASM_CONSTS = [];
 
 STATIC_BASE = GLOBAL_BASE;
 
-STATICTOP = STATIC_BASE + 8880;
+STATICTOP = STATIC_BASE + 9056;
 /* global initializers */  __ATINIT__.push();
 
 
@@ -2061,7 +2093,7 @@ STATICTOP = STATIC_BASE + 8880;
 
 
 
-var STATIC_BUMP = 8880;
+var STATIC_BUMP = 9056;
 Module["STATIC_BASE"] = STATIC_BASE;
 Module["STATIC_BUMP"] = STATIC_BUMP;
 
@@ -5480,10 +5512,10 @@ function copyTempDouble(ptr) {
           }
           console.log('main loop blocker "' + blocker.name + '" took ' + (Date.now() - start) + ' ms'); //, left: ' + Browser.mainLoop.remainingBlockers);
           Browser.mainLoop.updateStatus();
-          
+  
           // catches pause/resume main loop from blocker execution
           if (thisMainLoopId < Browser.mainLoop.currentlyRunningMainloop) return;
-          
+  
           setTimeout(Browser.mainLoop.runner, 0);
           return;
         }
@@ -5503,6 +5535,7 @@ function copyTempDouble(ptr) {
   
         // Signal GL rendering layer that processing of a new frame is about to start. This helps it optimize
         // VBO double-buffering and reduce GPU stalls.
+  
   
   
         if (Browser.mainLoop.method === 'timeout' && Module.ctx) {
@@ -5723,6 +5756,7 @@ function copyTempDouble(ptr) {
         };
         Module['preloadPlugins'].push(audioPlugin);
   
+  
         // Canvas event setup
   
         function pointerLockChange() {
@@ -5735,7 +5769,7 @@ function copyTempDouble(ptr) {
         if (canvas) {
           // forced aspect ratio can be enabled by defining 'forcedAspectRatio' on Module
           // Module['forcedAspectRatio'] = 4 / 3;
-          
+  
           canvas.requestPointerLock = canvas['requestPointerLock'] ||
                                       canvas['mozRequestPointerLock'] ||
                                       canvas['webkitRequestPointerLock'] ||
@@ -5972,13 +6006,13 @@ function copyTempDouble(ptr) {
       },getMouseWheelDelta:function (event) {
         var delta = 0;
         switch (event.type) {
-          case 'DOMMouseScroll': 
+          case 'DOMMouseScroll':
             delta = event.detail;
             break;
-          case 'mousewheel': 
+          case 'mousewheel':
             delta = event.wheelDelta;
             break;
-          case 'wheel': 
+          case 'wheel':
             delta = event['deltaY'];
             break;
           default:
@@ -5997,7 +6031,7 @@ function copyTempDouble(ptr) {
             Browser.mouseMovementX = Browser.getMovementX(event);
             Browser.mouseMovementY = Browser.getMovementY(event);
           }
-          
+  
           // check if SDL is available
           if (typeof SDL != "undefined") {
             Browser.mouseX = SDL.mouseX + Browser.mouseMovementX;
@@ -6007,7 +6041,7 @@ function copyTempDouble(ptr) {
             // FIXME: ideally this should be clamped against the canvas size and zero
             Browser.mouseX += Browser.mouseMovementX;
             Browser.mouseY += Browser.mouseMovementY;
-          }        
+          }
         } else {
           // Otherwise, calculate the movement based on the changes
           // in the coordinates.
@@ -6037,7 +6071,7 @@ function copyTempDouble(ptr) {
             adjustedY = adjustedY * (ch / rect.height);
   
             var coords = { x: adjustedX, y: adjustedY };
-            
+  
             if (event.type === 'touchstart') {
               Browser.lastTouches[touch.identifier] = coords;
               Browser.touches[touch.identifier] = coords;
@@ -6046,7 +6080,7 @@ function copyTempDouble(ptr) {
               if (!last) last = coords;
               Browser.lastTouches[touch.identifier] = last;
               Browser.touches[touch.identifier] = coords;
-            } 
+            }
             return;
           }
   
@@ -7132,6 +7166,7 @@ function copyTempDouble(ptr) {
         }
   
   
+  
         var ctx;
         var errorInfo = '?';
         function onContextCreationError(event) {
@@ -7182,6 +7217,9 @@ function copyTempDouble(ptr) {
         if (typeof webGLContextAttributes['enableExtensionsByDefault'] === 'undefined' || webGLContextAttributes['enableExtensionsByDefault']) {
           GL.initExtensions(context);
         }
+  
+  
+  
         return handle;
       },makeContextCurrent:function (contextHandle) {
         var context = GL.contexts[contextHandle];
@@ -7240,13 +7278,17 @@ function copyTempDouble(ptr) {
         // As new extensions are ratified at http://www.khronos.org/registry/webgl/extensions/ , feel free to add your new extensions
         // here, as long as they don't produce a performance impact for users that might not be using those extensions.
         // E.g. debugging-related extensions should probably be off by default.
-        var automaticallyEnabledExtensions = [ "OES_texture_float", "OES_texture_half_float", "OES_standard_derivatives",
+        var automaticallyEnabledExtensions = [ // Khronos ratified WebGL extensions ordered by number (no debug extensions):
+                                               "OES_texture_float", "OES_texture_half_float", "OES_standard_derivatives",
                                                "OES_vertex_array_object", "WEBGL_compressed_texture_s3tc", "WEBGL_depth_texture",
-                                               "OES_element_index_uint", "EXT_texture_filter_anisotropic", "ANGLE_instanced_arrays",
-                                               "OES_texture_float_linear", "OES_texture_half_float_linear", "WEBGL_compressed_texture_atc",
-                                               "WEBKIT_WEBGL_compressed_texture_pvrtc", "WEBGL_compressed_texture_pvrtc",
-                                               "EXT_color_buffer_half_float", "WEBGL_color_buffer_float", "EXT_frag_depth", "EXT_sRGB",
-                                               "WEBGL_draw_buffers", "WEBGL_shared_resources", "EXT_shader_texture_lod", "EXT_color_buffer_float"];
+                                               "OES_element_index_uint", "EXT_texture_filter_anisotropic", "EXT_frag_depth",
+                                               "WEBGL_draw_buffers", "ANGLE_instanced_arrays", "OES_texture_float_linear",
+                                               "OES_texture_half_float_linear", "EXT_blend_minmax", "EXT_shader_texture_lod",
+                                               // Community approved WebGL extensions ordered by number:
+                                               "WEBGL_compressed_texture_pvrtc", "EXT_color_buffer_half_float", "WEBGL_color_buffer_float",
+                                               "EXT_sRGB", "WEBGL_compressed_texture_etc1", "EXT_disjoint_timer_query",
+                                               "WEBGL_compressed_texture_etc", "WEBGL_compressed_texture_astc", "EXT_color_buffer_float",
+                                               "WEBGL_compressed_texture_s3tc_srgb", "EXT_disjoint_timer_query_webgl2"];
   
         function shouldEnableAutomatically(extension) {
           var ret = false;
@@ -7325,6 +7367,7 @@ function copyTempDouble(ptr) {
       contextAttributes['minorVersion'] = ((SAFE_HEAP_LOAD((((attributes)+(36))|0), 4, 0))|0);
       var enableExtensionsByDefault = ((SAFE_HEAP_LOAD((((attributes)+(40))|0), 4, 0))|0);
       contextAttributes['explicitSwapControl'] = ((SAFE_HEAP_LOAD((((attributes)+(44))|0), 4, 0))|0);
+      contextAttributes['renderViaOffscreenBackBuffer'] = ((SAFE_HEAP_LOAD((((attributes)+(48))|0), 4, 0))|0);
   
       target = Pointer_stringify(target);
       var canvas;
@@ -7337,9 +7380,9 @@ function copyTempDouble(ptr) {
         return 0;
       }
       if (contextAttributes['explicitSwapControl']) {
-        console.error('emscripten_webgl_create_context failed: explicitSwapControl is not supported, please rebuild with -s OFFSCREENCANVAS_SUPPORT=1 to enable targeting the experimental OffscreenCanvas specification!');
         return 0;
       }
+  
   
       var contextHandle = GL.createContext(canvas, contextAttributes);
       return contextHandle;
@@ -7993,7 +8036,7 @@ function invoke_vi(index,a1) {
 
 Module.asmGlobalArg = {};
 
-Module.asmLibraryArg = { "abort": abort, "assert": assert, "enlargeMemory": enlargeMemory, "getTotalMemory": getTotalMemory, "abortOnCannotGrowMemory": abortOnCannotGrowMemory, "abortStackOverflow": abortStackOverflow, "segfault": segfault, "alignfault": alignfault, "ftfault": ftfault, "nullFunc_ii": nullFunc_ii, "nullFunc_iii": nullFunc_iii, "nullFunc_iiii": nullFunc_iiii, "nullFunc_v": nullFunc_v, "nullFunc_vi": nullFunc_vi, "invoke_ii": invoke_ii, "invoke_iii": invoke_iii, "invoke_iiii": invoke_iiii, "invoke_v": invoke_v, "invoke_vi": invoke_vi, "___assert_fail": ___assert_fail, "___lock": ___lock, "___setErrNo": ___setErrNo, "___syscall140": ___syscall140, "___syscall145": ___syscall145, "___syscall146": ___syscall146, "___syscall221": ___syscall221, "___syscall5": ___syscall5, "___syscall54": ___syscall54, "___syscall6": ___syscall6, "___unlock": ___unlock, "_abort": _abort, "_emscripten_cancel_main_loop": _emscripten_cancel_main_loop, "_emscripten_get_now": _emscripten_get_now, "_emscripten_memcpy_big": _emscripten_memcpy_big, "_emscripten_set_keydown_callback": _emscripten_set_keydown_callback, "_emscripten_set_main_loop": _emscripten_set_main_loop, "_emscripten_set_main_loop_timing": _emscripten_set_main_loop_timing, "_emscripten_webgl_create_context": _emscripten_webgl_create_context, "_emscripten_webgl_destroy_context": _emscripten_webgl_destroy_context, "_emscripten_webgl_make_context_current": _emscripten_webgl_make_context_current, "_glActiveTexture": _glActiveTexture, "_glAttachShader": _glAttachShader, "_glBindBuffer": _glBindBuffer, "_glBindTexture": _glBindTexture, "_glBlendFunc": _glBlendFunc, "_glBufferData": _glBufferData, "_glClear": _glClear, "_glClearColor": _glClearColor, "_glCompileShader": _glCompileShader, "_glCreateProgram": _glCreateProgram, "_glCreateShader": _glCreateShader, "_glDeleteProgram": _glDeleteProgram, "_glDisable": _glDisable, "_glDrawElements": _glDrawElements, "_glEnable": _glEnable, "_glEnableVertexAttribArray": _glEnableVertexAttribArray, "_glGenBuffers": _glGenBuffers, "_glGenTextures": _glGenTextures, "_glGetAttribLocation": _glGetAttribLocation, "_glGetProgramInfoLog": _glGetProgramInfoLog, "_glGetProgramiv": _glGetProgramiv, "_glGetShaderInfoLog": _glGetShaderInfoLog, "_glGetShaderiv": _glGetShaderiv, "_glGetUniformLocation": _glGetUniformLocation, "_glIsProgram": _glIsProgram, "_glIsShader": _glIsShader, "_glLinkProgram": _glLinkProgram, "_glPixelStorei": _glPixelStorei, "_glShaderSource": _glShaderSource, "_glTexImage2D": _glTexImage2D, "_glTexParameteri": _glTexParameteri, "_glUniform1i": _glUniform1i, "_glUseProgram": _glUseProgram, "_glVertexAttribPointer": _glVertexAttribPointer, "_llvm_ceil_f64": _llvm_ceil_f64, "_llvm_fabs_f64": _llvm_fabs_f64, "_llvm_floor_f64": _llvm_floor_f64, "_llvm_sqrt_f64": _llvm_sqrt_f64, "emscriptenWebGLComputeImageSize": emscriptenWebGLComputeImageSize, "emscriptenWebGLGetHeapForType": emscriptenWebGLGetHeapForType, "emscriptenWebGLGetShiftForType": emscriptenWebGLGetShiftForType, "emscriptenWebGLGetTexPixelData": emscriptenWebGLGetTexPixelData, "DYNAMICTOP_PTR": DYNAMICTOP_PTR, "tempDoublePtr": tempDoublePtr, "ABORT": ABORT, "STACKTOP": STACKTOP, "STACK_MAX": STACK_MAX };
+Module.asmLibraryArg = { "abort": abort, "assert": assert, "enlargeMemory": enlargeMemory, "getTotalMemory": getTotalMemory, "abortOnCannotGrowMemory": abortOnCannotGrowMemory, "abortStackOverflow": abortStackOverflow, "segfault": segfault, "alignfault": alignfault, "ftfault": ftfault, "nullFunc_ii": nullFunc_ii, "nullFunc_iii": nullFunc_iii, "nullFunc_iiii": nullFunc_iiii, "nullFunc_v": nullFunc_v, "nullFunc_vi": nullFunc_vi, "invoke_ii": invoke_ii, "invoke_iii": invoke_iii, "invoke_iiii": invoke_iiii, "invoke_v": invoke_v, "invoke_vi": invoke_vi, "___assert_fail": ___assert_fail, "___lock": ___lock, "___setErrNo": ___setErrNo, "___syscall140": ___syscall140, "___syscall145": ___syscall145, "___syscall146": ___syscall146, "___syscall221": ___syscall221, "___syscall5": ___syscall5, "___syscall54": ___syscall54, "___syscall6": ___syscall6, "___unlock": ___unlock, "_abort": _abort, "_emscripten_cancel_main_loop": _emscripten_cancel_main_loop, "_emscripten_get_now": _emscripten_get_now, "_emscripten_memcpy_big": _emscripten_memcpy_big, "_emscripten_set_keydown_callback": _emscripten_set_keydown_callback, "_emscripten_set_main_loop": _emscripten_set_main_loop, "_emscripten_set_main_loop_timing": _emscripten_set_main_loop_timing, "_emscripten_webgl_create_context": _emscripten_webgl_create_context, "_emscripten_webgl_destroy_context": _emscripten_webgl_destroy_context, "_emscripten_webgl_make_context_current": _emscripten_webgl_make_context_current, "_glActiveTexture": _glActiveTexture, "_glAttachShader": _glAttachShader, "_glBindBuffer": _glBindBuffer, "_glBindTexture": _glBindTexture, "_glBlendFunc": _glBlendFunc, "_glBufferData": _glBufferData, "_glClear": _glClear, "_glClearColor": _glClearColor, "_glCompileShader": _glCompileShader, "_glCreateProgram": _glCreateProgram, "_glCreateShader": _glCreateShader, "_glDeleteProgram": _glDeleteProgram, "_glDisable": _glDisable, "_glDrawElements": _glDrawElements, "_glEnable": _glEnable, "_glEnableVertexAttribArray": _glEnableVertexAttribArray, "_glGenBuffers": _glGenBuffers, "_glGenTextures": _glGenTextures, "_glGetAttribLocation": _glGetAttribLocation, "_glGetProgramInfoLog": _glGetProgramInfoLog, "_glGetProgramiv": _glGetProgramiv, "_glGetShaderInfoLog": _glGetShaderInfoLog, "_glGetShaderiv": _glGetShaderiv, "_glGetUniformLocation": _glGetUniformLocation, "_glIsProgram": _glIsProgram, "_glIsShader": _glIsShader, "_glLinkProgram": _glLinkProgram, "_glPixelStorei": _glPixelStorei, "_glShaderSource": _glShaderSource, "_glTexImage2D": _glTexImage2D, "_glTexParameteri": _glTexParameteri, "_glUniform1i": _glUniform1i, "_glUseProgram": _glUseProgram, "_glVertexAttribPointer": _glVertexAttribPointer, "_llvm_ceil_f64": _llvm_ceil_f64, "_llvm_fabs_f64": _llvm_fabs_f64, "_llvm_floor_f64": _llvm_floor_f64, "_llvm_sqrt_f64": _llvm_sqrt_f64, "emscriptenWebGLComputeImageSize": emscriptenWebGLComputeImageSize, "emscriptenWebGLGetHeapForType": emscriptenWebGLGetHeapForType, "emscriptenWebGLGetShiftForType": emscriptenWebGLGetShiftForType, "emscriptenWebGLGetTexPixelData": emscriptenWebGLGetTexPixelData, "DYNAMICTOP_PTR": DYNAMICTOP_PTR, "tempDoublePtr": tempDoublePtr, "STACKTOP": STACKTOP, "STACK_MAX": STACK_MAX };
 // EMSCRIPTEN_START_ASM
 var asm =Module["asm"]// EMSCRIPTEN_END_ASM
 (Module.asmGlobalArg, Module.asmLibraryArg, buffer);
@@ -8276,6 +8319,7 @@ Module["writeArrayToMemory"] = writeArrayToMemory;
 Module["writeAsciiToMemory"] = writeAsciiToMemory;
 Module["addRunDependency"] = addRunDependency;
 Module["removeRunDependency"] = removeRunDependency;
+if (!Module["ENV"]) Module["ENV"] = function() { abort("'ENV' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") };
 if (!Module["FS"]) Module["FS"] = function() { abort("'FS' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)") };
 Module["FS_createFolder"] = FS.createFolder;
 Module["FS_createPath"] = FS.createPath;
@@ -8537,8 +8581,6 @@ function abort(what) {
 }
 Module['abort'] = abort;
 
-// {{PRE_RUN_ADDITIONS}}
-
 if (Module['preInit']) {
   if (typeof Module['preInit'] == 'function') Module['preInit'] = [Module['preInit']];
   while (Module['preInit'].length > 0) {
@@ -8555,8 +8597,6 @@ if (Module['noInitialRun']) {
 Module["noExitRuntime"] = true;
 
 run();
-
-// {{POST_RUN_ADDITIONS}}
 
 
 

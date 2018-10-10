@@ -223,6 +223,15 @@ void find_expanded_nodes(struct Code_Node* node) {
             }
             break;
         }
+        case CODE_KIND_ARRAY_INDEX:{
+            find_expanded_nodes(node->array_index.array);
+            find_expanded_nodes(node->array_index.index);
+            node->demands_expand = node->array_index.array->demands_expand |
+                                   node->array_index.index->demands_expand |
+                                   (node == interaction_data.cursor);
+            node->should_expand = node->array_index.array->demands_expand |
+                                  node->array_index.index->demands_expand;
+        }
         case CODE_KIND_WHILE:{
             if (node->was_run) {
                 if (node->transformed != NULL) {
@@ -680,16 +689,23 @@ void render_node(struct Code_Node* node,
             break;
         }
         case CODE_KIND_ARRAY_INDEX:{
-            render_node(node->array_index.array, render_data);
-            render_text("[", &render_data->xpos, &render_data->ypos,
-                        render_data->fg_color,
-                        render_data->bg_color,
-                        render_data);
-            render_node(node->array_index.index, render_data);
-            render_text("]", &render_data->xpos, &render_data->ypos,
-                        render_data->fg_color,
-                        render_data->bg_color,
-                        render_data);
+            if ((node->is_lhs ? interaction_data.show_changes : interaction_data.show_values) &&
+                node->should_expand == false && node->result != NULL) {
+
+                render_node(node->result, render_data);
+            }
+            else {
+                render_node(node->array_index.array, render_data);
+                render_text("[", &render_data->xpos, &render_data->ypos,
+                            render_data->fg_color,
+                            render_data->bg_color,
+                            render_data);
+                render_node(node->array_index.index, render_data);
+                render_text("]", &render_data->xpos, &render_data->ypos,
+                            render_data->fg_color,
+                            render_data->bg_color,
+                            render_data);
+            }
             break;
         }
         case CODE_KIND_DOT_OPERATOR:{

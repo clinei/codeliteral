@@ -257,12 +257,24 @@ main();
 `;
 */
 const code = `
+bool test_floats() {
+	bool passed = true;
+	0.3 - 0.2;
+	/*
+	0.3 + 0.2;
+	0.3 / 0.2;
+	0.3 * 0.2;
+	0.3 < 0.2;
+	0.3 > 0.2;
+	0.3 >= 0.2;
+	0.3 <= 0.2;
+	0.3 == 0.3;
+	0.3 != 0.2;
+	*/
+	return passed;
+}
 void main() {
-	bool passed = false;
-	int[2] arr;
-	arr[0] = 42;
-	arr[1] = arr[0];
-	passed = arr[1] == 42;
+	test_floats();
 }
 main();
 `;
