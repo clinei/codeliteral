@@ -30,6 +30,7 @@ struct Dynamic_Array {
 
 void array_init(struct Dynamic_Array* array, size_t element_size, size_t capacity);
 bool array_push(struct Dynamic_Array* array, void* element);
+void array_pop(struct Dynamic_Array* array);
 bool array_next(struct Dynamic_Array* array);
 bool array_maybe_realloc(struct Dynamic_Array* array);
 

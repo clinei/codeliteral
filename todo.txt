@@ -1,25 +1,23 @@
-Bugs:
+Important:
 
-we should have a comment on the general design
+boolean expressions must return bool literal
 
-reallocation of type_infos and code_node_array means we have to fix pointers in the tree
-we have to calculate the diff of the last block and then add that to every pointer
+time for scrolling
 
-type inference not implemented
+remove snprintf while rendering
+
+push_index was only for run_lvalue for strings, do not implement
 
 printf needs varargs
 
-mark_containment is now find_expanded_nodes
-we go into a block,
-init an array of an array of nodes,
-an array of indices,
-and an array of array lengths.
-we keep a block stack.
-when we hit an expansion demanding node,
-like the cursor or a flowpoint,
-we add the block to the array of array of nodes,
-and increase the length at the statement index,
-and store the statement index,
+we should have a comment on the general design
+
+Bugs:
+
+else if can put a transformed block between an else if chain, not good visually
+
+reallocation of type_infos and code_node_array means we have to fix pointers in the tree
+we have to calculate the diff of the last block and then add that to every pointer
 
 scrolling not implemented
 
@@ -34,6 +32,8 @@ and when we go back and haven't moved, set the cursor back to the previous one
 `m = a.[b].c` (F) `m = [42]` (F) `m = a.[b].c`
 `m = a.[b].c` (F) `m = [42]` (A) `[m] = 42` (F) `[m] = a.b.c`
 
+pressing P should only show parens when operator precedence changes
+
 dynamic arrays as structs,
 static arrays as pointers
 array concatenation
@@ -44,13 +44,12 @@ test ints
 Graphics Ideas:
 
 render fonts ourself
-render direct font vertices
+render font vertices directly
 try font hinting
 
 Ideas:
 
-pressing P shows parens around binary operation,
-so operation order can be understood at a glance
+what if we clone everything we run, instead of modifying stuff in place?
 
 we could have comments show up when we press a button,
 it might provide helpful information when debugging
@@ -61,6 +60,8 @@ it might increase comprehension
 what do we need to make this happen?
 
 maybe showing changes should show the result of the change, not the value before it
+
+maybe left hand side should be executed first, seems more intuitive
 
 make a comma operator, see how parsing looks like
 

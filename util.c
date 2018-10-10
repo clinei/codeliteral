@@ -6,6 +6,7 @@
 #define DEBUG_DYNAMIC_ARRAY false
 #define DEBUG_DYNAMIC_ARRAY_INIT true
 #define DEBUG_DYNAMIC_ARRAY_PUSH true
+#define DEBUG_DYNAMIC_ARRAY_POP true
 #define DEBUG_DYNAMIC_ARRAY_NEXT true
 #define DEBUG_DYNAMIC_ARRAY_REALLOC true
 void array_init(struct Dynamic_Array* array, size_t element_size, size_t capacity) {
@@ -30,6 +31,16 @@ bool array_push(struct Dynamic_Array* array, void* element) {
     array->last += array->element_size;
     memcpy(array->last, &element, array->element_size);
     return did_realloc;
+}
+void array_pop(struct Dynamic_Array* array) {
+    #if DEBUG_DYNAMIC_ARRAY && DEBUG_DYNAMIC_ARRAY_POP
+    printf("dynamic array pop\n");
+    printf("length: %zu\n", array->length);
+    #endif
+    if (array->length > 0) {
+        array->length -= 1;
+        array->last -= array->element_size;
+    }
 }
 bool array_next(struct Dynamic_Array* array) {
     array->length += 1;

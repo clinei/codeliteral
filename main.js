@@ -20,6 +20,25 @@ function set_text(new_text) {
 }
 /*
 const code = `
+bool test_if_else(){
+	bool passed = false;
+	int i = 0;
+	if (false) i = 1;
+	else if (true) i = 2;
+	else if (true) i = 3;
+	else if (true) i = 4;
+	passed = i == 2;
+	return passed;
+}
+bool test_nested_proc() {
+	bool passed = false;
+	int foo(int param) {
+		return param;
+	}
+	int bar = foo(40) + foo(2);
+	passed = foo == 42;
+	return passed;
+}
 bool test_nested_loop() {
 	bool passed = true;
 	int[6] results;
@@ -156,6 +175,7 @@ bool test_string() {
 	return passed;
 }
 void tests() {
+	test_if_else();
 	test_array();
 	test_pointer();
 	test_malloc_free();
@@ -238,7 +258,11 @@ main();
 */
 const code = `
 void main() {
-	1 + 2 * 3 + 4;
+	bool passed = false;
+	int[2] arr;
+	arr[0] = 42;
+	arr[1] = arr[0];
+	passed = arr[1] == 42;
 }
 main();
 `;

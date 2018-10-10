@@ -26,13 +26,111 @@ void set_serial(struct Code_Node* node) {
 	next_serial += 1;
 }
 
-struct Code_Node* make_procedure(struct Code_Node_Array* code_node_array,
+char* code_kind_to_string(enum Code_Kind kind) {
+    switch (kind) {
+        case CODE_KIND_IF:{
+            return "if";
+        }
+        case CODE_KIND_ELSE:{
+            return "else";
+        }
+        case CODE_KIND_WHILE:{
+            return "while";
+        }
+        case CODE_KIND_DO_WHILE:{
+            return "do while";
+        }
+        case CODE_KIND_FOR:{
+            return "for";
+        }
+        case CODE_KIND_BREAK:{
+            return "break";
+        }
+        case CODE_KIND_CONTINUE:{
+            return "continue";
+        }
+        case CODE_KIND_IDENT:{
+            return "ident";
+        }
+        case CODE_KIND_INCREMENT:{
+            return "increment";
+        }
+        case CODE_KIND_DECREMENT:{
+            return "decrement";
+        }
+        case CODE_KIND_MINUS:{
+            return "minus";
+        }
+        case CODE_KIND_NOT:{
+            return "not";
+        }
+        case CODE_KIND_ASSIGN:{
+            return "assign";
+        }
+        case CODE_KIND_OPASSIGN:{
+            return "opassign";
+        }
+        case CODE_KIND_BLOCK:{
+            return "block";
+        }
+        case CODE_KIND_PROCEDURE:{
+            return "procedure";
+        }
+        case CODE_KIND_STRUCT:{
+            return "struct";
+        }
+        case CODE_KIND_DECLARATION:{
+            return "declaration";
+        }
+        case CODE_KIND_REFERENCE:{
+            return "reference";
+        }
+        case CODE_KIND_DEREFERENCE:{
+            return "dereference";
+        }
+        case CODE_KIND_ARRAY_INDEX:{
+            return "array index";
+        }
+        case CODE_KIND_DOT_OPERATOR:{
+            return "dot operator";
+        }
+        case CODE_KIND_CALL:{
+            return "call";
+        }
+        case CODE_KIND_RETURN:{
+            return "return";
+        }
+        case CODE_KIND_BINARY_OPERATION:{
+            return "binary operation";
+        }
+        case CODE_KIND_STRING:{
+            return "string";
+        }
+        case CODE_KIND_PARENS:{
+            return "parens";
+        }
+        case CODE_KIND_LITERAL_INT:{
+            return "literal int";
+        }
+        case CODE_KIND_LITERAL_FLOAT:{
+            return "literal float";
+        }
+        case CODE_KIND_LITERAL_BOOL:{
+            return "literal bool";
+        }
+        case CODE_KIND_NATIVE_CODE:{
+            return "native code";
+        }
+    }
+}
+
+struct Code_Node* make_procedure(struct Code_Nodes* code_nodes,
                                  struct Code_Procedure_Params* params,
                                  bool has_varargs,
                                  struct Type_Info* return_type,
                                  struct Code_Node* block) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_PROCEDURE;
 
     if (params == NULL) {
@@ -40,23 +138,25 @@ struct Code_Node* make_procedure(struct Code_Node_Array* code_node_array,
         array_init((struct Dynamic_Array*)params, sizeof(struct Code_Node*), 10);
     }
     if (block == NULL) {
-        block = make_block(code_node_array, NULL);
+        block = make_block(code_nodes, NULL);
     }
 	node->procedure.params = params;
 	node->procedure.has_varargs = has_varargs;
 	node->procedure.return_type = return_type;
 	node->procedure.block = block;
 
+    node->procedure.return_ident = NULL;
+
 	set_serial(node);
 
 	return node;
 }
 
-struct Code_Node* make_call(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_call(struct Code_Nodes* code_nodes,
                             struct Code_Node* ident,
                             struct Code_Call_Args* args) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_CALL;
 
     if (args == NULL) {
@@ -66,34 +166,40 @@ struct Code_Node* make_call(struct Code_Node_Array* code_node_array,
 	node->call.ident = ident;
 	node->call.args = args;
 
+    node->call.returned = false;
+    node->call.return_ident = NULL;
+
 	set_serial(node);
 
 	return node;
 }
 
-struct Code_Node* make_declaration(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_declaration(struct Code_Nodes* code_nodes,
                                    struct Type_Info* type,
                                    struct Code_Node* ident,
                                    struct Code_Node* expression) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_DECLARATION;
-
-	ident->ident.declaration = node;
 
 	node->declaration.ident = ident;
 	node->declaration.type = type;
 	node->declaration.expression = expression;
+
+    node->declaration.pointer = 0;
+
+	ident->ident.declaration = node;
+    ident->type = type;
 	
 	set_serial(node);
 
 	return node;
 }
 
-struct Code_Node* make_reference(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_reference(struct Code_Nodes* code_nodes,
                                  struct Code_Node* expression) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_REFERENCE;
 
 	node->reference.expression = expression;
@@ -103,10 +209,10 @@ struct Code_Node* make_reference(struct Code_Node_Array* code_node_array,
 	return node;
 }
 
-struct Code_Node* make_dereference(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_dereference(struct Code_Nodes* code_nodes,
                                    struct Code_Node* expression) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_DEREFERENCE;
 
 	node->dereference.expression = expression;
@@ -116,11 +222,11 @@ struct Code_Node* make_dereference(struct Code_Node_Array* code_node_array,
 	return node;
 }
 
-struct Code_Node* make_array_index(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_array_index(struct Code_Nodes* code_nodes,
                                    struct Code_Node* array,
                                    struct Code_Node* index) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_ARRAY_INDEX;
 
 	node->array_index.array = array;
@@ -131,11 +237,11 @@ struct Code_Node* make_array_index(struct Code_Node_Array* code_node_array,
 	return node;
 }
 
-struct Code_Node* make_dot_operator(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_dot_operator(struct Code_Nodes* code_nodes,
                                     struct Code_Node* left,
                                     struct Code_Node* right) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_DOT_OPERATOR;
 
 	node->dot_operator.left = left;
@@ -146,29 +252,33 @@ struct Code_Node* make_dot_operator(struct Code_Node_Array* code_node_array,
 	return node;
 }
 
-struct Code_Node* make_block(struct Code_Node_Array* code_node_array,
-                             struct Code_Block_Statements* statements) {
+struct Code_Node* make_block(struct Code_Nodes* code_nodes,
+                             struct Code_Node_Array* statements) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_BLOCK;
 
     if (statements == NULL) {
-        statements = malloc(sizeof(struct Code_Block_Statements));
+        statements = malloc(sizeof(struct Code_Node_Array));
         array_init((struct Dynamic_Array*)statements, sizeof(struct Code_Node*), 10);
     }
 	node->block.statements = statements;
     node->block.declarations = NULL;
+    
+    node->block.allocations = NULL;
     node->block.is_transformed_block = false;
+    node->block.transformed_from = NULL;
+    node->block.extras = NULL;
 
 	set_serial(node);
 
 	return node;
 }
 
-struct Code_Node* make_return(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_return(struct Code_Nodes* code_nodes,
                               struct Code_Node* expression) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_RETURN;
 
 	node->return_.expression = expression;
@@ -178,10 +288,10 @@ struct Code_Node* make_return(struct Code_Node_Array* code_node_array,
 	return node;
 }
 
-struct Code_Node* make_struct(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_struct(struct Code_Nodes* code_nodes,
                               struct Code_Node* block) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_STRUCT;
 
 	node->struct_.block = block;
@@ -191,71 +301,81 @@ struct Code_Node* make_struct(struct Code_Node_Array* code_node_array,
 	return node;
 }
 
-struct Code_Node* make_if(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_if(struct Code_Nodes* code_nodes,
                           struct Code_Node* condition,
                           struct Code_Node* expression) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_IF;
 
 	node->if_.condition = condition;
 	node->if_.expression = expression;
 
+    node->if_.else_expr = NULL;
+
 	set_serial(node);
 
 	return node;
 }
 
-struct Code_Node* make_else(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_else(struct Code_Nodes* code_nodes,
                             struct Code_Node* expression) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_ELSE;
 
 	node->else_.expression = expression;
 
+    node->else_.if_expr = NULL;
+
 	set_serial(node);
 
 	return node;
 }
 
-struct Code_Node* make_while(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_while(struct Code_Nodes* code_nodes,
                              struct Code_Node* condition,
                              struct Code_Node* expression) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_WHILE;
 
 	node->while_.condition = condition;
 	node->while_.expression = expression;
 
+	node->while_.broken = false;
+	node->while_.continued = false;
+
 	set_serial(node);
 
 	return node;
 }
 
-struct Code_Node* make_do_while(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_do_while(struct Code_Nodes* code_nodes,
                                 struct Code_Node* condition,
                                 struct Code_Node* expression) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_DO_WHILE;
 
 	node->do_while_.condition = condition;
 	node->do_while_.expression = expression;
 
+	node->do_while_.broken = false;
+	node->do_while_.continued = false;
+
 	set_serial(node);
 
 	return node;
 }
 
-struct Code_Node* make_for(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_for(struct Code_Nodes* code_nodes,
                            struct Code_Node* begin,
                            struct Code_Node* condition,
                            struct Code_Node* cycle_end,
                            struct Code_Node* expression) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_FOR;
 
 	node->for_.begin = begin;
@@ -263,14 +383,17 @@ struct Code_Node* make_for(struct Code_Node_Array* code_node_array,
 	node->for_.cycle_end = cycle_end;
 	node->for_.expression = expression;
 
+	node->for_.broken = false;
+	node->for_.continued = false;
+
 	set_serial(node);
 
 	return node;
 }
 
-struct Code_Node* make_break(struct Code_Node_Array* code_node_array) {
+struct Code_Node* make_break(struct Code_Nodes* code_nodes) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_BREAK;
 
 	set_serial(node);
@@ -278,9 +401,9 @@ struct Code_Node* make_break(struct Code_Node_Array* code_node_array) {
 	return node;
 }
 
-struct Code_Node* make_continue(struct Code_Node_Array* code_node_array) {
+struct Code_Node* make_continue(struct Code_Nodes* code_nodes) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_CONTINUE;
 
 	set_serial(node);
@@ -288,10 +411,10 @@ struct Code_Node* make_continue(struct Code_Node_Array* code_node_array) {
 	return node;
 }
 
-struct Code_Node* make_minus(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_minus(struct Code_Nodes* code_nodes,
                              struct Code_Node* expression) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_MINUS;
 
 	node->minus.expression = expression;
@@ -301,10 +424,10 @@ struct Code_Node* make_minus(struct Code_Node_Array* code_node_array,
 	return node;
 }
 
-struct Code_Node* make_not(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_not(struct Code_Nodes* code_nodes,
                            struct Code_Node* expression) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_NOT;
 
 	node->not.expression = expression;
@@ -314,10 +437,10 @@ struct Code_Node* make_not(struct Code_Node_Array* code_node_array,
 	return node;
 }
 
-struct Code_Node* make_increment(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_increment(struct Code_Nodes* code_nodes,
                                  struct Code_Node* ident) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_INCREMENT;
 
 	node->increment.ident = ident;
@@ -327,10 +450,10 @@ struct Code_Node* make_increment(struct Code_Node_Array* code_node_array,
 	return node;
 }
 
-struct Code_Node* make_decrement(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_decrement(struct Code_Nodes* code_nodes,
                                  struct Code_Node* ident) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_DECREMENT;
 
 	node->decrement.ident = ident;
@@ -340,11 +463,11 @@ struct Code_Node* make_decrement(struct Code_Node_Array* code_node_array,
 	return node;
 }
 
-struct Code_Node* make_assign(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_assign(struct Code_Nodes* code_nodes,
                               struct Code_Node* ident,
                               struct Code_Node* expression) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_ASSIGN;
 
 	node->assign.ident = ident;
@@ -355,12 +478,12 @@ struct Code_Node* make_assign(struct Code_Node_Array* code_node_array,
 	return node;
 }
 
-struct Code_Node* make_opassign(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_opassign(struct Code_Nodes* code_nodes,
                                 struct Code_Node* ident,
                                 char* operation_type,
                                 struct Code_Node* expression) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_OPASSIGN;
 
 	node->opassign.ident = ident;
@@ -372,12 +495,12 @@ struct Code_Node* make_opassign(struct Code_Node_Array* code_node_array,
 	return node;
 }
 
-struct Code_Node* make_binary_operation(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_binary_operation(struct Code_Nodes* code_nodes,
                                         struct Code_Node* left,
                                         char* operation_type,
                                         struct Code_Node* right) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_BINARY_OPERATION;
 
 	node->binary_operation.left = left;
@@ -389,11 +512,11 @@ struct Code_Node* make_binary_operation(struct Code_Node_Array* code_node_array,
 	return node;
 }
 
-struct Code_Node* make_ident(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_ident(struct Code_Nodes* code_nodes,
                              char* name,
                              struct Code_Node* declaration) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_IDENT;
 
 	node->ident.name = name;
@@ -404,11 +527,12 @@ struct Code_Node* make_ident(struct Code_Node_Array* code_node_array,
 	return node;
 }
 
-struct Code_Node* make_literal_int(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_literal_int(struct Code_Nodes* code_nodes,
                                    int value) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_LITERAL_INT;
+    node->type = Native_Type_Int;
 
 	node->literal_int.value = value;
 
@@ -416,11 +540,12 @@ struct Code_Node* make_literal_int(struct Code_Node_Array* code_node_array,
 
 	return node;
 }
-struct Code_Node* make_literal_float(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_literal_float(struct Code_Nodes* code_nodes,
                                      float value) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_LITERAL_FLOAT;
+    node->type = Native_Type_Float;
 
 	node->literal_float.value = value;
 
@@ -428,11 +553,12 @@ struct Code_Node* make_literal_float(struct Code_Node_Array* code_node_array,
 
 	return node;
 }
-struct Code_Node* make_literal_bool(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_literal_bool(struct Code_Nodes* code_nodes,
                                     bool value) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_LITERAL_BOOL;
+    node->type = Native_Type_Bool;
 
 	node->literal_bool.value = value;
 
@@ -441,10 +567,10 @@ struct Code_Node* make_literal_bool(struct Code_Node_Array* code_node_array,
 	return node;
 }
 
-struct Code_Node* make_string(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_string(struct Code_Nodes* code_nodes,
                               char* pointer) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_STRING;
 
 	node->string_.pointer = pointer;
@@ -455,10 +581,10 @@ struct Code_Node* make_string(struct Code_Node_Array* code_node_array,
 	return node;
 }
 
-struct Code_Node* make_parens(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_parens(struct Code_Nodes* code_nodes,
                               struct Code_Node* expression) {
 
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_PARENS;
 
 	node->parens.expression = expression;
@@ -468,10 +594,10 @@ struct Code_Node* make_parens(struct Code_Node_Array* code_node_array,
 	return node;
 }
 
-struct Code_Node* make_native_code(struct Code_Node_Array* code_node_array,
+struct Code_Node* make_native_code(struct Code_Nodes* code_nodes,
                                    void* func_ptr) {
     
-	struct Code_Node* node = get_new_node_from_code_node_array(code_node_array);
+	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_NATIVE_CODE;
 
 	node->native_code.func_ptr = func_ptr;
@@ -682,34 +808,31 @@ struct Type_Info* make_type_info_void() {
 
 struct Infer_Data infer_data;
 void init_infer() {
-    infer_data.block_stack_length = 0;
-    infer_data.block_stack_capacity = 10;
-    infer_data.block_stack = malloc(sizeof(struct Code_Node*) * infer_data.block_stack_capacity);
-    // we don't resize yet
-}
-void init_infer_block_declarations(size_t index) {
-    struct Code_Node* block = infer_data.block_stack[index];
-    block->block.declarations = malloc(sizeof(struct Code_Block_Declarations));
-    array_init((struct Dynamic_Array*)block->block.declarations, sizeof(struct Code_Node*), 10);
+    infer_data.block_stack = malloc(sizeof(struct Code_Node_Array));
+    array_init((struct Dynamic_Array*)infer_data.block_stack, sizeof(struct Code_Node*), 10);
+    infer_data.last_block = NULL;
 }
 void infer_push_block(struct Code_Node* block) {
-    infer_data.block_stack[infer_data.block_stack_length] = block;
+    array_push((struct Dynamic_Array*)infer_data.block_stack, block);
+    infer_data.last_block = block;
     if (block->block.declarations == NULL) {
-        init_infer_block_declarations(infer_data.block_stack_length);
+        block->block.declarations = malloc(sizeof(struct Code_Node_Array));
+        array_init((struct Dynamic_Array*)block->block.declarations, sizeof(struct Code_Node*), 10);
     }
-    infer_data.block_stack_length += 1;
 }
 void infer_pop_block() {
-    infer_data.block_stack_length -= 1;
-}
-void infer_push_block_declaration(size_t index, struct Code_Node* decl) {
-    struct Code_Node* block = infer_data.block_stack[index];
-    array_push((struct Dynamic_Array*)block->block.declarations, decl);
+    array_pop((struct Dynamic_Array*)infer_data.block_stack);
+    if (infer_data.block_stack->length > 0) {
+        infer_data.last_block = infer_data.block_stack->first[infer_data.block_stack->length - 1];
+    }
+    else {
+        infer_data.last_block = NULL;
+    }
 }
 
 struct Code_Node* infer_decl_of_ident(struct Code_Node* ident) {
-    for (size_t i = infer_data.block_stack_length - 1; i >= 0; i -= 1) {
-        struct Code_Node* block = infer_data.block_stack[i];
+    for (size_t i = infer_data.block_stack->length - 1; i >= 0; i -= 1) {
+        struct Code_Node* block = infer_data.block_stack->first[i];
         for (size_t j = 0; j < block->block.declarations->length; j += 1) {
             struct Code_Node* decl = block->block.declarations->first[j];
             // printf("%s, %s\n", decl->declaration.ident->ident.name, ident->ident.name);
@@ -724,19 +847,32 @@ struct Code_Node* infer_decl_of_ident(struct Code_Node* ident) {
     return NULL;
 }
 struct Code_Node* infer(struct Code_Node* node) {
-    // printf("kind: %zu\n", node->kind);
+    // printf("infer kind: (%s)\n", code_kind_to_string(node->kind));
     switch (node->kind) {
         case CODE_KIND_BLOCK:{
             infer_push_block(node);
             for (size_t i = 0; i < node->block.statements->length; i += 1) {
+                infer_data.statement_index = i;
                 infer(node->block.statements->first[i]);
             }
             infer_pop_block();
             break;
         }
+        case CODE_KIND_PROCEDURE:{
+            // native code should not add declarations
+            if (node->procedure.block->kind == CODE_KIND_BLOCK) {
+                infer_push_block(node->procedure.block);
+                for (size_t i = 0; i < node->procedure.params->length; i += 1) {
+                    infer(node->procedure.params->first[i]);
+                }
+                infer_pop_block();
+                infer(node->procedure.block);
+            }
+            break;
+        }
         case CODE_KIND_DECLARATION:{
             // should error here when ident already declared in current scope
-            infer_push_block_declaration(infer_data.block_stack_length - 1, node);
+            array_push((struct Dynamic_Array*)infer_data.last_block->block.declarations, node);
             if (node->declaration.expression != NULL) {
                 infer(node->declaration.expression);
             }
@@ -776,6 +912,10 @@ struct Code_Node* infer(struct Code_Node* node) {
         case CODE_KIND_ARRAY_INDEX:{
             infer(node->array_index.array);
             infer(node->array_index.index);
+            if (node->array_index.index->type != Native_Type_Int) {
+                printf("only int type array index is currently allowed\n");
+                abort();
+            }
             node->type = node->array_index.array->type->array.elem_type;
             break;
         }
@@ -808,18 +948,6 @@ struct Code_Node* infer(struct Code_Node* node) {
             break;
         }
         case CODE_KIND_STRING:{
-            break;
-        }
-        case CODE_KIND_PROCEDURE:{
-            // native code should not add declarations
-            if (node->procedure.block->kind == CODE_KIND_BLOCK) {
-                infer_push_block(node->procedure.block);
-                for (size_t i = 0; i < node->procedure.params->length; i += 1) {
-                    infer(node->procedure.params->first[i]);
-                }
-                infer_pop_block();
-                infer(node->procedure.block);
-            }
             break;
         }
         case CODE_KIND_IF:{
@@ -968,24 +1096,24 @@ enum Operator_Precedence map_operator_to_precedence(char* operator) {
 }
 bool maybe_binary(enum Operator_Precedence prev_prec,
                   struct Token_Array* token_array,
-                  struct Code_Node_Array* code_node_array) {
+                  struct Code_Nodes* code_nodes) {
 
     enum Operator_Precedence curr_prec = map_operator_to_precedence(token_array->curr_token->str);
     if (curr_prec < prev_prec) {
-        struct Code_Node* left = code_node_array->last;
+        struct Code_Node* left = code_nodes->last;
         char* op = token_array->curr_token->str;
         token_array->curr_token++;
-        parse_rvalue_atom(token_array, code_node_array);
-        bool was_binary = maybe_binary(curr_prec, token_array, code_node_array);
-        struct Code_Node* right = code_node_array->last;
-        struct Code_Node* binop = make_binary_operation(code_node_array, left, op, right);
-        maybe_binary(prev_prec, token_array, code_node_array);
+        parse_rvalue_atom(token_array, code_nodes);
+        bool was_binary = maybe_binary(curr_prec, token_array, code_nodes);
+        struct Code_Node* right = code_nodes->last;
+        struct Code_Node* binop = make_binary_operation(code_nodes, left, op, right);
+        maybe_binary(prev_prec, token_array, code_nodes);
         return true;
     }
     return false;
 }
-void inject_stdlib(struct Code_Node_Array* code_node_array,
-                   struct Code_Block_Statements* statements) {
+void inject_stdlib(struct Code_Nodes* code_nodes,
+                   struct Code_Node_Array* statements) {
 
     // void* malloc(size_t num_bytes)
     struct Type_Info* malloc_return_type = make_type_info_ident("void*", Native_Type_Size_t);
@@ -995,15 +1123,15 @@ void inject_stdlib(struct Code_Node_Array* code_node_array,
     array_init((struct Dynamic_Array*)malloc_params, sizeof(struct Code_Node*), 1);
 
     struct Type_Info* num_bytes_type = make_type_info_ident("size_t", Native_Type_Size_t);
-    struct Code_Node* num_bytes_ident = make_ident(code_node_array, "num_bytes", NULL);
-    struct Code_Node* num_bytes_param = make_declaration(code_node_array, num_bytes_type, num_bytes_ident, NULL);
+    struct Code_Node* num_bytes_ident = make_ident(code_nodes, "num_bytes", NULL);
+    struct Code_Node* num_bytes_param = make_declaration(code_nodes, num_bytes_type, num_bytes_ident, NULL);
     
     array_push((struct Dynamic_Array*)malloc_params, num_bytes_param);
 
-    struct Code_Node* malloc_block = make_native_code(code_node_array, &malloc);
-    struct Code_Node* malloc_proc = make_procedure(code_node_array, malloc_params, malloc_has_varargs, malloc_return_type, malloc_block);
-    struct Code_Node* malloc_ident = make_ident(code_node_array, "malloc", NULL);
-    struct Code_Node* malloc_decl = make_declaration(code_node_array, NULL, malloc_ident, malloc_proc);
+    struct Code_Node* malloc_block = make_native_code(code_nodes, &malloc);
+    struct Code_Node* malloc_proc = make_procedure(code_nodes, malloc_params, malloc_has_varargs, malloc_return_type, malloc_block);
+    struct Code_Node* malloc_ident = make_ident(code_nodes, "malloc", NULL);
+    struct Code_Node* malloc_decl = make_declaration(code_nodes, NULL, malloc_ident, malloc_proc);
 
     array_push((struct Dynamic_Array*)statements, malloc_decl);
 
@@ -1015,15 +1143,15 @@ void inject_stdlib(struct Code_Node_Array* code_node_array,
     array_init((struct Dynamic_Array*)free_params, sizeof(struct Code_Node*), 1);
 
     struct Type_Info* ptr_type = make_type_info_ident("void*", Native_Type_Size_t);
-    struct Code_Node* ptr_ident = make_ident(code_node_array, "ptr", NULL);
-    struct Code_Node* ptr_param = make_declaration(code_node_array, ptr_type, ptr_ident, NULL);
+    struct Code_Node* ptr_ident = make_ident(code_nodes, "ptr", NULL);
+    struct Code_Node* ptr_param = make_declaration(code_nodes, ptr_type, ptr_ident, NULL);
 
     array_push((struct Dynamic_Array*)free_params, ptr_param);
 
-    struct Code_Node* free_block = make_native_code(code_node_array, &free);
-    struct Code_Node* free_proc = make_procedure(code_node_array, free_params, free_has_varargs, free_return_type, free_block);
-    struct Code_Node* free_ident = make_ident(code_node_array, "free", NULL);
-    struct Code_Node* free_decl = make_declaration(code_node_array, NULL, free_ident, free_proc);
+    struct Code_Node* free_block = make_native_code(code_nodes, &free);
+    struct Code_Node* free_proc = make_procedure(code_nodes, free_params, free_has_varargs, free_return_type, free_block);
+    struct Code_Node* free_ident = make_ident(code_nodes, "free", NULL);
+    struct Code_Node* free_decl = make_declaration(code_nodes, NULL, free_ident, free_proc);
 
     array_push((struct Dynamic_Array*)statements, free_decl);
     
@@ -1035,70 +1163,70 @@ void inject_stdlib(struct Code_Node_Array* code_node_array,
     array_init((struct Dynamic_Array*)printf_params, sizeof(struct Code_Node*), 1);
 
     struct Type_Info* fmt_type = make_type_info_ident("char*", Native_Type_Size_t);
-    struct Code_Node* fmt_ident = make_ident(code_node_array, "fmt", NULL);
-    struct Code_Node* fmt_param = make_declaration(code_node_array, fmt_type, fmt_ident, NULL);
+    struct Code_Node* fmt_ident = make_ident(code_nodes, "fmt", NULL);
+    struct Code_Node* fmt_param = make_declaration(code_nodes, fmt_type, fmt_ident, NULL);
 
     array_push((struct Dynamic_Array*)printf_params, fmt_param);
 
-    struct Code_Node* printf_block = make_native_code(code_node_array, &printf);
-    struct Code_Node* printf_proc = make_procedure(code_node_array, printf_params, printf_has_varargs, printf_return_type, printf_block);
+    struct Code_Node* printf_block = make_native_code(code_nodes, &printf);
+    struct Code_Node* printf_proc = make_procedure(code_nodes, printf_params, printf_has_varargs, printf_return_type, printf_block);
 
-    struct Code_Node* printf_ident = make_ident(code_node_array, "printf", NULL);
-    struct Code_Node* printf_decl = make_declaration(code_node_array, NULL, printf_ident, printf_proc);
+    struct Code_Node* printf_ident = make_ident(code_nodes, "printf", NULL);
+    struct Code_Node* printf_decl = make_declaration(code_nodes, NULL, printf_ident, printf_proc);
 
     array_push((struct Dynamic_Array*)statements, printf_decl);
 }
-struct Code_Node_Array* parse(struct Token_Array* token_array) {
-    struct Code_Node_Array* code_node_array = malloc(sizeof(struct Code_Node_Array));
-    array_init((struct Dynamic_Array*)code_node_array, sizeof(struct Code_Node), 1000);
+struct Code_Nodes* parse(struct Token_Array* token_array) {
+    struct Code_Nodes* code_nodes = malloc(sizeof(struct Code_Nodes));
+    array_init((struct Dynamic_Array*)code_nodes, sizeof(struct Code_Node), 1000);
     token_array->curr_token = token_array->first;
 
-    struct Code_Block_Statements* statements = malloc(sizeof(struct Code_Block_Statements));
+    struct Code_Node_Array* statements = malloc(sizeof(struct Code_Node_Array));
     array_init((struct Dynamic_Array*)statements, sizeof(struct Code_Node*), 10);
-    struct Code_Node* global_block = make_block(code_node_array, statements);
+    struct Code_Node* global_block = make_block(code_nodes, statements);
 
-    inject_stdlib(code_node_array, statements);
+    inject_stdlib(code_nodes, statements);
 
-    delimited(NULL, NULL, ";", &parse_statement, (struct Dynamic_Array*)statements, token_array, code_node_array);
-    code_node_array->first->block.is_transformed_block = true;
+    delimited(NULL, NULL, ";", &parse_statement, (struct Dynamic_Array*)statements, token_array, code_nodes);
+    code_nodes->first->block.is_transformed_block = true;
 
-    return code_node_array;
+    return code_nodes;
 }
 bool parse_statement(struct Token_Array* token_array,
-                     struct Code_Node_Array* code_node_array) {
+                     struct Code_Nodes* code_nodes) {
 
     // printf("stmt: %s\n", token_array->curr_token->str);
     struct Token* next_token = &token_array->curr_token[1];
     if (strcmp(token_array->curr_token->str, "{") == 0) {
-        return parse_block(token_array, code_node_array);
+        return parse_block(token_array, code_nodes);
     }
     else if (token_array->curr_token->kind == TOKEN_KIND_KEYWORD) {
         if (strcmp(token_array->curr_token->str, "if") == 0) {
-            return parse_if(token_array, code_node_array);
+            return parse_if(token_array, code_nodes);
         }
         else if (strcmp(token_array->curr_token->str, "else") == 0) {
-            return parse_else(token_array, code_node_array);
+            return parse_else(token_array, code_nodes);
         }
         else if (strcmp(token_array->curr_token->str, "while") == 0) {
-            return parse_while(token_array, code_node_array);
+            return parse_while(token_array, code_nodes);
         }
         else if (strcmp(token_array->curr_token->str, "do") == 0) {
-            return parse_do_while(token_array, code_node_array);
+            return parse_do_while(token_array, code_nodes);
         }
         else if (strcmp(token_array->curr_token->str, "for") == 0) {
-            return parse_for(token_array, code_node_array);
+            return parse_for(token_array, code_nodes);
         }
         else if (strcmp(token_array->curr_token->str, "continue") == 0) {
-            return parse_continue(token_array, code_node_array);
+            return parse_continue(token_array, code_nodes);
         }
         else if (strcmp(token_array->curr_token->str, "break") == 0) {
-            return parse_break(token_array, code_node_array);
+            return parse_break(token_array, code_nodes);
         }
         else if (strcmp(token_array->curr_token->str, "return") == 0) {
-            return parse_return(token_array, code_node_array);
+            return parse_return(token_array, code_nodes);
         }
         else if (strcmp(token_array->curr_token->str, "struct") == 0) {
-            return parse_struct_declaration(token_array, code_node_array);
+            return parse_struct_declaration(token_array, code_nodes);
         }
     }
     else if (token_array->curr_token->kind == TOKEN_KIND_IDENT) {
@@ -1107,31 +1235,31 @@ bool parse_statement(struct Token_Array* token_array,
         // statements other than declarations
         // that have a type on the left hand side
         // are errors but not handled yet
-        bool was_type = parse_type(token_array, code_node_array, &type);
+        bool was_type = parse_type(token_array, code_nodes, &type);
         next_token = &token_array->curr_token[1];
         if (was_type && token_array->curr_token->kind == TOKEN_KIND_IDENT) {
             if (next_token->str[0] == '(') {
-                return parse_procedure_declaration(token_array, code_node_array, type);
+                return parse_procedure_declaration(token_array, code_nodes, type);
             }
             else {
-                return parse_declaration_precomputed_type(token_array, code_node_array, type);
+                return parse_declaration_precomputed_type(token_array, code_nodes, type);
             }
         }
     }
-    bool was_lvalue = parse_lvalue(token_array, code_node_array);
+    bool was_lvalue = parse_lvalue(token_array, code_nodes);
     if (was_lvalue) {
         if (token_array->curr_token->kind == TOKEN_KIND_OP) {
             if (strcmp(token_array->curr_token->str, "++") == 0) {
-                return parse_increment(token_array, code_node_array);
+                return parse_increment(token_array, code_nodes);
             }
             else if (strcmp(token_array->curr_token->str, "--") == 0) {
-                return parse_decrement(token_array, code_node_array);
+                return parse_decrement(token_array, code_nodes);
             }
             else if (strcmp(token_array->curr_token->str, "=") == 0) {
-                return parse_assign(token_array, code_node_array);
+                return parse_assign(token_array, code_nodes);
             }
             else if (token_array->curr_token->str[strlen(token_array->curr_token->str)-1] == '=') {
-                return parse_opassign(token_array, code_node_array);
+                return parse_opassign(token_array, code_nodes);
             }
             else {
                 // actually, we have a problem
@@ -1143,56 +1271,56 @@ bool parse_statement(struct Token_Array* token_array,
         }
     }
     else {
-        return parse_rvalue(token_array, code_node_array);
+        return parse_rvalue(token_array, code_nodes);
     }
 }
 bool parse_rvalue_atom(struct Token_Array* token_array,
-                       struct Code_Node_Array* code_node_array) {
+                       struct Code_Nodes* code_nodes) {
 
     if (token_array->curr_token->kind == TOKEN_KIND_LITERAL) {
-        return parse_literal(token_array, code_node_array);
+        return parse_literal(token_array, code_nodes);
     }
     else if (token_array->curr_token->kind == TOKEN_KIND_STRING) {
-        return parse_string(token_array, code_node_array);
+        return parse_string(token_array, code_nodes);
     }
     else if (strcmp(token_array->curr_token->str, "&") == 0) {
-        return parse_reference(token_array, code_node_array);
+        return parse_reference(token_array, code_nodes);
     }
     else if (strcmp(token_array->curr_token->str, "true") == 0) {
-        make_literal_bool(code_node_array, true);
+        make_literal_bool(code_nodes, true);
         token_array->curr_token++;
         return true;
     }
     else if (strcmp(token_array->curr_token->str, "false") == 0) {
-        make_literal_bool(code_node_array, false);
+        make_literal_bool(code_nodes, false);
         token_array->curr_token++;
         return true;
     }
     else if (token_array->curr_token->str[0] == '(') {
         token_array->curr_token++;
-        parse_rvalue(token_array, code_node_array);
-        struct Code_Node* expression = code_node_array->last;
+        parse_rvalue(token_array, code_nodes);
+        struct Code_Node* expression = code_nodes->last;
         if (token_array->curr_token->str[0] == ')') {
             token_array->curr_token++;
-            make_parens(code_node_array, expression);
+            make_parens(code_nodes, expression);
             return true;
         }
         else abort();
     }
     else {
-        return parse_lvalue(token_array, code_node_array);
+        return parse_lvalue(token_array, code_nodes);
     }
 }
 bool parse_rvalue(struct Token_Array* token_array,
-                  struct Code_Node_Array* code_node_array) {
+                  struct Code_Nodes* code_nodes) {
 
     struct Token* prev_token = token_array->curr_token;
-    if (parse_rvalue_atom(token_array, code_node_array) == false) {
+    if (parse_rvalue_atom(token_array, code_nodes) == false) {
         return false;
     }
     enum Operator_Precedence prec = map_operator_to_precedence(token_array->curr_token->str);
     if (prec != OPERATOR_PRECEDENCE_NONE) {
-        maybe_binary(OPERATOR_PRECEDENCE_LAST, token_array, code_node_array);
+        maybe_binary(OPERATOR_PRECEDENCE_LAST, token_array, code_nodes);
         return true;
     }
     else {
@@ -1200,11 +1328,11 @@ bool parse_rvalue(struct Token_Array* token_array,
     }
 }
 bool parse_lvalue(struct Token_Array* token_array,
-                  struct Code_Node_Array* code_node_array) {
+                  struct Code_Nodes* code_nodes) {
 
     bool ret = false;
     if (token_array->curr_token->str[0] == '*') {
-        return parse_dereference(token_array, code_node_array);
+        return parse_dereference(token_array, code_nodes);
     }
     struct Token* prev_token = 0;
     struct Token* prev_token_2 = 0;
@@ -1212,7 +1340,7 @@ bool parse_lvalue(struct Token_Array* token_array,
         prev_token = token_array->curr_token;
         prev_token_2 = token_array->curr_token;
         
-        if (parse_ident(token_array, code_node_array)) {
+        if (parse_ident(token_array, code_nodes)) {
             ret = true;
         }
         else {
@@ -1220,7 +1348,7 @@ bool parse_lvalue(struct Token_Array* token_array,
         }
 
         prev_token_2 = token_array->curr_token;
-        if (ret && parse_call(token_array, code_node_array)) {
+        if (ret && parse_call(token_array, code_nodes)) {
             ret = true;
         }
         else {
@@ -1228,7 +1356,7 @@ bool parse_lvalue(struct Token_Array* token_array,
         }
 
         prev_token_2 = token_array->curr_token;
-        if (parse_array_index(token_array, code_node_array)) {
+        if (parse_array_index(token_array, code_nodes)) {
             ret = true;
         }
         else {
@@ -1236,7 +1364,7 @@ bool parse_lvalue(struct Token_Array* token_array,
         }
 
         prev_token_2 = token_array->curr_token;
-        if (parse_dot_operator(token_array, code_node_array)) {
+        if (parse_dot_operator(token_array, code_nodes)) {
             ret = true;
         }
         else {
@@ -1247,16 +1375,16 @@ bool parse_lvalue(struct Token_Array* token_array,
     return ret;
 }
 bool parse_call(struct Token_Array* token_array,
-                struct Code_Node_Array* code_node_array) {
+                struct Code_Nodes* code_nodes) {
 
     if (token_array->curr_token->str != NULL &&
         strcmp(token_array->curr_token->str, "(") == 0) {
         
-        struct Code_Node* ident = code_node_array->last;
+        struct Code_Node* ident = code_nodes->last;
         struct Code_Call_Args* args = malloc(sizeof(struct Code_Call_Args));
         array_init((struct Dynamic_Array*)args, sizeof(struct Code_Node*), 10);
-        delimited("(", ")", ",", &parse_rvalue, (struct Dynamic_Array*)args, token_array, code_node_array);
-        make_call(code_node_array, ident, args);
+        delimited("(", ")", ",", &parse_rvalue, (struct Dynamic_Array*)args, token_array, code_nodes);
+        make_call(code_nodes, ident, args);
         return true;
     }
     else {
@@ -1264,75 +1392,75 @@ bool parse_call(struct Token_Array* token_array,
     }
 }
 bool parse_literal(struct Token_Array* token_array,
-                   struct Code_Node_Array* code_node_array) {
+                   struct Code_Nodes* code_nodes) {
 
     if (is_one_of(token_array->curr_token->str, '.')) {
         float value = atof(token_array->curr_token->str);
-        make_literal_float(code_node_array, value);
+        make_literal_float(code_nodes, value);
     }
     else {
         int value = atoi(token_array->curr_token->str);
-        make_literal_int(code_node_array, value);
+        make_literal_int(code_nodes, value);
     }
     token_array->curr_token++;
     return true;
 }
 bool parse_string(struct Token_Array* token_array,
-                  struct Code_Node_Array* code_node_array) {
+                  struct Code_Nodes* code_nodes) {
 
-    make_string(code_node_array, token_array->curr_token->str);
+    make_string(code_nodes, token_array->curr_token->str);
     token_array->curr_token++;
     return true;
 }
 bool parse_reference(struct Token_Array* token_array,
-                     struct Code_Node_Array* code_node_array) {
+                     struct Code_Nodes* code_nodes) {
 
     token_array->curr_token++;
-    parse_lvalue(token_array, code_node_array);
-    struct Code_Node* expression = code_node_array->last;
-    make_reference(code_node_array, expression);
+    parse_lvalue(token_array, code_nodes);
+    struct Code_Node* expression = code_nodes->last;
+    make_reference(code_nodes, expression);
     return true;
 }
 bool parse_dereference(struct Token_Array* token_array,
-                       struct Code_Node_Array* code_node_array) {
+                       struct Code_Nodes* code_nodes) {
 
     char* str = token_array->curr_token->str;
     size_t levels = strlen(token_array->curr_token->str);
     token_array->curr_token++;
-    parse_lvalue(token_array, code_node_array);
-    struct Code_Node* node = code_node_array->last;
+    parse_lvalue(token_array, code_nodes);
+    struct Code_Node* node = code_nodes->last;
     for (size_t i = 0; i < levels; i += 1) {
         if (str[i] == '*') {
-            make_dereference(code_node_array, node);
-            node = code_node_array->last;
+            make_dereference(code_nodes, node);
+            node = code_nodes->last;
         }
         else abort();
     }
     return true;
 }
 bool parse_array_index(struct Token_Array* token_array,
-                       struct Code_Node_Array* code_node_array) {
+                       struct Code_Nodes* code_nodes) {
 
-    struct Code_Node* array = code_node_array->last;
+    struct Code_Node* array = code_nodes->last;
     if (token_array->curr_token->str[0] == '[') {
         token_array->curr_token++;
         bool had_index = false;
-        bool was_lvalue = parse_lvalue(token_array, code_node_array);
+        bool was_lvalue = parse_lvalue(token_array, code_nodes);
         if (was_lvalue) {
             had_index = true;
         }
         else {
-            bool was_rvalue = parse_rvalue(token_array, code_node_array);
+            bool was_rvalue = parse_rvalue(token_array, code_nodes);
             if (was_rvalue) {
                 had_index = true;
             }
             else abort();
         }
         if (had_index) {
-            struct Code_Node* index = code_node_array->last;
+            struct Code_Node* index = code_nodes->last;
             if (token_array->curr_token->str[0] == ']') {
                 token_array->curr_token++;
-                make_array_index(code_node_array, array, index);
+                make_array_index(code_nodes, array, index);
                 return true;
             }
             else abort();
@@ -1342,15 +1470,15 @@ bool parse_array_index(struct Token_Array* token_array,
     return false;
 }
 bool parse_dot_operator(struct Token_Array* token_array,
-                        struct Code_Node_Array* code_node_array) {
+                        struct Code_Nodes* code_nodes) {
 
-    struct Code_Node* left = code_node_array->last;
+    struct Code_Node* left = code_nodes->last;
     if (strcmp(token_array->curr_token->str, ".") == 0) {
         token_array->curr_token++;
-        bool has_right = parse_ident(token_array, code_node_array);
+        bool has_right = parse_ident(token_array, code_nodes);
         if (has_right) {
-            struct Code_Node* right = code_node_array->last;
-            make_dot_operator(code_node_array, left, right);
+            struct Code_Node* right = code_nodes->last;
+            make_dot_operator(code_nodes, left, right);
             return true;
         }
         else abort();
@@ -1358,12 +1486,12 @@ bool parse_dot_operator(struct Token_Array* token_array,
     return false;
 }
 bool parse_ident(struct Token_Array* token_array,
-                 struct Code_Node_Array* code_node_array) {
+                 struct Code_Nodes* code_nodes) {
 
     if (token_array->curr_token->kind == TOKEN_KIND_IDENT &&
         token_array->curr_token->str != NULL) {
 
-        make_ident(code_node_array, token_array->curr_token->str, NULL);
+        make_ident(code_nodes, token_array->curr_token->str, NULL);
 
         token_array->curr_token++;
         return true;
@@ -1373,52 +1501,69 @@ bool parse_ident(struct Token_Array* token_array,
     }
 }
 bool parse_if(struct Token_Array* token_array,
-              struct Code_Node_Array* code_node_array) {
+              struct Code_Nodes* code_nodes) {
 
     token_array->curr_token++;
     token_array->curr_token++;
-    parse_rvalue(token_array, code_node_array);
-    struct Code_Node* condition = code_node_array->last;
+    parse_rvalue(token_array, code_nodes);
+    struct Code_Node* condition = code_nodes->last;
     if (strcmp(token_array->curr_token->str, ")") == 0) {
         token_array->curr_token++;
     }
     else abort();
-    parse_statement(token_array, code_node_array);
-    struct Code_Node* expression = code_node_array->last;
-    make_if(code_node_array, condition, expression);
+    parse_statement(token_array, code_nodes);
+    struct Code_Node* expression = code_nodes->last;
+    make_if(code_nodes, condition, expression);
     return true;
 }
 bool parse_else(struct Token_Array* token_array,
-                struct Code_Node_Array* code_node_array) {
+                struct Code_Nodes* code_nodes) {
 
+    struct Code_Node* if_expr;
+    struct Code_Node* maybe_if = code_nodes->last;
+    if (maybe_if->kind == CODE_KIND_IF) {
+        if_expr = maybe_if;
+    }
+    else if (maybe_if->kind == CODE_KIND_ELSE &&
+             maybe_if->else_.expression->kind == CODE_KIND_IF) {
+
+        if_expr = maybe_if->else_.expression;
+    }
+    else {
+        printf("else statement does not follow an if statement\n");
+        abort();
+        return false;
+    }
     token_array->curr_token++;
-    parse_statement(token_array, code_node_array);
-    struct Code_Node* expression = code_node_array->last;
-    make_else(code_node_array, expression);
+    parse_statement(token_array, code_nodes);
+    struct Code_Node* expression = code_nodes->last;
+    struct Code_Node* else_expr = make_else(code_nodes, expression);
+    else_expr->else_.if_expr = if_expr;
+    if_expr->if_.else_expr = else_expr;
     return true;
 }
 bool parse_while(struct Token_Array* token_array,
-                 struct Code_Node_Array* code_node_array) {
+                 struct Code_Nodes* code_nodes) {
 
     token_array->curr_token++;
     token_array->curr_token++;
-    parse_rvalue(token_array, code_node_array);
-    struct Code_Node* condition = code_node_array->last;
+    parse_rvalue(token_array, code_nodes);
+    struct Code_Node* condition = code_nodes->last;
     if (token_array->curr_token->str[0] == ')') {
         token_array->curr_token++;
     }
     else abort();
-    parse_statement(token_array, code_node_array);
-    struct Code_Node* expression = code_node_array->last;
-    make_while(code_node_array, condition, expression);
+    parse_statement(token_array, code_nodes);
+    struct Code_Node* expression = code_nodes->last;
+    make_while(code_nodes, condition, expression);
     return true;
 }
 bool parse_do_while(struct Token_Array* token_array,
-                    struct Code_Node_Array* code_node_array) {
+                    struct Code_Nodes* code_nodes) {
 
     token_array->curr_token++;
-    parse_statement(token_array, code_node_array);
-    struct Code_Node* expression = code_node_array->last;
+    parse_statement(token_array, code_nodes);
+    struct Code_Node* expression = code_nodes->last;
     if (strcmp(token_array->curr_token->str, "while") == 0) {
         token_array->curr_token++;
     }
@@ -1427,18 +1572,18 @@ bool parse_do_while(struct Token_Array* token_array,
         token_array->curr_token++;
     }
     else abort();
-    parse_rvalue(token_array, code_node_array);
-    struct Code_Node* condition = code_node_array->last;
+    parse_rvalue(token_array, code_nodes);
+    struct Code_Node* condition = code_nodes->last;
     if (token_array->curr_token->str[0] == ')') {
         token_array->curr_token++;
     }
     else abort();
-    make_do_while(code_node_array, condition, expression);
+    make_do_while(code_nodes, condition, expression);
     return true;
 }
 #define DEBUG_FOR false
 bool parse_for(struct Token_Array* token_array,
-               struct Code_Node_Array* code_node_array) {
+               struct Code_Nodes* code_nodes) {
 
     struct Code_Node* begin = NULL;
     struct Code_Node* condition = NULL;
@@ -1456,12 +1601,12 @@ bool parse_for(struct Token_Array* token_array,
     printf("for begin\n");
     #endif
     if (token_array->curr_token->str[0] != ';') {
-        bool was_stmt = parse_statement(token_array, code_node_array);
+        bool was_stmt = parse_statement(token_array, code_nodes);
         if (was_stmt) {
             #if DEBUG_FOR
             printf("for begin true\n");
             #endif
-            begin = code_node_array->last;
+            begin = code_nodes->last;
             if (token_array->curr_token->str[0] == ';') {
                 token_array->curr_token++;
             }
@@ -1479,12 +1624,12 @@ bool parse_for(struct Token_Array* token_array,
     printf("for cond\n");
     #endif
     if (token_array->curr_token->str[0] != ';') {
-        bool was_rvalue = parse_rvalue(token_array, code_node_array);
+        bool was_rvalue = parse_rvalue(token_array, code_nodes);
         if (was_rvalue) {
             #if DEBUG_FOR
             printf("for cond true\n");
             #endif
-            condition = code_node_array->last;
+            condition = code_nodes->last;
             if (token_array->curr_token->str[0] == ';') {
                 token_array->curr_token++;
             }
@@ -1502,12 +1647,12 @@ bool parse_for(struct Token_Array* token_array,
     printf("for end\n");
     #endif
     if (token_array->curr_token->str[0] != ')') {
-        bool was_stmt = parse_statement(token_array, code_node_array);
+        bool was_stmt = parse_statement(token_array, code_nodes);
         if (was_stmt) {
             #if DEBUG_FOR
             printf("for end true\n");
             #endif
-            cycle_end = code_node_array->last;
+            cycle_end = code_nodes->last;
         }
         else abort();
     }
@@ -1526,12 +1671,12 @@ bool parse_for(struct Token_Array* token_array,
     #if DEBUG_FOR
     printf("for expr\n");
     #endif
-    bool was_stmt = parse_statement(token_array, code_node_array);
+    bool was_stmt = parse_statement(token_array, code_nodes);
     if (was_stmt) {
         #if DEBUG_FOR
         printf("for expr true\n");
         #endif
-        expression = code_node_array->last;
+        expression = code_nodes->last;
     }
     else {
         #if DEBUG_FOR
@@ -1539,130 +1684,130 @@ bool parse_for(struct Token_Array* token_array,
         #endif
         abort();
     }
-    make_for(code_node_array, begin, condition, cycle_end, expression);
+    make_for(code_nodes, begin, condition, cycle_end, expression);
     return true;
 }
 bool parse_continue(struct Token_Array* token_array,
-                    struct Code_Node_Array* code_node_array) {
+                    struct Code_Nodes* code_nodes) {
 
     token_array->curr_token++;
-    make_continue(code_node_array);
+    make_continue(code_nodes);
     return true;
 }
 bool parse_break(struct Token_Array* token_array,
-                 struct Code_Node_Array* code_node_array) {
+                 struct Code_Nodes* code_nodes) {
 
     token_array->curr_token++;
-    make_break(code_node_array);
+    make_break(code_nodes);
     return true;
 }
 bool parse_return(struct Token_Array* token_array,
-                  struct Code_Node_Array* code_node_array) {
+                  struct Code_Nodes* code_nodes) {
 
     token_array->curr_token++;
     struct Code_Node* expression = NULL;
     if (token_array->curr_token->str[0] != ';') {
-        parse_rvalue(token_array, code_node_array);
-        expression = code_node_array->last;
+        parse_rvalue(token_array, code_nodes);
+        expression = code_nodes->last;
     }
-    make_return(code_node_array, expression);
+    make_return(code_nodes, expression);
     return true;
 }
 bool parse_block(struct Token_Array* token_array,
-                 struct Code_Node_Array* code_node_array) {
+                 struct Code_Nodes* code_nodes) {
 
-    struct Code_Block_Statements* statements = malloc(sizeof(struct Code_Block_Statements));
+    struct Code_Node_Array* statements = malloc(sizeof(struct Code_Node_Array));
     array_init((struct Dynamic_Array*)statements, sizeof(struct Code_Node*), 10);
-    delimited("{", "}", ";", &parse_statement, (struct Dynamic_Array*)statements, token_array, code_node_array);
-    make_block(code_node_array, statements);
+    delimited("{", "}", ";", &parse_statement, (struct Dynamic_Array*)statements, token_array, code_nodes);
+    make_block(code_nodes, statements);
     return true;
 }
 bool parse_increment(struct Token_Array* token_array,
-                     struct Code_Node_Array* code_node_array) {
+                     struct Code_Nodes* code_nodes) {
 
-    struct Code_Node* left = code_node_array->last;
+    struct Code_Node* left = code_nodes->last;
     token_array->curr_token++;
-    make_increment(code_node_array, left);
+    make_increment(code_nodes, left);
     return true;
 }
 bool parse_decrement(struct Token_Array* token_array,
-                     struct Code_Node_Array* code_node_array) {
+                     struct Code_Nodes* code_nodes) {
 
-    struct Code_Node* left = code_node_array->last;
+    struct Code_Node* left = code_nodes->last;
     token_array->curr_token++;
-    make_decrement(code_node_array, left);
+    make_decrement(code_nodes, left);
     return true;
 }
 bool parse_assign(struct Token_Array* token_array,
-                  struct Code_Node_Array* code_node_array) {
+                  struct Code_Nodes* code_nodes) {
 
-    struct Code_Node* left = code_node_array->last;
+    struct Code_Node* left = code_nodes->last;
     token_array->curr_token++;
-    parse_rvalue(token_array, code_node_array);
-    struct Code_Node* right = code_node_array->last;
-    make_assign(code_node_array, left, right);
+    parse_rvalue(token_array, code_nodes);
+    struct Code_Node* right = code_nodes->last;
+    make_assign(code_nodes, left, right);
     return true;
 }
 bool parse_opassign(struct Token_Array* token_array,
-                    struct Code_Node_Array* code_node_array) {
+                    struct Code_Nodes* code_nodes) {
 
-    struct Code_Node* ident = code_node_array->last;
+    struct Code_Node* ident = code_nodes->last;
     size_t op_length = strlen(token_array->curr_token->str) - 1;
     char* operation_type = malloc(sizeof(char) * op_length);
     memcpy(operation_type, token_array->curr_token->str, op_length);
     operation_type[op_length] = '\0';
     token_array->curr_token++;
-    parse_rvalue(token_array, code_node_array);
-    struct Code_Node* expr = code_node_array->last;
-    make_opassign(code_node_array, ident, operation_type, expr);
+    parse_rvalue(token_array, code_nodes);
+    struct Code_Node* expr = code_nodes->last;
+    make_opassign(code_nodes, ident, operation_type, expr);
     return true;
 }
 bool parse_procedure_declaration(struct Token_Array* token_array,
-                                 struct Code_Node_Array* code_node_array,
+                                 struct Code_Nodes* code_nodes,
                                  struct Type_Info* return_type) {
 
-    parse_ident(token_array, code_node_array);
-    struct Code_Node* ident = code_node_array->last;
+    parse_ident(token_array, code_nodes);
+    struct Code_Node* ident = code_nodes->last;
     token_array->curr_token++;
     struct Code_Procedure_Params* params = malloc(sizeof(struct Code_Procedure_Params));
     array_init((struct Dynamic_Array*)params, sizeof(struct Code_Node*), 10);
-    delimited("(", ")", ",", &parse_param, (struct Dynamic_Array*)params, token_array, code_node_array);
+    delimited("(", ")", ",", &parse_param, (struct Dynamic_Array*)params, token_array, code_nodes);
     bool has_varargs = false;
     if (strcmp(token_array->curr_token->str, "...") == 0) {
         has_varargs = true;
         token_array->curr_token++;
     }
     token_array->curr_token++;
-    parse_block(token_array, code_node_array);
-    struct Code_Node* block = code_node_array->last;
-    make_procedure(code_node_array, params, has_varargs, return_type, block);
-    struct Code_Node* proc = code_node_array->last;
+    parse_block(token_array, code_nodes);
+    struct Code_Node* block = code_nodes->last;
+    make_procedure(code_nodes, params, has_varargs, return_type, block);
+    struct Code_Node* proc = code_nodes->last;
     // @Incomplete
     // should have function pointer type
-    make_declaration(code_node_array, NULL, ident, proc);
+    make_declaration(code_nodes, NULL, ident, proc);
     return true;
 }
 bool parse_type(struct Token_Array* token_array,
-                struct Code_Node_Array* code_node_array,
+                struct Code_Nodes* code_nodes,
                 struct Type_Info** out_type) {
 
-    struct Code_Node* prev_node = code_node_array->last;
-    size_t prev_length = code_node_array->length;
+    struct Code_Node* prev_node = code_nodes->last;
+    size_t prev_length = code_nodes->length;
     struct Token* prev_token = token_array->curr_token;
 
-    bool was_ident = parse_ident(token_array, code_node_array);
+    bool was_ident = parse_ident(token_array, code_nodes);
     if (was_ident == false) {
         return false;
     }
-    char* ident_name = code_node_array->last->ident.name;
-    code_node_array->length -= 1;
-    code_node_array->last--;
+    char* ident_name = code_nodes->last->ident.name;
+    code_nodes->length -= 1;
+    code_nodes->last--;
     struct Type_Info* prev_type = map_name_to_type(ident_name);
     if (prev_type == NULL) {
         // @Audit
         // does this ever happen?
-        code_node_array->last = prev_node;
-        code_node_array->length = prev_length;
+        code_nodes->last = prev_node;
+        code_nodes->length = prev_length;
         token_array->curr_token = prev_token;
         return false;
     }
@@ -1734,55 +1879,55 @@ bool parse_pointer_type(struct Token_Array* token_array,
     }
 }
 bool parse_param(struct Token_Array* token_array,
-                 struct Code_Node_Array* code_node_array) {
+                 struct Code_Nodes* code_nodes) {
 
     // varargs
     if (strcmp(token_array->curr_token->str, "...") == 0) {
         return false;
     }
     struct Type_Info* type;
-    parse_type(token_array, code_node_array, &type);
-    return parse_declaration_precomputed_type(token_array, code_node_array, type);
+    parse_type(token_array, code_nodes, &type);
+    return parse_declaration_precomputed_type(token_array, code_nodes, type);
 }
 bool parse_declaration(struct Token_Array* token_array,
-                       struct Code_Node_Array* code_node_array) {
+                       struct Code_Nodes* code_nodes) {
 
     struct Type_Info* type;
-    parse_type(token_array, code_node_array, &type);
-    return parse_declaration_precomputed_type(token_array, code_node_array, type);
+    parse_type(token_array, code_nodes, &type);
+    return parse_declaration_precomputed_type(token_array, code_nodes, type);
 }
 bool parse_declaration_precomputed_type(struct Token_Array* token_array,
-                                        struct Code_Node_Array* code_node_array,
+                                        struct Code_Nodes* code_nodes,
                                         struct Type_Info* type) {
 
-    bool was_ident = parse_ident(token_array, code_node_array);
+    bool was_ident = parse_ident(token_array, code_nodes);
     if (!was_ident) {
         abort();
         return false;
     }
-    struct Code_Node* ident = code_node_array->last;
+    struct Code_Node* ident = code_nodes->last;
     struct Code_Node* expression;
     if (strcmp(token_array->curr_token->str, "=") == 0) {
         token_array->curr_token++;
-        parse_rvalue(token_array, code_node_array);
-        expression = code_node_array->last;
+        parse_rvalue(token_array, code_nodes);
+        expression = code_nodes->last;
     }
-    make_declaration(code_node_array, type, ident, expression);
+    make_declaration(code_nodes, type, ident, expression);
     return true;
 }
 bool parse_struct_declaration(struct Token_Array* token_array,
-                              struct Code_Node_Array* code_node_array) {
+                              struct Code_Nodes* code_nodes) {
 
     token_array->curr_token++;
-    parse_ident(token_array, code_node_array);
-    struct Code_Node* ident = code_node_array->last;
+    parse_ident(token_array, code_nodes);
+    struct Code_Node* ident = code_nodes->last;
     struct Type_Info* type = make_type_info_struct_dummy();
     add_user_type(ident->ident.name, type);
-    parse_block(token_array, code_node_array);
-    struct Code_Node* block = code_node_array->last;
-    struct Code_Node* expression = make_struct(code_node_array, block);
+    parse_block(token_array, code_nodes);
+    struct Code_Node* block = code_nodes->last;
+    struct Code_Node* expression = make_struct(code_nodes, block);
     expression->type = type;
-    make_declaration(code_node_array, type, ident, expression);
+    make_declaration(code_nodes, type, ident, expression);
     return true;
 }
 #define DEBUG_DELIM false
@@ -1790,10 +1935,10 @@ bool parse_struct_declaration(struct Token_Array* token_array,
 int delim = 0;
 #endif
 bool delimited(char* start, char* stop, char* separator,
-               bool (*elem_func)(struct Token_Array*, struct Code_Node_Array*),
+               bool (*elem_func)(struct Token_Array*, struct Code_Nodes*),
                struct Dynamic_Array* results,
                struct Token_Array* token_array,
-               struct Code_Node_Array* code_node_array) {
+               struct Code_Nodes* code_nodes) {
 
     #if DEBUG_DELIM
     printf("start delim %d\n", delim);
@@ -1835,12 +1980,12 @@ bool delimited(char* start, char* stop, char* separator,
             #if DEBUG_DELIM
             printf("delim: %d, %s\n", token_array->curr_token->kind, token_array->curr_token->str);
             #endif
-            bool was_elem = elem_func(token_array, code_node_array);
+            bool was_elem = elem_func(token_array, code_nodes);
             if (!was_elem) {
                 break;
             }
             else {
-                array_push(results, code_node_array->last);
+                array_push(results, code_nodes->last);
             }
         }
         
@@ -1863,36 +2008,27 @@ bool delimited(char* start, char* stop, char* separator,
     return true;
 }
 
-struct Code_Node* get_new_node_from_code_node_array(struct Code_Node_Array* code_node_array) {
+struct Code_Node* get_new_code_node(struct Code_Nodes* code_nodes) {
 
-    /*
-    code_node_array->length += 1;
+    bool was_realloc = array_next((struct Dynamic_Array*)code_nodes);
 
-    // @Audit
-    // @Realloc
-    // might have to fix pointers for the entire tree
-    if (code_node_array->length == code_node_array->capacity) {
-        code_node_array->capacity *= 2;
-        struct Code_Node* before_first = code_node_array->first;
-        code_node_array->first = realloc(code_node_array->first, sizeof(struct Code_Node) * code_node_array->capacity);
-        struct Code_Node* after_first = code_node_array->first;
-        struct Code_Node* before_last = code_node_array->last;
-        code_node_array->last = &(code_node_array->first[code_node_array->length - 2]);
-        struct Code_Node* after_last = code_node_array->last;
-        printf("diff first: %ld\n", (long)after_first - (long)before_first);
-        printf("diff last: %ld\n", (long)after_last - (long)before_last);
-    }
+    // if realloc, we need to fix pointers using a diff
 
-    code_node_array->last++;
-    */
+    struct Code_Node* node = code_nodes->last;
 
-    array_next((struct Dynamic_Array*)code_node_array);
+    node->type = NULL;
 
-    code_node_array->last->type = NULL;
-    code_node_array->last->transformed = NULL;
-    code_node_array->last->result = NULL;
+    node->was_run = false;
+    node->is_lhs = false;
+    node->execution_index = 0;
+    node->result = NULL;
+    node->transformed = NULL;
 
-    return code_node_array->last;
+    node->demands_expand = false;
+    node->should_expand = false;
+    node->str = NULL;
+
+    return node;
 }
 
 struct Token_Array* tokenize(char* input) {

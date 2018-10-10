@@ -9,6 +9,8 @@
 #include <EGL/egl.h>
 
 #include "parser.h"
+#include "run.h"
+#include "debugger.h"
 #include "stb_truetype.h"
 
 EMSCRIPTEN_WEBGL_CONTEXT_HANDLE debugger_context;
@@ -32,23 +34,18 @@ struct Render_Data {
 
     GLfloat* fg_color;
     GLfloat* bg_color;
-
-    GLfloat* hilite_literal_fg_color;
-    GLfloat* hilite_string_fg_color;
-    GLfloat* hilite_ident_fg_color;
-    GLfloat* hilite_type_fg_color;
-    GLfloat* hilite_proc_fg_color;
-    GLfloat* hilite_return_fg_color;
-    GLfloat* hilite_keyword_fg_color;
-    GLfloat* hilite_op_fg_color;
-    GLfloat* hilite_comment_fg_color;
+    GLfloat* cursor_color;
 
     size_t bg_coords_length;
     size_t bg_coords_capacity;
     GLfloat* bg_coords;
     GLfloat* bg_colors;
+
+    float mark_start_xpos;
+    float mark_start_ypos;
+    size_t block_depth;
 };
-struct Render_Data* my_render_data;
+struct Render_Data my_render_data;
 
 struct Quad_Program {
     GLuint program_id;
@@ -104,6 +101,9 @@ void render_type(struct Type_Info* type,
 void render_indent(struct Render_Data* render_data);
 void render_space(struct Render_Data* render_data);
 void render_newline(struct Render_Data* render_data);
+
+void mark_background_start(struct Render_Data* render_data, GLfloat* bg_color);
+void mark_background_end(struct Render_Data* render_data);
 
 void convert_screen_coords_to_view_coords(float x, float y,
                                           float width, float height,
