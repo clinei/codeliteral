@@ -8,10 +8,12 @@
 #include <GLES2/gl2.h>
 #include <EGL/egl.h>
 
+#include "stb_truetype.h"
+
+#include "util.h"
 #include "parser.h"
 #include "run.h"
-#include "debugger.h"
-#include "stb_truetype.h"
+#include "interaction.h"
 
 EMSCRIPTEN_WEBGL_CONTEXT_HANDLE debugger_context;
 
@@ -26,8 +28,8 @@ struct Lines_Array {
     size_t length;
     size_t capacity;
     size_t element_size;
-    struct Indices_Array** first;
-    struct Indices_Array** last;
+    struct Indices_Array* first;
+    struct Indices_Array* last;
 };
 struct Render_Data {
     struct Atlas* font_atlas;
@@ -61,6 +63,7 @@ struct Render_Data {
 
     struct Lines_Array* lines;
     size_t line_index;
+    size_t cursor_line;
 };
 struct Render_Data my_render_data;
 

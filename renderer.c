@@ -1,5 +1,7 @@
 #include "renderer.h"
 
+#include "debug.h"
+
 #define FONT_BYTE_COUNT 290816
 #define CHAR_COUNT 96
 
@@ -40,14 +42,15 @@ void init_renderer() {
     // we reuse vertex indices
 
     my_render_data.lines = malloc(sizeof(struct Lines_Array));
-    array_init((struct Dynamic_Array*)my_render_data.lines, sizeof(struct Indices_Array*), 100);
+    array_init((struct Dynamic_Array*)my_render_data.lines, sizeof(struct Indices_Array), 100);
 
     // two because first newline needs something to clear
     for (size_t i = 0; i < 2; i += 1) {
-        struct Indices_Array* indices = malloc(sizeof(struct Indices_Array));
-        array_init((struct Dynamic_Array*)indices, sizeof(size_t), 10);
-        array_push((struct Dynamic_Array*)my_render_data.lines, &indices);
+        array_next((struct Dynamic_Array*)(my_render_data.lines));
+        array_init((struct Dynamic_Array*)(my_render_data.lines->last), sizeof(size_t), 10);
     }
+
+    my_render_data.cursor_line = 0;
 }
 
 void init_gl() {
@@ -330,7 +333,7 @@ void find_expanded_nodes(struct Code_Node* node) {
 
 void render(struct Code_Node* node) {
     // printf("cursor kind: (%s)\n", code_kind_to_string(interaction_data.cursor->kind));
-    printf("-----new frame\n");
+    // printf("-----new frame\n");
 
     GLfloat white[4] =        { 230 / 255.0f, 230 / 255.0f, 230 / 255.0f, 1 };
     GLfloat clear_color[4] =  { 37 / 255.0f, 37 / 255.0f, 37 / 255.0f, 1 };
@@ -354,7 +357,7 @@ void render(struct Code_Node* node) {
 
     find_expanded_nodes(node);
 
-    array_clear((struct Dynamic_Array*)(my_render_data.lines->first[0]));
+    array_clear((struct Dynamic_Array*)(my_render_data.lines->first));
     my_render_data.line_index = 0;
 
     render_node(node, &my_render_data);
@@ -418,26 +421,39 @@ void render_node(struct Code_Node* node,
     }
 
     if (node == interaction_data.cursor) {
+        render_data->cursor_line = render_data->line_index;
         mark_background_start(render_data, render_data->cursor_color);
     }
 
+    printf("render_node: (%s)\n", code_kind_to_string(node->kind));
+
     if (node->is_on_execution_stack) {
-        struct Indices_Array* indices = render_data->lines->first[render_data->line_index];
-        // struct Indices_Array* indices = render_data->lines->first[0];
-        // struct Indices_Array* indices = render_data->lines->first[1];
-        printf("line index: %zu\n", render_data->line_index);
-        printf("exec index: %zu\n", node->execution_index);
-        printf("indices: %zu\n", indices);
-        printf("length: %zu\n", indices->length);
-        printf("before size: %zu\n", indices->element_size);
+        // @Debug
+        char* gets_corrupted = get_gets_corrupted();
+        struct Indices_Array* indices = render_data->lines->first + render_data->line_index;
+        void* index_ptr = indices->last;
+        printf("index ptr: %zu\n", index_ptr);
+        printf("corrupted: %zu\n", gets_corrupted);
+        if (index_ptr == gets_corrupted) {
+            printf("right on the spot!\n");
+            abort();
+        }
+        else if (index_ptr < gets_corrupted && index_ptr + 40 > gets_corrupted) {
+            printf("not aligned\n");
+            // abort();
+        }
+        bool bad = run_data.execution_stack->first[2]->ident.name[0] < 32;
+        if (bad) {
+            printf("bad before\n");
+            abort();
+        }
         array_push((struct Dynamic_Array*)indices, &(node->execution_index));
-        printf("after size: %zu\n", indices->element_size);
-        if (indices->element_size != 4) {
+        bad = run_data.execution_stack->first[2]->ident.name[0] < 32;
+        if (bad) {
+            printf("bad after\n");
             abort();
         }
     }
-
-    // printf("render_node: (%s)\n", code_kind_to_string(node->kind));
 
     switch (node->kind) {
         case CODE_KIND_IF:{
@@ -1212,15 +1228,14 @@ void render_newline(struct Render_Data* render_data) {
     
     render_data->line_index += 1;
     if (render_data->line_index >= render_data->lines->length) {
-        printf("adding new index arrays\n");
+        printf("adding new indices arrays\n");
         size_t new_capacity = render_data->line_index * 2;
         while (render_data->lines->length < new_capacity) {
-            struct Indices_Array* indices = malloc(sizeof(struct Indices_Array));
-            array_init((struct Dynamic_Array*)indices, sizeof(size_t), 10);
-            array_push((struct Dynamic_Array*)render_data->lines, &indices);
+            array_next((struct Dynamic_Array*)(render_data->lines));
+            array_init((struct Dynamic_Array*)(render_data->lines->last), sizeof(size_t), 10);
         }
     }
-    array_clear((struct Dynamic_Array*)(render_data->lines->first[render_data->line_index]));
+    array_clear((struct Dynamic_Array*)(render_data->lines->first + render_data->line_index));
 }
 
 void convert_screen_coords_to_view_coords(float x, float y,

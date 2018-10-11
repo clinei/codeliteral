@@ -7,19 +7,13 @@
 
 #include "util.h"
 #include "parser.h"
-
-struct Interaction_Data {
-    bool show_values;
-    bool show_changes;
-    bool show_parens;
-    bool expand_all;
-    bool show_elements;
-    size_t execution_index;
-    struct Code_Node* cursor;
-};
-struct Interaction_Data interaction_data;
+#include "run.h"
+#include "interaction.h"
+#include "renderer.h"
 
 EM_BOOL keydown(int event_type, const struct EmscriptenKeyboardEvent* event, void* user_data);
+
+void move_up_line();
 
 EMSCRIPTEN_KEEPALIVE
 int init(int start_width, int start_height);

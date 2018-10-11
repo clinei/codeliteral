@@ -1,7 +1,9 @@
+#include "util.h"
+
 #define STB_TRUETYPE_IMPLEMENTATION
 #include "stb_truetype.h"
 
-#include "util.h"
+#include "debug.h"
 
 #define DEBUG_DYNAMIC_ARRAY false
 #define DEBUG_DYNAMIC_ARRAY_INIT true
@@ -29,6 +31,11 @@ bool array_push(struct Dynamic_Array* array, void* element) {
     #endif
     bool did_realloc = array_maybe_realloc(array);
     array->last += array->element_size;
+    void* gets_corrupted = get_gets_corrupted();
+    if (array->last <= gets_corrupted && (array->last + array->element_size) >= gets_corrupted) {
+        printf("got corrupted!\n");
+        abort();
+    }
     memcpy(array->last, element, array->element_size);
     return did_realloc;
 }
@@ -58,8 +65,9 @@ void array_clear(struct Dynamic_Array* array) {
 bool array_maybe_realloc(struct Dynamic_Array* array) {
     if (array->length == array->capacity) {
         array->capacity *= 2;
-        #if DEBUG_DYNAMIC_ARRAY && DEBUG_DYNAMIC_ARRAY_REALLOC
+        #if DEBUG_DYNAMIC_ARRAY && DEBUG_DYNAMIC_ARRAY_REALLOC || true
         void* first_before = array->first;
+        printf("dynamic array realloc\n");
         printf("capacity: %zu\n", array->capacity);
         printf("first before: %zu\n", (size_t)first_before);
         #endif

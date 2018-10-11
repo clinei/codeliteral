@@ -1,14 +1,11 @@
 #include "debugger.h"
-#include "util.h"
-#include "parser.h"
-#include "run.h"
-#include "renderer.h"
+
+#include "debug.h"
 
 bool initialized = false;
 
 char* my_text;
 struct Code_Nodes* my_code_nodes;
-struct Code_Node* main_call = NULL;
 
 EM_BOOL keydown(int event_type, const struct EmscriptenKeyboardEvent* event, void* user_data) {
     EM_BOOL consumed = false;
@@ -52,7 +49,19 @@ EM_BOOL keydown(int event_type, const struct EmscriptenKeyboardEvent* event, voi
         }
         consumed = true;
     }
+    else if (strcmp(event->key, "w") == 0) {
+        move_up_line();
+        consumed = true;
+    }
     return consumed;
+}
+
+void move_up_line() {
+    if (my_render_data.cursor_line > 0) {
+        printf("moving up a line\n");
+        size_t execution_index = my_render_data.lines->first[my_render_data.cursor_line].first[0];
+        interaction_data.cursor = run_data.execution_stack->first[execution_index];
+    }
 }
 
 EMSCRIPTEN_KEEPALIVE
@@ -77,27 +86,75 @@ int init(int start_width, int start_height) {
 
     struct Render_Data* render_data = &my_render_data;
 
-    size_t execution_index = 42;
+    size_t execution_index = 100;
+    
+    /*
+    allocate 2 indices arrays
 
-    if (true) {
-        for (size_t j = 0; j < 10; j += 1) {
-            printf("-----new frame\n");
-            array_clear((struct Dynamic_Array*)(my_render_data.lines->first[0]));
+    bug happens on frame 7 when nodes per line is 2
+    and on frame 14 when nodes per line is 1
+
+    must have at least 2 lines, indices array pointer changes
+    */
+
+    size_t num_frames = 0;
+    size_t num_lines_per_frame = 0;
+    size_t num_nodes_per_line = 0;
+
+    size_t case_id = 0;
+    switch (case_id) {
+        case 0: {
+            num_frames = 8;
+            num_lines_per_frame = 2;
+            num_nodes_per_line = 2;
+            break;
+        }
+        case 1: {
+            num_frames = 15;
+            num_lines_per_frame = 2;
+            num_nodes_per_line = 1;
+            break;
+        }
+        case 2: {
+            num_frames = 15;
+            num_lines_per_frame = 20;
+            num_nodes_per_line = 1;
+            // element_size becomes node 20
+            break;
+        }
+        case 3: {
+            num_frames = 15;
+            num_lines_per_frame = 20;
+            num_nodes_per_line = 2;
+            break;
+        }
+        default:{
+            break;
+        }
+    }
+
+    if (false) {
+        for (size_t j = 0; j < num_frames; j += 1) {
+            printf("-----frame %zu\n", j);
+            array_clear((struct Dynamic_Array*)(my_render_data.lines->first));
             render_data->line_index = 0;
-            for (size_t i = 0; i < 4; i += 1) {
-                for (size_t k = 0; k < 2; k += 1) {
-                    printf("---new node\n");
-                    struct Indices_Array* indices = render_data->lines->first[render_data->line_index];
+            for (size_t i = 0; i < num_lines_per_frame; i += 1) {
+            printf("-----line %zu\n", i);
+                for (size_t k = 0; k < num_nodes_per_line; k += 1) {
+                    printf("---node %zu\n", k);
+                    struct Indices_Array* indices = render_data->lines->first + render_data->line_index;
                     printf("line index: %zu\n", render_data->line_index);
                     printf("indices: %zu\n", indices);
                     printf("length: %zu\n", indices->length);
                     printf("before size: %zu\n", indices->element_size);
+                    execution_index += 1;
                     array_push((struct Dynamic_Array*)indices, &execution_index);
                     printf("after size: %zu\n", indices->element_size);
                     execution_index = indices->first[0];
                     printf("exec index: %zu\n", execution_index);
                     
                     if (indices->element_size != 4) {
+                        printf("bug!\n");
                         abort();
                     }
                 }
@@ -108,14 +165,14 @@ int init(int start_width, int start_height) {
                     printf("adding new index arrays\n");
                     size_t new_capacity = render_data->line_index * 2;
                     while (render_data->lines->length < new_capacity) {
-                        struct Indices_Array* indices = malloc(sizeof(struct Indices_Array));
-                        array_init((struct Dynamic_Array*)indices, sizeof(size_t), 10);
-                        array_push((struct Dynamic_Array*)render_data->lines, &indices);
+                        array_next((struct Dynamic_Array*)(render_data->lines));
+                        array_init((struct Dynamic_Array*)(render_data->lines->last), sizeof(size_t), 10);
                     }
                 }
-                array_clear((struct Dynamic_Array*)render_data->lines->first[render_data->line_index]);
+                array_clear((struct Dynamic_Array*)render_data->lines->first + render_data->line_index);
             }
         }
+        printf("no bug\n");
         abort();
     }
 
@@ -167,6 +224,9 @@ void set_text(char* new_text) {
     run_statement(code_nodes->first);
     run_data.did_run = true;
     interaction_data.cursor = run_data.execution_stack->first[interaction_data.execution_index];
+
+    // @Debug
+    set_gets_corrupted(run_data.execution_stack->first[2]->ident.name);
 }
 
 int main() {
