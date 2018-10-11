@@ -40,8 +40,9 @@ void set_memory(size_t offset, void* data, size_t num_bytes) {
 }
 
 void add_node_to_execution_stack(struct Code_Node* node) {
+    node->is_on_execution_stack = true;
     node->execution_index = run_data.execution_stack->length;
-    array_push((struct Dynamic_Array*)run_data.execution_stack, node);
+    array_push((struct Dynamic_Array*)run_data.execution_stack, &node);
 }
 
 void add_name_use(char* name) {
@@ -68,7 +69,7 @@ struct Code_Node* math_binop(struct Code_Node* left, char* op, struct Code_Node*
     // we need to compromise between left and right types
     char type = 0;
     if (left->type != Native_Type_Bool) {
-        if (left->type->kind == TYPE_INFO_TAG_FLOAT) {
+        if (left->type->ident.type->kind == TYPE_INFO_TAG_FLOAT) {
             type = 3;
         }
         else {
@@ -270,8 +271,6 @@ struct Code_Node* math_binop(struct Code_Node* left, char* op, struct Code_Node*
             return make_literal_bool(run_data.code_nodes, (bool)result);
         }
         else {
-            // @@@
-            printf("%f\n", result);
             return make_literal_float(run_data.code_nodes, result);
         }
     }
@@ -335,9 +334,9 @@ void fill_result_str(struct Code_Node* node) {
         }
         case CODE_KIND_LITERAL_FLOAT:{
             float value = node->literal_float.value;
-            int chars_needed = snprintf(NULL, 0, "%f", value) + 1;
+            int chars_needed = 20;
             char* str = malloc(sizeof(char) * chars_needed);
-            snprintf(str, chars_needed, "%f", value);
+            snprintf(str, chars_needed, "%.19f", value);
             node->str = str;
             break;
         }
@@ -428,7 +427,7 @@ void run_call(struct Code_Node* node) {
     }
     else if (proc->kind == CODE_KIND_PROCEDURE) {
         transform(node);
-        array_push((struct Dynamic_Array*)run_data.last_block->block.extras[run_data.statement_index], node->transformed);
+        array_push((struct Dynamic_Array*)run_data.last_block->block.extras[run_data.statement_index], &(node->transformed));
         run_statement(node->transformed);
     }
     run_data.last_call = prev_last_call;
@@ -499,18 +498,18 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
     switch (node->kind) {
         case CODE_KIND_LITERAL_BOOL:{
             add_node_to_execution_stack(node);
-            result = node;
-            break;
+            node->result = node;
+            return node;
         }
         case CODE_KIND_LITERAL_INT:{
             add_node_to_execution_stack(node);
-            result = node;
-            break;
+            node->result = node;
+            return node;
         }
         case CODE_KIND_LITERAL_FLOAT:{
             add_node_to_execution_stack(node);
-            result = node;
-            break;
+            node->result = node;
+            return node;
         }
         case CODE_KIND_BINARY_OPERATION:{
             result = math_solve(node);
@@ -581,7 +580,7 @@ bool run_loop_broken(struct Code_Node* node) {
     }
 }
 struct Code_Node* run_statement(struct Code_Node* node) {
-    printf("run_statement: (%s)\n", code_kind_to_string(node->kind));
+    // printf("run_statement: (%s)\n", code_kind_to_string(node->kind));
     if (node->was_run) {
         return node;
     }
@@ -631,7 +630,7 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                 node->declaration.pointer = run_data.stack_pointer + alignment_pad;
                 node->declaration.alignment_pad = alignment_pad;
                 run_data.stack_pointer += alignment_pad + type->size_in_bytes;
-                array_push((struct Dynamic_Array*)run_data.last_block->block.allocations, node);
+                array_push((struct Dynamic_Array*)run_data.last_block->block.allocations, &node);
 
                 if (expression != NULL) {
                     run_rvalue(expression);
@@ -683,7 +682,7 @@ struct Code_Node* run_statement(struct Code_Node* node) {
             run_data.last_loop = node;
             node->transformed = make_block(run_data.code_nodes, NULL);
             node->transformed->block.is_transformed_block = true;
-            array_push((struct Dynamic_Array*)run_data.last_block->block.extras[run_data.statement_index], node->transformed);
+            array_push((struct Dynamic_Array*)run_data.last_block->block.extras[run_data.statement_index], &(node->transformed));
             bool should_run = true;
             while (should_run) {
                 struct Code_Node* condition = clone(node->while_.condition);
@@ -695,7 +694,7 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                 if (should_run) {
                     run_statement(expression);
                 }
-                array_push((struct Dynamic_Array*)node->transformed->block.statements, if_stmt);
+                array_push((struct Dynamic_Array*)node->transformed->block.statements, &if_stmt);
                 if ((run_data.last_call != NULL && run_data.last_call->call.returned) ||
                     (run_data.last_loop != NULL && run_loop_broken(run_data.last_loop))) {
 
@@ -710,7 +709,7 @@ struct Code_Node* run_statement(struct Code_Node* node) {
             run_data.last_loop = node;
             node->transformed = make_block(run_data.code_nodes, NULL);
             node->transformed->block.is_transformed_block = true;
-            array_push((struct Dynamic_Array*)run_data.last_block->block.extras[run_data.statement_index], node->transformed);
+            array_push((struct Dynamic_Array*)run_data.last_block->block.extras[run_data.statement_index], &(node->transformed));
             bool first = true;
             bool should_run = true;
             while (should_run) {
@@ -730,7 +729,7 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                 if (should_run) {
                     run_statement(expression);
                 }
-                array_push((struct Dynamic_Array*)node->transformed->block.statements, if_stmt);
+                array_push((struct Dynamic_Array*)node->transformed->block.statements, &if_stmt);
                 if ((run_data.last_call != NULL && run_data.last_call->call.returned) ||
                     (run_data.last_loop != NULL && run_loop_broken(run_data.last_loop))) {
 
@@ -745,15 +744,15 @@ struct Code_Node* run_statement(struct Code_Node* node) {
             run_data.last_loop = node;
             node->transformed = make_block(run_data.code_nodes, NULL);
             node->transformed->block.is_transformed_block = true;
-            array_push((struct Dynamic_Array*)run_data.last_block->block.extras[run_data.statement_index], node->transformed);
+            array_push((struct Dynamic_Array*)run_data.last_block->block.extras[run_data.statement_index], &(node->transformed));
             run_statement(node->for_.begin);
-            array_push((struct Dynamic_Array*)node->transformed->block.statements, node->for_.begin);
+            array_push((struct Dynamic_Array*)node->transformed->block.statements, &(node->for_.begin));
             if (node->for_.expression->kind != CODE_KIND_BLOCK) {
                 struct Code_Node* block = make_block(run_data.code_nodes, NULL);
-                array_push((struct Dynamic_Array*)block->block.statements, node->for_.expression);
+                array_push((struct Dynamic_Array*)block->block.statements, &(node->for_.expression));
                 node->for_.expression = block;
             }
-            array_push((struct Dynamic_Array*)node->for_.expression->block.statements, node->for_.cycle_end);
+            array_push((struct Dynamic_Array*)node->for_.expression->block.statements, &(node->for_.cycle_end));
             bool should_run = true;
             while (should_run) {
                 struct Code_Node* condition = clone(node->for_.condition);
@@ -765,7 +764,7 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                 if (should_run) {
                     run_statement(expression);
                 }
-                array_push((struct Dynamic_Array*)node->transformed->block.statements, if_stmt);
+                array_push((struct Dynamic_Array*)node->transformed->block.statements, &if_stmt);
                 if ((run_data.last_call != NULL && run_data.last_call->call.returned) ||
                     (run_data.last_loop != NULL && run_loop_broken(run_data.last_loop))) {
 
@@ -801,7 +800,7 @@ struct Code_Node* clone(struct Code_Node* node) {
             cloned->block.is_transformed_block = node->block.is_transformed_block;
             for (size_t i = 0; i < node->block.statements->length; i += 1) {
                 struct Code_Node* cloned_stmt = clone(node->block.statements->first[i]);
-                array_push((struct Dynamic_Array*)cloned->block.statements, cloned_stmt);
+                array_push((struct Dynamic_Array*)cloned->block.statements, &cloned_stmt);
             }
             break;
         }
@@ -810,7 +809,7 @@ struct Code_Node* clone(struct Code_Node* node) {
             run_data.count_uses = false;
             for (size_t i = 0; i < node->procedure.params->length; i += 1) {
                 struct Code_Node* cloned_param = clone(node->procedure.params->first[i]);
-                array_push((struct Dynamic_Array*)cloned->procedure.params, cloned_param);
+                array_push((struct Dynamic_Array*)cloned->procedure.params, &cloned_param);
             }
             run_data.count_uses = true;
             break;
@@ -819,7 +818,7 @@ struct Code_Node* clone(struct Code_Node* node) {
             cloned = make_call(run_data.code_nodes, node->call.ident, NULL);
             for (size_t i = 0; i < node->call.args->length; i += 1) {
                 struct Code_Node* cloned_arg = clone(node->call.args->first[i]);
-                array_push((struct Dynamic_Array*)cloned->call.args, cloned_arg);
+                array_push((struct Dynamic_Array*)cloned->call.args, &cloned_arg);
             }
             break;
         }
@@ -956,14 +955,17 @@ struct Code_Node* clone(struct Code_Node* node) {
         }
         case CODE_KIND_LITERAL_INT:{
             cloned = make_literal_int(run_data.code_nodes, node->literal_int.value);
+            cloned->str = node->str;
             break;
         }
         case CODE_KIND_LITERAL_FLOAT:{
             cloned = make_literal_float(run_data.code_nodes, node->literal_float.value);
+            cloned->str = node->str;
             break;
         }
         case CODE_KIND_LITERAL_BOOL:{
             cloned = make_literal_bool(run_data.code_nodes, node->literal_bool.value);
+            cloned->str = node->str;
             break;
         }
         case CODE_KIND_STRING:{
@@ -998,15 +1000,15 @@ void transform(struct Code_Node* node) {
                 struct Code_Node* return_ident = make_ident(run_data.code_nodes, return_ident_name, NULL);
                 proc->procedure.return_ident = return_ident;
                 struct Code_Node* return_decl = make_declaration(run_data.code_nodes, proc->procedure.return_type, return_ident, NULL);
-                array_push((struct Dynamic_Array*)proc->transformed->block.statements, return_decl);
+                array_push((struct Dynamic_Array*)proc->transformed->block.statements, &return_decl);
 
                 for (size_t i = 0; i < proc->procedure.params->length; i += 1) {
                     struct Code_Node* param = proc->procedure.params->first[i];
-                    array_push((struct Dynamic_Array*)proc->transformed->block.statements, param);
+                    array_push((struct Dynamic_Array*)proc->transformed->block.statements, &param);
                 }
                 for (size_t i = 0; i < proc->procedure.block->block.statements->length; i += 1) {
                     struct Code_Node* stmt = proc->procedure.block->block.statements->first[i];
-                    array_push((struct Dynamic_Array*)proc->transformed->block.statements, stmt);
+                    array_push((struct Dynamic_Array*)proc->transformed->block.statements, &stmt);
                 }
             }
 

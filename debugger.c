@@ -75,6 +75,50 @@ int init(int start_width, int start_height) {
 
     initialized = true;
 
+    struct Render_Data* render_data = &my_render_data;
+
+    size_t execution_index = 42;
+
+    if (true) {
+        for (size_t j = 0; j < 10; j += 1) {
+            printf("-----new frame\n");
+            array_clear((struct Dynamic_Array*)(my_render_data.lines->first[0]));
+            render_data->line_index = 0;
+            for (size_t i = 0; i < 4; i += 1) {
+                for (size_t k = 0; k < 2; k += 1) {
+                    printf("---new node\n");
+                    struct Indices_Array* indices = render_data->lines->first[render_data->line_index];
+                    printf("line index: %zu\n", render_data->line_index);
+                    printf("indices: %zu\n", indices);
+                    printf("length: %zu\n", indices->length);
+                    printf("before size: %zu\n", indices->element_size);
+                    array_push((struct Dynamic_Array*)indices, &execution_index);
+                    printf("after size: %zu\n", indices->element_size);
+                    execution_index = indices->first[0];
+                    printf("exec index: %zu\n", execution_index);
+                    
+                    if (indices->element_size != 4) {
+                        abort();
+                    }
+                }
+                // newline
+                render_data->line_index += 1;
+                printf("before lines length: %zu\n", render_data->lines->length);
+                if (render_data->line_index >= render_data->lines->length) {
+                    printf("adding new index arrays\n");
+                    size_t new_capacity = render_data->line_index * 2;
+                    while (render_data->lines->length < new_capacity) {
+                        struct Indices_Array* indices = malloc(sizeof(struct Indices_Array));
+                        array_init((struct Dynamic_Array*)indices, sizeof(size_t), 10);
+                        array_push((struct Dynamic_Array*)render_data->lines, &indices);
+                    }
+                }
+                array_clear((struct Dynamic_Array*)render_data->lines->first[render_data->line_index]);
+            }
+        }
+        abort();
+    }
+
     return 1;
 }
 EMSCRIPTEN_KEEPALIVE

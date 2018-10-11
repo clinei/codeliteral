@@ -37,7 +37,17 @@ void init_renderer() {
     my_render_data.bg_coords_capacity = 100 * 4;
     my_render_data.bg_coords = malloc(sizeof(GLfloat) * 4 * my_render_data.bg_coords_capacity);
     my_render_data.bg_colors = malloc(sizeof(GLfloat) * 4 * my_render_data.bg_coords_capacity);
-    // we reuse indices
+    // we reuse vertex indices
+
+    my_render_data.lines = malloc(sizeof(struct Lines_Array));
+    array_init((struct Dynamic_Array*)my_render_data.lines, sizeof(struct Indices_Array*), 100);
+
+    // two because first newline needs something to clear
+    for (size_t i = 0; i < 2; i += 1) {
+        struct Indices_Array* indices = malloc(sizeof(struct Indices_Array));
+        array_init((struct Dynamic_Array*)indices, sizeof(size_t), 10);
+        array_push((struct Dynamic_Array*)my_render_data.lines, &indices);
+    }
 }
 
 void init_gl() {
@@ -320,6 +330,8 @@ void find_expanded_nodes(struct Code_Node* node) {
 
 void render(struct Code_Node* node) {
     // printf("cursor kind: (%s)\n", code_kind_to_string(interaction_data.cursor->kind));
+    printf("-----new frame\n");
+
     GLfloat white[4] =        { 230 / 255.0f, 230 / 255.0f, 230 / 255.0f, 1 };
     GLfloat clear_color[4] =  { 37 / 255.0f, 37 / 255.0f, 37 / 255.0f, 1 };
     GLfloat bg_color[4] =     { 120 / 255.0f, 60 / 255.0f, 20 / 255.0f, 0 };
@@ -341,6 +353,9 @@ void render(struct Code_Node* node) {
     memcpy(my_render_data.cursor_color, &cursor_color, sizeof(GLfloat) * 4);
 
     find_expanded_nodes(node);
+
+    array_clear((struct Dynamic_Array*)(my_render_data.lines->first[0]));
+    my_render_data.line_index = 0;
 
     render_node(node, &my_render_data);
 
@@ -404,6 +419,22 @@ void render_node(struct Code_Node* node,
 
     if (node == interaction_data.cursor) {
         mark_background_start(render_data, render_data->cursor_color);
+    }
+
+    if (node->is_on_execution_stack) {
+        struct Indices_Array* indices = render_data->lines->first[render_data->line_index];
+        // struct Indices_Array* indices = render_data->lines->first[0];
+        // struct Indices_Array* indices = render_data->lines->first[1];
+        printf("line index: %zu\n", render_data->line_index);
+        printf("exec index: %zu\n", node->execution_index);
+        printf("indices: %zu\n", indices);
+        printf("length: %zu\n", indices->length);
+        printf("before size: %zu\n", indices->element_size);
+        array_push((struct Dynamic_Array*)indices, &(node->execution_index));
+        printf("after size: %zu\n", indices->element_size);
+        if (indices->element_size != 4) {
+            abort();
+        }
     }
 
     // printf("render_node: (%s)\n", code_kind_to_string(node->kind));
@@ -1178,6 +1209,18 @@ void render_space(struct Render_Data* render_data) {
 void render_newline(struct Render_Data* render_data) {
     render_data->xpos = 0;
     render_data->ypos += render_data->font_atlas->font_size * render_data->line_height;
+    
+    render_data->line_index += 1;
+    if (render_data->line_index >= render_data->lines->length) {
+        printf("adding new index arrays\n");
+        size_t new_capacity = render_data->line_index * 2;
+        while (render_data->lines->length < new_capacity) {
+            struct Indices_Array* indices = malloc(sizeof(struct Indices_Array));
+            array_init((struct Dynamic_Array*)indices, sizeof(size_t), 10);
+            array_push((struct Dynamic_Array*)render_data->lines, &indices);
+        }
+    }
+    array_clear((struct Dynamic_Array*)(render_data->lines->first[render_data->line_index]));
 }
 
 void convert_screen_coords_to_view_coords(float x, float y,

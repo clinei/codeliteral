@@ -20,14 +20,42 @@ function set_text(new_text) {
 }
 /*
 const code = `
+bool test_floats() {
+	bool passed = true;
+	// rounds up
+	passed &= 0.3 - 0.2 == 0.1 == false;
+	passed &= 0.3 - 0.2 < 0.10001;
+	passed &= 0.3 - 0.2 > 0.10000;
+	passed &= 0.3 + 0.2 == 0.5;
+	passed &= 0.3 / 0.2 == 1.5;
+	passed &= 0.3 * 0.2 == 0.06 == false;
+	passed &= 0.3 < 0.2 == false;
+	passed &= 0.3 < 0.3 == false;
+	passed &= 0.3 < 0.4 == true;
+	passed &= 0.3 <= 0.2 == false;
+	passed &= 0.3 <= 0.3 == true;
+	passed &= 0.3 <= 0.4 == true;
+	passed &= 0.3 > 0.2 == true;
+	passed &= 0.3 > 0.3 == false;
+	passed &= 0.3 > 0.4 == false;
+	passed &= 0.3 >= 0.2 == true;
+	passed &= 0.3 >= 0.3 == true;
+	passed &= 0.3 >= 0.4 == false;
+	passed &= 0.3 == 0.2 == false;
+	passed &= 0.3 == 0.3 == true;
+	passed &= 0.3 != 0.2 == true;
+	passed &= 0.3 != 0.3 == false;
+	return passed;
+}
 bool test_if_else(){
 	bool passed = false;
 	int i = 0;
 	if (false) i = 1;
-	else if (true) i = 2;
+	else if (false) i = 2;
 	else if (true) i = 3;
 	else if (true) i = 4;
-	passed = i == 2;
+	else if (true) i = 5;
+	passed = i == 3;
 	return passed;
 }
 bool test_nested_proc() {
@@ -257,24 +285,8 @@ main();
 `;
 */
 const code = `
-bool test_floats() {
-	bool passed = true;
-	0.3 - 0.2;
-	/*
-	0.3 + 0.2;
-	0.3 / 0.2;
-	0.3 * 0.2;
-	0.3 < 0.2;
-	0.3 > 0.2;
-	0.3 >= 0.2;
-	0.3 <= 0.2;
-	0.3 == 0.3;
-	0.3 != 0.2;
-	*/
-	return passed;
-}
 void main() {
-	test_floats();
+	int i = 0;
 }
 main();
 `;

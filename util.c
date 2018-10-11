@@ -29,7 +29,7 @@ bool array_push(struct Dynamic_Array* array, void* element) {
     #endif
     bool did_realloc = array_maybe_realloc(array);
     array->last += array->element_size;
-    memcpy(array->last, &element, array->element_size);
+    memcpy(array->last, element, array->element_size);
     return did_realloc;
 }
 void array_pop(struct Dynamic_Array* array) {
@@ -51,6 +51,9 @@ bool array_next(struct Dynamic_Array* array) {
     bool did_realloc = array_maybe_realloc(array);
     array->last += array->element_size;
     return did_realloc;
+}
+void array_clear(struct Dynamic_Array* array) {
+    array->length = 0;
 }
 bool array_maybe_realloc(struct Dynamic_Array* array) {
     if (array->length == array->capacity) {

@@ -15,6 +15,20 @@
 
 EMSCRIPTEN_WEBGL_CONTEXT_HANDLE debugger_context;
 
+struct Indices_Array {
+    size_t length;
+    size_t capacity;
+    size_t element_size;
+    size_t* first;
+    size_t* last;
+};
+struct Lines_Array {
+    size_t length;
+    size_t capacity;
+    size_t element_size;
+    struct Indices_Array** first;
+    struct Indices_Array** last;
+};
 struct Render_Data {
     struct Atlas* font_atlas;
     float width;
@@ -44,6 +58,9 @@ struct Render_Data {
     float mark_start_xpos;
     float mark_start_ypos;
     size_t block_depth;
+
+    struct Lines_Array* lines;
+    size_t line_index;
 };
 struct Render_Data my_render_data;
 

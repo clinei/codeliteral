@@ -1,8 +1,8 @@
 Important:
 
-boolean expressions must return bool literal
-
 time for scrolling and moving with WASD
+
+struct Code_Node should use flags instead of bools
 
 remove snprintf while rendering
 

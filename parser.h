@@ -225,6 +225,7 @@ struct Code_Node {
 
     bool was_run;
     bool is_lhs;
+    bool is_on_execution_stack;
     size_t execution_index;
     struct Code_Node* result;
     struct Code_Node* transformed;
