@@ -2,10 +2,6 @@ Important:
 
 time for scrolling and moving with WASD
 
-struct Code_Node should use flags instead of bools
-
-remove snprintf while rendering
-
 push_index was only for run_lvalue for strings, do not implement
 
 printf needs varargs
@@ -46,6 +42,12 @@ Graphics Ideas:
 render fonts ourself
 render font vertices directly
 try font hinting
+
+Implementation Ideas:
+
+struct Code_Node should use flags instead of bools
+
+render_type should not use snprintf, we should prerender type str
 
 Ideas:
 

@@ -365,7 +365,7 @@ bool convert_to_bool(void* value, struct Type_Info* type) {
         case TYPE_INFO_TAG_INTEGER:{
             // @Incomplete
             // we don't account for size
-            if (type == Native_Type_Bool) {
+            if (type == Native_Type_Bool->ident.type) {
                 return *(bool*)value;
             }
             else {
@@ -394,6 +394,7 @@ struct Code_Node* get_result(void* value, struct Type_Info* type) {
                 result = make_literal_bool(run_data.code_nodes, *(bool*)value);
             }
             else {
+                printf("int ptr: %zu\n", (size_t)value);
                 result = make_literal_int(run_data.code_nodes, *(int*)value);
             }
             break;
@@ -414,6 +415,7 @@ struct Code_Node* get_result(void* value, struct Type_Info* type) {
 }
 struct Code_Node* get_ident_result(struct Code_Node* node) {
     void* value = get_memory(node->ident.declaration->declaration.pointer, node->type->size_in_bytes);
+    printf("get_ident\n");
     return get_result(value, node->type);
 }
 void run_call(struct Code_Node* node) {
@@ -618,7 +620,6 @@ struct Code_Node* run_statement(struct Code_Node* node) {
             }
             add_node_to_execution_stack(node->declaration.ident);
             if (type && type->kind == TYPE_INFO_TAG_IDENT && type->ident.type->kind != TYPE_INFO_TAG_VOID) {
-
                 size_t align;
                 if (type->kind == TYPE_INFO_TAG_ARRAY) {
                     align = type->array.elem_type->size_in_bytes;
@@ -626,8 +627,17 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                 else {
                     align = type->size_in_bytes;
                 }
-                size_t alignment_pad = align - ((*(size_t*)run_data.memory + run_data.stack_pointer) % align);
+                // size_t alignment_pad = align - ((*(size_t*)run_data.memory + run_data.stack_pointer) % align);
+                size_t alignment_pad = ((size_t)run_data.memory + run_data.stack_pointer) % align;
                 node->declaration.pointer = run_data.stack_pointer + alignment_pad;
+                printf("align pad: %zu\n", alignment_pad);
+                printf("mem ptr:   %zu\n", run_data.memory);
+                printf("stack ptr: %zu\n", run_data.stack_pointer);
+                printf("decl ptr:  %zu\n", node->declaration.pointer);
+                if ((size_t)(node->declaration.pointer + run_data.memory) % align) {
+                    printf("memory alignment error!\n");
+                    abort();
+                }
                 node->declaration.alignment_pad = alignment_pad;
                 run_data.stack_pointer += alignment_pad + type->size_in_bytes;
                 array_push((struct Dynamic_Array*)run_data.last_block->block.allocations, &node);

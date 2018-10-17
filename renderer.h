@@ -17,19 +17,12 @@
 
 EMSCRIPTEN_WEBGL_CONTEXT_HANDLE debugger_context;
 
-struct Indices_Array {
-    size_t length;
-    size_t capacity;
-    size_t element_size;
-    size_t* first;
-    size_t* last;
-};
 struct Lines_Array {
     size_t length;
     size_t capacity;
     size_t element_size;
-    struct Indices_Array* first;
-    struct Indices_Array* last;
+    struct Code_Node_Array* first;
+    struct Code_Node_Array* last;
 };
 struct Render_Data {
     struct Atlas* font_atlas;

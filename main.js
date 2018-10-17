@@ -48,14 +48,21 @@ bool test_floats() {
 	return passed;
 }
 bool test_if_else(){
-	bool passed = false;
+	bool passed = true;
 	int i = 0;
 	if (false) i = 1;
 	else if (false) i = 2;
 	else if (true) i = 3;
 	else if (true) i = 4;
 	else if (true) i = 5;
-	passed = i == 3;
+	passed &= i == 3;
+	if (false) {
+		i = 0;
+	}
+	else {
+		i = 123;
+	}
+	passed &= i == 123;
 	return passed;
 }
 bool test_nested_proc() {
@@ -285,8 +292,28 @@ main();
 `;
 */
 const code = `
-void main() {
+bool test_if_else(){
+	bool passed = true;
 	int i = 0;
+	if (false) i = 1;
+	else if (false) i = 2;
+	else if (true) i = 3;
+	else if (true) i = 4;
+	else if (true) i = 5;
+	passed &= i == 3;
+	if (false) {
+		i = 0;
+	}
+	else {
+		i = 123;
+	}
+	passed &= i == 123;
+	return passed;
+}
+void main() {
+	int a = 20 + 20 + 2;
+	bool b = true;
+	int c = a * a / a;
 }
 main();
 `;

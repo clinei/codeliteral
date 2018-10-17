@@ -10,6 +10,7 @@ struct Interaction_Data {
     bool expand_all;
     bool show_elements;
     size_t execution_index;
+    size_t column_index;
     struct Code_Node* cursor;
 };
 struct Interaction_Data interaction_data;

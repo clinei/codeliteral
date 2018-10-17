@@ -42,12 +42,12 @@ void init_renderer() {
     // we reuse vertex indices
 
     my_render_data.lines = malloc(sizeof(struct Lines_Array));
-    array_init((struct Dynamic_Array*)my_render_data.lines, sizeof(struct Indices_Array), 100);
+    array_init((struct Dynamic_Array*)my_render_data.lines, sizeof(struct Code_Node_Array), 100);
 
     // two because first newline needs something to clear
     for (size_t i = 0; i < 2; i += 1) {
         array_next((struct Dynamic_Array*)(my_render_data.lines));
-        array_init((struct Dynamic_Array*)(my_render_data.lines->last), sizeof(size_t), 10);
+        array_init((struct Dynamic_Array*)(my_render_data.lines->last), sizeof(struct Code_Node*), 10);
     }
 
     my_render_data.cursor_line = 0;
@@ -148,11 +148,13 @@ void find_expanded_nodes(struct Code_Node* node) {
             for (size_t i = 0; i < node->block.statements->length; i += 1) {
                 struct Code_Node* stmt = node->block.statements->first[i];
                 find_expanded_nodes(stmt);
-                node->should_expand |= stmt->should_expand;
                 node->demands_expand |= stmt->demands_expand;
             }
             if (run_data.did_run == false) {
                 node->should_expand = true;
+            }
+            else {
+                node->should_expand = node->was_run;
             }
             break;
         }
@@ -427,10 +429,14 @@ void render_node(struct Code_Node* node,
 
     // printf("render_node: (%s)\n", code_kind_to_string(node->kind));
 
-    if (node->is_on_execution_stack) {
-        struct Indices_Array* indices = render_data->lines->first + render_data->line_index;
-        array_push((struct Dynamic_Array*)indices, node);
-        // array_push((struct Dynamic_Array*)indices, &(node->execution_index));
+    bool order_last = false;
+    if (node->kind == CODE_KIND_BINARY_OPERATION) {
+        order_last = true;
+    }
+
+    if (node->is_on_execution_stack && order_last == false) {
+        struct Code_Node_Array* nodes = render_data->lines->first + render_data->line_index;
+        array_push((struct Dynamic_Array*)nodes, &node);
     }
 
     switch (node->kind) {
@@ -993,6 +999,11 @@ void render_node(struct Code_Node* node,
         }
     }
     
+    if (node->is_on_execution_stack && order_last == true) {
+        struct Code_Node_Array* nodes = render_data->lines->first + render_data->line_index;
+        array_push((struct Dynamic_Array*)nodes, &node);
+    }
+    
     if (node == interaction_data.cursor) {
         mark_background_end(render_data);
     }
@@ -1206,11 +1217,11 @@ void render_newline(struct Render_Data* render_data) {
     
     render_data->line_index += 1;
     if (render_data->line_index >= render_data->lines->length) {
-        printf("adding new indices arrays\n");
+        printf("adding new node arrays\n");
         size_t new_capacity = render_data->line_index * 2;
         while (render_data->lines->length < new_capacity) {
             array_next((struct Dynamic_Array*)(render_data->lines));
-            array_init((struct Dynamic_Array*)(render_data->lines->last), sizeof(size_t), 10);
+            array_init((struct Dynamic_Array*)(render_data->lines->last), sizeof(struct Code_Node*), 10);
         }
     }
     array_clear((struct Dynamic_Array*)(render_data->lines->first + render_data->line_index));

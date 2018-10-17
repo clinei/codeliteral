@@ -53,14 +53,86 @@ EM_BOOL keydown(int event_type, const struct EmscriptenKeyboardEvent* event, voi
         move_up_line();
         consumed = true;
     }
+    else if (strcmp(event->key, "s") == 0) {
+        move_down_line();
+        consumed = true;
+    }
+    else if (strcmp(event->key, "a") == 0) {
+        move_left_line();
+        consumed = true;
+    }
+    else if (strcmp(event->key, "d") == 0) {
+        move_right_line();
+        consumed = true;
+    }
     return consumed;
 }
 
+// @Incomplete
+// column_index must get truncated
 void move_up_line() {
     if (my_render_data.cursor_line > 0) {
-        printf("moving up a line\n");
-        size_t execution_index = my_render_data.lines->first[my_render_data.cursor_line].first[0];
-        interaction_data.cursor = run_data.execution_stack->first[execution_index];
+        struct Code_Node_Array* nodes = NULL;
+        size_t i = my_render_data.cursor_line - 1;
+        while (i >= 0) {
+            nodes = my_render_data.lines->first + i;
+            if (nodes->length > 0) {
+                break;
+            }
+            if (i == 0) {
+                return;
+            }
+            i -= 1;
+        }
+        size_t last_column_index = nodes->length - 1;
+        if (interaction_data.column_index > last_column_index) {
+            interaction_data.column_index = last_column_index;
+        }
+        struct Code_Node* node = nodes->first[interaction_data.column_index];
+        interaction_data.cursor = node;
+        interaction_data.execution_index = node->execution_index;
+    }
+}
+void move_down_line() {
+    size_t last_line_index = my_render_data.line_index - 1;
+    if (my_render_data.cursor_line < last_line_index) {
+        struct Code_Node_Array* nodes = NULL;
+        size_t i = my_render_data.cursor_line + 1;
+        while (i <= last_line_index) {
+            nodes = my_render_data.lines->first + i;
+            if (nodes->length > 0) {
+                break;
+            }
+            if (i == last_line_index) {
+                return;
+            }
+            i += 1;
+        }
+        size_t last_column_index = nodes->length - 1;
+        if (interaction_data.column_index > last_column_index) {
+            interaction_data.column_index = last_column_index;
+        }
+        struct Code_Node* node = nodes->first[interaction_data.column_index];
+        interaction_data.cursor = node;
+        interaction_data.execution_index = node->execution_index;
+    }
+}
+void move_left_line() {
+    struct Code_Node_Array* nodes = my_render_data.lines->first + my_render_data.cursor_line;
+    if (interaction_data.column_index > 0) {
+        interaction_data.column_index -= 1;
+        struct Code_Node* node = nodes->first[interaction_data.column_index];
+        interaction_data.cursor = node;
+        interaction_data.execution_index = node->execution_index;
+    }
+}
+void move_right_line() {
+    struct Code_Node_Array* nodes = my_render_data.lines->first + my_render_data.cursor_line;
+    if (interaction_data.column_index < nodes->length - 1) {
+        interaction_data.column_index += 1;
+        struct Code_Node* node = nodes->first[interaction_data.column_index];
+        interaction_data.cursor = node;
+        interaction_data.execution_index = node->execution_index;
     }
 }
 
@@ -78,6 +150,7 @@ int init(int start_width, int start_height) {
     interaction_data.show_elements = false;
     interaction_data.expand_all = false;
     interaction_data.execution_index = 0;
+    interaction_data.column_index = 0;
 
     emscripten_set_keydown_callback("#window", NULL, false, &keydown);
     emscripten_set_main_loop(&step, 12, 0);
@@ -131,7 +204,7 @@ void set_text(char* new_text) {
 
     run_statement(code_nodes->first);
     run_data.did_run = true;
-    interaction_data.cursor = run_data.execution_stack->first[interaction_data.execution_index];
+    interaction_data.cursor = run_data.execution_stack->first[0];
 }
 
 int main() {

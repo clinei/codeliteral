@@ -14,6 +14,9 @@
 EM_BOOL keydown(int event_type, const struct EmscriptenKeyboardEvent* event, void* user_data);
 
 void move_up_line();
+void move_down_line();
+void move_left_line();
+void move_right_line();
 
 EMSCRIPTEN_KEEPALIVE
 int init(int start_width, int start_height);
