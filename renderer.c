@@ -425,34 +425,12 @@ void render_node(struct Code_Node* node,
         mark_background_start(render_data, render_data->cursor_color);
     }
 
-    printf("render_node: (%s)\n", code_kind_to_string(node->kind));
+    // printf("render_node: (%s)\n", code_kind_to_string(node->kind));
 
     if (node->is_on_execution_stack) {
-        // @Debug
-        char* gets_corrupted = get_gets_corrupted();
         struct Indices_Array* indices = render_data->lines->first + render_data->line_index;
-        void* index_ptr = indices->last;
-        printf("index ptr: %zu\n", index_ptr);
-        printf("corrupted: %zu\n", gets_corrupted);
-        if (index_ptr == gets_corrupted) {
-            printf("right on the spot!\n");
-            abort();
-        }
-        else if (index_ptr < gets_corrupted && index_ptr + 40 > gets_corrupted) {
-            printf("not aligned\n");
-            // abort();
-        }
-        bool bad = run_data.execution_stack->first[2]->ident.name[0] < 32;
-        if (bad) {
-            printf("bad before\n");
-            abort();
-        }
-        array_push((struct Dynamic_Array*)indices, &(node->execution_index));
-        bad = run_data.execution_stack->first[2]->ident.name[0] < 32;
-        if (bad) {
-            printf("bad after\n");
-            abort();
-        }
+        array_push((struct Dynamic_Array*)indices, node);
+        // array_push((struct Dynamic_Array*)indices, &(node->execution_index));
     }
 
     switch (node->kind) {

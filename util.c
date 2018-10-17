@@ -14,6 +14,7 @@
 void array_init(struct Dynamic_Array* array, size_t element_size, size_t capacity) {
     #if DEBUG_DYNAMIC_ARRAY && DEBUG_DYNAMIC_ARRAY_INIT
     printf("dynamic array init\n");
+    printf("array: #%zu\n", array);
     printf("element_size: %zu\n", element_size);
     printf("capacity: %zu\n", capacity);
     #endif
@@ -27,21 +28,21 @@ bool array_push(struct Dynamic_Array* array, void* element) {
     array->length += 1;
     #if DEBUG_DYNAMIC_ARRAY && DEBUG_DYNAMIC_ARRAY_PUSH
     printf("dynamic array push\n");
+    printf("array: #%zu\n", array);
     printf("length: %zu\n", array->length);
+    printf("element_size: %zu\n", array->element_size);
+    printf("first: %zu\n", array->first);
+    printf("last:  %zu\n", array->last + array->element_size);
     #endif
     bool did_realloc = array_maybe_realloc(array);
     array->last += array->element_size;
-    void* gets_corrupted = get_gets_corrupted();
-    if (array->last <= gets_corrupted && (array->last + array->element_size) >= gets_corrupted) {
-        printf("got corrupted!\n");
-        abort();
-    }
     memcpy(array->last, element, array->element_size);
     return did_realloc;
 }
 void array_pop(struct Dynamic_Array* array) {
     #if DEBUG_DYNAMIC_ARRAY && DEBUG_DYNAMIC_ARRAY_POP
     printf("dynamic array pop\n");
+    printf("array: #%zu\n", array);
     printf("length: %zu\n", array->length);
     #endif
     if (array->length > 0) {
@@ -53,6 +54,7 @@ bool array_next(struct Dynamic_Array* array) {
     array->length += 1;
     #if DEBUG_DYNAMIC_ARRAY && DEBUG_DYNAMIC_ARRAY_NEXT
     printf("dynamic array next\n");
+    printf("array: #%zu\n", array);
     printf("length: %zu\n", array->length);
     #endif
     bool did_realloc = array_maybe_realloc(array);
@@ -61,11 +63,12 @@ bool array_next(struct Dynamic_Array* array) {
 }
 void array_clear(struct Dynamic_Array* array) {
     array->length = 0;
+    array->last = (void*)((size_t)array->first - array->element_size);
 }
 bool array_maybe_realloc(struct Dynamic_Array* array) {
     if (array->length == array->capacity) {
         array->capacity *= 2;
-        #if DEBUG_DYNAMIC_ARRAY && DEBUG_DYNAMIC_ARRAY_REALLOC || true
+        #if DEBUG_DYNAMIC_ARRAY && DEBUG_DYNAMIC_ARRAY_REALLOC
         void* first_before = array->first;
         printf("dynamic array realloc\n");
         printf("capacity: %zu\n", array->capacity);
