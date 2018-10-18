@@ -853,7 +853,7 @@ struct Code_Node* infer_decl_of_ident(struct Code_Node* ident) {
     return NULL;
 }
 struct Code_Node* infer(struct Code_Node* node) {
-    // printf("infer kind: (%s)\n", code_kind_to_string(node->kind));
+    printf("infer kind: (%s)\n", code_kind_to_string(node->kind));
     switch (node->kind) {
         case CODE_KIND_BLOCK:{
             infer_push_block(node);
@@ -934,8 +934,11 @@ struct Code_Node* infer(struct Code_Node* node) {
                     if (left->type->ident.type->kind == TYPE_INFO_TAG_STRUCT) {
                         struct Type_Info_Struct* struct_ = &(left->type->ident.type->struct_);
                         size_t member_index = index_of_string(right->ident.name, struct_->member_names, struct_->members_length);
+                        printf("member_index: %zu\n", member_index);
+                        printf("member type: %u\n", struct_->members[member_index]->kind);
                         right->type = struct_->members[member_index];
                     }
+                    else abort();
                 }
                 else if (left->type->kind == TYPE_INFO_TAG_ARRAY) {
                     if (strcmp(right->ident.name, "length") == 0) {
@@ -947,6 +950,9 @@ struct Code_Node* infer(struct Code_Node* node) {
             }
             else abort();
             node->type = right->type;
+            printf("left type: %u\n", left->type->ident.type->kind);
+            printf("right type: %u\n", right->type->ident.type->kind);
+            // abort();
             break;
         }
         case CODE_KIND_STRUCT:{

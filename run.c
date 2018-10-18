@@ -68,16 +68,14 @@ struct Code_Node* math_binop(struct Code_Node* left, char* op, struct Code_Node*
     // @Incomplete
     // we need to compromise between left and right types
     char type = 0;
-    if (left->type != Native_Type_Bool) {
-        if (left->type->ident.type->kind == TYPE_INFO_TAG_FLOAT) {
-            type = 3;
-        }
-        else {
-            type = 2;
-        }
-    }
-    else {
+    if (left->type == Native_Type_Bool) {
         type = 1;
+    }
+    else if (left->type->ident.type->kind == TYPE_INFO_TAG_INTEGER) {
+        type = 2;
+    }
+    else if (left->type->ident.type->kind == TYPE_INFO_TAG_FLOAT) {
+        type = 3;
     }
 
     // @Ugh
@@ -394,7 +392,6 @@ struct Code_Node* get_result(void* value, struct Type_Info* type) {
                 result = make_literal_bool(run_data.code_nodes, *(bool*)value);
             }
             else {
-                printf("int ptr: %zu\n", (size_t)value);
                 result = make_literal_int(run_data.code_nodes, *(int*)value);
             }
             break;
@@ -403,19 +400,21 @@ struct Code_Node* get_result(void* value, struct Type_Info* type) {
             result = make_literal_float(run_data.code_nodes, *(float*)value);
             break;
         }
+        case TYPE_INFO_TAG_STRUCT:{
+            return NULL;
+        }
         default:{
             printf("get_result not implemented for type kind %u\n", type->kind);
             abort();
             break;
         }
     }
-    
+
     fill_result_str(result);
     return result;
 }
 struct Code_Node* get_ident_result(struct Code_Node* node) {
     void* value = get_memory(node->ident.declaration->declaration.pointer, node->type->size_in_bytes);
-    printf("get_ident\n");
     return get_result(value, node->type);
 }
 void run_call(struct Code_Node* node) {
@@ -424,16 +423,18 @@ void run_call(struct Code_Node* node) {
     struct Code_Node* prev_last_call = run_data.last_call;
     run_data.last_call = node;
     struct Code_Node* proc = node->call.ident->ident.declaration->declaration.expression;
-    if (proc->kind == CODE_KIND_NATIVE_CODE) {
-        printf("native code\n");
-    }
-    else if (proc->kind == CODE_KIND_PROCEDURE) {
+    if (proc->procedure.block->kind == CODE_KIND_BLOCK) {
         transform(node);
         array_push((struct Dynamic_Array*)run_data.last_block->block.extras[run_data.statement_index], &(node->transformed));
         run_statement(node->transformed);
+        add_node_to_execution_stack(node);
+    }
+    else if (proc->procedure.block->kind == CODE_KIND_NATIVE_CODE) {
+        printf("native code\n");
+        // @Incomplete
+        // need to import a libc, like musl
     }
     run_data.last_call = prev_last_call;
-    add_node_to_execution_stack(node);
 }
 size_t run_lvalue(struct Code_Node* node) {
     // printf("run_lvalue: (%s)\n", code_kind_to_string(node->kind));
@@ -461,9 +462,12 @@ size_t run_lvalue(struct Code_Node* node) {
             break;
         }
         case CODE_KIND_OPASSIGN:{
-            size_t lhs_pointer = run_lvalue(node->opassign.ident);
+            struct Code_Node* lhs = node->opassign.ident;
+            lhs->is_lhs = true;
+            size_t lhs_pointer = run_lvalue(lhs);
+            lhs->result = get_result(get_memory(lhs_pointer, lhs->type->size_in_bytes), lhs->type);
             run_rvalue(node->opassign.expression);
-            node->result = math_binop(node->opassign.ident->result, node->opassign.operation_type, node->opassign.expression->result);
+            node->result = math_binop(lhs->result, node->opassign.operation_type, node->opassign.expression->result);
             set_memory(lhs_pointer, get_result_ptr(node), node->opassign.ident->type->size_in_bytes);
             break;
         }
@@ -483,6 +487,18 @@ size_t run_lvalue(struct Code_Node* node) {
             }
             result = lhs_pointer + index_result * node->type->size_in_bytes;
             add_node_to_execution_stack(node);
+            break;
+        }
+        case CODE_KIND_DOT_OPERATOR:{
+            struct Code_Node* left = node->dot_operator.left;
+            struct Code_Node* right = node->dot_operator.right;
+            left->is_lhs = node->is_lhs;
+            right->is_lhs = node->is_lhs;
+            struct Type_Info_Struct* struct_ = &(left->type->ident.type->struct_);
+            size_t member_index = index_of_string(right->ident.name, struct_->member_names, struct_->members_length);
+            result = run_lvalue(left) + struct_->offsets[member_index];
+            // add_memory_use(result, right);
+
             break;
         }
         default:{
@@ -529,7 +545,6 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
             break;
         }
         case CODE_KIND_ARRAY_INDEX:{
-            // @@@
             void* real_pointer = (void*)(run_data.memory + run_lvalue(node));
             result = get_result(real_pointer, node->type);
             break;
@@ -582,7 +597,7 @@ bool run_loop_broken(struct Code_Node* node) {
     }
 }
 struct Code_Node* run_statement(struct Code_Node* node) {
-    // printf("run_statement: (%s)\n", code_kind_to_string(node->kind));
+    printf("run_statement: (%s)\n", code_kind_to_string(node->kind));
     if (node->was_run) {
         return node;
     }
@@ -615,37 +630,43 @@ struct Code_Node* run_statement(struct Code_Node* node) {
         case CODE_KIND_DECLARATION:{
             struct Type_Info* type = node->declaration.type;
             struct Code_Node* expression = node->declaration.expression;
-            if (expression != NULL && expression->kind == CODE_KIND_PROCEDURE) {
+            if (expression != NULL &&
+                (expression->kind == CODE_KIND_PROCEDURE ||
+                 expression->kind == CODE_KIND_STRUCT
+                )) {
+
                 break;
             }
             add_node_to_execution_stack(node->declaration.ident);
-            if (type && type->kind == TYPE_INFO_TAG_IDENT && type->ident.type->kind != TYPE_INFO_TAG_VOID) {
-                size_t align;
-                if (type->kind == TYPE_INFO_TAG_ARRAY) {
-                    align = type->array.elem_type->size_in_bytes;
+            if (type && type->kind == TYPE_INFO_TAG_IDENT && type->ident.type->kind == TYPE_INFO_TAG_VOID) {
+                break;
+            }
+            size_t align;
+            if (type->kind == TYPE_INFO_TAG_IDENT) {
+                if (type->ident.type->kind == TYPE_INFO_TAG_STRUCT) {
+                    // largest alignment, 32bit for now
+                    align = 4;
                 }
                 else {
                     align = type->size_in_bytes;
                 }
-                // size_t alignment_pad = align - ((*(size_t*)run_data.memory + run_data.stack_pointer) % align);
-                size_t alignment_pad = ((size_t)run_data.memory + run_data.stack_pointer) % align;
-                node->declaration.pointer = run_data.stack_pointer + alignment_pad;
-                printf("align pad: %zu\n", alignment_pad);
-                printf("mem ptr:   %zu\n", run_data.memory);
-                printf("stack ptr: %zu\n", run_data.stack_pointer);
-                printf("decl ptr:  %zu\n", node->declaration.pointer);
-                if ((size_t)(node->declaration.pointer + run_data.memory) % align) {
-                    printf("memory alignment error!\n");
-                    abort();
-                }
-                node->declaration.alignment_pad = alignment_pad;
-                run_data.stack_pointer += alignment_pad + type->size_in_bytes;
-                array_push((struct Dynamic_Array*)run_data.last_block->block.allocations, &node);
+            }
+            else if (type->kind == TYPE_INFO_TAG_ARRAY) {
+                align = type->array.elem_type->size_in_bytes;
+            }
+            if (align == 0) {
+                printf("alignment is zero!\n");
+                abort();
+            }
+            size_t alignment_pad = align - (run_data.stack_pointer % align);
+            node->declaration.pointer = run_data.stack_pointer + alignment_pad;
+            node->declaration.alignment_pad = alignment_pad;
+            run_data.stack_pointer += alignment_pad + type->size_in_bytes;
+            array_push((struct Dynamic_Array*)run_data.last_block->block.allocations, &node);
 
-                if (expression != NULL) {
-                    run_rvalue(expression);
-                    set_memory(node->declaration.pointer, get_result_ptr(expression), node->declaration.type->size_in_bytes);
-                }
+            if (expression != NULL) {
+                run_rvalue(expression);
+                set_memory(node->declaration.pointer, get_result_ptr(expression), node->declaration.type->size_in_bytes);
             }
             break;
         }

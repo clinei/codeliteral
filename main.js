@@ -22,7 +22,8 @@ function set_text(new_text) {
 const code = `
 bool test_floats() {
 	bool passed = true;
-	// rounds up
+	// broken, but different from native
+	// divergent behavior
 	passed &= 0.3 - 0.2 == 0.1 == false;
 	passed &= 0.3 - 0.2 < 0.10001;
 	passed &= 0.3 - 0.2 > 0.10000;
@@ -292,28 +293,44 @@ main();
 `;
 */
 const code = `
-bool test_if_else(){
+bool test_struct() {
 	bool passed = true;
-	int i = 0;
-	if (false) i = 1;
-	else if (false) i = 2;
-	else if (true) i = 3;
-	else if (true) i = 4;
-	else if (true) i = 5;
-	passed &= i == 3;
-	if (false) {
-		i = 0;
-	}
-	else {
-		i = 123;
-	}
-	passed &= i == 123;
+	struct Car {
+		uint type;
+		uint age;
+	};
+	struct Person {
+		uint age;
+		Car car;
+	};
+	// crash
+	Person steve;
+	steve.age = 20;
+	passed &= steve.age == 20;
+	steve.car.age = 2;
+	passed &= steve.car.age == 2;
+	steve.age += 4;
+	passed &= steve.age == 24;
+	steve.car.age += 4;
+	passed &= steve.car.age == 6;
+	return passed;
+}
+bool test_struct2() {
+	bool passed = true;
+	struct Person {
+		uint age;
+	};
+	// crash
+	Person steve;
+	steve.age = 20;
+	passed &= steve.age == 20;
+	steve.age += 4;
+	passed &= steve.age == 24;
 	return passed;
 }
 void main() {
-	int a = 20 + 20 + 2;
-	bool b = true;
-	int c = a * a / a;
+	// test_struct();
+	test_struct2();
 }
 main();
 `;

@@ -45,6 +45,9 @@ try font hinting
 
 Implementation Ideas:
 
+import a libc, like musl, so we can printf
+that requires a preprocessor
+
 struct Code_Node should use flags instead of bools
 
 render_type should not use snprintf, we should prerender type str

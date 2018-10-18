@@ -247,6 +247,16 @@ void find_expanded_nodes(struct Code_Node* node) {
             node->should_expand = node->array_index.array->demands_expand |
                                   node->array_index.index->demands_expand;
         }
+        case CODE_KIND_DOT_OPERATOR:{
+            find_expanded_nodes(node->dot_operator.left);
+            find_expanded_nodes(node->dot_operator.right);
+            node->demands_expand = node->dot_operator.left->demands_expand |
+                                   node->dot_operator.right->demands_expand |
+                                   (node == interaction_data.cursor);
+            node->should_expand = node->dot_operator.left->demands_expand |
+                                  node->dot_operator.right->demands_expand;
+            break;
+        }
         case CODE_KIND_WHILE:{
             if (node->was_run) {
                 if (node->transformed != NULL) {
@@ -308,10 +318,15 @@ void find_expanded_nodes(struct Code_Node* node) {
             }
             break;
         }
+        case CODE_KIND_STRUCT:{
+            find_expanded_nodes(node->struct_.block);
+            break;
+        }
         case CODE_KIND_IDENT:{
             node->demands_expand = node == interaction_data.cursor;
             break;
         }
+        case CODE_KIND_STRING:
         case CODE_KIND_LITERAL_INT:
         case CODE_KIND_LITERAL_FLOAT:
         case CODE_KIND_LITERAL_BOOL:{
