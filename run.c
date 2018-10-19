@@ -72,10 +72,15 @@ struct Code_Node* math_binop(struct Code_Node* left, char* op, struct Code_Node*
         type = 1;
     }
     else if (left->type->ident.type->kind == TYPE_INFO_TAG_INTEGER) {
-        type = 2;
+        if (left->type->ident.type->integer.is_signed) {
+            type = 2;
+        }
+        else {
+            type = 3;
+        }
     }
     else if (left->type->ident.type->kind == TYPE_INFO_TAG_FLOAT) {
-        type = 3;
+        type = 4;
     }
 
     // @Ugh
@@ -97,6 +102,9 @@ struct Code_Node* math_binop(struct Code_Node* left, char* op, struct Code_Node*
         }
         else if (strcmp(op, "/") == 0) {
             result = left_value / right_value;
+        }
+        else if (strcmp(op, "%") == 0) {
+            result = left_value % right_value;
         }
         else if (strcmp(op, "<") == 0) {
             result = left_value < right_value;
@@ -141,9 +149,9 @@ struct Code_Node* math_binop(struct Code_Node* left, char* op, struct Code_Node*
         // integer
         // we really should store operation type as an enum
         // how should we handle custom operators then?
-        int left_value = left->literal_int.value;
-        int right_value = right->literal_int.value;
-        int result;
+        signed long int left_value = left->literal_int.value;
+        signed long int right_value = right->literal_int.value;
+        signed long int result;
         bool is_bool_op = false;
         // @Copypaste
         if (strcmp(op, "+") == 0) {
@@ -157,6 +165,9 @@ struct Code_Node* math_binop(struct Code_Node* left, char* op, struct Code_Node*
         }
         else if (strcmp(op, "/") == 0) {
             result = left_value / right_value;
+        }
+        else if (strcmp(op, "%") == 0) {
+            result = left_value % right_value;
         }
         else if (strcmp(op, "&") == 0) {
             result = left_value & right_value;
@@ -211,10 +222,85 @@ struct Code_Node* math_binop(struct Code_Node* left, char* op, struct Code_Node*
         }
     }
     else if (type == 3) {
-        // float
-        float left_value = left->literal_float.value;
-        float right_value = right->literal_float.value;
-        float result;
+        // integer
+        // we really should store operation type as an enum
+        // how should we handle custom operators then?
+        unsigned long int left_value = left->literal_uint.value;
+        unsigned long int right_value = right->literal_uint.value;
+        unsigned long int result;
+        bool is_bool_op = false;
+        // @Copypaste
+        if (strcmp(op, "+") == 0) {
+            result = left_value + right_value;
+        }
+        else if (strcmp(op, "-") == 0) {
+            result = left_value - right_value;
+        }
+        else if (strcmp(op, "*") == 0) {
+            result = left_value * right_value;
+        }
+        else if (strcmp(op, "/") == 0) {
+            result = left_value / right_value;
+        }
+        else if (strcmp(op, "%") == 0) {
+            result = left_value % right_value;
+        }
+        else if (strcmp(op, "&") == 0) {
+            result = left_value & right_value;
+        }
+        else if (strcmp(op, "^") == 0) {
+            result = left_value ^ right_value;
+        }
+        else if (strcmp(op, "|") == 0) {
+            result = left_value | right_value;
+        }
+        else if (strcmp(op, "<") == 0) {
+            is_bool_op = true;
+            result = left_value < right_value;
+        }
+        else if (strcmp(op, "<=") == 0) {
+            is_bool_op = true;
+            result = left_value <= right_value;
+        }
+        else if (strcmp(op, ">") == 0) {
+            is_bool_op = true;
+            result = left_value > right_value;
+        }
+        else if (strcmp(op, ">=") == 0) {
+            is_bool_op = true;
+            result = left_value >= right_value;
+        }
+        else if (strcmp(op, "!=") == 0) {
+            is_bool_op = true;
+            result = left_value != right_value;
+        }
+        else if (strcmp(op, "==") == 0) {
+            is_bool_op = true;
+            result = left_value == right_value;
+        }
+        else if (strcmp(op, "&&") == 0) {
+            is_bool_op = true;
+            result = left_value && right_value;
+        }
+        else if (strcmp(op, "||") == 0) {
+            is_bool_op = true;
+            result = left_value || right_value;
+        }
+        else {
+            printf("math_binop not implemented for uint op kind: (%s)\n", op);
+            abort();
+        }
+        if (is_bool_op) {
+            return make_literal_bool(run_data.code_nodes, (bool)result);
+        }
+        else {
+            return make_literal_uint(run_data.code_nodes, result);
+        }
+    }
+    else if (type == 4) {
+        double left_value = left->literal_float.value;
+        double right_value = right->literal_float.value;
+        double result;
         bool is_bool_op = false;
         // @Copypaste
         if (strcmp(op, "+") == 0) {
@@ -302,6 +388,10 @@ void* get_result_ptr(struct Code_Node* node) {
             return &(node->result->literal_int.value);
             break;
         }
+        case CODE_KIND_LITERAL_UINT:{
+            return &(node->result->literal_uint.value);
+            break;
+        }
         case CODE_KIND_LITERAL_FLOAT:{
             return &(node->result->literal_float.value);
             break;
@@ -323,15 +413,23 @@ void fill_result_str(struct Code_Node* node) {
     }
     switch (node->kind) {
         case CODE_KIND_LITERAL_INT:{
-            int value = node->literal_int.value;
-            int chars_needed = snprintf(NULL, 0, "%d", value) + 1;
+            signed long int value = node->literal_int.value;
+            int chars_needed = snprintf(NULL, 0, "%ld", value) + 1;
             char* str = malloc(sizeof(char) * chars_needed);
-            snprintf(str, chars_needed, "%d", value);
+            snprintf(str, chars_needed, "%ld", value);
+            node->str = str;
+            break;
+        }
+        case CODE_KIND_LITERAL_UINT:{
+            unsigned long int value = node->literal_uint.value;
+            int chars_needed = snprintf(NULL, 0, "%lu", value) + 1;
+            char* str = malloc(sizeof(char) * chars_needed);
+            snprintf(str, chars_needed, "%lu", value);
             node->str = str;
             break;
         }
         case CODE_KIND_LITERAL_FLOAT:{
-            float value = node->literal_float.value;
+            double value = node->literal_float.value;
             int chars_needed = 20;
             char* str = malloc(sizeof(char) * chars_needed);
             snprintf(str, chars_needed, "%.19f", value);
@@ -386,18 +484,19 @@ struct Code_Node* get_result(void* value, struct Type_Info* type) {
             return get_result(value, type->ident.type);
         }
         case TYPE_INFO_TAG_INTEGER:{
-            // @Incomplete
-            // we don't account for size
             if (type == Native_Type_Bool->ident.type) {
                 result = make_literal_bool(run_data.code_nodes, *(bool*)value);
             }
+            else if (type->integer.is_signed) {
+                result = make_literal_int(run_data.code_nodes, *(signed long int*)value);
+            }
             else {
-                result = make_literal_int(run_data.code_nodes, *(int*)value);
+                result = make_literal_uint(run_data.code_nodes, *(unsigned long int*)value);
             }
             break;
         }
         case TYPE_INFO_TAG_FLOAT:{
-            result = make_literal_float(run_data.code_nodes, *(float*)value);
+            result = make_literal_float(run_data.code_nodes, *(double*)value);
             break;
         }
         case TYPE_INFO_TAG_STRUCT:{
@@ -436,6 +535,27 @@ void run_call(struct Code_Node* node) {
     }
     run_data.last_call = prev_last_call;
 }
+struct Code_Node* maybe_cast(struct Code_Node* lhs, struct Code_Node* rhs) {
+    struct Type_Info* lhs_type = lhs->type;
+    if (lhs_type->kind == TYPE_INFO_TAG_IDENT) {
+        lhs_type = lhs_type->ident.type;
+    }
+    struct Type_Info* rhs_type = rhs->type;
+    if (rhs_type->kind == TYPE_INFO_TAG_IDENT) {
+        rhs_type = rhs_type->ident.type;
+    }
+    if (lhs_type->kind == TYPE_INFO_TAG_INTEGER && rhs_type->kind == TYPE_INFO_TAG_INTEGER) {
+        if (lhs_type->integer.is_signed == true && rhs_type->integer.is_signed == false) {
+            signed long int value = (signed long int)rhs->literal_uint.value;
+            rhs = make_literal_int(run_data.code_nodes, value);
+        }
+        else if (lhs_type->integer.is_signed == false && rhs_type->integer.is_signed == true) {
+            printf("can't convert signed int expression to unsigned\n");
+            abort();
+        }
+    }
+    return rhs;
+}
 size_t run_lvalue(struct Code_Node* node) {
     // printf("run_lvalue: (%s)\n", code_kind_to_string(node->kind));
     node->was_run = true;
@@ -450,25 +570,30 @@ size_t run_lvalue(struct Code_Node* node) {
             break;
         }
         case CODE_KIND_ASSIGN:{
-            node->assign.ident->is_lhs = true;
-            size_t lhs_pointer = run_lvalue(node->assign.ident);
-            run_rvalue(node->assign.expression);
-            node->result = node->assign.expression->result;
-            void* prev_value = get_memory(lhs_pointer, node->assign.ident->type->size_in_bytes);
-            if (node->assign.ident->type->kind != TYPE_INFO_TAG_ARRAY) {
-                node->assign.ident->result = get_result(prev_value, node->assign.ident->type);
+            struct Code_Node* lhs = node->assign.ident;
+            struct Code_Node* rhs = node->assign.expression;
+            lhs->is_lhs = true;
+            size_t lhs_pointer = run_lvalue(lhs);
+            run_rvalue(rhs);
+            rhs->result = maybe_cast(lhs, rhs->result);
+            node->result = rhs->result;
+            void* prev_value = get_memory(lhs_pointer, lhs->type->size_in_bytes);
+            if (lhs->type->kind != TYPE_INFO_TAG_ARRAY) {
+                lhs->result = get_result(prev_value, lhs->type);
             }
-            set_memory(lhs_pointer, get_result_ptr(node), node->assign.ident->type->size_in_bytes);
+            set_memory(lhs_pointer, get_result_ptr(node), lhs->type->size_in_bytes);
             break;
         }
         case CODE_KIND_OPASSIGN:{
             struct Code_Node* lhs = node->opassign.ident;
+            struct Code_Node* rhs = node->opassign.expression;
             lhs->is_lhs = true;
             size_t lhs_pointer = run_lvalue(lhs);
             lhs->result = get_result(get_memory(lhs_pointer, lhs->type->size_in_bytes), lhs->type);
-            run_rvalue(node->opassign.expression);
-            node->result = math_binop(lhs->result, node->opassign.operation_type, node->opassign.expression->result);
-            set_memory(lhs_pointer, get_result_ptr(node), node->opassign.ident->type->size_in_bytes);
+            run_rvalue(rhs);
+            rhs->result = maybe_cast(lhs, rhs->result);
+            node->result = math_binop(lhs->result, node->opassign.operation_type, rhs->result);
+            set_memory(lhs_pointer, get_result_ptr(node), lhs->type->size_in_bytes);
             break;
         }
         case CODE_KIND_CALL:{
@@ -497,6 +622,7 @@ size_t run_lvalue(struct Code_Node* node) {
             struct Type_Info_Struct* struct_ = &(left->type->ident.type->struct_);
             size_t member_index = index_of_string(right->ident.name, struct_->member_names, struct_->members_length);
             result = run_lvalue(left) + struct_->offsets[member_index];
+            add_node_to_execution_stack(right);
             // add_memory_use(result, right);
 
             break;
@@ -510,21 +636,14 @@ size_t run_lvalue(struct Code_Node* node) {
     return result;
 }
 struct Code_Node* run_rvalue(struct Code_Node* node) {
-    // printf("run_rvalue: (%s)\n", code_kind_to_string(node->kind));
+    printf("run_rvalue: (%s)\n", code_kind_to_string(node->kind));
     node->was_run = true;
     struct Code_Node* result = NULL;
     switch (node->kind) {
+        case CODE_KIND_LITERAL_INT:
+        case CODE_KIND_LITERAL_UINT:
+        case CODE_KIND_LITERAL_FLOAT:
         case CODE_KIND_LITERAL_BOOL:{
-            add_node_to_execution_stack(node);
-            node->result = node;
-            return node;
-        }
-        case CODE_KIND_LITERAL_INT:{
-            add_node_to_execution_stack(node);
-            node->result = node;
-            return node;
-        }
-        case CODE_KIND_LITERAL_FLOAT:{
             add_node_to_execution_stack(node);
             node->result = node;
             return node;
@@ -547,6 +666,10 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
         case CODE_KIND_ARRAY_INDEX:{
             void* real_pointer = (void*)(run_data.memory + run_lvalue(node));
             result = get_result(real_pointer, node->type);
+            break;
+        }
+        case CODE_KIND_DOT_OPERATOR:{
+            result = get_result(get_memory(run_lvalue(node), node->type->size_in_bytes), node->type);
             break;
         }
         default:{
@@ -629,6 +752,12 @@ struct Code_Node* run_statement(struct Code_Node* node) {
         }
         case CODE_KIND_DECLARATION:{
             struct Type_Info* type = node->declaration.type;
+            if (type == NULL) {
+                break;
+            }
+            if (type->kind == TYPE_INFO_TAG_IDENT) {
+                type = type->ident.type;
+            }
             struct Code_Node* expression = node->declaration.expression;
             if (expression != NULL &&
                 (expression->kind == CODE_KIND_PROCEDURE ||
@@ -638,34 +767,48 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                 break;
             }
             add_node_to_execution_stack(node->declaration.ident);
-            if (type && type->kind == TYPE_INFO_TAG_IDENT && type->ident.type->kind == TYPE_INFO_TAG_VOID) {
+            if (type->kind == TYPE_INFO_TAG_VOID) {
                 break;
             }
-            size_t align;
-            if (type->kind == TYPE_INFO_TAG_IDENT) {
-                if (type->ident.type->kind == TYPE_INFO_TAG_STRUCT) {
-                    // largest alignment, 32bit for now
-                    align = 4;
-                }
-                else {
-                    align = type->size_in_bytes;
-                }
+            size_t align = 0;
+            if (type->kind == TYPE_INFO_TAG_STRUCT) {
+                // largest alignment, 32bit for now
+                align = 4;
             }
             else if (type->kind == TYPE_INFO_TAG_ARRAY) {
                 align = type->array.elem_type->size_in_bytes;
+            }
+            else {
+                align = type->size_in_bytes;
             }
             if (align == 0) {
                 printf("alignment is zero!\n");
                 abort();
             }
-            size_t alignment_pad = align - (run_data.stack_pointer % align);
+            size_t alignment_pad = (align - (run_data.stack_pointer % align)) % align;
             node->declaration.pointer = run_data.stack_pointer + alignment_pad;
             node->declaration.alignment_pad = alignment_pad;
+            printf("name: %s\n", node->declaration.ident->ident.name);
+            printf("decl ptr: %zu\n", node->declaration.pointer);
             run_data.stack_pointer += alignment_pad + type->size_in_bytes;
             array_push((struct Dynamic_Array*)run_data.last_block->block.allocations, &node);
 
             if (expression != NULL) {
                 run_rvalue(expression);
+                struct Type_Info* expr_type = expression->type;
+                if (expr_type->kind == TYPE_INFO_TAG_IDENT) {
+                    expr_type = expr_type->ident.type;
+                }
+                if (type->kind == TYPE_INFO_TAG_INTEGER && expr_type->kind == TYPE_INFO_TAG_INTEGER) {
+                    if (type->integer.is_signed == true && expr_type->integer.is_signed == false) {
+                        signed long int value = (signed long int)expression->result->literal_uint.value;
+                        expression->result = make_literal_int(run_data.code_nodes, value);
+                    }
+                    else if (type->integer.is_signed == false && expr_type->integer.is_signed == true) {
+                        printf("can't convert signed int expression to unsigned\n");
+                        abort();
+                    }
+                }
                 set_memory(node->declaration.pointer, get_result_ptr(expression), node->declaration.type->size_in_bytes);
             }
             break;
@@ -981,11 +1124,19 @@ struct Code_Node* clone(struct Code_Node* node) {
             break;
         }
         case CODE_KIND_STRUCT:{
-            cloned = make_struct(run_data.code_nodes, clone(node->struct_.block));
+            run_data.count_uses = false;
+            struct Code_Node* cloned_block = clone(node->struct_.block);
+            run_data.count_uses = true;
+            cloned = make_struct(run_data.code_nodes, cloned_block);
             break;
         }
         case CODE_KIND_LITERAL_INT:{
             cloned = make_literal_int(run_data.code_nodes, node->literal_int.value);
+            cloned->str = node->str;
+            break;
+        }
+        case CODE_KIND_LITERAL_UINT:{
+            cloned = make_literal_uint(run_data.code_nodes, node->literal_uint.value);
             cloned->str = node->str;
             break;
         }

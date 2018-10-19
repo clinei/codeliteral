@@ -65,9 +65,10 @@ enum Code_Kind {
     CODE_KIND_STRING = 26,
     CODE_KIND_PARENS = 27,
     CODE_KIND_LITERAL_INT = 28,
-    CODE_KIND_LITERAL_FLOAT = 29,
-    CODE_KIND_LITERAL_BOOL = 30,
-    CODE_KIND_NATIVE_CODE = 31,
+    CODE_KIND_LITERAL_UINT = 29,
+    CODE_KIND_LITERAL_FLOAT = 30,
+    CODE_KIND_LITERAL_BOOL = 31,
+    CODE_KIND_NATIVE_CODE = 32,
 };
 char* code_kind_to_string(enum Code_Kind kind);
 
@@ -200,10 +201,13 @@ struct Code_Ident {
     struct Code_Node* declaration;
 };
 struct Code_Literal_Int {
-    int value;
+    signed long int value;
+};
+struct Code_Literal_Uint {
+    unsigned long int value;
 };
 struct Code_Literal_Float {
-    float value;
+    double value;
 };
 struct Code_Literal_Bool {
     bool value;
@@ -261,6 +265,7 @@ struct Code_Node {
         struct Code_String string_;
         struct Code_Parens parens;
         struct Code_Literal_Int literal_int;
+        struct Code_Literal_Uint literal_uint;
         struct Code_Literal_Float literal_float;
         struct Code_Literal_Bool literal_bool;
         struct Code_Native_Code native_code;
@@ -362,7 +367,9 @@ struct Code_Node* make_ident(struct Code_Nodes* code_nodes,
                              char* name,
                              struct Code_Node* declaration);
 struct Code_Node* make_literal_int(struct Code_Nodes* code_nodes,
-                                   int value);
+                                   signed long int value);
+struct Code_Node* make_literal_uint(struct Code_Nodes* code_nodes,
+                                    unsigned long int value);
 struct Code_Node* make_literal_float(struct Code_Nodes* code_nodes,
                                      float value);
 struct Code_Node* make_literal_bool(struct Code_Nodes* code_nodes,
@@ -477,6 +484,8 @@ struct Infer_Data {
 
     struct Code_Node* last_block;
     size_t statement_index;
+
+    struct Code_Node* last_declaration;
 };
 
 struct Code_Nodes* parse(struct Token_Array* token_array);

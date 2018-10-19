@@ -320,6 +320,7 @@ void find_expanded_nodes(struct Code_Node* node) {
         }
         case CODE_KIND_STRUCT:{
             find_expanded_nodes(node->struct_.block);
+            node->struct_.block->should_expand = true;
             break;
         }
         case CODE_KIND_IDENT:{
@@ -328,6 +329,7 @@ void find_expanded_nodes(struct Code_Node* node) {
         }
         case CODE_KIND_STRING:
         case CODE_KIND_LITERAL_INT:
+        case CODE_KIND_LITERAL_UINT:
         case CODE_KIND_LITERAL_FLOAT:
         case CODE_KIND_LITERAL_BOOL:{
             node->demands_expand = node == interaction_data.cursor;
@@ -755,17 +757,24 @@ void render_node(struct Code_Node* node,
             break;
         }
         case CODE_KIND_DOT_OPERATOR:{
-            render_node(node->dot_operator.left, render_data);
-            render_text(".", &render_data->xpos, &render_data->ypos,
-                        render_data->fg_color,
-                        render_data->bg_color,
-                        render_data);
-            render_node(node->dot_operator.right, render_data);
+            if ((node->is_lhs ? interaction_data.show_changes : interaction_data.show_values) &&
+                node->should_expand == false && node->result != NULL) {
+                
+                render_node(node->result, render_data);
+            }
+            else {
+                render_node(node->dot_operator.left, render_data);
+                render_text(".", &render_data->xpos, &render_data->ypos,
+                            render_data->fg_color,
+                            render_data->bg_color,
+                            render_data);
+                render_node(node->dot_operator.right, render_data);
+            }
             break;
         }
         case CODE_KIND_CALL:{
-            if (interaction_data.show_values && node->result != NULL &&
-                (node->should_expand == false && interaction_data.expand_all == false)) {
+            if ((node->is_lhs ? interaction_data.show_changes : interaction_data.show_values) &&
+                (node->should_expand == false && interaction_data.expand_all == false) && node->result != NULL) {
                 
                 render_node(node->result, render_data);
             }
@@ -879,20 +888,9 @@ void render_node(struct Code_Node* node,
             }
             break;
         }
-        case CODE_KIND_LITERAL_INT:{
-            render_text(node->str, &render_data->xpos, &render_data->ypos,
-                        hilite_literal_fg_color,
-                        render_data->bg_color,
-                        render_data);
-            break;
-        }
-        case CODE_KIND_LITERAL_FLOAT:{
-            render_text(node->str, &render_data->xpos, &render_data->ypos,
-                        hilite_literal_fg_color,
-                        render_data->bg_color,
-                        render_data);
-            break;
-        }
+        case CODE_KIND_LITERAL_INT:
+        case CODE_KIND_LITERAL_UINT:
+        case CODE_KIND_LITERAL_FLOAT:
         case CODE_KIND_LITERAL_BOOL:{
             render_text(node->str, &render_data->xpos, &render_data->ypos,
                         hilite_literal_fg_color,
@@ -1259,6 +1257,10 @@ void get_baked_quad_scaled(const stbtt_bakedchar *chardata,
 
    float d3d_bias = opengl_fillrule ? 0 : -0.5f;
    float ipw = 1.0f / pw, iph = 1.0f / ph;
+   if (char_index < 0) {
+       printf("char_index is less than 0, did you forget to null-terminate a string?");
+       abort();
+   }
    const stbtt_bakedchar *b = chardata + char_index;
    int round_x = (int)floor(*xpos + b->xoff / scale + 0.5f);
    int round_y = (int)floor(*ypos + b->yoff / scale + 0.5f);

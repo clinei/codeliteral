@@ -112,6 +112,9 @@ char* code_kind_to_string(enum Code_Kind kind) {
         case CODE_KIND_LITERAL_INT:{
             return "literal int";
         }
+        case CODE_KIND_LITERAL_UINT:{
+            return "literal uint";
+        }
         case CODE_KIND_LITERAL_FLOAT:{
             return "literal float";
         }
@@ -528,13 +531,26 @@ struct Code_Node* make_ident(struct Code_Nodes* code_nodes,
 }
 
 struct Code_Node* make_literal_int(struct Code_Nodes* code_nodes,
-                                   int value) {
+                                   signed long int value) {
 
 	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_LITERAL_INT;
     node->type = Native_Type_Int;
 
 	node->literal_int.value = value;
+
+	set_serial(node);
+
+	return node;
+}
+struct Code_Node* make_literal_uint(struct Code_Nodes* code_nodes,
+                                    unsigned long int value) {
+
+	struct Code_Node* node = get_new_code_node(code_nodes);
+	node->kind = CODE_KIND_LITERAL_UINT;
+    node->type = Native_Type_UInt;
+
+	node->literal_uint.value = value;
 
 	set_serial(node);
 
@@ -817,6 +833,7 @@ void init_infer() {
     infer_data.block_stack = malloc(sizeof(struct Code_Node_Array));
     array_init((struct Dynamic_Array*)infer_data.block_stack, sizeof(struct Code_Node*), 10);
     infer_data.last_block = NULL;
+    infer_data.last_declaration = NULL;
 }
 void infer_push_block(struct Code_Node* block) {
     array_push((struct Dynamic_Array*)infer_data.block_stack, &block);
@@ -853,7 +870,7 @@ struct Code_Node* infer_decl_of_ident(struct Code_Node* ident) {
     return NULL;
 }
 struct Code_Node* infer(struct Code_Node* node) {
-    printf("infer kind: (%s)\n", code_kind_to_string(node->kind));
+    // printf("infer kind: (%s)\n", code_kind_to_string(node->kind));
     switch (node->kind) {
         case CODE_KIND_BLOCK:{
             infer_push_block(node);
@@ -934,8 +951,6 @@ struct Code_Node* infer(struct Code_Node* node) {
                     if (left->type->ident.type->kind == TYPE_INFO_TAG_STRUCT) {
                         struct Type_Info_Struct* struct_ = &(left->type->ident.type->struct_);
                         size_t member_index = index_of_string(right->ident.name, struct_->member_names, struct_->members_length);
-                        printf("member_index: %zu\n", member_index);
-                        printf("member type: %u\n", struct_->members[member_index]->kind);
                         right->type = struct_->members[member_index];
                     }
                     else abort();
@@ -950,8 +965,6 @@ struct Code_Node* infer(struct Code_Node* node) {
             }
             else abort();
             node->type = right->type;
-            printf("left type: %u\n", left->type->ident.type->kind);
-            printf("right type: %u\n", right->type->ident.type->kind);
             // abort();
             break;
         }
@@ -1289,7 +1302,9 @@ bool parse_statement(struct Token_Array* token_array,
 bool parse_rvalue_atom(struct Token_Array* token_array,
                        struct Code_Nodes* code_nodes) {
 
-    if (token_array->curr_token->kind == TOKEN_KIND_LITERAL) {
+    if (token_array->curr_token->kind == TOKEN_KIND_OP ||
+        token_array->curr_token->kind == TOKEN_KIND_LITERAL) {
+        
         return parse_literal(token_array, code_nodes);
     }
     else if (token_array->curr_token->kind == TOKEN_KIND_STRING) {
@@ -1408,17 +1423,39 @@ bool parse_call(struct Token_Array* token_array,
 bool parse_literal(struct Token_Array* token_array,
                    struct Code_Nodes* code_nodes) {
 
+    bool minus = false;
+    if (strcmp(token_array->curr_token->str, "-") == 0) {
+        minus = true;
+        token_array->curr_token++;
+    }
+    else if (strcmp(token_array->curr_token->str, "+") == 0) {
+        token_array->curr_token++;
+    }
     if (is_one_of(token_array->curr_token->str, '.')) {
         char* str = token_array->curr_token->str;
-        float value = atof(token_array->curr_token->str);
+        double value = atof(token_array->curr_token->str);
+        if (minus) {
+            value = -value;
+        }
         struct Code_Node* float_literal = make_literal_float(code_nodes, value);
         float_literal->str = str;
     }
+    else if (minus) {
+        char* str = token_array->curr_token->str;
+        signed long int value = strtoll(token_array->curr_token->str, NULL, 10);
+        value = -value;
+        struct Code_Node* int_literal = make_literal_int(code_nodes, value);
+        // int_literal->str = str;
+        size_t str_length = strlen(str) + 1;
+        int_literal->str = malloc(str_length + 1);
+        int_literal->str[0] = '-';
+        memcpy(int_literal->str + 1, str, str_length);
+    }
     else {
         char* str = token_array->curr_token->str;
-        int value = atoi(token_array->curr_token->str);
-        struct Code_Node* int_literal = make_literal_int(code_nodes, value);
-        int_literal->str = str;
+        unsigned long int value = strtoul(token_array->curr_token->str, NULL, 10);
+        struct Code_Node* uint_literal = make_literal_uint(code_nodes, value);
+        uint_literal->str = str;
     }
     token_array->curr_token++;
     return true;

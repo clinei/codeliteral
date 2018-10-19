@@ -1,5 +1,9 @@
 Important:
 
+blah
+
+structs need alignment padding
+
 time for scrolling and moving with WASD
 
 push_index was only for run_lvalue for strings, do not implement

@@ -72,7 +72,7 @@ bool test_nested_proc() {
 		return param;
 	}
 	int bar = foo(40) + foo(2);
-	passed = foo == 42;
+	passed = bar == 42;
 	return passed;
 }
 bool test_nested_loop() {
@@ -293,44 +293,27 @@ main();
 `;
 */
 const code = `
-bool test_struct() {
-	bool passed = true;
-	struct Car {
-		uint type;
-		uint age;
-	};
-	struct Person {
-		uint age;
-		Car car;
-	};
-	// crash
-	Person steve;
-	steve.age = 20;
-	passed &= steve.age == 20;
-	steve.car.age = 2;
-	passed &= steve.car.age == 2;
-	steve.age += 4;
-	passed &= steve.age == 24;
-	steve.car.age += 4;
-	passed &= steve.car.age == 6;
-	return passed;
-}
-bool test_struct2() {
-	bool passed = true;
-	struct Person {
-		uint age;
-	};
-	// crash
-	Person steve;
-	steve.age = 20;
-	passed &= steve.age == 20;
-	steve.age += 4;
-	passed &= steve.age == 24;
-	return passed;
+void fizzbuzz(ushort number) {
+	for (uint i = 1; i <= number; i += 1) {
+		if (i % 15 == 0) {
+			printf("%s\n", "FizzBuzz");
+		}
+		else if (i % 5 == 0) {
+			printf("%s\n", "Buzz");
+		}
+		else if (i % 3 == 0) {
+			printf("%s\n", "Fizz");
+		}
+		else {
+			printf("%u\n", i);
+		}
+	}
 }
 void main() {
-	// test_struct();
-	test_struct2();
+	ushort a = 10;
+	// wrong value
+	a;
+	// fizzbuzz(10);
 }
 main();
 `;
