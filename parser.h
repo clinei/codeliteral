@@ -123,13 +123,20 @@ struct Code_Dot_Operator {
     struct Code_Node* left;
     struct Code_Node* right;
 };
+struct Extras {
+    size_t length;
+    size_t capacity;
+    size_t element_size;
+    struct Code_Node_Array* first;
+    struct Code_Node_Array* last;
+};
 struct Code_Block {
     struct Code_Node_Array* statements;
     struct Code_Node_Array* declarations;
     struct Code_Node_Array* allocations;
-    struct Code_Node_Array** extras;
+    struct Extras* extras;
+    // which of these do we actually need?
     struct Code_Node* transformed_from;
-    // redundant because of the above
     bool is_transformed_block;
 };
 struct Code_Return {
@@ -150,25 +157,16 @@ struct Code_Else {
 struct Code_While {
     struct Code_Node* condition;
     struct Code_Node* expression;
-
-    bool broken;
-    bool continued;
 };
 struct Code_Do_While {
     struct Code_Node* condition;
     struct Code_Node* expression;
-
-    bool broken;
-    bool continued;
 };
 struct Code_For {
     struct Code_Node* begin;
     struct Code_Node* condition;
     struct Code_Node* cycle_end;
     struct Code_Node* expression;
-
-    bool broken;
-    bool continued;
 };
 struct Code_Minus {
     struct Code_Node* expression;
@@ -227,7 +225,11 @@ struct Code_Node {
 	struct Type_Info* type;
 	size_t serial;
 
+    // @Incomplete
+    // convert to flags
     bool was_run;
+    bool broken;
+    bool continued;
     bool is_lhs;
     bool is_on_execution_stack;
     size_t execution_index;
@@ -590,6 +592,7 @@ enum Operator_Precedence {
     OPERATOR_PRECEDENCE_MODULO = 3,
 };
 enum Operator_Precedence map_operator_to_precedence(char* operator);
+bool is_operator_boolean(char* operation_type);
 bool maybe_binary(enum Operator_Precedence prev_prec,
                   struct Token_Array* token_array,
                   struct Code_Nodes* code_nodes);

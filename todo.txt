@@ -1,18 +1,12 @@
-Important:
+Bugs:
 
-blah
+convert node pointers to diffs from the base
+
+we should use flags instead of bools
+
+too much memory gets overwritten, is this caused by endianness?
 
 structs need alignment padding
-
-time for scrolling and moving with WASD
-
-push_index was only for run_lvalue for strings, do not implement
-
-printf needs varargs
-
-we should have a comment on the general design
-
-Bugs:
 
 else if can put a transformed block between an else if chain, not good visually
 

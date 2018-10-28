@@ -1,5 +1,7 @@
 #include "run.h"
 
+#include "debug.h"
+
 void init_run(struct Code_Nodes* code_nodes) {
     run_data.code_nodes = code_nodes;
 
@@ -36,6 +38,7 @@ void set_memory(size_t offset, void* data, size_t num_bytes) {
         run_data.memory_size *= 2;
         run_data.memory = realloc(run_data.memory, run_data.memory_size);
     }
+    // memcpy(run_data.memory + offset, data, sizeof(size_t));
     memcpy(run_data.memory + offset, data, num_bytes);
 }
 
@@ -412,6 +415,9 @@ void fill_result_str(struct Code_Node* node) {
         return;
     }
     switch (node->kind) {
+        case CODE_KIND_STRING:{
+            break;
+        }
         case CODE_KIND_LITERAL_INT:{
             signed long int value = node->literal_int.value;
             int chars_needed = snprintf(NULL, 0, "%ld", value) + 1;
@@ -460,12 +466,14 @@ bool convert_to_bool(void* value, struct Type_Info* type) {
         }
         case TYPE_INFO_TAG_INTEGER:{
             // @Incomplete
-            // we don't account for size
             if (type == Native_Type_Bool->ident.type) {
                 return *(bool*)value;
             }
+            else if (type->integer.is_signed) {
+                return *(signed long int*)value > 0;
+            }
             else {
-                return *(int*)value > 0;
+                return *(unsigned long int*)value > 0;
             }
         }
         case TYPE_INFO_TAG_FLOAT:{
@@ -488,10 +496,14 @@ struct Code_Node* get_result(void* value, struct Type_Info* type) {
                 result = make_literal_bool(run_data.code_nodes, *(bool*)value);
             }
             else if (type->integer.is_signed) {
-                result = make_literal_int(run_data.code_nodes, *(signed long int*)value);
+                result = make_literal_int(run_data.code_nodes, 0);
+                memcpy(&result->literal_int.value, value, type->size_in_bytes);
+                // @Incomplete
+                bool minus = result->literal_int.value < 0;
             }
             else {
-                result = make_literal_uint(run_data.code_nodes, *(unsigned long int*)value);
+                result = make_literal_uint(run_data.code_nodes, 0);
+                memcpy(&result->literal_uint.value, value, type->size_in_bytes);
             }
             break;
         }
@@ -524,12 +536,17 @@ void run_call(struct Code_Node* node) {
     struct Code_Node* proc = node->call.ident->ident.declaration->declaration.expression;
     if (proc->procedure.block->kind == CODE_KIND_BLOCK) {
         transform(node);
-        array_push((struct Dynamic_Array*)run_data.last_block->block.extras[run_data.statement_index], &(node->transformed));
+        struct Code_Node_Array* extras = run_data.last_block->block.extras->first + run_data.statement_index;
+        array_push((struct Dynamic_Array*)extras, &(node->transformed));
         run_statement(node->transformed);
         add_node_to_execution_stack(node);
+        printf("exiting %s\n", node->call.ident->ident.name);
     }
     else if (proc->procedure.block->kind == CODE_KIND_NATIVE_CODE) {
         printf("native code\n");
+        for (size_t i = 0; i < node->call.args->length; i += 1) {
+            run_rvalue(node->call.args->first[i]);
+        }
         // @Incomplete
         // need to import a libc, like musl
     }
@@ -562,6 +579,8 @@ size_t run_lvalue(struct Code_Node* node) {
     size_t result = 0;
     switch (node->kind) {
         case CODE_KIND_IDENT:{
+            // would be nice if we could update names while cloning
+            node->ident.name = node->ident.declaration->declaration.ident->ident.name;
             add_node_to_execution_stack(node);
             result = node->ident.declaration->declaration.pointer;
             if (node->type->kind != TYPE_INFO_TAG_ARRAY) {
@@ -597,7 +616,10 @@ size_t run_lvalue(struct Code_Node* node) {
             break;
         }
         case CODE_KIND_CALL:{
+            struct Code_Node* prev_last_loop = run_data.last_loop;
+            run_data.last_loop = NULL;
             run_call(node);
+            run_data.last_loop = prev_last_loop;
             result = *(size_t*)get_result_ptr(node);
             break;
         }
@@ -636,10 +658,11 @@ size_t run_lvalue(struct Code_Node* node) {
     return result;
 }
 struct Code_Node* run_rvalue(struct Code_Node* node) {
-    printf("run_rvalue: (%s)\n", code_kind_to_string(node->kind));
+    // printf("run_rvalue: (%s)\n", code_kind_to_string(node->kind));
     node->was_run = true;
     struct Code_Node* result = NULL;
     switch (node->kind) {
+        case CODE_KIND_STRING:
         case CODE_KIND_LITERAL_INT:
         case CODE_KIND_LITERAL_UINT:
         case CODE_KIND_LITERAL_FLOAT:
@@ -654,6 +677,8 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
             break;
         }
         case CODE_KIND_IDENT:{
+            // would be nice if we could update names while cloning
+            node->ident.name = node->ident.declaration->declaration.ident->ident.name;
             add_node_to_execution_stack(node);
             result = get_ident_result(node);
             break;
@@ -685,38 +710,21 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
 
     return result;
 }
-bool run_loop_broken_or_continued(struct Code_Node* node) {
-    switch (node->kind) {
-        case CODE_KIND_WHILE:{
-            return node->while_.broken || node->while_.continued;
-        }
-        case CODE_KIND_DO_WHILE:{
-            return node->do_while_.broken || node->do_while_.continued;
-        }
-        case CODE_KIND_FOR:{
-            return node->for_.broken || node->for_.continued;
-        }
-        default:{
-            abort();
-            return false;
-        }
+void run_start_block(struct Code_Node* node) {
+    node->block.allocations = malloc(sizeof(struct Code_Node_Array));
+    array_init((struct Dynamic_Array*)node->block.allocations, sizeof(struct Code_Node*), 10);
+    node->block.extras = malloc(sizeof(struct Extras));
+    if (node->block.statements->length == 0) {
+        array_init((struct Dynamic_Array*)node->block.extras, sizeof(struct Code_Node_Array), 10);
+    }
+    else {
+        array_init((struct Dynamic_Array*)node->block.extras, sizeof(struct Code_Node_Array), node->block.statements->length);
     }
 }
-bool run_loop_broken(struct Code_Node* node) {
-    switch (node->kind) {
-        case CODE_KIND_WHILE:{
-            return node->while_.broken;
-        }
-        case CODE_KIND_DO_WHILE:{
-            return node->do_while_.broken;
-        }
-        case CODE_KIND_FOR:{
-            return node->for_.broken;
-        }
-        default:{
-            abort();
-            return false;
-        }
+void run_end_block(struct Code_Node* node) {
+    for (size_t i = 0; i < node->block.allocations->length; i += 1) {
+        struct Code_Node* decl = node->block.allocations->first[i];
+        run_data.stack_pointer -= decl->declaration.type->size_in_bytes + decl->declaration.alignment_pad;
     }
 }
 struct Code_Node* run_statement(struct Code_Node* node) {
@@ -729,24 +737,22 @@ struct Code_Node* run_statement(struct Code_Node* node) {
         case CODE_KIND_BLOCK:{
             struct Code_Node* prev_last_block = run_data.last_block;
             run_data.last_block = node;
-            node->block.allocations = malloc(sizeof(struct Code_Node_Array));
-            array_init((struct Dynamic_Array*)node->block.allocations, sizeof(struct Code_Node*), 10);
-            node->block.extras = malloc(sizeof(struct Code_Node_Array*) * node->block.statements->length);
+            run_start_block(node);
+            size_t prev_length = node->block.statements->length;
             for (size_t i = 0; i < node->block.statements->length; i += 1) {
-                node->block.extras[i] = malloc(sizeof(struct Code_Node_Array));
-                array_init((struct Dynamic_Array*)node->block.extras[i], sizeof(struct Code_Node*), 2);
+                struct Code_Node_Array* extras = malloc(sizeof(struct Code_Node_Array));
+                array_init((struct Dynamic_Array*)extras, sizeof(struct Code_Node*), 2);
+                array_push((struct Dynamic_Array*)node->block.extras, extras);
                 run_data.statement_index = i;
                 run_statement(node->block.statements->first[i]);
                 if ((run_data.last_call != NULL && run_data.last_call->call.returned) ||
-                    (run_data.last_loop != NULL && run_loop_broken_or_continued(run_data.last_loop))) {
+                    (run_data.last_loop != NULL && 
+                     (run_data.last_loop->broken || run_data.last_loop->continued))) {
 
                     break;
                 }
             }
-            for (size_t i = 0; i < node->block.allocations->length; i += 1) {
-                struct Code_Node* decl = node->block.allocations->first[i];
-                run_data.stack_pointer -= decl->declaration.type->size_in_bytes + decl->declaration.alignment_pad;
-            }
+            run_end_block(node);
             run_data.last_block = prev_last_block;
             break;
         }
@@ -757,6 +763,18 @@ struct Code_Node* run_statement(struct Code_Node* node) {
             }
             if (type->kind == TYPE_INFO_TAG_IDENT) {
                 type = type->ident.type;
+            }
+            // guarantee unique variable names
+            char* ident_name = node->declaration.ident->ident.name;
+            size_t uses = get_name_uses(ident_name);
+            if (uses > 0) {
+                int chars_needed = snprintf(NULL, 0, "%s_%zu", ident_name, uses) + 1;
+                char* new_ident_name = malloc(sizeof(char) * chars_needed);
+                int more_chars_needed = snprintf(new_ident_name, chars_needed, "%s_%zu", ident_name, uses);
+                node->declaration.ident->ident.name = new_ident_name;
+            }
+            if (run_data.count_uses) {
+                add_name_use(ident_name);
             }
             struct Code_Node* expression = node->declaration.expression;
             if (expression != NULL &&
@@ -788,10 +806,9 @@ struct Code_Node* run_statement(struct Code_Node* node) {
             size_t alignment_pad = (align - (run_data.stack_pointer % align)) % align;
             node->declaration.pointer = run_data.stack_pointer + alignment_pad;
             node->declaration.alignment_pad = alignment_pad;
-            printf("name: %s\n", node->declaration.ident->ident.name);
-            printf("decl ptr: %zu\n", node->declaration.pointer);
             run_data.stack_pointer += alignment_pad + type->size_in_bytes;
             array_push((struct Dynamic_Array*)run_data.last_block->block.allocations, &node);
+            printf("decl ptr: %zu\n", node->declaration.pointer);
 
             if (expression != NULL) {
                 run_rvalue(expression);
@@ -802,7 +819,9 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                 if (type->kind == TYPE_INFO_TAG_INTEGER && expr_type->kind == TYPE_INFO_TAG_INTEGER) {
                     if (type->integer.is_signed == true && expr_type->integer.is_signed == false) {
                         signed long int value = (signed long int)expression->result->literal_uint.value;
+                        char* str = expression->result->str;
                         expression->result = make_literal_int(run_data.code_nodes, value);
+                        expression->result->str = str;
                     }
                     else if (type->integer.is_signed == false && expr_type->integer.is_signed == true) {
                         printf("can't convert signed int expression to unsigned\n");
@@ -856,9 +875,19 @@ struct Code_Node* run_statement(struct Code_Node* node) {
             run_data.last_loop = node;
             node->transformed = make_block(run_data.code_nodes, NULL);
             node->transformed->block.is_transformed_block = true;
-            array_push((struct Dynamic_Array*)run_data.last_block->block.extras[run_data.statement_index], &(node->transformed));
+            run_statement(node->transformed);
+            struct Code_Node_Array* extras = run_data.last_block->block.extras->first + run_data.statement_index;
+            array_push((struct Dynamic_Array*)extras, &(node->transformed));
+            struct Code_Node* prev_last_block = run_data.last_block;
+            run_data.last_block = node->transformed;
+            run_data.statement_index = 0;
+            run_start_block(node->transformed);
             bool should_run = true;
             while (should_run) {
+                run_data.statement_index += 1;
+                struct Extras* loop_extras = malloc(sizeof(struct Code_Node_Array));
+                array_init((struct Dynamic_Array*)loop_extras, sizeof(struct Code_Node*), 2);
+                array_push((struct Dynamic_Array*)node->transformed->block.extras, loop_extras);
                 struct Code_Node* condition = clone(node->while_.condition);
                 struct Code_Node* expression = clone(node->while_.expression);
                 struct Code_Node* if_stmt = make_if(run_data.code_nodes, condition, expression);
@@ -870,11 +899,13 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                 }
                 array_push((struct Dynamic_Array*)node->transformed->block.statements, &if_stmt);
                 if ((run_data.last_call != NULL && run_data.last_call->call.returned) ||
-                    (run_data.last_loop != NULL && run_loop_broken(run_data.last_loop))) {
+                    (run_data.last_loop != NULL && run_data.last_loop->broken)) {
 
                     break;
                 }
             }
+            run_end_block(node->transformed);
+            run_data.last_block = prev_last_block;
             run_data.last_loop = prev_last_loop;
             break;
         }
@@ -883,10 +914,20 @@ struct Code_Node* run_statement(struct Code_Node* node) {
             run_data.last_loop = node;
             node->transformed = make_block(run_data.code_nodes, NULL);
             node->transformed->block.is_transformed_block = true;
-            array_push((struct Dynamic_Array*)run_data.last_block->block.extras[run_data.statement_index], &(node->transformed));
+            run_statement(node->transformed);
+            struct Code_Node_Array* extras = run_data.last_block->block.extras->first + run_data.statement_index;
+            array_push((struct Dynamic_Array*)extras, &(node->transformed));
+            struct Code_Node* prev_last_block = run_data.last_block;
+            run_data.last_block = node->transformed;
+            run_data.statement_index = 0;
+            run_start_block(node->transformed);
             bool first = true;
             bool should_run = true;
             while (should_run) {
+                run_data.statement_index += 1;
+                struct Extras* loop_extras = malloc(sizeof(struct Code_Node_Array));
+                array_init((struct Dynamic_Array*)loop_extras, sizeof(struct Code_Node*), 2);
+                array_push((struct Dynamic_Array*)node->transformed->block.extras, loop_extras);
                 struct Code_Node* condition;
                 if (first) {
                     first = false;
@@ -905,11 +946,13 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                 }
                 array_push((struct Dynamic_Array*)node->transformed->block.statements, &if_stmt);
                 if ((run_data.last_call != NULL && run_data.last_call->call.returned) ||
-                    (run_data.last_loop != NULL && run_loop_broken(run_data.last_loop))) {
+                    (run_data.last_loop != NULL && run_data.last_loop->broken)) {
 
                     break;
                 }
             }
+            run_end_block(node->transformed);
+            run_data.last_block = prev_last_block;
             run_data.last_loop = prev_last_loop;
             break;
         }
@@ -918,18 +961,41 @@ struct Code_Node* run_statement(struct Code_Node* node) {
             run_data.last_loop = node;
             node->transformed = make_block(run_data.code_nodes, NULL);
             node->transformed->block.is_transformed_block = true;
-            array_push((struct Dynamic_Array*)run_data.last_block->block.extras[run_data.statement_index], &(node->transformed));
-            run_statement(node->for_.begin);
-            array_push((struct Dynamic_Array*)node->transformed->block.statements, &(node->for_.begin));
+            struct Code_Node_Array* extras = run_data.last_block->block.extras->first + run_data.statement_index;
+            array_push((struct Dynamic_Array*)extras, &(node->transformed));
+            struct Code_Node* prev_last_block = run_data.last_block;
+            run_data.last_block = node->transformed;
+            run_data.statement_index = 0;
+            run_start_block(node->transformed);
+            if (node->for_.begin != NULL) {
+                struct Code_Node_Array* begin_extras = malloc(sizeof(struct Code_Node_Array));
+                array_init((struct Dynamic_Array*)begin_extras, sizeof(struct Code_Node*), 2);
+                array_push((struct Dynamic_Array*)node->transformed->block.extras, begin_extras);
+                array_push((struct Dynamic_Array*)node->transformed->block.statements, &(node->for_.begin));
+                run_statement(node->for_.begin);
+                run_data.statement_index += 1;
+            }
             if (node->for_.expression->kind != CODE_KIND_BLOCK) {
                 struct Code_Node* block = make_block(run_data.code_nodes, NULL);
                 array_push((struct Dynamic_Array*)block->block.statements, &(node->for_.expression));
                 node->for_.expression = block;
             }
-            array_push((struct Dynamic_Array*)node->for_.expression->block.statements, &(node->for_.cycle_end));
+            if (node->for_.cycle_end != NULL) {
+                array_push((struct Dynamic_Array*)node->for_.expression->block.statements, &(node->for_.cycle_end));
+            }
             bool should_run = true;
             while (should_run) {
-                struct Code_Node* condition = clone(node->for_.condition);
+                run_data.statement_index += 1;
+                struct Extras* loop_extras = malloc(sizeof(struct Code_Node_Array));
+                array_init((struct Dynamic_Array*)loop_extras, sizeof(struct Code_Node*), 2);
+                array_push((struct Dynamic_Array*)node->transformed->block.extras, loop_extras);
+                struct Code_Node* condition;
+                if (node->for_.condition != NULL) {
+                    condition = clone(node->for_.condition);
+                }
+                else {
+                    condition = make_literal_bool(run_data.code_nodes, true);
+                }
                 struct Code_Node* expression = clone(node->for_.expression);
                 struct Code_Node* if_stmt = make_if(run_data.code_nodes, condition, expression);
                 if_stmt->was_run = true;
@@ -940,12 +1006,32 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                 }
                 array_push((struct Dynamic_Array*)node->transformed->block.statements, &if_stmt);
                 if ((run_data.last_call != NULL && run_data.last_call->call.returned) ||
-                    (run_data.last_loop != NULL && run_loop_broken(run_data.last_loop))) {
+                    (run_data.last_loop != NULL && run_data.last_loop->broken)) {
 
                     break;
                 }
             }
+            run_end_block(node->transformed);
+            run_data.last_block = prev_last_block;
             run_data.last_loop = prev_last_loop;
+            break;
+        }
+        case CODE_KIND_BREAK:{
+            if (run_data.last_loop == NULL) {
+                printf("trying to break out of a non-existant loop!\n");
+                abort();
+                break;
+            }
+            run_data.last_loop->broken = true;
+            break;
+        }
+        case CODE_KIND_CONTINUE:{
+            if (run_data.last_loop == NULL) {
+                printf("trying to continue a non-existant loop!\n");
+                abort();
+                break;
+            }
+            run_data.last_loop->continued = true;
             break;
         }
         default:{
@@ -967,6 +1053,7 @@ struct Code_Node* map_original_to_clone(struct Code_Node* original) {
 }
 
 struct Code_Node* clone(struct Code_Node* node) {
+    // printf("clone: (%s)\n", code_kind_to_string(node->kind));
     struct Code_Node* cloned = NULL;
     switch (node->kind) {
         case CODE_KIND_BLOCK:{
@@ -1008,26 +1095,23 @@ struct Code_Node* clone(struct Code_Node* node) {
             }
             cloned = make_declaration(run_data.code_nodes, node->declaration.type, clone(node->declaration.ident), expression);
             cloned->declaration.ident->ident.declaration = cloned;
-            char* ident_name = node->declaration.ident->ident.name;
-            size_t uses = get_name_uses(ident_name);
-            if (uses > 0) {
-                int chars_needed = snprintf(NULL, 0, "%s_%zu", ident_name, uses) + 1;
-                char* new_ident_name = malloc(sizeof(char) * chars_needed);
-                int more_chars_needed = snprintf(new_ident_name, chars_needed, "%s_%zu", ident_name, uses);
-                cloned->declaration.ident->ident.name = new_ident_name;
-            }
-            if (run_data.count_uses) {
-                add_name_use(ident_name);
+            // @Incomplete
+            // need associative array
+            for (size_t i = 0; i < run_data.original_to_clone->length; i += 1) {
+                if (run_data.original_to_clone->originals[i] == node) {
+                    // overwrite
+                    run_data.original_to_clone->clones[i] = cloned;
+                    break;
+                }
             }
             soa_push((struct Dynamic_SOA*)run_data.original_to_clone, node, cloned);
             break;
         }
         case CODE_KIND_IDENT:{
-            cloned = make_ident(run_data.code_nodes, node->ident.name, NULL);
+            cloned = make_ident(run_data.code_nodes, node->ident.name, node->ident.declaration);
             struct Code_Node* cloned_decl = map_original_to_clone(node->ident.declaration);
             if (cloned_decl != NULL) {
                 cloned->ident.declaration = cloned_decl;
-                cloned->ident.name = cloned_decl->declaration.ident->ident.name;
             }
             break;
         }

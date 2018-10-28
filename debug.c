@@ -1,10 +1,10 @@
 #include "debug.h"
 
-void* gets_corrupted;
+void* debug_ptr;
 
-void set_gets_corrupted(void* ptr) {
-    gets_corrupted = ptr;
+void set_debug_ptr(void* ptr) {
+    debug_ptr = ptr;
 }
-void* get_gets_corrupted() {
-    return gets_corrupted;
+void* get_debug_ptr() {
+    return debug_ptr;
 }
