@@ -1223,7 +1223,7 @@ struct Code_Nodes* parse(struct Token_Array* token_array) {
 bool parse_statement(struct Token_Array* token_array,
                      struct Code_Nodes* code_nodes) {
 
-    // printf("stmt: %s\n", token_array->curr_token->str);
+    // printf("parse_statement: %s\n", token_array->curr_token->str);
     struct Token* next_token = &token_array->curr_token[1];
     if (strcmp(token_array->curr_token->str, "{") == 0) {
         return parse_block(token_array, code_nodes);
@@ -1306,16 +1306,19 @@ bool parse_statement(struct Token_Array* token_array,
 bool parse_rvalue_atom(struct Token_Array* token_array,
                        struct Code_Nodes* code_nodes) {
 
-    if (token_array->curr_token->kind == TOKEN_KIND_OP ||
+    if (strcmp(token_array->curr_token->str, "&") == 0) {
+        return parse_reference(token_array, code_nodes);
+    }
+    else if (token_array->curr_token->str[0] == '*') {
+        return parse_dereference(token_array, code_nodes);
+    }
+    else if (token_array->curr_token->kind == TOKEN_KIND_OP ||
         token_array->curr_token->kind == TOKEN_KIND_LITERAL) {
         
         return parse_literal(token_array, code_nodes);
     }
     else if (token_array->curr_token->kind == TOKEN_KIND_STRING) {
         return parse_string(token_array, code_nodes);
-    }
-    else if (strcmp(token_array->curr_token->str, "&") == 0) {
-        return parse_reference(token_array, code_nodes);
     }
     else if (strcmp(token_array->curr_token->str, "true") == 0) {
         struct Code_Node* bool_literal = make_literal_bool(code_nodes, true);
@@ -1363,6 +1366,7 @@ bool parse_rvalue(struct Token_Array* token_array,
 bool parse_lvalue(struct Token_Array* token_array,
                   struct Code_Nodes* code_nodes) {
 
+    // printf("parse_lvalue: %s\n", token_array->curr_token->str);
     bool ret = false;
     if (token_array->curr_token->str[0] == '*') {
         return parse_dereference(token_array, code_nodes);

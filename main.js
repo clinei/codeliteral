@@ -292,6 +292,7 @@ int main() {
 main();
 `;
 */
+// /*
 const code = `
 bool test_nested_loop() {
 	bool passed = true;
@@ -327,17 +328,31 @@ void fizzbuzz(ushort number) {
 		}
 	}
 }
+bool test_pointer() {
+	bool passed = true;
+	int a = 0;
+	int* b;
+	b = &a;
+	*b = 12345;
+	passed &= a == 12345;
+	a = 0;
+	int** c;
+	c = &b;
+	**c = 12345;
+	passed &= a == 12345;
+	int d = 0;
+	d = **c;
+	passed &= d == 12345;
+	return passed;
+}
 void main() {
-	fizzbuzz(10);
-	test_nested_loop();
-	/*
-	for (uint i = 0; i < 2; i += 1) {
-		for (uint j = 0; j < 2; j += 1) {}
-	}
-	*/
+	// fizzbuzz(10);
+	// test_nested_loop();
+	test_pointer();
 }
 main();
 `;
+// */
 
 function main() {
 

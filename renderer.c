@@ -335,6 +335,20 @@ void find_expanded_nodes(struct Code_Node* node) {
             node->demands_expand = node == interaction_data.cursor;
             break;
         }
+        case CODE_KIND_REFERENCE:{
+            find_expanded_nodes(node->reference.expression);
+            node->demands_expand = node->reference.expression->demands_expand |
+                                   (node == interaction_data.cursor);
+            node->should_expand = node->reference.expression->demands_expand;
+            break;
+        }
+        case CODE_KIND_DEREFERENCE:{
+            find_expanded_nodes(node->dereference.expression);
+            node->demands_expand = node->dereference.expression->demands_expand |
+                                   (node == interaction_data.cursor);
+            node->should_expand = node->dereference.expression->demands_expand;
+            break;
+        }
         case CODE_KIND_STRING:
         case CODE_KIND_LITERAL_INT:
         case CODE_KIND_LITERAL_UINT:
@@ -735,19 +749,31 @@ void render_node(struct Code_Node* node,
             break;
         }
         case CODE_KIND_REFERENCE:{
-            render_text("&", &render_data->xpos, &render_data->ypos,
-                        render_data->fg_color,
-                        render_data->bg_color,
-                        render_data);
-            render_node(node->reference.expression, render_data);
+            if (interaction_data.show_values && node->should_expand == false && node->result != NULL) {
+                render_node(node->result, render_data);
+            }
+            else {
+                render_text("&", &render_data->xpos, &render_data->ypos,
+                            hilite_op_fg_color,
+                            render_data->bg_color,
+                            render_data);
+                render_node(node->reference.expression, render_data);
+            }
             break;
         }
         case CODE_KIND_DEREFERENCE:{
-            render_text("*", &render_data->xpos, &render_data->ypos,
-                        render_data->fg_color,
-                        render_data->bg_color,
-                        render_data);
-            render_node(node->dereference.expression, render_data);
+            if ((node->is_lhs ? interaction_data.show_changes : interaction_data.show_values) &&
+                node->should_expand == false && node->result != NULL) {
+
+                render_node(node->result, render_data);
+            }
+            else {
+                render_text("*", &render_data->xpos, &render_data->ypos,
+                            hilite_op_fg_color,
+                            render_data->bg_color,
+                            render_data);
+                render_node(node->dereference.expression, render_data);
+            }
             break;
         }
         case CODE_KIND_ARRAY_INDEX:{

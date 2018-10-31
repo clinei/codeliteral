@@ -511,6 +511,11 @@ struct Code_Node* get_result(void* value, struct Type_Info* type) {
             result = make_literal_float(run_data.code_nodes, *(double*)value);
             break;
         }
+        case TYPE_INFO_TAG_POINTER:{
+            result = make_literal_uint(run_data.code_nodes, 0);
+            memcpy(&result->literal_uint.value, value, type->size_in_bytes);
+            break;
+        }
         case TYPE_INFO_TAG_STRUCT:{
             return NULL;
         }
@@ -574,7 +579,7 @@ struct Code_Node* maybe_cast(struct Code_Node* lhs, struct Code_Node* rhs) {
     return rhs;
 }
 size_t run_lvalue(struct Code_Node* node) {
-    // printf("run_lvalue: (%s)\n", code_kind_to_string(node->kind));
+    printf("run_lvalue: (%s)\n", code_kind_to_string(node->kind));
     node->was_run = true;
     size_t result = 0;
     switch (node->kind) {
@@ -649,6 +654,17 @@ size_t run_lvalue(struct Code_Node* node) {
 
             break;
         }
+        case CODE_KIND_DEREFERENCE:{
+            add_node_to_execution_stack(node);
+            node->dereference.expression->is_lhs = node->is_lhs;
+            size_t pointer = run_lvalue(node->dereference.expression);
+            void* real_pointer = get_memory(pointer, sizeof(size_t));
+            result = *(size_t*)real_pointer;
+            // @Incomplete
+            // many dereferences in a row don't show the result of each dereference
+            node->result = get_result(real_pointer, node->dereference.expression->type);
+            break;
+        }
         default:{
             printf("run_lvalue not implemented for node kind: (%s)\n", code_kind_to_string(node->kind));
             abort();
@@ -697,10 +713,22 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
             result = get_result(get_memory(run_lvalue(node), node->type->size_in_bytes), node->type);
             break;
         }
+        case CODE_KIND_REFERENCE:{
+            if (node->reference.expression->kind != CODE_KIND_IDENT) {
+                printf("references can only be done on idents for now\n");
+                abort();
+            }
+            add_node_to_execution_stack(node);
+            result = make_literal_uint(run_data.code_nodes, run_lvalue(node->reference.expression));
+            break;
+        }
+        case CODE_KIND_DEREFERENCE:{
+            void* value = get_memory(run_lvalue(node), node->type->size_in_bytes);
+            result = get_result(value, node->type);
+            break;
+        }
         default:{
-            // @Incomplete
-            // need size_t literal
-            result = make_literal_int(run_data.code_nodes, (int)run_lvalue(node));
+            result = make_literal_uint(run_data.code_nodes, run_lvalue(node));
             break;
         }
     }
