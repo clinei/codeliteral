@@ -12,5 +12,7 @@ struct Interaction_Data {
     size_t execution_index;
     size_t column_index;
     struct Code_Node* cursor;
+    float scroll_x;
+    float scroll_y;
 };
 struct Interaction_Data interaction_data;

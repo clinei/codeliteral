@@ -151,9 +151,11 @@ int init(int start_width, int start_height) {
     interaction_data.expand_all = false;
     interaction_data.execution_index = 0;
     interaction_data.column_index = 0;
+    interaction_data.scroll_x = 0;
+    interaction_data.scroll_y = 0;
 
     emscripten_set_keydown_callback("#window", NULL, false, &keydown);
-    emscripten_set_main_loop(&step, 12, 0);
+    emscripten_set_main_loop(&step, 20, 0);
 
     initialized = true;
 

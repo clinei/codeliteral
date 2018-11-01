@@ -1,4 +1,4 @@
 #pragma once
 
-void set_gets_corrupted(void*);
-void* get_gets_corrupted();
+void set_debug_ptr(void*);
+void* get_debug_ptr();

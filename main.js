@@ -292,7 +292,26 @@ int main() {
 main();
 `;
 */
+// /*
 const code = `
+bool test_nested_loop() {
+	bool passed = true;
+	int[6] results;
+	int width = 2;
+	int height = 3;
+	int i = 0;
+	for (int width_iter = 0; width_iter < width; width_iter += 1) {
+		for (int height_iter = 0; height_iter < height; height_iter += 1) {
+			int d = width_iter * height + height_iter;
+			results[i] = d;
+			i += 1;
+		}
+	}
+	for (int j = 0; j < 6; j += 1) {
+		passed &= results[j] == j;
+	}
+	return passed;
+}
 void fizzbuzz(ushort number) {
 	for (uint i = 1; i <= number; i += 1) {
 		if (i % 15 == 0) {
@@ -309,14 +328,31 @@ void fizzbuzz(ushort number) {
 		}
 	}
 }
+bool test_pointer() {
+	bool passed = true;
+	int a = 0;
+	int* b;
+	b = &a;
+	*b = 12345;
+	passed &= a == 12345;
+	a = 0;
+	int** c;
+	c = &b;
+	**c = 12345;
+	passed &= a == 12345;
+	int d = 0;
+	d = **c;
+	passed &= d == 12345;
+	return passed;
+}
 void main() {
-	ushort a = 10;
-	// wrong value
-	a;
 	// fizzbuzz(10);
+	// test_nested_loop();
+	test_pointer();
 }
 main();
 `;
+// */
 
 function main() {
 

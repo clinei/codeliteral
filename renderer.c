@@ -233,6 +233,14 @@ void find_expanded_nodes(struct Code_Node* node) {
                 node->should_expand = node->transformed->should_expand;
                 node->demands_expand = node->transformed->demands_expand;
             }
+            else {
+                // native code
+                for (size_t i = 0; i < node->call.args->length; i += 1) {
+                    struct Code_Node* arg = node->call.args->first[i];
+                    find_expanded_nodes(arg);
+                    node->demands_expand |= arg->demands_expand;
+                }
+            }
             if (node == interaction_data.cursor) {
                 node->demands_expand = true;
             }
@@ -327,16 +335,35 @@ void find_expanded_nodes(struct Code_Node* node) {
             node->demands_expand = node == interaction_data.cursor;
             break;
         }
+        case CODE_KIND_REFERENCE:{
+            find_expanded_nodes(node->reference.expression);
+            node->demands_expand = node->reference.expression->demands_expand |
+                                   (node == interaction_data.cursor);
+            node->should_expand = node->reference.expression->demands_expand;
+            break;
+        }
+        case CODE_KIND_DEREFERENCE:{
+            find_expanded_nodes(node->dereference.expression);
+            node->demands_expand = node->dereference.expression->demands_expand |
+                                   (node == interaction_data.cursor);
+            node->should_expand = node->dereference.expression->demands_expand;
+            break;
+        }
         case CODE_KIND_STRING:
         case CODE_KIND_LITERAL_INT:
         case CODE_KIND_LITERAL_UINT:
         case CODE_KIND_LITERAL_FLOAT:
         case CODE_KIND_LITERAL_BOOL:{
             node->demands_expand = node == interaction_data.cursor;
-            if (run_data.did_run == false) {
+            if (node->result == NULL || node->result->str == NULL) {
                 node->result = node;
                 fill_result_str(node);
             }
+            break;
+        }
+        case CODE_KIND_BREAK:
+        case CODE_KIND_CONTINUE:{
+            node->demands_expand = node == interaction_data.cursor;
             break;
         }
         case CODE_KIND_NATIVE_CODE: {
@@ -348,6 +375,7 @@ void find_expanded_nodes(struct Code_Node* node) {
             break;
         }
     }
+    // printf("find_expanded_nodes: (%s) ###\n", code_kind_to_string(node->kind));
 }
 
 void render(struct Code_Node* node) {
@@ -359,8 +387,8 @@ void render(struct Code_Node* node) {
     GLfloat bg_color[4] =     { 120 / 255.0f, 60 / 255.0f, 20 / 255.0f, 0 };
     GLfloat cursor_color[4] = { 120 / 255.0f, 60 / 255.0f, 20 / 255.0f, 1 };
 
-    my_render_data.xpos = 0;
-    my_render_data.ypos = my_render_data.font_atlas->font_size;
+    my_render_data.xpos = -interaction_data.scroll_x;
+    my_render_data.ypos = -interaction_data.scroll_y + my_render_data.font_atlas->font_size;
     my_render_data.indent_level = 0;
     my_render_data.line_height = 1.01;
 
@@ -380,6 +408,9 @@ void render(struct Code_Node* node) {
     my_render_data.line_index = 0;
 
     render_node(node, &my_render_data);
+
+    // floating point error accumulation?
+    interaction_data.scroll_y = interaction_data.cursor->offset_y - my_render_data.font_atlas->font_size;
 
     emscripten_webgl_make_context_current(debugger_context);
 
@@ -435,13 +466,15 @@ void render_node(struct Code_Node* node,
                  struct Render_Data* render_data) {
 
     // clip
-    if (render_data->ypos > render_data->height) {
+    if (0 > render_data->ypos && render_data->ypos > render_data->height) {
         return;
     }
 
     if (node == interaction_data.cursor) {
         render_data->cursor_line = render_data->line_index;
         mark_background_start(render_data, render_data->cursor_color);
+        node->offset_x = render_data->xpos + interaction_data.scroll_x;
+        node->offset_y = render_data->ypos + interaction_data.scroll_y;
     }
 
     // printf("render_node: (%s)\n", code_kind_to_string(node->kind));
@@ -721,19 +754,31 @@ void render_node(struct Code_Node* node,
             break;
         }
         case CODE_KIND_REFERENCE:{
-            render_text("&", &render_data->xpos, &render_data->ypos,
-                        render_data->fg_color,
-                        render_data->bg_color,
-                        render_data);
-            render_node(node->reference.expression, render_data);
+            if (interaction_data.show_values && node->should_expand == false && node->result != NULL) {
+                render_node(node->result, render_data);
+            }
+            else {
+                render_text("&", &render_data->xpos, &render_data->ypos,
+                            hilite_op_fg_color,
+                            render_data->bg_color,
+                            render_data);
+                render_node(node->reference.expression, render_data);
+            }
             break;
         }
         case CODE_KIND_DEREFERENCE:{
-            render_text("*", &render_data->xpos, &render_data->ypos,
-                        render_data->fg_color,
-                        render_data->bg_color,
-                        render_data);
-            render_node(node->dereference.expression, render_data);
+            if ((node->is_lhs ? interaction_data.show_changes : interaction_data.show_values) &&
+                node->should_expand == false && node->result != NULL) {
+
+                render_node(node->result, render_data);
+            }
+            else {
+                render_text("*", &render_data->xpos, &render_data->ypos,
+                            hilite_op_fg_color,
+                            render_data->bg_color,
+                            render_data);
+                render_node(node->dereference.expression, render_data);
+            }
             break;
         }
         case CODE_KIND_ARRAY_INDEX:{
@@ -931,9 +976,9 @@ void render_node(struct Code_Node* node,
             }
             render_data->block_depth += 1;
             for (size_t i = 0; i < node->block.statements->length; i += 1) {
-                if (node->block.extras != NULL) {
-                    for (size_t j = 0; j < node->block.extras[i]->length; j += 1) {
-                        struct Code_Node* extra = node->block.extras[i]->first[j];
+                if (node->block.extras != NULL && i < node->block.extras->length) {
+                    for (size_t j = 0; j < node->block.extras->first[i].length; j += 1) {
+                        struct Code_Node* extra = node->block.extras->first[i].first[j];
                         if (interaction_data.expand_all || extra->demands_expand || extra->should_expand) {
                             render_node(extra, render_data);
                         }
@@ -976,6 +1021,9 @@ void render_node(struct Code_Node* node,
                     }
                 }
                 render_newline(render_data);
+                if (stmt->kind == CODE_KIND_BREAK || stmt->kind == CODE_KIND_CONTINUE) {
+                    break;
+                }
             }
             render_data->block_depth -= 1;
             if (node->block.is_transformed_block == false) {
@@ -1028,7 +1076,7 @@ void render_text(char* text, float* xpos, float* ypos,
                  struct Render_Data* render_data) {
 
     // clip
-    if (*ypos > render_data->height) {
+    if (0 > *ypos && *ypos > render_data->height) {
         return;
     }
 
@@ -1045,10 +1093,10 @@ void render_text(char* text, float* xpos, float* ypos,
         }
         
         // clip
-        if (*xpos > render_data->width) {
+        if (0 > *xpos && *xpos > render_data->width) {
             continue;
         }
-        if (*ypos > render_data->height) {
+        if (0 > *ypos && *ypos > render_data->height) {
             break;
         }
 
@@ -1230,7 +1278,7 @@ void render_newline(struct Render_Data* render_data) {
     
     render_data->line_index += 1;
     if (render_data->line_index >= render_data->lines->length) {
-        printf("adding new node arrays\n");
+        // printf("adding new node arrays\n");
         size_t new_capacity = render_data->line_index * 2;
         while (render_data->lines->length < new_capacity) {
             array_next((struct Dynamic_Array*)(render_data->lines));
@@ -1258,7 +1306,7 @@ void get_baked_quad_scaled(const stbtt_bakedchar *chardata,
    float d3d_bias = opengl_fillrule ? 0 : -0.5f;
    float ipw = 1.0f / pw, iph = 1.0f / ph;
    if (char_index < 0) {
-       printf("char_index is less than 0, did you forget to null-terminate a string?");
+       printf("char_index is less than 0, did you forget to null-terminate a string?\n");
        abort();
    }
    const stbtt_bakedchar *b = chardata + char_index;
