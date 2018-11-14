@@ -51,6 +51,9 @@ void init_renderer() {
     }
 
     my_render_data.cursor_line = 0;
+
+    my_render_data.render_nodes = malloc(sizeof(struct Render_Nodes));
+    array_init((struct Dynamic_Array*)my_render_data.render_nodes, sizeof(struct Render_Node), 10000);
 }
 
 void init_gl() {
@@ -136,6 +139,22 @@ void init_atlas(struct Atlas* atlas, char* font_filename, float font_size, float
     atlas->chars = chars;
     atlas->char_count = char_count;
 }
+
+struct Render_Node* make_text(struct Render_Nodes* render_nodes, char* text, float x, float y) {
+    struct Render_Node* node = get_new_render_node(render_nodes);
+
+    node->text.text = text;
+    node->text.x = x;
+    node->text.y = y;
+
+    return node;
+}
+
+struct Render_Node* get_new_render_node(struct Render_Nodes* render_nodes) {
+    bool was_realloc = array_next((struct Dynamic_Array*)render_nodes);
+    return render_nodes->last;
+}
+
 
 void find_expanded_nodes(struct Code_Node* node) {
     // printf("find_expanded_nodes: (%s)\n", code_kind_to_string(node->kind));
@@ -621,6 +640,8 @@ void render_node(struct Code_Node* node,
             break;
         }
         case CODE_KIND_BREAK:{
+            // @Inprogress
+            // struct Render_Node* = make_text(render_data->render_nodes, "break", render_data->xpos, render_data->ypos);
             render_text("break", &render_data->xpos, &render_data->ypos,
                         hilite_keyword_fg_color,
                         render_data->bg_color,

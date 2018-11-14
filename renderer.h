@@ -24,6 +24,13 @@ struct Lines_Array {
     struct Code_Node_Array* first;
     struct Code_Node_Array* last;
 };
+struct Render_Nodes {
+    size_t length;
+    size_t capacity;
+    size_t element_size;
+    struct Render_Node* first;
+    struct Render_Node* last;
+};
 struct Render_Data {
     struct Atlas* font_atlas;
     float width;
@@ -57,6 +64,8 @@ struct Render_Data {
     struct Lines_Array* lines;
     size_t line_index;
     size_t cursor_line;
+
+    struct Render_Nodes* render_nodes;
 };
 struct Render_Data my_render_data;
 
@@ -95,12 +104,41 @@ struct Atlas {
     stbtt_bakedchar* chars;
 };
 
+struct Color {
+    float r;
+    float g;
+    float b;
+    float a;
+};
+struct Render_Text {
+    float x;
+    float y;
+    float width;
+    float height;
+    char* text;
+    float font_size;
+    struct Color color;
+};
+enum Render_Kind {
+    RENDER_KIND_TEXT
+};
+struct Render_Node {
+    enum Render_Kind kind;
+
+    union {
+        struct Render_Text text;
+    };
+};
+
 void init_renderer();
 void init_gl();
 void init_quad_program();
 void init_atlas_program();
 void init_atlas(struct Atlas* atlas, char* font_filename, float font_size, float scale, size_t char_count);
 void init_hilite();
+
+struct Render_Node* get_new_render_node(struct Render_Nodes* render_nodes);
+struct Render_Node* make_text(struct Render_Nodes* render_nodes, char* text, float x, float y);
 
 void render(struct Code_Node* node);
 void render_node(struct Code_Node* node,
