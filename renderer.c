@@ -54,6 +54,8 @@ void init_renderer() {
 
     my_render_data.render_nodes = malloc(sizeof(struct Render_Nodes));
     array_init((struct Dynamic_Array*)my_render_data.render_nodes, sizeof(struct Render_Node), 10000);
+
+    my_render_data.debugger_root = make_list(my_render_data.render_nodes, LIST_DIRECTION_VERTICAL);
 }
 
 void init_gl() {
@@ -140,12 +142,27 @@ void init_atlas(struct Atlas* atlas, char* font_filename, float font_size, float
     atlas->char_count = char_count;
 }
 
-struct Render_Node* make_text(struct Render_Nodes* render_nodes, char* text, float x, float y) {
+struct Render_Node* make_text(struct Render_Nodes* render_nodes,
+                              char* text,
+                              GLfloat* color) {
+
     struct Render_Node* node = get_new_render_node(render_nodes);
+    node->kind = RENDER_KIND_TEXT;
 
     node->text.text = text;
-    node->text.x = x;
-    node->text.y = y;
+    node->text.color = color;
+
+    return node;
+}
+struct Render_Node* make_list(struct Render_Nodes* render_nodes,
+                              enum List_Direction direction) {
+    
+    struct Render_Node* node = get_new_render_node(render_nodes);
+    node->kind = RENDER_KIND_LIST;
+
+    node->list.elements = malloc(sizeof(struct Render_Node_Array));
+    array_init((struct Dynamic_Array*)node->list.elements, sizeof(struct Render_Node*), 10);
+    node->list.direction = direction;
 
     return node;
 }
@@ -406,8 +423,13 @@ void render(struct Code_Node* node) {
     GLfloat bg_color[4] =     { 120 / 255.0f, 60 / 255.0f, 20 / 255.0f, 0 };
     GLfloat cursor_color[4] = { 120 / 255.0f, 60 / 255.0f, 20 / 255.0f, 1 };
 
+    my_render_data.debugger_root->x = -interaction_data.scroll_x;
+    my_render_data.debugger_root->y = 0;
+    // my_render_data.debugger_root->y = -interaction_data.scroll_y + my_render_data.font_atlas->font_size;
+
     my_render_data.xpos = -interaction_data.scroll_x;
-    my_render_data.ypos = -interaction_data.scroll_y + my_render_data.font_atlas->font_size;
+    my_render_data.ypos = 0;
+    // my_render_data.ypos = -interaction_data.scroll_y + my_render_data.font_atlas->font_size;
     my_render_data.indent_level = 0;
     my_render_data.line_height = 1.01;
 
@@ -426,10 +448,19 @@ void render(struct Code_Node* node) {
     array_clear((struct Dynamic_Array*)(my_render_data.lines->first));
     my_render_data.line_index = 0;
 
-    render_node(node, &my_render_data);
+    // render_code_node(node, my_render_data.debugger_root, &my_render_data);
+    array_clear_after((struct Dynamic_Array*)my_render_data.render_nodes, 1);
+    struct Render_Node* foo = make_text(my_render_data.render_nodes, "foo", &white);
+    struct Render_Node* bar = make_text(my_render_data.render_nodes, "bar", &hilite_keyword_fg_color);
+    array_push((struct Dynamic_Array*)my_render_data.debugger_root->list.elements, &foo);
+    array_push((struct Dynamic_Array*)my_render_data.debugger_root->list.elements, &bar);
+    layout_node(my_render_data.debugger_root, NULL, &my_render_data);
 
-    // floating point error accumulation?
-    interaction_data.scroll_y = interaction_data.cursor->offset_y - my_render_data.font_atlas->font_size;
+    interaction_data.scroll_y = 0;
+    // interaction_data.scroll_y = -my_render_data.font_atlas->font_size;
+    // interaction_data.scroll_y = interaction_data.cursor->offset_y - my_render_data.font_atlas->font_size;
+
+    render_node(my_render_data.debugger_root, &my_render_data);
 
     emscripten_webgl_make_context_current(debugger_context);
 
@@ -481,13 +512,127 @@ void render(struct Code_Node* node) {
     // abort();
 }
 
-void render_node(struct Code_Node* node,
+float get_text_width(char* text, struct Atlas* font_atlas) {
+    float width = 0;
+    int char_width = 0;
+    int left_side_bearing = 0;
+    size_t i = 0;
+    while (*text) {
+        stbtt_GetCodepointHMetrics(&font_atlas->font_info, *text, &char_width, &left_side_bearing);
+        width += char_width / font_atlas->scale;
+        text++;
+    }
+    return width;
+}
+void layout_node(struct Render_Node* node,
+                 struct Render_Node* parent,
                  struct Render_Data* render_data) {
 
+    // printf("layout_node: (%u)\n", node->kind);
+
+    if (parent == NULL) {
+        render_data->layout_data.curr_x = node->x;
+        render_data->layout_data.curr_y = node->y;
+    }
+    else {
+        node->x = render_data->layout_data.curr_x;
+        node->y = render_data->layout_data.curr_y;
+    }
+
+    switch (node->kind) {
+        case RENDER_KIND_TEXT:{
+            node->width = get_text_width(node->text.text, render_data->font_atlas);
+            node->height = render_data->font_atlas->font_size;
+            break;
+        }
+        case RENDER_KIND_LIST:{
+            float main_distance = 0;
+            float max_cross_distance = 0;
+            for (size_t i = 0; i < node->list.elements->length; i += 1) {
+                if (node->list.direction == LIST_DIRECTION_VERTICAL) {
+                    render_data->layout_data.curr_x = node->x;
+                }
+                else if (node->list.direction == LIST_DIRECTION_HORIZONTAL) {
+                    render_data->layout_data.curr_y = node->y;
+                }
+                struct Render_Node* elem = node->list.elements->first[i];
+                layout_node(elem, node, render_data);
+                if (node->list.direction == LIST_DIRECTION_VERTICAL) {
+                    main_distance += elem->height;
+                    if (elem->width > max_cross_distance) {
+                        max_cross_distance = elem->width;
+                    }
+                }
+                else if (node->list.direction == LIST_DIRECTION_HORIZONTAL) {
+                    main_distance += elem->width;
+                    if (elem->height > max_cross_distance) {
+                        max_cross_distance = elem->height;
+                    }
+                }
+            }
+            if (node->list.direction == LIST_DIRECTION_VERTICAL) {
+                node->height = main_distance;
+                node->width = max_cross_distance;
+            }
+            else if (node->list.direction == LIST_DIRECTION_HORIZONTAL) {
+                node->width = main_distance;
+                node->height = max_cross_distance;
+            }
+            break;
+        }
+        default:{
+            printf("layout_node not implemented for node kind: %u\n", node->kind);
+            abort();
+            break;
+        }
+    }
+
+    render_data->layout_data.curr_x += node->width;
+    render_data->layout_data.curr_y += node->height;
+
+    printf("x: %f\n", node->x);
+    printf("y: %f\n", node->y);
+    printf("width:  %f\n", node->width);
+    printf("height: %f\n", node->height);
+}
+
+void render_node(struct Render_Node* node, struct Render_Data* render_data) {
+    switch (node->kind) {
+        case RENDER_KIND_TEXT:{
+            float x = node->x;
+            float y = node->y;
+            render_text(node->text.text,
+                        &x, &y,
+                        node->text.color,
+                        render_data->bg_color,
+                        render_data);
+            break;
+        }
+        case RENDER_KIND_LIST:{
+            for (size_t i = 0; i < node->list.elements->length; i += 1) {
+                render_node(node->list.elements->first[i], render_data);
+            }
+            break;
+        }
+        default:{
+            printf("render_node not implemented for kind: %u\n", node->kind);
+            abort();
+            break;
+        }
+    }
+}
+
+struct Render_Node* render_code_node(struct Code_Node* node,
+                                     struct Render_Data* render_data) {
+
+    // @Refactor
+    // should be in layout_node
+    /*
     // clip
     if (0 > render_data->ypos && render_data->ypos > render_data->height) {
         return;
     }
+    */
 
     if (node == interaction_data.cursor) {
         render_data->cursor_line = render_data->line_index;
@@ -508,6 +653,8 @@ void render_node(struct Code_Node* node,
         array_push((struct Dynamic_Array*)nodes, &node);
     }
 
+    struct Render_Node* ret_node = NULL;
+
     switch (node->kind) {
         case CODE_KIND_IF:{
             render_text("if", &render_data->xpos, &render_data->ypos,
@@ -519,14 +666,14 @@ void render_node(struct Code_Node* node,
                         render_data->fg_color,
                         render_data->bg_color,
                         render_data);
-            render_node(node->if_.condition, render_data);
+            render_code_node(node->if_.condition, render_data);
             render_text(")", &render_data->xpos, &render_data->ypos,
                         render_data->fg_color,
                         render_data->bg_color,
                         render_data);
             render_space(render_data);
             if (node->if_.expression->was_run) {
-                render_node(node->if_.expression, render_data);
+                render_code_node(node->if_.expression, render_data);
                 if (node->if_.expression->kind != CODE_KIND_BLOCK){
                     render_text(";", &render_data->xpos, &render_data->ypos,
                                 render_data->fg_color,
@@ -548,7 +695,7 @@ void render_node(struct Code_Node* node,
                         render_data->bg_color,
                         render_data);
             render_space(render_data);
-            render_node(node->else_.expression, render_data);
+            render_code_node(node->else_.expression, render_data);
             if (node->else_.expression->kind != CODE_KIND_BLOCK &&
                 node->else_.expression->kind != CODE_KIND_IF) {
 
@@ -569,13 +716,13 @@ void render_node(struct Code_Node* node,
                         render_data->fg_color,
                         render_data->bg_color,
                         render_data);
-            render_node(node->while_.condition, render_data);
+            render_code_node(node->while_.condition, render_data);
             render_text(")", &render_data->xpos, &render_data->ypos,
                         render_data->fg_color,
                         render_data->bg_color,
                         render_data);
             render_space(render_data);
-            render_node(node->while_.expression, render_data);
+            render_code_node(node->while_.expression, render_data);
             break;
         }
         case CODE_KIND_DO_WHILE:{
@@ -584,7 +731,7 @@ void render_node(struct Code_Node* node,
                         render_data->bg_color,
                         render_data);
             render_space(render_data);
-            render_node(node->do_while_.expression, render_data);
+            render_code_node(node->do_while_.expression, render_data);
             render_space(render_data);
             render_text("while", &render_data->xpos, &render_data->ypos,
                         hilite_keyword_fg_color,
@@ -595,7 +742,7 @@ void render_node(struct Code_Node* node,
                         render_data->fg_color,
                         render_data->bg_color,
                         render_data);
-            render_node(node->do_while_.condition, render_data);
+            render_code_node(node->do_while_.condition, render_data);
             render_text(")", &render_data->xpos, &render_data->ypos,
                         render_data->fg_color,
                         render_data->bg_color,
@@ -613,7 +760,7 @@ void render_node(struct Code_Node* node,
                         render_data->bg_color,
                         render_data);
             if (node->for_.begin != NULL) {
-                render_node(node->for_.begin, render_data);
+                render_code_node(node->for_.begin, render_data);
             }
             render_text(";", &render_data->xpos, &render_data->ypos,
                         render_data->fg_color,
@@ -621,7 +768,7 @@ void render_node(struct Code_Node* node,
                         render_data);
             if (node->for_.condition != NULL) {
                 render_space(render_data);
-                render_node(node->for_.condition, render_data);
+                render_code_node(node->for_.condition, render_data);
             }
             render_text(";", &render_data->xpos, &render_data->ypos,
                         render_data->fg_color,
@@ -629,19 +776,19 @@ void render_node(struct Code_Node* node,
                         render_data);
             if (node->for_.cycle_end != NULL) {
                 render_space(render_data);
-                render_node(node->for_.cycle_end, render_data);
+                render_code_node(node->for_.cycle_end, render_data);
             }
             render_text(")", &render_data->xpos, &render_data->ypos,
                         render_data->fg_color,
                         render_data->bg_color,
                         render_data);
             render_space(render_data);
-            render_node(node->for_.expression, render_data);
+            render_code_node(node->for_.expression, render_data);
             break;
         }
         case CODE_KIND_BREAK:{
             // @Inprogress
-            // struct Render_Node* = make_text(render_data->render_nodes, "break", render_data->xpos, render_data->ypos);
+            // struct Render_Node* = make_text(render_data->render_nodes, "break", hilite_keyword_fg_color);
             render_text("break", &render_data->xpos, &render_data->ypos,
                         hilite_keyword_fg_color,
                         render_data->bg_color,
@@ -656,7 +803,7 @@ void render_node(struct Code_Node* node,
             break;
         }
         case CODE_KIND_INCREMENT:{
-            render_node(node->increment.ident, render_data);
+            render_code_node(node->increment.ident, render_data);
             render_text("++", &render_data->xpos, &render_data->ypos,
                         hilite_op_fg_color,
                         render_data->bg_color,
@@ -664,7 +811,7 @@ void render_node(struct Code_Node* node,
             break;
         }
         case CODE_KIND_DECREMENT:{
-            render_node(node->decrement.ident, render_data);
+            render_code_node(node->decrement.ident, render_data);
             render_text("--", &render_data->xpos, &render_data->ypos,
                         hilite_op_fg_color,
                         render_data->bg_color,
@@ -672,13 +819,15 @@ void render_node(struct Code_Node* node,
             break;
         }
         case CODE_KIND_DECLARATION:{
+            ret_node = make_list(render_data->render_nodes, LIST_DIRECTION_HORIZONTAL);
+            array_push((struct Dynamic_Array*)ret_node->list.elements, ret_node);
             if (node->declaration.expression != NULL &&
                 node->declaration.expression->kind == CODE_KIND_PROCEDURE) {
 
                 struct Code_Procedure* proc = &(node->declaration.expression->procedure);
                 render_type(proc->return_type, render_data);
                 render_space(render_data);
-                render_node(node->declaration.ident, render_data);
+                render_code_node(node->declaration.ident, render_data);
                 render_text("(", &render_data->xpos, &render_data->ypos,
                             render_data->fg_color,
                             render_data->bg_color,
@@ -695,7 +844,7 @@ void render_node(struct Code_Node* node,
                     else {
                         first = false;
                     }
-                    render_node(proc->params->first[i], render_data);
+                    render_code_node(proc->params->first[i], render_data);
                 }
                 if (proc->has_varargs) {
                     if (first == false) {
@@ -718,7 +867,7 @@ void render_node(struct Code_Node* node,
                             render_data->bg_color,
                             render_data);
                 render_space(render_data);
-                render_node(proc->block, render_data);
+                render_code_node(proc->block, render_data);
             }
             else if (node->declaration.expression != NULL &&
                      node->declaration.expression->kind == CODE_KIND_STRUCT) {
@@ -728,14 +877,14 @@ void render_node(struct Code_Node* node,
                             render_data->bg_color,
                             render_data);
                 render_space(render_data);
-                render_node(node->declaration.ident, render_data);
+                render_code_node(node->declaration.ident, render_data);
                 render_space(render_data);
-                render_node(node->declaration.expression->struct_.block, render_data);
+                render_code_node(node->declaration.expression->struct_.block, render_data);
             }
             else {
                 render_type(node->declaration.type, render_data);
                 render_space(render_data);
-                render_node(node->declaration.ident, render_data);
+                render_code_node(node->declaration.ident, render_data);
                 if (node->declaration.expression != NULL) {
                     render_space(render_data);
                     render_text("=", &render_data->xpos, &render_data->ypos,
@@ -743,24 +892,24 @@ void render_node(struct Code_Node* node,
                                 render_data->bg_color,
                                 render_data);
                     render_space(render_data);
-                    render_node(node->declaration.expression, render_data);
+                    render_code_node(node->declaration.expression, render_data);
                 }
             }
             break;
         }
         case CODE_KIND_ASSIGN:{
-            render_node(node->assign.ident, render_data);
+            render_code_node(node->assign.ident, render_data);
             render_space(render_data);
             render_text("=", &render_data->xpos, &render_data->ypos,
                         hilite_op_fg_color,
                         render_data->bg_color,
                         render_data);
             render_space(render_data);
-            render_node(node->assign.expression, render_data);
+            render_code_node(node->assign.expression, render_data);
             break;
         }
         case CODE_KIND_OPASSIGN:{
-            render_node(node->opassign.ident, render_data);
+            render_code_node(node->opassign.ident, render_data);
             render_space(render_data);
             render_text(node->opassign.operation_type, &render_data->xpos, &render_data->ypos,
                         hilite_op_fg_color,
@@ -771,19 +920,19 @@ void render_node(struct Code_Node* node,
                         render_data->bg_color,
                         render_data);
             render_space(render_data);
-            render_node(node->opassign.expression, render_data);
+            render_code_node(node->opassign.expression, render_data);
             break;
         }
         case CODE_KIND_REFERENCE:{
             if (interaction_data.show_values && node->should_expand == false && node->result != NULL) {
-                render_node(node->result, render_data);
+                render_code_node(node->result, render_data);
             }
             else {
                 render_text("&", &render_data->xpos, &render_data->ypos,
                             hilite_op_fg_color,
                             render_data->bg_color,
                             render_data);
-                render_node(node->reference.expression, render_data);
+                render_code_node(node->reference.expression, render_data);
             }
             break;
         }
@@ -791,14 +940,14 @@ void render_node(struct Code_Node* node,
             if ((node->is_lhs ? interaction_data.show_changes : interaction_data.show_values) &&
                 node->should_expand == false && node->result != NULL) {
 
-                render_node(node->result, render_data);
+                render_code_node(node->result, render_data);
             }
             else {
                 render_text("*", &render_data->xpos, &render_data->ypos,
                             hilite_op_fg_color,
                             render_data->bg_color,
                             render_data);
-                render_node(node->dereference.expression, render_data);
+                render_code_node(node->dereference.expression, render_data);
             }
             break;
         }
@@ -806,15 +955,15 @@ void render_node(struct Code_Node* node,
             if ((node->is_lhs ? interaction_data.show_changes : interaction_data.show_values) &&
                 node->should_expand == false && node->result != NULL) {
 
-                render_node(node->result, render_data);
+                render_code_node(node->result, render_data);
             }
             else {
-                render_node(node->array_index.array, render_data);
+                render_code_node(node->array_index.array, render_data);
                 render_text("[", &render_data->xpos, &render_data->ypos,
                             render_data->fg_color,
                             render_data->bg_color,
                             render_data);
-                render_node(node->array_index.index, render_data);
+                render_code_node(node->array_index.index, render_data);
                 render_text("]", &render_data->xpos, &render_data->ypos,
                             render_data->fg_color,
                             render_data->bg_color,
@@ -826,15 +975,15 @@ void render_node(struct Code_Node* node,
             if ((node->is_lhs ? interaction_data.show_changes : interaction_data.show_values) &&
                 node->should_expand == false && node->result != NULL) {
                 
-                render_node(node->result, render_data);
+                render_code_node(node->result, render_data);
             }
             else {
-                render_node(node->dot_operator.left, render_data);
+                render_code_node(node->dot_operator.left, render_data);
                 render_text(".", &render_data->xpos, &render_data->ypos,
                             render_data->fg_color,
                             render_data->bg_color,
                             render_data);
-                render_node(node->dot_operator.right, render_data);
+                render_code_node(node->dot_operator.right, render_data);
             }
             break;
         }
@@ -842,13 +991,13 @@ void render_node(struct Code_Node* node,
             if ((node->is_lhs ? interaction_data.show_changes : interaction_data.show_values) &&
                 (node->should_expand == false && interaction_data.expand_all == false) && node->result != NULL) {
                 
-                render_node(node->result, render_data);
+                render_code_node(node->result, render_data);
             }
             else if (node->should_expand || interaction_data.expand_all) {
-                render_node(node->call.return_ident, render_data);
+                render_code_node(node->call.return_ident, render_data);
             }
             else {
-                render_node(node->call.ident, render_data);
+                render_code_node(node->call.ident, render_data);
                 render_text("(", &render_data->xpos, &render_data->ypos,
                             render_data->fg_color,
                             render_data->bg_color,
@@ -865,7 +1014,7 @@ void render_node(struct Code_Node* node,
                     else {
                         first = false;
                     }
-                    render_node(node->call.args->first[i], render_data);
+                    render_code_node(node->call.args->first[i], render_data);
                 }
                 render_text(")", &render_data->xpos, &render_data->ypos,
                             render_data->fg_color,
@@ -876,7 +1025,7 @@ void render_node(struct Code_Node* node,
         }
         case CODE_KIND_RETURN:{
             if (node->transformed != NULL) {
-                render_node(node->transformed, render_data);
+                render_code_node(node->transformed, render_data);
             }
             else {
                 render_text("return", &render_data->xpos, &render_data->ypos,
@@ -885,7 +1034,7 @@ void render_node(struct Code_Node* node,
                             render_data);
                 if (node->return_.expression != NULL) {
                     render_space(render_data);
-                    render_node(node->return_.expression, render_data);
+                    render_code_node(node->return_.expression, render_data);
                 }
             }
             break;
@@ -900,7 +1049,7 @@ void render_node(struct Code_Node* node,
             if (interaction_data.show_values && node->result != NULL &&
                 (node->should_expand == false && interaction_data.show_elements == false)) {
 
-                render_node(node->result, render_data);
+                render_code_node(node->result, render_data);
             }
             else {
                 // @Incomplete
@@ -911,14 +1060,14 @@ void render_node(struct Code_Node* node,
                                 render_data->bg_color,
                                 render_data);
                 }
-                render_node(node->binary_operation.left, render_data);
+                render_code_node(node->binary_operation.left, render_data);
                 render_space(render_data);
                 render_text(node->binary_operation.operation_type, &render_data->xpos, &render_data->ypos,
                             hilite_op_fg_color,
                             render_data->bg_color,
                             render_data);
                 render_space(render_data);
-                render_node(node->binary_operation.right, render_data);
+                render_code_node(node->binary_operation.right, render_data);
                 if (interaction_data.show_parens) {
                     render_text(")", &render_data->xpos, &render_data->ypos,
                                 render_data->fg_color,
@@ -933,7 +1082,7 @@ void render_node(struct Code_Node* node,
                         render_data->fg_color,
                         render_data->bg_color,
                         render_data);
-            render_node(node->parens.expression, render_data);
+            render_code_node(node->parens.expression, render_data);
             render_text(")", &render_data->xpos, &render_data->ypos,
                         render_data->fg_color,
                         render_data->bg_color,
@@ -944,7 +1093,7 @@ void render_node(struct Code_Node* node,
             if ((node->is_lhs ? interaction_data.show_changes : interaction_data.show_values) &&
                 node->result != NULL) {
 
-                render_node(node->result, render_data);
+                render_code_node(node->result, render_data);
             }
             else {
                 render_text(node->ident.name, &render_data->xpos, &render_data->ypos,
@@ -980,28 +1129,28 @@ void render_node(struct Code_Node* node,
             break;
         }
         case CODE_KIND_BLOCK:{
+            ret_node = make_list(render_data->render_nodes, LIST_DIRECTION_VERTICAL);
             if (node->demands_expand == false && node->should_expand == false) {
-                render_text("{}", &render_data->xpos, &render_data->ypos,
-                            render_data->fg_color,
-                            render_data->bg_color,
-                            render_data);
+                struct Render_Node* empty_block = make_text(render_data->render_nodes, "{}", render_data->fg_color);
+                array_push((struct Dynamic_Array*)ret_node->list.elements, empty_block);
                 break;
             }
             if (node->block.is_transformed_block == false) {
-                render_text("{", &render_data->xpos, &render_data->ypos,
-                            render_data->fg_color,
-                            render_data->bg_color,
-                            render_data);
+                struct Render_Node* opening_bracket = make_text(render_data->render_nodes, "{", render_data->fg_color);
+                array_push((struct Dynamic_Array*)ret_node->list.elements, opening_bracket);
                 render_newline(render_data);
                 render_data->indent_level += 1;
             }
             render_data->block_depth += 1;
             for (size_t i = 0; i < node->block.statements->length; i += 1) {
                 if (node->block.extras != NULL && i < node->block.extras->length) {
+                    struct Render_Node* extras_list = make_list(render_data->render_nodes, LIST_DIRECTION_VERTICAL);
+                    array_push((struct Dynamic_Array*)ret_node->list.elements, extras_list);
                     for (size_t j = 0; j < node->block.extras->first[i].length; j += 1) {
                         struct Code_Node* extra = node->block.extras->first[i].first[j];
                         if (interaction_data.expand_all || extra->demands_expand || extra->should_expand) {
-                            render_node(extra, render_data);
+                            struct Render_Node* extra_node = render_code_node(extra, render_data);
+                            array_push((struct Dynamic_Array*)extras_list->list.elements, extra_node);
                         }
                     }
                 }
@@ -1023,7 +1172,8 @@ void render_node(struct Code_Node* node,
                 }
                 render_indent(render_data);
                 float prev_xpos = render_data->xpos;
-                render_node(stmt, render_data);
+                struct Render_Node* stmt_node = render_code_node(stmt, render_data);
+                array_push((struct Dynamic_Array*)ret_node->list.elements, stmt_node);
                 if (render_data->xpos != prev_xpos) {
                     if (stmt->kind != CODE_KIND_IF &&
                         stmt->kind != CODE_KIND_ELSE &&
@@ -1035,10 +1185,7 @@ void render_node(struct Code_Node* node,
                         )
                     ) {
 
-                        render_text(";", &render_data->xpos, &render_data->ypos,
-                                    render_data->fg_color,
-                                    render_data->bg_color,
-                                    render_data);
+                        struct Render_Node* semicolon = make_text(render_data->render_nodes, ";", render_data->fg_color);
                     }
                 }
                 render_newline(render_data);
@@ -1050,10 +1197,8 @@ void render_node(struct Code_Node* node,
             if (node->block.is_transformed_block == false) {
                 render_data->indent_level -= 1;
                 render_indent(render_data);
-                render_text("}", &render_data->xpos, &render_data->ypos,
-                            render_data->fg_color,
-                            render_data->bg_color,
-                            render_data);
+                struct Render_Node* closing_bracket = make_text(render_data->render_nodes, "}", render_data->fg_color);
+                array_push((struct Dynamic_Array*)ret_node->list.elements, closing_bracket);
             }
             break;
         }
@@ -1075,7 +1220,7 @@ void render_node(struct Code_Node* node,
             break;
         }
         default:{
-            printf("render not implemented for node kind: (%s)\n", code_kind_to_string(node->kind));
+            printf("render_code_node not implemented for code kind: (%s)\n", code_kind_to_string(node->kind));
             abort();
             break;
         }
@@ -1089,6 +1234,8 @@ void render_node(struct Code_Node* node,
     if (node == interaction_data.cursor) {
         mark_background_end(render_data);
     }
+
+    return ret_node;
 }
 
 void render_text(char* text, float* xpos, float* ypos,

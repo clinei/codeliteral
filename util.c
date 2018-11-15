@@ -65,6 +65,18 @@ void array_clear(struct Dynamic_Array* array) {
     array->length = 0;
     array->last = (void*)((size_t)array->first - array->element_size);
 }
+void array_clear_after(struct Dynamic_Array* array, size_t index) {
+    if (array->length == 0) {
+        printf("array length is 0, are you sure you want to clear_after?\n");
+        abort();
+    }
+    if (array->length < index) {
+        printf("tried to clear an array after index %zu, but length is only %zu\n", index, array->length);
+        abort();
+    }
+    array->length = index + 1;
+    array->last = (void*)((size_t)array->first + array->element_size * (index - 1));
+}
 bool array_maybe_realloc(struct Dynamic_Array* array) {
     if (array->length == array->capacity) {
         array->capacity *= 2;

@@ -31,6 +31,17 @@ struct Render_Nodes {
     struct Render_Node* first;
     struct Render_Node* last;
 };
+struct Render_Node_Array {
+    size_t length;
+    size_t capacity;
+    size_t element_size;
+    struct Render_Node** first;
+    struct Render_Node** last;
+};
+struct Layout_Data {
+    float curr_x;
+    float curr_y;
+};
 struct Render_Data {
     struct Atlas* font_atlas;
     float width;
@@ -66,6 +77,8 @@ struct Render_Data {
     size_t cursor_line;
 
     struct Render_Nodes* render_nodes;
+    struct Render_Node* debugger_root;
+    struct Layout_Data layout_data;
 };
 struct Render_Data my_render_data;
 
@@ -104,29 +117,34 @@ struct Atlas {
     stbtt_bakedchar* chars;
 };
 
-struct Color {
-    float r;
-    float g;
-    float b;
-    float a;
-};
 struct Render_Text {
-    float x;
-    float y;
-    float width;
-    float height;
     char* text;
+    GLfloat* color;
     float font_size;
-    struct Color color;
+};
+enum List_Direction {
+    LIST_DIRECTION_VERTICAL,
+    LIST_DIRECTION_HORIZONTAL
+};
+struct Render_List {
+    struct Render_Node_Array* elements;
+    enum List_Direction direction;
 };
 enum Render_Kind {
-    RENDER_KIND_TEXT
+    RENDER_KIND_TEXT,
+    RENDER_KIND_LIST,
 };
 struct Render_Node {
     enum Render_Kind kind;
 
+    float x;
+    float y;
+    float width;
+    float height;
+
     union {
         struct Render_Text text;
+        struct Render_List list;
     };
 };
 
@@ -138,16 +156,25 @@ void init_atlas(struct Atlas* atlas, char* font_filename, float font_size, float
 void init_hilite();
 
 struct Render_Node* get_new_render_node(struct Render_Nodes* render_nodes);
-struct Render_Node* make_text(struct Render_Nodes* render_nodes, char* text, float x, float y);
+struct Render_Node* make_text(struct Render_Nodes* render_nodes,
+                              char* text,
+                              GLfloat* color);
+struct Render_Node* make_list(struct Render_Nodes* render_nodes,
+                              enum List_Direction direction);
 
 void render(struct Code_Node* node);
-void render_node(struct Code_Node* node,
+struct Render_Node* render_code_node(struct Code_Node* node,
+                                     struct Render_Data* render_data);
+void render_type(struct Type_Info* type,
+                 struct Render_Data* render_data);
+void layout_node(struct Render_Node* node,
+                 struct Render_Node* parent,
+                 struct Render_Data* render_data);
+void render_node(struct Render_Node* node,
                  struct Render_Data* render_data);
 void render_text(char* text, float* xpos, float* ypos,
                  GLfloat* fg_color,
                  GLfloat* bg_color,
-                 struct Render_Data* render_data);
-void render_type(struct Type_Info* type,
                  struct Render_Data* render_data);
 void render_indent(struct Render_Data* render_data);
 void render_space(struct Render_Data* render_data);
