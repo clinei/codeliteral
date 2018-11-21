@@ -130,9 +130,14 @@ struct Render_List {
     struct Render_Node_Array* elements;
     enum List_Direction direction;
 };
+struct Render_Background_Start {
+    GLfloat* color;
+};
 enum Render_Kind {
     RENDER_KIND_TEXT,
     RENDER_KIND_LIST,
+    RENDER_KIND_BACKGROUND_START,
+    RENDER_KIND_BACKGROUND_END
 };
 struct Render_Node {
     enum Render_Kind kind;
@@ -145,6 +150,7 @@ struct Render_Node {
     union {
         struct Render_Text text;
         struct Render_List list;
+        struct Render_Background_Start background_start;
     };
 };
 
@@ -163,8 +169,8 @@ struct Render_Node* make_list(struct Render_Nodes* render_nodes,
                               enum List_Direction direction);
 
 void render(struct Code_Node* node);
-struct Render_Node* render_code_node(struct Code_Node* node,
-                                     struct Render_Data* render_data);
+void render_code_node(struct Code_Node* node,
+                      struct Render_Data* render_data);
 void render_type(struct Type_Info* type,
                  struct Render_Data* render_data);
 void layout_node(struct Render_Node* node,

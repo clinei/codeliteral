@@ -106,6 +106,9 @@ bool array_maybe_realloc(struct Dynamic_Array* array) {
         return false;
     }
 }
+void array_destroy(struct Dynamic_Array* array) {
+    free(array->first);
+}
 
 #define DEBUG_DYNAMIC_SOA false
 #define DEBUG_DYNAMIC_SOA_INIT true
