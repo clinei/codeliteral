@@ -138,7 +138,7 @@ struct Code_Node* make_procedure(struct Code_Nodes* code_nodes,
 
     if (params == NULL) {
         params = malloc(sizeof(struct Code_Procedure_Params));
-        array_init((struct Dynamic_Array*)params, sizeof(struct Code_Node*), 10);
+        array_init(params, sizeof(struct Code_Node*), 10);
     }
     if (block == NULL) {
         block = make_block(code_nodes, NULL);
@@ -164,7 +164,7 @@ struct Code_Node* make_call(struct Code_Nodes* code_nodes,
 
     if (args == NULL) {
         args = malloc(sizeof(struct Code_Call_Args));
-        array_init((struct Dynamic_Array*)args, sizeof(struct Code_Node*), 10);
+        array_init(args, sizeof(struct Code_Node*), 10);
     }
 	node->call.ident = ident;
 	node->call.args = args;
@@ -263,7 +263,7 @@ struct Code_Node* make_block(struct Code_Nodes* code_nodes,
 
     if (statements == NULL) {
         statements = malloc(sizeof(struct Code_Node_Array));
-        array_init((struct Dynamic_Array*)statements, sizeof(struct Code_Node*), 10);
+        array_init(statements, sizeof(struct Code_Node*), 10);
     }
 	node->block.statements = statements;
     node->block.declarations = NULL;
@@ -616,7 +616,7 @@ struct Code_Node* make_native_code(struct Code_Nodes* code_nodes,
 
 void init_type_infos() {
     type_infos = malloc(sizeof(struct Type_Infos));
-    array_init((struct Dynamic_Array*)type_infos, sizeof(struct Type_Info), 1000);
+    array_init(type_infos, sizeof(struct Type_Info), 1000);
 
     Native_Type_Char = make_type_info_ident("char", make_type_info_integer(1, false));
     Native_Type_UChar = make_type_info_ident("uchar", make_type_info_integer(1, false));
@@ -702,7 +702,7 @@ struct Type_Info* map_name_to_native_type(char* name) {
     }
 }
 struct Type_Info* get_new_type_info() {
-    array_next((struct Dynamic_Array*)type_infos);
+    array_next(type_infos);
     return type_infos->last;
 }
 struct Type_Info* make_type_info_integer(size_t size_in_bytes, bool is_signed) {
@@ -822,20 +822,20 @@ struct Type_Info* make_type_info_void() {
 struct Infer_Data infer_data;
 void init_infer() {
     infer_data.block_stack = malloc(sizeof(struct Code_Node_Array));
-    array_init((struct Dynamic_Array*)infer_data.block_stack, sizeof(struct Code_Node*), 10);
+    array_init(infer_data.block_stack, sizeof(struct Code_Node*), 10);
     infer_data.last_block = NULL;
     infer_data.last_declaration = NULL;
 }
 void infer_push_block(struct Code_Node* block) {
-    array_push((struct Dynamic_Array*)infer_data.block_stack, &block);
+    array_push(infer_data.block_stack, &block);
     infer_data.last_block = block;
     if (block->block.declarations == NULL) {
         block->block.declarations = malloc(sizeof(struct Code_Node_Array));
-        array_init((struct Dynamic_Array*)block->block.declarations, sizeof(struct Code_Node*), 10);
+        array_init(block->block.declarations, sizeof(struct Code_Node*), 10);
     }
 }
 void infer_pop_block() {
-    array_pop((struct Dynamic_Array*)infer_data.block_stack);
+    array_pop(infer_data.block_stack);
     if (infer_data.block_stack->length > 0) {
         infer_data.last_block = infer_data.block_stack->first[infer_data.block_stack->length - 1];
     }
@@ -886,7 +886,7 @@ struct Code_Node* infer(struct Code_Node* node) {
         }
         case CODE_KIND_DECLARATION:{
             // should error here when ident already declared in current scope
-            array_push((struct Dynamic_Array*)infer_data.last_block->block.declarations, &node);
+            array_push(infer_data.last_block->block.declarations, &node);
             infer(node->declaration.ident);
             if (node->declaration.expression != NULL) {
                 infer(node->declaration.expression);
@@ -1148,53 +1148,53 @@ void inject_stdlib(struct Code_Nodes* code_nodes,
 
     bool malloc_has_varargs = false;
     struct Code_Procedure_Params* malloc_params = malloc(sizeof(struct Code_Procedure_Params));
-    array_init((struct Dynamic_Array*)malloc_params, sizeof(struct Code_Node*), 1);
+    array_init(malloc_params, sizeof(struct Code_Node*), 1);
 
     struct Type_Info* num_bytes_type = Native_Type_Size_t;
     struct Code_Node* num_bytes_ident = make_ident(code_nodes, "num_bytes", NULL);
     struct Code_Node* num_bytes_param = make_declaration(code_nodes, num_bytes_type, num_bytes_ident, NULL);
     
-    array_push((struct Dynamic_Array*)malloc_params, &num_bytes_param);
+    array_push(malloc_params, &num_bytes_param);
 
     struct Code_Node* malloc_block = make_native_code(code_nodes, &malloc);
     struct Code_Node* malloc_proc = make_procedure(code_nodes, malloc_params, malloc_has_varargs, malloc_return_type, malloc_block);
     struct Code_Node* malloc_ident = make_ident(code_nodes, "malloc", NULL);
     struct Code_Node* malloc_decl = make_declaration(code_nodes, NULL, malloc_ident, malloc_proc);
 
-    array_push((struct Dynamic_Array*)statements, &malloc_decl);
+    array_push(statements, &malloc_decl);
 
     // void free(void* ptr)
     struct Type_Info* free_return_type = Native_Type_Void;
 
     bool free_has_varargs = false;
     struct Code_Procedure_Params* free_params = malloc(sizeof(struct Code_Procedure_Params));
-    array_init((struct Dynamic_Array*)free_params, sizeof(struct Code_Node*), 1);
+    array_init(free_params, sizeof(struct Code_Node*), 1);
 
     struct Type_Info* ptr_type = make_type_info_pointer(Native_Type_Void);
     struct Code_Node* ptr_ident = make_ident(code_nodes, "ptr", NULL);
     struct Code_Node* ptr_param = make_declaration(code_nodes, ptr_type, ptr_ident, NULL);
 
-    array_push((struct Dynamic_Array*)free_params, &ptr_param);
+    array_push(free_params, &ptr_param);
 
     struct Code_Node* free_block = make_native_code(code_nodes, &free);
     struct Code_Node* free_proc = make_procedure(code_nodes, free_params, free_has_varargs, free_return_type, free_block);
     struct Code_Node* free_ident = make_ident(code_nodes, "free", NULL);
     struct Code_Node* free_decl = make_declaration(code_nodes, NULL, free_ident, free_proc);
 
-    array_push((struct Dynamic_Array*)statements, &free_decl);
+    array_push(statements, &free_decl);
     
     // void printf(char* fmt, ...)
     struct Type_Info* printf_return_type = Native_Type_Void;
 
     bool printf_has_varargs = true;
     struct Code_Procedure_Params* printf_params = malloc(sizeof(struct Code_Procedure_Params));
-    array_init((struct Dynamic_Array*)printf_params, sizeof(struct Code_Node*), 1);
+    array_init(printf_params, sizeof(struct Code_Node*), 1);
 
     struct Type_Info* fmt_type = make_type_info_pointer(Native_Type_Char);
     struct Code_Node* fmt_ident = make_ident(code_nodes, "fmt", NULL);
     struct Code_Node* fmt_param = make_declaration(code_nodes, fmt_type, fmt_ident, NULL);
 
-    array_push((struct Dynamic_Array*)printf_params, &fmt_param);
+    array_push(printf_params, &fmt_param);
 
     struct Code_Node* printf_block = make_native_code(code_nodes, &printf);
     struct Code_Node* printf_proc = make_procedure(code_nodes, printf_params, printf_has_varargs, printf_return_type, printf_block);
@@ -1202,20 +1202,20 @@ void inject_stdlib(struct Code_Nodes* code_nodes,
     struct Code_Node* printf_ident = make_ident(code_nodes, "printf", NULL);
     struct Code_Node* printf_decl = make_declaration(code_nodes, NULL, printf_ident, printf_proc);
 
-    array_push((struct Dynamic_Array*)statements, &printf_decl);
+    array_push(statements, &printf_decl);
 }
 struct Code_Nodes* parse(struct Token_Array* token_array) {
     struct Code_Nodes* code_nodes = malloc(sizeof(struct Code_Nodes));
-    array_init((struct Dynamic_Array*)code_nodes, sizeof(struct Code_Node), 10000);
+    array_init(code_nodes, sizeof(struct Code_Node), 10000);
     token_array->curr_token = token_array->first;
 
     struct Code_Node_Array* statements = malloc(sizeof(struct Code_Node_Array));
-    array_init((struct Dynamic_Array*)statements, sizeof(struct Code_Node*), 10);
+    array_init(statements, sizeof(struct Code_Node*), 10);
     struct Code_Node* global_block = make_block(code_nodes, statements);
 
     inject_stdlib(code_nodes, statements);
 
-    delimited(NULL, NULL, ";", &parse_statement, (struct Dynamic_Array*)statements, token_array, code_nodes);
+    delimited(NULL, NULL, ";", &parse_statement, statements, token_array, code_nodes);
     code_nodes->first->block.is_transformed_block = true;
 
     return code_nodes;
@@ -1419,8 +1419,8 @@ bool parse_call(struct Token_Array* token_array,
         
         struct Code_Node* ident = code_nodes->last;
         struct Code_Call_Args* args = malloc(sizeof(struct Code_Call_Args));
-        array_init((struct Dynamic_Array*)args, sizeof(struct Code_Node*), 10);
-        delimited("(", ")", ",", &parse_rvalue, (struct Dynamic_Array*)args, token_array, code_nodes);
+        array_init(args, sizeof(struct Code_Node*), 10);
+        delimited("(", ")", ",", &parse_rvalue, args, token_array, code_nodes);
         make_call(code_nodes, ident, args);
         return true;
     }
@@ -1780,8 +1780,8 @@ bool parse_block(struct Token_Array* token_array,
                  struct Code_Nodes* code_nodes) {
 
     struct Code_Node_Array* statements = malloc(sizeof(struct Code_Node_Array));
-    array_init((struct Dynamic_Array*)statements, sizeof(struct Code_Node*), 10);
-    delimited("{", "}", ";", &parse_statement, (struct Dynamic_Array*)statements, token_array, code_nodes);
+    array_init(statements, sizeof(struct Code_Node*), 10);
+    delimited("{", "}", ";", &parse_statement, statements, token_array, code_nodes);
     make_block(code_nodes, statements);
     return true;
 }
@@ -1833,8 +1833,8 @@ bool parse_procedure_declaration(struct Token_Array* token_array,
     struct Code_Node* ident = code_nodes->last;
     token_array->curr_token++;
     struct Code_Procedure_Params* params = malloc(sizeof(struct Code_Procedure_Params));
-    array_init((struct Dynamic_Array*)params, sizeof(struct Code_Node*), 10);
-    delimited("(", ")", ",", &parse_param, (struct Dynamic_Array*)params, token_array, code_nodes);
+    array_init(params, sizeof(struct Code_Node*), 10);
+    delimited("(", ")", ",", &parse_param, params, token_array, code_nodes);
     bool has_varargs = false;
     if (strcmp(token_array->curr_token->str, "...") == 0) {
         has_varargs = true;
@@ -2075,7 +2075,7 @@ bool delimited(char* start, char* stop, char* separator,
 
 struct Code_Node* get_new_code_node(struct Code_Nodes* code_nodes) {
 
-    bool was_realloc = array_next((struct Dynamic_Array*)code_nodes);
+    bool was_realloc = array_next(code_nodes);
 
     // @Incomplete
     // if realloc, we need to fix pointers using a diff
@@ -2111,12 +2111,12 @@ struct Token_Array* tokenize(char* input) {
     size_t input_length = strlen(input);
 
     struct Token_Array* token_array = malloc(sizeof(struct Token_Array));
-    array_init((struct Dynamic_Array*)token_array, sizeof(struct Token), 100);
+    array_init(token_array, sizeof(struct Token), 100);
 
     // token_array->last = token_array->first;
     char* prev = input;
     for (size_t i = 0; *input; i += 1) {
-        array_next((struct Dynamic_Array*)token_array);
+        array_next(token_array);
         read_token(token_array->last, &input);
         if (input == prev) {
             printf("lexing error!\n");

@@ -11,7 +11,7 @@ void init_run(struct Code_Nodes* code_nodes) {
     run_data.last_loop = NULL;
 
     run_data.execution_stack = malloc(sizeof(struct Code_Node_Array));
-    array_init((struct Dynamic_Array*)run_data.execution_stack, sizeof(struct Code_Node*), 10);
+    array_init(run_data.execution_stack, sizeof(struct Code_Node*), 10);
 
     run_data.original_to_clone = malloc(sizeof(struct Original_To_Clone_Map_SOA));
     soa_init((struct Dynamic_SOA*)run_data.original_to_clone, 100, 2, sizeof(struct Code_Node*), sizeof(struct Code_Node*));
@@ -45,7 +45,7 @@ void set_memory(size_t offset, void* data, size_t num_bytes) {
 void add_node_to_execution_stack(struct Code_Node* node) {
     node->is_on_execution_stack = true;
     node->execution_index = run_data.execution_stack->length;
-    array_push((struct Dynamic_Array*)run_data.execution_stack, &node);
+    array_push(run_data.execution_stack, &node);
 }
 
 void add_name_use(char* name) {
@@ -542,7 +542,7 @@ void run_call(struct Code_Node* node) {
     if (proc->procedure.block->kind == CODE_KIND_BLOCK) {
         transform(node);
         struct Code_Node_Array* extras = run_data.last_block->block.extras->first + run_data.statement_index;
-        array_push((struct Dynamic_Array*)extras, &(node->transformed));
+        array_push(extras, &(node->transformed));
         run_statement(node->transformed);
         add_node_to_execution_stack(node);
         printf("exiting %s\n", node->call.ident->ident.name);
@@ -740,13 +740,13 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
 }
 void run_start_block(struct Code_Node* node) {
     node->block.allocations = malloc(sizeof(struct Code_Node_Array));
-    array_init((struct Dynamic_Array*)node->block.allocations, sizeof(struct Code_Node*), 10);
+    array_init(node->block.allocations, sizeof(struct Code_Node*), 10);
     node->block.extras = malloc(sizeof(struct Extras));
     if (node->block.statements->length == 0) {
-        array_init((struct Dynamic_Array*)node->block.extras, sizeof(struct Code_Node_Array), 10);
+        array_init(node->block.extras, sizeof(struct Code_Node_Array), 10);
     }
     else {
-        array_init((struct Dynamic_Array*)node->block.extras, sizeof(struct Code_Node_Array), node->block.statements->length);
+        array_init(node->block.extras, sizeof(struct Code_Node_Array), node->block.statements->length);
     }
 }
 void run_end_block(struct Code_Node* node) {
@@ -769,8 +769,8 @@ struct Code_Node* run_statement(struct Code_Node* node) {
             size_t prev_length = node->block.statements->length;
             for (size_t i = 0; i < node->block.statements->length; i += 1) {
                 struct Code_Node_Array* extras = malloc(sizeof(struct Code_Node_Array));
-                array_init((struct Dynamic_Array*)extras, sizeof(struct Code_Node*), 2);
-                array_push((struct Dynamic_Array*)node->block.extras, extras);
+                array_init(extras, sizeof(struct Code_Node*), 2);
+                array_push(node->block.extras, extras);
                 run_data.statement_index = i;
                 run_statement(node->block.statements->first[i]);
                 if ((run_data.last_call != NULL && run_data.last_call->call.returned) ||
@@ -835,7 +835,7 @@ struct Code_Node* run_statement(struct Code_Node* node) {
             node->declaration.pointer = run_data.stack_pointer + alignment_pad;
             node->declaration.alignment_pad = alignment_pad;
             run_data.stack_pointer += alignment_pad + type->size_in_bytes;
-            array_push((struct Dynamic_Array*)run_data.last_block->block.allocations, &node);
+            array_push(run_data.last_block->block.allocations, &node);
             printf("decl ptr: %zu\n", node->declaration.pointer);
 
             if (expression != NULL) {
@@ -905,7 +905,7 @@ struct Code_Node* run_statement(struct Code_Node* node) {
             node->transformed->block.is_transformed_block = true;
             run_statement(node->transformed);
             struct Code_Node_Array* extras = run_data.last_block->block.extras->first + run_data.statement_index;
-            array_push((struct Dynamic_Array*)extras, &(node->transformed));
+            array_push(extras, &(node->transformed));
             struct Code_Node* prev_last_block = run_data.last_block;
             run_data.last_block = node->transformed;
             run_data.statement_index = 0;
@@ -914,8 +914,8 @@ struct Code_Node* run_statement(struct Code_Node* node) {
             while (should_run) {
                 run_data.statement_index += 1;
                 struct Extras* loop_extras = malloc(sizeof(struct Code_Node_Array));
-                array_init((struct Dynamic_Array*)loop_extras, sizeof(struct Code_Node*), 2);
-                array_push((struct Dynamic_Array*)node->transformed->block.extras, loop_extras);
+                array_init(loop_extras, sizeof(struct Code_Node*), 2);
+                array_push(node->transformed->block.extras, loop_extras);
                 struct Code_Node* condition = clone(node->while_.condition);
                 struct Code_Node* expression = clone(node->while_.expression);
                 struct Code_Node* if_stmt = make_if(run_data.code_nodes, condition, expression);
@@ -925,7 +925,7 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                 if (should_run) {
                     run_statement(expression);
                 }
-                array_push((struct Dynamic_Array*)node->transformed->block.statements, &if_stmt);
+                array_push(node->transformed->block.statements, &if_stmt);
                 if ((run_data.last_call != NULL && run_data.last_call->call.returned) ||
                     (run_data.last_loop != NULL && run_data.last_loop->broken)) {
 
@@ -944,7 +944,7 @@ struct Code_Node* run_statement(struct Code_Node* node) {
             node->transformed->block.is_transformed_block = true;
             run_statement(node->transformed);
             struct Code_Node_Array* extras = run_data.last_block->block.extras->first + run_data.statement_index;
-            array_push((struct Dynamic_Array*)extras, &(node->transformed));
+            array_push(extras, &(node->transformed));
             struct Code_Node* prev_last_block = run_data.last_block;
             run_data.last_block = node->transformed;
             run_data.statement_index = 0;
@@ -954,8 +954,8 @@ struct Code_Node* run_statement(struct Code_Node* node) {
             while (should_run) {
                 run_data.statement_index += 1;
                 struct Extras* loop_extras = malloc(sizeof(struct Code_Node_Array));
-                array_init((struct Dynamic_Array*)loop_extras, sizeof(struct Code_Node*), 2);
-                array_push((struct Dynamic_Array*)node->transformed->block.extras, loop_extras);
+                array_init(loop_extras, sizeof(struct Code_Node*), 2);
+                array_push(node->transformed->block.extras, loop_extras);
                 struct Code_Node* condition;
                 if (first) {
                     first = false;
@@ -972,7 +972,7 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                 if (should_run) {
                     run_statement(expression);
                 }
-                array_push((struct Dynamic_Array*)node->transformed->block.statements, &if_stmt);
+                array_push(node->transformed->block.statements, &if_stmt);
                 if ((run_data.last_call != NULL && run_data.last_call->call.returned) ||
                     (run_data.last_loop != NULL && run_data.last_loop->broken)) {
 
@@ -990,33 +990,33 @@ struct Code_Node* run_statement(struct Code_Node* node) {
             node->transformed = make_block(run_data.code_nodes, NULL);
             node->transformed->block.is_transformed_block = true;
             struct Code_Node_Array* extras = run_data.last_block->block.extras->first + run_data.statement_index;
-            array_push((struct Dynamic_Array*)extras, &(node->transformed));
+            array_push(extras, &(node->transformed));
             struct Code_Node* prev_last_block = run_data.last_block;
             run_data.last_block = node->transformed;
             run_data.statement_index = 0;
             run_start_block(node->transformed);
             if (node->for_.begin != NULL) {
                 struct Code_Node_Array* begin_extras = malloc(sizeof(struct Code_Node_Array));
-                array_init((struct Dynamic_Array*)begin_extras, sizeof(struct Code_Node*), 2);
-                array_push((struct Dynamic_Array*)node->transformed->block.extras, begin_extras);
-                array_push((struct Dynamic_Array*)node->transformed->block.statements, &(node->for_.begin));
+                array_init(begin_extras, sizeof(struct Code_Node*), 2);
+                array_push(node->transformed->block.extras, begin_extras);
+                array_push(node->transformed->block.statements, &(node->for_.begin));
                 run_statement(node->for_.begin);
                 run_data.statement_index += 1;
             }
             if (node->for_.expression->kind != CODE_KIND_BLOCK) {
                 struct Code_Node* block = make_block(run_data.code_nodes, NULL);
-                array_push((struct Dynamic_Array*)block->block.statements, &(node->for_.expression));
+                array_push(block->block.statements, &(node->for_.expression));
                 node->for_.expression = block;
             }
             if (node->for_.cycle_end != NULL) {
-                array_push((struct Dynamic_Array*)node->for_.expression->block.statements, &(node->for_.cycle_end));
+                array_push(node->for_.expression->block.statements, &(node->for_.cycle_end));
             }
             bool should_run = true;
             while (should_run) {
                 run_data.statement_index += 1;
                 struct Extras* loop_extras = malloc(sizeof(struct Code_Node_Array));
-                array_init((struct Dynamic_Array*)loop_extras, sizeof(struct Code_Node*), 2);
-                array_push((struct Dynamic_Array*)node->transformed->block.extras, loop_extras);
+                array_init(loop_extras, sizeof(struct Code_Node*), 2);
+                array_push(node->transformed->block.extras, loop_extras);
                 struct Code_Node* condition;
                 if (node->for_.condition != NULL) {
                     condition = clone(node->for_.condition);
@@ -1032,7 +1032,7 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                 if (should_run) {
                     run_statement(expression);
                 }
-                array_push((struct Dynamic_Array*)node->transformed->block.statements, &if_stmt);
+                array_push(node->transformed->block.statements, &if_stmt);
                 if ((run_data.last_call != NULL && run_data.last_call->call.returned) ||
                     (run_data.last_loop != NULL && run_data.last_loop->broken)) {
 
@@ -1089,7 +1089,7 @@ struct Code_Node* clone(struct Code_Node* node) {
             cloned->block.is_transformed_block = node->block.is_transformed_block;
             for (size_t i = 0; i < node->block.statements->length; i += 1) {
                 struct Code_Node* cloned_stmt = clone(node->block.statements->first[i]);
-                array_push((struct Dynamic_Array*)cloned->block.statements, &cloned_stmt);
+                array_push(cloned->block.statements, &cloned_stmt);
             }
             break;
         }
@@ -1098,7 +1098,7 @@ struct Code_Node* clone(struct Code_Node* node) {
             run_data.count_uses = false;
             for (size_t i = 0; i < node->procedure.params->length; i += 1) {
                 struct Code_Node* cloned_param = clone(node->procedure.params->first[i]);
-                array_push((struct Dynamic_Array*)cloned->procedure.params, &cloned_param);
+                array_push(cloned->procedure.params, &cloned_param);
             }
             run_data.count_uses = true;
             break;
@@ -1107,7 +1107,7 @@ struct Code_Node* clone(struct Code_Node* node) {
             cloned = make_call(run_data.code_nodes, node->call.ident, NULL);
             for (size_t i = 0; i < node->call.args->length; i += 1) {
                 struct Code_Node* cloned_arg = clone(node->call.args->first[i]);
-                array_push((struct Dynamic_Array*)cloned->call.args, &cloned_arg);
+                array_push(cloned->call.args, &cloned_arg);
             }
             break;
         }
@@ -1294,15 +1294,15 @@ void transform(struct Code_Node* node) {
                 struct Code_Node* return_ident = make_ident(run_data.code_nodes, return_ident_name, NULL);
                 proc->procedure.return_ident = return_ident;
                 struct Code_Node* return_decl = make_declaration(run_data.code_nodes, proc->procedure.return_type, return_ident, NULL);
-                array_push((struct Dynamic_Array*)proc->transformed->block.statements, &return_decl);
+                array_push(proc->transformed->block.statements, &return_decl);
 
                 for (size_t i = 0; i < proc->procedure.params->length; i += 1) {
                     struct Code_Node* param = proc->procedure.params->first[i];
-                    array_push((struct Dynamic_Array*)proc->transformed->block.statements, &param);
+                    array_push(proc->transformed->block.statements, &param);
                 }
                 for (size_t i = 0; i < proc->procedure.block->block.statements->length; i += 1) {
                     struct Code_Node* stmt = proc->procedure.block->block.statements->first[i];
-                    array_push((struct Dynamic_Array*)proc->transformed->block.statements, &stmt);
+                    array_push(proc->transformed->block.statements, &stmt);
                 }
             }
 
