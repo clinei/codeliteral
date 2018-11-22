@@ -18,7 +18,7 @@ function set_text(new_text) {
     writeAsciiToMemory(new_text, ptr);
     call_set_text(ptr);
 }
-/*
+// /*
 const code = `
 bool test_floats() {
 	bool passed = true;
@@ -166,7 +166,10 @@ bool test_struct_array() {
 	struct Person {
 		uint age;
 	};
+	// @@@
+	// decl ptr: 16
 	Person[2] people;
+	// begin has same decl ptr: 16
 	for (int i = 0; i < people.length; i += 1) {
 		people[i].age = (i + 1) * 10;
 	};
@@ -214,7 +217,7 @@ void tests() {
 	test_if_else();
 	test_array();
 	test_pointer();
-	test_malloc_free();
+	// test_malloc_free();
 	// test_heap();
 	// test_dynamic_array();
 	test_struct();
@@ -291,8 +294,8 @@ int main() {
 }
 main();
 `;
-*/
-// /*
+// */
+/*
 const code = `
 bool test_nested_loop() {
 	bool passed = true;
@@ -347,12 +350,12 @@ bool test_pointer() {
 }
 void main() {
 	// fizzbuzz(10);
-	test_nested_loop();
+	// test_nested_loop();
 	// test_pointer();
 }
 main();
 `;
-// */
+*/
 
 function main() {
 

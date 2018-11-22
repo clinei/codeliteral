@@ -188,7 +188,7 @@ Module['FS_createPath']('/assets', 'shaders', true, true);
   }
 
  }
- loadPackage({"files": [{"start": 0, "audio": 0, "end": 285388, "filename": "/assets/fonts/SourceCodeVariable-Roman.ttf"}, {"start": 285388, "audio": 0, "end": 285496, "filename": "/assets/shaders/quad.frag.glsl"}, {"start": 285496, "audio": 0, "end": 285684, "filename": "/assets/shaders/quad.vert.glsl"}, {"start": 285684, "audio": 0, "end": 285937, "filename": "/assets/shaders/texture_atlas.frag.glsl"}, {"start": 285937, "audio": 0, "end": 286173, "filename": "/assets/shaders/texture_atlas.vert.glsl"}], "remote_package_size": 286173, "package_uuid": "57fdbe1d-3672-47d9-9a31-0090ce966cd8"});
+ loadPackage({"files": [{"start": 0, "audio": 0, "end": 285388, "filename": "/assets/fonts/SourceCodeVariable-Roman.ttf"}, {"start": 285388, "audio": 0, "end": 285496, "filename": "/assets/shaders/quad.frag.glsl"}, {"start": 285496, "audio": 0, "end": 285684, "filename": "/assets/shaders/quad.vert.glsl"}, {"start": 285684, "audio": 0, "end": 285937, "filename": "/assets/shaders/texture_atlas.frag.glsl"}, {"start": 285937, "audio": 0, "end": 286173, "filename": "/assets/shaders/texture_atlas.vert.glsl"}], "remote_package_size": 286173, "package_uuid": "9eb3cb2a-f28b-4e6e-9d07-583fce15e35d"});
 
 })();
 

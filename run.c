@@ -498,8 +498,6 @@ struct Code_Node* get_result(void* value, struct Type_Info* type) {
             else if (type->integer.is_signed) {
                 result = make_literal_int(run_data.code_nodes, 0);
                 memcpy(&result->literal_int.value, value, type->size_in_bytes);
-                // @Incomplete
-                bool minus = result->literal_int.value < 0;
             }
             else {
                 result = make_literal_uint(run_data.code_nodes, 0);
@@ -508,7 +506,8 @@ struct Code_Node* get_result(void* value, struct Type_Info* type) {
             break;
         }
         case TYPE_INFO_TAG_FLOAT:{
-            result = make_literal_float(run_data.code_nodes, *(double*)value);
+            result = make_literal_float(run_data.code_nodes, 0);
+            memcpy(&result->literal_float.value, value, type->size_in_bytes);
             break;
         }
         case TYPE_INFO_TAG_POINTER:{
@@ -531,6 +530,7 @@ struct Code_Node* get_result(void* value, struct Type_Info* type) {
 }
 struct Code_Node* get_ident_result(struct Code_Node* node) {
     void* value = get_memory(node->ident.declaration->declaration.pointer, node->type->size_in_bytes);
+    printf("ptr: %zu\n", ((size_t)value) % 4);
     return get_result(value, node->type);
 }
 void run_call(struct Code_Node* node) {
@@ -549,9 +549,11 @@ void run_call(struct Code_Node* node) {
     }
     else if (proc->procedure.block->kind == CODE_KIND_NATIVE_CODE) {
         printf("native code\n");
+        /*
         for (size_t i = 0; i < node->call.args->length; i += 1) {
             run_rvalue(node->call.args->first[i]);
         }
+        */
         // @Incomplete
         // need to import a libc, like musl
     }
@@ -665,6 +667,10 @@ size_t run_lvalue(struct Code_Node* node) {
             node->result = get_result(real_pointer, node->dereference.expression->type);
             break;
         }
+        case CODE_KIND_PARENS:{
+            result = run_lvalue(node->parens.expression);
+            break;
+        }
         default:{
             printf("run_lvalue not implemented for node kind: (%s)\n", code_kind_to_string(node->kind));
             abort();
@@ -736,6 +742,10 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
         case CODE_KIND_DEREFERENCE:{
             void* value = get_memory(run_lvalue(node), node->type->size_in_bytes);
             result = get_result(value, node->type);
+            break;
+        }
+        case CODE_KIND_PARENS:{
+            result = run_rvalue(node->parens.expression);
             break;
         }
         default:{
@@ -828,12 +838,12 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                 break;
             }
             size_t align = 0;
+            size_t max_align = 4;
             if (type->kind == TYPE_INFO_TAG_STRUCT) {
-                // largest alignment, 32bit for now
-                align = 4;
+                align = max_align;
             }
             else if (type->kind == TYPE_INFO_TAG_ARRAY) {
-                align = type->array.elem_type->size_in_bytes;
+                align = max_align;
             }
             else {
                 align = type->size_in_bytes;
