@@ -347,8 +347,8 @@ bool test_pointer() {
 }
 void main() {
 	// fizzbuzz(10);
-	// test_nested_loop();
-	test_pointer();
+	test_nested_loop();
+	// test_pointer();
 }
 main();
 `;

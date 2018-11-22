@@ -1125,6 +1125,7 @@ void render_code_node(struct Code_Node* node,
             if (node->block.is_transformed_block == false) {
                 render_data->indent_level -= 1;
                 render_indent(render_data);
+                last_line = *render_data->debugger_root->list.elements->last;
                 struct Render_Node* close_bracket = make_text(render_data->render_nodes, "}", render_data->fg_color);
                 array_push(last_line->list.elements, &close_bracket);
             }
@@ -1361,7 +1362,14 @@ void render_type(struct Type_Info* type,
 }
 
 void render_indent(struct Render_Data* render_data) {
-    render_data->xpos = render_data->indent_level * 4 * render_data->font_atlas->char_width;
+    struct Render_Node* last_line = *render_data->debugger_root->list.elements->last;
+    struct Render_Node* space = make_text(render_data->render_nodes, " ", render_data->fg_color);
+    for (size_t i = 0; i < render_data->indent_level; i += 1) {
+        for (size_t j = 0; j < 4; j += 1) {
+            array_push(last_line->list.elements, &space);
+        }
+    }
+    // render_data->xpos = render_data->indent_level * 4 * render_data->font_atlas->char_width;
 }
 void render_space(struct Render_Data* render_data) {
     struct Render_Node* last_line = *render_data->debugger_root->list.elements->last;

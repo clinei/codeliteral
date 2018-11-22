@@ -932,10 +932,12 @@ struct Code_Node* infer(struct Code_Node* node) {
         case CODE_KIND_ARRAY_INDEX:{
             infer(node->array_index.array);
             infer(node->array_index.index);
+            /*
             if (node->array_index.index->type != Native_Type_Int) {
                 printf("only int type array index is currently allowed\n");
                 abort();
             }
+            */
             node->type = node->array_index.array->type->array.elem_type;
             break;
         }

@@ -710,7 +710,18 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
             break;
         }
         case CODE_KIND_DOT_OPERATOR:{
-            result = get_result(get_memory(run_lvalue(node), node->type->size_in_bytes), node->type);
+            struct Code_Node* left = node->dot_operator.left;
+            struct Code_Node* right = node->dot_operator.right;
+            if (left->type->kind == TYPE_INFO_TAG_ARRAY &&
+                right->kind == CODE_KIND_IDENT && strcmp(right->ident.name, "length") == 0) {
+
+                left->is_lhs = node->is_lhs;
+                right->is_lhs = node->is_lhs;
+                result = make_literal_uint(run_data.code_nodes, left->type->array.length);
+            }
+            else {
+                result = get_result(get_memory(run_lvalue(node), node->type->size_in_bytes), node->type);
+            }
             break;
         }
         case CODE_KIND_REFERENCE:{
