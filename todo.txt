@@ -37,6 +37,8 @@ test ints
 
 Graphics Ideas:
 
+backgrounds need a stack approach
+
 render fonts ourself
 render font vertices directly
 try font hinting

@@ -166,6 +166,23 @@ struct Render_Node* make_list(struct Render_Nodes* render_nodes,
 
     return node;
 }
+struct Render_Node* make_background_start(struct Render_Nodes* render_nodes,
+                                          GLfloat* color) {
+    
+    struct Render_Node* node = get_new_render_node(render_nodes);
+    node->kind = RENDER_KIND_BACKGROUND_START;
+
+    node->background_start.color = color;
+
+    return node;
+}
+struct Render_Node* make_background_end(struct Render_Nodes* render_nodes) {
+    
+    struct Render_Node* node = get_new_render_node(render_nodes);
+    node->kind = RENDER_KIND_BACKGROUND_END;
+
+    return node;
+}
 
 struct Render_Node* get_new_render_node(struct Render_Nodes* render_nodes) {
     bool was_realloc = array_next(render_nodes);
@@ -420,7 +437,9 @@ void destroy_render_node(struct Render_Node* node) {
             array_destroy(node->list.elements);
             break;
         }
-        case RENDER_KIND_TEXT:{
+        case RENDER_KIND_TEXT:
+        case RENDER_KIND_BACKGROUND_START:
+        case RENDER_KIND_BACKGROUND_END:{
             break;
         }
         default:{
@@ -597,6 +616,12 @@ void layout_node(struct Render_Node* node,
             }
             break;
         }
+        case RENDER_KIND_BACKGROUND_START:
+        case RENDER_KIND_BACKGROUND_END:{
+            node->width = 0;
+            node->height = 0;
+            break;
+        }
         default:{
             printf("layout_node not implemented for node kind: %u\n", node->kind);
             abort();
@@ -632,6 +657,16 @@ void render_node(struct Render_Node* node, struct Render_Data* render_data) {
             }
             break;
         }
+        case RENDER_KIND_BACKGROUND_START:{
+            // @Incomplete
+            // we need a stack
+            mark_background_start(render_data, node->background_start.color, node->x, node->y);
+            break;
+        }
+        case RENDER_KIND_BACKGROUND_END:{
+            mark_background_end(render_data, node->x, node->y);
+            break;
+        }
         default:{
             printf("render_node not implemented for kind: %u\n", node->kind);
             abort();
@@ -652,13 +687,19 @@ void render_code_node(struct Code_Node* node,
     }
     */
 
+    struct Render_Node* last_line = *render_data->debugger_root->list.elements->last;
+
     // @Incomplete
     // need to add background start and end render nodes to the line
     if (node == interaction_data.cursor) {
+        struct Render_Node* cursor_begin = make_background_start(render_data->render_nodes, render_data->cursor_color);
+        array_push(last_line->list.elements, &cursor_begin);
         render_data->cursor_line = render_data->line_index;
+        /*
         mark_background_start(render_data, render_data->cursor_color);
         node->offset_x = render_data->xpos + interaction_data.scroll_x;
         node->offset_y = render_data->ypos + interaction_data.scroll_y;
+        */
     }
 
     // printf("render_node: (%s)\n", code_kind_to_string(node->kind));
@@ -672,8 +713,6 @@ void render_code_node(struct Code_Node* node,
         struct Code_Node_Array* nodes = render_data->lines->first + render_data->line_index;
         array_push(nodes, &node);
     }
-
-    struct Render_Node* last_line = *render_data->debugger_root->list.elements->last;
 
     switch (node->kind) {
         case CODE_KIND_IF:{
@@ -1121,7 +1160,9 @@ void render_code_node(struct Code_Node* node,
     }
     
     if (node == interaction_data.cursor) {
-        mark_background_end(render_data);
+        struct Render_Node* cursor_end = make_background_end(render_data->render_nodes);
+        array_push(last_line->list.elements, &cursor_end);
+        // mark_background_end(render_data);
     }
 }
 
@@ -1224,24 +1265,29 @@ void render_text(char* text, float* xpos, float* ypos,
     }
 }
 
-void mark_background_start(struct Render_Data* render_data, GLfloat* bg_color) {
+void mark_background_start(struct Render_Data* render_data,
+                           GLfloat* color,
+                           float x, float y) {
     
     for (size_t i = 0; i < 4; i += 1) {
-        render_data->bg_colors[render_data->bg_coords_length + 4 * i + 0] = bg_color[0];
-        render_data->bg_colors[render_data->bg_coords_length + 4 * i + 1] = bg_color[1];
-        render_data->bg_colors[render_data->bg_coords_length + 4 * i + 2] = bg_color[2];
-        render_data->bg_colors[render_data->bg_coords_length + 4 * i + 3] = bg_color[3];
+        render_data->bg_colors[render_data->bg_coords_length + 4 * i + 0] = color[0];
+        render_data->bg_colors[render_data->bg_coords_length + 4 * i + 1] = color[1];
+        render_data->bg_colors[render_data->bg_coords_length + 4 * i + 2] = color[2];
+        render_data->bg_colors[render_data->bg_coords_length + 4 * i + 3] = color[3];
     }
 
-    render_data->mark_start_xpos = render_data->xpos;
-    render_data->mark_start_ypos = render_data->ypos - render_data->font_atlas->font_size + 4;
+    // @Incomplete
+    // we need a stack
+    render_data->mark_start_xpos = x;
+    render_data->mark_start_ypos = y - render_data->font_atlas->font_size + 4;
 }
-void mark_background_end(struct Render_Data* render_data) {
+void mark_background_end(struct Render_Data* render_data,
+                         float x, float y) {
 
     float start_xpos = render_data->mark_start_xpos;
     float start_ypos = render_data->mark_start_ypos;
-    float end_xpos = render_data->xpos;
-    float end_ypos = render_data->ypos + 6;
+    float end_xpos = x;
+    float end_ypos = y + 6;
 
     convert_screen_coords_to_view_coords(start_xpos, start_ypos, render_data->width, render_data->height, &start_xpos, &start_ypos);
     convert_screen_coords_to_view_coords(end_xpos, end_ypos, render_data->width, render_data->height, &end_xpos, &end_ypos);

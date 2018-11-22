@@ -47973,7 +47973,7 @@
   (set_local $$1
    (get_local $$0)
   )
-  ;;@ renderer.c:171:0
+  ;;@ renderer.c:188:0
   (set_local $$3
    (get_local $$1)
   )
@@ -47985,7 +47985,7 @@
   (set_local $$2
    (get_local $$4)
   )
-  ;;@ renderer.c:172:0
+  ;;@ renderer.c:189:0
   (set_local $$5
    (get_local $$1)
   )
@@ -48123,7 +48123,153 @@
    (get_local $$17)
   )
  )
- (func $_find_expanded_nodes (; 169 ;) (param $$0 i32)
+ (func $_make_background_start (; 169 ;) (param $$0 i32) (param $$1 i32) (result i32)
+  (local $$10 i32)
+  (local $$11 i32)
+  (local $$2 i32)
+  (local $$3 i32)
+  (local $$4 i32)
+  (local $$5 i32)
+  (local $$6 i32)
+  (local $$7 i32)
+  (local $$8 i32)
+  (local $$9 i32)
+  (local $label i32)
+  (local $sp i32)
+  (set_local $sp
+   (get_global $STACKTOP)
+  )
+  (set_global $STACKTOP
+   (i32.add
+    (get_global $STACKTOP)
+    (i32.const 16)
+   )
+  )
+  (if
+   (i32.ge_s
+    (get_global $STACKTOP)
+    (get_global $STACK_MAX)
+   )
+   (call $abortStackOverflow
+    (i32.const 16)
+   )
+  )
+  (set_local $$2
+   (get_local $$0)
+  )
+  (set_local $$3
+   (get_local $$1)
+  )
+  ;;@ renderer.c:172:0
+  (set_local $$5
+   (get_local $$2)
+  )
+  (set_local $$6
+   (call $_get_new_render_node
+    (get_local $$5)
+   )
+  )
+  (set_local $$4
+   (get_local $$6)
+  )
+  ;;@ renderer.c:173:0
+  (set_local $$7
+   (get_local $$4)
+  )
+  (i32.store
+   (get_local $$7)
+   (i32.const 2)
+  )
+  ;;@ renderer.c:175:0
+  (set_local $$8
+   (get_local $$3)
+  )
+  (set_local $$9
+   (get_local $$4)
+  )
+  (set_local $$10
+   (i32.add
+    (get_local $$9)
+    (i32.const 20)
+   )
+  )
+  (i32.store
+   (get_local $$10)
+   (get_local $$8)
+  )
+  ;;@ renderer.c:177:0
+  (set_local $$11
+   (get_local $$4)
+  )
+  (set_global $STACKTOP
+   (get_local $sp)
+  )
+  (return
+   (get_local $$11)
+  )
+ )
+ (func $_make_background_end (; 170 ;) (param $$0 i32) (result i32)
+  (local $$1 i32)
+  (local $$2 i32)
+  (local $$3 i32)
+  (local $$4 i32)
+  (local $$5 i32)
+  (local $$6 i32)
+  (local $label i32)
+  (local $sp i32)
+  (set_local $sp
+   (get_global $STACKTOP)
+  )
+  (set_global $STACKTOP
+   (i32.add
+    (get_global $STACKTOP)
+    (i32.const 16)
+   )
+  )
+  (if
+   (i32.ge_s
+    (get_global $STACKTOP)
+    (get_global $STACK_MAX)
+   )
+   (call $abortStackOverflow
+    (i32.const 16)
+   )
+  )
+  (set_local $$1
+   (get_local $$0)
+  )
+  ;;@ renderer.c:181:0
+  (set_local $$3
+   (get_local $$1)
+  )
+  (set_local $$4
+   (call $_get_new_render_node
+    (get_local $$3)
+   )
+  )
+  (set_local $$2
+   (get_local $$4)
+  )
+  ;;@ renderer.c:182:0
+  (set_local $$5
+   (get_local $$2)
+  )
+  (i32.store
+   (get_local $$5)
+   (i32.const 3)
+  )
+  ;;@ renderer.c:184:0
+  (set_local $$6
+   (get_local $$2)
+  )
+  (set_global $STACKTOP
+   (get_local $sp)
+  )
+  (return
+   (get_local $$6)
+  )
+ )
+ (func $_find_expanded_nodes (; 171 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$100 i32)
@@ -48788,7 +48934,7 @@
   (set_local $$1
    (get_local $$0)
   )
-  ;;@ renderer.c:179:0
+  ;;@ renderer.c:196:0
   (set_local $$6
    (get_local $$1)
   )
@@ -48802,7 +48948,7 @@
    (get_local $$7)
    (i32.const 0)
   )
-  ;;@ renderer.c:180:0
+  ;;@ renderer.c:197:0
   (set_local $$8
    (get_local $$1)
   )
@@ -48816,7 +48962,7 @@
    (get_local $$9)
    (i32.const 0)
   )
-  ;;@ renderer.c:182:0
+  ;;@ renderer.c:199:0
   (set_local $$10
    (get_local $$1)
   )
@@ -48862,7 +49008,7 @@
                                )
                               )
                               (block
-                               ;;@ renderer.c:184:0
+                               ;;@ renderer.c:201:0
                                (set_local $$2
                                 (i32.const 0)
                                )
@@ -48902,7 +49048,7 @@
                                   )
                                   (br $while-out)
                                  )
-                                 ;;@ renderer.c:185:0
+                                 ;;@ renderer.c:202:0
                                  (set_local $$18
                                   (get_local $$1)
                                  )
@@ -48948,14 +49094,14 @@
                                  (set_local $$3
                                   (get_local $$25)
                                  )
-                                 ;;@ renderer.c:186:0
+                                 ;;@ renderer.c:203:0
                                  (set_local $$26
                                   (get_local $$3)
                                  )
                                  (call $_find_expanded_nodes
                                   (get_local $$26)
                                  )
-                                 ;;@ renderer.c:187:0
+                                 ;;@ renderer.c:204:0
                                  (set_local $$27
                                   (get_local $$3)
                                  )
@@ -49012,7 +49158,7 @@
                                   (get_local $$32)
                                   (get_local $$36)
                                  )
-                                 ;;@ renderer.c:184:0
+                                 ;;@ renderer.c:201:0
                                  (set_local $$37
                                   (get_local $$2)
                                  )
@@ -49028,7 +49174,7 @@
                                  (br $while-in)
                                 )
                                )
-                               ;;@ renderer.c:189:0
+                               ;;@ renderer.c:206:0
                                (set_local $$39
                                 (i32.load8_s
                                  (i32.const 9876)
@@ -49052,7 +49198,7 @@
                                (if
                                 (get_local $$41)
                                 (block
-                                 ;;@ renderer.c:190:0
+                                 ;;@ renderer.c:207:0
                                  (set_local $$43
                                   (i32.add
                                    (get_local $$42)
@@ -49066,11 +49212,11 @@
                                  (set_global $STACKTOP
                                   (get_local $sp)
                                  )
-                                 ;;@ renderer.c:415:0
+                                 ;;@ renderer.c:432:0
                                  (return)
                                 )
                                 (block
-                                 ;;@ renderer.c:193:0
+                                 ;;@ renderer.c:210:0
                                  (set_local $$44
                                   (i32.add
                                    (get_local $$42)
@@ -49098,14 +49244,14 @@
                                  (set_global $STACKTOP
                                   (get_local $sp)
                                  )
-                                 ;;@ renderer.c:415:0
+                                 ;;@ renderer.c:432:0
                                  (return)
                                 )
                                )
                               )
                              )
                              (block
-                              ;;@ renderer.c:198:0
+                              ;;@ renderer.c:215:0
                               (set_local $$48
                                (i32.load8_s
                                 (i32.const 9876)
@@ -49131,11 +49277,11 @@
                                 (set_global $STACKTOP
                                  (get_local $sp)
                                 )
-                                ;;@ renderer.c:415:0
+                                ;;@ renderer.c:432:0
                                 (return)
                                )
                               )
-                              ;;@ renderer.c:199:0
+                              ;;@ renderer.c:216:0
                               (set_local $$51
                                (get_local $$1)
                               )
@@ -49159,7 +49305,7 @@
                               (call $_find_expanded_nodes
                                (get_local $$54)
                               )
-                              ;;@ renderer.c:200:0
+                              ;;@ renderer.c:217:0
                               (set_local $$55
                                (get_local $$1)
                               )
@@ -49173,7 +49319,7 @@
                                (get_local $$56)
                                (i32.const 1)
                               )
-                              ;;@ renderer.c:201:0
+                              ;;@ renderer.c:218:0
                               (set_local $$57
                                (get_local $$1)
                               )
@@ -49190,12 +49336,12 @@
                               (set_global $STACKTOP
                                (get_local $sp)
                               )
-                              ;;@ renderer.c:415:0
+                              ;;@ renderer.c:432:0
                               (return)
                              )
                             )
                             (block
-                             ;;@ renderer.c:206:0
+                             ;;@ renderer.c:223:0
                              (set_local $$59
                               (get_local $$1)
                              )
@@ -49219,7 +49365,7 @@
                              (call $_find_expanded_nodes
                               (get_local $$62)
                              )
-                             ;;@ renderer.c:207:0
+                             ;;@ renderer.c:224:0
                              (set_local $$63
                               (get_local $$1)
                              )
@@ -49264,7 +49410,7 @@
                               (get_local $$70)
                               (get_local $$68)
                              )
-                             ;;@ renderer.c:208:0
+                             ;;@ renderer.c:225:0
                              (set_local $$71
                               (get_local $$1)
                              )
@@ -49299,11 +49445,11 @@
                                (set_global $STACKTOP
                                 (get_local $sp)
                                )
-                               ;;@ renderer.c:415:0
+                               ;;@ renderer.c:432:0
                                (return)
                               )
                              )
-                             ;;@ renderer.c:209:0
+                             ;;@ renderer.c:226:0
                              (set_local $$76
                               (get_local $$1)
                              )
@@ -49327,7 +49473,7 @@
                              (call $_find_expanded_nodes
                               (get_local $$79)
                              )
-                             ;;@ renderer.c:210:0
+                             ;;@ renderer.c:227:0
                              (set_local $$80
                               (get_local $$1)
                              )
@@ -49404,12 +49550,12 @@
                              (set_global $STACKTOP
                               (get_local $sp)
                              )
-                             ;;@ renderer.c:415:0
+                             ;;@ renderer.c:432:0
                              (return)
                             )
                            )
                            (block
-                            ;;@ renderer.c:215:0
+                            ;;@ renderer.c:232:0
                             (set_local $$93
                              (get_local $$1)
                             )
@@ -49427,7 +49573,7 @@
                             (call $_find_expanded_nodes
                              (get_local $$95)
                             )
-                            ;;@ renderer.c:216:0
+                            ;;@ renderer.c:233:0
                             (set_local $$96
                              (get_local $$1)
                             )
@@ -49451,7 +49597,7 @@
                             (call $_find_expanded_nodes
                              (get_local $$99)
                             )
-                            ;;@ renderer.c:217:0
+                            ;;@ renderer.c:234:0
                             (set_local $$100
                              (get_local $$1)
                             )
@@ -49483,7 +49629,7 @@
                               (i32.const 255)
                              )
                             )
-                            ;;@ renderer.c:218:0
+                            ;;@ renderer.c:235:0
                             (set_local $$106
                              (get_local $$1)
                             )
@@ -49521,7 +49667,7 @@
                               (i32.const 255)
                              )
                             )
-                            ;;@ renderer.c:217:0
+                            ;;@ renderer.c:234:0
                             (set_local $$113
                              (i32.or
                               (get_local $$105)
@@ -49547,7 +49693,7 @@
                              (get_local $$116)
                              (get_local $$114)
                             )
-                            ;;@ renderer.c:219:0
+                            ;;@ renderer.c:236:0
                             (set_local $$117
                              (get_local $$1)
                             )
@@ -49592,7 +49738,7 @@
                              (get_local $$124)
                              (get_local $$122)
                             )
-                            ;;@ renderer.c:220:0
+                            ;;@ renderer.c:237:0
                             (set_local $$125
                              (i32.load8_s
                               (i32.const 9876)
@@ -49618,11 +49764,11 @@
                               (set_global $STACKTOP
                                (get_local $sp)
                               )
-                              ;;@ renderer.c:415:0
+                              ;;@ renderer.c:432:0
                               (return)
                              )
                             )
-                            ;;@ renderer.c:221:0
+                            ;;@ renderer.c:238:0
                             (set_local $$128
                              (get_local $$1)
                             )
@@ -49639,12 +49785,12 @@
                             (set_global $STACKTOP
                              (get_local $sp)
                             )
-                            ;;@ renderer.c:415:0
+                            ;;@ renderer.c:432:0
                             (return)
                            )
                           )
                           (block
-                           ;;@ renderer.c:226:0
+                           ;;@ renderer.c:243:0
                            (set_local $$130
                             (get_local $$1)
                            )
@@ -49662,7 +49808,7 @@
                            (call $_find_expanded_nodes
                             (get_local $$132)
                            )
-                           ;;@ renderer.c:227:0
+                           ;;@ renderer.c:244:0
                            (set_local $$133
                             (get_local $$1)
                            )
@@ -49701,7 +49847,7 @@
                             (get_local $$139)
                             (get_local $$137)
                            )
-                           ;;@ renderer.c:228:0
+                           ;;@ renderer.c:245:0
                            (set_local $$140
                             (get_local $$1)
                            )
@@ -49740,7 +49886,7 @@
                             (get_local $$146)
                             (get_local $$144)
                            )
-                           ;;@ renderer.c:229:0
+                           ;;@ renderer.c:246:0
                            (set_local $$147
                             (i32.load8_s
                              (i32.const 9876)
@@ -49766,11 +49912,11 @@
                              (set_global $STACKTOP
                               (get_local $sp)
                              )
-                             ;;@ renderer.c:415:0
+                             ;;@ renderer.c:432:0
                              (return)
                             )
                            )
-                           ;;@ renderer.c:230:0
+                           ;;@ renderer.c:247:0
                            (set_local $$150
                             (get_local $$1)
                            )
@@ -49784,7 +49930,7 @@
                             (get_local $$151)
                             (i32.const 1)
                            )
-                           ;;@ renderer.c:231:0
+                           ;;@ renderer.c:248:0
                            (set_local $$152
                             (get_local $$1)
                            )
@@ -49812,12 +49958,12 @@
                            (set_global $STACKTOP
                             (get_local $sp)
                            )
-                           ;;@ renderer.c:415:0
+                           ;;@ renderer.c:432:0
                            (return)
                           )
                          )
                          (block
-                          ;;@ renderer.c:236:0
+                          ;;@ renderer.c:253:0
                           (set_local $$156
                            (get_local $$1)
                           )
@@ -49835,7 +49981,7 @@
                           (call $_find_expanded_nodes
                            (get_local $$158)
                           )
-                          ;;@ renderer.c:237:0
+                          ;;@ renderer.c:254:0
                           (set_local $$159
                            (get_local $$1)
                           )
@@ -49859,7 +50005,7 @@
                           (call $_find_expanded_nodes
                            (get_local $$162)
                           )
-                          ;;@ renderer.c:238:0
+                          ;;@ renderer.c:255:0
                           (set_local $$163
                            (get_local $$1)
                           )
@@ -49891,7 +50037,7 @@
                             (i32.const 255)
                            )
                           )
-                          ;;@ renderer.c:239:0
+                          ;;@ renderer.c:256:0
                           (set_local $$169
                            (get_local $$1)
                           )
@@ -49929,7 +50075,7 @@
                             (i32.const 255)
                            )
                           )
-                          ;;@ renderer.c:238:0
+                          ;;@ renderer.c:255:0
                           (set_local $$176
                            (i32.or
                             (get_local $$168)
@@ -49955,7 +50101,7 @@
                            (get_local $$179)
                            (get_local $$177)
                           )
-                          ;;@ renderer.c:240:0
+                          ;;@ renderer.c:257:0
                           (set_local $$180
                            (get_local $$1)
                           )
@@ -49972,12 +50118,12 @@
                           (set_global $STACKTOP
                            (get_local $sp)
                           )
-                          ;;@ renderer.c:415:0
+                          ;;@ renderer.c:432:0
                           (return)
                          )
                         )
                         (block
-                         ;;@ renderer.c:244:0
+                         ;;@ renderer.c:261:0
                          (set_local $$182
                           (get_local $$1)
                          )
@@ -49995,7 +50141,7 @@
                          (call $_find_expanded_nodes
                           (get_local $$184)
                          )
-                         ;;@ renderer.c:245:0
+                         ;;@ renderer.c:262:0
                          (set_local $$185
                           (get_local $$1)
                          )
@@ -50019,7 +50165,7 @@
                          (call $_find_expanded_nodes
                           (get_local $$188)
                          )
-                         ;;@ renderer.c:246:0
+                         ;;@ renderer.c:263:0
                          (set_local $$189
                           (get_local $$1)
                          )
@@ -50051,7 +50197,7 @@
                            (i32.const 255)
                           )
                          )
-                         ;;@ renderer.c:247:0
+                         ;;@ renderer.c:264:0
                          (set_local $$195
                           (get_local $$1)
                          )
@@ -50089,7 +50235,7 @@
                            (i32.const 255)
                           )
                          )
-                         ;;@ renderer.c:246:0
+                         ;;@ renderer.c:263:0
                          (set_local $$202
                           (i32.or
                            (get_local $$194)
@@ -50115,7 +50261,7 @@
                           (get_local $$205)
                           (get_local $$203)
                          )
-                         ;;@ renderer.c:248:0
+                         ;;@ renderer.c:265:0
                          (set_local $$206
                           (get_local $$1)
                          )
@@ -50132,12 +50278,12 @@
                          (set_global $STACKTOP
                           (get_local $sp)
                          )
-                         ;;@ renderer.c:415:0
+                         ;;@ renderer.c:432:0
                          (return)
                         )
                        )
                        (block
-                        ;;@ renderer.c:252:0
+                        ;;@ renderer.c:269:0
                         (set_local $$208
                          (get_local $$1)
                         )
@@ -50155,7 +50301,7 @@
                         (call $_find_expanded_nodes
                          (get_local $$210)
                         )
-                        ;;@ renderer.c:253:0
+                        ;;@ renderer.c:270:0
                         (set_local $$211
                          (get_local $$1)
                         )
@@ -50179,7 +50325,7 @@
                         (call $_find_expanded_nodes
                          (get_local $$214)
                         )
-                        ;;@ renderer.c:254:0
+                        ;;@ renderer.c:271:0
                         (set_local $$215
                          (get_local $$1)
                         )
@@ -50211,7 +50357,7 @@
                           (i32.const 255)
                          )
                         )
-                        ;;@ renderer.c:255:0
+                        ;;@ renderer.c:272:0
                         (set_local $$221
                          (get_local $$1)
                         )
@@ -50249,14 +50395,14 @@
                           (i32.const 255)
                          )
                         )
-                        ;;@ renderer.c:254:0
+                        ;;@ renderer.c:271:0
                         (set_local $$228
                          (i32.or
                           (get_local $$220)
                           (get_local $$227)
                          )
                         )
-                        ;;@ renderer.c:256:0
+                        ;;@ renderer.c:273:0
                         (set_local $$229
                          (get_local $$1)
                         )
@@ -50277,14 +50423,14 @@
                           (i32.const 1)
                          )
                         )
-                        ;;@ renderer.c:255:0
+                        ;;@ renderer.c:272:0
                         (set_local $$233
                          (i32.or
                           (get_local $$228)
                           (get_local $$232)
                          )
                         )
-                        ;;@ renderer.c:254:0
+                        ;;@ renderer.c:271:0
                         (set_local $$234
                          (i32.and
                           (get_local $$233)
@@ -50304,7 +50450,7 @@
                          (get_local $$236)
                          (get_local $$234)
                         )
-                        ;;@ renderer.c:257:0
+                        ;;@ renderer.c:274:0
                         (set_local $$237
                          (get_local $$1)
                         )
@@ -50336,7 +50482,7 @@
                           (i32.const 255)
                          )
                         )
-                        ;;@ renderer.c:258:0
+                        ;;@ renderer.c:275:0
                         (set_local $$243
                          (get_local $$1)
                         )
@@ -50374,7 +50520,7 @@
                           (i32.const 255)
                          )
                         )
-                        ;;@ renderer.c:257:0
+                        ;;@ renderer.c:274:0
                         (set_local $$250
                          (i32.or
                           (get_local $$242)
@@ -50403,12 +50549,12 @@
                         (set_global $STACKTOP
                          (get_local $sp)
                         )
-                        ;;@ renderer.c:415:0
+                        ;;@ renderer.c:432:0
                         (return)
                        )
                       )
                       (block
-                       ;;@ renderer.c:263:0
+                       ;;@ renderer.c:280:0
                        (set_local $$254
                         (get_local $$1)
                        )
@@ -50433,7 +50579,7 @@
                         (if
                          (get_local $$257)
                          (block
-                          ;;@ renderer.c:264:0
+                          ;;@ renderer.c:281:0
                           (set_local $$258
                            (get_local $$1)
                           )
@@ -50451,7 +50597,7 @@
                           (call $_find_expanded_nodes
                            (get_local $$260)
                           )
-                          ;;@ renderer.c:265:0
+                          ;;@ renderer.c:282:0
                           (set_local $$261
                            (get_local $$1)
                           )
@@ -50501,7 +50647,7 @@
                            (get_local $$269)
                            (get_local $$265)
                           )
-                          ;;@ renderer.c:266:0
+                          ;;@ renderer.c:283:0
                           (set_local $$270
                            (i32.load8_s
                             (i32.const 9896)
@@ -50522,7 +50668,7 @@
                           (if
                            (get_local $$271)
                            (block
-                            ;;@ renderer.c:267:0
+                            ;;@ renderer.c:284:0
                             (set_local $$272
                              (get_local $$1)
                             )
@@ -50549,7 +50695,7 @@
                             )
                            )
                           )
-                          ;;@ renderer.c:269:0
+                          ;;@ renderer.c:286:0
                           (set_local $$276
                            (get_local $$1)
                           )
@@ -50588,7 +50734,7 @@
                            (get_local $$282)
                            (get_local $$280)
                           )
-                          ;;@ renderer.c:270:0
+                          ;;@ renderer.c:287:0
                           (set_local $$283
                            (get_local $$1)
                           )
@@ -50629,7 +50775,7 @@
                           )
                          )
                          (block
-                          ;;@ renderer.c:274:0
+                          ;;@ renderer.c:291:0
                           (set_local $$4
                            (i32.const 0)
                           )
@@ -50675,7 +50821,7 @@
                              )
                              (br $label$break$L40)
                             )
-                            ;;@ renderer.c:275:0
+                            ;;@ renderer.c:292:0
                             (set_local $$297
                              (get_local $$1)
                             )
@@ -50727,14 +50873,14 @@
                             (set_local $$5
                              (get_local $$305)
                             )
-                            ;;@ renderer.c:276:0
+                            ;;@ renderer.c:293:0
                             (set_local $$306
                              (get_local $$5)
                             )
                             (call $_find_expanded_nodes
                              (get_local $$306)
                             )
-                            ;;@ renderer.c:277:0
+                            ;;@ renderer.c:294:0
                             (set_local $$307
                              (get_local $$5)
                             )
@@ -50791,7 +50937,7 @@
                              (get_local $$312)
                              (get_local $$316)
                             )
-                            ;;@ renderer.c:274:0
+                            ;;@ renderer.c:291:0
                             (set_local $$317
                              (get_local $$4)
                             )
@@ -50810,7 +50956,7 @@
                          )
                         )
                        )
-                       ;;@ renderer.c:280:0
+                       ;;@ renderer.c:297:0
                        (set_local $$319
                         (get_local $$1)
                        )
@@ -50833,11 +50979,11 @@
                          (set_global $STACKTOP
                           (get_local $sp)
                          )
-                         ;;@ renderer.c:415:0
+                         ;;@ renderer.c:432:0
                          (return)
                         )
                        )
-                       ;;@ renderer.c:281:0
+                       ;;@ renderer.c:298:0
                        (set_local $$322
                         (get_local $$1)
                        )
@@ -50854,12 +51000,12 @@
                        (set_global $STACKTOP
                         (get_local $sp)
                        )
-                       ;;@ renderer.c:415:0
+                       ;;@ renderer.c:432:0
                        (return)
                       )
                      )
                      (block
-                      ;;@ renderer.c:286:0
+                      ;;@ renderer.c:303:0
                       (set_local $$324
                        (get_local $$1)
                       )
@@ -50877,7 +51023,7 @@
                       (call $_find_expanded_nodes
                        (get_local $$326)
                       )
-                      ;;@ renderer.c:287:0
+                      ;;@ renderer.c:304:0
                       (set_local $$327
                        (get_local $$1)
                       )
@@ -50901,7 +51047,7 @@
                       (call $_find_expanded_nodes
                        (get_local $$330)
                       )
-                      ;;@ renderer.c:288:0
+                      ;;@ renderer.c:305:0
                       (set_local $$331
                        (get_local $$1)
                       )
@@ -50933,7 +51079,7 @@
                         (i32.const 255)
                        )
                       )
-                      ;;@ renderer.c:289:0
+                      ;;@ renderer.c:306:0
                       (set_local $$337
                        (get_local $$1)
                       )
@@ -50971,14 +51117,14 @@
                         (i32.const 255)
                        )
                       )
-                      ;;@ renderer.c:288:0
+                      ;;@ renderer.c:305:0
                       (set_local $$344
                        (i32.or
                         (get_local $$336)
                         (get_local $$343)
                        )
                       )
-                      ;;@ renderer.c:290:0
+                      ;;@ renderer.c:307:0
                       (set_local $$345
                        (get_local $$1)
                       )
@@ -50999,14 +51145,14 @@
                         (i32.const 1)
                        )
                       )
-                      ;;@ renderer.c:289:0
+                      ;;@ renderer.c:306:0
                       (set_local $$349
                        (i32.or
                         (get_local $$344)
                         (get_local $$348)
                        )
                       )
-                      ;;@ renderer.c:288:0
+                      ;;@ renderer.c:305:0
                       (set_local $$350
                        (i32.and
                         (get_local $$349)
@@ -51026,7 +51172,7 @@
                        (get_local $$352)
                        (get_local $$350)
                       )
-                      ;;@ renderer.c:291:0
+                      ;;@ renderer.c:308:0
                       (set_local $$353
                        (get_local $$1)
                       )
@@ -51058,7 +51204,7 @@
                         (i32.const 255)
                        )
                       )
-                      ;;@ renderer.c:292:0
+                      ;;@ renderer.c:309:0
                       (set_local $$359
                        (get_local $$1)
                       )
@@ -51096,7 +51242,7 @@
                         (i32.const 255)
                        )
                       )
-                      ;;@ renderer.c:291:0
+                      ;;@ renderer.c:308:0
                       (set_local $$366
                        (i32.or
                         (get_local $$358)
@@ -51128,7 +51274,7 @@
                     (br $switch)
                    )
                    (block
-                    ;;@ renderer.c:305:0
+                    ;;@ renderer.c:322:0
                     (set_local $$416
                      (get_local $$1)
                     )
@@ -51163,7 +51309,7 @@
                       (get_local $$419)
                      )
                      (block
-                      ;;@ renderer.c:314:0
+                      ;;@ renderer.c:331:0
                       (set_local $$440
                        (i32.add
                         (get_local $$420)
@@ -51178,7 +51324,7 @@
                       (call $_find_expanded_nodes
                        (get_local $$441)
                       )
-                      ;;@ renderer.c:315:0
+                      ;;@ renderer.c:332:0
                       (set_local $$442
                        (get_local $$1)
                       )
@@ -51202,7 +51348,7 @@
                       (call $_find_expanded_nodes
                        (get_local $$445)
                       )
-                      ;;@ renderer.c:316:0
+                      ;;@ renderer.c:333:0
                       (set_local $$446
                        (get_local $$1)
                       )
@@ -51219,11 +51365,11 @@
                       (set_global $STACKTOP
                        (get_local $sp)
                       )
-                      ;;@ renderer.c:415:0
+                      ;;@ renderer.c:432:0
                       (return)
                      )
                     )
-                    ;;@ renderer.c:306:0
+                    ;;@ renderer.c:323:0
                     (set_local $$421
                      (i32.add
                       (get_local $$420)
@@ -51249,11 +51395,11 @@
                       (set_global $STACKTOP
                        (get_local $sp)
                       )
-                      ;;@ renderer.c:415:0
+                      ;;@ renderer.c:432:0
                       (return)
                      )
                     )
-                    ;;@ renderer.c:307:0
+                    ;;@ renderer.c:324:0
                     (set_local $$424
                      (get_local $$1)
                     )
@@ -51271,7 +51417,7 @@
                     (call $_find_expanded_nodes
                      (get_local $$426)
                     )
-                    ;;@ renderer.c:308:0
+                    ;;@ renderer.c:325:0
                     (set_local $$427
                      (get_local $$1)
                     )
@@ -51296,7 +51442,7 @@
                      (get_local $$430)
                      (i32.const 1)
                     )
-                    ;;@ renderer.c:309:0
+                    ;;@ renderer.c:326:0
                     (set_local $$431
                      (get_local $$1)
                     )
@@ -51335,7 +51481,7 @@
                      (get_local $$437)
                      (get_local $$435)
                     )
-                    ;;@ renderer.c:310:0
+                    ;;@ renderer.c:327:0
                     (set_local $$438
                      (get_local $$1)
                     )
@@ -51352,12 +51498,12 @@
                     (set_global $STACKTOP
                      (get_local $sp)
                     )
-                    ;;@ renderer.c:415:0
+                    ;;@ renderer.c:432:0
                     (return)
                    )
                   )
                   (block
-                   ;;@ renderer.c:321:0
+                   ;;@ renderer.c:338:0
                    (set_local $$448
                     (get_local $$1)
                    )
@@ -51392,7 +51538,7 @@
                      (get_local $$451)
                     )
                     (block
-                     ;;@ renderer.c:330:0
+                     ;;@ renderer.c:347:0
                      (set_local $$472
                       (i32.add
                        (get_local $$452)
@@ -51407,7 +51553,7 @@
                      (call $_find_expanded_nodes
                       (get_local $$473)
                      )
-                     ;;@ renderer.c:331:0
+                     ;;@ renderer.c:348:0
                      (set_local $$474
                       (get_local $$1)
                      )
@@ -51431,7 +51577,7 @@
                      (call $_find_expanded_nodes
                       (get_local $$477)
                      )
-                     ;;@ renderer.c:332:0
+                     ;;@ renderer.c:349:0
                      (set_local $$478
                       (get_local $$1)
                      )
@@ -51448,11 +51594,11 @@
                      (set_global $STACKTOP
                       (get_local $sp)
                      )
-                     ;;@ renderer.c:415:0
+                     ;;@ renderer.c:432:0
                      (return)
                     )
                    )
-                   ;;@ renderer.c:322:0
+                   ;;@ renderer.c:339:0
                    (set_local $$453
                     (i32.add
                      (get_local $$452)
@@ -51478,11 +51624,11 @@
                      (set_global $STACKTOP
                       (get_local $sp)
                      )
-                     ;;@ renderer.c:415:0
+                     ;;@ renderer.c:432:0
                      (return)
                     )
                    )
-                   ;;@ renderer.c:323:0
+                   ;;@ renderer.c:340:0
                    (set_local $$456
                     (get_local $$1)
                    )
@@ -51500,7 +51646,7 @@
                    (call $_find_expanded_nodes
                     (get_local $$458)
                    )
-                   ;;@ renderer.c:324:0
+                   ;;@ renderer.c:341:0
                    (set_local $$459
                     (get_local $$1)
                    )
@@ -51525,7 +51671,7 @@
                     (get_local $$462)
                     (i32.const 1)
                    )
-                   ;;@ renderer.c:325:0
+                   ;;@ renderer.c:342:0
                    (set_local $$463
                     (get_local $$1)
                    )
@@ -51564,7 +51710,7 @@
                     (get_local $$469)
                     (get_local $$467)
                    )
-                   ;;@ renderer.c:326:0
+                   ;;@ renderer.c:343:0
                    (set_local $$470
                     (get_local $$1)
                    )
@@ -51581,12 +51727,12 @@
                    (set_global $STACKTOP
                     (get_local $sp)
                    )
-                   ;;@ renderer.c:415:0
+                   ;;@ renderer.c:432:0
                    (return)
                   )
                  )
                  (block
-                  ;;@ renderer.c:337:0
+                  ;;@ renderer.c:354:0
                   (set_local $$480
                    (get_local $$1)
                   )
@@ -51621,7 +51767,7 @@
                     (get_local $$483)
                    )
                    (block
-                    ;;@ renderer.c:346:0
+                    ;;@ renderer.c:363:0
                     (set_local $$504
                      (i32.add
                       (get_local $$484)
@@ -51636,7 +51782,7 @@
                     (call $_find_expanded_nodes
                      (get_local $$505)
                     )
-                    ;;@ renderer.c:347:0
+                    ;;@ renderer.c:364:0
                     (set_local $$506
                      (get_local $$1)
                     )
@@ -51660,7 +51806,7 @@
                     (call $_find_expanded_nodes
                      (get_local $$509)
                     )
-                    ;;@ renderer.c:348:0
+                    ;;@ renderer.c:365:0
                     (set_local $$510
                      (get_local $$1)
                     )
@@ -51684,7 +51830,7 @@
                     (call $_find_expanded_nodes
                      (get_local $$513)
                     )
-                    ;;@ renderer.c:349:0
+                    ;;@ renderer.c:366:0
                     (set_local $$514
                      (get_local $$1)
                     )
@@ -51708,7 +51854,7 @@
                     (call $_find_expanded_nodes
                      (get_local $$517)
                     )
-                    ;;@ renderer.c:350:0
+                    ;;@ renderer.c:367:0
                     (set_local $$518
                      (get_local $$1)
                     )
@@ -51725,11 +51871,11 @@
                     (set_global $STACKTOP
                      (get_local $sp)
                     )
-                    ;;@ renderer.c:415:0
+                    ;;@ renderer.c:432:0
                     (return)
                    )
                   )
-                  ;;@ renderer.c:338:0
+                  ;;@ renderer.c:355:0
                   (set_local $$485
                    (i32.add
                     (get_local $$484)
@@ -51755,11 +51901,11 @@
                     (set_global $STACKTOP
                      (get_local $sp)
                     )
-                    ;;@ renderer.c:415:0
+                    ;;@ renderer.c:432:0
                     (return)
                    )
                   )
-                  ;;@ renderer.c:339:0
+                  ;;@ renderer.c:356:0
                   (set_local $$488
                    (get_local $$1)
                   )
@@ -51777,7 +51923,7 @@
                   (call $_find_expanded_nodes
                    (get_local $$490)
                   )
-                  ;;@ renderer.c:340:0
+                  ;;@ renderer.c:357:0
                   (set_local $$491
                    (get_local $$1)
                   )
@@ -51802,7 +51948,7 @@
                    (get_local $$494)
                    (i32.const 1)
                   )
-                  ;;@ renderer.c:341:0
+                  ;;@ renderer.c:358:0
                   (set_local $$495
                    (get_local $$1)
                   )
@@ -51841,7 +51987,7 @@
                    (get_local $$501)
                    (get_local $$499)
                   )
-                  ;;@ renderer.c:342:0
+                  ;;@ renderer.c:359:0
                   (set_local $$502
                    (get_local $$1)
                   )
@@ -51858,12 +52004,12 @@
                   (set_global $STACKTOP
                    (get_local $sp)
                   )
-                  ;;@ renderer.c:415:0
+                  ;;@ renderer.c:432:0
                   (return)
                  )
                 )
                 (block
-                 ;;@ renderer.c:355:0
+                 ;;@ renderer.c:372:0
                  (set_local $$520
                   (get_local $$1)
                  )
@@ -51907,7 +52053,7 @@
                    (if
                     (get_local $$526)
                     (block
-                     ;;@ renderer.c:356:0
+                     ;;@ renderer.c:373:0
                      (set_local $$527
                       (get_local $$1)
                      )
@@ -51925,7 +52071,7 @@
                      (call $_find_expanded_nodes
                       (get_local $$529)
                      )
-                     ;;@ renderer.c:357:0
+                     ;;@ renderer.c:374:0
                      (set_local $$530
                       (get_local $$1)
                      )
@@ -51964,7 +52110,7 @@
                       (get_local $$536)
                       (get_local $$534)
                      )
-                     ;;@ renderer.c:358:0
+                     ;;@ renderer.c:375:0
                      (set_local $$537
                       (get_local $$1)
                      )
@@ -51995,13 +52141,13 @@
                      (set_global $STACKTOP
                       (get_local $sp)
                      )
-                     ;;@ renderer.c:415:0
+                     ;;@ renderer.c:432:0
                      (return)
                     )
                    )
                   )
                  )
-                 ;;@ renderer.c:361:0
+                 ;;@ renderer.c:378:0
                  (set_local $$542
                   (get_local $$1)
                  )
@@ -52022,12 +52168,12 @@
                  (set_global $STACKTOP
                   (get_local $sp)
                  )
-                 ;;@ renderer.c:415:0
+                 ;;@ renderer.c:432:0
                  (return)
                 )
                )
                (block
-                ;;@ renderer.c:366:0
+                ;;@ renderer.c:383:0
                 (set_local $$545
                  (get_local $$1)
                 )
@@ -52045,7 +52191,7 @@
                 (call $_find_expanded_nodes
                  (get_local $$547)
                 )
-                ;;@ renderer.c:367:0
+                ;;@ renderer.c:384:0
                 (set_local $$548
                  (get_local $$1)
                 )
@@ -52073,12 +52219,12 @@
                 (set_global $STACKTOP
                  (get_local $sp)
                 )
-                ;;@ renderer.c:415:0
+                ;;@ renderer.c:432:0
                 (return)
                )
               )
               (block
-               ;;@ renderer.c:371:0
+               ;;@ renderer.c:388:0
                (set_local $$552
                 (get_local $$1)
                )
@@ -52121,12 +52267,12 @@
                (set_global $STACKTOP
                 (get_local $sp)
                )
-               ;;@ renderer.c:415:0
+               ;;@ renderer.c:432:0
                (return)
               )
              )
              (block
-              ;;@ renderer.c:375:0
+              ;;@ renderer.c:392:0
               (set_local $$559
                (get_local $$1)
               )
@@ -52144,7 +52290,7 @@
               (call $_find_expanded_nodes
                (get_local $$561)
               )
-              ;;@ renderer.c:376:0
+              ;;@ renderer.c:393:0
               (set_local $$562
                (get_local $$1)
               )
@@ -52176,7 +52322,7 @@
                 (i32.const 255)
                )
               )
-              ;;@ renderer.c:377:0
+              ;;@ renderer.c:394:0
               (set_local $$568
                (get_local $$1)
               )
@@ -52197,7 +52343,7 @@
                 (i32.const 1)
                )
               )
-              ;;@ renderer.c:376:0
+              ;;@ renderer.c:393:0
               (set_local $$572
                (i32.or
                 (get_local $$567)
@@ -52223,7 +52369,7 @@
                (get_local $$575)
                (get_local $$573)
               )
-              ;;@ renderer.c:378:0
+              ;;@ renderer.c:395:0
               (set_local $$576
                (get_local $$1)
               )
@@ -52265,12 +52411,12 @@
               (set_global $STACKTOP
                (get_local $sp)
               )
-              ;;@ renderer.c:415:0
+              ;;@ renderer.c:432:0
               (return)
              )
             )
             (block
-             ;;@ renderer.c:382:0
+             ;;@ renderer.c:399:0
              (set_local $$583
               (get_local $$1)
              )
@@ -52288,7 +52434,7 @@
              (call $_find_expanded_nodes
               (get_local $$585)
              )
-             ;;@ renderer.c:383:0
+             ;;@ renderer.c:400:0
              (set_local $$586
               (get_local $$1)
              )
@@ -52320,7 +52466,7 @@
                (i32.const 255)
               )
              )
-             ;;@ renderer.c:384:0
+             ;;@ renderer.c:401:0
              (set_local $$592
               (get_local $$1)
              )
@@ -52341,7 +52487,7 @@
                (i32.const 1)
               )
              )
-             ;;@ renderer.c:383:0
+             ;;@ renderer.c:400:0
              (set_local $$596
               (i32.or
                (get_local $$591)
@@ -52367,7 +52513,7 @@
               (get_local $$599)
               (get_local $$597)
              )
-             ;;@ renderer.c:385:0
+             ;;@ renderer.c:402:0
              (set_local $$600
               (get_local $$1)
              )
@@ -52409,7 +52555,7 @@
              (set_global $STACKTOP
               (get_local $sp)
              )
-             ;;@ renderer.c:415:0
+             ;;@ renderer.c:432:0
              (return)
             )
            )
@@ -52418,7 +52564,7 @@
         )
        )
        (block
-        ;;@ renderer.c:393:0
+        ;;@ renderer.c:410:0
         (set_local $$607
          (get_local $$1)
         )
@@ -52458,7 +52604,7 @@
          (get_local $$613)
          (get_local $$611)
         )
-        ;;@ renderer.c:394:0
+        ;;@ renderer.c:411:0
         (set_local $$614
          (get_local $$1)
         )
@@ -52523,13 +52669,13 @@
             (set_global $STACKTOP
              (get_local $sp)
             )
-            ;;@ renderer.c:415:0
+            ;;@ renderer.c:432:0
             (return)
            )
           )
          )
         )
-        ;;@ renderer.c:395:0
+        ;;@ renderer.c:412:0
         (set_local $$624
          (get_local $$1)
         )
@@ -52546,7 +52692,7 @@
          (get_local $$626)
          (get_local $$624)
         )
-        ;;@ renderer.c:396:0
+        ;;@ renderer.c:413:0
         (set_local $$627
          (get_local $$1)
         )
@@ -52556,13 +52702,13 @@
         (set_global $STACKTOP
          (get_local $sp)
         )
-        ;;@ renderer.c:415:0
+        ;;@ renderer.c:432:0
         (return)
        )
       )
      )
      (block
-      ;;@ renderer.c:402:0
+      ;;@ renderer.c:419:0
       (set_local $$628
        (get_local $$1)
       )
@@ -52605,7 +52751,7 @@
       (set_global $STACKTOP
        (get_local $sp)
       )
-      ;;@ renderer.c:415:0
+      ;;@ renderer.c:432:0
       (return)
      )
     )
@@ -52617,7 +52763,7 @@
     )
    )
    (block
-    ;;@ renderer.c:409:0
+    ;;@ renderer.c:426:0
     (set_local $$635
      (get_local $$1)
     )
@@ -52641,11 +52787,11 @@
       (get_local $$vararg_buffer)
      )
     )
-    ;;@ renderer.c:410:0
+    ;;@ renderer.c:427:0
     (call $_abort)
    )
   )
-  ;;@ renderer.c:295:0
+  ;;@ renderer.c:312:0
   (set_local $$370
    (get_local $$1)
   )
@@ -52663,7 +52809,7 @@
   (call $_find_expanded_nodes
    (get_local $$372)
   )
-  ;;@ renderer.c:296:0
+  ;;@ renderer.c:313:0
   (set_local $$373
    (get_local $$1)
   )
@@ -52687,7 +52833,7 @@
   (call $_find_expanded_nodes
    (get_local $$376)
   )
-  ;;@ renderer.c:297:0
+  ;;@ renderer.c:314:0
   (set_local $$377
    (get_local $$1)
   )
@@ -52719,7 +52865,7 @@
     (i32.const 255)
    )
   )
-  ;;@ renderer.c:298:0
+  ;;@ renderer.c:315:0
   (set_local $$383
    (get_local $$1)
   )
@@ -52757,14 +52903,14 @@
     (i32.const 255)
    )
   )
-  ;;@ renderer.c:297:0
+  ;;@ renderer.c:314:0
   (set_local $$390
    (i32.or
     (get_local $$382)
     (get_local $$389)
    )
   )
-  ;;@ renderer.c:299:0
+  ;;@ renderer.c:316:0
   (set_local $$391
    (get_local $$1)
   )
@@ -52785,14 +52931,14 @@
     (i32.const 1)
    )
   )
-  ;;@ renderer.c:298:0
+  ;;@ renderer.c:315:0
   (set_local $$395
    (i32.or
     (get_local $$390)
     (get_local $$394)
    )
   )
-  ;;@ renderer.c:297:0
+  ;;@ renderer.c:314:0
   (set_local $$396
    (i32.and
     (get_local $$395)
@@ -52812,7 +52958,7 @@
    (get_local $$398)
    (get_local $$396)
   )
-  ;;@ renderer.c:300:0
+  ;;@ renderer.c:317:0
   (set_local $$399
    (get_local $$1)
   )
@@ -52844,7 +52990,7 @@
     (i32.const 255)
    )
   )
-  ;;@ renderer.c:301:0
+  ;;@ renderer.c:318:0
   (set_local $$405
    (get_local $$1)
   )
@@ -52882,7 +53028,7 @@
     (i32.const 255)
    )
   )
-  ;;@ renderer.c:300:0
+  ;;@ renderer.c:317:0
   (set_local $$412
    (i32.or
     (get_local $$404)
@@ -52911,10 +53057,10 @@
   (set_global $STACKTOP
    (get_local $sp)
   )
-  ;;@ renderer.c:415:0
+  ;;@ renderer.c:432:0
   (return)
  )
- (func $_destroy_render_node (; 170 ;) (param $$0 i32)
+ (func $_destroy_render_node (; 172 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -52950,7 +53096,7 @@
   (set_local $$1
    (get_local $$0)
   )
-  ;;@ renderer.c:418:0
+  ;;@ renderer.c:435:0
   (set_local $$2
    (get_local $$1)
   )
@@ -52961,39 +53107,43 @@
   )
   (block $switch
    (block $switch-default
-    (block $switch-case0
-     (block $switch-case
-      (br_table $switch-case0 $switch-case $switch-default
-       (i32.sub
-        (get_local $$3)
-        (i32.const 0)
+    (block $switch-case2
+     (block $switch-case1
+      (block $switch-case0
+       (block $switch-case
+        (br_table $switch-case2 $switch-case $switch-case1 $switch-case0 $switch-default
+         (i32.sub
+          (get_local $$3)
+          (i32.const 0)
+         )
+        )
+       )
+       (block
+        ;;@ renderer.c:437:0
+        (set_local $$4
+         (get_local $$1)
+        )
+        (set_local $$5
+         (i32.add
+          (get_local $$4)
+          (i32.const 20)
+         )
+        )
+        (set_local $$6
+         (i32.load
+          (get_local $$5)
+         )
+        )
+        (call $_array_destroy
+         (get_local $$6)
+        )
+        (set_global $STACKTOP
+         (get_local $sp)
+        )
+        ;;@ renderer.c:451:0
+        (return)
        )
       )
-     )
-     (block
-      ;;@ renderer.c:420:0
-      (set_local $$4
-       (get_local $$1)
-      )
-      (set_local $$5
-       (i32.add
-        (get_local $$4)
-        (i32.const 20)
-       )
-      )
-      (set_local $$6
-       (i32.load
-        (get_local $$5)
-       )
-      )
-      (call $_array_destroy
-       (get_local $$6)
-      )
-      (set_global $STACKTOP
-       (get_local $sp)
-      )
-      ;;@ renderer.c:432:0
-      (return)
      )
     )
     (block
@@ -53004,7 +53154,7 @@
     )
    )
    (block
-    ;;@ renderer.c:427:0
+    ;;@ renderer.c:446:0
     (set_local $$7
      (get_local $$1)
     )
@@ -53023,12 +53173,12 @@
       (get_local $$vararg_buffer)
      )
     )
-    ;;@ renderer.c:428:0
+    ;;@ renderer.c:447:0
     (call $_abort)
    )
   )
  )
- (func $_destroy_render_nodes (; 171 ;) (param $$0 i32)
+ (func $_destroy_render_nodes (; 173 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -53065,7 +53215,7 @@
   (set_local $$1
    (get_local $$0)
   )
-  ;;@ renderer.c:434:0
+  ;;@ renderer.c:453:0
   (set_local $$2
    (i32.const 0)
   )
@@ -53094,7 +53244,7 @@
      )
      (br $while-out)
     )
-    ;;@ renderer.c:435:0
+    ;;@ renderer.c:454:0
     (set_local $$7
      (get_local $$1)
     )
@@ -53124,7 +53274,7 @@
     (call $_destroy_render_node
      (get_local $$11)
     )
-    ;;@ renderer.c:434:0
+    ;;@ renderer.c:453:0
     (set_local $$12
      (get_local $$2)
     )
@@ -53143,10 +53293,10 @@
   (set_global $STACKTOP
    (get_local $sp)
   )
-  ;;@ renderer.c:437:0
+  ;;@ renderer.c:456:0
   (return)
  )
- (func $_render (; 172 ;) (param $$0 i32)
+ (func $_render (; 174 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$100 i32)
@@ -53352,7 +53502,7 @@
     (i32.const 1152)
    )
   )
-  ;;@ renderer.c:443:0
+  ;;@ renderer.c:462:0
   (i64.store
    (i32.add
     (get_local $$2)
@@ -53371,7 +53521,7 @@
     (i32.const 1168)
    )
   )
-  ;;@ renderer.c:444:0
+  ;;@ renderer.c:463:0
   (i64.store
    (i32.add
     (get_local $$3)
@@ -53390,7 +53540,7 @@
     (i32.const 1184)
    )
   )
-  ;;@ renderer.c:445:0
+  ;;@ renderer.c:464:0
   (i64.store
    (i32.add
     (get_local $$4)
@@ -53409,7 +53559,7 @@
     (i32.const 1200)
    )
   )
-  ;;@ renderer.c:446:0
+  ;;@ renderer.c:465:0
   (i64.store
    (i32.add
     (get_local $$5)
@@ -53422,11 +53572,11 @@
     )
    )
   )
-  ;;@ renderer.c:448:0
+  ;;@ renderer.c:467:0
   (set_local $$6
    (i32.const 9012)
   )
-  ;;@ renderer.c:454:0
+  ;;@ renderer.c:473:0
   (set_local $$7
    (get_local $$6)
   )
@@ -53440,7 +53590,7 @@
    (get_local $$8)
    (i32.const 0)
   )
-  ;;@ renderer.c:455:0
+  ;;@ renderer.c:474:0
   (set_local $$9
    (get_local $$6)
   )
@@ -53454,7 +53604,7 @@
    (get_local $$10)
    (f32.const 1.0099999904632568)
   )
-  ;;@ renderer.c:457:0
+  ;;@ renderer.c:476:0
   (set_local $$11
    (get_local $$6)
   )
@@ -53468,7 +53618,7 @@
    (get_local $$12)
    (i32.const 0)
   )
-  ;;@ renderer.c:458:0
+  ;;@ renderer.c:477:0
   (set_local $$13
    (get_local $$6)
   )
@@ -53482,7 +53632,7 @@
    (get_local $$14)
    (i32.const 0)
   )
-  ;;@ renderer.c:459:0
+  ;;@ renderer.c:478:0
   (set_local $$15
    (get_local $$6)
   )
@@ -53496,7 +53646,7 @@
    (get_local $$16)
    (i32.const 0)
   )
-  ;;@ renderer.c:461:0
+  ;;@ renderer.c:480:0
   (set_local $$17
    (get_local $$6)
   )
@@ -53510,7 +53660,7 @@
    (get_local $$18)
    (i32.const 0)
   )
-  ;;@ renderer.c:463:0
+  ;;@ renderer.c:482:0
   (set_local $$19
    (get_local $$6)
   )
@@ -53543,7 +53693,7 @@
     )
    )
   )
-  ;;@ renderer.c:464:0
+  ;;@ renderer.c:483:0
   (set_local $$22
    (get_local $$6)
   )
@@ -53576,7 +53726,7 @@
     )
    )
   )
-  ;;@ renderer.c:465:0
+  ;;@ renderer.c:484:0
   (set_local $$25
    (get_local $$6)
   )
@@ -53609,14 +53759,14 @@
     )
    )
   )
-  ;;@ renderer.c:467:0
+  ;;@ renderer.c:486:0
   (set_local $$28
    (get_local $$1)
   )
   (call $_find_expanded_nodes
    (get_local $$28)
   )
-  ;;@ renderer.c:469:0
+  ;;@ renderer.c:488:0
   (set_local $$29
    (get_local $$6)
   )
@@ -53645,7 +53795,7 @@
   (call $_array_clear
    (get_local $$33)
   )
-  ;;@ renderer.c:470:0
+  ;;@ renderer.c:489:0
   (set_local $$34
    (get_local $$6)
   )
@@ -53659,7 +53809,7 @@
    (get_local $$35)
    (i32.const 0)
   )
-  ;;@ renderer.c:472:0
+  ;;@ renderer.c:491:0
   (set_local $$36
    (get_local $$6)
   )
@@ -53677,7 +53827,7 @@
   (call $_destroy_render_nodes
    (get_local $$38)
   )
-  ;;@ renderer.c:473:0
+  ;;@ renderer.c:492:0
   (set_local $$39
    (get_local $$6)
   )
@@ -53695,7 +53845,7 @@
   (call $_array_clear
    (get_local $$41)
   )
-  ;;@ renderer.c:475:0
+  ;;@ renderer.c:494:0
   (set_local $$42
    (get_local $$6)
   )
@@ -53729,14 +53879,14 @@
    (get_local $$47)
    (get_local $$45)
   )
-  ;;@ renderer.c:476:0
+  ;;@ renderer.c:495:0
   (set_local $$48
    (get_local $$6)
   )
   (call $_render_newline
    (get_local $$48)
   )
-  ;;@ renderer.c:478:0
+  ;;@ renderer.c:497:0
   (set_local $$49
    (get_local $$1)
   )
@@ -53747,7 +53897,7 @@
    (get_local $$49)
    (get_local $$50)
   )
-  ;;@ renderer.c:482:0
+  ;;@ renderer.c:501:0
   (set_local $$51
    (f32.neg
     (f32.const 0)
@@ -53777,7 +53927,7 @@
    (get_local $$55)
    (get_local $$51)
   )
-  ;;@ renderer.c:483:0
+  ;;@ renderer.c:502:0
   (set_local $$56
    (f32.neg
     (f32.const 0)
@@ -53832,7 +53982,7 @@
    (get_local $$65)
    (get_local $$61)
   )
-  ;;@ renderer.c:484:0
+  ;;@ renderer.c:503:0
   (set_local $$66
    (get_local $$6)
   )
@@ -53855,7 +54005,7 @@
    (i32.const 0)
    (get_local $$69)
   )
-  ;;@ renderer.c:486:0
+  ;;@ renderer.c:505:0
   (set_local $$70
    (get_local $$6)
   )
@@ -53877,7 +54027,7 @@
    (get_local $$72)
    (get_local $$73)
   )
-  ;;@ renderer.c:488:0
+  ;;@ renderer.c:507:0
   (set_local $$74
    (i32.load
     (i32.const 9008)
@@ -53888,7 +54038,7 @@
     (get_local $$74)
    )
   )
-  ;;@ renderer.c:490:0
+  ;;@ renderer.c:509:0
   (set_local $$75
    (f32.load
     (get_local $$3)
@@ -53941,24 +54091,24 @@
     (get_local $$81)
    )
   )
-  ;;@ renderer.c:491:0
+  ;;@ renderer.c:510:0
   (call $_glClear
    (i32.const 16384)
   )
-  ;;@ renderer.c:492:0
+  ;;@ renderer.c:511:0
   (call $_glEnable
    (i32.const 3042)
   )
-  ;;@ renderer.c:493:0
+  ;;@ renderer.c:512:0
   (call $_glBlendFunc
    (i32.const 770)
    (i32.const 771)
   )
-  ;;@ renderer.c:494:0
+  ;;@ renderer.c:513:0
   (call $_glDisable
    (i32.const 2929)
   )
-  ;;@ renderer.c:497:0
+  ;;@ renderer.c:516:0
   (set_local $$82
    (i32.load
     (i32.const 9136)
@@ -53967,7 +54117,7 @@
   (call $_glUseProgram
    (get_local $$82)
   )
-  ;;@ renderer.c:499:0
+  ;;@ renderer.c:518:0
   (set_local $$83
    (i32.load
     (i32.const 9140)
@@ -53977,7 +54127,7 @@
    (i32.const 34962)
    (get_local $$83)
   )
-  ;;@ renderer.c:500:0
+  ;;@ renderer.c:519:0
   (set_local $$84
    (get_local $$6)
   )
@@ -54018,7 +54168,7 @@
    (get_local $$90)
    (i32.const 35048)
   )
-  ;;@ renderer.c:501:0
+  ;;@ renderer.c:520:0
   (set_local $$91
    (i32.load
     (i32.const 9152)
@@ -54027,7 +54177,7 @@
   (call $_glEnableVertexAttribArray
    (get_local $$91)
   )
-  ;;@ renderer.c:502:0
+  ;;@ renderer.c:521:0
   (set_local $$92
    (i32.load
     (i32.const 9152)
@@ -54041,7 +54191,7 @@
    (i32.const 0)
    (i32.const 0)
   )
-  ;;@ renderer.c:504:0
+  ;;@ renderer.c:523:0
   (set_local $$93
    (i32.load
     (i32.const 9144)
@@ -54051,7 +54201,7 @@
    (i32.const 34962)
    (get_local $$93)
   )
-  ;;@ renderer.c:505:0
+  ;;@ renderer.c:524:0
   (set_local $$94
    (get_local $$6)
   )
@@ -54092,7 +54242,7 @@
    (get_local $$100)
    (i32.const 35048)
   )
-  ;;@ renderer.c:506:0
+  ;;@ renderer.c:525:0
   (set_local $$101
    (i32.load
     (i32.const 9156)
@@ -54101,7 +54251,7 @@
   (call $_glEnableVertexAttribArray
    (get_local $$101)
   )
-  ;;@ renderer.c:507:0
+  ;;@ renderer.c:526:0
   (set_local $$102
    (i32.load
     (i32.const 9156)
@@ -54115,7 +54265,7 @@
    (i32.const 0)
    (i32.const 0)
   )
-  ;;@ renderer.c:509:0
+  ;;@ renderer.c:528:0
   (set_local $$103
    (i32.load
     (i32.const 9172)
@@ -54125,7 +54275,7 @@
    (i32.const 34963)
    (get_local $$103)
   )
-  ;;@ renderer.c:510:0
+  ;;@ renderer.c:529:0
   (set_local $$104
    (get_local $$6)
   )
@@ -54190,7 +54340,7 @@
    (get_local $$113)
    (i32.const 35048)
   )
-  ;;@ renderer.c:512:0
+  ;;@ renderer.c:531:0
   (set_local $$114
    (get_local $$6)
   )
@@ -54235,7 +54385,7 @@
    (i32.const 5125)
    (i32.const 0)
   )
-  ;;@ renderer.c:515:0
+  ;;@ renderer.c:534:0
   (set_local $$120
    (i32.load
     (i32.const 9160)
@@ -54244,7 +54394,7 @@
   (call $_glUseProgram
    (get_local $$120)
   )
-  ;;@ renderer.c:517:0
+  ;;@ renderer.c:536:0
   (set_local $$121
    (get_local $$6)
   )
@@ -54262,7 +54412,7 @@
    (i32.const 3553)
    (get_local $$123)
   )
-  ;;@ renderer.c:518:0
+  ;;@ renderer.c:537:0
   (set_local $$124
    (i32.load
     (i32.const 9184)
@@ -54272,7 +54422,7 @@
    (get_local $$124)
    (i32.const 0)
   )
-  ;;@ renderer.c:520:0
+  ;;@ renderer.c:539:0
   (set_local $$125
    (i32.load
     (i32.const 9164)
@@ -54282,7 +54432,7 @@
    (i32.const 34962)
    (get_local $$125)
   )
-  ;;@ renderer.c:521:0
+  ;;@ renderer.c:540:0
   (set_local $$126
    (get_local $$6)
   )
@@ -54323,7 +54473,7 @@
    (get_local $$132)
    (i32.const 35048)
   )
-  ;;@ renderer.c:522:0
+  ;;@ renderer.c:541:0
   (set_local $$133
    (i32.load
     (i32.const 9176)
@@ -54332,7 +54482,7 @@
   (call $_glEnableVertexAttribArray
    (get_local $$133)
   )
-  ;;@ renderer.c:523:0
+  ;;@ renderer.c:542:0
   (set_local $$134
    (i32.load
     (i32.const 9176)
@@ -54346,7 +54496,7 @@
    (i32.const 0)
    (i32.const 0)
   )
-  ;;@ renderer.c:525:0
+  ;;@ renderer.c:544:0
   (set_local $$135
    (i32.load
     (i32.const 9168)
@@ -54356,7 +54506,7 @@
    (i32.const 34962)
    (get_local $$135)
   )
-  ;;@ renderer.c:526:0
+  ;;@ renderer.c:545:0
   (set_local $$136
    (get_local $$6)
   )
@@ -54397,7 +54547,7 @@
    (get_local $$142)
    (i32.const 35048)
   )
-  ;;@ renderer.c:527:0
+  ;;@ renderer.c:546:0
   (set_local $$143
    (i32.load
     (i32.const 9180)
@@ -54406,7 +54556,7 @@
   (call $_glEnableVertexAttribArray
    (get_local $$143)
   )
-  ;;@ renderer.c:528:0
+  ;;@ renderer.c:547:0
   (set_local $$144
    (i32.load
     (i32.const 9180)
@@ -54420,7 +54570,7 @@
    (i32.const 0)
    (i32.const 0)
   )
-  ;;@ renderer.c:530:0
+  ;;@ renderer.c:549:0
   (set_local $$145
    (i32.load
     (i32.const 9172)
@@ -54430,7 +54580,7 @@
    (i32.const 34963)
    (get_local $$145)
   )
-  ;;@ renderer.c:531:0
+  ;;@ renderer.c:550:0
   (set_local $$146
    (get_local $$6)
   )
@@ -54471,7 +54621,7 @@
    (get_local $$152)
    (i32.const 35048)
   )
-  ;;@ renderer.c:533:0
+  ;;@ renderer.c:552:0
   (set_local $$153
    (get_local $$6)
   )
@@ -54495,10 +54645,10 @@
   (set_global $STACKTOP
    (get_local $sp)
   )
-  ;;@ renderer.c:536:0
+  ;;@ renderer.c:555:0
   (return)
  )
- (func $_render_newline (; 173 ;) (param $$0 i32)
+ (func $_render_newline (; 175 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -54576,7 +54726,7 @@
   (set_local $$1
    (get_local $$0)
   )
-  ;;@ renderer.c:1331:0
+  ;;@ renderer.c:1377:0
   (set_local $$4
    (get_local $$1)
   )
@@ -54601,7 +54751,7 @@
    (get_local $$5)
    (get_local $$7)
   )
-  ;;@ renderer.c:1332:0
+  ;;@ renderer.c:1378:0
   (set_local $$8
    (get_local $$1)
   )
@@ -54645,7 +54795,7 @@
    (if
     (get_local $$15)
     (block
-     ;;@ renderer.c:1333:0
+     ;;@ renderer.c:1379:0
      (set_local $$16
       (get_local $$1)
      )
@@ -54671,7 +54821,7 @@
      )
      (loop $while-in
       (block $while-out
-       ;;@ renderer.c:1334:0
+       ;;@ renderer.c:1380:0
        (set_local $$20
         (get_local $$1)
        )
@@ -54706,7 +54856,7 @@
         )
         (br $label$break$L1)
        )
-       ;;@ renderer.c:1335:0
+       ;;@ renderer.c:1381:0
        (set_local $$26
         (get_local $$1)
        )
@@ -54726,7 +54876,7 @@
          (get_local $$28)
         )
        )
-       ;;@ renderer.c:1336:0
+       ;;@ renderer.c:1382:0
        (set_local $$29
         (get_local $$1)
        )
@@ -54763,7 +54913,7 @@
     )
    )
   )
-  ;;@ renderer.c:1339:0
+  ;;@ renderer.c:1385:0
   (set_local $$34
    (get_local $$1)
   )
@@ -54815,7 +54965,7 @@
   (call $_array_clear
    (get_local $$42)
   )
-  ;;@ renderer.c:1341:0
+  ;;@ renderer.c:1387:0
   (set_local $$43
    (get_local $$1)
   )
@@ -54840,7 +54990,7 @@
    (get_local $$3)
    (get_local $$46)
   )
-  ;;@ renderer.c:1342:0
+  ;;@ renderer.c:1388:0
   (set_local $$47
    (get_local $$1)
   )
@@ -54875,10 +55025,10 @@
   (set_global $STACKTOP
    (get_local $sp)
   )
-  ;;@ renderer.c:1343:0
+  ;;@ renderer.c:1389:0
   (return)
  )
- (func $_render_code_node (; 174 ;) (param $$0 i32) (param $$1 i32)
+ (func $_render_code_node (; 176 ;) (param $$0 i32) (param $$1 i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$1000 i32)
@@ -55269,6 +55419,8 @@
   (local $$1348 i32)
   (local $$1349 i32)
   (local $$135 i32)
+  (local $$1350 i32)
+  (local $$1351 i32)
   (local $$136 i32)
   (local $$137 i32)
   (local $$138 i32)
@@ -56083,7 +56235,7 @@
   (local $$867 i32)
   (local $$868 i32)
   (local $$869 i32)
-  (local $$87 f32)
+  (local $$87 i32)
   (local $$870 i32)
   (local $$871 i32)
   (local $$872 i32)
@@ -56094,7 +56246,7 @@
   (local $$877 i32)
   (local $$878 i32)
   (local $$879 i32)
-  (local $$88 f32)
+  (local $$88 i32)
   (local $$880 i32)
   (local $$881 i32)
   (local $$882 i32)
@@ -56150,7 +56302,7 @@
   (local $$927 i32)
   (local $$928 i32)
   (local $$929 i32)
-  (local $$93 f32)
+  (local $$93 i32)
   (local $$930 i32)
   (local $$931 i32)
   (local $$932 i32)
@@ -56161,7 +56313,7 @@
   (local $$937 i32)
   (local $$938 i32)
   (local $$939 i32)
-  (local $$94 f32)
+  (local $$94 i32)
   (local $$940 i32)
   (local $$941 i32)
   (local $$942 i32)
@@ -56255,343 +56407,355 @@
   (set_local $$2
    (i32.add
     (get_local $sp)
-    (i32.const 272)
+    (i32.const 280)
    )
   )
-  (set_local $$7
+  (set_local $$5
    (i32.add
     (get_local $sp)
-    (i32.const 256)
+    (i32.const 268)
    )
   )
   (set_local $$8
    (i32.add
     (get_local $sp)
-    (i32.const 252)
+    (i32.const 260)
    )
   )
   (set_local $$9
    (i32.add
     (get_local $sp)
-    (i32.const 248)
+    (i32.const 256)
    )
   )
   (set_local $$10
    (i32.add
     (get_local $sp)
-    (i32.const 244)
+    (i32.const 252)
    )
   )
   (set_local $$11
    (i32.add
     (get_local $sp)
-    (i32.const 240)
+    (i32.const 248)
    )
   )
   (set_local $$12
    (i32.add
     (get_local $sp)
-    (i32.const 236)
+    (i32.const 244)
    )
   )
   (set_local $$13
    (i32.add
     (get_local $sp)
-    (i32.const 232)
+    (i32.const 240)
    )
   )
   (set_local $$14
    (i32.add
     (get_local $sp)
-    (i32.const 228)
+    (i32.const 236)
    )
   )
   (set_local $$15
    (i32.add
     (get_local $sp)
-    (i32.const 224)
+    (i32.const 232)
    )
   )
   (set_local $$16
    (i32.add
     (get_local $sp)
-    (i32.const 220)
+    (i32.const 228)
    )
   )
   (set_local $$17
    (i32.add
     (get_local $sp)
-    (i32.const 216)
+    (i32.const 224)
    )
   )
   (set_local $$18
    (i32.add
     (get_local $sp)
-    (i32.const 212)
+    (i32.const 220)
    )
   )
   (set_local $$19
    (i32.add
     (get_local $sp)
-    (i32.const 208)
+    (i32.const 216)
    )
   )
   (set_local $$20
    (i32.add
     (get_local $sp)
-    (i32.const 204)
+    (i32.const 212)
    )
   )
   (set_local $$21
    (i32.add
     (get_local $sp)
-    (i32.const 200)
+    (i32.const 208)
    )
   )
   (set_local $$22
    (i32.add
     (get_local $sp)
-    (i32.const 196)
+    (i32.const 204)
    )
   )
   (set_local $$23
    (i32.add
     (get_local $sp)
-    (i32.const 192)
+    (i32.const 200)
    )
   )
   (set_local $$24
    (i32.add
     (get_local $sp)
-    (i32.const 188)
+    (i32.const 196)
    )
   )
   (set_local $$25
    (i32.add
     (get_local $sp)
-    (i32.const 184)
+    (i32.const 192)
    )
   )
   (set_local $$26
    (i32.add
     (get_local $sp)
-    (i32.const 180)
+    (i32.const 188)
    )
   )
   (set_local $$27
    (i32.add
     (get_local $sp)
-    (i32.const 176)
+    (i32.const 184)
    )
   )
   (set_local $$28
    (i32.add
     (get_local $sp)
-    (i32.const 172)
+    (i32.const 180)
    )
   )
   (set_local $$29
    (i32.add
     (get_local $sp)
-    (i32.const 168)
+    (i32.const 176)
    )
   )
-  (set_local $$31
+  (set_local $$30
    (i32.add
     (get_local $sp)
-    (i32.const 160)
+    (i32.const 172)
    )
   )
-  (set_local $$34
+  (set_local $$32
    (i32.add
     (get_local $sp)
-    (i32.const 152)
+    (i32.const 164)
    )
   )
   (set_local $$35
    (i32.add
     (get_local $sp)
-    (i32.const 148)
+    (i32.const 156)
    )
   )
   (set_local $$36
    (i32.add
     (get_local $sp)
-    (i32.const 144)
+    (i32.const 152)
    )
   )
   (set_local $$37
    (i32.add
     (get_local $sp)
-    (i32.const 140)
+    (i32.const 148)
    )
   )
   (set_local $$38
    (i32.add
     (get_local $sp)
-    (i32.const 136)
+    (i32.const 144)
    )
   )
   (set_local $$39
    (i32.add
     (get_local $sp)
-    (i32.const 132)
+    (i32.const 140)
    )
   )
   (set_local $$40
    (i32.add
     (get_local $sp)
-    (i32.const 128)
+    (i32.const 136)
    )
   )
   (set_local $$41
    (i32.add
     (get_local $sp)
-    (i32.const 124)
+    (i32.const 132)
    )
   )
   (set_local $$42
    (i32.add
     (get_local $sp)
-    (i32.const 120)
+    (i32.const 128)
    )
   )
   (set_local $$43
    (i32.add
     (get_local $sp)
-    (i32.const 116)
+    (i32.const 124)
    )
   )
   (set_local $$44
    (i32.add
     (get_local $sp)
-    (i32.const 112)
+    (i32.const 120)
    )
   )
   (set_local $$45
    (i32.add
     (get_local $sp)
-    (i32.const 108)
+    (i32.const 116)
    )
   )
   (set_local $$46
    (i32.add
     (get_local $sp)
-    (i32.const 104)
+    (i32.const 112)
    )
   )
   (set_local $$47
    (i32.add
     (get_local $sp)
-    (i32.const 100)
+    (i32.const 108)
    )
   )
   (set_local $$48
    (i32.add
     (get_local $sp)
-    (i32.const 96)
+    (i32.const 104)
    )
   )
-  (set_local $$51
+  (set_local $$49
    (i32.add
     (get_local $sp)
-    (i32.const 88)
+    (i32.const 100)
    )
   )
   (set_local $$52
    (i32.add
     (get_local $sp)
-    (i32.const 84)
+    (i32.const 92)
    )
   )
   (set_local $$53
    (i32.add
     (get_local $sp)
-    (i32.const 80)
+    (i32.const 88)
    )
   )
   (set_local $$54
    (i32.add
     (get_local $sp)
-    (i32.const 76)
+    (i32.const 84)
    )
   )
   (set_local $$55
    (i32.add
     (get_local $sp)
-    (i32.const 72)
+    (i32.const 80)
    )
   )
   (set_local $$56
    (i32.add
     (get_local $sp)
-    (i32.const 68)
+    (i32.const 76)
    )
   )
   (set_local $$57
    (i32.add
     (get_local $sp)
-    (i32.const 64)
+    (i32.const 72)
    )
   )
   (set_local $$58
    (i32.add
     (get_local $sp)
-    (i32.const 60)
+    (i32.const 68)
    )
   )
   (set_local $$59
    (i32.add
     (get_local $sp)
-    (i32.const 56)
+    (i32.const 64)
    )
   )
   (set_local $$60
    (i32.add
     (get_local $sp)
-    (i32.const 52)
+    (i32.const 60)
    )
   )
   (set_local $$61
    (i32.add
     (get_local $sp)
-    (i32.const 48)
+    (i32.const 56)
    )
   )
   (set_local $$62
    (i32.add
     (get_local $sp)
-    (i32.const 44)
+    (i32.const 52)
    )
   )
   (set_local $$63
    (i32.add
     (get_local $sp)
-    (i32.const 40)
+    (i32.const 48)
    )
   )
   (set_local $$64
    (i32.add
     (get_local $sp)
-    (i32.const 36)
+    (i32.const 44)
    )
   )
   (set_local $$65
    (i32.add
     (get_local $sp)
-    (i32.const 32)
+    (i32.const 40)
    )
   )
-  (set_local $$70
+  (set_local $$66
    (i32.add
     (get_local $sp)
-    (i32.const 12)
+    (i32.const 36)
    )
   )
   (set_local $$71
    (i32.add
     (get_local $sp)
-    (i32.const 8)
+    (i32.const 16)
+   )
+  )
+  (set_local $$72
+   (i32.add
+    (get_local $sp)
+    (i32.const 12)
+   )
+  )
+  (set_local $$74
+   (i32.add
+    (get_local $sp)
+    (i32.const 4)
    )
   )
   (i32.store
@@ -56601,290 +56765,301 @@
   (set_local $$3
    (get_local $$1)
   )
-  ;;@ renderer.c:657:0
-  (set_local $$73
+  ;;@ renderer.c:690:0
+  (set_local $$75
+   (get_local $$3)
+  )
+  (set_local $$76
+   (i32.add
+    (get_local $$75)
+    (i32.const 112)
+   )
+  )
+  (set_local $$77
+   (i32.load
+    (get_local $$76)
+   )
+  )
+  (set_local $$78
+   (i32.add
+    (get_local $$77)
+    (i32.const 20)
+   )
+  )
+  (set_local $$79
+   (i32.load
+    (get_local $$78)
+   )
+  )
+  (set_local $$80
+   (i32.add
+    (get_local $$79)
+    (i32.const 16)
+   )
+  )
+  (set_local $$81
+   (i32.load
+    (get_local $$80)
+   )
+  )
+  (set_local $$82
+   (i32.load
+    (get_local $$81)
+   )
+  )
+  (set_local $$4
+   (get_local $$82)
+  )
+  ;;@ renderer.c:694:0
+  (set_local $$83
    (i32.load
     (get_local $$2)
    )
   )
-  (set_local $$74
+  (set_local $$84
    (i32.load
     (i32.const 9912)
    )
   )
-  (set_local $$75
+  (set_local $$85
    (i32.eq
-    (get_local $$73)
-    (get_local $$74)
+    (get_local $$83)
+    (get_local $$84)
    )
   )
   (if
-   (get_local $$75)
+   (get_local $$85)
    (block
-    ;;@ renderer.c:658:0
-    (set_local $$76
-     (get_local $$3)
-    )
-    (set_local $$77
-     (i32.add
-      (get_local $$76)
-      (i32.const 100)
-     )
-    )
-    (set_local $$78
-     (i32.load
-      (get_local $$77)
-     )
-    )
-    (set_local $$79
-     (get_local $$3)
-    )
-    (set_local $$80
-     (i32.add
-      (get_local $$79)
-      (i32.const 104)
-     )
-    )
-    (i32.store
-     (get_local $$80)
-     (get_local $$78)
-    )
-    ;;@ renderer.c:659:0
-    (set_local $$81
-     (get_local $$3)
-    )
-    (set_local $$82
-     (get_local $$3)
-    )
-    (set_local $$83
-     (i32.add
-      (get_local $$82)
-      (i32.const 64)
-     )
-    )
-    (set_local $$84
-     (i32.load
-      (get_local $$83)
-     )
-    )
-    (call $_mark_background_start
-     (get_local $$81)
-     (get_local $$84)
-    )
-    ;;@ renderer.c:660:0
-    (set_local $$85
-     (get_local $$3)
-    )
+    ;;@ renderer.c:695:0
     (set_local $$86
-     (i32.add
-      (get_local $$85)
-      (i32.const 12)
-     )
+     (get_local $$3)
     )
     (set_local $$87
-     (f32.load
+     (i32.add
       (get_local $$86)
+      (i32.const 108)
      )
     )
     (set_local $$88
-     (f32.add
+     (i32.load
       (get_local $$87)
-      (f32.const 0)
      )
     )
     (set_local $$89
-     (i32.load
-      (get_local $$2)
-     )
+     (get_local $$3)
     )
     (set_local $$90
      (i32.add
       (get_local $$89)
-      (i32.const 40)
+      (i32.const 64)
      )
     )
-    (f32.store
-     (get_local $$90)
-     (get_local $$88)
-    )
-    ;;@ renderer.c:661:0
     (set_local $$91
-     (get_local $$3)
+     (i32.load
+      (get_local $$90)
+     )
     )
     (set_local $$92
-     (i32.add
+     (call $_make_background_start
+      (get_local $$88)
       (get_local $$91)
-      (i32.const 16)
      )
     )
+    (i32.store
+     (get_local $$5)
+     (get_local $$92)
+    )
+    ;;@ renderer.c:696:0
     (set_local $$93
-     (f32.load
-      (get_local $$92)
-     )
+     (get_local $$4)
     )
     (set_local $$94
-     (f32.add
+     (i32.add
       (get_local $$93)
-      (f32.const 0)
+      (i32.const 20)
      )
     )
     (set_local $$95
      (i32.load
-      (get_local $$2)
+      (get_local $$94)
      )
     )
-    (set_local $$96
-     (i32.add
+    (drop
+     (call $_array_push
       (get_local $$95)
-      (i32.const 44)
+      (get_local $$5)
      )
     )
-    (f32.store
-     (get_local $$96)
-     (get_local $$94)
+    ;;@ renderer.c:697:0
+    (set_local $$96
+     (get_local $$3)
+    )
+    (set_local $$97
+     (i32.add
+      (get_local $$96)
+      (i32.const 100)
+     )
+    )
+    (set_local $$98
+     (i32.load
+      (get_local $$97)
+     )
+    )
+    (set_local $$99
+     (get_local $$3)
+    )
+    (set_local $$100
+     (i32.add
+      (get_local $$99)
+      (i32.const 104)
+     )
+    )
+    (i32.store
+     (get_local $$100)
+     (get_local $$98)
     )
    )
   )
-  ;;@ renderer.c:666:0
-  (set_local $$4
+  ;;@ renderer.c:707:0
+  (set_local $$6
    (i32.const 0)
   )
-  ;;@ renderer.c:667:0
-  (set_local $$97
+  ;;@ renderer.c:708:0
+  (set_local $$101
    (i32.load
     (get_local $$2)
    )
   )
-  (set_local $$98
+  (set_local $$102
    (i32.load
-    (get_local $$97)
+    (get_local $$101)
    )
   )
-  (set_local $$99
+  (set_local $$103
    (i32.eq
-    (get_local $$98)
+    (get_local $$102)
     (i32.const 25)
    )
   )
   (set_local $$spec$store$select
    (if (result i32)
-    (get_local $$99)
+    (get_local $$103)
     (i32.const 1)
     (i32.const 0)
    )
   )
-  (set_local $$4
+  (set_local $$6
    (get_local $$spec$store$select)
   )
-  ;;@ renderer.c:671:0
-  (set_local $$100
+  ;;@ renderer.c:712:0
+  (set_local $$104
    (i32.load
     (get_local $$2)
    )
   )
-  (set_local $$101
+  (set_local $$105
    (i32.add
-    (get_local $$100)
+    (get_local $$104)
     (i32.const 16)
    )
   )
-  (set_local $$102
+  (set_local $$106
    (i32.load8_s
-    (get_local $$101)
+    (get_local $$105)
    )
   )
-  (set_local $$103
+  (set_local $$107
    (i32.and
-    (get_local $$102)
+    (get_local $$106)
     (i32.const 255)
    )
   )
-  (set_local $$104
+  (set_local $$108
    (i32.ne
-    (get_local $$103)
+    (get_local $$107)
     (i32.const 0)
    )
   )
   (if
-   (get_local $$104)
+   (get_local $$108)
    (block
-    (set_local $$105
-     (get_local $$4)
+    (set_local $$109
+     (get_local $$6)
     )
-    (set_local $$106
+    (set_local $$110
      (i32.and
-      (get_local $$105)
+      (get_local $$109)
       (i32.const 255)
      )
     )
-    (set_local $$107
+    (set_local $$111
      (i32.eq
-      (get_local $$106)
+      (get_local $$110)
       (i32.const 0)
      )
     )
     (if
-     (get_local $$107)
+     (get_local $$111)
      (block
-      ;;@ renderer.c:672:0
-      (set_local $$108
+      ;;@ renderer.c:713:0
+      (set_local $$112
        (get_local $$3)
       )
-      (set_local $$109
+      (set_local $$113
        (i32.add
-        (get_local $$108)
+        (get_local $$112)
         (i32.const 96)
        )
       )
-      (set_local $$110
-       (i32.load
-        (get_local $$109)
-       )
-      )
-      (set_local $$111
-       (i32.add
-        (get_local $$110)
-        (i32.const 12)
-       )
-      )
-      (set_local $$112
-       (i32.load
-        (get_local $$111)
-       )
-      )
-      (set_local $$113
-       (get_local $$3)
-      )
       (set_local $$114
-       (i32.add
+       (i32.load
         (get_local $$113)
-        (i32.const 100)
        )
       )
       (set_local $$115
-       (i32.load
+       (i32.add
         (get_local $$114)
+        (i32.const 12)
        )
       )
       (set_local $$116
+       (i32.load
+        (get_local $$115)
+       )
+      )
+      (set_local $$117
+       (get_local $$3)
+      )
+      (set_local $$118
        (i32.add
-        (get_local $$112)
+        (get_local $$117)
+        (i32.const 100)
+       )
+      )
+      (set_local $$119
+       (i32.load
+        (get_local $$118)
+       )
+      )
+      (set_local $$120
+       (i32.add
+        (get_local $$116)
         (i32.mul
-         (get_local $$115)
+         (get_local $$119)
          (i32.const 20)
         )
        )
       )
-      (set_local $$5
-       (get_local $$116)
+      (set_local $$7
+       (get_local $$120)
       )
-      ;;@ renderer.c:673:0
-      (set_local $$117
-       (get_local $$5)
+      ;;@ renderer.c:714:0
+      (set_local $$121
+       (get_local $$7)
       )
       (drop
        (call $_array_push
-        (get_local $$117)
+        (get_local $$121)
         (get_local $$2)
        )
       )
@@ -56892,60 +57067,15 @@
     )
    )
   )
-  ;;@ renderer.c:676:0
-  (set_local $$118
-   (get_local $$3)
-  )
-  (set_local $$119
-   (i32.add
-    (get_local $$118)
-    (i32.const 112)
-   )
-  )
-  (set_local $$120
-   (i32.load
-    (get_local $$119)
-   )
-  )
-  (set_local $$121
-   (i32.add
-    (get_local $$120)
-    (i32.const 20)
-   )
-  )
+  ;;@ renderer.c:717:0
   (set_local $$122
-   (i32.load
-    (get_local $$121)
-   )
-  )
-  (set_local $$123
-   (i32.add
-    (get_local $$122)
-    (i32.const 16)
-   )
-  )
-  (set_local $$124
-   (i32.load
-    (get_local $$123)
-   )
-  )
-  (set_local $$125
-   (i32.load
-    (get_local $$124)
-   )
-  )
-  (set_local $$6
-   (get_local $$125)
-  )
-  ;;@ renderer.c:678:0
-  (set_local $$126
    (i32.load
     (get_local $$2)
    )
   )
-  (set_local $$127
+  (set_local $$123
    (i32.load
-    (get_local $$126)
+    (get_local $$122)
    )
   )
   (block $label$break$L8
@@ -56983,20 +57113,46 @@
                                   (block $switch-case
                                    (br_table $switch-case $switch-case0 $switch-case1 $switch-case2 $switch-default $switch-case3 $switch-case4 $switch-case5 $switch-case23 $switch-case6 $switch-case7 $switch-default $switch-default $switch-case9 $switch-case10 $switch-case35 $switch-case20 $switch-case19 $switch-case8 $switch-case11 $switch-case12 $switch-case13 $switch-case14 $switch-case17 $switch-case18 $switch-case21 $switch-case28 $switch-case22 $switch-case27 $switch-case26 $switch-case25 $switch-case24 $switch-case36 $switch-default
                                     (i32.sub
-                                     (get_local $$127)
+                                     (get_local $$123)
                                      (i32.const 0)
                                     )
                                    )
                                   )
                                   (block
-                                   ;;@ renderer.c:680:0
-                                   (set_local $$128
+                                   ;;@ renderer.c:719:0
+                                   (set_local $$124
                                     (get_local $$3)
+                                   )
+                                   (set_local $$125
+                                    (i32.add
+                                     (get_local $$124)
+                                     (i32.const 108)
+                                    )
+                                   )
+                                   (set_local $$126
+                                    (i32.load
+                                     (get_local $$125)
+                                    )
+                                   )
+                                   (set_local $$127
+                                    (call $_make_text
+                                     (get_local $$126)
+                                     (i32.const 5967)
+                                     (i32.const 1104)
+                                    )
+                                   )
+                                   (i32.store
+                                    (get_local $$8)
+                                    (get_local $$127)
+                                   )
+                                   ;;@ renderer.c:720:0
+                                   (set_local $$128
+                                    (get_local $$4)
                                    )
                                    (set_local $$129
                                     (i32.add
                                      (get_local $$128)
-                                     (i32.const 108)
+                                     (i32.const 20)
                                     )
                                    )
                                    (set_local $$130
@@ -57004,60 +57160,60 @@
                                      (get_local $$129)
                                     )
                                    )
-                                   (set_local $$131
-                                    (call $_make_text
-                                     (get_local $$130)
-                                     (i32.const 5967)
-                                     (i32.const 1104)
-                                    )
-                                   )
-                                   (i32.store
-                                    (get_local $$7)
-                                    (get_local $$131)
-                                   )
-                                   ;;@ renderer.c:681:0
-                                   (set_local $$132
-                                    (get_local $$6)
-                                   )
-                                   (set_local $$133
-                                    (i32.add
-                                     (get_local $$132)
-                                     (i32.const 20)
-                                    )
-                                   )
-                                   (set_local $$134
-                                    (i32.load
-                                     (get_local $$133)
-                                    )
-                                   )
                                    (drop
                                     (call $_array_push
-                                     (get_local $$134)
-                                     (get_local $$7)
+                                     (get_local $$130)
+                                     (get_local $$8)
                                     )
                                    )
-                                   ;;@ renderer.c:682:0
-                                   (set_local $$135
+                                   ;;@ renderer.c:721:0
+                                   (set_local $$131
                                     (get_local $$3)
                                    )
-                                   (set_local $$136
+                                   (set_local $$132
                                     (i32.add
-                                     (get_local $$135)
+                                     (get_local $$131)
                                      (i32.const 108)
                                     )
                                    )
-                                   (set_local $$137
+                                   (set_local $$133
                                     (i32.load
+                                     (get_local $$132)
+                                    )
+                                   )
+                                   (set_local $$134
+                                    (get_local $$3)
+                                   )
+                                   (set_local $$135
+                                    (i32.add
+                                     (get_local $$134)
+                                     (i32.const 56)
+                                    )
+                                   )
+                                   (set_local $$136
+                                    (i32.load
+                                     (get_local $$135)
+                                    )
+                                   )
+                                   (set_local $$137
+                                    (call $_make_text
+                                     (get_local $$133)
+                                     (i32.const 6534)
                                      (get_local $$136)
                                     )
                                    )
+                                   (i32.store
+                                    (get_local $$9)
+                                    (get_local $$137)
+                                   )
+                                   ;;@ renderer.c:722:0
                                    (set_local $$138
-                                    (get_local $$3)
+                                    (get_local $$4)
                                    )
                                    (set_local $$139
                                     (i32.add
                                      (get_local $$138)
-                                     (i32.const 56)
+                                     (i32.const 20)
                                     )
                                    )
                                    (set_local $$140
@@ -57065,48 +57221,44 @@
                                      (get_local $$139)
                                     )
                                    )
-                                   (set_local $$141
-                                    (call $_make_text
-                                     (get_local $$137)
-                                     (i32.const 6534)
-                                     (get_local $$140)
-                                    )
-                                   )
-                                   (i32.store
-                                    (get_local $$8)
-                                    (get_local $$141)
-                                   )
-                                   ;;@ renderer.c:683:0
-                                   (set_local $$142
-                                    (get_local $$6)
-                                   )
-                                   (set_local $$143
-                                    (i32.add
-                                     (get_local $$142)
-                                     (i32.const 20)
-                                    )
-                                   )
-                                   (set_local $$144
-                                    (i32.load
-                                     (get_local $$143)
-                                    )
-                                   )
                                    (drop
                                     (call $_array_push
-                                     (get_local $$144)
-                                     (get_local $$8)
+                                     (get_local $$140)
+                                     (get_local $$9)
                                     )
                                    )
-                                   ;;@ renderer.c:684:0
-                                   (set_local $$145
+                                   ;;@ renderer.c:723:0
+                                   (set_local $$141
                                     (i32.load
                                      (get_local $$2)
                                     )
                                    )
+                                   (set_local $$142
+                                    (i32.add
+                                     (get_local $$141)
+                                     (i32.const 48)
+                                    )
+                                   )
+                                   (set_local $$143
+                                    (i32.load
+                                     (get_local $$142)
+                                    )
+                                   )
+                                   (set_local $$144
+                                    (get_local $$3)
+                                   )
+                                   (call $_render_code_node
+                                    (get_local $$143)
+                                    (get_local $$144)
+                                   )
+                                   ;;@ renderer.c:724:0
+                                   (set_local $$145
+                                    (get_local $$3)
+                                   )
                                    (set_local $$146
                                     (i32.add
                                      (get_local $$145)
-                                     (i32.const 48)
+                                     (i32.const 108)
                                     )
                                    )
                                    (set_local $$147
@@ -57117,32 +57269,36 @@
                                    (set_local $$148
                                     (get_local $$3)
                                    )
-                                   (call $_render_code_node
-                                    (get_local $$147)
-                                    (get_local $$148)
-                                   )
-                                   ;;@ renderer.c:685:0
                                    (set_local $$149
-                                    (get_local $$3)
+                                    (i32.add
+                                     (get_local $$148)
+                                     (i32.const 56)
+                                    )
                                    )
                                    (set_local $$150
-                                    (i32.add
+                                    (i32.load
                                      (get_local $$149)
-                                     (i32.const 108)
                                     )
                                    )
                                    (set_local $$151
-                                    (i32.load
+                                    (call $_make_text
+                                     (get_local $$147)
+                                     (i32.const 5971)
                                      (get_local $$150)
                                     )
                                    )
+                                   (i32.store
+                                    (get_local $$10)
+                                    (get_local $$151)
+                                   )
+                                   ;;@ renderer.c:725:0
                                    (set_local $$152
-                                    (get_local $$3)
+                                    (get_local $$4)
                                    )
                                    (set_local $$153
                                     (i32.add
                                      (get_local $$152)
-                                     (i32.const 56)
+                                     (i32.const 20)
                                     )
                                    )
                                    (set_local $$154
@@ -57150,25 +57306,28 @@
                                      (get_local $$153)
                                     )
                                    )
-                                   (set_local $$155
-                                    (call $_make_text
-                                     (get_local $$151)
-                                     (i32.const 5971)
+                                   (drop
+                                    (call $_array_push
                                      (get_local $$154)
+                                     (get_local $$10)
                                     )
                                    )
-                                   (i32.store
-                                    (get_local $$9)
-                                    (get_local $$155)
+                                   ;;@ renderer.c:726:0
+                                   (set_local $$155
+                                    (i32.load
+                                     (get_local $$2)
+                                    )
                                    )
-                                   ;;@ renderer.c:686:0
                                    (set_local $$156
-                                    (get_local $$6)
+                                    (i32.add
+                                     (get_local $$155)
+                                     (i32.const 48)
+                                    )
                                    )
                                    (set_local $$157
                                     (i32.add
                                      (get_local $$156)
-                                     (i32.const 20)
+                                     (i32.const 4)
                                     )
                                    )
                                    (set_local $$158
@@ -57176,51 +57335,22 @@
                                      (get_local $$157)
                                     )
                                    )
-                                   (drop
-                                    (call $_array_push
-                                     (get_local $$158)
-                                     (get_local $$9)
-                                    )
-                                   )
-                                   ;;@ renderer.c:687:0
                                    (set_local $$159
-                                    (i32.load
-                                     (get_local $$2)
-                                    )
-                                   )
-                                   (set_local $$160
                                     (i32.add
-                                     (get_local $$159)
-                                     (i32.const 48)
-                                    )
-                                   )
-                                   (set_local $$161
-                                    (i32.add
-                                     (get_local $$160)
-                                     (i32.const 4)
-                                    )
-                                   )
-                                   (set_local $$162
-                                    (i32.load
-                                     (get_local $$161)
-                                    )
-                                   )
-                                   (set_local $$163
-                                    (i32.add
-                                     (get_local $$162)
+                                     (get_local $$158)
                                      (i32.const 12)
                                     )
                                    )
-                                   (set_local $$164
+                                   (set_local $$160
                                     (i32.load8_s
-                                     (get_local $$163)
+                                     (get_local $$159)
                                     )
                                    )
-                                   (set_local $$165
+                                   (set_local $$161
                                     (i32.ne
                                      (i32.shr_s
                                       (i32.shl
-                                       (get_local $$164)
+                                       (get_local $$160)
                                        (i32.const 24)
                                       )
                                       (i32.const 24)
@@ -57230,31 +57360,57 @@
                                    )
                                    (if
                                     (i32.eqz
-                                     (get_local $$165)
+                                     (get_local $$161)
                                     )
                                     (block
-                                     ;;@ renderer.c:695:0
-                                     (set_local $$187
+                                     ;;@ renderer.c:734:0
+                                     (set_local $$183
                                       (get_local $$3)
                                      )
-                                     (set_local $$188
+                                     (set_local $$184
                                       (i32.add
-                                       (get_local $$187)
+                                       (get_local $$183)
                                        (i32.const 108)
                                       )
                                      )
-                                     (set_local $$189
+                                     (set_local $$185
                                       (i32.load
+                                       (get_local $$184)
+                                      )
+                                     )
+                                     (set_local $$186
+                                      (get_local $$3)
+                                     )
+                                     (set_local $$187
+                                      (i32.add
+                                       (get_local $$186)
+                                       (i32.const 56)
+                                      )
+                                     )
+                                     (set_local $$188
+                                      (i32.load
+                                       (get_local $$187)
+                                      )
+                                     )
+                                     (set_local $$189
+                                      (call $_make_text
+                                       (get_local $$185)
+                                       (i32.const 5974)
                                        (get_local $$188)
                                       )
                                      )
+                                     (i32.store
+                                      (get_local $$12)
+                                      (get_local $$189)
+                                     )
+                                     ;;@ renderer.c:735:0
                                      (set_local $$190
-                                      (get_local $$3)
+                                      (get_local $$4)
                                      )
                                      (set_local $$191
                                       (i32.add
                                        (get_local $$190)
-                                       (i32.const 56)
+                                       (i32.const 20)
                                       )
                                      )
                                      (set_local $$192
@@ -57262,130 +57418,130 @@
                                        (get_local $$191)
                                       )
                                      )
-                                     (set_local $$193
-                                      (call $_make_text
-                                       (get_local $$189)
-                                       (i32.const 5974)
-                                       (get_local $$192)
-                                      )
-                                     )
-                                     (i32.store
-                                      (get_local $$11)
-                                      (get_local $$193)
-                                     )
-                                     ;;@ renderer.c:696:0
-                                     (set_local $$194
-                                      (get_local $$6)
-                                     )
-                                     (set_local $$195
-                                      (i32.add
-                                       (get_local $$194)
-                                       (i32.const 20)
-                                      )
-                                     )
-                                     (set_local $$196
-                                      (i32.load
-                                       (get_local $$195)
-                                      )
-                                     )
                                      (drop
                                       (call $_array_push
-                                       (get_local $$196)
-                                       (get_local $$11)
+                                       (get_local $$192)
+                                       (get_local $$12)
                                       )
                                      )
                                      (br $label$break$L8)
                                     )
                                    )
-                                   ;;@ renderer.c:688:0
-                                   (set_local $$166
+                                   ;;@ renderer.c:727:0
+                                   (set_local $$162
                                     (i32.load
                                      (get_local $$2)
                                     )
                                    )
-                                   (set_local $$167
+                                   (set_local $$163
                                     (i32.add
-                                     (get_local $$166)
+                                     (get_local $$162)
                                      (i32.const 48)
+                                    )
+                                   )
+                                   (set_local $$164
+                                    (i32.add
+                                     (get_local $$163)
+                                     (i32.const 4)
+                                    )
+                                   )
+                                   (set_local $$165
+                                    (i32.load
+                                     (get_local $$164)
+                                    )
+                                   )
+                                   (set_local $$166
+                                    (get_local $$3)
+                                   )
+                                   (call $_render_code_node
+                                    (get_local $$165)
+                                    (get_local $$166)
+                                   )
+                                   ;;@ renderer.c:728:0
+                                   (set_local $$167
+                                    (i32.load
+                                     (get_local $$2)
                                     )
                                    )
                                    (set_local $$168
                                     (i32.add
                                      (get_local $$167)
-                                     (i32.const 4)
-                                    )
-                                   )
-                                   (set_local $$169
-                                    (i32.load
-                                     (get_local $$168)
-                                    )
-                                   )
-                                   (set_local $$170
-                                    (get_local $$3)
-                                   )
-                                   (call $_render_code_node
-                                    (get_local $$169)
-                                    (get_local $$170)
-                                   )
-                                   ;;@ renderer.c:689:0
-                                   (set_local $$171
-                                    (i32.load
-                                     (get_local $$2)
-                                    )
-                                   )
-                                   (set_local $$172
-                                    (i32.add
-                                     (get_local $$171)
                                      (i32.const 48)
                                     )
                                    )
-                                   (set_local $$173
+                                   (set_local $$169
                                     (i32.add
-                                     (get_local $$172)
+                                     (get_local $$168)
                                      (i32.const 4)
                                     )
                                    )
-                                   (set_local $$174
+                                   (set_local $$170
                                     (i32.load
-                                     (get_local $$173)
+                                     (get_local $$169)
                                     )
                                    )
-                                   (set_local $$175
+                                   (set_local $$171
                                     (i32.load
-                                     (get_local $$174)
+                                     (get_local $$170)
                                     )
                                    )
-                                   (set_local $$176
+                                   (set_local $$172
                                     (i32.ne
-                                     (get_local $$175)
+                                     (get_local $$171)
                                      (i32.const 15)
                                     )
                                    )
                                    (if
-                                    (get_local $$176)
+                                    (get_local $$172)
                                     (block
-                                     ;;@ renderer.c:690:0
-                                     (set_local $$177
+                                     ;;@ renderer.c:729:0
+                                     (set_local $$173
                                       (get_local $$3)
                                      )
-                                     (set_local $$178
+                                     (set_local $$174
                                       (i32.add
-                                       (get_local $$177)
+                                       (get_local $$173)
                                        (i32.const 108)
                                       )
                                      )
-                                     (set_local $$179
+                                     (set_local $$175
                                       (i32.load
+                                       (get_local $$174)
+                                      )
+                                     )
+                                     (set_local $$176
+                                      (get_local $$3)
+                                     )
+                                     (set_local $$177
+                                      (i32.add
+                                       (get_local $$176)
+                                       (i32.const 56)
+                                      )
+                                     )
+                                     (set_local $$178
+                                      (i32.load
+                                       (get_local $$177)
+                                      )
+                                     )
+                                     (set_local $$179
+                                      (call $_make_text
+                                       (get_local $$175)
+                                       (i32.const 6593)
                                        (get_local $$178)
                                       )
                                      )
+                                     (i32.store
+                                      (get_local $$11)
+                                      (get_local $$179)
+                                     )
+                                     ;;@ renderer.c:730:0
                                      (set_local $$180
-                                      (get_local $$3)
+                                      (get_local $$4)
                                      )
                                      (set_local $$181
                                       (i32.add
                                        (get_local $$180)
-                                       (i32.const 56)
+                                       (i32.const 20)
                                       )
                                      )
                                      (set_local $$182
@@ -57393,36 +57549,10 @@
                                        (get_local $$181)
                                       )
                                      )
-                                     (set_local $$183
-                                      (call $_make_text
-                                       (get_local $$179)
-                                       (i32.const 6593)
-                                       (get_local $$182)
-                                      )
-                                     )
-                                     (i32.store
-                                      (get_local $$10)
-                                      (get_local $$183)
-                                     )
-                                     ;;@ renderer.c:691:0
-                                     (set_local $$184
-                                      (get_local $$6)
-                                     )
-                                     (set_local $$185
-                                      (i32.add
-                                       (get_local $$184)
-                                       (i32.const 20)
-                                      )
-                                     )
-                                     (set_local $$186
-                                      (i32.load
-                                       (get_local $$185)
-                                      )
-                                     )
                                      (drop
                                       (call $_array_push
-                                       (get_local $$186)
-                                       (get_local $$10)
+                                       (get_local $$182)
+                                       (get_local $$11)
                                       )
                                      )
                                     )
@@ -57431,14 +57561,40 @@
                                   )
                                  )
                                  (block
-                                  ;;@ renderer.c:701:0
-                                  (set_local $$197
+                                  ;;@ renderer.c:740:0
+                                  (set_local $$193
                                    (get_local $$3)
+                                  )
+                                  (set_local $$194
+                                   (i32.add
+                                    (get_local $$193)
+                                    (i32.const 108)
+                                   )
+                                  )
+                                  (set_local $$195
+                                   (i32.load
+                                    (get_local $$194)
+                                   )
+                                  )
+                                  (set_local $$196
+                                   (call $_make_text
+                                    (get_local $$195)
+                                    (i32.const 5977)
+                                    (i32.const 1104)
+                                   )
+                                  )
+                                  (i32.store
+                                   (get_local $$13)
+                                   (get_local $$196)
+                                  )
+                                  ;;@ renderer.c:741:0
+                                  (set_local $$197
+                                   (get_local $$4)
                                   )
                                   (set_local $$198
                                    (i32.add
                                     (get_local $$197)
-                                    (i32.const 108)
+                                    (i32.const 20)
                                    )
                                   )
                                   (set_local $$199
@@ -57446,39 +57602,37 @@
                                     (get_local $$198)
                                    )
                                   )
-                                  (set_local $$200
-                                   (call $_make_text
+                                  (drop
+                                   (call $_array_push
                                     (get_local $$199)
-                                    (i32.const 5977)
-                                    (i32.const 1104)
+                                    (get_local $$13)
                                    )
                                   )
-                                  (i32.store
-                                   (get_local $$12)
-                                   (get_local $$200)
+                                  ;;@ renderer.c:742:0
+                                  (set_local $$200
+                                   (i32.load
+                                    (get_local $$2)
+                                   )
                                   )
-                                  ;;@ renderer.c:702:0
                                   (set_local $$201
-                                   (get_local $$6)
+                                   (i32.add
+                                    (get_local $$200)
+                                    (i32.const 48)
+                                   )
                                   )
                                   (set_local $$202
-                                   (i32.add
+                                   (i32.load
                                     (get_local $$201)
-                                    (i32.const 20)
                                    )
                                   )
                                   (set_local $$203
-                                   (i32.load
-                                    (get_local $$202)
-                                   )
+                                   (get_local $$3)
                                   )
-                                  (drop
-                                   (call $_array_push
-                                    (get_local $$203)
-                                    (get_local $$12)
-                                   )
+                                  (call $_render_code_node
+                                   (get_local $$202)
+                                   (get_local $$203)
                                   )
-                                  ;;@ renderer.c:703:0
+                                  ;;@ renderer.c:743:0
                                   (set_local $$204
                                    (i32.load
                                     (get_local $$2)
@@ -57496,96 +57650,98 @@
                                    )
                                   )
                                   (set_local $$207
-                                   (get_local $$3)
+                                   (i32.load
+                                    (get_local $$206)
+                                   )
                                   )
-                                  (call $_render_code_node
-                                   (get_local $$206)
-                                   (get_local $$207)
-                                  )
-                                  ;;@ renderer.c:704:0
                                   (set_local $$208
-                                   (i32.load
-                                    (get_local $$2)
-                                   )
-                                  )
-                                  (set_local $$209
-                                   (i32.add
-                                    (get_local $$208)
-                                    (i32.const 48)
-                                   )
-                                  )
-                                  (set_local $$210
-                                   (i32.load
-                                    (get_local $$209)
-                                   )
-                                  )
-                                  (set_local $$211
-                                   (i32.load
-                                    (get_local $$210)
-                                   )
-                                  )
-                                  (set_local $$212
                                    (i32.ne
-                                    (get_local $$211)
+                                    (get_local $$207)
                                     (i32.const 15)
                                    )
                                   )
                                   (if
-                                   (get_local $$212)
+                                   (get_local $$208)
                                    (block
-                                    ;;@ renderer.c:705:0
-                                    (set_local $$213
+                                    ;;@ renderer.c:744:0
+                                    (set_local $$209
                                      (i32.load
                                       (get_local $$2)
                                      )
                                     )
-                                    (set_local $$214
+                                    (set_local $$210
                                      (i32.add
-                                      (get_local $$213)
+                                      (get_local $$209)
                                       (i32.const 48)
                                      )
                                     )
-                                    (set_local $$215
+                                    (set_local $$211
                                      (i32.load
-                                      (get_local $$214)
+                                      (get_local $$210)
                                      )
                                     )
-                                    (set_local $$216
+                                    (set_local $$212
                                      (i32.load
-                                      (get_local $$215)
+                                      (get_local $$211)
                                      )
                                     )
-                                    (set_local $$217
+                                    (set_local $$213
                                      (i32.ne
-                                      (get_local $$216)
+                                      (get_local $$212)
                                       (i32.const 0)
                                      )
                                     )
                                     (if
-                                     (get_local $$217)
+                                     (get_local $$213)
                                      (block
-                                      ;;@ renderer.c:707:0
-                                      (set_local $$218
+                                      ;;@ renderer.c:746:0
+                                      (set_local $$214
                                        (get_local $$3)
                                       )
-                                      (set_local $$219
+                                      (set_local $$215
                                        (i32.add
-                                        (get_local $$218)
+                                        (get_local $$214)
                                         (i32.const 108)
                                        )
                                       )
-                                      (set_local $$220
+                                      (set_local $$216
                                        (i32.load
+                                        (get_local $$215)
+                                       )
+                                      )
+                                      (set_local $$217
+                                       (get_local $$3)
+                                      )
+                                      (set_local $$218
+                                       (i32.add
+                                        (get_local $$217)
+                                        (i32.const 56)
+                                       )
+                                      )
+                                      (set_local $$219
+                                       (i32.load
+                                        (get_local $$218)
+                                       )
+                                      )
+                                      (set_local $$220
+                                       (call $_make_text
+                                        (get_local $$216)
+                                        (i32.const 6593)
                                         (get_local $$219)
                                        )
                                       )
+                                      (i32.store
+                                       (get_local $$14)
+                                       (get_local $$220)
+                                      )
+                                      ;;@ renderer.c:747:0
                                       (set_local $$221
-                                       (get_local $$3)
+                                       (get_local $$4)
                                       )
                                       (set_local $$222
                                        (i32.add
                                         (get_local $$221)
-                                        (i32.const 56)
+                                        (i32.const 20)
                                        )
                                       )
                                       (set_local $$223
@@ -57593,36 +57749,10 @@
                                         (get_local $$222)
                                        )
                                       )
-                                      (set_local $$224
-                                       (call $_make_text
-                                        (get_local $$220)
-                                        (i32.const 6593)
-                                        (get_local $$223)
-                                       )
-                                      )
-                                      (i32.store
-                                       (get_local $$13)
-                                       (get_local $$224)
-                                      )
-                                      ;;@ renderer.c:708:0
-                                      (set_local $$225
-                                       (get_local $$6)
-                                      )
-                                      (set_local $$226
-                                       (i32.add
-                                        (get_local $$225)
-                                        (i32.const 20)
-                                       )
-                                      )
-                                      (set_local $$227
-                                       (i32.load
-                                        (get_local $$226)
-                                       )
-                                      )
                                       (drop
                                        (call $_array_push
-                                        (get_local $$227)
-                                        (get_local $$13)
+                                        (get_local $$223)
+                                        (get_local $$14)
                                        )
                                       )
                                      )
@@ -57633,14 +57763,40 @@
                                  )
                                 )
                                 (block
-                                 ;;@ renderer.c:713:0
-                                 (set_local $$228
+                                 ;;@ renderer.c:752:0
+                                 (set_local $$224
                                   (get_local $$3)
+                                 )
+                                 (set_local $$225
+                                  (i32.add
+                                   (get_local $$224)
+                                   (i32.const 108)
+                                  )
+                                 )
+                                 (set_local $$226
+                                  (i32.load
+                                   (get_local $$225)
+                                  )
+                                 )
+                                 (set_local $$227
+                                  (call $_make_text
+                                   (get_local $$226)
+                                   (i32.const 5983)
+                                   (i32.const 1104)
+                                  )
+                                 )
+                                 (i32.store
+                                  (get_local $$15)
+                                  (get_local $$227)
+                                 )
+                                 ;;@ renderer.c:753:0
+                                 (set_local $$228
+                                  (get_local $$4)
                                  )
                                  (set_local $$229
                                   (i32.add
                                    (get_local $$228)
-                                   (i32.const 108)
+                                   (i32.const 20)
                                   )
                                  )
                                  (set_local $$230
@@ -57648,60 +57804,60 @@
                                    (get_local $$229)
                                   )
                                  )
-                                 (set_local $$231
-                                  (call $_make_text
-                                   (get_local $$230)
-                                   (i32.const 5983)
-                                   (i32.const 1104)
-                                  )
-                                 )
-                                 (i32.store
-                                  (get_local $$14)
-                                  (get_local $$231)
-                                 )
-                                 ;;@ renderer.c:714:0
-                                 (set_local $$232
-                                  (get_local $$6)
-                                 )
-                                 (set_local $$233
-                                  (i32.add
-                                   (get_local $$232)
-                                   (i32.const 20)
-                                  )
-                                 )
-                                 (set_local $$234
-                                  (i32.load
-                                   (get_local $$233)
-                                  )
-                                 )
                                  (drop
                                   (call $_array_push
-                                   (get_local $$234)
-                                   (get_local $$14)
+                                   (get_local $$230)
+                                   (get_local $$15)
                                   )
                                  )
-                                 ;;@ renderer.c:715:0
-                                 (set_local $$235
+                                 ;;@ renderer.c:754:0
+                                 (set_local $$231
                                   (get_local $$3)
                                  )
-                                 (set_local $$236
+                                 (set_local $$232
                                   (i32.add
-                                   (get_local $$235)
+                                   (get_local $$231)
                                    (i32.const 108)
                                   )
                                  )
-                                 (set_local $$237
+                                 (set_local $$233
                                   (i32.load
+                                   (get_local $$232)
+                                  )
+                                 )
+                                 (set_local $$234
+                                  (get_local $$3)
+                                 )
+                                 (set_local $$235
+                                  (i32.add
+                                   (get_local $$234)
+                                   (i32.const 56)
+                                  )
+                                 )
+                                 (set_local $$236
+                                  (i32.load
+                                   (get_local $$235)
+                                  )
+                                 )
+                                 (set_local $$237
+                                  (call $_make_text
+                                   (get_local $$233)
+                                   (i32.const 6534)
                                    (get_local $$236)
                                   )
                                  )
+                                 (i32.store
+                                  (get_local $$16)
+                                  (get_local $$237)
+                                 )
+                                 ;;@ renderer.c:755:0
                                  (set_local $$238
-                                  (get_local $$3)
+                                  (get_local $$4)
                                  )
                                  (set_local $$239
                                   (i32.add
                                    (get_local $$238)
-                                   (i32.const 56)
+                                   (i32.const 20)
                                   )
                                  )
                                  (set_local $$240
@@ -57709,48 +57865,44 @@
                                    (get_local $$239)
                                   )
                                  )
-                                 (set_local $$241
-                                  (call $_make_text
-                                   (get_local $$237)
-                                   (i32.const 6534)
-                                   (get_local $$240)
-                                  )
-                                 )
-                                 (i32.store
-                                  (get_local $$15)
-                                  (get_local $$241)
-                                 )
-                                 ;;@ renderer.c:716:0
-                                 (set_local $$242
-                                  (get_local $$6)
-                                 )
-                                 (set_local $$243
-                                  (i32.add
-                                   (get_local $$242)
-                                   (i32.const 20)
-                                  )
-                                 )
-                                 (set_local $$244
-                                  (i32.load
-                                   (get_local $$243)
-                                  )
-                                 )
                                  (drop
                                   (call $_array_push
-                                   (get_local $$244)
-                                   (get_local $$15)
+                                   (get_local $$240)
+                                   (get_local $$16)
                                   )
                                  )
-                                 ;;@ renderer.c:717:0
-                                 (set_local $$245
+                                 ;;@ renderer.c:756:0
+                                 (set_local $$241
                                   (i32.load
                                    (get_local $$2)
                                   )
                                  )
+                                 (set_local $$242
+                                  (i32.add
+                                   (get_local $$241)
+                                   (i32.const 48)
+                                  )
+                                 )
+                                 (set_local $$243
+                                  (i32.load
+                                   (get_local $$242)
+                                  )
+                                 )
+                                 (set_local $$244
+                                  (get_local $$3)
+                                 )
+                                 (call $_render_code_node
+                                  (get_local $$243)
+                                  (get_local $$244)
+                                 )
+                                 ;;@ renderer.c:757:0
+                                 (set_local $$245
+                                  (get_local $$3)
+                                 )
                                  (set_local $$246
                                   (i32.add
                                    (get_local $$245)
-                                   (i32.const 48)
+                                   (i32.const 108)
                                   )
                                  )
                                  (set_local $$247
@@ -57761,32 +57913,36 @@
                                  (set_local $$248
                                   (get_local $$3)
                                  )
-                                 (call $_render_code_node
-                                  (get_local $$247)
-                                  (get_local $$248)
-                                 )
-                                 ;;@ renderer.c:718:0
                                  (set_local $$249
-                                  (get_local $$3)
+                                  (i32.add
+                                   (get_local $$248)
+                                   (i32.const 56)
+                                  )
                                  )
                                  (set_local $$250
-                                  (i32.add
+                                  (i32.load
                                    (get_local $$249)
-                                   (i32.const 108)
                                   )
                                  )
                                  (set_local $$251
-                                  (i32.load
+                                  (call $_make_text
+                                   (get_local $$247)
+                                   (i32.const 5971)
                                    (get_local $$250)
                                   )
                                  )
+                                 (i32.store
+                                  (get_local $$17)
+                                  (get_local $$251)
+                                 )
+                                 ;;@ renderer.c:758:0
                                  (set_local $$252
-                                  (get_local $$3)
+                                  (get_local $$4)
                                  )
                                  (set_local $$253
                                   (i32.add
                                    (get_local $$252)
-                                   (i32.const 56)
+                                   (i32.const 20)
                                   )
                                  )
                                  (set_local $$254
@@ -57794,25 +57950,28 @@
                                    (get_local $$253)
                                   )
                                  )
-                                 (set_local $$255
-                                  (call $_make_text
-                                   (get_local $$251)
-                                   (i32.const 5971)
+                                 (drop
+                                  (call $_array_push
                                    (get_local $$254)
+                                   (get_local $$17)
                                   )
                                  )
-                                 (i32.store
-                                  (get_local $$16)
-                                  (get_local $$255)
+                                 ;;@ renderer.c:759:0
+                                 (set_local $$255
+                                  (i32.load
+                                   (get_local $$2)
+                                  )
                                  )
-                                 ;;@ renderer.c:719:0
                                  (set_local $$256
-                                  (get_local $$6)
+                                  (i32.add
+                                   (get_local $$255)
+                                   (i32.const 48)
+                                  )
                                  )
                                  (set_local $$257
                                   (i32.add
                                    (get_local $$256)
-                                   (i32.const 20)
+                                   (i32.const 4)
                                   )
                                  )
                                  (set_local $$258
@@ -57820,54 +57979,51 @@
                                    (get_local $$257)
                                   )
                                  )
-                                 (drop
-                                  (call $_array_push
-                                   (get_local $$258)
-                                   (get_local $$16)
-                                  )
-                                 )
-                                 ;;@ renderer.c:720:0
                                  (set_local $$259
-                                  (i32.load
-                                   (get_local $$2)
-                                  )
-                                 )
-                                 (set_local $$260
-                                  (i32.add
-                                   (get_local $$259)
-                                   (i32.const 48)
-                                  )
-                                 )
-                                 (set_local $$261
-                                  (i32.add
-                                   (get_local $$260)
-                                   (i32.const 4)
-                                  )
-                                 )
-                                 (set_local $$262
-                                  (i32.load
-                                   (get_local $$261)
-                                  )
-                                 )
-                                 (set_local $$263
                                   (get_local $$3)
                                  )
                                  (call $_render_code_node
-                                  (get_local $$262)
-                                  (get_local $$263)
+                                  (get_local $$258)
+                                  (get_local $$259)
                                  )
                                  (br $switch)
                                 )
                                )
                                (block
-                                ;;@ renderer.c:724:0
-                                (set_local $$264
+                                ;;@ renderer.c:763:0
+                                (set_local $$260
                                  (get_local $$3)
+                                )
+                                (set_local $$261
+                                 (i32.add
+                                  (get_local $$260)
+                                  (i32.const 108)
+                                 )
+                                )
+                                (set_local $$262
+                                 (i32.load
+                                  (get_local $$261)
+                                 )
+                                )
+                                (set_local $$263
+                                 (call $_make_text
+                                  (get_local $$262)
+                                  (i32.const 5990)
+                                  (i32.const 1104)
+                                 )
+                                )
+                                (i32.store
+                                 (get_local $$18)
+                                 (get_local $$263)
+                                )
+                                ;;@ renderer.c:764:0
+                                (set_local $$264
+                                 (get_local $$4)
                                 )
                                 (set_local $$265
                                  (i32.add
                                   (get_local $$264)
-                                  (i32.const 108)
+                                  (i32.const 20)
                                  )
                                 )
                                 (set_local $$266
@@ -57875,25 +58031,28 @@
                                   (get_local $$265)
                                  )
                                 )
-                                (set_local $$267
-                                 (call $_make_text
+                                (drop
+                                 (call $_array_push
                                   (get_local $$266)
-                                  (i32.const 5990)
-                                  (i32.const 1104)
+                                  (get_local $$18)
                                  )
                                 )
-                                (i32.store
-                                 (get_local $$17)
-                                 (get_local $$267)
+                                ;;@ renderer.c:765:0
+                                (set_local $$267
+                                 (i32.load
+                                  (get_local $$2)
+                                 )
                                 )
-                                ;;@ renderer.c:725:0
                                 (set_local $$268
-                                 (get_local $$6)
+                                 (i32.add
+                                  (get_local $$267)
+                                  (i32.const 48)
+                                 )
                                 )
                                 (set_local $$269
                                  (i32.add
                                   (get_local $$268)
-                                  (i32.const 20)
+                                  (i32.const 4)
                                  )
                                 )
                                 (set_local $$270
@@ -57901,28 +58060,21 @@
                                   (get_local $$269)
                                  )
                                 )
-                                (drop
-                                 (call $_array_push
-                                  (get_local $$270)
-                                  (get_local $$17)
-                                 )
-                                )
-                                ;;@ renderer.c:726:0
                                 (set_local $$271
-                                 (i32.load
-                                  (get_local $$2)
-                                 )
+                                 (get_local $$3)
                                 )
+                                (call $_render_code_node
+                                 (get_local $$270)
+                                 (get_local $$271)
+                                )
+                                ;;@ renderer.c:766:0
                                 (set_local $$272
-                                 (i32.add
-                                  (get_local $$271)
-                                  (i32.const 48)
-                                 )
+                                 (get_local $$3)
                                 )
                                 (set_local $$273
                                  (i32.add
                                   (get_local $$272)
-                                  (i32.const 4)
+                                  (i32.const 108)
                                  )
                                 )
                                 (set_local $$274
@@ -57931,20 +58083,24 @@
                                  )
                                 )
                                 (set_local $$275
-                                 (get_local $$3)
+                                 (call $_make_text
+                                  (get_local $$274)
+                                  (i32.const 5983)
+                                  (i32.const 1104)
+                                 )
                                 )
-                                (call $_render_code_node
-                                 (get_local $$274)
+                                (i32.store
+                                 (get_local $$19)
                                  (get_local $$275)
                                 )
-                                ;;@ renderer.c:727:0
+                                ;;@ renderer.c:767:0
                                 (set_local $$276
-                                 (get_local $$3)
+                                 (get_local $$4)
                                 )
                                 (set_local $$277
                                  (i32.add
                                   (get_local $$276)
-                                  (i32.const 108)
+                                  (i32.const 20)
                                  )
                                 )
                                 (set_local $$278
@@ -57952,60 +58108,60 @@
                                   (get_local $$277)
                                  )
                                 )
-                                (set_local $$279
-                                 (call $_make_text
-                                  (get_local $$278)
-                                  (i32.const 5983)
-                                  (i32.const 1104)
-                                 )
-                                )
-                                (i32.store
-                                 (get_local $$18)
-                                 (get_local $$279)
-                                )
-                                ;;@ renderer.c:728:0
-                                (set_local $$280
-                                 (get_local $$6)
-                                )
-                                (set_local $$281
-                                 (i32.add
-                                  (get_local $$280)
-                                  (i32.const 20)
-                                 )
-                                )
-                                (set_local $$282
-                                 (i32.load
-                                  (get_local $$281)
-                                 )
-                                )
                                 (drop
                                  (call $_array_push
-                                  (get_local $$282)
-                                  (get_local $$18)
+                                  (get_local $$278)
+                                  (get_local $$19)
                                  )
                                 )
-                                ;;@ renderer.c:729:0
-                                (set_local $$283
+                                ;;@ renderer.c:768:0
+                                (set_local $$279
                                  (get_local $$3)
                                 )
-                                (set_local $$284
+                                (set_local $$280
                                  (i32.add
-                                  (get_local $$283)
+                                  (get_local $$279)
                                   (i32.const 108)
                                  )
                                 )
-                                (set_local $$285
+                                (set_local $$281
                                  (i32.load
+                                  (get_local $$280)
+                                 )
+                                )
+                                (set_local $$282
+                                 (get_local $$3)
+                                )
+                                (set_local $$283
+                                 (i32.add
+                                  (get_local $$282)
+                                  (i32.const 56)
+                                 )
+                                )
+                                (set_local $$284
+                                 (i32.load
+                                  (get_local $$283)
+                                 )
+                                )
+                                (set_local $$285
+                                 (call $_make_text
+                                  (get_local $$281)
+                                  (i32.const 6534)
                                   (get_local $$284)
                                  )
                                 )
+                                (i32.store
+                                 (get_local $$20)
+                                 (get_local $$285)
+                                )
+                                ;;@ renderer.c:769:0
                                 (set_local $$286
-                                 (get_local $$3)
+                                 (get_local $$4)
                                 )
                                 (set_local $$287
                                  (i32.add
                                   (get_local $$286)
-                                  (i32.const 56)
+                                  (i32.const 20)
                                  )
                                 )
                                 (set_local $$288
@@ -58013,48 +58169,44 @@
                                   (get_local $$287)
                                  )
                                 )
-                                (set_local $$289
-                                 (call $_make_text
-                                  (get_local $$285)
-                                  (i32.const 6534)
-                                  (get_local $$288)
-                                 )
-                                )
-                                (i32.store
-                                 (get_local $$19)
-                                 (get_local $$289)
-                                )
-                                ;;@ renderer.c:730:0
-                                (set_local $$290
-                                 (get_local $$6)
-                                )
-                                (set_local $$291
-                                 (i32.add
-                                  (get_local $$290)
-                                  (i32.const 20)
-                                 )
-                                )
-                                (set_local $$292
-                                 (i32.load
-                                  (get_local $$291)
-                                 )
-                                )
                                 (drop
                                  (call $_array_push
-                                  (get_local $$292)
-                                  (get_local $$19)
+                                  (get_local $$288)
+                                  (get_local $$20)
                                  )
                                 )
-                                ;;@ renderer.c:731:0
-                                (set_local $$293
+                                ;;@ renderer.c:770:0
+                                (set_local $$289
                                  (i32.load
                                   (get_local $$2)
                                  )
                                 )
+                                (set_local $$290
+                                 (i32.add
+                                  (get_local $$289)
+                                  (i32.const 48)
+                                 )
+                                )
+                                (set_local $$291
+                                 (i32.load
+                                  (get_local $$290)
+                                 )
+                                )
+                                (set_local $$292
+                                 (get_local $$3)
+                                )
+                                (call $_render_code_node
+                                 (get_local $$291)
+                                 (get_local $$292)
+                                )
+                                ;;@ renderer.c:771:0
+                                (set_local $$293
+                                 (get_local $$3)
+                                )
                                 (set_local $$294
                                  (i32.add
                                   (get_local $$293)
-                                  (i32.const 48)
+                                  (i32.const 108)
                                  )
                                 )
                                 (set_local $$295
@@ -58065,32 +58217,36 @@
                                 (set_local $$296
                                  (get_local $$3)
                                 )
-                                (call $_render_code_node
-                                 (get_local $$295)
-                                 (get_local $$296)
-                                )
-                                ;;@ renderer.c:732:0
                                 (set_local $$297
-                                 (get_local $$3)
+                                 (i32.add
+                                  (get_local $$296)
+                                  (i32.const 56)
+                                 )
                                 )
                                 (set_local $$298
-                                 (i32.add
+                                 (i32.load
                                   (get_local $$297)
-                                  (i32.const 108)
                                  )
                                 )
                                 (set_local $$299
-                                 (i32.load
+                                 (call $_make_text
+                                  (get_local $$295)
+                                  (i32.const 6536)
                                   (get_local $$298)
                                  )
                                 )
+                                (i32.store
+                                 (get_local $$21)
+                                 (get_local $$299)
+                                )
+                                ;;@ renderer.c:772:0
                                 (set_local $$300
-                                 (get_local $$3)
+                                 (get_local $$4)
                                 )
                                 (set_local $$301
                                  (i32.add
                                   (get_local $$300)
-                                  (i32.const 56)
+                                  (i32.const 20)
                                  )
                                 )
                                 (set_local $$302
@@ -58098,50 +58254,50 @@
                                   (get_local $$301)
                                  )
                                 )
-                                (set_local $$303
-                                 (call $_make_text
-                                  (get_local $$299)
-                                  (i32.const 6536)
-                                  (get_local $$302)
-                                 )
-                                )
-                                (i32.store
-                                 (get_local $$20)
-                                 (get_local $$303)
-                                )
-                                ;;@ renderer.c:733:0
-                                (set_local $$304
-                                 (get_local $$6)
-                                )
-                                (set_local $$305
-                                 (i32.add
-                                  (get_local $$304)
-                                  (i32.const 20)
-                                 )
-                                )
-                                (set_local $$306
-                                 (i32.load
-                                  (get_local $$305)
-                                 )
-                                )
                                 (drop
                                  (call $_array_push
-                                  (get_local $$306)
-                                  (get_local $$20)
+                                  (get_local $$302)
+                                  (get_local $$21)
                                  )
                                 )
                                 (br $switch)
                                )
                               )
                               (block
-                               ;;@ renderer.c:737:0
-                               (set_local $$307
+                               ;;@ renderer.c:776:0
+                               (set_local $$303
                                 (get_local $$3)
+                               )
+                               (set_local $$304
+                                (i32.add
+                                 (get_local $$303)
+                                 (i32.const 108)
+                                )
+                               )
+                               (set_local $$305
+                                (i32.load
+                                 (get_local $$304)
+                                )
+                               )
+                               (set_local $$306
+                                (call $_make_text
+                                 (get_local $$305)
+                                 (i32.const 5994)
+                                 (i32.const 1104)
+                                )
+                               )
+                               (i32.store
+                                (get_local $$22)
+                                (get_local $$306)
+                               )
+                               ;;@ renderer.c:777:0
+                               (set_local $$307
+                                (get_local $$4)
                                )
                                (set_local $$308
                                 (i32.add
                                  (get_local $$307)
-                                 (i32.const 108)
+                                 (i32.const 20)
                                 )
                                )
                                (set_local $$309
@@ -58149,60 +58305,60 @@
                                  (get_local $$308)
                                 )
                                )
-                               (set_local $$310
-                                (call $_make_text
-                                 (get_local $$309)
-                                 (i32.const 5994)
-                                 (i32.const 1104)
-                                )
-                               )
-                               (i32.store
-                                (get_local $$21)
-                                (get_local $$310)
-                               )
-                               ;;@ renderer.c:738:0
-                               (set_local $$311
-                                (get_local $$6)
-                               )
-                               (set_local $$312
-                                (i32.add
-                                 (get_local $$311)
-                                 (i32.const 20)
-                                )
-                               )
-                               (set_local $$313
-                                (i32.load
-                                 (get_local $$312)
-                                )
-                               )
                                (drop
                                 (call $_array_push
-                                 (get_local $$313)
-                                 (get_local $$21)
+                                 (get_local $$309)
+                                 (get_local $$22)
                                 )
                                )
-                               ;;@ renderer.c:739:0
-                               (set_local $$314
+                               ;;@ renderer.c:778:0
+                               (set_local $$310
                                 (get_local $$3)
                                )
-                               (set_local $$315
+                               (set_local $$311
                                 (i32.add
-                                 (get_local $$314)
+                                 (get_local $$310)
                                  (i32.const 108)
                                 )
                                )
-                               (set_local $$316
+                               (set_local $$312
                                 (i32.load
+                                 (get_local $$311)
+                                )
+                               )
+                               (set_local $$313
+                                (get_local $$3)
+                               )
+                               (set_local $$314
+                                (i32.add
+                                 (get_local $$313)
+                                 (i32.const 56)
+                                )
+                               )
+                               (set_local $$315
+                                (i32.load
+                                 (get_local $$314)
+                                )
+                               )
+                               (set_local $$316
+                                (call $_make_text
+                                 (get_local $$312)
+                                 (i32.const 6534)
                                  (get_local $$315)
                                 )
                                )
+                               (i32.store
+                                (get_local $$23)
+                                (get_local $$316)
+                               )
+                               ;;@ renderer.c:779:0
                                (set_local $$317
-                                (get_local $$3)
+                                (get_local $$4)
                                )
                                (set_local $$318
                                 (i32.add
                                  (get_local $$317)
-                                 (i32.const 56)
+                                 (i32.const 20)
                                 )
                                )
                                (set_local $$319
@@ -58210,112 +58366,112 @@
                                  (get_local $$318)
                                 )
                                )
-                               (set_local $$320
-                                (call $_make_text
-                                 (get_local $$316)
-                                 (i32.const 6534)
-                                 (get_local $$319)
-                                )
-                               )
-                               (i32.store
-                                (get_local $$22)
-                                (get_local $$320)
-                               )
-                               ;;@ renderer.c:740:0
-                               (set_local $$321
-                                (get_local $$6)
-                               )
-                               (set_local $$322
-                                (i32.add
-                                 (get_local $$321)
-                                 (i32.const 20)
-                                )
-                               )
-                               (set_local $$323
-                                (i32.load
-                                 (get_local $$322)
-                                )
-                               )
                                (drop
                                 (call $_array_push
-                                 (get_local $$323)
-                                 (get_local $$22)
+                                 (get_local $$319)
+                                 (get_local $$23)
                                 )
                                )
-                               ;;@ renderer.c:741:0
-                               (set_local $$324
+                               ;;@ renderer.c:780:0
+                               (set_local $$320
                                 (i32.load
                                  (get_local $$2)
                                 )
                                )
-                               (set_local $$325
+                               (set_local $$321
                                 (i32.add
-                                 (get_local $$324)
+                                 (get_local $$320)
                                  (i32.const 48)
                                 )
                                )
-                               (set_local $$326
+                               (set_local $$322
                                 (i32.load
-                                 (get_local $$325)
+                                 (get_local $$321)
                                 )
                                )
-                               (set_local $$327
+                               (set_local $$323
                                 (i32.ne
-                                 (get_local $$326)
+                                 (get_local $$322)
                                  (i32.const 0)
                                 )
                                )
                                (if
-                                (get_local $$327)
+                                (get_local $$323)
                                 (block
-                                 ;;@ renderer.c:742:0
-                                 (set_local $$328
+                                 ;;@ renderer.c:781:0
+                                 (set_local $$324
                                   (i32.load
                                    (get_local $$2)
                                   )
                                  )
-                                 (set_local $$329
+                                 (set_local $$325
                                   (i32.add
-                                   (get_local $$328)
+                                   (get_local $$324)
                                    (i32.const 48)
                                   )
                                  )
-                                 (set_local $$330
+                                 (set_local $$326
                                   (i32.load
-                                   (get_local $$329)
+                                   (get_local $$325)
                                   )
                                  )
-                                 (set_local $$331
+                                 (set_local $$327
                                   (get_local $$3)
                                  )
                                  (call $_render_code_node
-                                  (get_local $$330)
-                                  (get_local $$331)
+                                  (get_local $$326)
+                                  (get_local $$327)
                                  )
                                 )
                                )
-                               ;;@ renderer.c:744:0
-                               (set_local $$332
+                               ;;@ renderer.c:783:0
+                               (set_local $$328
                                 (get_local $$3)
                                )
-                               (set_local $$333
+                               (set_local $$329
                                 (i32.add
-                                 (get_local $$332)
+                                 (get_local $$328)
                                  (i32.const 108)
                                 )
                                )
-                               (set_local $$334
+                               (set_local $$330
                                 (i32.load
+                                 (get_local $$329)
+                                )
+                               )
+                               (set_local $$331
+                                (get_local $$3)
+                               )
+                               (set_local $$332
+                                (i32.add
+                                 (get_local $$331)
+                                 (i32.const 56)
+                                )
+                               )
+                               (set_local $$333
+                                (i32.load
+                                 (get_local $$332)
+                                )
+                               )
+                               (set_local $$334
+                                (call $_make_text
+                                 (get_local $$330)
+                                 (i32.const 6593)
                                  (get_local $$333)
                                 )
                                )
+                               (i32.store
+                                (get_local $$24)
+                                (get_local $$334)
+                               )
+                               ;;@ renderer.c:784:0
                                (set_local $$335
-                                (get_local $$3)
+                                (get_local $$4)
                                )
                                (set_local $$336
                                 (i32.add
                                  (get_local $$335)
-                                 (i32.const 56)
+                                 (i32.const 20)
                                 )
                                )
                                (set_local $$337
@@ -58323,25 +58479,28 @@
                                  (get_local $$336)
                                 )
                                )
-                               (set_local $$338
-                                (call $_make_text
-                                 (get_local $$334)
-                                 (i32.const 6593)
+                               (drop
+                                (call $_array_push
                                  (get_local $$337)
+                                 (get_local $$24)
                                 )
                                )
-                               (i32.store
-                                (get_local $$23)
-                                (get_local $$338)
+                               ;;@ renderer.c:785:0
+                               (set_local $$338
+                                (i32.load
+                                 (get_local $$2)
+                                )
                                )
-                               ;;@ renderer.c:745:0
                                (set_local $$339
-                                (get_local $$6)
+                                (i32.add
+                                 (get_local $$338)
+                                 (i32.const 48)
+                                )
                                )
                                (set_local $$340
                                 (i32.add
                                  (get_local $$339)
-                                 (i32.const 20)
+                                 (i32.const 4)
                                 )
                                )
                                (set_local $$341
@@ -58349,98 +58508,95 @@
                                  (get_local $$340)
                                 )
                                )
-                               (drop
-                                (call $_array_push
-                                 (get_local $$341)
-                                 (get_local $$23)
-                                )
-                               )
-                               ;;@ renderer.c:746:0
                                (set_local $$342
-                                (i32.load
-                                 (get_local $$2)
-                                )
-                               )
-                               (set_local $$343
-                                (i32.add
-                                 (get_local $$342)
-                                 (i32.const 48)
-                                )
-                               )
-                               (set_local $$344
-                                (i32.add
-                                 (get_local $$343)
-                                 (i32.const 4)
-                                )
-                               )
-                               (set_local $$345
-                                (i32.load
-                                 (get_local $$344)
-                                )
-                               )
-                               (set_local $$346
                                 (i32.ne
-                                 (get_local $$345)
+                                 (get_local $$341)
                                  (i32.const 0)
                                 )
                                )
                                (if
-                                (get_local $$346)
+                                (get_local $$342)
                                 (block
-                                 ;;@ renderer.c:747:0
-                                 (set_local $$347
+                                 ;;@ renderer.c:786:0
+                                 (set_local $$343
                                   (i32.load
                                    (get_local $$2)
                                   )
                                  )
-                                 (set_local $$348
+                                 (set_local $$344
                                   (i32.add
-                                   (get_local $$347)
+                                   (get_local $$343)
                                    (i32.const 48)
                                   )
                                  )
-                                 (set_local $$349
+                                 (set_local $$345
                                   (i32.add
-                                   (get_local $$348)
+                                   (get_local $$344)
                                    (i32.const 4)
                                   )
                                  )
-                                 (set_local $$350
+                                 (set_local $$346
                                   (i32.load
-                                   (get_local $$349)
+                                   (get_local $$345)
                                   )
                                  )
-                                 (set_local $$351
+                                 (set_local $$347
                                   (get_local $$3)
                                  )
                                  (call $_render_code_node
-                                  (get_local $$350)
-                                  (get_local $$351)
+                                  (get_local $$346)
+                                  (get_local $$347)
                                  )
                                 )
                                )
-                               ;;@ renderer.c:749:0
-                               (set_local $$352
+                               ;;@ renderer.c:788:0
+                               (set_local $$348
                                 (get_local $$3)
                                )
-                               (set_local $$353
+                               (set_local $$349
                                 (i32.add
-                                 (get_local $$352)
+                                 (get_local $$348)
                                  (i32.const 108)
                                 )
                                )
-                               (set_local $$354
+                               (set_local $$350
                                 (i32.load
+                                 (get_local $$349)
+                                )
+                               )
+                               (set_local $$351
+                                (get_local $$3)
+                               )
+                               (set_local $$352
+                                (i32.add
+                                 (get_local $$351)
+                                 (i32.const 56)
+                                )
+                               )
+                               (set_local $$353
+                                (i32.load
+                                 (get_local $$352)
+                                )
+                               )
+                               (set_local $$354
+                                (call $_make_text
+                                 (get_local $$350)
+                                 (i32.const 6593)
                                  (get_local $$353)
                                 )
                                )
+                               (i32.store
+                                (get_local $$25)
+                                (get_local $$354)
+                               )
+                               ;;@ renderer.c:789:0
                                (set_local $$355
-                                (get_local $$3)
+                                (get_local $$4)
                                )
                                (set_local $$356
                                 (i32.add
                                  (get_local $$355)
-                                 (i32.const 56)
+                                 (i32.const 20)
                                 )
                                )
                                (set_local $$357
@@ -58448,25 +58604,28 @@
                                  (get_local $$356)
                                 )
                                )
-                               (set_local $$358
-                                (call $_make_text
-                                 (get_local $$354)
-                                 (i32.const 6593)
+                               (drop
+                                (call $_array_push
                                  (get_local $$357)
+                                 (get_local $$25)
                                 )
                                )
-                               (i32.store
-                                (get_local $$24)
-                                (get_local $$358)
+                               ;;@ renderer.c:790:0
+                               (set_local $$358
+                                (i32.load
+                                 (get_local $$2)
+                                )
                                )
-                               ;;@ renderer.c:750:0
                                (set_local $$359
-                                (get_local $$6)
+                                (i32.add
+                                 (get_local $$358)
+                                 (i32.const 48)
+                                )
                                )
                                (set_local $$360
                                 (i32.add
                                  (get_local $$359)
-                                 (i32.const 20)
+                                 (i32.const 8)
                                 )
                                )
                                (set_local $$361
@@ -58474,98 +58633,95 @@
                                  (get_local $$360)
                                 )
                                )
-                               (drop
-                                (call $_array_push
-                                 (get_local $$361)
-                                 (get_local $$24)
-                                )
-                               )
-                               ;;@ renderer.c:751:0
                                (set_local $$362
-                                (i32.load
-                                 (get_local $$2)
-                                )
-                               )
-                               (set_local $$363
-                                (i32.add
-                                 (get_local $$362)
-                                 (i32.const 48)
-                                )
-                               )
-                               (set_local $$364
-                                (i32.add
-                                 (get_local $$363)
-                                 (i32.const 8)
-                                )
-                               )
-                               (set_local $$365
-                                (i32.load
-                                 (get_local $$364)
-                                )
-                               )
-                               (set_local $$366
                                 (i32.ne
-                                 (get_local $$365)
+                                 (get_local $$361)
                                  (i32.const 0)
                                 )
                                )
                                (if
-                                (get_local $$366)
+                                (get_local $$362)
                                 (block
-                                 ;;@ renderer.c:752:0
-                                 (set_local $$367
+                                 ;;@ renderer.c:791:0
+                                 (set_local $$363
                                   (i32.load
                                    (get_local $$2)
                                   )
                                  )
-                                 (set_local $$368
+                                 (set_local $$364
                                   (i32.add
-                                   (get_local $$367)
+                                   (get_local $$363)
                                    (i32.const 48)
                                   )
                                  )
-                                 (set_local $$369
+                                 (set_local $$365
                                   (i32.add
-                                   (get_local $$368)
+                                   (get_local $$364)
                                    (i32.const 8)
                                   )
                                  )
-                                 (set_local $$370
+                                 (set_local $$366
                                   (i32.load
-                                   (get_local $$369)
+                                   (get_local $$365)
                                   )
                                  )
-                                 (set_local $$371
+                                 (set_local $$367
                                   (get_local $$3)
                                  )
                                  (call $_render_code_node
-                                  (get_local $$370)
-                                  (get_local $$371)
+                                  (get_local $$366)
+                                  (get_local $$367)
                                  )
                                 )
                                )
-                               ;;@ renderer.c:754:0
-                               (set_local $$372
+                               ;;@ renderer.c:793:0
+                               (set_local $$368
                                 (get_local $$3)
                                )
-                               (set_local $$373
+                               (set_local $$369
                                 (i32.add
-                                 (get_local $$372)
+                                 (get_local $$368)
                                  (i32.const 108)
                                 )
                                )
-                               (set_local $$374
+                               (set_local $$370
                                 (i32.load
+                                 (get_local $$369)
+                                )
+                               )
+                               (set_local $$371
+                                (get_local $$3)
+                               )
+                               (set_local $$372
+                                (i32.add
+                                 (get_local $$371)
+                                 (i32.const 56)
+                                )
+                               )
+                               (set_local $$373
+                                (i32.load
+                                 (get_local $$372)
+                                )
+                               )
+                               (set_local $$374
+                                (call $_make_text
+                                 (get_local $$370)
+                                 (i32.const 5971)
                                  (get_local $$373)
                                 )
                                )
+                               (i32.store
+                                (get_local $$26)
+                                (get_local $$374)
+                               )
+                               ;;@ renderer.c:794:0
                                (set_local $$375
-                                (get_local $$3)
+                                (get_local $$4)
                                )
                                (set_local $$376
                                 (i32.add
                                  (get_local $$375)
-                                 (i32.const 56)
+                                 (i32.const 20)
                                 )
                                )
                                (set_local $$377
@@ -58573,25 +58729,28 @@
                                  (get_local $$376)
                                 )
                                )
-                               (set_local $$378
-                                (call $_make_text
-                                 (get_local $$374)
-                                 (i32.const 5971)
+                               (drop
+                                (call $_array_push
                                  (get_local $$377)
+                                 (get_local $$26)
                                 )
                                )
-                               (i32.store
-                                (get_local $$25)
-                                (get_local $$378)
+                               ;;@ renderer.c:795:0
+                               (set_local $$378
+                                (i32.load
+                                 (get_local $$2)
+                                )
                                )
-                               ;;@ renderer.c:755:0
                                (set_local $$379
-                                (get_local $$6)
+                                (i32.add
+                                 (get_local $$378)
+                                 (i32.const 48)
+                                )
                                )
                                (set_local $$380
                                 (i32.add
                                  (get_local $$379)
-                                 (i32.const 20)
+                                 (i32.const 12)
                                 )
                                )
                                (set_local $$381
@@ -58599,54 +58758,51 @@
                                  (get_local $$380)
                                 )
                                )
-                               (drop
-                                (call $_array_push
-                                 (get_local $$381)
-                                 (get_local $$25)
-                                )
-                               )
-                               ;;@ renderer.c:756:0
                                (set_local $$382
-                                (i32.load
-                                 (get_local $$2)
-                                )
-                               )
-                               (set_local $$383
-                                (i32.add
-                                 (get_local $$382)
-                                 (i32.const 48)
-                                )
-                               )
-                               (set_local $$384
-                                (i32.add
-                                 (get_local $$383)
-                                 (i32.const 12)
-                                )
-                               )
-                               (set_local $$385
-                                (i32.load
-                                 (get_local $$384)
-                                )
-                               )
-                               (set_local $$386
                                 (get_local $$3)
                                )
                                (call $_render_code_node
-                                (get_local $$385)
-                                (get_local $$386)
+                                (get_local $$381)
+                                (get_local $$382)
                                )
                                (br $switch)
                               )
                              )
                              (block
-                              ;;@ renderer.c:760:0
-                              (set_local $$387
+                              ;;@ renderer.c:799:0
+                              (set_local $$383
                                (get_local $$3)
+                              )
+                              (set_local $$384
+                               (i32.add
+                                (get_local $$383)
+                                (i32.const 108)
+                               )
+                              )
+                              (set_local $$385
+                               (i32.load
+                                (get_local $$384)
+                               )
+                              )
+                              (set_local $$386
+                               (call $_make_text
+                                (get_local $$385)
+                                (i32.const 6120)
+                                (i32.const 1104)
+                               )
+                              )
+                              (i32.store
+                               (get_local $$27)
+                               (get_local $$386)
+                              )
+                              ;;@ renderer.c:800:0
+                              (set_local $$387
+                               (get_local $$4)
                               )
                               (set_local $$388
                                (i32.add
                                 (get_local $$387)
-                                (i32.const 108)
+                                (i32.const 20)
                                )
                               )
                               (set_local $$389
@@ -58654,50 +58810,50 @@
                                 (get_local $$388)
                                )
                               )
-                              (set_local $$390
-                               (call $_make_text
-                                (get_local $$389)
-                                (i32.const 6120)
-                                (i32.const 1104)
-                               )
-                              )
-                              (i32.store
-                               (get_local $$26)
-                               (get_local $$390)
-                              )
-                              ;;@ renderer.c:761:0
-                              (set_local $$391
-                               (get_local $$6)
-                              )
-                              (set_local $$392
-                               (i32.add
-                                (get_local $$391)
-                                (i32.const 20)
-                               )
-                              )
-                              (set_local $$393
-                               (i32.load
-                                (get_local $$392)
-                               )
-                              )
                               (drop
                                (call $_array_push
-                                (get_local $$393)
-                                (get_local $$26)
+                                (get_local $$389)
+                                (get_local $$27)
                                )
                               )
                               (br $switch)
                              )
                             )
                             (block
-                             ;;@ renderer.c:765:0
-                             (set_local $$394
+                             ;;@ renderer.c:804:0
+                             (set_local $$390
                               (get_local $$3)
+                             )
+                             (set_local $$391
+                              (i32.add
+                               (get_local $$390)
+                               (i32.const 108)
+                              )
+                             )
+                             (set_local $$392
+                              (i32.load
+                               (get_local $$391)
+                              )
+                             )
+                             (set_local $$393
+                              (call $_make_text
+                               (get_local $$392)
+                               (i32.const 6111)
+                               (i32.const 1104)
+                              )
+                             )
+                             (i32.store
+                              (get_local $$28)
+                              (get_local $$393)
+                             )
+                             ;;@ renderer.c:805:0
+                             (set_local $$394
+                              (get_local $$4)
                              )
                              (set_local $$395
                               (i32.add
                                (get_local $$394)
-                               (i32.const 108)
+                               (i32.const 20)
                               )
                              )
                              (set_local $$396
@@ -58705,52 +58861,48 @@
                                (get_local $$395)
                               )
                              )
-                             (set_local $$397
-                              (call $_make_text
-                               (get_local $$396)
-                               (i32.const 6111)
-                               (i32.const 1104)
-                              )
-                             )
-                             (i32.store
-                              (get_local $$27)
-                              (get_local $$397)
-                             )
-                             ;;@ renderer.c:766:0
-                             (set_local $$398
-                              (get_local $$6)
-                             )
-                             (set_local $$399
-                              (i32.add
-                               (get_local $$398)
-                               (i32.const 20)
-                              )
-                             )
-                             (set_local $$400
-                              (i32.load
-                               (get_local $$399)
-                              )
-                             )
                              (drop
                               (call $_array_push
-                               (get_local $$400)
-                               (get_local $$27)
+                               (get_local $$396)
+                               (get_local $$28)
                               )
                              )
                              (br $switch)
                             )
                            )
                            (block
-                            ;;@ renderer.c:770:0
-                            (set_local $$401
+                            ;;@ renderer.c:809:0
+                            (set_local $$397
                              (i32.load
                               (get_local $$2)
                              )
                             )
+                            (set_local $$398
+                             (i32.add
+                              (get_local $$397)
+                              (i32.const 48)
+                             )
+                            )
+                            (set_local $$399
+                             (i32.load
+                              (get_local $$398)
+                             )
+                            )
+                            (set_local $$400
+                             (get_local $$3)
+                            )
+                            (call $_render_code_node
+                             (get_local $$399)
+                             (get_local $$400)
+                            )
+                            ;;@ renderer.c:810:0
+                            (set_local $$401
+                             (get_local $$3)
+                            )
                             (set_local $$402
                              (i32.add
                               (get_local $$401)
-                              (i32.const 48)
+                              (i32.const 108)
                              )
                             )
                             (set_local $$403
@@ -58759,20 +58911,24 @@
                              )
                             )
                             (set_local $$404
-                             (get_local $$3)
+                             (call $_make_text
+                              (get_local $$403)
+                              (i32.const 6597)
+                              (i32.const 1120)
+                             )
                             )
-                            (call $_render_code_node
-                             (get_local $$403)
+                            (i32.store
+                             (get_local $$29)
                              (get_local $$404)
                             )
-                            ;;@ renderer.c:771:0
+                            ;;@ renderer.c:811:0
                             (set_local $$405
-                             (get_local $$3)
+                             (get_local $$4)
                             )
                             (set_local $$406
                              (i32.add
                               (get_local $$405)
-                              (i32.const 108)
+                              (i32.const 20)
                              )
                             )
                             (set_local $$407
@@ -58780,52 +58936,48 @@
                               (get_local $$406)
                              )
                             )
-                            (set_local $$408
-                             (call $_make_text
-                              (get_local $$407)
-                              (i32.const 6597)
-                              (i32.const 1120)
-                             )
-                            )
-                            (i32.store
-                             (get_local $$28)
-                             (get_local $$408)
-                            )
-                            ;;@ renderer.c:772:0
-                            (set_local $$409
-                             (get_local $$6)
-                            )
-                            (set_local $$410
-                             (i32.add
-                              (get_local $$409)
-                              (i32.const 20)
-                             )
-                            )
-                            (set_local $$411
-                             (i32.load
-                              (get_local $$410)
-                             )
-                            )
                             (drop
                              (call $_array_push
-                              (get_local $$411)
-                              (get_local $$28)
+                              (get_local $$407)
+                              (get_local $$29)
                              )
                             )
                             (br $switch)
                            )
                           )
                           (block
-                           ;;@ renderer.c:776:0
-                           (set_local $$412
+                           ;;@ renderer.c:815:0
+                           (set_local $$408
                             (i32.load
                              (get_local $$2)
                             )
                            )
+                           (set_local $$409
+                            (i32.add
+                             (get_local $$408)
+                             (i32.const 48)
+                            )
+                           )
+                           (set_local $$410
+                            (i32.load
+                             (get_local $$409)
+                            )
+                           )
+                           (set_local $$411
+                            (get_local $$3)
+                           )
+                           (call $_render_code_node
+                            (get_local $$410)
+                            (get_local $$411)
+                           )
+                           ;;@ renderer.c:816:0
+                           (set_local $$412
+                            (get_local $$3)
+                           )
                            (set_local $$413
                             (i32.add
                              (get_local $$412)
-                             (i32.const 48)
+                             (i32.const 108)
                             )
                            )
                            (set_local $$414
@@ -58834,20 +58986,24 @@
                             )
                            )
                            (set_local $$415
-                            (get_local $$3)
+                            (call $_make_text
+                             (get_local $$414)
+                             (i32.const 6600)
+                             (i32.const 1120)
+                            )
                            )
-                           (call $_render_code_node
-                            (get_local $$414)
+                           (i32.store
+                            (get_local $$30)
                             (get_local $$415)
                            )
-                           ;;@ renderer.c:777:0
+                           ;;@ renderer.c:817:0
                            (set_local $$416
-                            (get_local $$3)
+                            (get_local $$4)
                            )
                            (set_local $$417
                             (i32.add
                              (get_local $$416)
-                             (i32.const 108)
+                             (i32.const 20)
                             )
                            )
                            (set_local $$418
@@ -58855,122 +59011,120 @@
                              (get_local $$417)
                             )
                            )
-                           (set_local $$419
-                            (call $_make_text
-                             (get_local $$418)
-                             (i32.const 6600)
-                             (i32.const 1120)
-                            )
-                           )
-                           (i32.store
-                            (get_local $$29)
-                            (get_local $$419)
-                           )
-                           ;;@ renderer.c:778:0
-                           (set_local $$420
-                            (get_local $$6)
-                           )
-                           (set_local $$421
-                            (i32.add
-                             (get_local $$420)
-                             (i32.const 20)
-                            )
-                           )
-                           (set_local $$422
-                            (i32.load
-                             (get_local $$421)
-                            )
-                           )
                            (drop
                             (call $_array_push
-                             (get_local $$422)
-                             (get_local $$29)
+                             (get_local $$418)
+                             (get_local $$30)
                             )
                            )
                            (br $switch)
                           )
                          )
                          (block
-                          ;;@ renderer.c:782:0
-                          (set_local $$423
+                          ;;@ renderer.c:821:0
+                          (set_local $$419
                            (i32.load
                             (get_local $$2)
                            )
                           )
-                          (set_local $$424
+                          (set_local $$420
                            (i32.add
-                            (get_local $$423)
+                            (get_local $$419)
                             (i32.const 48)
                            )
                           )
-                          (set_local $$425
+                          (set_local $$421
                            (i32.add
-                            (get_local $$424)
+                            (get_local $$420)
                             (i32.const 8)
                            )
                           )
-                          (set_local $$426
+                          (set_local $$422
                            (i32.load
-                            (get_local $$425)
+                            (get_local $$421)
                            )
                           )
-                          (set_local $$427
+                          (set_local $$423
                            (i32.ne
-                            (get_local $$426)
+                            (get_local $$422)
                             (i32.const 0)
                            )
                           )
                           (if
-                           (get_local $$427)
+                           (get_local $$423)
                            (block
-                            ;;@ renderer.c:783:0
-                            (set_local $$428
+                            ;;@ renderer.c:822:0
+                            (set_local $$424
                              (i32.load
                               (get_local $$2)
                              )
                             )
-                            (set_local $$429
+                            (set_local $$425
                              (i32.add
-                              (get_local $$428)
+                              (get_local $$424)
                               (i32.const 48)
                              )
                             )
-                            (set_local $$430
+                            (set_local $$426
                              (i32.add
-                              (get_local $$429)
+                              (get_local $$425)
                               (i32.const 8)
                              )
                             )
-                            (set_local $$431
+                            (set_local $$427
                              (i32.load
-                              (get_local $$430)
+                              (get_local $$426)
                              )
                             )
-                            (set_local $$432
+                            (set_local $$428
                              (i32.load
-                              (get_local $$431)
+                              (get_local $$427)
                              )
                             )
-                            (set_local $$433
+                            (set_local $$429
                              (i32.eq
-                              (get_local $$432)
+                              (get_local $$428)
                               (i32.const 16)
                              )
                             )
                             (if
-                             (get_local $$433)
+                             (get_local $$429)
                              (block
-                              ;;@ renderer.c:785:0
-                              (set_local $$434
+                              ;;@ renderer.c:824:0
+                              (set_local $$430
                                (i32.load
                                 (get_local $$2)
                                )
                               )
-                              (set_local $$435
+                              (set_local $$431
                                (i32.add
-                                (get_local $$434)
+                                (get_local $$430)
                                 (i32.const 48)
                                )
+                              )
+                              (set_local $$432
+                               (i32.add
+                                (get_local $$431)
+                                (i32.const 8)
+                               )
+                              )
+                              (set_local $$433
+                               (i32.load
+                                (get_local $$432)
+                               )
+                              )
+                              (set_local $$434
+                               (i32.add
+                                (get_local $$433)
+                                (i32.const 48)
+                               )
+                              )
+                              (set_local $$31
+                               (get_local $$434)
+                              )
+                              ;;@ renderer.c:825:0
+                              (set_local $$435
+                               (get_local $$31)
                               )
                               (set_local $$436
                                (i32.add
@@ -58984,59 +59138,57 @@
                                )
                               )
                               (set_local $$438
-                               (i32.add
-                                (get_local $$437)
-                                (i32.const 48)
-                               )
-                              )
-                              (set_local $$30
-                               (get_local $$438)
-                              )
-                              ;;@ renderer.c:786:0
-                              (set_local $$439
-                               (get_local $$30)
-                              )
-                              (set_local $$440
-                               (i32.add
-                                (get_local $$439)
-                                (i32.const 8)
-                               )
-                              )
-                              (set_local $$441
-                               (i32.load
-                                (get_local $$440)
-                               )
-                              )
-                              (set_local $$442
                                (get_local $$3)
                               )
                               (call $_render_type
-                               (get_local $$441)
-                               (get_local $$442)
+                               (get_local $$437)
+                               (get_local $$438)
                               )
-                              ;;@ renderer.c:787:0
-                              (set_local $$443
+                              ;;@ renderer.c:826:0
+                              (set_local $$439
                                (get_local $$3)
                               )
                               (call $_render_space
-                               (get_local $$443)
+                               (get_local $$439)
                               )
-                              ;;@ renderer.c:788:0
-                              (set_local $$444
+                              ;;@ renderer.c:827:0
+                              (set_local $$440
                                (i32.load
                                 (get_local $$2)
                                )
                               )
-                              (set_local $$445
+                              (set_local $$441
                                (i32.add
-                                (get_local $$444)
+                                (get_local $$440)
                                 (i32.const 48)
                                )
+                              )
+                              (set_local $$442
+                               (i32.add
+                                (get_local $$441)
+                                (i32.const 4)
+                               )
+                              )
+                              (set_local $$443
+                               (i32.load
+                                (get_local $$442)
+                               )
+                              )
+                              (set_local $$444
+                               (get_local $$3)
+                              )
+                              (call $_render_code_node
+                               (get_local $$443)
+                               (get_local $$444)
+                              )
+                              ;;@ renderer.c:828:0
+                              (set_local $$445
+                               (get_local $$3)
                               )
                               (set_local $$446
                                (i32.add
                                 (get_local $$445)
-                                (i32.const 4)
+                                (i32.const 108)
                                )
                               )
                               (set_local $$447
@@ -59047,32 +59199,36 @@
                               (set_local $$448
                                (get_local $$3)
                               )
-                              (call $_render_code_node
-                               (get_local $$447)
-                               (get_local $$448)
-                              )
-                              ;;@ renderer.c:789:0
                               (set_local $$449
-                               (get_local $$3)
+                               (i32.add
+                                (get_local $$448)
+                                (i32.const 56)
+                               )
                               )
                               (set_local $$450
-                               (i32.add
+                               (i32.load
                                 (get_local $$449)
-                                (i32.const 108)
                                )
                               )
                               (set_local $$451
-                               (i32.load
+                               (call $_make_text
+                                (get_local $$447)
+                                (i32.const 6534)
                                 (get_local $$450)
                                )
                               )
+                              (i32.store
+                               (get_local $$32)
+                               (get_local $$451)
+                              )
+                              ;;@ renderer.c:829:0
                               (set_local $$452
-                               (get_local $$3)
+                               (get_local $$4)
                               )
                               (set_local $$453
                                (i32.add
                                 (get_local $$452)
-                                (i32.const 56)
+                                (i32.const 20)
                                )
                               )
                               (set_local $$454
@@ -59080,117 +59236,117 @@
                                 (get_local $$453)
                                )
                               )
-                              (set_local $$455
-                               (call $_make_text
-                                (get_local $$451)
-                                (i32.const 6534)
-                                (get_local $$454)
-                               )
-                              )
-                              (i32.store
-                               (get_local $$31)
-                               (get_local $$455)
-                              )
-                              ;;@ renderer.c:790:0
-                              (set_local $$456
-                               (get_local $$6)
-                              )
-                              (set_local $$457
-                               (i32.add
-                                (get_local $$456)
-                                (i32.const 20)
-                               )
-                              )
-                              (set_local $$458
-                               (i32.load
-                                (get_local $$457)
-                               )
-                              )
                               (drop
                                (call $_array_push
-                                (get_local $$458)
-                                (get_local $$31)
+                                (get_local $$454)
+                                (get_local $$32)
                                )
                               )
-                              ;;@ renderer.c:791:0
-                              (set_local $$32
+                              ;;@ renderer.c:830:0
+                              (set_local $$33
                                (i32.const 1)
                               )
-                              ;;@ renderer.c:792:0
-                              (set_local $$33
+                              ;;@ renderer.c:831:0
+                              (set_local $$34
                                (i32.const 0)
                               )
                               (loop $while-in
                                (block $while-out
+                                (set_local $$455
+                                 (get_local $$34)
+                                )
+                                (set_local $$456
+                                 (get_local $$31)
+                                )
+                                (set_local $$457
+                                 (i32.load
+                                  (get_local $$456)
+                                 )
+                                )
+                                (set_local $$458
+                                 (i32.load
+                                  (get_local $$457)
+                                 )
+                                )
                                 (set_local $$459
-                                 (get_local $$33)
-                                )
-                                (set_local $$460
-                                 (get_local $$30)
-                                )
-                                (set_local $$461
-                                 (i32.load
-                                  (get_local $$460)
-                                 )
-                                )
-                                (set_local $$462
-                                 (i32.load
-                                  (get_local $$461)
-                                 )
-                                )
-                                (set_local $$463
                                  (i32.lt_u
-                                  (get_local $$459)
-                                  (get_local $$462)
+                                  (get_local $$455)
+                                  (get_local $$458)
                                  )
                                 )
                                 (if
                                  (i32.eqz
-                                  (get_local $$463)
+                                  (get_local $$459)
                                  )
                                  (br $while-out)
                                 )
-                                ;;@ renderer.c:793:0
-                                (set_local $$464
-                                 (get_local $$32)
+                                ;;@ renderer.c:832:0
+                                (set_local $$460
+                                 (get_local $$33)
                                 )
-                                (set_local $$465
+                                (set_local $$461
                                  (i32.and
-                                  (get_local $$464)
+                                  (get_local $$460)
                                   (i32.const 255)
                                  )
                                 )
-                                (set_local $$466
+                                (set_local $$462
                                  (i32.eq
-                                  (get_local $$465)
+                                  (get_local $$461)
                                   (i32.const 0)
                                  )
                                 )
                                 (if
-                                 (get_local $$466)
+                                 (get_local $$462)
                                  (block
-                                  ;;@ renderer.c:794:0
-                                  (set_local $$467
+                                  ;;@ renderer.c:833:0
+                                  (set_local $$463
                                    (get_local $$3)
                                   )
-                                  (set_local $$468
+                                  (set_local $$464
                                    (i32.add
-                                    (get_local $$467)
+                                    (get_local $$463)
                                     (i32.const 108)
                                    )
                                   )
-                                  (set_local $$469
+                                  (set_local $$465
                                    (i32.load
+                                    (get_local $$464)
+                                   )
+                                  )
+                                  (set_local $$466
+                                   (get_local $$3)
+                                  )
+                                  (set_local $$467
+                                   (i32.add
+                                    (get_local $$466)
+                                    (i32.const 56)
+                                   )
+                                  )
+                                  (set_local $$468
+                                   (i32.load
+                                    (get_local $$467)
+                                   )
+                                  )
+                                  (set_local $$469
+                                   (call $_make_text
+                                    (get_local $$465)
+                                    (i32.const 5999)
                                     (get_local $$468)
                                    )
                                   )
+                                  (i32.store
+                                   (get_local $$35)
+                                   (get_local $$469)
+                                  )
+                                  ;;@ renderer.c:834:0
                                   (set_local $$470
-                                   (get_local $$3)
+                                   (get_local $$4)
                                   )
                                   (set_local $$471
                                    (i32.add
                                     (get_local $$470)
-                                    (i32.const 56)
+                                    (i32.const 20)
                                    )
                                   )
                                   (set_local $$472
@@ -59198,124 +59354,98 @@
                                     (get_local $$471)
                                    )
                                   )
-                                  (set_local $$473
-                                   (call $_make_text
-                                    (get_local $$469)
-                                    (i32.const 5999)
-                                    (get_local $$472)
-                                   )
-                                  )
-                                  (i32.store
-                                   (get_local $$34)
-                                   (get_local $$473)
-                                  )
-                                  ;;@ renderer.c:795:0
-                                  (set_local $$474
-                                   (get_local $$6)
-                                  )
-                                  (set_local $$475
-                                   (i32.add
-                                    (get_local $$474)
-                                    (i32.const 20)
-                                   )
-                                  )
-                                  (set_local $$476
-                                   (i32.load
-                                    (get_local $$475)
-                                   )
-                                  )
                                   (drop
                                    (call $_array_push
-                                    (get_local $$476)
-                                    (get_local $$34)
+                                    (get_local $$472)
+                                    (get_local $$35)
                                    )
                                   )
                                  )
-                                 ;;@ renderer.c:798:0
-                                 (set_local $$32
+                                 ;;@ renderer.c:837:0
+                                 (set_local $$33
                                   (i32.const 0)
                                  )
                                 )
-                                ;;@ renderer.c:800:0
-                                (set_local $$477
-                                 (get_local $$30)
+                                ;;@ renderer.c:839:0
+                                (set_local $$473
+                                 (get_local $$31)
                                 )
-                                (set_local $$478
+                                (set_local $$474
                                  (i32.load
-                                  (get_local $$477)
+                                  (get_local $$473)
                                  )
                                 )
-                                (set_local $$479
+                                (set_local $$475
                                  (i32.add
-                                  (get_local $$478)
+                                  (get_local $$474)
                                   (i32.const 12)
                                  )
                                 )
-                                (set_local $$480
+                                (set_local $$476
                                  (i32.load
-                                  (get_local $$479)
+                                  (get_local $$475)
                                  )
                                 )
-                                (set_local $$481
-                                 (get_local $$33)
+                                (set_local $$477
+                                 (get_local $$34)
                                 )
-                                (set_local $$482
+                                (set_local $$478
                                  (i32.add
-                                  (get_local $$480)
+                                  (get_local $$476)
                                   (i32.shl
-                                   (get_local $$481)
+                                   (get_local $$477)
                                    (i32.const 2)
                                   )
                                  )
                                 )
-                                (set_local $$483
+                                (set_local $$479
                                  (i32.load
-                                  (get_local $$482)
+                                  (get_local $$478)
                                  )
                                 )
-                                (set_local $$484
+                                (set_local $$480
                                  (get_local $$3)
                                 )
                                 (call $_render_code_node
-                                 (get_local $$483)
-                                 (get_local $$484)
+                                 (get_local $$479)
+                                 (get_local $$480)
                                 )
-                                ;;@ renderer.c:792:0
-                                (set_local $$485
-                                 (get_local $$33)
+                                ;;@ renderer.c:831:0
+                                (set_local $$481
+                                 (get_local $$34)
                                 )
-                                (set_local $$486
+                                (set_local $$482
                                  (i32.add
-                                  (get_local $$485)
+                                  (get_local $$481)
                                   (i32.const 1)
                                  )
                                 )
-                                (set_local $$33
-                                 (get_local $$486)
+                                (set_local $$34
+                                 (get_local $$482)
                                 )
                                 (br $while-in)
                                )
                               )
-                              ;;@ renderer.c:802:0
-                              (set_local $$487
-                               (get_local $$30)
+                              ;;@ renderer.c:841:0
+                              (set_local $$483
+                               (get_local $$31)
                               )
-                              (set_local $$488
+                              (set_local $$484
                                (i32.add
-                                (get_local $$487)
+                                (get_local $$483)
                                 (i32.const 4)
                                )
                               )
-                              (set_local $$489
+                              (set_local $$485
                                (i32.load8_s
-                                (get_local $$488)
+                                (get_local $$484)
                                )
                               )
-                              (set_local $$490
+                              (set_local $$486
                                (i32.ne
                                 (i32.shr_s
                                  (i32.shl
-                                  (get_local $$489)
+                                  (get_local $$485)
                                   (i32.const 24)
                                  )
                                  (i32.const 24)
@@ -59324,49 +59454,75 @@
                                )
                               )
                               (if
-                               (get_local $$490)
+                               (get_local $$486)
                                (block
-                                ;;@ renderer.c:803:0
-                                (set_local $$491
-                                 (get_local $$32)
+                                ;;@ renderer.c:842:0
+                                (set_local $$487
+                                 (get_local $$33)
                                 )
-                                (set_local $$492
+                                (set_local $$488
                                  (i32.and
-                                  (get_local $$491)
+                                  (get_local $$487)
                                   (i32.const 255)
                                  )
                                 )
-                                (set_local $$493
+                                (set_local $$489
                                  (i32.eq
-                                  (get_local $$492)
+                                  (get_local $$488)
                                   (i32.const 0)
                                  )
                                 )
                                 (if
-                                 (get_local $$493)
+                                 (get_local $$489)
                                  (block
-                                  ;;@ renderer.c:804:0
-                                  (set_local $$494
+                                  ;;@ renderer.c:843:0
+                                  (set_local $$490
                                    (get_local $$3)
                                   )
-                                  (set_local $$495
+                                  (set_local $$491
                                    (i32.add
-                                    (get_local $$494)
+                                    (get_local $$490)
                                     (i32.const 108)
                                    )
                                   )
-                                  (set_local $$496
+                                  (set_local $$492
                                    (i32.load
+                                    (get_local $$491)
+                                   )
+                                  )
+                                  (set_local $$493
+                                   (get_local $$3)
+                                  )
+                                  (set_local $$494
+                                   (i32.add
+                                    (get_local $$493)
+                                    (i32.const 56)
+                                   )
+                                  )
+                                  (set_local $$495
+                                   (i32.load
+                                    (get_local $$494)
+                                   )
+                                  )
+                                  (set_local $$496
+                                   (call $_make_text
+                                    (get_local $$492)
+                                    (i32.const 5999)
                                     (get_local $$495)
                                    )
                                   )
+                                  (i32.store
+                                   (get_local $$36)
+                                   (get_local $$496)
+                                  )
+                                  ;;@ renderer.c:844:0
                                   (set_local $$497
-                                   (get_local $$3)
+                                   (get_local $$4)
                                   )
                                   (set_local $$498
                                    (i32.add
                                     (get_local $$497)
-                                    (i32.const 56)
+                                    (i32.const 20)
                                    )
                                   )
                                   (set_local $$499
@@ -59374,52 +59530,52 @@
                                     (get_local $$498)
                                    )
                                   )
-                                  (set_local $$500
-                                   (call $_make_text
-                                    (get_local $$496)
-                                    (i32.const 5999)
-                                    (get_local $$499)
-                                   )
-                                  )
-                                  (i32.store
-                                   (get_local $$35)
-                                   (get_local $$500)
-                                  )
-                                  ;;@ renderer.c:805:0
-                                  (set_local $$501
-                                   (get_local $$6)
-                                  )
-                                  (set_local $$502
-                                   (i32.add
-                                    (get_local $$501)
-                                    (i32.const 20)
-                                   )
-                                  )
-                                  (set_local $$503
-                                   (i32.load
-                                    (get_local $$502)
-                                   )
-                                  )
                                   (drop
                                    (call $_array_push
-                                    (get_local $$503)
-                                    (get_local $$35)
+                                    (get_local $$499)
+                                    (get_local $$36)
                                    )
                                   )
                                  )
-                                 ;;@ renderer.c:808:0
-                                 (set_local $$32
+                                 ;;@ renderer.c:847:0
+                                 (set_local $$33
                                   (i32.const 0)
                                  )
                                 )
-                                ;;@ renderer.c:810:0
-                                (set_local $$504
+                                ;;@ renderer.c:849:0
+                                (set_local $$500
                                  (get_local $$3)
+                                )
+                                (set_local $$501
+                                 (i32.add
+                                  (get_local $$500)
+                                  (i32.const 108)
+                                 )
+                                )
+                                (set_local $$502
+                                 (i32.load
+                                  (get_local $$501)
+                                 )
+                                )
+                                (set_local $$503
+                                 (call $_make_text
+                                  (get_local $$502)
+                                  (i32.const 6603)
+                                  (i32.const 1072)
+                                 )
+                                )
+                                (i32.store
+                                 (get_local $$37)
+                                 (get_local $$503)
+                                )
+                                ;;@ renderer.c:850:0
+                                (set_local $$504
+                                 (get_local $$4)
                                 )
                                 (set_local $$505
                                  (i32.add
                                   (get_local $$504)
-                                  (i32.const 108)
+                                  (i32.const 20)
                                  )
                                 )
                                 (set_local $$506
@@ -59427,62 +59583,62 @@
                                   (get_local $$505)
                                  )
                                 )
-                                (set_local $$507
-                                 (call $_make_text
-                                  (get_local $$506)
-                                  (i32.const 6603)
-                                  (i32.const 1072)
-                                 )
-                                )
-                                (i32.store
-                                 (get_local $$36)
-                                 (get_local $$507)
-                                )
-                                ;;@ renderer.c:811:0
-                                (set_local $$508
-                                 (get_local $$6)
-                                )
-                                (set_local $$509
-                                 (i32.add
-                                  (get_local $$508)
-                                  (i32.const 20)
-                                 )
-                                )
-                                (set_local $$510
-                                 (i32.load
-                                  (get_local $$509)
-                                 )
-                                )
                                 (drop
                                  (call $_array_push
-                                  (get_local $$510)
-                                  (get_local $$36)
+                                  (get_local $$506)
+                                  (get_local $$37)
                                  )
                                 )
                                )
                               )
-                              ;;@ renderer.c:813:0
-                              (set_local $$511
+                              ;;@ renderer.c:852:0
+                              (set_local $$507
                                (get_local $$3)
                               )
-                              (set_local $$512
+                              (set_local $$508
                                (i32.add
-                                (get_local $$511)
+                                (get_local $$507)
                                 (i32.const 108)
                                )
                               )
-                              (set_local $$513
+                              (set_local $$509
                                (i32.load
+                                (get_local $$508)
+                               )
+                              )
+                              (set_local $$510
+                               (get_local $$3)
+                              )
+                              (set_local $$511
+                               (i32.add
+                                (get_local $$510)
+                                (i32.const 56)
+                               )
+                              )
+                              (set_local $$512
+                               (i32.load
+                                (get_local $$511)
+                               )
+                              )
+                              (set_local $$513
+                               (call $_make_text
+                                (get_local $$509)
+                                (i32.const 5971)
                                 (get_local $$512)
                                )
                               )
+                              (i32.store
+                               (get_local $$38)
+                               (get_local $$513)
+                              )
+                              ;;@ renderer.c:853:0
                               (set_local $$514
-                               (get_local $$3)
+                               (get_local $$4)
                               )
                               (set_local $$515
                                (i32.add
                                 (get_local $$514)
-                                (i32.const 56)
+                                (i32.const 20)
                                )
                               )
                               (set_local $$516
@@ -59490,142 +59646,142 @@
                                 (get_local $$515)
                                )
                               )
-                              (set_local $$517
-                               (call $_make_text
-                                (get_local $$513)
-                                (i32.const 5971)
-                                (get_local $$516)
-                               )
-                              )
-                              (i32.store
-                               (get_local $$37)
-                               (get_local $$517)
-                              )
-                              ;;@ renderer.c:814:0
-                              (set_local $$518
-                               (get_local $$6)
-                              )
-                              (set_local $$519
-                               (i32.add
-                                (get_local $$518)
-                                (i32.const 20)
-                               )
-                              )
-                              (set_local $$520
-                               (i32.load
-                                (get_local $$519)
-                               )
-                              )
                               (drop
                                (call $_array_push
-                                (get_local $$520)
-                                (get_local $$37)
+                                (get_local $$516)
+                                (get_local $$38)
                                )
                               )
-                              ;;@ renderer.c:815:0
-                              (set_local $$521
-                               (get_local $$30)
+                              ;;@ renderer.c:854:0
+                              (set_local $$517
+                               (get_local $$31)
                               )
-                              (set_local $$522
+                              (set_local $$518
                                (i32.add
-                                (get_local $$521)
+                                (get_local $$517)
                                 (i32.const 12)
                                )
                               )
-                              (set_local $$523
+                              (set_local $$519
                                (i32.load
-                                (get_local $$522)
+                                (get_local $$518)
                                )
                               )
-                              (set_local $$524
+                              (set_local $$520
                                (get_local $$3)
                               )
                               (call $_render_code_node
-                               (get_local $$523)
-                               (get_local $$524)
+                               (get_local $$519)
+                               (get_local $$520)
                               )
                               (br $label$break$L8)
                              )
                             )
                            )
                           )
-                          ;;@ renderer.c:817:0
-                          (set_local $$525
+                          ;;@ renderer.c:856:0
+                          (set_local $$521
                            (i32.load
                             (get_local $$2)
                            )
                           )
-                          (set_local $$526
+                          (set_local $$522
                            (i32.add
-                            (get_local $$525)
+                            (get_local $$521)
                             (i32.const 48)
                            )
                           )
-                          (set_local $$527
+                          (set_local $$523
                            (i32.add
-                            (get_local $$526)
+                            (get_local $$522)
                             (i32.const 8)
                            )
                           )
-                          (set_local $$528
+                          (set_local $$524
                            (i32.load
-                            (get_local $$527)
+                            (get_local $$523)
                            )
                           )
-                          (set_local $$529
+                          (set_local $$525
                            (i32.ne
-                            (get_local $$528)
+                            (get_local $$524)
                             (i32.const 0)
                            )
                           )
                           (if
-                           (get_local $$529)
+                           (get_local $$525)
                            (block
-                            ;;@ renderer.c:818:0
-                            (set_local $$530
+                            ;;@ renderer.c:857:0
+                            (set_local $$526
                              (i32.load
                               (get_local $$2)
                              )
                             )
-                            (set_local $$531
+                            (set_local $$527
                              (i32.add
-                              (get_local $$530)
+                              (get_local $$526)
                               (i32.const 48)
                              )
                             )
-                            (set_local $$532
+                            (set_local $$528
                              (i32.add
-                              (get_local $$531)
+                              (get_local $$527)
                               (i32.const 8)
                              )
                             )
-                            (set_local $$533
+                            (set_local $$529
                              (i32.load
-                              (get_local $$532)
+                              (get_local $$528)
                              )
                             )
-                            (set_local $$534
+                            (set_local $$530
                              (i32.load
-                              (get_local $$533)
+                              (get_local $$529)
                              )
                             )
-                            (set_local $$535
+                            (set_local $$531
                              (i32.eq
-                              (get_local $$534)
+                              (get_local $$530)
                               (i32.const 17)
                              )
                             )
                             (if
-                             (get_local $$535)
+                             (get_local $$531)
                              (block
-                              ;;@ renderer.c:820:0
-                              (set_local $$536
+                              ;;@ renderer.c:859:0
+                              (set_local $$532
                                (get_local $$3)
+                              )
+                              (set_local $$533
+                               (i32.add
+                                (get_local $$532)
+                                (i32.const 108)
+                               )
+                              )
+                              (set_local $$534
+                               (i32.load
+                                (get_local $$533)
+                               )
+                              )
+                              (set_local $$535
+                               (call $_make_text
+                                (get_local $$534)
+                                (i32.const 6002)
+                                (i32.const 1088)
+                               )
+                              )
+                              (i32.store
+                               (get_local $$39)
+                               (get_local $$535)
+                              )
+                              ;;@ renderer.c:860:0
+                              (set_local $$536
+                               (get_local $$4)
                               )
                               (set_local $$537
                                (i32.add
                                 (get_local $$536)
-                                (i32.const 108)
+                                (i32.const 20)
                                )
                               )
                               (set_local $$538
@@ -59633,25 +59789,28 @@
                                 (get_local $$537)
                                )
                               )
-                              (set_local $$539
-                               (call $_make_text
+                              (drop
+                               (call $_array_push
                                 (get_local $$538)
-                                (i32.const 6002)
-                                (i32.const 1088)
+                                (get_local $$39)
                                )
                               )
-                              (i32.store
-                               (get_local $$38)
-                               (get_local $$539)
+                              ;;@ renderer.c:861:0
+                              (set_local $$539
+                               (i32.load
+                                (get_local $$2)
+                               )
                               )
-                              ;;@ renderer.c:821:0
                               (set_local $$540
-                               (get_local $$6)
+                               (i32.add
+                                (get_local $$539)
+                                (i32.const 48)
+                               )
                               )
                               (set_local $$541
                                (i32.add
                                 (get_local $$540)
-                                (i32.const 20)
+                                (i32.const 4)
                                )
                               )
                               (set_local $$542
@@ -59659,203 +59818,200 @@
                                 (get_local $$541)
                                )
                               )
-                              (drop
-                               (call $_array_push
-                                (get_local $$542)
-                                (get_local $$38)
-                               )
-                              )
-                              ;;@ renderer.c:822:0
                               (set_local $$543
-                               (i32.load
-                                (get_local $$2)
-                               )
-                              )
-                              (set_local $$544
-                               (i32.add
-                                (get_local $$543)
-                                (i32.const 48)
-                               )
-                              )
-                              (set_local $$545
-                               (i32.add
-                                (get_local $$544)
-                                (i32.const 4)
-                               )
-                              )
-                              (set_local $$546
-                               (i32.load
-                                (get_local $$545)
-                               )
-                              )
-                              (set_local $$547
                                (get_local $$3)
                               )
                               (call $_render_code_node
-                               (get_local $$546)
-                               (get_local $$547)
+                               (get_local $$542)
+                               (get_local $$543)
                               )
-                              ;;@ renderer.c:823:0
-                              (set_local $$548
+                              ;;@ renderer.c:862:0
+                              (set_local $$544
                                (get_local $$3)
                               )
                               (call $_render_space
-                               (get_local $$548)
+                               (get_local $$544)
                               )
-                              ;;@ renderer.c:824:0
-                              (set_local $$549
+                              ;;@ renderer.c:863:0
+                              (set_local $$545
                                (i32.load
                                 (get_local $$2)
                                )
                               )
-                              (set_local $$550
+                              (set_local $$546
                                (i32.add
-                                (get_local $$549)
+                                (get_local $$545)
                                 (i32.const 48)
                                )
                               )
-                              (set_local $$551
+                              (set_local $$547
                                (i32.add
-                                (get_local $$550)
+                                (get_local $$546)
                                 (i32.const 8)
                                )
                               )
-                              (set_local $$552
+                              (set_local $$548
                                (i32.load
-                                (get_local $$551)
+                                (get_local $$547)
                                )
                               )
-                              (set_local $$553
+                              (set_local $$549
                                (i32.add
-                                (get_local $$552)
+                                (get_local $$548)
                                 (i32.const 48)
                                )
                               )
-                              (set_local $$554
+                              (set_local $$550
                                (i32.load
-                                (get_local $$553)
+                                (get_local $$549)
                                )
                               )
-                              (set_local $$555
+                              (set_local $$551
                                (get_local $$3)
                               )
                               (call $_render_code_node
-                               (get_local $$554)
-                               (get_local $$555)
+                               (get_local $$550)
+                               (get_local $$551)
                               )
                               (br $label$break$L8)
                              )
                             )
                            )
                           )
-                          ;;@ renderer.c:827:0
-                          (set_local $$556
+                          ;;@ renderer.c:866:0
+                          (set_local $$552
                            (i32.load
                             (get_local $$2)
                            )
                           )
-                          (set_local $$557
+                          (set_local $$553
                            (i32.add
-                            (get_local $$556)
+                            (get_local $$552)
                             (i32.const 48)
                            )
                           )
-                          (set_local $$558
+                          (set_local $$554
                            (i32.load
-                            (get_local $$557)
+                            (get_local $$553)
                            )
                           )
-                          (set_local $$559
+                          (set_local $$555
                            (get_local $$3)
                           )
                           (call $_render_type
-                           (get_local $$558)
-                           (get_local $$559)
+                           (get_local $$554)
+                           (get_local $$555)
                           )
-                          ;;@ renderer.c:828:0
-                          (set_local $$560
+                          ;;@ renderer.c:867:0
+                          (set_local $$556
                            (get_local $$3)
                           )
                           (call $_render_space
-                           (get_local $$560)
+                           (get_local $$556)
                           )
-                          ;;@ renderer.c:829:0
-                          (set_local $$561
+                          ;;@ renderer.c:868:0
+                          (set_local $$557
                            (i32.load
                             (get_local $$2)
                            )
                           )
-                          (set_local $$562
+                          (set_local $$558
                            (i32.add
-                            (get_local $$561)
+                            (get_local $$557)
                             (i32.const 48)
+                           )
+                          )
+                          (set_local $$559
+                           (i32.add
+                            (get_local $$558)
+                            (i32.const 4)
+                           )
+                          )
+                          (set_local $$560
+                           (i32.load
+                            (get_local $$559)
+                           )
+                          )
+                          (set_local $$561
+                           (get_local $$3)
+                          )
+                          (call $_render_code_node
+                           (get_local $$560)
+                           (get_local $$561)
+                          )
+                          ;;@ renderer.c:869:0
+                          (set_local $$562
+                           (i32.load
+                            (get_local $$2)
                            )
                           )
                           (set_local $$563
                            (i32.add
                             (get_local $$562)
-                            (i32.const 4)
-                           )
-                          )
-                          (set_local $$564
-                           (i32.load
-                            (get_local $$563)
-                           )
-                          )
-                          (set_local $$565
-                           (get_local $$3)
-                          )
-                          (call $_render_code_node
-                           (get_local $$564)
-                           (get_local $$565)
-                          )
-                          ;;@ renderer.c:830:0
-                          (set_local $$566
-                           (i32.load
-                            (get_local $$2)
-                           )
-                          )
-                          (set_local $$567
-                           (i32.add
-                            (get_local $$566)
                             (i32.const 48)
                            )
                           )
-                          (set_local $$568
+                          (set_local $$564
                            (i32.add
-                            (get_local $$567)
+                            (get_local $$563)
                             (i32.const 8)
                            )
                           )
-                          (set_local $$569
+                          (set_local $$565
                            (i32.load
-                            (get_local $$568)
+                            (get_local $$564)
                            )
                           )
-                          (set_local $$570
+                          (set_local $$566
                            (i32.ne
-                            (get_local $$569)
+                            (get_local $$565)
                             (i32.const 0)
                            )
                           )
                           (if
-                           (get_local $$570)
+                           (get_local $$566)
                            (block
-                            ;;@ renderer.c:831:0
-                            (set_local $$571
+                            ;;@ renderer.c:870:0
+                            (set_local $$567
                              (get_local $$3)
                             )
                             (call $_render_space
+                             (get_local $$567)
+                            )
+                            ;;@ renderer.c:871:0
+                            (set_local $$568
+                             (get_local $$3)
+                            )
+                            (set_local $$569
+                             (i32.add
+                              (get_local $$568)
+                              (i32.const 108)
+                             )
+                            )
+                            (set_local $$570
+                             (i32.load
+                              (get_local $$569)
+                             )
+                            )
+                            (set_local $$571
+                             (call $_make_text
+                              (get_local $$570)
+                              (i32.const 6530)
+                              (i32.const 1120)
+                             )
+                            )
+                            (i32.store
+                             (get_local $$40)
                              (get_local $$571)
                             )
-                            ;;@ renderer.c:832:0
+                            ;;@ renderer.c:872:0
                             (set_local $$572
-                             (get_local $$3)
+                             (get_local $$4)
                             )
                             (set_local $$573
                              (i32.add
                               (get_local $$572)
-                              (i32.const 108)
+                              (i32.const 20)
                              )
                             )
                             (set_local $$574
@@ -59863,74 +60019,48 @@
                               (get_local $$573)
                              )
                             )
-                            (set_local $$575
-                             (call $_make_text
-                              (get_local $$574)
-                              (i32.const 6530)
-                              (i32.const 1120)
-                             )
-                            )
-                            (i32.store
-                             (get_local $$39)
-                             (get_local $$575)
-                            )
-                            ;;@ renderer.c:833:0
-                            (set_local $$576
-                             (get_local $$6)
-                            )
-                            (set_local $$577
-                             (i32.add
-                              (get_local $$576)
-                              (i32.const 20)
-                             )
-                            )
-                            (set_local $$578
-                             (i32.load
-                              (get_local $$577)
-                             )
-                            )
                             (drop
                              (call $_array_push
-                              (get_local $$578)
-                              (get_local $$39)
+                              (get_local $$574)
+                              (get_local $$40)
                              )
                             )
-                            ;;@ renderer.c:834:0
-                            (set_local $$579
+                            ;;@ renderer.c:873:0
+                            (set_local $$575
                              (get_local $$3)
                             )
                             (call $_render_space
-                             (get_local $$579)
+                             (get_local $$575)
                             )
-                            ;;@ renderer.c:835:0
-                            (set_local $$580
+                            ;;@ renderer.c:874:0
+                            (set_local $$576
                              (i32.load
                               (get_local $$2)
                              )
                             )
-                            (set_local $$581
+                            (set_local $$577
                              (i32.add
-                              (get_local $$580)
+                              (get_local $$576)
                               (i32.const 48)
                              )
                             )
-                            (set_local $$582
+                            (set_local $$578
                              (i32.add
-                              (get_local $$581)
+                              (get_local $$577)
                               (i32.const 8)
                              )
                             )
-                            (set_local $$583
+                            (set_local $$579
                              (i32.load
-                              (get_local $$582)
+                              (get_local $$578)
                              )
                             )
-                            (set_local $$584
+                            (set_local $$580
                              (get_local $$3)
                             )
                             (call $_render_code_node
-                             (get_local $$583)
-                             (get_local $$584)
+                             (get_local $$579)
+                             (get_local $$580)
                             )
                            )
                           )
@@ -59938,45 +60068,71 @@
                          )
                         )
                         (block
-                         ;;@ renderer.c:841:0
-                         (set_local $$585
+                         ;;@ renderer.c:880:0
+                         (set_local $$581
                           (i32.load
                            (get_local $$2)
                           )
                          )
-                         (set_local $$586
+                         (set_local $$582
                           (i32.add
-                           (get_local $$585)
+                           (get_local $$581)
                            (i32.const 48)
                           )
                          )
-                         (set_local $$587
+                         (set_local $$583
                           (i32.load
-                           (get_local $$586)
+                           (get_local $$582)
                           )
                          )
-                         (set_local $$588
+                         (set_local $$584
                           (get_local $$3)
                          )
                          (call $_render_code_node
-                          (get_local $$587)
-                          (get_local $$588)
+                          (get_local $$583)
+                          (get_local $$584)
                          )
-                         ;;@ renderer.c:842:0
-                         (set_local $$589
+                         ;;@ renderer.c:881:0
+                         (set_local $$585
                           (get_local $$3)
                          )
                          (call $_render_space
+                          (get_local $$585)
+                         )
+                         ;;@ renderer.c:882:0
+                         (set_local $$586
+                          (get_local $$3)
+                         )
+                         (set_local $$587
+                          (i32.add
+                           (get_local $$586)
+                           (i32.const 108)
+                          )
+                         )
+                         (set_local $$588
+                          (i32.load
+                           (get_local $$587)
+                          )
+                         )
+                         (set_local $$589
+                          (call $_make_text
+                           (get_local $$588)
+                           (i32.const 6530)
+                           (i32.const 1120)
+                          )
+                         )
+                         (i32.store
+                          (get_local $$41)
                           (get_local $$589)
                          )
-                         ;;@ renderer.c:843:0
+                         ;;@ renderer.c:883:0
                          (set_local $$590
-                          (get_local $$3)
+                          (get_local $$4)
                          )
                          (set_local $$591
                           (i32.add
                            (get_local $$590)
-                           (i32.const 108)
+                           (i32.const 20)
                           )
                          )
                          (set_local $$592
@@ -59984,118 +60140,114 @@
                            (get_local $$591)
                           )
                          )
-                         (set_local $$593
-                          (call $_make_text
-                           (get_local $$592)
-                           (i32.const 6530)
-                           (i32.const 1120)
-                          )
-                         )
-                         (i32.store
-                          (get_local $$40)
-                          (get_local $$593)
-                         )
-                         ;;@ renderer.c:844:0
-                         (set_local $$594
-                          (get_local $$6)
-                         )
-                         (set_local $$595
-                          (i32.add
-                           (get_local $$594)
-                           (i32.const 20)
-                          )
-                         )
-                         (set_local $$596
-                          (i32.load
-                           (get_local $$595)
-                          )
-                         )
                          (drop
                           (call $_array_push
-                           (get_local $$596)
-                           (get_local $$40)
+                           (get_local $$592)
+                           (get_local $$41)
                           )
                          )
-                         ;;@ renderer.c:845:0
-                         (set_local $$597
+                         ;;@ renderer.c:884:0
+                         (set_local $$593
                           (get_local $$3)
                          )
                          (call $_render_space
-                          (get_local $$597)
+                          (get_local $$593)
                          )
-                         ;;@ renderer.c:846:0
-                         (set_local $$598
+                         ;;@ renderer.c:885:0
+                         (set_local $$594
                           (i32.load
                            (get_local $$2)
                           )
                          )
-                         (set_local $$599
+                         (set_local $$595
                           (i32.add
-                           (get_local $$598)
+                           (get_local $$594)
                            (i32.const 48)
                           )
                          )
-                         (set_local $$600
+                         (set_local $$596
                           (i32.add
-                           (get_local $$599)
+                           (get_local $$595)
                            (i32.const 4)
                           )
                          )
-                         (set_local $$601
+                         (set_local $$597
                           (i32.load
-                           (get_local $$600)
+                           (get_local $$596)
                           )
                          )
-                         (set_local $$602
+                         (set_local $$598
                           (get_local $$3)
                          )
                          (call $_render_code_node
-                          (get_local $$601)
-                          (get_local $$602)
+                          (get_local $$597)
+                          (get_local $$598)
                          )
                          (br $switch)
                         )
                        )
                        (block
-                        ;;@ renderer.c:850:0
-                        (set_local $$603
+                        ;;@ renderer.c:889:0
+                        (set_local $$599
                          (i32.load
                           (get_local $$2)
                          )
                         )
-                        (set_local $$604
+                        (set_local $$600
                          (i32.add
-                          (get_local $$603)
+                          (get_local $$599)
                           (i32.const 48)
                          )
                         )
-                        (set_local $$605
+                        (set_local $$601
                          (i32.load
-                          (get_local $$604)
+                          (get_local $$600)
                          )
                         )
-                        (set_local $$606
+                        (set_local $$602
                          (get_local $$3)
                         )
                         (call $_render_code_node
-                         (get_local $$605)
-                         (get_local $$606)
+                         (get_local $$601)
+                         (get_local $$602)
                         )
-                        ;;@ renderer.c:851:0
-                        (set_local $$607
+                        ;;@ renderer.c:890:0
+                        (set_local $$603
                          (get_local $$3)
                         )
                         (call $_render_space
-                         (get_local $$607)
+                         (get_local $$603)
                         )
-                        ;;@ renderer.c:852:0
-                        (set_local $$608
+                        ;;@ renderer.c:891:0
+                        (set_local $$604
                          (get_local $$3)
+                        )
+                        (set_local $$605
+                         (i32.add
+                          (get_local $$604)
+                          (i32.const 108)
+                         )
+                        )
+                        (set_local $$606
+                         (i32.load
+                          (get_local $$605)
+                         )
+                        )
+                        (set_local $$607
+                         (i32.load
+                          (get_local $$2)
+                         )
+                        )
+                        (set_local $$608
+                         (i32.add
+                          (get_local $$607)
+                          (i32.const 48)
+                         )
                         )
                         (set_local $$609
                          (i32.add
                           (get_local $$608)
-                          (i32.const 108)
+                          (i32.const 4)
                          )
                         )
                         (set_local $$610
@@ -60104,20 +60256,24 @@
                          )
                         )
                         (set_local $$611
-                         (i32.load
-                          (get_local $$2)
+                         (call $_make_text
+                          (get_local $$606)
+                          (get_local $$610)
+                          (i32.const 1120)
                          )
                         )
+                        (i32.store
+                         (get_local $$42)
+                         (get_local $$611)
+                        )
+                        ;;@ renderer.c:892:0
                         (set_local $$612
-                         (i32.add
-                          (get_local $$611)
-                          (i32.const 48)
-                         )
+                         (get_local $$4)
                         )
                         (set_local $$613
                          (i32.add
                           (get_local $$612)
-                          (i32.const 4)
+                          (i32.const 20)
                          )
                         )
                         (set_local $$614
@@ -60125,46 +60281,46 @@
                           (get_local $$613)
                          )
                         )
-                        (set_local $$615
-                         (call $_make_text
-                          (get_local $$610)
+                        (drop
+                         (call $_array_push
                           (get_local $$614)
+                          (get_local $$42)
+                         )
+                        )
+                        ;;@ renderer.c:893:0
+                        (set_local $$615
+                         (get_local $$3)
+                        )
+                        (set_local $$616
+                         (i32.add
+                          (get_local $$615)
+                          (i32.const 108)
+                         )
+                        )
+                        (set_local $$617
+                         (i32.load
+                          (get_local $$616)
+                         )
+                        )
+                        (set_local $$618
+                         (call $_make_text
+                          (get_local $$617)
+                          (i32.const 6530)
                           (i32.const 1120)
                          )
                         )
                         (i32.store
-                         (get_local $$41)
-                         (get_local $$615)
+                         (get_local $$43)
+                         (get_local $$618)
                         )
-                        ;;@ renderer.c:853:0
-                        (set_local $$616
-                         (get_local $$6)
-                        )
-                        (set_local $$617
-                         (i32.add
-                          (get_local $$616)
-                          (i32.const 20)
-                         )
-                        )
-                        (set_local $$618
-                         (i32.load
-                          (get_local $$617)
-                         )
-                        )
-                        (drop
-                         (call $_array_push
-                          (get_local $$618)
-                          (get_local $$41)
-                         )
-                        )
-                        ;;@ renderer.c:854:0
+                        ;;@ renderer.c:894:0
                         (set_local $$619
-                         (get_local $$3)
+                         (get_local $$4)
                         )
                         (set_local $$620
                          (i32.add
                           (get_local $$619)
-                          (i32.const 108)
+                          (i32.const 20)
                          )
                         )
                         (set_local $$621
@@ -60172,179 +60328,153 @@
                           (get_local $$620)
                          )
                         )
-                        (set_local $$622
-                         (call $_make_text
-                          (get_local $$621)
-                          (i32.const 6530)
-                          (i32.const 1120)
-                         )
-                        )
-                        (i32.store
-                         (get_local $$42)
-                         (get_local $$622)
-                        )
-                        ;;@ renderer.c:855:0
-                        (set_local $$623
-                         (get_local $$6)
-                        )
-                        (set_local $$624
-                         (i32.add
-                          (get_local $$623)
-                          (i32.const 20)
-                         )
-                        )
-                        (set_local $$625
-                         (i32.load
-                          (get_local $$624)
-                         )
-                        )
                         (drop
                          (call $_array_push
-                          (get_local $$625)
-                          (get_local $$42)
+                          (get_local $$621)
+                          (get_local $$43)
                          )
                         )
-                        ;;@ renderer.c:856:0
-                        (set_local $$626
+                        ;;@ renderer.c:895:0
+                        (set_local $$622
                          (get_local $$3)
                         )
                         (call $_render_space
-                         (get_local $$626)
+                         (get_local $$622)
                         )
-                        ;;@ renderer.c:857:0
-                        (set_local $$627
+                        ;;@ renderer.c:896:0
+                        (set_local $$623
                          (i32.load
                           (get_local $$2)
                          )
                         )
-                        (set_local $$628
+                        (set_local $$624
                          (i32.add
-                          (get_local $$627)
+                          (get_local $$623)
                           (i32.const 48)
                          )
                         )
-                        (set_local $$629
+                        (set_local $$625
                          (i32.add
-                          (get_local $$628)
+                          (get_local $$624)
                           (i32.const 8)
                          )
                         )
-                        (set_local $$630
+                        (set_local $$626
                          (i32.load
-                          (get_local $$629)
+                          (get_local $$625)
                          )
                         )
-                        (set_local $$631
+                        (set_local $$627
                          (get_local $$3)
                         )
                         (call $_render_code_node
-                         (get_local $$630)
-                         (get_local $$631)
+                         (get_local $$626)
+                         (get_local $$627)
                         )
                         (br $switch)
                        )
                       )
                       (block
-                       ;;@ renderer.c:861:0
-                       (set_local $$632
+                       ;;@ renderer.c:900:0
+                       (set_local $$628
                         (i32.load8_s
                          (i32.const 9888)
                         )
                        )
-                       (set_local $$633
+                       (set_local $$629
                         (i32.and
-                         (get_local $$632)
+                         (get_local $$628)
                          (i32.const 255)
                         )
                        )
-                       (set_local $$634
+                       (set_local $$630
                         (i32.ne
-                         (get_local $$633)
+                         (get_local $$629)
                          (i32.const 0)
                         )
                        )
                        (if
-                        (get_local $$634)
+                        (get_local $$630)
                         (block
-                         (set_local $$635
+                         (set_local $$631
                           (i32.load
                            (get_local $$2)
                           )
                          )
-                         (set_local $$636
+                         (set_local $$632
                           (i32.add
-                           (get_local $$635)
+                           (get_local $$631)
                            (i32.const 33)
                           )
                          )
-                         (set_local $$637
+                         (set_local $$633
                           (i32.load8_s
-                           (get_local $$636)
+                           (get_local $$632)
                           )
                          )
-                         (set_local $$638
+                         (set_local $$634
                           (i32.and
-                           (get_local $$637)
+                           (get_local $$633)
                            (i32.const 255)
                           )
                          )
-                         (set_local $$639
+                         (set_local $$635
                           (i32.eq
-                           (get_local $$638)
+                           (get_local $$634)
                            (i32.const 0)
                           )
                          )
                          (if
-                          (get_local $$639)
+                          (get_local $$635)
                           (block
-                           (set_local $$640
+                           (set_local $$636
                             (i32.load
                              (get_local $$2)
                             )
                            )
-                           (set_local $$641
+                           (set_local $$637
                             (i32.add
-                             (get_local $$640)
+                             (get_local $$636)
                              (i32.const 24)
                             )
                            )
-                           (set_local $$642
+                           (set_local $$638
                             (i32.load
-                             (get_local $$641)
+                             (get_local $$637)
                             )
                            )
-                           (set_local $$643
+                           (set_local $$639
                             (i32.ne
-                             (get_local $$642)
+                             (get_local $$638)
                              (i32.const 0)
                             )
                            )
                            (if
-                            (get_local $$643)
+                            (get_local $$639)
                             (block
-                             ;;@ renderer.c:862:0
-                             (set_local $$644
+                             ;;@ renderer.c:901:0
+                             (set_local $$640
                               (i32.load
                                (get_local $$2)
                               )
                              )
-                             (set_local $$645
+                             (set_local $$641
                               (i32.add
-                               (get_local $$644)
+                               (get_local $$640)
                                (i32.const 24)
                               )
                              )
-                             (set_local $$646
+                             (set_local $$642
                               (i32.load
-                               (get_local $$645)
+                               (get_local $$641)
                               )
                              )
-                             (set_local $$647
+                             (set_local $$643
                               (get_local $$3)
                              )
                              (call $_render_code_node
-                              (get_local $$646)
-                              (get_local $$647)
+                              (get_local $$642)
+                              (get_local $$643)
                              )
                              (br $label$break$L8)
                             )
@@ -60353,14 +60483,40 @@
                          )
                         )
                        )
-                       ;;@ renderer.c:865:0
-                       (set_local $$648
+                       ;;@ renderer.c:904:0
+                       (set_local $$644
                         (get_local $$3)
+                       )
+                       (set_local $$645
+                        (i32.add
+                         (get_local $$644)
+                         (i32.const 108)
+                        )
+                       )
+                       (set_local $$646
+                        (i32.load
+                         (get_local $$645)
+                        )
+                       )
+                       (set_local $$647
+                        (call $_make_text
+                         (get_local $$646)
+                         (i32.const 6919)
+                         (i32.const 1120)
+                        )
+                       )
+                       (i32.store
+                        (get_local $$44)
+                        (get_local $$647)
+                       )
+                       ;;@ renderer.c:905:0
+                       (set_local $$648
+                        (get_local $$4)
                        )
                        (set_local $$649
                         (i32.add
                          (get_local $$648)
-                         (i32.const 108)
+                         (i32.const 20)
                         )
                        )
                        (set_local $$650
@@ -60368,142 +60524,116 @@
                          (get_local $$649)
                         )
                        )
-                       (set_local $$651
-                        (call $_make_text
-                         (get_local $$650)
-                         (i32.const 6919)
-                         (i32.const 1120)
-                        )
-                       )
-                       (i32.store
-                        (get_local $$43)
-                        (get_local $$651)
-                       )
-                       ;;@ renderer.c:866:0
-                       (set_local $$652
-                        (get_local $$6)
-                       )
-                       (set_local $$653
-                        (i32.add
-                         (get_local $$652)
-                         (i32.const 20)
-                        )
-                       )
-                       (set_local $$654
-                        (i32.load
-                         (get_local $$653)
-                        )
-                       )
                        (drop
                         (call $_array_push
-                         (get_local $$654)
-                         (get_local $$43)
+                         (get_local $$650)
+                         (get_local $$44)
                         )
                        )
-                       ;;@ renderer.c:867:0
-                       (set_local $$655
+                       ;;@ renderer.c:906:0
+                       (set_local $$651
                         (i32.load
                          (get_local $$2)
                         )
                        )
-                       (set_local $$656
+                       (set_local $$652
                         (i32.add
-                         (get_local $$655)
+                         (get_local $$651)
                          (i32.const 48)
                         )
                        )
-                       (set_local $$657
+                       (set_local $$653
                         (i32.load
-                         (get_local $$656)
+                         (get_local $$652)
                         )
                        )
-                       (set_local $$658
+                       (set_local $$654
                         (get_local $$3)
                        )
                        (call $_render_code_node
-                        (get_local $$657)
-                        (get_local $$658)
+                        (get_local $$653)
+                        (get_local $$654)
                        )
                        (br $switch)
                       )
                      )
                      (block
-                      ;;@ renderer.c:872:0
-                      (set_local $$659
+                      ;;@ renderer.c:911:0
+                      (set_local $$655
                        (i32.load
                         (get_local $$2)
                        )
                       )
-                      (set_local $$660
+                      (set_local $$656
                        (i32.add
-                        (get_local $$659)
+                        (get_local $$655)
                         (i32.const 15)
                        )
                       )
-                      (set_local $$661
+                      (set_local $$657
                        (i32.load8_s
-                        (get_local $$660)
+                        (get_local $$656)
                        )
                       )
-                      (set_local $$662
+                      (set_local $$658
                        (i32.and
-                        (get_local $$661)
+                        (get_local $$657)
                         (i32.const 255)
                        )
                       )
-                      (set_local $$663
+                      (set_local $$659
                        (i32.ne
-                        (get_local $$662)
+                        (get_local $$658)
                         (i32.const 0)
                        )
                       )
                       (if
-                       (get_local $$663)
+                       (get_local $$659)
                        (block
-                        (set_local $$664
+                        (set_local $$660
                          (i32.load8_s
                           (i32.const 9892)
                          )
                         )
-                        (set_local $$665
+                        (set_local $$661
                          (i32.and
-                          (get_local $$664)
+                          (get_local $$660)
                           (i32.const 255)
                          )
                         )
-                        (set_local $$666
+                        (set_local $$662
                          (i32.ne
-                          (get_local $$665)
+                          (get_local $$661)
                           (i32.const 0)
                          )
                         )
                         (if
-                         (get_local $$666)
+                         (get_local $$662)
                          (set_local $label
                           (i32.const 56)
                          )
                         )
                        )
                        (block
-                        (set_local $$667
+                        (set_local $$663
                          (i32.load8_s
                           (i32.const 9888)
                          )
                         )
-                        (set_local $$668
+                        (set_local $$664
                          (i32.and
-                          (get_local $$667)
+                          (get_local $$663)
                           (i32.const 255)
                          )
                         )
-                        (set_local $$669
+                        (set_local $$665
                          (i32.ne
-                          (get_local $$668)
+                          (get_local $$664)
                           (i32.const 0)
                          )
                         )
                         (if
-                         (get_local $$669)
+                         (get_local $$665)
                          (set_local $label
                           (i32.const 56)
                          )
@@ -60516,86 +60646,86 @@
                         (i32.const 56)
                        )
                        (block
-                        ;;@ renderer.c:873:0
-                        (set_local $$670
+                        ;;@ renderer.c:912:0
+                        (set_local $$666
                          (i32.load
                           (get_local $$2)
                          )
                         )
-                        (set_local $$671
+                        (set_local $$667
                          (i32.add
-                          (get_local $$670)
+                          (get_local $$666)
                           (i32.const 33)
                          )
                         )
-                        (set_local $$672
+                        (set_local $$668
                          (i32.load8_s
-                          (get_local $$671)
+                          (get_local $$667)
                          )
                         )
-                        (set_local $$673
+                        (set_local $$669
                          (i32.and
-                          (get_local $$672)
+                          (get_local $$668)
                           (i32.const 255)
                          )
                         )
-                        (set_local $$674
+                        (set_local $$670
                          (i32.eq
-                          (get_local $$673)
+                          (get_local $$669)
                           (i32.const 0)
                          )
                         )
                         (if
-                         (get_local $$674)
+                         (get_local $$670)
                          (block
-                          (set_local $$675
+                          (set_local $$671
                            (i32.load
                             (get_local $$2)
                            )
                           )
-                          (set_local $$676
+                          (set_local $$672
                            (i32.add
-                            (get_local $$675)
+                            (get_local $$671)
                             (i32.const 24)
                            )
                           )
-                          (set_local $$677
+                          (set_local $$673
                            (i32.load
-                            (get_local $$676)
+                            (get_local $$672)
                            )
                           )
-                          (set_local $$678
+                          (set_local $$674
                            (i32.ne
-                            (get_local $$677)
+                            (get_local $$673)
                             (i32.const 0)
                            )
                           )
                           (if
-                           (get_local $$678)
+                           (get_local $$674)
                            (block
-                            ;;@ renderer.c:875:0
-                            (set_local $$679
+                            ;;@ renderer.c:914:0
+                            (set_local $$675
                              (i32.load
                               (get_local $$2)
                              )
                             )
-                            (set_local $$680
+                            (set_local $$676
                              (i32.add
-                              (get_local $$679)
+                              (get_local $$675)
                               (i32.const 24)
                              )
                             )
-                            (set_local $$681
+                            (set_local $$677
                              (i32.load
-                              (get_local $$680)
+                              (get_local $$676)
                              )
                             )
-                            (set_local $$682
+                            (set_local $$678
                              (get_local $$3)
                             )
                             (call $_render_code_node
-                             (get_local $$681)
-                             (get_local $$682)
+                             (get_local $$677)
+                             (get_local $$678)
                             )
                             (br $label$break$L8)
                            )
@@ -60604,14 +60734,40 @@
                         )
                        )
                       )
-                      ;;@ renderer.c:878:0
-                      (set_local $$683
+                      ;;@ renderer.c:917:0
+                      (set_local $$679
                        (get_local $$3)
+                      )
+                      (set_local $$680
+                       (i32.add
+                        (get_local $$679)
+                        (i32.const 108)
+                       )
+                      )
+                      (set_local $$681
+                       (i32.load
+                        (get_local $$680)
+                       )
+                      )
+                      (set_local $$682
+                       (call $_make_text
+                        (get_local $$681)
+                        (i32.const 6897)
+                        (i32.const 1120)
+                       )
+                      )
+                      (i32.store
+                       (get_local $$45)
+                       (get_local $$682)
+                      )
+                      ;;@ renderer.c:918:0
+                      (set_local $$683
+                       (get_local $$4)
                       )
                       (set_local $$684
                        (i32.add
                         (get_local $$683)
-                        (i32.const 108)
+                        (i32.const 20)
                        )
                       )
                       (set_local $$685
@@ -60619,142 +60775,116 @@
                         (get_local $$684)
                        )
                       )
-                      (set_local $$686
-                       (call $_make_text
-                        (get_local $$685)
-                        (i32.const 6897)
-                        (i32.const 1120)
-                       )
-                      )
-                      (i32.store
-                       (get_local $$44)
-                       (get_local $$686)
-                      )
-                      ;;@ renderer.c:879:0
-                      (set_local $$687
-                       (get_local $$6)
-                      )
-                      (set_local $$688
-                       (i32.add
-                        (get_local $$687)
-                        (i32.const 20)
-                       )
-                      )
-                      (set_local $$689
-                       (i32.load
-                        (get_local $$688)
-                       )
-                      )
                       (drop
                        (call $_array_push
-                        (get_local $$689)
-                        (get_local $$44)
+                        (get_local $$685)
+                        (get_local $$45)
                        )
                       )
-                      ;;@ renderer.c:880:0
-                      (set_local $$690
+                      ;;@ renderer.c:919:0
+                      (set_local $$686
                        (i32.load
                         (get_local $$2)
                        )
                       )
-                      (set_local $$691
+                      (set_local $$687
                        (i32.add
-                        (get_local $$690)
+                        (get_local $$686)
                         (i32.const 48)
                        )
                       )
-                      (set_local $$692
+                      (set_local $$688
                        (i32.load
-                        (get_local $$691)
+                        (get_local $$687)
                        )
                       )
-                      (set_local $$693
+                      (set_local $$689
                        (get_local $$3)
                       )
                       (call $_render_code_node
-                       (get_local $$692)
-                       (get_local $$693)
+                       (get_local $$688)
+                       (get_local $$689)
                       )
                       (br $switch)
                      )
                     )
                     (block
-                     ;;@ renderer.c:885:0
-                     (set_local $$694
+                     ;;@ renderer.c:924:0
+                     (set_local $$690
                       (i32.load
                        (get_local $$2)
                       )
                      )
-                     (set_local $$695
+                     (set_local $$691
                       (i32.add
-                       (get_local $$694)
+                       (get_local $$690)
                        (i32.const 15)
                       )
                      )
-                     (set_local $$696
+                     (set_local $$692
                       (i32.load8_s
-                       (get_local $$695)
+                       (get_local $$691)
                       )
                      )
-                     (set_local $$697
+                     (set_local $$693
                       (i32.and
-                       (get_local $$696)
+                       (get_local $$692)
                        (i32.const 255)
                       )
                      )
-                     (set_local $$698
+                     (set_local $$694
                       (i32.ne
-                       (get_local $$697)
+                       (get_local $$693)
                        (i32.const 0)
                       )
                      )
                      (if
-                      (get_local $$698)
+                      (get_local $$694)
                       (block
-                       (set_local $$699
+                       (set_local $$695
                         (i32.load8_s
                          (i32.const 9892)
                         )
                        )
-                       (set_local $$700
+                       (set_local $$696
                         (i32.and
-                         (get_local $$699)
+                         (get_local $$695)
                          (i32.const 255)
                         )
                        )
-                       (set_local $$701
+                       (set_local $$697
                         (i32.ne
-                         (get_local $$700)
+                         (get_local $$696)
                          (i32.const 0)
                         )
                        )
                        (if
-                        (get_local $$701)
+                        (get_local $$697)
                         (set_local $label
                          (i32.const 63)
                         )
                        )
                       )
                       (block
-                       (set_local $$702
+                       (set_local $$698
                         (i32.load8_s
                          (i32.const 9888)
                         )
                        )
-                       (set_local $$703
+                       (set_local $$699
                         (i32.and
-                         (get_local $$702)
+                         (get_local $$698)
                          (i32.const 255)
                         )
                        )
-                       (set_local $$704
+                       (set_local $$700
                         (i32.ne
-                         (get_local $$703)
+                         (get_local $$699)
                          (i32.const 0)
                         )
                        )
                        (if
-                        (get_local $$704)
+                        (get_local $$700)
                         (set_local $label
                          (i32.const 63)
                         )
@@ -60767,86 +60897,86 @@
                        (i32.const 63)
                       )
                       (block
-                       ;;@ renderer.c:886:0
-                       (set_local $$705
+                       ;;@ renderer.c:925:0
+                       (set_local $$701
                         (i32.load
                          (get_local $$2)
                         )
                        )
-                       (set_local $$706
+                       (set_local $$702
                         (i32.add
-                         (get_local $$705)
+                         (get_local $$701)
                          (i32.const 33)
                         )
                        )
-                       (set_local $$707
+                       (set_local $$703
                         (i32.load8_s
-                         (get_local $$706)
+                         (get_local $$702)
                         )
                        )
-                       (set_local $$708
+                       (set_local $$704
                         (i32.and
-                         (get_local $$707)
+                         (get_local $$703)
                          (i32.const 255)
                         )
                        )
-                       (set_local $$709
+                       (set_local $$705
                         (i32.eq
-                         (get_local $$708)
+                         (get_local $$704)
                          (i32.const 0)
                         )
                        )
                        (if
-                        (get_local $$709)
+                        (get_local $$705)
                         (block
-                         (set_local $$710
+                         (set_local $$706
                           (i32.load
                            (get_local $$2)
                           )
                          )
-                         (set_local $$711
+                         (set_local $$707
                           (i32.add
-                           (get_local $$710)
+                           (get_local $$706)
                            (i32.const 24)
                           )
                          )
-                         (set_local $$712
+                         (set_local $$708
                           (i32.load
-                           (get_local $$711)
+                           (get_local $$707)
                           )
                          )
-                         (set_local $$713
+                         (set_local $$709
                           (i32.ne
-                           (get_local $$712)
+                           (get_local $$708)
                            (i32.const 0)
                           )
                          )
                          (if
-                          (get_local $$713)
+                          (get_local $$709)
                           (block
-                           ;;@ renderer.c:888:0
-                           (set_local $$714
+                           ;;@ renderer.c:927:0
+                           (set_local $$710
                             (i32.load
                              (get_local $$2)
                             )
                            )
-                           (set_local $$715
+                           (set_local $$711
                             (i32.add
-                             (get_local $$714)
+                             (get_local $$710)
                              (i32.const 24)
                             )
                            )
-                           (set_local $$716
+                           (set_local $$712
                             (i32.load
-                             (get_local $$715)
+                             (get_local $$711)
                             )
                            )
-                           (set_local $$717
+                           (set_local $$713
                             (get_local $$3)
                            )
                            (call $_render_code_node
-                            (get_local $$716)
-                            (get_local $$717)
+                            (get_local $$712)
+                            (get_local $$713)
                            )
                            (br $label$break$L8)
                           )
@@ -60855,16 +60985,38 @@
                        )
                       )
                      )
-                     ;;@ renderer.c:891:0
-                     (set_local $$718
+                     ;;@ renderer.c:930:0
+                     (set_local $$714
                       (i32.load
                        (get_local $$2)
                       )
                      )
+                     (set_local $$715
+                      (i32.add
+                       (get_local $$714)
+                       (i32.const 48)
+                      )
+                     )
+                     (set_local $$716
+                      (i32.load
+                       (get_local $$715)
+                      )
+                     )
+                     (set_local $$717
+                      (get_local $$3)
+                     )
+                     (call $_render_code_node
+                      (get_local $$716)
+                      (get_local $$717)
+                     )
+                     ;;@ renderer.c:931:0
+                     (set_local $$718
+                      (get_local $$3)
+                     )
                      (set_local $$719
                       (i32.add
                        (get_local $$718)
-                       (i32.const 48)
+                       (i32.const 108)
                       )
                      )
                      (set_local $$720
@@ -60875,32 +61027,36 @@
                      (set_local $$721
                       (get_local $$3)
                      )
-                     (call $_render_code_node
-                      (get_local $$720)
-                      (get_local $$721)
-                     )
-                     ;;@ renderer.c:892:0
                      (set_local $$722
-                      (get_local $$3)
+                      (i32.add
+                       (get_local $$721)
+                       (i32.const 56)
+                      )
                      )
                      (set_local $$723
-                      (i32.add
+                      (i32.load
                        (get_local $$722)
-                       (i32.const 108)
                       )
                      )
                      (set_local $$724
-                      (i32.load
+                      (call $_make_text
+                       (get_local $$720)
+                       (i32.const 6010)
                        (get_local $$723)
                       )
                      )
+                     (i32.store
+                      (get_local $$46)
+                      (get_local $$724)
+                     )
+                     ;;@ renderer.c:932:0
                      (set_local $$725
-                      (get_local $$3)
+                      (get_local $$4)
                      )
                      (set_local $$726
                       (i32.add
                        (get_local $$725)
-                       (i32.const 56)
+                       (i32.const 20)
                       )
                      )
                      (set_local $$727
@@ -60908,25 +61064,28 @@
                        (get_local $$726)
                       )
                      )
-                     (set_local $$728
-                      (call $_make_text
-                       (get_local $$724)
-                       (i32.const 6010)
+                     (drop
+                      (call $_array_push
                        (get_local $$727)
+                       (get_local $$46)
                       )
                      )
-                     (i32.store
-                      (get_local $$45)
-                      (get_local $$728)
+                     ;;@ renderer.c:933:0
+                     (set_local $$728
+                      (i32.load
+                       (get_local $$2)
+                      )
                      )
-                     ;;@ renderer.c:893:0
                      (set_local $$729
-                      (get_local $$6)
+                      (i32.add
+                       (get_local $$728)
+                       (i32.const 48)
+                      )
                      )
                      (set_local $$730
                       (i32.add
                        (get_local $$729)
-                       (i32.const 20)
+                       (i32.const 4)
                       )
                      )
                      (set_local $$731
@@ -60934,28 +61093,21 @@
                        (get_local $$730)
                       )
                      )
-                     (drop
-                      (call $_array_push
-                       (get_local $$731)
-                       (get_local $$45)
-                      )
-                     )
-                     ;;@ renderer.c:894:0
                      (set_local $$732
-                      (i32.load
-                       (get_local $$2)
-                      )
+                      (get_local $$3)
                      )
+                     (call $_render_code_node
+                      (get_local $$731)
+                      (get_local $$732)
+                     )
+                     ;;@ renderer.c:934:0
                      (set_local $$733
-                      (i32.add
-                       (get_local $$732)
-                       (i32.const 48)
-                      )
+                      (get_local $$3)
                      )
                      (set_local $$734
                       (i32.add
                        (get_local $$733)
-                       (i32.const 4)
+                       (i32.const 108)
                       )
                      )
                      (set_local $$735
@@ -60966,32 +61118,36 @@
                      (set_local $$736
                       (get_local $$3)
                      )
-                     (call $_render_code_node
-                      (get_local $$735)
-                      (get_local $$736)
-                     )
-                     ;;@ renderer.c:895:0
                      (set_local $$737
-                      (get_local $$3)
+                      (i32.add
+                       (get_local $$736)
+                       (i32.const 56)
+                      )
                      )
                      (set_local $$738
-                      (i32.add
+                      (i32.load
                        (get_local $$737)
-                       (i32.const 108)
                       )
                      )
                      (set_local $$739
-                      (i32.load
+                      (call $_make_text
+                       (get_local $$735)
+                       (i32.const 6012)
                        (get_local $$738)
                       )
                      )
+                     (i32.store
+                      (get_local $$47)
+                      (get_local $$739)
+                     )
+                     ;;@ renderer.c:935:0
                      (set_local $$740
-                      (get_local $$3)
+                      (get_local $$4)
                      )
                      (set_local $$741
                       (i32.add
                        (get_local $$740)
-                       (i32.const 56)
+                       (i32.const 20)
                       )
                      )
                      (set_local $$742
@@ -60999,118 +61155,92 @@
                        (get_local $$741)
                       )
                      )
-                     (set_local $$743
-                      (call $_make_text
-                       (get_local $$739)
-                       (i32.const 6012)
-                       (get_local $$742)
-                      )
-                     )
-                     (i32.store
-                      (get_local $$46)
-                      (get_local $$743)
-                     )
-                     ;;@ renderer.c:896:0
-                     (set_local $$744
-                      (get_local $$6)
-                     )
-                     (set_local $$745
-                      (i32.add
-                       (get_local $$744)
-                       (i32.const 20)
-                      )
-                     )
-                     (set_local $$746
-                      (i32.load
-                       (get_local $$745)
-                      )
-                     )
                      (drop
                       (call $_array_push
-                       (get_local $$746)
-                       (get_local $$46)
+                       (get_local $$742)
+                       (get_local $$47)
                       )
                      )
                      (br $switch)
                     )
                    )
                    (block
-                    ;;@ renderer.c:901:0
-                    (set_local $$747
+                    ;;@ renderer.c:940:0
+                    (set_local $$743
                      (i32.load
                       (get_local $$2)
                      )
                     )
-                    (set_local $$748
+                    (set_local $$744
                      (i32.add
-                      (get_local $$747)
+                      (get_local $$743)
                       (i32.const 15)
                      )
                     )
-                    (set_local $$749
+                    (set_local $$745
                      (i32.load8_s
-                      (get_local $$748)
+                      (get_local $$744)
                      )
                     )
-                    (set_local $$750
+                    (set_local $$746
                      (i32.and
-                      (get_local $$749)
+                      (get_local $$745)
                       (i32.const 255)
                      )
                     )
-                    (set_local $$751
+                    (set_local $$747
                      (i32.ne
-                      (get_local $$750)
+                      (get_local $$746)
                       (i32.const 0)
                      )
                     )
                     (if
-                     (get_local $$751)
+                     (get_local $$747)
                      (block
-                      (set_local $$752
+                      (set_local $$748
                        (i32.load8_s
                         (i32.const 9892)
                        )
                       )
-                      (set_local $$753
+                      (set_local $$749
                        (i32.and
-                        (get_local $$752)
+                        (get_local $$748)
                         (i32.const 255)
                        )
                       )
-                      (set_local $$754
+                      (set_local $$750
                        (i32.ne
-                        (get_local $$753)
+                        (get_local $$749)
                         (i32.const 0)
                        )
                       )
                       (if
-                       (get_local $$754)
+                       (get_local $$750)
                        (set_local $label
                         (i32.const 70)
                        )
                       )
                      )
                      (block
-                      (set_local $$755
+                      (set_local $$751
                        (i32.load8_s
                         (i32.const 9888)
                        )
                       )
-                      (set_local $$756
+                      (set_local $$752
                        (i32.and
-                        (get_local $$755)
+                        (get_local $$751)
                         (i32.const 255)
                        )
                       )
-                      (set_local $$757
+                      (set_local $$753
                        (i32.ne
-                        (get_local $$756)
+                        (get_local $$752)
                         (i32.const 0)
                        )
                       )
                       (if
-                       (get_local $$757)
+                       (get_local $$753)
                        (set_local $label
                         (i32.const 70)
                        )
@@ -61123,86 +61253,86 @@
                       (i32.const 70)
                      )
                      (block
-                      ;;@ renderer.c:902:0
-                      (set_local $$758
+                      ;;@ renderer.c:941:0
+                      (set_local $$754
                        (i32.load
                         (get_local $$2)
                        )
                       )
-                      (set_local $$759
+                      (set_local $$755
                        (i32.add
-                        (get_local $$758)
+                        (get_local $$754)
                         (i32.const 33)
                        )
                       )
-                      (set_local $$760
+                      (set_local $$756
                        (i32.load8_s
-                        (get_local $$759)
+                        (get_local $$755)
                        )
                       )
-                      (set_local $$761
+                      (set_local $$757
                        (i32.and
-                        (get_local $$760)
+                        (get_local $$756)
                         (i32.const 255)
                        )
                       )
-                      (set_local $$762
+                      (set_local $$758
                        (i32.eq
-                        (get_local $$761)
+                        (get_local $$757)
                         (i32.const 0)
                        )
                       )
                       (if
-                       (get_local $$762)
+                       (get_local $$758)
                        (block
-                        (set_local $$763
+                        (set_local $$759
                          (i32.load
                           (get_local $$2)
                          )
                         )
-                        (set_local $$764
+                        (set_local $$760
                          (i32.add
-                          (get_local $$763)
+                          (get_local $$759)
                           (i32.const 24)
                          )
                         )
-                        (set_local $$765
+                        (set_local $$761
                          (i32.load
-                          (get_local $$764)
+                          (get_local $$760)
                          )
                         )
-                        (set_local $$766
+                        (set_local $$762
                          (i32.ne
-                          (get_local $$765)
+                          (get_local $$761)
                           (i32.const 0)
                          )
                         )
                         (if
-                         (get_local $$766)
+                         (get_local $$762)
                          (block
-                          ;;@ renderer.c:904:0
-                          (set_local $$767
+                          ;;@ renderer.c:943:0
+                          (set_local $$763
                            (i32.load
                             (get_local $$2)
                            )
                           )
-                          (set_local $$768
+                          (set_local $$764
                            (i32.add
-                            (get_local $$767)
+                            (get_local $$763)
                             (i32.const 24)
                            )
                           )
-                          (set_local $$769
+                          (set_local $$765
                            (i32.load
-                            (get_local $$768)
+                            (get_local $$764)
                            )
                           )
-                          (set_local $$770
+                          (set_local $$766
                            (get_local $$3)
                           )
                           (call $_render_code_node
-                           (get_local $$769)
-                           (get_local $$770)
+                           (get_local $$765)
+                           (get_local $$766)
                           )
                           (br $label$break$L8)
                          )
@@ -61211,16 +61341,38 @@
                       )
                      )
                     )
-                    ;;@ renderer.c:907:0
-                    (set_local $$771
+                    ;;@ renderer.c:946:0
+                    (set_local $$767
                      (i32.load
                       (get_local $$2)
                      )
                     )
+                    (set_local $$768
+                     (i32.add
+                      (get_local $$767)
+                      (i32.const 48)
+                     )
+                    )
+                    (set_local $$769
+                     (i32.load
+                      (get_local $$768)
+                     )
+                    )
+                    (set_local $$770
+                     (get_local $$3)
+                    )
+                    (call $_render_code_node
+                     (get_local $$769)
+                     (get_local $$770)
+                    )
+                    ;;@ renderer.c:947:0
+                    (set_local $$771
+                     (get_local $$3)
+                    )
                     (set_local $$772
                      (i32.add
                       (get_local $$771)
-                      (i32.const 48)
+                      (i32.const 108)
                      )
                     )
                     (set_local $$773
@@ -61231,32 +61383,36 @@
                     (set_local $$774
                      (get_local $$3)
                     )
-                    (call $_render_code_node
-                     (get_local $$773)
-                     (get_local $$774)
-                    )
-                    ;;@ renderer.c:908:0
                     (set_local $$775
-                     (get_local $$3)
+                     (i32.add
+                      (get_local $$774)
+                      (i32.const 56)
+                     )
                     )
                     (set_local $$776
-                     (i32.add
+                     (i32.load
                       (get_local $$775)
-                      (i32.const 108)
                      )
                     )
                     (set_local $$777
-                     (i32.load
+                     (call $_make_text
+                      (get_local $$773)
+                      (i32.const 7936)
                       (get_local $$776)
                      )
                     )
+                    (i32.store
+                     (get_local $$48)
+                     (get_local $$777)
+                    )
+                    ;;@ renderer.c:948:0
                     (set_local $$778
-                     (get_local $$3)
+                     (get_local $$4)
                     )
                     (set_local $$779
                      (i32.add
                       (get_local $$778)
-                      (i32.const 56)
+                      (i32.const 20)
                      )
                     )
                     (set_local $$780
@@ -61264,25 +61420,28 @@
                       (get_local $$779)
                      )
                     )
-                    (set_local $$781
-                     (call $_make_text
-                      (get_local $$777)
-                      (i32.const 7936)
+                    (drop
+                     (call $_array_push
                       (get_local $$780)
+                      (get_local $$48)
                      )
                     )
-                    (i32.store
-                     (get_local $$47)
-                     (get_local $$781)
+                    ;;@ renderer.c:949:0
+                    (set_local $$781
+                     (i32.load
+                      (get_local $$2)
+                     )
                     )
-                    ;;@ renderer.c:909:0
                     (set_local $$782
-                     (get_local $$6)
+                     (i32.add
+                      (get_local $$781)
+                      (i32.const 48)
+                     )
                     )
                     (set_local $$783
                      (i32.add
                       (get_local $$782)
-                      (i32.const 20)
+                      (i32.const 4)
                      )
                     )
                     (set_local $$784
@@ -61290,122 +61449,93 @@
                       (get_local $$783)
                      )
                     )
-                    (drop
-                     (call $_array_push
-                      (get_local $$784)
-                      (get_local $$47)
-                     )
-                    )
-                    ;;@ renderer.c:910:0
                     (set_local $$785
-                     (i32.load
-                      (get_local $$2)
-                     )
-                    )
-                    (set_local $$786
-                     (i32.add
-                      (get_local $$785)
-                      (i32.const 48)
-                     )
-                    )
-                    (set_local $$787
-                     (i32.add
-                      (get_local $$786)
-                      (i32.const 4)
-                     )
-                    )
-                    (set_local $$788
-                     (i32.load
-                      (get_local $$787)
-                     )
-                    )
-                    (set_local $$789
                      (get_local $$3)
                     )
                     (call $_render_code_node
-                     (get_local $$788)
-                     (get_local $$789)
+                     (get_local $$784)
+                     (get_local $$785)
                     )
                     (br $switch)
                    )
                   )
                   (block
-                   ;;@ renderer.c:915:0
-                   (set_local $$790
+                   ;;@ renderer.c:954:0
+                   (set_local $$786
                     (i32.load
                      (get_local $$2)
                     )
                    )
-                   (set_local $$791
+                   (set_local $$787
                     (i32.add
-                     (get_local $$790)
+                     (get_local $$786)
                      (i32.const 15)
                     )
                    )
-                   (set_local $$792
+                   (set_local $$788
                     (i32.load8_s
-                     (get_local $$791)
+                     (get_local $$787)
                     )
                    )
-                   (set_local $$793
+                   (set_local $$789
                     (i32.and
-                     (get_local $$792)
+                     (get_local $$788)
                      (i32.const 255)
                     )
                    )
-                   (set_local $$794
+                   (set_local $$790
                     (i32.ne
-                     (get_local $$793)
+                     (get_local $$789)
                      (i32.const 0)
                     )
                    )
                    (if
-                    (get_local $$794)
+                    (get_local $$790)
                     (block
-                     (set_local $$795
+                     (set_local $$791
                       (i32.load8_s
                        (i32.const 9892)
                       )
                      )
-                     (set_local $$796
+                     (set_local $$792
                       (i32.and
-                       (get_local $$795)
+                       (get_local $$791)
                        (i32.const 255)
                       )
                      )
-                     (set_local $$797
+                     (set_local $$793
                       (i32.ne
-                       (get_local $$796)
+                       (get_local $$792)
                        (i32.const 0)
                       )
                      )
                      (if
-                      (get_local $$797)
+                      (get_local $$793)
                       (set_local $label
                        (i32.const 77)
                       )
                      )
                     )
                     (block
-                     (set_local $$798
+                     (set_local $$794
                       (i32.load8_s
                        (i32.const 9888)
                       )
                      )
-                     (set_local $$799
+                     (set_local $$795
                       (i32.and
-                       (get_local $$798)
+                       (get_local $$794)
                        (i32.const 255)
                       )
                      )
-                     (set_local $$800
+                     (set_local $$796
                       (i32.ne
-                       (get_local $$799)
+                       (get_local $$795)
                        (i32.const 0)
                       )
                      )
                      (if
-                      (get_local $$800)
+                      (get_local $$796)
                       (set_local $label
                        (i32.const 77)
                       )
@@ -61418,106 +61548,106 @@
                      (i32.const 77)
                     )
                     (block
-                     ;;@ renderer.c:916:0
-                     (set_local $$801
+                     ;;@ renderer.c:955:0
+                     (set_local $$797
                       (i32.load
                        (get_local $$2)
                       )
                      )
-                     (set_local $$802
+                     (set_local $$798
                       (i32.add
-                       (get_local $$801)
+                       (get_local $$797)
                        (i32.const 33)
                       )
                      )
-                     (set_local $$803
+                     (set_local $$799
                       (i32.load8_s
-                       (get_local $$802)
+                       (get_local $$798)
                       )
                      )
-                     (set_local $$804
+                     (set_local $$800
                       (i32.and
-                       (get_local $$803)
+                       (get_local $$799)
                        (i32.const 255)
                       )
                      )
-                     (set_local $$805
+                     (set_local $$801
                       (i32.eq
-                       (get_local $$804)
+                       (get_local $$800)
                        (i32.const 0)
                       )
                      )
                      (if
-                      (get_local $$805)
+                      (get_local $$801)
                       (block
-                       (set_local $$806
+                       (set_local $$802
                         (i32.load8_s
                          (i32.const 9896)
                         )
                        )
-                       (set_local $$807
+                       (set_local $$803
                         (i32.and
-                         (get_local $$806)
+                         (get_local $$802)
                          (i32.const 255)
                         )
                        )
-                       (set_local $$808
+                       (set_local $$804
                         (i32.eq
-                         (get_local $$807)
+                         (get_local $$803)
                          (i32.const 0)
                         )
                        )
                        (if
-                        (get_local $$808)
+                        (get_local $$804)
                         (block
-                         (set_local $$809
+                         (set_local $$805
                           (i32.load
                            (get_local $$2)
                           )
                          )
-                         (set_local $$810
+                         (set_local $$806
                           (i32.add
-                           (get_local $$809)
+                           (get_local $$805)
                            (i32.const 24)
                           )
                          )
-                         (set_local $$811
+                         (set_local $$807
                           (i32.load
-                           (get_local $$810)
+                           (get_local $$806)
                           )
                          )
-                         (set_local $$812
+                         (set_local $$808
                           (i32.ne
-                           (get_local $$811)
+                           (get_local $$807)
                            (i32.const 0)
                           )
                          )
                          (if
-                          (get_local $$812)
+                          (get_local $$808)
                           (block
-                           ;;@ renderer.c:918:0
-                           (set_local $$813
+                           ;;@ renderer.c:957:0
+                           (set_local $$809
                             (i32.load
                              (get_local $$2)
                             )
                            )
-                           (set_local $$814
+                           (set_local $$810
                             (i32.add
-                             (get_local $$813)
+                             (get_local $$809)
                              (i32.const 24)
                             )
                            )
-                           (set_local $$815
+                           (set_local $$811
                             (i32.load
-                             (get_local $$814)
+                             (get_local $$810)
                             )
                            )
-                           (set_local $$816
+                           (set_local $$812
                             (get_local $$3)
                            )
                            (call $_render_code_node
-                            (get_local $$815)
-                            (get_local $$816)
+                            (get_local $$811)
+                            (get_local $$812)
                            )
                            (br $label$break$L8)
                           )
@@ -61528,72 +61658,94 @@
                      )
                     )
                    )
-                   ;;@ renderer.c:920:0
-                   (set_local $$817
+                   ;;@ renderer.c:959:0
+                   (set_local $$813
                     (i32.load
                      (get_local $$2)
                     )
                    )
-                   (set_local $$818
+                   (set_local $$814
                     (i32.add
-                     (get_local $$817)
+                     (get_local $$813)
                      (i32.const 33)
                     )
                    )
-                   (set_local $$819
+                   (set_local $$815
                     (i32.load8_s
-                     (get_local $$818)
+                     (get_local $$814)
                     )
                    )
-                   (set_local $$820
+                   (set_local $$816
                     (i32.and
-                     (get_local $$819)
+                     (get_local $$815)
                      (i32.const 255)
                     )
                    )
-                   (set_local $$821
+                   (set_local $$817
                     (i32.ne
-                     (get_local $$820)
+                     (get_local $$816)
                      (i32.const 0)
                     )
                    )
                    (if
                     (i32.eqz
-                     (get_local $$821)
+                     (get_local $$817)
                     )
                     (block
-                     (set_local $$822
+                     (set_local $$818
                       (i32.load8_s
                        (i32.const 9896)
                       )
                      )
-                     (set_local $$823
+                     (set_local $$819
                       (i32.and
-                       (get_local $$822)
+                       (get_local $$818)
                        (i32.const 255)
                       )
                      )
-                     (set_local $$824
+                     (set_local $$820
                       (i32.ne
-                       (get_local $$823)
+                       (get_local $$819)
                        (i32.const 0)
                       )
                      )
                      (if
                       (i32.eqz
-                       (get_local $$824)
+                       (get_local $$820)
                       )
                       (block
-                       ;;@ renderer.c:924:0
-                       (set_local $$830
+                       ;;@ renderer.c:963:0
+                       (set_local $$826
                         (i32.load
                          (get_local $$2)
                         )
                        )
+                       (set_local $$827
+                        (i32.add
+                         (get_local $$826)
+                         (i32.const 48)
+                        )
+                       )
+                       (set_local $$828
+                        (i32.load
+                         (get_local $$827)
+                        )
+                       )
+                       (set_local $$829
+                        (get_local $$3)
+                       )
+                       (call $_render_code_node
+                        (get_local $$828)
+                        (get_local $$829)
+                       )
+                       ;;@ renderer.c:964:0
+                       (set_local $$830
+                        (get_local $$3)
+                       )
                        (set_local $$831
                         (i32.add
                          (get_local $$830)
-                         (i32.const 48)
+                         (i32.const 108)
                         )
                        )
                        (set_local $$832
@@ -61604,32 +61756,36 @@
                        (set_local $$833
                         (get_local $$3)
                        )
-                       (call $_render_code_node
-                        (get_local $$832)
-                        (get_local $$833)
-                       )
-                       ;;@ renderer.c:925:0
                        (set_local $$834
-                        (get_local $$3)
+                        (i32.add
+                         (get_local $$833)
+                         (i32.const 56)
+                        )
                        )
                        (set_local $$835
-                        (i32.add
+                        (i32.load
                          (get_local $$834)
-                         (i32.const 108)
                         )
                        )
                        (set_local $$836
-                        (i32.load
+                        (call $_make_text
+                         (get_local $$832)
+                         (i32.const 6534)
                          (get_local $$835)
                         )
                        )
+                       (i32.store
+                        (get_local $$49)
+                        (get_local $$836)
+                       )
+                       ;;@ renderer.c:965:0
                        (set_local $$837
-                        (get_local $$3)
+                        (get_local $$4)
                        )
                        (set_local $$838
                         (i32.add
                          (get_local $$837)
-                         (i32.const 56)
+                         (i32.const 20)
                         )
                        )
                        (set_local $$839
@@ -61637,131 +61793,131 @@
                          (get_local $$838)
                         )
                        )
-                       (set_local $$840
-                        (call $_make_text
-                         (get_local $$836)
-                         (i32.const 6534)
-                         (get_local $$839)
-                        )
-                       )
-                       (i32.store
-                        (get_local $$48)
-                        (get_local $$840)
-                       )
-                       ;;@ renderer.c:926:0
-                       (set_local $$841
-                        (get_local $$6)
-                       )
-                       (set_local $$842
-                        (i32.add
-                         (get_local $$841)
-                         (i32.const 20)
-                        )
-                       )
-                       (set_local $$843
-                        (i32.load
-                         (get_local $$842)
-                        )
-                       )
                        (drop
                         (call $_array_push
-                         (get_local $$843)
-                         (get_local $$48)
+                         (get_local $$839)
+                         (get_local $$49)
                         )
                        )
-                       ;;@ renderer.c:927:0
-                       (set_local $$49
+                       ;;@ renderer.c:966:0
+                       (set_local $$50
                         (i32.const 1)
                        )
-                       ;;@ renderer.c:928:0
-                       (set_local $$50
+                       ;;@ renderer.c:967:0
+                       (set_local $$51
                         (i32.const 0)
                        )
                        (loop $while-in16
                         (block $while-out15
-                         (set_local $$844
-                          (get_local $$50)
+                         (set_local $$840
+                          (get_local $$51)
                          )
-                         (set_local $$845
+                         (set_local $$841
                           (i32.load
                            (get_local $$2)
                           )
                          )
-                         (set_local $$846
+                         (set_local $$842
                           (i32.add
-                           (get_local $$845)
+                           (get_local $$841)
                            (i32.const 48)
                           )
                          )
-                         (set_local $$847
+                         (set_local $$843
                           (i32.add
-                           (get_local $$846)
+                           (get_local $$842)
                            (i32.const 4)
                           )
                          )
-                         (set_local $$848
+                         (set_local $$844
                           (i32.load
-                           (get_local $$847)
+                           (get_local $$843)
                           )
                          )
-                         (set_local $$849
+                         (set_local $$845
                           (i32.load
-                           (get_local $$848)
-                          )
-                         )
-                         (set_local $$850
-                          (i32.lt_u
                            (get_local $$844)
-                           (get_local $$849)
+                          )
+                         )
+                         (set_local $$846
+                          (i32.lt_u
+                           (get_local $$840)
+                           (get_local $$845)
                           )
                          )
                          (if
                           (i32.eqz
-                           (get_local $$850)
+                           (get_local $$846)
                           )
                           (br $while-out15)
                          )
-                         ;;@ renderer.c:929:0
-                         (set_local $$851
-                          (get_local $$49)
+                         ;;@ renderer.c:968:0
+                         (set_local $$847
+                          (get_local $$50)
                          )
-                         (set_local $$852
+                         (set_local $$848
                           (i32.and
-                           (get_local $$851)
+                           (get_local $$847)
                            (i32.const 255)
                           )
                          )
-                         (set_local $$853
+                         (set_local $$849
                           (i32.eq
-                           (get_local $$852)
+                           (get_local $$848)
                            (i32.const 0)
                           )
                          )
                          (if
-                          (get_local $$853)
+                          (get_local $$849)
                           (block
-                           ;;@ renderer.c:930:0
-                           (set_local $$854
+                           ;;@ renderer.c:969:0
+                           (set_local $$850
                             (get_local $$3)
                            )
-                           (set_local $$855
+                           (set_local $$851
                             (i32.add
-                             (get_local $$854)
+                             (get_local $$850)
                              (i32.const 108)
                             )
                            )
-                           (set_local $$856
+                           (set_local $$852
                             (i32.load
+                             (get_local $$851)
+                            )
+                           )
+                           (set_local $$853
+                            (get_local $$3)
+                           )
+                           (set_local $$854
+                            (i32.add
+                             (get_local $$853)
+                             (i32.const 56)
+                            )
+                           )
+                           (set_local $$855
+                            (i32.load
+                             (get_local $$854)
+                            )
+                           )
+                           (set_local $$856
+                            (call $_make_text
+                             (get_local $$852)
+                             (i32.const 5999)
                              (get_local $$855)
                             )
                            )
+                           (i32.store
+                            (get_local $$52)
+                            (get_local $$856)
+                           )
+                           ;;@ renderer.c:970:0
                            (set_local $$857
-                            (get_local $$3)
+                            (get_local $$4)
                            )
                            (set_local $$858
                             (i32.add
                              (get_local $$857)
-                             (i32.const 56)
+                             (i32.const 20)
                             )
                            )
                            (set_local $$859
@@ -61769,140 +61925,140 @@
                              (get_local $$858)
                             )
                            )
-                           (set_local $$860
-                            (call $_make_text
-                             (get_local $$856)
-                             (i32.const 5999)
-                             (get_local $$859)
-                            )
-                           )
-                           (i32.store
-                            (get_local $$51)
-                            (get_local $$860)
-                           )
-                           ;;@ renderer.c:931:0
-                           (set_local $$861
-                            (get_local $$6)
-                           )
-                           (set_local $$862
-                            (i32.add
-                             (get_local $$861)
-                             (i32.const 20)
-                            )
-                           )
-                           (set_local $$863
-                            (i32.load
-                             (get_local $$862)
-                            )
-                           )
                            (drop
                             (call $_array_push
-                             (get_local $$863)
-                             (get_local $$51)
+                             (get_local $$859)
+                             (get_local $$52)
                             )
                            )
                           )
-                          ;;@ renderer.c:934:0
-                          (set_local $$49
+                          ;;@ renderer.c:973:0
+                          (set_local $$50
                            (i32.const 0)
                           )
                          )
-                         ;;@ renderer.c:936:0
-                         (set_local $$864
+                         ;;@ renderer.c:975:0
+                         (set_local $$860
                           (i32.load
                            (get_local $$2)
                           )
                          )
-                         (set_local $$865
+                         (set_local $$861
                           (i32.add
-                           (get_local $$864)
+                           (get_local $$860)
                            (i32.const 48)
                           )
                          )
-                         (set_local $$866
+                         (set_local $$862
                           (i32.add
-                           (get_local $$865)
+                           (get_local $$861)
                            (i32.const 4)
                           )
                          )
-                         (set_local $$867
+                         (set_local $$863
                           (i32.load
-                           (get_local $$866)
+                           (get_local $$862)
                           )
                          )
-                         (set_local $$868
+                         (set_local $$864
                           (i32.add
-                           (get_local $$867)
+                           (get_local $$863)
                            (i32.const 12)
                           )
                          )
-                         (set_local $$869
+                         (set_local $$865
                           (i32.load
-                           (get_local $$868)
+                           (get_local $$864)
                           )
                          )
-                         (set_local $$870
-                          (get_local $$50)
+                         (set_local $$866
+                          (get_local $$51)
                          )
-                         (set_local $$871
+                         (set_local $$867
                           (i32.add
-                           (get_local $$869)
+                           (get_local $$865)
                            (i32.shl
-                            (get_local $$870)
+                            (get_local $$866)
                             (i32.const 2)
                            )
                           )
                          )
-                         (set_local $$872
+                         (set_local $$868
                           (i32.load
-                           (get_local $$871)
+                           (get_local $$867)
                           )
                          )
-                         (set_local $$873
+                         (set_local $$869
                           (get_local $$3)
                          )
                          (call $_render_code_node
-                          (get_local $$872)
-                          (get_local $$873)
+                          (get_local $$868)
+                          (get_local $$869)
                          )
-                         ;;@ renderer.c:928:0
-                         (set_local $$874
-                          (get_local $$50)
+                         ;;@ renderer.c:967:0
+                         (set_local $$870
+                          (get_local $$51)
                          )
-                         (set_local $$875
+                         (set_local $$871
                           (i32.add
-                           (get_local $$874)
+                           (get_local $$870)
                            (i32.const 1)
                           )
                          )
-                         (set_local $$50
-                          (get_local $$875)
+                         (set_local $$51
+                          (get_local $$871)
                          )
                          (br $while-in16)
                         )
                        )
-                       ;;@ renderer.c:938:0
-                       (set_local $$876
+                       ;;@ renderer.c:977:0
+                       (set_local $$872
                         (get_local $$3)
                        )
-                       (set_local $$877
+                       (set_local $$873
                         (i32.add
-                         (get_local $$876)
+                         (get_local $$872)
                          (i32.const 108)
                         )
                        )
-                       (set_local $$878
+                       (set_local $$874
                         (i32.load
+                         (get_local $$873)
+                        )
+                       )
+                       (set_local $$875
+                        (get_local $$3)
+                       )
+                       (set_local $$876
+                        (i32.add
+                         (get_local $$875)
+                         (i32.const 56)
+                        )
+                       )
+                       (set_local $$877
+                        (i32.load
+                         (get_local $$876)
+                        )
+                       )
+                       (set_local $$878
+                        (call $_make_text
+                         (get_local $$874)
+                         (i32.const 6536)
                          (get_local $$877)
                         )
                        )
+                       (i32.store
+                        (get_local $$53)
+                        (get_local $$878)
+                       )
+                       ;;@ renderer.c:978:0
                        (set_local $$879
-                        (get_local $$3)
+                        (get_local $$4)
                        )
                        (set_local $$880
                         (i32.add
                          (get_local $$879)
-                         (i32.const 56)
+                         (i32.const 20)
                         )
                        )
                        (set_local $$881
@@ -61910,36 +62066,10 @@
                          (get_local $$880)
                         )
                        )
-                       (set_local $$882
-                        (call $_make_text
-                         (get_local $$878)
-                         (i32.const 6536)
-                         (get_local $$881)
-                        )
-                       )
-                       (i32.store
-                        (get_local $$52)
-                        (get_local $$882)
-                       )
-                       ;;@ renderer.c:939:0
-                       (set_local $$883
-                        (get_local $$6)
-                       )
-                       (set_local $$884
-                        (i32.add
-                         (get_local $$883)
-                         (i32.const 20)
-                        )
-                       )
-                       (set_local $$885
-                        (i32.load
-                         (get_local $$884)
-                        )
-                       )
                        (drop
                         (call $_array_push
-                         (get_local $$885)
-                         (get_local $$52)
+                         (get_local $$881)
+                         (get_local $$53)
                         )
                        )
                        (br $label$break$L8)
@@ -61947,101 +62077,127 @@
                      )
                     )
                    )
-                   ;;@ renderer.c:921:0
-                   (set_local $$825
+                   ;;@ renderer.c:960:0
+                   (set_local $$821
                     (i32.load
                      (get_local $$2)
                     )
                    )
-                   (set_local $$826
+                   (set_local $$822
                     (i32.add
-                     (get_local $$825)
+                     (get_local $$821)
                      (i32.const 48)
                     )
                    )
-                   (set_local $$827
+                   (set_local $$823
                     (i32.add
-                     (get_local $$826)
+                     (get_local $$822)
                      (i32.const 12)
                     )
                    )
-                   (set_local $$828
+                   (set_local $$824
                     (i32.load
-                     (get_local $$827)
+                     (get_local $$823)
                     )
                    )
-                   (set_local $$829
+                   (set_local $$825
                     (get_local $$3)
                    )
                    (call $_render_code_node
-                    (get_local $$828)
-                    (get_local $$829)
+                    (get_local $$824)
+                    (get_local $$825)
                    )
                    (br $switch)
                   )
                  )
                  (block
-                  ;;@ renderer.c:944:0
-                  (set_local $$886
+                  ;;@ renderer.c:983:0
+                  (set_local $$882
                    (i32.load
                     (get_local $$2)
                    )
                   )
-                  (set_local $$887
+                  (set_local $$883
                    (i32.add
-                    (get_local $$886)
+                    (get_local $$882)
                     (i32.const 28)
                    )
                   )
-                  (set_local $$888
+                  (set_local $$884
                    (i32.load
-                    (get_local $$887)
+                    (get_local $$883)
                    )
                   )
-                  (set_local $$889
+                  (set_local $$885
                    (i32.ne
-                    (get_local $$888)
+                    (get_local $$884)
                     (i32.const 0)
                    )
                   )
                   (if
-                   (get_local $$889)
+                   (get_local $$885)
                    (block
-                    ;;@ renderer.c:945:0
-                    (set_local $$890
+                    ;;@ renderer.c:984:0
+                    (set_local $$886
                      (i32.load
                       (get_local $$2)
                      )
                     )
-                    (set_local $$891
+                    (set_local $$887
                      (i32.add
-                      (get_local $$890)
+                      (get_local $$886)
                       (i32.const 28)
                      )
                     )
-                    (set_local $$892
+                    (set_local $$888
                      (i32.load
-                      (get_local $$891)
+                      (get_local $$887)
                      )
                     )
-                    (set_local $$893
+                    (set_local $$889
                      (get_local $$3)
                     )
                     (call $_render_code_node
-                     (get_local $$892)
-                     (get_local $$893)
+                     (get_local $$888)
+                     (get_local $$889)
                     )
                     (br $label$break$L8)
                    )
                   )
-                  ;;@ renderer.c:948:0
-                  (set_local $$894
+                  ;;@ renderer.c:987:0
+                  (set_local $$890
                    (get_local $$3)
+                  )
+                  (set_local $$891
+                   (i32.add
+                    (get_local $$890)
+                    (i32.const 108)
+                   )
+                  )
+                  (set_local $$892
+                   (i32.load
+                    (get_local $$891)
+                   )
+                  )
+                  (set_local $$893
+                   (call $_make_text
+                    (get_local $$892)
+                    (i32.const 6126)
+                    (i32.const 1104)
+                   )
+                  )
+                  (i32.store
+                   (get_local $$54)
+                   (get_local $$893)
+                  )
+                  ;;@ renderer.c:988:0
+                  (set_local $$894
+                   (get_local $$4)
                   )
                   (set_local $$895
                    (i32.add
                     (get_local $$894)
-                    (i32.const 108)
+                    (i32.const 20)
                    )
                   )
                   (set_local $$896
@@ -62049,94 +62205,68 @@
                     (get_local $$895)
                    )
                   )
-                  (set_local $$897
-                   (call $_make_text
-                    (get_local $$896)
-                    (i32.const 6126)
-                    (i32.const 1104)
-                   )
-                  )
-                  (i32.store
-                   (get_local $$53)
-                   (get_local $$897)
-                  )
-                  ;;@ renderer.c:949:0
-                  (set_local $$898
-                   (get_local $$6)
-                  )
-                  (set_local $$899
-                   (i32.add
-                    (get_local $$898)
-                    (i32.const 20)
-                   )
-                  )
-                  (set_local $$900
-                   (i32.load
-                    (get_local $$899)
-                   )
-                  )
                   (drop
                    (call $_array_push
-                    (get_local $$900)
-                    (get_local $$53)
+                    (get_local $$896)
+                    (get_local $$54)
                    )
                   )
-                  ;;@ renderer.c:950:0
-                  (set_local $$901
+                  ;;@ renderer.c:989:0
+                  (set_local $$897
                    (i32.load
                     (get_local $$2)
                    )
                   )
-                  (set_local $$902
+                  (set_local $$898
                    (i32.add
-                    (get_local $$901)
+                    (get_local $$897)
                     (i32.const 48)
                    )
                   )
-                  (set_local $$903
+                  (set_local $$899
                    (i32.load
-                    (get_local $$902)
+                    (get_local $$898)
                    )
                   )
-                  (set_local $$904
+                  (set_local $$900
                    (i32.ne
-                    (get_local $$903)
+                    (get_local $$899)
                     (i32.const 0)
                    )
                   )
                   (if
-                   (get_local $$904)
+                   (get_local $$900)
                    (block
-                    ;;@ renderer.c:951:0
-                    (set_local $$905
+                    ;;@ renderer.c:990:0
+                    (set_local $$901
                      (get_local $$3)
                     )
                     (call $_render_space
-                     (get_local $$905)
+                     (get_local $$901)
                     )
-                    ;;@ renderer.c:952:0
-                    (set_local $$906
+                    ;;@ renderer.c:991:0
+                    (set_local $$902
                      (i32.load
                       (get_local $$2)
                      )
                     )
-                    (set_local $$907
+                    (set_local $$903
                      (i32.add
-                      (get_local $$906)
+                      (get_local $$902)
                       (i32.const 48)
                      )
                     )
-                    (set_local $$908
+                    (set_local $$904
                      (i32.load
-                      (get_local $$907)
+                      (get_local $$903)
                      )
                     )
-                    (set_local $$909
+                    (set_local $$905
                      (get_local $$3)
                     )
                     (call $_render_code_node
-                     (get_local $$908)
-                     (get_local $$909)
+                     (get_local $$904)
+                     (get_local $$905)
                     )
                    )
                   )
@@ -62147,127 +62277,127 @@
                (br $switch)
               )
               (block
-               ;;@ renderer.c:964:0
-               (set_local $$910
+               ;;@ renderer.c:1003:0
+               (set_local $$906
                 (i32.load8_s
                  (i32.const 9888)
                 )
                )
-               (set_local $$911
+               (set_local $$907
                 (i32.and
-                 (get_local $$910)
+                 (get_local $$906)
                  (i32.const 255)
                 )
                )
-               (set_local $$912
+               (set_local $$908
                 (i32.ne
-                 (get_local $$911)
+                 (get_local $$907)
                  (i32.const 0)
                 )
                )
                (if
-                (get_local $$912)
+                (get_local $$908)
                 (block
-                 (set_local $$913
+                 (set_local $$909
                   (i32.load
                    (get_local $$2)
                   )
                  )
-                 (set_local $$914
+                 (set_local $$910
                   (i32.add
-                   (get_local $$913)
+                   (get_local $$909)
                    (i32.const 24)
                   )
                  )
-                 (set_local $$915
+                 (set_local $$911
                   (i32.load
-                   (get_local $$914)
+                   (get_local $$910)
                   )
                  )
-                 (set_local $$916
+                 (set_local $$912
                   (i32.ne
-                   (get_local $$915)
+                   (get_local $$911)
                    (i32.const 0)
                   )
                  )
                  (if
-                  (get_local $$916)
+                  (get_local $$912)
                   (block
-                   ;;@ renderer.c:965:0
-                   (set_local $$917
+                   ;;@ renderer.c:1004:0
+                   (set_local $$913
                     (i32.load
                      (get_local $$2)
                     )
                    )
-                   (set_local $$918
+                   (set_local $$914
                     (i32.add
-                     (get_local $$917)
+                     (get_local $$913)
                      (i32.const 33)
                     )
                    )
-                   (set_local $$919
+                   (set_local $$915
                     (i32.load8_s
-                     (get_local $$918)
+                     (get_local $$914)
                     )
                    )
-                   (set_local $$920
+                   (set_local $$916
                     (i32.and
-                     (get_local $$919)
+                     (get_local $$915)
                      (i32.const 255)
                     )
                    )
-                   (set_local $$921
+                   (set_local $$917
                     (i32.eq
-                     (get_local $$920)
+                     (get_local $$916)
                      (i32.const 0)
                     )
                    )
                    (if
-                    (get_local $$921)
+                    (get_local $$917)
                     (block
-                     (set_local $$922
+                     (set_local $$918
                       (i32.load8_s
                        (i32.const 9900)
                       )
                      )
-                     (set_local $$923
+                     (set_local $$919
                       (i32.and
-                       (get_local $$922)
+                       (get_local $$918)
                        (i32.const 255)
                       )
                      )
-                     (set_local $$924
+                     (set_local $$920
                       (i32.eq
-                       (get_local $$923)
+                       (get_local $$919)
                        (i32.const 0)
                       )
                      )
                      (if
-                      (get_local $$924)
+                      (get_local $$920)
                       (block
-                       ;;@ renderer.c:967:0
-                       (set_local $$925
+                       ;;@ renderer.c:1006:0
+                       (set_local $$921
                         (i32.load
                          (get_local $$2)
                         )
                        )
-                       (set_local $$926
+                       (set_local $$922
                         (i32.add
-                         (get_local $$925)
+                         (get_local $$921)
                          (i32.const 24)
                         )
                        )
-                       (set_local $$927
+                       (set_local $$923
                         (i32.load
-                         (get_local $$926)
+                         (get_local $$922)
                         )
                        )
-                       (set_local $$928
+                       (set_local $$924
                         (get_local $$3)
                        )
                        (call $_render_code_node
-                        (get_local $$927)
-                        (get_local $$928)
+                        (get_local $$923)
+                        (get_local $$924)
                        )
                        (br $label$break$L8)
                       )
@@ -62278,17 +62408,17 @@
                  )
                 )
                )
-               ;;@ renderer.c:972:0
-               (set_local $$929
+               ;;@ renderer.c:1011:0
+               (set_local $$925
                 (i32.load8_s
                  (i32.const 9924)
                 )
                )
-               (set_local $$930
+               (set_local $$926
                 (i32.ne
                  (i32.shr_s
                   (i32.shl
-                   (get_local $$929)
+                   (get_local $$925)
                    (i32.const 24)
                   )
                   (i32.const 24)
@@ -62297,30 +62427,56 @@
                 )
                )
                (if
-                (get_local $$930)
+                (get_local $$926)
                 (block
-                 ;;@ renderer.c:973:0
-                 (set_local $$931
+                 ;;@ renderer.c:1012:0
+                 (set_local $$927
                   (get_local $$3)
                  )
-                 (set_local $$932
+                 (set_local $$928
                   (i32.add
-                   (get_local $$931)
+                   (get_local $$927)
                    (i32.const 108)
                   )
                  )
-                 (set_local $$933
+                 (set_local $$929
                   (i32.load
+                   (get_local $$928)
+                  )
+                 )
+                 (set_local $$930
+                  (get_local $$3)
+                 )
+                 (set_local $$931
+                  (i32.add
+                   (get_local $$930)
+                   (i32.const 56)
+                  )
+                 )
+                 (set_local $$932
+                  (i32.load
+                   (get_local $$931)
+                  )
+                 )
+                 (set_local $$933
+                  (call $_make_text
+                   (get_local $$929)
+                   (i32.const 6534)
                    (get_local $$932)
                   )
                  )
+                 (i32.store
+                  (get_local $$55)
+                  (get_local $$933)
+                 )
+                 ;;@ renderer.c:1013:0
                  (set_local $$934
-                  (get_local $$3)
+                  (get_local $$4)
                  )
                  (set_local $$935
                   (i32.add
                    (get_local $$934)
-                   (i32.const 56)
+                   (i32.const 20)
                   )
                  )
                  (set_local $$936
@@ -62328,79 +62484,75 @@
                    (get_local $$935)
                   )
                  )
-                 (set_local $$937
-                  (call $_make_text
-                   (get_local $$933)
-                   (i32.const 6534)
-                   (get_local $$936)
-                  )
-                 )
-                 (i32.store
-                  (get_local $$54)
-                  (get_local $$937)
-                 )
-                 ;;@ renderer.c:974:0
-                 (set_local $$938
-                  (get_local $$6)
-                 )
-                 (set_local $$939
-                  (i32.add
-                   (get_local $$938)
-                   (i32.const 20)
-                  )
-                 )
-                 (set_local $$940
-                  (i32.load
-                   (get_local $$939)
-                  )
-                 )
                  (drop
                   (call $_array_push
-                   (get_local $$940)
-                   (get_local $$54)
+                   (get_local $$936)
+                   (get_local $$55)
                   )
                  )
                 )
                )
-               ;;@ renderer.c:976:0
-               (set_local $$941
+               ;;@ renderer.c:1015:0
+               (set_local $$937
                 (i32.load
                  (get_local $$2)
                 )
                )
-               (set_local $$942
+               (set_local $$938
                 (i32.add
-                 (get_local $$941)
+                 (get_local $$937)
                  (i32.const 48)
                 )
                )
-               (set_local $$943
+               (set_local $$939
                 (i32.load
-                 (get_local $$942)
+                 (get_local $$938)
                 )
                )
-               (set_local $$944
+               (set_local $$940
                 (get_local $$3)
                )
                (call $_render_code_node
-                (get_local $$943)
-                (get_local $$944)
+                (get_local $$939)
+                (get_local $$940)
                )
-               ;;@ renderer.c:977:0
-               (set_local $$945
+               ;;@ renderer.c:1016:0
+               (set_local $$941
                 (get_local $$3)
                )
                (call $_render_space
-                (get_local $$945)
+                (get_local $$941)
                )
-               ;;@ renderer.c:978:0
-               (set_local $$946
+               ;;@ renderer.c:1017:0
+               (set_local $$942
                 (get_local $$3)
+               )
+               (set_local $$943
+                (i32.add
+                 (get_local $$942)
+                 (i32.const 108)
+                )
+               )
+               (set_local $$944
+                (i32.load
+                 (get_local $$943)
+                )
+               )
+               (set_local $$945
+                (i32.load
+                 (get_local $$2)
+                )
+               )
+               (set_local $$946
+                (i32.add
+                 (get_local $$945)
+                 (i32.const 48)
+                )
                )
                (set_local $$947
                 (i32.add
                  (get_local $$946)
-                 (i32.const 108)
+                 (i32.const 4)
                 )
                )
                (set_local $$948
@@ -62409,20 +62561,24 @@
                 )
                )
                (set_local $$949
-                (i32.load
-                 (get_local $$2)
+                (call $_make_text
+                 (get_local $$944)
+                 (get_local $$948)
+                 (i32.const 1120)
                 )
                )
+               (i32.store
+                (get_local $$56)
+                (get_local $$949)
+               )
+               ;;@ renderer.c:1018:0
                (set_local $$950
-                (i32.add
-                 (get_local $$949)
-                 (i32.const 48)
-                )
+                (get_local $$4)
                )
                (set_local $$951
                 (i32.add
                  (get_local $$950)
-                 (i32.const 4)
+                 (i32.const 20)
                 )
                )
                (set_local $$952
@@ -62430,86 +62586,60 @@
                  (get_local $$951)
                 )
                )
-               (set_local $$953
-                (call $_make_text
-                 (get_local $$948)
-                 (get_local $$952)
-                 (i32.const 1120)
-                )
-               )
-               (i32.store
-                (get_local $$55)
-                (get_local $$953)
-               )
-               ;;@ renderer.c:979:0
-               (set_local $$954
-                (get_local $$6)
-               )
-               (set_local $$955
-                (i32.add
-                 (get_local $$954)
-                 (i32.const 20)
-                )
-               )
-               (set_local $$956
-                (i32.load
-                 (get_local $$955)
-                )
-               )
                (drop
                 (call $_array_push
-                 (get_local $$956)
-                 (get_local $$55)
+                 (get_local $$952)
+                 (get_local $$56)
                 )
                )
-               ;;@ renderer.c:980:0
-               (set_local $$957
+               ;;@ renderer.c:1019:0
+               (set_local $$953
                 (get_local $$3)
                )
                (call $_render_space
-                (get_local $$957)
+                (get_local $$953)
                )
-               ;;@ renderer.c:981:0
-               (set_local $$958
+               ;;@ renderer.c:1020:0
+               (set_local $$954
                 (i32.load
                  (get_local $$2)
                 )
                )
-               (set_local $$959
+               (set_local $$955
                 (i32.add
-                 (get_local $$958)
+                 (get_local $$954)
                  (i32.const 48)
                 )
                )
-               (set_local $$960
+               (set_local $$956
                 (i32.add
-                 (get_local $$959)
+                 (get_local $$955)
                  (i32.const 8)
                 )
                )
-               (set_local $$961
+               (set_local $$957
                 (i32.load
-                 (get_local $$960)
+                 (get_local $$956)
                 )
                )
-               (set_local $$962
+               (set_local $$958
                 (get_local $$3)
                )
                (call $_render_code_node
-                (get_local $$961)
-                (get_local $$962)
+                (get_local $$957)
+                (get_local $$958)
                )
-               ;;@ renderer.c:982:0
-               (set_local $$963
+               ;;@ renderer.c:1021:0
+               (set_local $$959
                 (i32.load8_s
                  (i32.const 9924)
                 )
                )
-               (set_local $$964
+               (set_local $$960
                 (i32.ne
                  (i32.shr_s
                   (i32.shl
-                   (get_local $$963)
+                   (get_local $$959)
                    (i32.const 24)
                   )
                   (i32.const 24)
@@ -62518,30 +62648,56 @@
                 )
                )
                (if
-                (get_local $$964)
+                (get_local $$960)
                 (block
-                 ;;@ renderer.c:983:0
-                 (set_local $$965
+                 ;;@ renderer.c:1022:0
+                 (set_local $$961
                   (get_local $$3)
                  )
-                 (set_local $$966
+                 (set_local $$962
                   (i32.add
-                   (get_local $$965)
+                   (get_local $$961)
                    (i32.const 108)
                   )
                  )
-                 (set_local $$967
+                 (set_local $$963
                   (i32.load
+                   (get_local $$962)
+                  )
+                 )
+                 (set_local $$964
+                  (get_local $$3)
+                 )
+                 (set_local $$965
+                  (i32.add
+                   (get_local $$964)
+                   (i32.const 56)
+                  )
+                 )
+                 (set_local $$966
+                  (i32.load
+                   (get_local $$965)
+                  )
+                 )
+                 (set_local $$967
+                  (call $_make_text
+                   (get_local $$963)
+                   (i32.const 6536)
                    (get_local $$966)
                   )
                  )
+                 (i32.store
+                  (get_local $$57)
+                  (get_local $$967)
+                 )
+                 ;;@ renderer.c:1023:0
                  (set_local $$968
-                  (get_local $$3)
+                  (get_local $$4)
                  )
                  (set_local $$969
                   (i32.add
                    (get_local $$968)
-                   (i32.const 56)
+                   (i32.const 20)
                   )
                  )
                  (set_local $$970
@@ -62549,36 +62705,10 @@
                    (get_local $$969)
                   )
                  )
-                 (set_local $$971
-                  (call $_make_text
-                   (get_local $$967)
-                   (i32.const 6536)
-                   (get_local $$970)
-                  )
-                 )
-                 (i32.store
-                  (get_local $$56)
-                  (get_local $$971)
-                 )
-                 ;;@ renderer.c:984:0
-                 (set_local $$972
-                  (get_local $$6)
-                 )
-                 (set_local $$973
-                  (i32.add
-                   (get_local $$972)
-                   (i32.const 20)
-                  )
-                 )
-                 (set_local $$974
-                  (i32.load
-                   (get_local $$973)
-                  )
-                 )
                  (drop
                   (call $_array_push
-                   (get_local $$974)
-                   (get_local $$56)
+                   (get_local $$970)
+                   (get_local $$57)
                   )
                  )
                 )
@@ -62587,28 +62717,54 @@
               )
              )
              (block
-              ;;@ renderer.c:990:0
-              (set_local $$975
+              ;;@ renderer.c:1029:0
+              (set_local $$971
                (get_local $$3)
               )
-              (set_local $$976
+              (set_local $$972
                (i32.add
-                (get_local $$975)
+                (get_local $$971)
                 (i32.const 108)
                )
               )
-              (set_local $$977
+              (set_local $$973
                (i32.load
+                (get_local $$972)
+               )
+              )
+              (set_local $$974
+               (get_local $$3)
+              )
+              (set_local $$975
+               (i32.add
+                (get_local $$974)
+                (i32.const 56)
+               )
+              )
+              (set_local $$976
+               (i32.load
+                (get_local $$975)
+               )
+              )
+              (set_local $$977
+               (call $_make_text
+                (get_local $$973)
+                (i32.const 6534)
                 (get_local $$976)
                )
               )
+              (i32.store
+               (get_local $$58)
+               (get_local $$977)
+              )
+              ;;@ renderer.c:1030:0
               (set_local $$978
-               (get_local $$3)
+               (get_local $$4)
               )
               (set_local $$979
                (i32.add
                 (get_local $$978)
-                (i32.const 56)
+                (i32.const 20)
                )
               )
               (set_local $$980
@@ -62616,48 +62772,44 @@
                 (get_local $$979)
                )
               )
-              (set_local $$981
-               (call $_make_text
-                (get_local $$977)
-                (i32.const 6534)
-                (get_local $$980)
-               )
-              )
-              (i32.store
-               (get_local $$57)
-               (get_local $$981)
-              )
-              ;;@ renderer.c:991:0
-              (set_local $$982
-               (get_local $$6)
-              )
-              (set_local $$983
-               (i32.add
-                (get_local $$982)
-                (i32.const 20)
-               )
-              )
-              (set_local $$984
-               (i32.load
-                (get_local $$983)
-               )
-              )
               (drop
                (call $_array_push
-                (get_local $$984)
-                (get_local $$57)
+                (get_local $$980)
+                (get_local $$58)
                )
               )
-              ;;@ renderer.c:992:0
-              (set_local $$985
+              ;;@ renderer.c:1031:0
+              (set_local $$981
                (i32.load
                 (get_local $$2)
                )
               )
+              (set_local $$982
+               (i32.add
+                (get_local $$981)
+                (i32.const 48)
+               )
+              )
+              (set_local $$983
+               (i32.load
+                (get_local $$982)
+               )
+              )
+              (set_local $$984
+               (get_local $$3)
+              )
+              (call $_render_code_node
+               (get_local $$983)
+               (get_local $$984)
+              )
+              ;;@ renderer.c:1032:0
+              (set_local $$985
+               (get_local $$3)
+              )
               (set_local $$986
                (i32.add
                 (get_local $$985)
-                (i32.const 48)
+                (i32.const 108)
                )
               )
               (set_local $$987
@@ -62668,32 +62820,36 @@
               (set_local $$988
                (get_local $$3)
               )
-              (call $_render_code_node
-               (get_local $$987)
-               (get_local $$988)
-              )
-              ;;@ renderer.c:993:0
               (set_local $$989
-               (get_local $$3)
+               (i32.add
+                (get_local $$988)
+                (i32.const 56)
+               )
               )
               (set_local $$990
-               (i32.add
+               (i32.load
                 (get_local $$989)
-                (i32.const 108)
                )
               )
               (set_local $$991
-               (i32.load
+               (call $_make_text
+                (get_local $$987)
+                (i32.const 6536)
                 (get_local $$990)
                )
               )
+              (i32.store
+               (get_local $$59)
+               (get_local $$991)
+              )
+              ;;@ renderer.c:1033:0
               (set_local $$992
-               (get_local $$3)
+               (get_local $$4)
               )
               (set_local $$993
                (i32.add
                 (get_local $$992)
-                (i32.const 56)
+                (i32.const 20)
                )
               )
               (set_local $$994
@@ -62701,118 +62857,92 @@
                 (get_local $$993)
                )
               )
-              (set_local $$995
-               (call $_make_text
-                (get_local $$991)
-                (i32.const 6536)
-                (get_local $$994)
-               )
-              )
-              (i32.store
-               (get_local $$58)
-               (get_local $$995)
-              )
-              ;;@ renderer.c:994:0
-              (set_local $$996
-               (get_local $$6)
-              )
-              (set_local $$997
-               (i32.add
-                (get_local $$996)
-                (i32.const 20)
-               )
-              )
-              (set_local $$998
-               (i32.load
-                (get_local $$997)
-               )
-              )
               (drop
                (call $_array_push
-                (get_local $$998)
-                (get_local $$58)
+                (get_local $$994)
+                (get_local $$59)
                )
               )
               (br $switch)
              )
             )
             (block
-             ;;@ renderer.c:998:0
-             (set_local $$999
+             ;;@ renderer.c:1037:0
+             (set_local $$995
               (i32.load
                (get_local $$2)
               )
              )
-             (set_local $$1000
+             (set_local $$996
               (i32.add
-               (get_local $$999)
+               (get_local $$995)
                (i32.const 15)
               )
              )
-             (set_local $$1001
+             (set_local $$997
               (i32.load8_s
-               (get_local $$1000)
+               (get_local $$996)
               )
              )
-             (set_local $$1002
+             (set_local $$998
               (i32.and
-               (get_local $$1001)
+               (get_local $$997)
                (i32.const 255)
               )
              )
-             (set_local $$1003
+             (set_local $$999
               (i32.ne
-               (get_local $$1002)
+               (get_local $$998)
                (i32.const 0)
               )
              )
              (if
-              (get_local $$1003)
+              (get_local $$999)
               (block
-               (set_local $$1004
+               (set_local $$1000
                 (i32.load8_s
                  (i32.const 9892)
                 )
                )
-               (set_local $$1005
+               (set_local $$1001
                 (i32.and
-                 (get_local $$1004)
+                 (get_local $$1000)
                  (i32.const 255)
                 )
                )
-               (set_local $$1006
+               (set_local $$1002
                 (i32.ne
-                 (get_local $$1005)
+                 (get_local $$1001)
                  (i32.const 0)
                 )
                )
                (if
-                (get_local $$1006)
+                (get_local $$1002)
                 (set_local $label
                  (i32.const 108)
                 )
                )
               )
               (block
-               (set_local $$1007
+               (set_local $$1003
                 (i32.load8_s
                  (i32.const 9888)
                 )
                )
-               (set_local $$1008
+               (set_local $$1004
                 (i32.and
-                 (get_local $$1007)
+                 (get_local $$1003)
                  (i32.const 255)
                 )
                )
-               (set_local $$1009
+               (set_local $$1005
                 (i32.ne
-                 (get_local $$1008)
+                 (get_local $$1004)
                  (i32.const 0)
                 )
                )
                (if
-                (get_local $$1009)
+                (get_local $$1005)
                 (set_local $label
                  (i32.const 108)
                 )
@@ -62825,85 +62955,111 @@
                (i32.const 108)
               )
               (block
-               ;;@ renderer.c:999:0
-               (set_local $$1010
+               ;;@ renderer.c:1038:0
+               (set_local $$1006
                 (i32.load
                  (get_local $$2)
                 )
                )
-               (set_local $$1011
+               (set_local $$1007
                 (i32.add
-                 (get_local $$1010)
+                 (get_local $$1006)
                  (i32.const 24)
                 )
                )
-               (set_local $$1012
+               (set_local $$1008
                 (i32.load
-                 (get_local $$1011)
+                 (get_local $$1007)
                 )
                )
-               (set_local $$1013
+               (set_local $$1009
                 (i32.ne
-                 (get_local $$1012)
+                 (get_local $$1008)
                  (i32.const 0)
                 )
                )
                (if
-                (get_local $$1013)
+                (get_local $$1009)
                 (block
-                 ;;@ renderer.c:1001:0
-                 (set_local $$1014
+                 ;;@ renderer.c:1040:0
+                 (set_local $$1010
                   (i32.load
                    (get_local $$2)
                   )
                  )
-                 (set_local $$1015
+                 (set_local $$1011
                   (i32.add
-                   (get_local $$1014)
+                   (get_local $$1010)
                    (i32.const 24)
                   )
                  )
-                 (set_local $$1016
+                 (set_local $$1012
                   (i32.load
-                   (get_local $$1015)
+                   (get_local $$1011)
                   )
                  )
-                 (set_local $$1017
+                 (set_local $$1013
                   (get_local $$3)
                  )
                  (call $_render_code_node
-                  (get_local $$1016)
-                  (get_local $$1017)
+                  (get_local $$1012)
+                  (get_local $$1013)
                  )
                  (br $label$break$L8)
                 )
                )
               )
              )
-             ;;@ renderer.c:1004:0
-             (set_local $$1018
+             ;;@ renderer.c:1043:0
+             (set_local $$1014
               (get_local $$3)
              )
-             (set_local $$1019
+             (set_local $$1015
               (i32.add
-               (get_local $$1018)
+               (get_local $$1014)
                (i32.const 108)
               )
              )
-             (set_local $$1020
+             (set_local $$1016
               (i32.load
-               (get_local $$1019)
+               (get_local $$1015)
               )
              )
-             (set_local $$1021
+             (set_local $$1017
               (i32.load
                (get_local $$2)
               )
              )
+             (set_local $$1018
+              (i32.add
+               (get_local $$1017)
+               (i32.const 48)
+              )
+             )
+             (set_local $$1019
+              (i32.load
+               (get_local $$1018)
+              )
+             )
+             (set_local $$1020
+              (call $_make_text
+               (get_local $$1016)
+               (get_local $$1019)
+               (i32.const 1072)
+              )
+             )
+             (i32.store
+              (get_local $$60)
+              (get_local $$1020)
+             )
+             ;;@ renderer.c:1044:0
+             (set_local $$1021
+              (get_local $$4)
+             )
              (set_local $$1022
               (i32.add
                (get_local $$1021)
-               (i32.const 48)
+               (i32.const 20)
               )
              )
              (set_local $$1023
@@ -62911,36 +63067,10 @@
                (get_local $$1022)
               )
              )
-             (set_local $$1024
-              (call $_make_text
-               (get_local $$1020)
-               (get_local $$1023)
-               (i32.const 1072)
-              )
-             )
-             (i32.store
-              (get_local $$59)
-              (get_local $$1024)
-             )
-             ;;@ renderer.c:1005:0
-             (set_local $$1025
-              (get_local $$6)
-             )
-             (set_local $$1026
-              (i32.add
-               (get_local $$1025)
-               (i32.const 20)
-              )
-             )
-             (set_local $$1027
-              (i32.load
-               (get_local $$1026)
-              )
-             )
              (drop
               (call $_array_push
-               (get_local $$1027)
-               (get_local $$59)
+               (get_local $$1023)
+               (get_local $$60)
               )
              )
              (br $switch)
@@ -62950,30 +63080,56 @@
          )
         )
         (block
-         ;;@ renderer.c:1013:0
-         (set_local $$1028
+         ;;@ renderer.c:1052:0
+         (set_local $$1024
           (get_local $$3)
          )
-         (set_local $$1029
+         (set_local $$1025
           (i32.add
-           (get_local $$1028)
+           (get_local $$1024)
            (i32.const 108)
           )
          )
-         (set_local $$1030
+         (set_local $$1026
           (i32.load
-           (get_local $$1029)
+           (get_local $$1025)
           )
          )
-         (set_local $$1031
+         (set_local $$1027
           (i32.load
            (get_local $$2)
           )
          )
+         (set_local $$1028
+          (i32.add
+           (get_local $$1027)
+           (i32.const 36)
+          )
+         )
+         (set_local $$1029
+          (i32.load
+           (get_local $$1028)
+          )
+         )
+         (set_local $$1030
+          (call $_make_text
+           (get_local $$1026)
+           (get_local $$1029)
+           (i32.const 1056)
+          )
+         )
+         (i32.store
+          (get_local $$61)
+          (get_local $$1030)
+         )
+         ;;@ renderer.c:1053:0
+         (set_local $$1031
+          (get_local $$4)
+         )
          (set_local $$1032
           (i32.add
            (get_local $$1031)
-           (i32.const 36)
+           (i32.const 20)
           )
          )
          (set_local $$1033
@@ -62981,50 +63137,50 @@
            (get_local $$1032)
           )
          )
-         (set_local $$1034
-          (call $_make_text
-           (get_local $$1030)
-           (get_local $$1033)
-           (i32.const 1056)
-          )
-         )
-         (i32.store
-          (get_local $$60)
-          (get_local $$1034)
-         )
-         ;;@ renderer.c:1014:0
-         (set_local $$1035
-          (get_local $$6)
-         )
-         (set_local $$1036
-          (i32.add
-           (get_local $$1035)
-           (i32.const 20)
-          )
-         )
-         (set_local $$1037
-          (i32.load
-           (get_local $$1036)
-          )
-         )
          (drop
           (call $_array_push
-           (get_local $$1037)
-           (get_local $$60)
+           (get_local $$1033)
+           (get_local $$61)
           )
          )
          (br $switch)
         )
        )
        (block
-        ;;@ renderer.c:1018:0
-        (set_local $$1038
+        ;;@ renderer.c:1057:0
+        (set_local $$1034
          (get_local $$3)
+        )
+        (set_local $$1035
+         (i32.add
+          (get_local $$1034)
+          (i32.const 108)
+         )
+        )
+        (set_local $$1036
+         (i32.load
+          (get_local $$1035)
+         )
+        )
+        (set_local $$1037
+         (call $_make_text
+          (get_local $$1036)
+          (i32.const 6014)
+          (i32.const 1056)
+         )
+        )
+        (i32.store
+         (get_local $$62)
+         (get_local $$1037)
+        )
+        ;;@ renderer.c:1058:0
+        (set_local $$1038
+         (get_local $$4)
         )
         (set_local $$1039
          (i32.add
           (get_local $$1038)
-          (i32.const 108)
+          (i32.const 20)
          )
         )
         (set_local $$1040
@@ -63032,62 +63188,62 @@
           (get_local $$1039)
          )
         )
-        (set_local $$1041
-         (call $_make_text
+        (drop
+         (call $_array_push
           (get_local $$1040)
-          (i32.const 6014)
-          (i32.const 1056)
+          (get_local $$62)
          )
         )
-        (i32.store
-         (get_local $$61)
-         (get_local $$1041)
+        ;;@ renderer.c:1059:0
+        (set_local $$1041
+         (get_local $$3)
         )
-        ;;@ renderer.c:1019:0
         (set_local $$1042
-         (get_local $$6)
+         (i32.add
+          (get_local $$1041)
+          (i32.const 108)
+         )
         )
         (set_local $$1043
-         (i32.add
+         (i32.load
           (get_local $$1042)
-          (i32.const 20)
          )
         )
         (set_local $$1044
          (i32.load
-          (get_local $$1043)
+          (get_local $$2)
          )
         )
-        (drop
-         (call $_array_push
-          (get_local $$1044)
-          (get_local $$61)
-         )
-        )
-        ;;@ renderer.c:1020:0
         (set_local $$1045
-         (get_local $$3)
+         (i32.add
+          (get_local $$1044)
+          (i32.const 48)
+         )
         )
         (set_local $$1046
-         (i32.add
+         (i32.load
           (get_local $$1045)
-          (i32.const 108)
          )
         )
         (set_local $$1047
-         (i32.load
+         (call $_make_text
+          (get_local $$1043)
           (get_local $$1046)
+          (i32.const 1056)
          )
         )
+        (i32.store
+         (get_local $$63)
+         (get_local $$1047)
+        )
+        ;;@ renderer.c:1060:0
         (set_local $$1048
-         (i32.load
-          (get_local $$2)
-         )
+         (get_local $$4)
         )
         (set_local $$1049
          (i32.add
           (get_local $$1048)
-          (i32.const 48)
+          (i32.const 20)
          )
         )
         (set_local $$1050
@@ -63095,46 +63251,46 @@
           (get_local $$1049)
          )
         )
-        (set_local $$1051
-         (call $_make_text
-          (get_local $$1047)
+        (drop
+         (call $_array_push
           (get_local $$1050)
+          (get_local $$63)
+         )
+        )
+        ;;@ renderer.c:1061:0
+        (set_local $$1051
+         (get_local $$3)
+        )
+        (set_local $$1052
+         (i32.add
+          (get_local $$1051)
+          (i32.const 108)
+         )
+        )
+        (set_local $$1053
+         (i32.load
+          (get_local $$1052)
+         )
+        )
+        (set_local $$1054
+         (call $_make_text
+          (get_local $$1053)
+          (i32.const 6014)
           (i32.const 1056)
          )
         )
         (i32.store
-         (get_local $$62)
-         (get_local $$1051)
+         (get_local $$64)
+         (get_local $$1054)
         )
-        ;;@ renderer.c:1021:0
-        (set_local $$1052
-         (get_local $$6)
-        )
-        (set_local $$1053
-         (i32.add
-          (get_local $$1052)
-          (i32.const 20)
-         )
-        )
-        (set_local $$1054
-         (i32.load
-          (get_local $$1053)
-         )
-        )
-        (drop
-         (call $_array_push
-          (get_local $$1054)
-          (get_local $$62)
-         )
-        )
-        ;;@ renderer.c:1022:0
+        ;;@ renderer.c:1062:0
         (set_local $$1055
-         (get_local $$3)
+         (get_local $$4)
         )
         (set_local $$1056
          (i32.add
           (get_local $$1055)
-          (i32.const 108)
+          (i32.const 20)
          )
         )
         (set_local $$1057
@@ -63142,127 +63298,127 @@
           (get_local $$1056)
          )
         )
-        (set_local $$1058
-         (call $_make_text
-          (get_local $$1057)
-          (i32.const 6014)
-          (i32.const 1056)
-         )
-        )
-        (i32.store
-         (get_local $$63)
-         (get_local $$1058)
-        )
-        ;;@ renderer.c:1023:0
-        (set_local $$1059
-         (get_local $$6)
-        )
-        (set_local $$1060
-         (i32.add
-          (get_local $$1059)
-          (i32.const 20)
-         )
-        )
-        (set_local $$1061
-         (i32.load
-          (get_local $$1060)
-         )
-        )
         (drop
          (call $_array_push
-          (get_local $$1061)
-          (get_local $$63)
+          (get_local $$1057)
+          (get_local $$64)
          )
         )
         (br $switch)
        )
       )
       (block
-       ;;@ renderer.c:1027:0
-       (set_local $$1062
+       ;;@ renderer.c:1066:0
+       (set_local $$1058
         (i32.load
          (get_local $$2)
         )
        )
-       (set_local $$1063
+       (set_local $$1059
         (i32.add
-         (get_local $$1062)
+         (get_local $$1058)
          (i32.const 32)
         )
        )
-       (set_local $$1064
+       (set_local $$1060
         (i32.load8_s
-         (get_local $$1063)
+         (get_local $$1059)
         )
        )
-       (set_local $$1065
+       (set_local $$1061
         (i32.and
-         (get_local $$1064)
+         (get_local $$1060)
          (i32.const 255)
         )
        )
-       (set_local $$1066
+       (set_local $$1062
         (i32.eq
-         (get_local $$1065)
+         (get_local $$1061)
          (i32.const 0)
         )
        )
        (if
-        (get_local $$1066)
+        (get_local $$1062)
         (block
-         (set_local $$1067
+         (set_local $$1063
           (i32.load
            (get_local $$2)
           )
          )
-         (set_local $$1068
+         (set_local $$1064
           (i32.add
-           (get_local $$1067)
+           (get_local $$1063)
            (i32.const 33)
           )
          )
-         (set_local $$1069
+         (set_local $$1065
           (i32.load8_s
-           (get_local $$1068)
+           (get_local $$1064)
           )
          )
-         (set_local $$1070
+         (set_local $$1066
           (i32.and
-           (get_local $$1069)
+           (get_local $$1065)
            (i32.const 255)
           )
          )
-         (set_local $$1071
+         (set_local $$1067
           (i32.eq
-           (get_local $$1070)
+           (get_local $$1066)
            (i32.const 0)
           )
          )
          (if
-          (get_local $$1071)
+          (get_local $$1067)
           (block
-           ;;@ renderer.c:1028:0
-           (set_local $$1072
+           ;;@ renderer.c:1067:0
+           (set_local $$1068
             (get_local $$3)
            )
-           (set_local $$1073
+           (set_local $$1069
             (i32.add
-             (get_local $$1072)
+             (get_local $$1068)
              (i32.const 108)
             )
            )
-           (set_local $$1074
+           (set_local $$1070
             (i32.load
+             (get_local $$1069)
+            )
+           )
+           (set_local $$1071
+            (get_local $$3)
+           )
+           (set_local $$1072
+            (i32.add
+             (get_local $$1071)
+             (i32.const 56)
+            )
+           )
+           (set_local $$1073
+            (i32.load
+             (get_local $$1072)
+            )
+           )
+           (set_local $$1074
+            (call $_make_text
+             (get_local $$1070)
+             (i32.const 5974)
              (get_local $$1073)
             )
            )
+           (i32.store
+            (get_local $$65)
+            (get_local $$1074)
+           )
+           ;;@ renderer.c:1068:0
            (set_local $$1075
-            (get_local $$3)
+            (get_local $$4)
            )
            (set_local $$1076
             (i32.add
              (get_local $$1075)
-             (i32.const 56)
+             (i32.const 20)
             )
            )
            (set_local $$1077
@@ -63270,36 +63426,10 @@
              (get_local $$1076)
             )
            )
-           (set_local $$1078
-            (call $_make_text
-             (get_local $$1074)
-             (i32.const 5974)
-             (get_local $$1077)
-            )
-           )
-           (i32.store
-            (get_local $$64)
-            (get_local $$1078)
-           )
-           ;;@ renderer.c:1029:0
-           (set_local $$1079
-            (get_local $$6)
-           )
-           (set_local $$1080
-            (i32.add
-             (get_local $$1079)
-             (i32.const 20)
-            )
-           )
-           (set_local $$1081
-            (i32.load
-             (get_local $$1080)
-            )
-           )
            (drop
             (call $_array_push
-             (get_local $$1081)
-             (get_local $$64)
+             (get_local $$1077)
+             (get_local $$65)
             )
            )
            (br $label$break$L8)
@@ -63307,66 +63437,92 @@
          )
         )
        )
-       ;;@ renderer.c:1032:0
-       (set_local $$1082
+       ;;@ renderer.c:1071:0
+       (set_local $$1078
         (i32.load
          (get_local $$2)
         )
        )
-       (set_local $$1083
+       (set_local $$1079
         (i32.add
-         (get_local $$1082)
+         (get_local $$1078)
          (i32.const 48)
         )
        )
-       (set_local $$1084
+       (set_local $$1080
         (i32.add
-         (get_local $$1083)
+         (get_local $$1079)
          (i32.const 20)
         )
        )
-       (set_local $$1085
+       (set_local $$1081
         (i32.load8_s
-         (get_local $$1084)
+         (get_local $$1080)
         )
        )
-       (set_local $$1086
+       (set_local $$1082
         (i32.and
-         (get_local $$1085)
+         (get_local $$1081)
          (i32.const 255)
         )
        )
-       (set_local $$1087
+       (set_local $$1083
         (i32.eq
-         (get_local $$1086)
+         (get_local $$1082)
          (i32.const 0)
         )
        )
        (if
-        (get_local $$1087)
+        (get_local $$1083)
         (block
-         ;;@ renderer.c:1033:0
-         (set_local $$1088
+         ;;@ renderer.c:1072:0
+         (set_local $$1084
           (get_local $$3)
          )
-         (set_local $$1089
+         (set_local $$1085
           (i32.add
-           (get_local $$1088)
+           (get_local $$1084)
            (i32.const 108)
           )
          )
-         (set_local $$1090
+         (set_local $$1086
           (i32.load
+           (get_local $$1085)
+          )
+         )
+         (set_local $$1087
+          (get_local $$3)
+         )
+         (set_local $$1088
+          (i32.add
+           (get_local $$1087)
+           (i32.const 56)
+          )
+         )
+         (set_local $$1089
+          (i32.load
+           (get_local $$1088)
+          )
+         )
+         (set_local $$1090
+          (call $_make_text
+           (get_local $$1086)
+           (i32.const 6595)
            (get_local $$1089)
           )
          )
+         (i32.store
+          (get_local $$66)
+          (get_local $$1090)
+         )
+         ;;@ renderer.c:1073:0
          (set_local $$1091
-          (get_local $$3)
+          (get_local $$4)
          )
          (set_local $$1092
           (i32.add
            (get_local $$1091)
-           (i32.const 56)
+           (i32.const 20)
           )
          )
          (set_local $$1093
@@ -63374,25 +63530,27 @@
            (get_local $$1092)
           )
          )
-         (set_local $$1094
-          (call $_make_text
-           (get_local $$1090)
-           (i32.const 6595)
+         (drop
+          (call $_array_push
            (get_local $$1093)
+           (get_local $$66)
           )
          )
-         (i32.store
-          (get_local $$65)
+         ;;@ renderer.c:1074:0
+         (set_local $$1094
+          (get_local $$3)
+         )
+         (call $_render_newline
           (get_local $$1094)
          )
-         ;;@ renderer.c:1034:0
+         ;;@ renderer.c:1075:0
          (set_local $$1095
-          (get_local $$6)
+          (get_local $$3)
          )
          (set_local $$1096
           (i32.add
            (get_local $$1095)
-           (i32.const 20)
+           (i32.const 24)
           )
          )
          (set_local $$1097
@@ -63400,277 +63558,272 @@
            (get_local $$1096)
           )
          )
-         (drop
-          (call $_array_push
-           (get_local $$1097)
-           (get_local $$65)
-          )
-         )
-         ;;@ renderer.c:1035:0
          (set_local $$1098
-          (get_local $$3)
-         )
-         (call $_render_newline
-          (get_local $$1098)
-         )
-         ;;@ renderer.c:1036:0
-         (set_local $$1099
-          (get_local $$3)
-         )
-         (set_local $$1100
           (i32.add
-           (get_local $$1099)
-           (i32.const 24)
-          )
-         )
-         (set_local $$1101
-          (i32.load
-           (get_local $$1100)
-          )
-         )
-         (set_local $$1102
-          (i32.add
-           (get_local $$1101)
+           (get_local $$1097)
            (i32.const 1)
           )
          )
          (i32.store
-          (get_local $$1100)
-          (get_local $$1102)
+          (get_local $$1096)
+          (get_local $$1098)
          )
         )
        )
-       ;;@ renderer.c:1038:0
-       (set_local $$1103
+       ;;@ renderer.c:1077:0
+       (set_local $$1099
         (get_local $$3)
        )
-       (set_local $$1104
+       (set_local $$1100
         (i32.add
-         (get_local $$1103)
+         (get_local $$1099)
          (i32.const 92)
         )
        )
-       (set_local $$1105
+       (set_local $$1101
         (i32.load
-         (get_local $$1104)
+         (get_local $$1100)
         )
        )
-       (set_local $$1106
+       (set_local $$1102
         (i32.add
-         (get_local $$1105)
+         (get_local $$1101)
          (i32.const 1)
         )
        )
        (i32.store
-        (get_local $$1104)
-        (get_local $$1106)
+        (get_local $$1100)
+        (get_local $$1102)
        )
-       ;;@ renderer.c:1039:0
-       (set_local $$66
+       ;;@ renderer.c:1078:0
+       (set_local $$67
         (i32.const 0)
        )
        (loop $label$continue$L151
         (block $label$break$L151
-         (set_local $$1107
-          (get_local $$66)
+         (set_local $$1103
+          (get_local $$67)
          )
-         (set_local $$1108
+         (set_local $$1104
           (i32.load
            (get_local $$2)
           )
          )
-         (set_local $$1109
+         (set_local $$1105
           (i32.add
-           (get_local $$1108)
+           (get_local $$1104)
            (i32.const 48)
           )
          )
-         (set_local $$1110
+         (set_local $$1106
           (i32.load
-           (get_local $$1109)
+           (get_local $$1105)
           )
          )
-         (set_local $$1111
+         (set_local $$1107
           (i32.load
-           (get_local $$1110)
+           (get_local $$1106)
           )
          )
-         (set_local $$1112
+         (set_local $$1108
           (i32.lt_u
+           (get_local $$1103)
            (get_local $$1107)
-           (get_local $$1111)
           )
          )
          (if
           (i32.eqz
-           (get_local $$1112)
+           (get_local $$1108)
           )
           (br $label$break$L151)
          )
-         ;;@ renderer.c:1040:0
-         (set_local $$1113
+         ;;@ renderer.c:1079:0
+         (set_local $$1109
           (i32.load
            (get_local $$2)
           )
          )
-         (set_local $$1114
+         (set_local $$1110
           (i32.add
-           (get_local $$1113)
+           (get_local $$1109)
            (i32.const 48)
           )
          )
-         (set_local $$1115
+         (set_local $$1111
           (i32.add
-           (get_local $$1114)
+           (get_local $$1110)
            (i32.const 12)
           )
          )
-         (set_local $$1116
+         (set_local $$1112
           (i32.load
-           (get_local $$1115)
+           (get_local $$1111)
           )
          )
-         (set_local $$1117
+         (set_local $$1113
           (i32.ne
-           (get_local $$1116)
+           (get_local $$1112)
            (i32.const 0)
           )
          )
          (block $label$break$L154
           (if
-           (get_local $$1117)
+           (get_local $$1113)
            (block
-            (set_local $$1118
-             (get_local $$66)
+            (set_local $$1114
+             (get_local $$67)
             )
-            (set_local $$1119
+            (set_local $$1115
              (i32.load
               (get_local $$2)
              )
             )
-            (set_local $$1120
+            (set_local $$1116
              (i32.add
-              (get_local $$1119)
+              (get_local $$1115)
               (i32.const 48)
              )
             )
-            (set_local $$1121
+            (set_local $$1117
              (i32.add
-              (get_local $$1120)
+              (get_local $$1116)
               (i32.const 12)
              )
             )
-            (set_local $$1122
+            (set_local $$1118
              (i32.load
-              (get_local $$1121)
+              (get_local $$1117)
              )
             )
-            (set_local $$1123
+            (set_local $$1119
              (i32.load
-              (get_local $$1122)
-             )
-            )
-            (set_local $$1124
-             (i32.lt_u
               (get_local $$1118)
-              (get_local $$1123)
+             )
+            )
+            (set_local $$1120
+             (i32.lt_u
+              (get_local $$1114)
+              (get_local $$1119)
              )
             )
             (if
-             (get_local $$1124)
+             (get_local $$1120)
              (block
-              ;;@ renderer.c:1041:0
-              (set_local $$67
+              ;;@ renderer.c:1080:0
+              (set_local $$68
                (i32.const 0)
               )
               (loop $while-in31
                (block $while-out30
-                (set_local $$1125
-                 (get_local $$67)
+                (set_local $$1121
+                 (get_local $$68)
                 )
-                (set_local $$1126
+                (set_local $$1122
                  (i32.load
                   (get_local $$2)
                  )
                 )
-                (set_local $$1127
+                (set_local $$1123
                  (i32.add
-                  (get_local $$1126)
+                  (get_local $$1122)
                   (i32.const 48)
                  )
                 )
-                (set_local $$1128
+                (set_local $$1124
                  (i32.add
-                  (get_local $$1127)
+                  (get_local $$1123)
                   (i32.const 12)
                  )
+                )
+                (set_local $$1125
+                 (i32.load
+                  (get_local $$1124)
+                 )
+                )
+                (set_local $$1126
+                 (i32.add
+                  (get_local $$1125)
+                  (i32.const 12)
+                 )
+                )
+                (set_local $$1127
+                 (i32.load
+                  (get_local $$1126)
+                 )
+                )
+                (set_local $$1128
+                 (get_local $$67)
                 )
                 (set_local $$1129
-                 (i32.load
-                  (get_local $$1128)
-                 )
-                )
-                (set_local $$1130
                  (i32.add
-                  (get_local $$1129)
-                  (i32.const 12)
-                 )
-                )
-                (set_local $$1131
-                 (i32.load
-                  (get_local $$1130)
-                 )
-                )
-                (set_local $$1132
-                 (get_local $$66)
-                )
-                (set_local $$1133
-                 (i32.add
-                  (get_local $$1131)
+                  (get_local $$1127)
                   (i32.mul
-                   (get_local $$1132)
+                   (get_local $$1128)
                    (i32.const 20)
                   )
                  )
                 )
-                (set_local $$1134
+                (set_local $$1130
                  (i32.load
-                  (get_local $$1133)
+                  (get_local $$1129)
                  )
                 )
-                (set_local $$1135
+                (set_local $$1131
                  (i32.lt_u
-                  (get_local $$1125)
-                  (get_local $$1134)
+                  (get_local $$1121)
+                  (get_local $$1130)
                  )
                 )
                 (if
                  (i32.eqz
-                  (get_local $$1135)
+                  (get_local $$1131)
                  )
                  (br $label$break$L154)
                 )
-                ;;@ renderer.c:1042:0
-                (set_local $$1136
+                ;;@ renderer.c:1081:0
+                (set_local $$1132
                  (i32.load
                   (get_local $$2)
                  )
                 )
-                (set_local $$1137
+                (set_local $$1133
                  (i32.add
-                  (get_local $$1136)
+                  (get_local $$1132)
                   (i32.const 48)
                  )
                 )
-                (set_local $$1138
+                (set_local $$1134
                  (i32.add
-                  (get_local $$1137)
+                  (get_local $$1133)
                   (i32.const 12)
                  )
                 )
-                (set_local $$1139
+                (set_local $$1135
                  (i32.load
-                  (get_local $$1138)
+                  (get_local $$1134)
+                 )
+                )
+                (set_local $$1136
+                 (i32.add
+                  (get_local $$1135)
+                  (i32.const 12)
+                 )
+                )
+                (set_local $$1137
+                 (i32.load
+                  (get_local $$1136)
+                 )
+                )
+                (set_local $$1138
+                 (get_local $$67)
+                )
+                (set_local $$1139
+                 (i32.add
+                  (get_local $$1137)
+                  (i32.mul
+                   (get_local $$1138)
+                   (i32.const 20)
+                  )
                  )
                 )
                 (set_local $$1140
@@ -63685,132 +63838,109 @@
                  )
                 )
                 (set_local $$1142
-                 (get_local $$66)
+                 (get_local $$68)
                 )
                 (set_local $$1143
                  (i32.add
                   (get_local $$1141)
-                  (i32.mul
-                   (get_local $$1142)
-                   (i32.const 20)
-                  )
-                 )
-                )
-                (set_local $$1144
-                 (i32.add
-                  (get_local $$1143)
-                  (i32.const 12)
-                 )
-                )
-                (set_local $$1145
-                 (i32.load
-                  (get_local $$1144)
-                 )
-                )
-                (set_local $$1146
-                 (get_local $$67)
-                )
-                (set_local $$1147
-                 (i32.add
-                  (get_local $$1145)
                   (i32.shl
-                   (get_local $$1146)
+                   (get_local $$1142)
                    (i32.const 2)
                   )
                  )
                 )
-                (set_local $$1148
+                (set_local $$1144
                  (i32.load
-                  (get_local $$1147)
+                  (get_local $$1143)
                  )
                 )
-                (set_local $$68
-                 (get_local $$1148)
+                (set_local $$69
+                 (get_local $$1144)
                 )
-                ;;@ renderer.c:1043:0
-                (set_local $$1149
+                ;;@ renderer.c:1082:0
+                (set_local $$1145
                  (i32.load8_s
                   (i32.const 9896)
                  )
                 )
-                (set_local $$1150
+                (set_local $$1146
                  (i32.and
-                  (get_local $$1149)
+                  (get_local $$1145)
                   (i32.const 255)
                  )
                 )
-                (set_local $$1151
+                (set_local $$1147
                  (i32.ne
-                  (get_local $$1150)
+                  (get_local $$1146)
                   (i32.const 0)
                  )
                 )
                 (if
-                 (get_local $$1151)
+                 (get_local $$1147)
                  (set_local $label
                   (i32.const 127)
                  )
                  (block
-                  (set_local $$1152
-                   (get_local $$68)
+                  (set_local $$1148
+                   (get_local $$69)
                   )
-                  (set_local $$1153
+                  (set_local $$1149
                    (i32.add
-                    (get_local $$1152)
+                    (get_local $$1148)
                     (i32.const 32)
                    )
                   )
-                  (set_local $$1154
+                  (set_local $$1150
                    (i32.load8_s
-                    (get_local $$1153)
+                    (get_local $$1149)
                    )
                   )
-                  (set_local $$1155
+                  (set_local $$1151
                    (i32.and
-                    (get_local $$1154)
+                    (get_local $$1150)
                     (i32.const 255)
                    )
                   )
-                  (set_local $$1156
+                  (set_local $$1152
                    (i32.ne
-                    (get_local $$1155)
+                    (get_local $$1151)
                     (i32.const 0)
                    )
                   )
                   (if
-                   (get_local $$1156)
+                   (get_local $$1152)
                    (set_local $label
                     (i32.const 127)
                    )
                    (block
-                    (set_local $$1157
-                     (get_local $$68)
+                    (set_local $$1153
+                     (get_local $$69)
                     )
-                    (set_local $$1158
+                    (set_local $$1154
                      (i32.add
-                      (get_local $$1157)
+                      (get_local $$1153)
                       (i32.const 33)
                      )
                     )
-                    (set_local $$1159
+                    (set_local $$1155
                      (i32.load8_s
-                      (get_local $$1158)
+                      (get_local $$1154)
                      )
                     )
-                    (set_local $$1160
+                    (set_local $$1156
                      (i32.and
-                      (get_local $$1159)
+                      (get_local $$1155)
                       (i32.const 255)
                      )
                     )
-                    (set_local $$1161
+                    (set_local $$1157
                      (i32.ne
-                      (get_local $$1160)
+                      (get_local $$1156)
                       (i32.const 0)
                      )
                     )
                     (if
-                     (get_local $$1161)
+                     (get_local $$1157)
                      (set_local $label
                       (i32.const 127)
                      )
@@ -63828,31 +63958,31 @@
                   (set_local $label
                    (i32.const 0)
                   )
-                  ;;@ renderer.c:1044:0
-                  (set_local $$1162
-                   (get_local $$68)
+                  ;;@ renderer.c:1083:0
+                  (set_local $$1158
+                   (get_local $$69)
                   )
-                  (set_local $$1163
+                  (set_local $$1159
                    (get_local $$3)
                   )
                   (call $_render_code_node
-                   (get_local $$1162)
-                   (get_local $$1163)
+                   (get_local $$1158)
+                   (get_local $$1159)
                   )
                  )
                 )
-                ;;@ renderer.c:1041:0
-                (set_local $$1164
-                 (get_local $$67)
+                ;;@ renderer.c:1080:0
+                (set_local $$1160
+                 (get_local $$68)
                 )
-                (set_local $$1165
+                (set_local $$1161
                  (i32.add
-                  (get_local $$1164)
+                  (get_local $$1160)
                   (i32.const 1)
                  )
                 )
-                (set_local $$67
-                 (get_local $$1165)
+                (set_local $$68
+                 (get_local $$1161)
                 )
                 (br $while-in31)
                )
@@ -63862,180 +63992,180 @@
            )
           )
          )
-         ;;@ renderer.c:1048:0
-         (set_local $$1166
+         ;;@ renderer.c:1087:0
+         (set_local $$1162
           (i32.load
            (get_local $$2)
           )
          )
-         (set_local $$1167
+         (set_local $$1163
           (i32.add
-           (get_local $$1166)
+           (get_local $$1162)
            (i32.const 48)
           )
          )
-         (set_local $$1168
+         (set_local $$1164
           (i32.load
-           (get_local $$1167)
+           (get_local $$1163)
           )
          )
-         (set_local $$1169
+         (set_local $$1165
           (i32.add
-           (get_local $$1168)
+           (get_local $$1164)
            (i32.const 12)
           )
          )
-         (set_local $$1170
+         (set_local $$1166
           (i32.load
-           (get_local $$1169)
+           (get_local $$1165)
           )
          )
-         (set_local $$1171
-          (get_local $$66)
+         (set_local $$1167
+          (get_local $$67)
          )
-         (set_local $$1172
+         (set_local $$1168
           (i32.add
-           (get_local $$1170)
+           (get_local $$1166)
            (i32.shl
-            (get_local $$1171)
+            (get_local $$1167)
             (i32.const 2)
            )
           )
          )
-         (set_local $$1173
+         (set_local $$1169
           (i32.load
-           (get_local $$1172)
+           (get_local $$1168)
           )
          )
-         (set_local $$69
-          (get_local $$1173)
+         (set_local $$70
+          (get_local $$1169)
          )
-         ;;@ renderer.c:1050:0
-         (set_local $$1174
-          (get_local $$69)
+         ;;@ renderer.c:1089:0
+         (set_local $$1170
+          (get_local $$70)
          )
-         (set_local $$1175
+         (set_local $$1171
           (i32.load
-           (get_local $$1174)
+           (get_local $$1170)
           )
          )
-         (set_local $$1176
+         (set_local $$1172
           (i32.eq
-           (get_local $$1175)
+           (get_local $$1171)
            (i32.const 18)
           )
          )
          (if
-          (get_local $$1176)
+          (get_local $$1172)
           (block
-           (set_local $$1177
+           (set_local $$1173
             (get_local $$3)
            )
-           (set_local $$1178
+           (set_local $$1174
             (i32.add
-             (get_local $$1177)
+             (get_local $$1173)
              (i32.const 92)
             )
            )
-           (set_local $$1179
+           (set_local $$1175
             (i32.load
-             (get_local $$1178)
+             (get_local $$1174)
             )
            )
-           (set_local $$1180
+           (set_local $$1176
             (i32.eq
-             (get_local $$1179)
+             (get_local $$1175)
              (i32.const 1)
             )
            )
            (if
-            (get_local $$1180)
+            (get_local $$1176)
             (block
-             ;;@ renderer.c:1051:0
-             (set_local $$1181
-              (get_local $$69)
+             ;;@ renderer.c:1090:0
+             (set_local $$1177
+              (get_local $$70)
              )
-             (set_local $$1182
+             (set_local $$1178
               (i32.add
-               (get_local $$1181)
+               (get_local $$1177)
                (i32.const 48)
               )
              )
-             (set_local $$1183
+             (set_local $$1179
               (i32.add
-               (get_local $$1182)
+               (get_local $$1178)
                (i32.const 8)
               )
              )
-             (set_local $$1184
+             (set_local $$1180
               (i32.load
-               (get_local $$1183)
+               (get_local $$1179)
               )
              )
-             (set_local $$1185
+             (set_local $$1181
               (i32.ne
-               (get_local $$1184)
+               (get_local $$1180)
                (i32.const 0)
               )
              )
              (if
-              (get_local $$1185)
+              (get_local $$1181)
               (block
-               (set_local $$1186
+               (set_local $$1182
                 (i32.load8_s
                  (i32.const 9876)
                 )
                )
-               (set_local $$1187
+               (set_local $$1183
                 (i32.and
-                 (get_local $$1186)
+                 (get_local $$1182)
                  (i32.const 255)
                 )
                )
-               (set_local $$1188
+               (set_local $$1184
                 (i32.ne
-                 (get_local $$1187)
+                 (get_local $$1183)
                  (i32.const 0)
                 )
                )
                (if
-                (get_local $$1188)
+                (get_local $$1184)
                 (block
-                 ;;@ renderer.c:1052:0
-                 (set_local $$1189
-                  (get_local $$69)
+                 ;;@ renderer.c:1091:0
+                 (set_local $$1185
+                  (get_local $$70)
                  )
-                 (set_local $$1190
+                 (set_local $$1186
                   (i32.add
-                   (get_local $$1189)
+                   (get_local $$1185)
                    (i32.const 48)
                   )
                  )
-                 (set_local $$1191
+                 (set_local $$1187
                   (i32.add
-                   (get_local $$1190)
+                   (get_local $$1186)
                    (i32.const 8)
                   )
                  )
-                 (set_local $$1192
+                 (set_local $$1188
                   (i32.load
-                   (get_local $$1191)
+                   (get_local $$1187)
                   )
                  )
-                 (set_local $$1193
+                 (set_local $$1189
                   (i32.load
-                   (get_local $$1192)
+                   (get_local $$1188)
                   )
                  )
-                 (set_local $$1194
+                 (set_local $$1190
                   (i32.eq
-                   (get_local $$1193)
+                   (get_local $$1189)
                    (i32.const 16)
                   )
                  )
                  (if
                   (i32.eqz
-                   (get_local $$1194)
+                   (get_local $$1190)
                   )
                   (set_local $label
                    (i32.const 134)
@@ -64071,301 +64201,323 @@
             (set_local $label
              (i32.const 0)
             )
-            ;;@ renderer.c:1056:0
-            (set_local $$1195
-             (get_local $$69)
+            ;;@ renderer.c:1095:0
+            (set_local $$1191
+             (get_local $$70)
             )
-            (set_local $$1196
+            (set_local $$1192
              (i32.add
-              (get_local $$1195)
+              (get_local $$1191)
               (i32.const 33)
              )
             )
-            (set_local $$1197
+            (set_local $$1193
              (i32.load8_s
-              (get_local $$1196)
+              (get_local $$1192)
              )
             )
-            (set_local $$1198
+            (set_local $$1194
              (i32.and
-              (get_local $$1197)
+              (get_local $$1193)
               (i32.const 255)
              )
             )
-            (set_local $$1199
+            (set_local $$1195
              (i32.eq
-              (get_local $$1198)
+              (get_local $$1194)
               (i32.const 0)
              )
             )
             (if
-             (get_local $$1199)
+             (get_local $$1195)
              (block
-              ;;@ renderer.c:1057:0
-              (set_local $$1200
-               (get_local $$69)
+              ;;@ renderer.c:1096:0
+              (set_local $$1196
+               (get_local $$70)
               )
-              (set_local $$1201
+              (set_local $$1197
                (i32.load
-                (get_local $$1200)
+                (get_local $$1196)
                )
               )
-              (set_local $$1202
+              (set_local $$1198
                (i32.eq
-                (get_local $$1201)
+                (get_local $$1197)
                 (i32.const 1)
                )
               )
               (if
-               (get_local $$1202)
+               (get_local $$1198)
                (br $do-once)
               )
-              ;;@ renderer.c:1058:0
-              (set_local $$1203
-               (get_local $$69)
+              ;;@ renderer.c:1097:0
+              (set_local $$1199
+               (get_local $$70)
               )
-              (set_local $$1204
+              (set_local $$1200
                (i32.load
-                (get_local $$1203)
+                (get_local $$1199)
                )
               )
-              (set_local $$1205
+              (set_local $$1201
                (i32.eq
-                (get_local $$1204)
+                (get_local $$1200)
                 (i32.const 2)
                )
               )
               (if
-               (get_local $$1205)
+               (get_local $$1201)
                (br $do-once)
               )
-              ;;@ renderer.c:1059:0
-              (set_local $$1206
-               (get_local $$69)
+              ;;@ renderer.c:1098:0
+              (set_local $$1202
+               (get_local $$70)
               )
-              (set_local $$1207
+              (set_local $$1203
                (i32.load
-                (get_local $$1206)
+                (get_local $$1202)
                )
               )
-              (set_local $$1208
+              (set_local $$1204
                (i32.eq
-                (get_local $$1207)
+                (get_local $$1203)
                 (i32.const 3)
                )
               )
               (if
-               (get_local $$1208)
+               (get_local $$1204)
                (br $do-once)
               )
-              ;;@ renderer.c:1060:0
-              (set_local $$1209
-               (get_local $$69)
+              ;;@ renderer.c:1099:0
+              (set_local $$1205
+               (get_local $$70)
               )
-              (set_local $$1210
+              (set_local $$1206
                (i32.load
-                (get_local $$1209)
+                (get_local $$1205)
                )
               )
-              (set_local $$1211
+              (set_local $$1207
                (i32.eq
-                (get_local $$1210)
+                (get_local $$1206)
                 (i32.const 5)
                )
               )
               (if
-               (get_local $$1211)
+               (get_local $$1207)
                (br $do-once)
               )
              )
             )
-            ;;@ renderer.c:1064:0
-            (set_local $$1212
+            ;;@ renderer.c:1103:0
+            (set_local $$1208
              (get_local $$3)
             )
             (call $_render_indent
-             (get_local $$1212)
+             (get_local $$1208)
             )
-            ;;@ renderer.c:1065:0
-            (set_local $$1213
-             (get_local $$69)
+            ;;@ renderer.c:1104:0
+            (set_local $$1209
+             (get_local $$70)
             )
-            (set_local $$1214
+            (set_local $$1210
              (get_local $$3)
             )
             (call $_render_code_node
-             (get_local $$1213)
-             (get_local $$1214)
+             (get_local $$1209)
+             (get_local $$1210)
             )
-            ;;@ renderer.c:1066:0
-            (set_local $$1215
-             (get_local $$69)
+            ;;@ renderer.c:1105:0
+            (set_local $$1211
+             (get_local $$70)
             )
-            (set_local $$1216
+            (set_local $$1212
              (i32.load
-              (get_local $$1215)
+              (get_local $$1211)
              )
             )
-            (set_local $$1217
+            (set_local $$1213
              (i32.ne
-              (get_local $$1216)
+              (get_local $$1212)
               (i32.const 0)
              )
             )
             (block $do-once33
              (if
-              (get_local $$1217)
+              (get_local $$1213)
               (block
-               ;;@ renderer.c:1067:0
-               (set_local $$1218
-                (get_local $$69)
+               ;;@ renderer.c:1106:0
+               (set_local $$1214
+                (get_local $$70)
                )
-               (set_local $$1219
+               (set_local $$1215
                 (i32.load
-                 (get_local $$1218)
+                 (get_local $$1214)
                 )
                )
-               (set_local $$1220
+               (set_local $$1216
                 (i32.ne
-                 (get_local $$1219)
+                 (get_local $$1215)
                  (i32.const 1)
                 )
                )
                (if
-                (get_local $$1220)
+                (get_local $$1216)
                 (block
-                 ;;@ renderer.c:1068:0
-                 (set_local $$1221
-                  (get_local $$69)
+                 ;;@ renderer.c:1107:0
+                 (set_local $$1217
+                  (get_local $$70)
                  )
-                 (set_local $$1222
+                 (set_local $$1218
                   (i32.load
-                   (get_local $$1221)
+                   (get_local $$1217)
                   )
                  )
-                 (set_local $$1223
+                 (set_local $$1219
                   (i32.ne
-                   (get_local $$1222)
+                   (get_local $$1218)
                    (i32.const 2)
                   )
                  )
                  (if
-                  (get_local $$1223)
+                  (get_local $$1219)
                   (block
-                   ;;@ renderer.c:1069:0
-                   (set_local $$1224
-                    (get_local $$69)
+                   ;;@ renderer.c:1108:0
+                   (set_local $$1220
+                    (get_local $$70)
                    )
-                   (set_local $$1225
+                   (set_local $$1221
                     (i32.load
-                     (get_local $$1224)
+                     (get_local $$1220)
                     )
                    )
-                   (set_local $$1226
+                   (set_local $$1222
                     (i32.ne
-                     (get_local $$1225)
+                     (get_local $$1221)
                      (i32.const 5)
                     )
                    )
                    (if
-                    (get_local $$1226)
+                    (get_local $$1222)
                     (block
-                     ;;@ renderer.c:1070:0
-                     (set_local $$1227
-                      (get_local $$69)
+                     ;;@ renderer.c:1109:0
+                     (set_local $$1223
+                      (get_local $$70)
                      )
-                     (set_local $$1228
+                     (set_local $$1224
                       (i32.load
-                       (get_local $$1227)
+                       (get_local $$1223)
                       )
                      )
-                     (set_local $$1229
+                     (set_local $$1225
                       (i32.eq
-                       (get_local $$1228)
+                       (get_local $$1224)
                        (i32.const 18)
                       )
                      )
                      (if
-                      (get_local $$1229)
+                      (get_local $$1225)
                       (block
-                       ;;@ renderer.c:1071:0
-                       (set_local $$1230
-                        (get_local $$69)
+                       ;;@ renderer.c:1110:0
+                       (set_local $$1226
+                        (get_local $$70)
                        )
-                       (set_local $$1231
+                       (set_local $$1227
                         (i32.add
-                         (get_local $$1230)
+                         (get_local $$1226)
                          (i32.const 48)
                         )
                        )
-                       (set_local $$1232
+                       (set_local $$1228
                         (i32.add
-                         (get_local $$1231)
+                         (get_local $$1227)
                          (i32.const 8)
                         )
                        )
-                       (set_local $$1233
+                       (set_local $$1229
                         (i32.load
-                         (get_local $$1232)
+                         (get_local $$1228)
                         )
                        )
-                       (set_local $$1234
+                       (set_local $$1230
                         (i32.ne
-                         (get_local $$1233)
+                         (get_local $$1229)
                          (i32.const 0)
                         )
                        )
                        (if
-                        (get_local $$1234)
+                        (get_local $$1230)
                         (block
-                         ;;@ renderer.c:1072:0
-                         (set_local $$1235
-                          (get_local $$69)
+                         ;;@ renderer.c:1111:0
+                         (set_local $$1231
+                          (get_local $$70)
                          )
-                         (set_local $$1236
+                         (set_local $$1232
                           (i32.add
-                           (get_local $$1235)
+                           (get_local $$1231)
                            (i32.const 48)
                           )
                          )
-                         (set_local $$1237
+                         (set_local $$1233
                           (i32.add
-                           (get_local $$1236)
+                           (get_local $$1232)
                            (i32.const 8)
                           )
                          )
-                         (set_local $$1238
+                         (set_local $$1234
                           (i32.load
-                           (get_local $$1237)
+                           (get_local $$1233)
                           )
                          )
-                         (set_local $$1239
+                         (set_local $$1235
                           (i32.load
-                           (get_local $$1238)
+                           (get_local $$1234)
                           )
                          )
-                         (set_local $$1240
+                         (set_local $$1236
                           (i32.eq
-                           (get_local $$1239)
+                           (get_local $$1235)
                            (i32.const 16)
                           )
                          )
                          (if
-                          (get_local $$1240)
+                          (get_local $$1236)
                           (br $do-once33)
                          )
                         )
                        )
                       )
                      )
-                     ;;@ renderer.c:1076:0
-                     (set_local $$1241
+                     ;;@ renderer.c:1115:0
+                     (set_local $$1237
                       (get_local $$3)
+                     )
+                     (set_local $$1238
+                      (i32.add
+                       (get_local $$1237)
+                       (i32.const 112)
+                      )
+                     )
+                     (set_local $$1239
+                      (i32.load
+                       (get_local $$1238)
+                      )
+                     )
+                     (set_local $$1240
+                      (i32.add
+                       (get_local $$1239)
+                       (i32.const 20)
+                      )
+                     )
+                     (set_local $$1241
+                      (i32.load
+                       (get_local $$1240)
+                      )
                      )
                      (set_local $$1242
                       (i32.add
                        (get_local $$1241)
-                       (i32.const 112)
+                       (i32.const 16)
                       )
                      )
                      (set_local $$1243
@@ -64374,20 +64526,21 @@
                       )
                      )
                      (set_local $$1244
-                      (i32.add
+                      (i32.load
                        (get_local $$1243)
-                       (i32.const 20)
                       )
                      )
+                     (set_local $$4
+                      (get_local $$1244)
+                     )
+                     ;;@ renderer.c:1116:0
                      (set_local $$1245
-                      (i32.load
-                       (get_local $$1244)
-                      )
+                      (get_local $$3)
                      )
                      (set_local $$1246
                       (i32.add
                        (get_local $$1245)
-                       (i32.const 16)
+                       (i32.const 108)
                       )
                      )
                      (set_local $$1247
@@ -64396,35 +64549,38 @@
                       )
                      )
                      (set_local $$1248
-                      (i32.load
-                       (get_local $$1247)
-                      )
-                     )
-                     (set_local $$6
-                      (get_local $$1248)
-                     )
-                     ;;@ renderer.c:1077:0
-                     (set_local $$1249
                       (get_local $$3)
                      )
-                     (set_local $$1250
+                     (set_local $$1249
                       (i32.add
+                       (get_local $$1248)
+                       (i32.const 56)
+                      )
+                     )
+                     (set_local $$1250
+                      (i32.load
                        (get_local $$1249)
-                       (i32.const 108)
                       )
                      )
                      (set_local $$1251
-                      (i32.load
+                      (call $_make_text
+                       (get_local $$1247)
+                       (i32.const 6593)
                        (get_local $$1250)
                       )
                      )
+                     (i32.store
+                      (get_local $$71)
+                      (get_local $$1251)
+                     )
+                     ;;@ renderer.c:1117:0
                      (set_local $$1252
-                      (get_local $$3)
+                      (get_local $$4)
                      )
                      (set_local $$1253
                       (i32.add
                        (get_local $$1252)
-                       (i32.const 56)
+                       (i32.const 20)
                       )
                      )
                      (set_local $$1254
@@ -64432,36 +64588,10 @@
                        (get_local $$1253)
                       )
                      )
-                     (set_local $$1255
-                      (call $_make_text
-                       (get_local $$1251)
-                       (i32.const 6593)
-                       (get_local $$1254)
-                      )
-                     )
-                     (i32.store
-                      (get_local $$70)
-                      (get_local $$1255)
-                     )
-                     ;;@ renderer.c:1078:0
-                     (set_local $$1256
-                      (get_local $$6)
-                     )
-                     (set_local $$1257
-                      (i32.add
-                       (get_local $$1256)
-                       (i32.const 20)
-                      )
-                     )
-                     (set_local $$1258
-                      (i32.load
-                       (get_local $$1257)
-                      )
-                     )
                      (drop
                       (call $_array_push
-                       (get_local $$1258)
-                       (get_local $$70)
+                       (get_local $$1254)
+                       (get_local $$71)
                       )
                      )
                     )
@@ -64473,186 +64603,212 @@
               )
              )
             )
-            ;;@ renderer.c:1080:0
-            (set_local $$1259
+            ;;@ renderer.c:1119:0
+            (set_local $$1255
              (get_local $$3)
             )
             (call $_render_newline
-             (get_local $$1259)
+             (get_local $$1255)
             )
-            ;;@ renderer.c:1081:0
-            (set_local $$1260
-             (get_local $$69)
+            ;;@ renderer.c:1120:0
+            (set_local $$1256
+             (get_local $$70)
             )
-            (set_local $$1261
+            (set_local $$1257
              (i32.load
-              (get_local $$1260)
+              (get_local $$1256)
              )
             )
-            (set_local $$1262
+            (set_local $$1258
              (i32.eq
-              (get_local $$1261)
+              (get_local $$1257)
               (i32.const 6)
              )
             )
             (if
-             (get_local $$1262)
+             (get_local $$1258)
              (br $label$break$L151)
             )
-            (set_local $$1263
-             (get_local $$69)
+            (set_local $$1259
+             (get_local $$70)
             )
-            (set_local $$1264
+            (set_local $$1260
              (i32.load
-              (get_local $$1263)
+              (get_local $$1259)
              )
             )
-            (set_local $$1265
+            (set_local $$1261
              (i32.eq
-              (get_local $$1264)
+              (get_local $$1260)
               (i32.const 7)
              )
             )
             (if
-             (get_local $$1265)
+             (get_local $$1261)
              (br $label$break$L151)
             )
            )
           )
          )
-         ;;@ renderer.c:1039:0
-         (set_local $$1266
-          (get_local $$66)
+         ;;@ renderer.c:1078:0
+         (set_local $$1262
+          (get_local $$67)
          )
-         (set_local $$1267
+         (set_local $$1263
           (i32.add
-           (get_local $$1266)
+           (get_local $$1262)
            (i32.const 1)
           )
          )
-         (set_local $$66
-          (get_local $$1267)
+         (set_local $$67
+          (get_local $$1263)
          )
          (br $label$continue$L151)
         )
        )
-       ;;@ renderer.c:1085:0
-       (set_local $$1268
+       ;;@ renderer.c:1124:0
+       (set_local $$1264
         (get_local $$3)
        )
-       (set_local $$1269
+       (set_local $$1265
         (i32.add
-         (get_local $$1268)
+         (get_local $$1264)
          (i32.const 92)
         )
        )
-       (set_local $$1270
+       (set_local $$1266
         (i32.load
-         (get_local $$1269)
+         (get_local $$1265)
         )
        )
-       (set_local $$1271
+       (set_local $$1267
         (i32.sub
-         (get_local $$1270)
+         (get_local $$1266)
          (i32.const 1)
         )
        )
        (i32.store
-        (get_local $$1269)
-        (get_local $$1271)
+        (get_local $$1265)
+        (get_local $$1267)
        )
-       ;;@ renderer.c:1086:0
-       (set_local $$1272
+       ;;@ renderer.c:1125:0
+       (set_local $$1268
         (i32.load
          (get_local $$2)
         )
        )
-       (set_local $$1273
+       (set_local $$1269
         (i32.add
-         (get_local $$1272)
+         (get_local $$1268)
          (i32.const 48)
         )
        )
-       (set_local $$1274
+       (set_local $$1270
         (i32.add
-         (get_local $$1273)
+         (get_local $$1269)
          (i32.const 20)
         )
        )
-       (set_local $$1275
+       (set_local $$1271
         (i32.load8_s
-         (get_local $$1274)
+         (get_local $$1270)
         )
        )
-       (set_local $$1276
+       (set_local $$1272
         (i32.and
-         (get_local $$1275)
+         (get_local $$1271)
          (i32.const 255)
         )
        )
-       (set_local $$1277
+       (set_local $$1273
         (i32.eq
-         (get_local $$1276)
+         (get_local $$1272)
          (i32.const 0)
         )
        )
        (if
-        (get_local $$1277)
+        (get_local $$1273)
         (block
-         ;;@ renderer.c:1087:0
-         (set_local $$1278
+         ;;@ renderer.c:1126:0
+         (set_local $$1274
           (get_local $$3)
          )
-         (set_local $$1279
+         (set_local $$1275
           (i32.add
-           (get_local $$1278)
+           (get_local $$1274)
            (i32.const 24)
           )
          )
-         (set_local $$1280
+         (set_local $$1276
           (i32.load
-           (get_local $$1279)
+           (get_local $$1275)
           )
          )
-         (set_local $$1281
+         (set_local $$1277
           (i32.sub
-           (get_local $$1280)
+           (get_local $$1276)
            (i32.const 1)
           )
          )
          (i32.store
-          (get_local $$1279)
-          (get_local $$1281)
+          (get_local $$1275)
+          (get_local $$1277)
          )
-         ;;@ renderer.c:1088:0
-         (set_local $$1282
+         ;;@ renderer.c:1127:0
+         (set_local $$1278
           (get_local $$3)
          )
          (call $_render_indent
-          (get_local $$1282)
+          (get_local $$1278)
          )
-         ;;@ renderer.c:1089:0
-         (set_local $$1283
+         ;;@ renderer.c:1128:0
+         (set_local $$1279
           (get_local $$3)
          )
-         (set_local $$1284
+         (set_local $$1280
           (i32.add
-           (get_local $$1283)
+           (get_local $$1279)
            (i32.const 108)
           )
          )
-         (set_local $$1285
+         (set_local $$1281
           (i32.load
+           (get_local $$1280)
+          )
+         )
+         (set_local $$1282
+          (get_local $$3)
+         )
+         (set_local $$1283
+          (i32.add
+           (get_local $$1282)
+           (i32.const 56)
+          )
+         )
+         (set_local $$1284
+          (i32.load
+           (get_local $$1283)
+          )
+         )
+         (set_local $$1285
+          (call $_make_text
+           (get_local $$1281)
+           (i32.const 6711)
            (get_local $$1284)
           )
          )
+         (i32.store
+          (get_local $$72)
+          (get_local $$1285)
+         )
+         ;;@ renderer.c:1129:0
          (set_local $$1286
-          (get_local $$3)
+          (get_local $$4)
          )
          (set_local $$1287
           (i32.add
            (get_local $$1286)
-           (i32.const 56)
+           (i32.const 20)
           )
          )
          (set_local $$1288
@@ -64660,36 +64816,10 @@
            (get_local $$1287)
           )
          )
-         (set_local $$1289
-          (call $_make_text
-           (get_local $$1285)
-           (i32.const 6711)
-           (get_local $$1288)
-          )
-         )
-         (i32.store
-          (get_local $$71)
-          (get_local $$1289)
-         )
-         ;;@ renderer.c:1090:0
-         (set_local $$1290
-          (get_local $$6)
-         )
-         (set_local $$1291
-          (i32.add
-           (get_local $$1290)
-           (i32.const 20)
-          )
-         )
-         (set_local $$1292
-          (i32.load
-           (get_local $$1291)
-          )
-         )
          (drop
           (call $_array_push
-           (get_local $$1292)
-           (get_local $$71)
+           (get_local $$1288)
+           (get_local $$72)
           )
          )
         )
@@ -64698,214 +64828,214 @@
       )
      )
      (block
-      ;;@ renderer.c:1095:0
+      ;;@ renderer.c:1134:0
+      (set_local $$1289
+       (get_local $$3)
+      )
+      (set_local $$1290
+       (i32.add
+        (get_local $$1289)
+        (i32.const 12)
+       )
+      )
+      (set_local $$1291
+       (get_local $$3)
+      )
+      (set_local $$1292
+       (i32.add
+        (get_local $$1291)
+        (i32.const 16)
+       )
+      )
+      ;;@ renderer.c:1135:0
       (set_local $$1293
        (get_local $$3)
       )
       (set_local $$1294
        (i32.add
         (get_local $$1293)
-        (i32.const 12)
-       )
-      )
-      (set_local $$1295
-       (get_local $$3)
-      )
-      (set_local $$1296
-       (i32.add
-        (get_local $$1295)
-        (i32.const 16)
-       )
-      )
-      ;;@ renderer.c:1096:0
-      (set_local $$1297
-       (get_local $$3)
-      )
-      (set_local $$1298
-       (i32.add
-        (get_local $$1297)
         (i32.const 56)
        )
       )
-      (set_local $$1299
+      (set_local $$1295
        (i32.load
-        (get_local $$1298)
+        (get_local $$1294)
        )
       )
-      ;;@ renderer.c:1097:0
-      (set_local $$1300
+      ;;@ renderer.c:1136:0
+      (set_local $$1296
        (get_local $$3)
       )
-      (set_local $$1301
+      (set_local $$1297
        (i32.add
-        (get_local $$1300)
+        (get_local $$1296)
         (i32.const 60)
        )
       )
-      (set_local $$1302
+      (set_local $$1298
        (i32.load
-        (get_local $$1301)
+        (get_local $$1297)
        )
       )
-      ;;@ renderer.c:1098:0
-      (set_local $$1303
+      ;;@ renderer.c:1137:0
+      (set_local $$1299
        (get_local $$3)
       )
-      ;;@ renderer.c:1095:0
+      ;;@ renderer.c:1134:0
       (call $_render_text
        (i32.const 6595)
-       (get_local $$1294)
-       (get_local $$1296)
+       (get_local $$1290)
+       (get_local $$1292)
+       (get_local $$1295)
+       (get_local $$1298)
        (get_local $$1299)
-       (get_local $$1302)
-       (get_local $$1303)
       )
-      ;;@ renderer.c:1099:0
-      (set_local $$1304
+      ;;@ renderer.c:1138:0
+      (set_local $$1300
        (get_local $$3)
       )
       (call $_render_space
-       (get_local $$1304)
+       (get_local $$1300)
       )
-      ;;@ renderer.c:1100:0
+      ;;@ renderer.c:1139:0
+      (set_local $$1301
+       (get_local $$3)
+      )
+      (set_local $$1302
+       (i32.add
+        (get_local $$1301)
+        (i32.const 12)
+       )
+      )
+      (set_local $$1303
+       (get_local $$3)
+      )
+      (set_local $$1304
+       (i32.add
+        (get_local $$1303)
+        (i32.const 16)
+       )
+      )
+      ;;@ renderer.c:1141:0
       (set_local $$1305
        (get_local $$3)
       )
       (set_local $$1306
        (i32.add
         (get_local $$1305)
-        (i32.const 12)
-       )
-      )
-      (set_local $$1307
-       (get_local $$3)
-      )
-      (set_local $$1308
-       (i32.add
-        (get_local $$1307)
-        (i32.const 16)
-       )
-      )
-      ;;@ renderer.c:1102:0
-      (set_local $$1309
-       (get_local $$3)
-      )
-      (set_local $$1310
-       (i32.add
-        (get_local $$1309)
         (i32.const 60)
        )
       )
-      (set_local $$1311
+      (set_local $$1307
        (i32.load
-        (get_local $$1310)
+        (get_local $$1306)
        )
       )
-      ;;@ renderer.c:1103:0
-      (set_local $$1312
+      ;;@ renderer.c:1142:0
+      (set_local $$1308
        (get_local $$3)
       )
-      ;;@ renderer.c:1100:0
+      ;;@ renderer.c:1139:0
       (call $_render_text
        (i32.const 6016)
-       (get_local $$1306)
-       (get_local $$1308)
+       (get_local $$1302)
+       (get_local $$1304)
        (i32.const 1136)
-       (get_local $$1311)
-       (get_local $$1312)
+       (get_local $$1307)
+       (get_local $$1308)
       )
-      ;;@ renderer.c:1104:0
-      (set_local $$1313
+      ;;@ renderer.c:1143:0
+      (set_local $$1309
        (get_local $$3)
       )
       (call $_render_space
-       (get_local $$1313)
+       (get_local $$1309)
       )
-      ;;@ renderer.c:1105:0
+      ;;@ renderer.c:1144:0
+      (set_local $$1310
+       (get_local $$3)
+      )
+      (set_local $$1311
+       (i32.add
+        (get_local $$1310)
+        (i32.const 12)
+       )
+      )
+      (set_local $$1312
+       (get_local $$3)
+      )
+      (set_local $$1313
+       (i32.add
+        (get_local $$1312)
+        (i32.const 16)
+       )
+      )
+      ;;@ renderer.c:1145:0
       (set_local $$1314
        (get_local $$3)
       )
       (set_local $$1315
        (i32.add
         (get_local $$1314)
-        (i32.const 12)
-       )
-      )
-      (set_local $$1316
-       (get_local $$3)
-      )
-      (set_local $$1317
-       (i32.add
-        (get_local $$1316)
-        (i32.const 16)
-       )
-      )
-      ;;@ renderer.c:1106:0
-      (set_local $$1318
-       (get_local $$3)
-      )
-      (set_local $$1319
-       (i32.add
-        (get_local $$1318)
         (i32.const 56)
        )
       )
-      (set_local $$1320
+      (set_local $$1316
        (i32.load
-        (get_local $$1319)
+        (get_local $$1315)
        )
       )
-      ;;@ renderer.c:1107:0
-      (set_local $$1321
+      ;;@ renderer.c:1146:0
+      (set_local $$1317
        (get_local $$3)
       )
-      (set_local $$1322
+      (set_local $$1318
        (i32.add
-        (get_local $$1321)
+        (get_local $$1317)
         (i32.const 60)
        )
       )
-      (set_local $$1323
+      (set_local $$1319
        (i32.load
-        (get_local $$1322)
+        (get_local $$1318)
        )
       )
-      ;;@ renderer.c:1108:0
-      (set_local $$1324
+      ;;@ renderer.c:1147:0
+      (set_local $$1320
        (get_local $$3)
       )
-      ;;@ renderer.c:1105:0
+      ;;@ renderer.c:1144:0
       (call $_render_text
        (i32.const 6711)
-       (get_local $$1315)
-       (get_local $$1317)
+       (get_local $$1311)
+       (get_local $$1313)
+       (get_local $$1316)
+       (get_local $$1319)
        (get_local $$1320)
-       (get_local $$1323)
-       (get_local $$1324)
       )
       (br $switch)
      )
     )
     (block
-     ;;@ renderer.c:1112:0
-     (set_local $$1325
+     ;;@ renderer.c:1151:0
+     (set_local $$1321
       (i32.load
        (get_local $$2)
       )
      )
-     (set_local $$1326
+     (set_local $$1322
       (i32.load
-       (get_local $$1325)
+       (get_local $$1321)
       )
      )
-     (set_local $$1327
+     (set_local $$1323
       (call $_code_kind_to_string
-       (get_local $$1326)
+       (get_local $$1322)
       )
      )
      (i32.store
       (get_local $$vararg_buffer)
-      (get_local $$1327)
+      (get_local $$1323)
      )
      (drop
       (call $_printf
@@ -64913,120 +65043,120 @@
        (get_local $$vararg_buffer)
       )
      )
-     ;;@ renderer.c:1113:0
+     ;;@ renderer.c:1152:0
      (call $_abort)
     )
    )
   )
-  ;;@ renderer.c:1118:0
-  (set_local $$1328
+  ;;@ renderer.c:1157:0
+  (set_local $$1324
    (i32.load
     (get_local $$2)
    )
   )
-  (set_local $$1329
+  (set_local $$1325
    (i32.add
-    (get_local $$1328)
+    (get_local $$1324)
     (i32.const 16)
    )
   )
-  (set_local $$1330
+  (set_local $$1326
    (i32.load8_s
-    (get_local $$1329)
+    (get_local $$1325)
    )
   )
-  (set_local $$1331
+  (set_local $$1327
    (i32.and
-    (get_local $$1330)
+    (get_local $$1326)
     (i32.const 255)
    )
   )
-  (set_local $$1332
+  (set_local $$1328
    (i32.ne
-    (get_local $$1331)
+    (get_local $$1327)
     (i32.const 0)
    )
   )
   (if
-   (get_local $$1332)
+   (get_local $$1328)
    (block
-    (set_local $$1333
-     (get_local $$4)
+    (set_local $$1329
+     (get_local $$6)
     )
-    (set_local $$1334
+    (set_local $$1330
      (i32.and
-      (get_local $$1333)
+      (get_local $$1329)
       (i32.const 255)
      )
     )
-    (set_local $$1335
+    (set_local $$1331
      (i32.eq
-      (get_local $$1334)
+      (get_local $$1330)
       (i32.const 1)
      )
     )
     (if
-     (get_local $$1335)
+     (get_local $$1331)
      (block
-      ;;@ renderer.c:1119:0
-      (set_local $$1336
+      ;;@ renderer.c:1158:0
+      (set_local $$1332
        (get_local $$3)
       )
-      (set_local $$1337
+      (set_local $$1333
        (i32.add
-        (get_local $$1336)
+        (get_local $$1332)
         (i32.const 96)
        )
       )
-      (set_local $$1338
+      (set_local $$1334
        (i32.load
-        (get_local $$1337)
+        (get_local $$1333)
        )
       )
-      (set_local $$1339
+      (set_local $$1335
        (i32.add
-        (get_local $$1338)
+        (get_local $$1334)
         (i32.const 12)
        )
       )
-      (set_local $$1340
+      (set_local $$1336
        (i32.load
-        (get_local $$1339)
+        (get_local $$1335)
        )
       )
-      (set_local $$1341
+      (set_local $$1337
        (get_local $$3)
       )
-      (set_local $$1342
+      (set_local $$1338
        (i32.add
-        (get_local $$1341)
+        (get_local $$1337)
         (i32.const 100)
        )
       )
-      (set_local $$1343
+      (set_local $$1339
        (i32.load
-        (get_local $$1342)
+        (get_local $$1338)
        )
       )
-      (set_local $$1344
+      (set_local $$1340
        (i32.add
-        (get_local $$1340)
+        (get_local $$1336)
         (i32.mul
-         (get_local $$1343)
+         (get_local $$1339)
          (i32.const 20)
         )
        )
       )
-      (set_local $$72
-       (get_local $$1344)
+      (set_local $$73
+       (get_local $$1340)
       )
-      ;;@ renderer.c:1120:0
-      (set_local $$1345
-       (get_local $$72)
+      ;;@ renderer.c:1159:0
+      (set_local $$1341
+       (get_local $$73)
       )
       (drop
        (call $_array_push
-        (get_local $$1345)
+        (get_local $$1341)
         (get_local $$2)
        )
       )
@@ -65034,49 +65164,87 @@
     )
    )
   )
-  ;;@ renderer.c:1123:0
-  (set_local $$1346
+  ;;@ renderer.c:1162:0
+  (set_local $$1342
    (i32.load
     (get_local $$2)
    )
   )
-  (set_local $$1347
+  (set_local $$1343
    (i32.load
     (i32.const 9912)
    )
   )
-  (set_local $$1348
+  (set_local $$1344
    (i32.eq
-    (get_local $$1346)
-    (get_local $$1347)
+    (get_local $$1342)
+    (get_local $$1343)
    )
   )
   (if
    (i32.eqz
-    (get_local $$1348)
+    (get_local $$1344)
    )
    (block
     (set_global $STACKTOP
      (get_local $sp)
     )
-    ;;@ renderer.c:1126:0
+    ;;@ renderer.c:1167:0
     (return)
    )
   )
-  ;;@ renderer.c:1124:0
-  (set_local $$1349
+  ;;@ renderer.c:1163:0
+  (set_local $$1345
    (get_local $$3)
   )
-  (call $_mark_background_end
-   (get_local $$1349)
+  (set_local $$1346
+   (i32.add
+    (get_local $$1345)
+    (i32.const 108)
+   )
+  )
+  (set_local $$1347
+   (i32.load
+    (get_local $$1346)
+   )
+  )
+  (set_local $$1348
+   (call $_make_background_end
+    (get_local $$1347)
+   )
+  )
+  (i32.store
+   (get_local $$74)
+   (get_local $$1348)
+  )
+  ;;@ renderer.c:1164:0
+  (set_local $$1349
+   (get_local $$4)
+  )
+  (set_local $$1350
+   (i32.add
+    (get_local $$1349)
+    (i32.const 20)
+   )
+  )
+  (set_local $$1351
+   (i32.load
+    (get_local $$1350)
+   )
+  )
+  (drop
+   (call $_array_push
+    (get_local $$1351)
+    (get_local $$74)
+   )
   )
   (set_global $STACKTOP
    (get_local $sp)
   )
-  ;;@ renderer.c:1126:0
+  ;;@ renderer.c:1167:0
   (return)
  )
- (func $_layout_node (; 175 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
+ (func $_layout_node (; 177 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -65136,6 +65304,10 @@
   (local $$150 i32)
   (local $$151 i32)
   (local $$152 i32)
+  (local $$153 i32)
+  (local $$154 i32)
+  (local $$155 i32)
+  (local $$156 i32)
   (local $$16 i32)
   (local $$17 i32)
   (local $$18 i32)
@@ -65260,7 +65432,7 @@
   (set_local $$5
    (get_local $$2)
   )
-  ;;@ renderer.c:552:0
+  ;;@ renderer.c:571:0
   (set_local $$10
    (get_local $$4)
   )
@@ -65273,7 +65445,7 @@
   (if
    (get_local $$11)
    (block
-    ;;@ renderer.c:553:0
+    ;;@ renderer.c:572:0
     (set_local $$12
      (get_local $$3)
     )
@@ -65301,7 +65473,7 @@
      (get_local $$16)
      (get_local $$14)
     )
-    ;;@ renderer.c:554:0
+    ;;@ renderer.c:573:0
     (set_local $$17
      (get_local $$3)
     )
@@ -65337,7 +65509,7 @@
     )
    )
    (block
-    ;;@ renderer.c:557:0
+    ;;@ renderer.c:576:0
     (set_local $$23
      (get_local $$5)
     )
@@ -65365,7 +65537,7 @@
      (get_local $$27)
      (get_local $$25)
     )
-    ;;@ renderer.c:558:0
+    ;;@ renderer.c:577:0
     (set_local $$28
      (get_local $$5)
     )
@@ -65401,7 +65573,7 @@
     )
    )
   )
-  ;;@ renderer.c:561:0
+  ;;@ renderer.c:580:0
   (set_local $$34
    (get_local $$3)
   )
@@ -65412,739 +65584,778 @@
   )
   (block $switch
    (block $switch-default
-    (block $switch-case0
-     (block $switch-case
-      (br_table $switch-case $switch-case0 $switch-default
-       (i32.sub
-        (get_local $$35)
-        (i32.const 0)
-       )
-      )
-     )
-     (block
-      ;;@ renderer.c:563:0
-      (set_local $$36
-       (get_local $$3)
-      )
-      (set_local $$37
-       (i32.add
-        (get_local $$36)
-        (i32.const 20)
-       )
-      )
-      (set_local $$38
-       (i32.load
-        (get_local $$37)
-       )
-      )
-      (set_local $$39
-       (get_local $$5)
-      )
-      (set_local $$40
-       (i32.load
-        (get_local $$39)
-       )
-      )
-      (set_local $$41
-       (call $_get_text_width
-        (get_local $$38)
-        (get_local $$40)
-       )
-      )
-      (set_local $$42
-       (get_local $$3)
-      )
-      (set_local $$43
-       (i32.add
-        (get_local $$42)
-        (i32.const 12)
-       )
-      )
-      (f32.store
-       (get_local $$43)
-       (get_local $$41)
-      )
-      ;;@ renderer.c:564:0
-      (set_local $$44
-       (get_local $$5)
-      )
-      (set_local $$45
-       (i32.load
-        (get_local $$44)
-       )
-      )
-      (set_local $$46
-       (i32.add
-        (get_local $$45)
-        (i32.const 16)
-       )
-      )
-      (set_local $$47
-       (f32.load
-        (get_local $$46)
-       )
-      )
-      (set_local $$48
-       (get_local $$3)
-      )
-      (set_local $$49
-       (i32.add
-        (get_local $$48)
-        (i32.const 16)
-       )
-      )
-      (f32.store
-       (get_local $$49)
-       (get_local $$47)
-      )
-      (set_global $STACKTOP
-       (get_local $sp)
-      )
-      ;;@ renderer.c:615:0
-      (return)
-     )
-    )
-    (block
-     ;;@ renderer.c:568:0
-     (set_local $$6
-      (f32.const 0)
-     )
-     ;;@ renderer.c:569:0
-     (set_local $$7
-      (f32.const 0)
-     )
-     ;;@ renderer.c:570:0
-     (set_local $$8
-      (i32.const 0)
-     )
-     (loop $while-in
-      (block $while-out
-       (set_local $$50
-        (get_local $$8)
-       )
-       (set_local $$51
-        (get_local $$3)
-       )
-       (set_local $$52
-        (i32.add
-         (get_local $$51)
-         (i32.const 20)
-        )
-       )
-       (set_local $$53
-        (i32.load
-         (get_local $$52)
-        )
-       )
-       (set_local $$54
-        (i32.load
-         (get_local $$53)
-        )
-       )
-       (set_local $$55
-        (i32.lt_u
-         (get_local $$50)
-         (get_local $$54)
-        )
-       )
-       (set_local $$56
-        (get_local $$3)
-       )
-       (set_local $$57
-        (i32.add
-         (get_local $$56)
-         (i32.const 20)
-        )
-       )
-       (if
-        (i32.eqz
-         (get_local $$55)
-        )
-        (br $while-out)
-       )
-       ;;@ renderer.c:571:0
-       (set_local $$58
-        (i32.load
-         (get_local $$57)
-        )
-       )
-       (set_local $$59
-        (i32.add
-         (get_local $$58)
-         (i32.const 12)
-        )
-       )
-       (set_local $$60
-        (i32.load
-         (get_local $$59)
-        )
-       )
-       (set_local $$61
-        (get_local $$8)
-       )
-       (set_local $$62
-        (i32.add
-         (get_local $$60)
-         (i32.shl
-          (get_local $$61)
-          (i32.const 2)
+    (block $switch-case2
+     (block $switch-case1
+      (block $switch-case0
+       (block $switch-case
+        (br_table $switch-case $switch-case0 $switch-case2 $switch-case1 $switch-default
+         (i32.sub
+          (get_local $$35)
+          (i32.const 0)
          )
         )
        )
-       (set_local $$63
-        (i32.load
-         (get_local $$62)
+       (block
+        ;;@ renderer.c:582:0
+        (set_local $$36
+         (get_local $$3)
+        )
+        (set_local $$37
+         (i32.add
+          (get_local $$36)
+          (i32.const 20)
+         )
+        )
+        (set_local $$38
+         (i32.load
+          (get_local $$37)
+         )
+        )
+        (set_local $$39
+         (get_local $$5)
+        )
+        (set_local $$40
+         (i32.load
+          (get_local $$39)
+         )
+        )
+        (set_local $$41
+         (call $_get_text_width
+          (get_local $$38)
+          (get_local $$40)
+         )
+        )
+        (set_local $$42
+         (get_local $$3)
+        )
+        (set_local $$43
+         (i32.add
+          (get_local $$42)
+          (i32.const 12)
+         )
+        )
+        (f32.store
+         (get_local $$43)
+         (get_local $$41)
+        )
+        ;;@ renderer.c:583:0
+        (set_local $$44
+         (get_local $$5)
+        )
+        (set_local $$45
+         (i32.load
+          (get_local $$44)
+         )
+        )
+        (set_local $$46
+         (i32.add
+          (get_local $$45)
+          (i32.const 16)
+         )
+        )
+        (set_local $$47
+         (f32.load
+          (get_local $$46)
+         )
+        )
+        (set_local $$48
+         (get_local $$3)
+        )
+        (set_local $$49
+         (i32.add
+          (get_local $$48)
+          (i32.const 16)
+         )
+        )
+        (f32.store
+         (get_local $$49)
+         (get_local $$47)
+        )
+        (set_global $STACKTOP
+         (get_local $sp)
+        )
+        ;;@ renderer.c:640:0
+        (return)
+       )
+      )
+      (block
+       ;;@ renderer.c:587:0
+       (set_local $$6
+        (f32.const 0)
+       )
+       ;;@ renderer.c:588:0
+       (set_local $$7
+        (f32.const 0)
+       )
+       ;;@ renderer.c:589:0
+       (set_local $$8
+        (i32.const 0)
+       )
+       (loop $while-in
+        (block $while-out
+         (set_local $$50
+          (get_local $$8)
+         )
+         (set_local $$51
+          (get_local $$3)
+         )
+         (set_local $$52
+          (i32.add
+           (get_local $$51)
+           (i32.const 20)
+          )
+         )
+         (set_local $$53
+          (i32.load
+           (get_local $$52)
+          )
+         )
+         (set_local $$54
+          (i32.load
+           (get_local $$53)
+          )
+         )
+         (set_local $$55
+          (i32.lt_u
+           (get_local $$50)
+           (get_local $$54)
+          )
+         )
+         (set_local $$56
+          (get_local $$3)
+         )
+         (set_local $$57
+          (i32.add
+           (get_local $$56)
+           (i32.const 20)
+          )
+         )
+         (if
+          (i32.eqz
+           (get_local $$55)
+          )
+          (br $while-out)
+         )
+         ;;@ renderer.c:590:0
+         (set_local $$58
+          (i32.load
+           (get_local $$57)
+          )
+         )
+         (set_local $$59
+          (i32.add
+           (get_local $$58)
+           (i32.const 12)
+          )
+         )
+         (set_local $$60
+          (i32.load
+           (get_local $$59)
+          )
+         )
+         (set_local $$61
+          (get_local $$8)
+         )
+         (set_local $$62
+          (i32.add
+           (get_local $$60)
+           (i32.shl
+            (get_local $$61)
+            (i32.const 2)
+           )
+          )
+         )
+         (set_local $$63
+          (i32.load
+           (get_local $$62)
+          )
+         )
+         (set_local $$9
+          (get_local $$63)
+         )
+         ;;@ renderer.c:591:0
+         (set_local $$64
+          (get_local $$9)
+         )
+         (set_local $$65
+          (get_local $$3)
+         )
+         (set_local $$66
+          (get_local $$5)
+         )
+         (call $_layout_node
+          (get_local $$64)
+          (get_local $$65)
+          (get_local $$66)
+         )
+         ;;@ renderer.c:592:0
+         (set_local $$67
+          (get_local $$3)
+         )
+         (set_local $$68
+          (i32.add
+           (get_local $$67)
+           (i32.const 20)
+          )
+         )
+         (set_local $$69
+          (i32.add
+           (get_local $$68)
+           (i32.const 4)
+          )
+         )
+         (set_local $$70
+          (i32.load
+           (get_local $$69)
+          )
+         )
+         (set_local $$71
+          (i32.eq
+           (get_local $$70)
+           (i32.const 0)
+          )
+         )
+         (if
+          (get_local $$71)
+          (block
+           ;;@ renderer.c:593:0
+           (set_local $$72
+            (get_local $$9)
+           )
+           (set_local $$73
+            (i32.add
+             (get_local $$72)
+             (i32.const 16)
+            )
+           )
+           (set_local $$74
+            (f32.load
+             (get_local $$73)
+            )
+           )
+           (set_local $$75
+            (get_local $$5)
+           )
+           (set_local $$76
+            (i32.add
+             (get_local $$75)
+             (i32.const 116)
+            )
+           )
+           (set_local $$77
+            (i32.add
+             (get_local $$76)
+             (i32.const 4)
+            )
+           )
+           (set_local $$78
+            (f32.load
+             (get_local $$77)
+            )
+           )
+           (set_local $$79
+            (f32.add
+             (get_local $$78)
+             (get_local $$74)
+            )
+           )
+           (f32.store
+            (get_local $$77)
+            (get_local $$79)
+           )
+           ;;@ renderer.c:594:0
+           (set_local $$80
+            (get_local $$3)
+           )
+           (set_local $$81
+            (i32.add
+             (get_local $$80)
+             (i32.const 4)
+            )
+           )
+           (set_local $$82
+            (f32.load
+             (get_local $$81)
+            )
+           )
+           (set_local $$83
+            (get_local $$5)
+           )
+           (set_local $$84
+            (i32.add
+             (get_local $$83)
+             (i32.const 116)
+            )
+           )
+           (f32.store
+            (get_local $$84)
+            (get_local $$82)
+           )
+           ;;@ renderer.c:595:0
+           (set_local $$85
+            (get_local $$9)
+           )
+           (set_local $$86
+            (i32.add
+             (get_local $$85)
+             (i32.const 16)
+            )
+           )
+           (set_local $$87
+            (f32.load
+             (get_local $$86)
+            )
+           )
+           (set_local $$88
+            (get_local $$6)
+           )
+           (set_local $$89
+            (f32.add
+             (get_local $$88)
+             (get_local $$87)
+            )
+           )
+           (set_local $$6
+            (get_local $$89)
+           )
+           ;;@ renderer.c:596:0
+           (set_local $$90
+            (get_local $$9)
+           )
+           (set_local $$91
+            (i32.add
+             (get_local $$90)
+             (i32.const 12)
+            )
+           )
+           (set_local $$92
+            (f32.load
+             (get_local $$91)
+            )
+           )
+           (set_local $$93
+            (get_local $$7)
+           )
+           (set_local $$94
+            (f32.gt
+             (get_local $$92)
+             (get_local $$93)
+            )
+           )
+           (if
+            (get_local $$94)
+            (block
+             ;;@ renderer.c:597:0
+             (set_local $$95
+              (get_local $$9)
+             )
+             (set_local $$96
+              (i32.add
+               (get_local $$95)
+               (i32.const 12)
+              )
+             )
+             (set_local $$97
+              (f32.load
+               (get_local $$96)
+              )
+             )
+             (set_local $$7
+              (get_local $$97)
+             )
+            )
+           )
+          )
+          (block
+           ;;@ renderer.c:600:0
+           (set_local $$98
+            (get_local $$3)
+           )
+           (set_local $$99
+            (i32.add
+             (get_local $$98)
+             (i32.const 20)
+            )
+           )
+           (set_local $$100
+            (i32.add
+             (get_local $$99)
+             (i32.const 4)
+            )
+           )
+           (set_local $$101
+            (i32.load
+             (get_local $$100)
+            )
+           )
+           (set_local $$102
+            (i32.eq
+             (get_local $$101)
+             (i32.const 1)
+            )
+           )
+           (if
+            (get_local $$102)
+            (block
+             ;;@ renderer.c:601:0
+             (set_local $$103
+              (get_local $$9)
+             )
+             (set_local $$104
+              (i32.add
+               (get_local $$103)
+               (i32.const 12)
+              )
+             )
+             (set_local $$105
+              (f32.load
+               (get_local $$104)
+              )
+             )
+             (set_local $$106
+              (get_local $$5)
+             )
+             (set_local $$107
+              (i32.add
+               (get_local $$106)
+               (i32.const 116)
+              )
+             )
+             (set_local $$108
+              (f32.load
+               (get_local $$107)
+              )
+             )
+             (set_local $$109
+              (f32.add
+               (get_local $$108)
+               (get_local $$105)
+              )
+             )
+             (f32.store
+              (get_local $$107)
+              (get_local $$109)
+             )
+             ;;@ renderer.c:602:0
+             (set_local $$110
+              (get_local $$3)
+             )
+             (set_local $$111
+              (i32.add
+               (get_local $$110)
+               (i32.const 8)
+              )
+             )
+             (set_local $$112
+              (f32.load
+               (get_local $$111)
+              )
+             )
+             (set_local $$113
+              (get_local $$5)
+             )
+             (set_local $$114
+              (i32.add
+               (get_local $$113)
+               (i32.const 116)
+              )
+             )
+             (set_local $$115
+              (i32.add
+               (get_local $$114)
+               (i32.const 4)
+              )
+             )
+             (f32.store
+              (get_local $$115)
+              (get_local $$112)
+             )
+             ;;@ renderer.c:603:0
+             (set_local $$116
+              (get_local $$9)
+             )
+             (set_local $$117
+              (i32.add
+               (get_local $$116)
+               (i32.const 12)
+              )
+             )
+             (set_local $$118
+              (f32.load
+               (get_local $$117)
+              )
+             )
+             (set_local $$119
+              (get_local $$6)
+             )
+             (set_local $$120
+              (f32.add
+               (get_local $$119)
+               (get_local $$118)
+              )
+             )
+             (set_local $$6
+              (get_local $$120)
+             )
+             ;;@ renderer.c:604:0
+             (set_local $$121
+              (get_local $$9)
+             )
+             (set_local $$122
+              (i32.add
+               (get_local $$121)
+               (i32.const 16)
+              )
+             )
+             (set_local $$123
+              (f32.load
+               (get_local $$122)
+              )
+             )
+             (set_local $$124
+              (get_local $$7)
+             )
+             (set_local $$125
+              (f32.gt
+               (get_local $$123)
+               (get_local $$124)
+              )
+             )
+             (if
+              (get_local $$125)
+              (block
+               ;;@ renderer.c:605:0
+               (set_local $$126
+                (get_local $$9)
+               )
+               (set_local $$127
+                (i32.add
+                 (get_local $$126)
+                 (i32.const 16)
+                )
+               )
+               (set_local $$128
+                (f32.load
+                 (get_local $$127)
+                )
+               )
+               (set_local $$7
+                (get_local $$128)
+               )
+              )
+             )
+            )
+           )
+          )
+         )
+         ;;@ renderer.c:589:0
+         (set_local $$129
+          (get_local $$8)
+         )
+         (set_local $$130
+          (i32.add
+           (get_local $$129)
+           (i32.const 1)
+          )
+         )
+         (set_local $$8
+          (get_local $$130)
+         )
+         (br $while-in)
         )
        )
-       (set_local $$9
-        (get_local $$63)
-       )
-       ;;@ renderer.c:572:0
-       (set_local $$64
-        (get_local $$9)
-       )
-       (set_local $$65
-        (get_local $$3)
-       )
-       (set_local $$66
-        (get_local $$5)
-       )
-       (call $_layout_node
-        (get_local $$64)
-        (get_local $$65)
-        (get_local $$66)
-       )
-       ;;@ renderer.c:573:0
-       (set_local $$67
-        (get_local $$3)
-       )
-       (set_local $$68
+       ;;@ renderer.c:609:0
+       (set_local $$131
         (i32.add
-         (get_local $$67)
-         (i32.const 20)
-        )
-       )
-       (set_local $$69
-        (i32.add
-         (get_local $$68)
+         (get_local $$57)
          (i32.const 4)
         )
        )
-       (set_local $$70
+       (set_local $$132
         (i32.load
-         (get_local $$69)
+         (get_local $$131)
         )
        )
-       (set_local $$71
+       (set_local $$133
         (i32.eq
-         (get_local $$70)
+         (get_local $$132)
          (i32.const 0)
         )
        )
        (if
-        (get_local $$71)
+        (get_local $$133)
         (block
-         ;;@ renderer.c:574:0
-         (set_local $$72
-          (get_local $$9)
-         )
-         (set_local $$73
-          (i32.add
-           (get_local $$72)
-           (i32.const 16)
-          )
-         )
-         (set_local $$74
-          (f32.load
-           (get_local $$73)
-          )
-         )
-         (set_local $$75
-          (get_local $$5)
-         )
-         (set_local $$76
-          (i32.add
-           (get_local $$75)
-           (i32.const 116)
-          )
-         )
-         (set_local $$77
-          (i32.add
-           (get_local $$76)
-           (i32.const 4)
-          )
-         )
-         (set_local $$78
-          (f32.load
-           (get_local $$77)
-          )
-         )
-         (set_local $$79
-          (f32.add
-           (get_local $$78)
-           (get_local $$74)
-          )
-         )
-         (f32.store
-          (get_local $$77)
-          (get_local $$79)
-         )
-         ;;@ renderer.c:575:0
-         (set_local $$80
-          (get_local $$3)
-         )
-         (set_local $$81
-          (i32.add
-           (get_local $$80)
-           (i32.const 4)
-          )
-         )
-         (set_local $$82
-          (f32.load
-           (get_local $$81)
-          )
-         )
-         (set_local $$83
-          (get_local $$5)
-         )
-         (set_local $$84
-          (i32.add
-           (get_local $$83)
-           (i32.const 116)
-          )
-         )
-         (f32.store
-          (get_local $$84)
-          (get_local $$82)
-         )
-         ;;@ renderer.c:576:0
-         (set_local $$85
-          (get_local $$9)
-         )
-         (set_local $$86
-          (i32.add
-           (get_local $$85)
-           (i32.const 16)
-          )
-         )
-         (set_local $$87
-          (f32.load
-           (get_local $$86)
-          )
-         )
-         (set_local $$88
+         ;;@ renderer.c:610:0
+         (set_local $$134
           (get_local $$6)
          )
-         (set_local $$89
-          (f32.add
-           (get_local $$88)
-           (get_local $$87)
+         (set_local $$135
+          (get_local $$3)
+         )
+         (set_local $$136
+          (i32.add
+           (get_local $$135)
+           (i32.const 16)
           )
          )
-         (set_local $$6
-          (get_local $$89)
+         (f32.store
+          (get_local $$136)
+          (get_local $$134)
          )
-         ;;@ renderer.c:577:0
-         (set_local $$90
-          (get_local $$9)
+         ;;@ renderer.c:611:0
+         (set_local $$137
+          (get_local $$7)
          )
-         (set_local $$91
+         (set_local $$138
+          (get_local $$3)
+         )
+         (set_local $$139
           (i32.add
-           (get_local $$90)
+           (get_local $$138)
            (i32.const 12)
           )
          )
-         (set_local $$92
-          (f32.load
-           (get_local $$91)
-          )
+         (f32.store
+          (get_local $$139)
+          (get_local $$137)
          )
-         (set_local $$93
-          (get_local $$7)
+         (set_global $STACKTOP
+          (get_local $sp)
          )
-         (set_local $$94
-          (f32.gt
-           (get_local $$92)
-           (get_local $$93)
-          )
-         )
-         (if
-          (get_local $$94)
-          (block
-           ;;@ renderer.c:578:0
-           (set_local $$95
-            (get_local $$9)
-           )
-           (set_local $$96
-            (i32.add
-             (get_local $$95)
-             (i32.const 12)
-            )
-           )
-           (set_local $$97
-            (f32.load
-             (get_local $$96)
-            )
-           )
-           (set_local $$7
-            (get_local $$97)
-           )
-          )
-         )
-        )
-        (block
-         ;;@ renderer.c:581:0
-         (set_local $$98
-          (get_local $$3)
-         )
-         (set_local $$99
-          (i32.add
-           (get_local $$98)
-           (i32.const 20)
-          )
-         )
-         (set_local $$100
-          (i32.add
-           (get_local $$99)
-           (i32.const 4)
-          )
-         )
-         (set_local $$101
-          (i32.load
-           (get_local $$100)
-          )
-         )
-         (set_local $$102
-          (i32.eq
-           (get_local $$101)
-           (i32.const 1)
-          )
-         )
-         (if
-          (get_local $$102)
-          (block
-           ;;@ renderer.c:582:0
-           (set_local $$103
-            (get_local $$9)
-           )
-           (set_local $$104
-            (i32.add
-             (get_local $$103)
-             (i32.const 12)
-            )
-           )
-           (set_local $$105
-            (f32.load
-             (get_local $$104)
-            )
-           )
-           (set_local $$106
-            (get_local $$5)
-           )
-           (set_local $$107
-            (i32.add
-             (get_local $$106)
-             (i32.const 116)
-            )
-           )
-           (set_local $$108
-            (f32.load
-             (get_local $$107)
-            )
-           )
-           (set_local $$109
-            (f32.add
-             (get_local $$108)
-             (get_local $$105)
-            )
-           )
-           (f32.store
-            (get_local $$107)
-            (get_local $$109)
-           )
-           ;;@ renderer.c:583:0
-           (set_local $$110
-            (get_local $$3)
-           )
-           (set_local $$111
-            (i32.add
-             (get_local $$110)
-             (i32.const 8)
-            )
-           )
-           (set_local $$112
-            (f32.load
-             (get_local $$111)
-            )
-           )
-           (set_local $$113
-            (get_local $$5)
-           )
-           (set_local $$114
-            (i32.add
-             (get_local $$113)
-             (i32.const 116)
-            )
-           )
-           (set_local $$115
-            (i32.add
-             (get_local $$114)
-             (i32.const 4)
-            )
-           )
-           (f32.store
-            (get_local $$115)
-            (get_local $$112)
-           )
-           ;;@ renderer.c:584:0
-           (set_local $$116
-            (get_local $$9)
-           )
-           (set_local $$117
-            (i32.add
-             (get_local $$116)
-             (i32.const 12)
-            )
-           )
-           (set_local $$118
-            (f32.load
-             (get_local $$117)
-            )
-           )
-           (set_local $$119
-            (get_local $$6)
-           )
-           (set_local $$120
-            (f32.add
-             (get_local $$119)
-             (get_local $$118)
-            )
-           )
-           (set_local $$6
-            (get_local $$120)
-           )
-           ;;@ renderer.c:585:0
-           (set_local $$121
-            (get_local $$9)
-           )
-           (set_local $$122
-            (i32.add
-             (get_local $$121)
-             (i32.const 16)
-            )
-           )
-           (set_local $$123
-            (f32.load
-             (get_local $$122)
-            )
-           )
-           (set_local $$124
-            (get_local $$7)
-           )
-           (set_local $$125
-            (f32.gt
-             (get_local $$123)
-             (get_local $$124)
-            )
-           )
-           (if
-            (get_local $$125)
-            (block
-             ;;@ renderer.c:586:0
-             (set_local $$126
-              (get_local $$9)
-             )
-             (set_local $$127
-              (i32.add
-               (get_local $$126)
-               (i32.const 16)
-              )
-             )
-             (set_local $$128
-              (f32.load
-               (get_local $$127)
-              )
-             )
-             (set_local $$7
-              (get_local $$128)
-             )
-            )
-           )
-          )
-         )
+         ;;@ renderer.c:640:0
+         (return)
         )
        )
-       ;;@ renderer.c:570:0
-       (set_local $$129
-        (get_local $$8)
+       ;;@ renderer.c:613:0
+       (set_local $$140
+        (get_local $$3)
        )
-       (set_local $$130
+       (set_local $$141
         (i32.add
-         (get_local $$129)
+         (get_local $$140)
+         (i32.const 20)
+        )
+       )
+       (set_local $$142
+        (i32.add
+         (get_local $$141)
+         (i32.const 4)
+        )
+       )
+       (set_local $$143
+        (i32.load
+         (get_local $$142)
+        )
+       )
+       (set_local $$144
+        (i32.eq
+         (get_local $$143)
          (i32.const 1)
         )
        )
-       (set_local $$8
-        (get_local $$130)
-       )
-       (br $while-in)
-      )
-     )
-     ;;@ renderer.c:590:0
-     (set_local $$131
-      (i32.add
-       (get_local $$57)
-       (i32.const 4)
-      )
-     )
-     (set_local $$132
-      (i32.load
-       (get_local $$131)
-      )
-     )
-     (set_local $$133
-      (i32.eq
-       (get_local $$132)
-       (i32.const 0)
-      )
-     )
-     (if
-      (get_local $$133)
-      (block
-       ;;@ renderer.c:591:0
-       (set_local $$134
-        (get_local $$6)
-       )
-       (set_local $$135
-        (get_local $$3)
-       )
-       (set_local $$136
-        (i32.add
-         (get_local $$135)
-         (i32.const 16)
+       (if
+        (i32.eqz
+         (get_local $$144)
+        )
+        (block
+         (set_global $STACKTOP
+          (get_local $sp)
+         )
+         ;;@ renderer.c:640:0
+         (return)
         )
        )
-       (f32.store
-        (get_local $$136)
-        (get_local $$134)
+       ;;@ renderer.c:614:0
+       (set_local $$145
+        (get_local $$6)
        )
-       ;;@ renderer.c:592:0
-       (set_local $$137
-        (get_local $$7)
-       )
-       (set_local $$138
+       (set_local $$146
         (get_local $$3)
        )
-       (set_local $$139
+       (set_local $$147
         (i32.add
-         (get_local $$138)
+         (get_local $$146)
          (i32.const 12)
         )
        )
        (f32.store
-        (get_local $$139)
-        (get_local $$137)
+        (get_local $$147)
+        (get_local $$145)
+       )
+       ;;@ renderer.c:615:0
+       (set_local $$148
+        (get_local $$7)
+       )
+       (set_local $$149
+        (get_local $$3)
+       )
+       (set_local $$150
+        (i32.add
+         (get_local $$149)
+         (i32.const 16)
+        )
+       )
+       (f32.store
+        (get_local $$150)
+        (get_local $$148)
        )
        (set_global $STACKTOP
         (get_local $sp)
        )
-       ;;@ renderer.c:615:0
+       ;;@ renderer.c:640:0
        (return)
       )
      )
-     ;;@ renderer.c:594:0
-     (set_local $$140
+    )
+    (block
+     ;;@ renderer.c:621:0
+     (set_local $$151
       (get_local $$3)
      )
-     (set_local $$141
+     (set_local $$152
       (i32.add
-       (get_local $$140)
-       (i32.const 20)
-      )
-     )
-     (set_local $$142
-      (i32.add
-       (get_local $$141)
-       (i32.const 4)
-      )
-     )
-     (set_local $$143
-      (i32.load
-       (get_local $$142)
-      )
-     )
-     (set_local $$144
-      (i32.eq
-       (get_local $$143)
-       (i32.const 1)
-      )
-     )
-     (if
-      (i32.eqz
-       (get_local $$144)
-      )
-      (block
-       (set_global $STACKTOP
-        (get_local $sp)
-       )
-       ;;@ renderer.c:615:0
-       (return)
-      )
-     )
-     ;;@ renderer.c:595:0
-     (set_local $$145
-      (get_local $$6)
-     )
-     (set_local $$146
-      (get_local $$3)
-     )
-     (set_local $$147
-      (i32.add
-       (get_local $$146)
+       (get_local $$151)
        (i32.const 12)
       )
      )
      (f32.store
-      (get_local $$147)
-      (get_local $$145)
+      (get_local $$152)
+      (f32.const 0)
      )
-     ;;@ renderer.c:596:0
-     (set_local $$148
-      (get_local $$7)
-     )
-     (set_local $$149
+     ;;@ renderer.c:622:0
+     (set_local $$153
       (get_local $$3)
      )
-     (set_local $$150
+     (set_local $$154
       (i32.add
-       (get_local $$149)
+       (get_local $$153)
        (i32.const 16)
       )
      )
      (f32.store
-      (get_local $$150)
-      (get_local $$148)
+      (get_local $$154)
+      (f32.const 0)
      )
      (set_global $STACKTOP
       (get_local $sp)
      )
-     ;;@ renderer.c:615:0
+     ;;@ renderer.c:640:0
      (return)
     )
    )
    (block
-    ;;@ renderer.c:601:0
-    (set_local $$151
+    ;;@ renderer.c:626:0
+    (set_local $$155
      (get_local $$3)
     )
-    (set_local $$152
+    (set_local $$156
      (i32.load
-      (get_local $$151)
+      (get_local $$155)
      )
     )
     (i32.store
      (get_local $$vararg_buffer)
-     (get_local $$152)
+     (get_local $$156)
     )
     (drop
      (call $_printf
@@ -66152,12 +66363,12 @@
       (get_local $$vararg_buffer)
      )
     )
-    ;;@ renderer.c:602:0
+    ;;@ renderer.c:627:0
     (call $_abort)
    )
   )
  )
- (func $_render_node (; 176 ;) (param $$0 i32) (param $$1 i32)
+ (func $_render_node (; 178 ;) (param $$0 i32) (param $$1 i32)
   (local $$10 i32)
   (local $$11 f32)
   (local $$12 i32)
@@ -66196,8 +66407,25 @@
   (local $$42 i32)
   (local $$43 i32)
   (local $$44 i32)
+  (local $$45 i32)
+  (local $$46 i32)
+  (local $$47 i32)
+  (local $$48 i32)
+  (local $$49 f32)
   (local $$5 i32)
+  (local $$50 i32)
+  (local $$51 i32)
+  (local $$52 f32)
+  (local $$53 i32)
+  (local $$54 i32)
+  (local $$55 i32)
+  (local $$56 f32)
+  (local $$57 i32)
+  (local $$58 i32)
+  (local $$59 f32)
   (local $$6 i32)
+  (local $$60 i32)
+  (local $$61 i32)
   (local $$7 i32)
   (local $$8 i32)
   (local $$9 i32)
@@ -66243,7 +66471,7 @@
   (set_local $$3
    (get_local $$1)
   )
-  ;;@ renderer.c:618:0
+  ;;@ renderer.c:643:0
   (set_local $$7
    (get_local $$2)
   )
@@ -66254,252 +66482,359 @@
   )
   (block $switch
    (block $switch-default
-    (block $switch-case0
-     (block $switch-case
-      (br_table $switch-case $switch-case0 $switch-default
-       (i32.sub
-        (get_local $$8)
+    (block $switch-case2
+     (block $switch-case1
+      (block $switch-case0
+       (block $switch-case
+        (br_table $switch-case $switch-case0 $switch-case1 $switch-case2 $switch-default
+         (i32.sub
+          (get_local $$8)
+          (i32.const 0)
+         )
+        )
+       )
+       (block
+        ;;@ renderer.c:645:0
+        (set_local $$9
+         (get_local $$2)
+        )
+        (set_local $$10
+         (i32.add
+          (get_local $$9)
+          (i32.const 4)
+         )
+        )
+        (set_local $$11
+         (f32.load
+          (get_local $$10)
+         )
+        )
+        (f32.store
+         (get_local $$4)
+         (get_local $$11)
+        )
+        ;;@ renderer.c:646:0
+        (set_local $$12
+         (get_local $$2)
+        )
+        (set_local $$13
+         (i32.add
+          (get_local $$12)
+          (i32.const 8)
+         )
+        )
+        (set_local $$14
+         (f32.load
+          (get_local $$13)
+         )
+        )
+        (f32.store
+         (get_local $$5)
+         (get_local $$14)
+        )
+        ;;@ renderer.c:647:0
+        (set_local $$15
+         (get_local $$2)
+        )
+        (set_local $$16
+         (i32.add
+          (get_local $$15)
+          (i32.const 20)
+         )
+        )
+        (set_local $$17
+         (i32.load
+          (get_local $$16)
+         )
+        )
+        ;;@ renderer.c:649:0
+        (set_local $$18
+         (get_local $$2)
+        )
+        (set_local $$19
+         (i32.add
+          (get_local $$18)
+          (i32.const 20)
+         )
+        )
+        (set_local $$20
+         (i32.add
+          (get_local $$19)
+          (i32.const 4)
+         )
+        )
+        (set_local $$21
+         (i32.load
+          (get_local $$20)
+         )
+        )
+        ;;@ renderer.c:650:0
+        (set_local $$22
+         (get_local $$3)
+        )
+        (set_local $$23
+         (i32.add
+          (get_local $$22)
+          (i32.const 60)
+         )
+        )
+        (set_local $$24
+         (i32.load
+          (get_local $$23)
+         )
+        )
+        ;;@ renderer.c:651:0
+        (set_local $$25
+         (get_local $$3)
+        )
+        ;;@ renderer.c:647:0
+        (call $_render_text
+         (get_local $$17)
+         (get_local $$4)
+         (get_local $$5)
+         (get_local $$21)
+         (get_local $$24)
+         (get_local $$25)
+        )
+        (set_global $STACKTOP
+         (get_local $sp)
+        )
+        ;;@ renderer.c:676:0
+        (return)
+       )
+      )
+      (block
+       ;;@ renderer.c:655:0
+       (set_local $$6
         (i32.const 0)
        )
+       (loop $while-in
+        (block $while-out
+         (set_local $$26
+          (get_local $$6)
+         )
+         (set_local $$27
+          (get_local $$2)
+         )
+         (set_local $$28
+          (i32.add
+           (get_local $$27)
+           (i32.const 20)
+          )
+         )
+         (set_local $$29
+          (i32.load
+           (get_local $$28)
+          )
+         )
+         (set_local $$30
+          (i32.load
+           (get_local $$29)
+          )
+         )
+         (set_local $$31
+          (i32.lt_u
+           (get_local $$26)
+           (get_local $$30)
+          )
+         )
+         (if
+          (i32.eqz
+           (get_local $$31)
+          )
+          (br $while-out)
+         )
+         ;;@ renderer.c:656:0
+         (set_local $$32
+          (get_local $$2)
+         )
+         (set_local $$33
+          (i32.add
+           (get_local $$32)
+           (i32.const 20)
+          )
+         )
+         (set_local $$34
+          (i32.load
+           (get_local $$33)
+          )
+         )
+         (set_local $$35
+          (i32.add
+           (get_local $$34)
+           (i32.const 12)
+          )
+         )
+         (set_local $$36
+          (i32.load
+           (get_local $$35)
+          )
+         )
+         (set_local $$37
+          (get_local $$6)
+         )
+         (set_local $$38
+          (i32.add
+           (get_local $$36)
+           (i32.shl
+            (get_local $$37)
+            (i32.const 2)
+           )
+          )
+         )
+         (set_local $$39
+          (i32.load
+           (get_local $$38)
+          )
+         )
+         (set_local $$40
+          (get_local $$3)
+         )
+         (call $_render_node
+          (get_local $$39)
+          (get_local $$40)
+         )
+         ;;@ renderer.c:655:0
+         (set_local $$41
+          (get_local $$6)
+         )
+         (set_local $$42
+          (i32.add
+           (get_local $$41)
+           (i32.const 1)
+          )
+         )
+         (set_local $$6
+          (get_local $$42)
+         )
+         (br $while-in)
+        )
+       )
+       (set_global $STACKTOP
+        (get_local $sp)
+       )
+       ;;@ renderer.c:676:0
+       (return)
       )
      )
      (block
-      ;;@ renderer.c:620:0
-      (set_local $$9
+      ;;@ renderer.c:663:0
+      (set_local $$43
+       (get_local $$3)
+      )
+      (set_local $$44
        (get_local $$2)
       )
-      (set_local $$10
+      (set_local $$45
        (i32.add
-        (get_local $$9)
+        (get_local $$44)
+        (i32.const 20)
+       )
+      )
+      (set_local $$46
+       (i32.load
+        (get_local $$45)
+       )
+      )
+      (set_local $$47
+       (get_local $$2)
+      )
+      (set_local $$48
+       (i32.add
+        (get_local $$47)
         (i32.const 4)
        )
       )
-      (set_local $$11
+      (set_local $$49
        (f32.load
-        (get_local $$10)
+        (get_local $$48)
        )
       )
-      (f32.store
-       (get_local $$4)
-       (get_local $$11)
-      )
-      ;;@ renderer.c:621:0
-      (set_local $$12
+      (set_local $$50
        (get_local $$2)
       )
-      (set_local $$13
+      (set_local $$51
        (i32.add
-        (get_local $$12)
+        (get_local $$50)
         (i32.const 8)
        )
       )
-      (set_local $$14
+      (set_local $$52
        (f32.load
-        (get_local $$13)
+        (get_local $$51)
        )
       )
-      (f32.store
-       (get_local $$5)
-       (get_local $$14)
-      )
-      ;;@ renderer.c:622:0
-      (set_local $$15
-       (get_local $$2)
-      )
-      (set_local $$16
-       (i32.add
-        (get_local $$15)
-        (i32.const 20)
-       )
-      )
-      (set_local $$17
-       (i32.load
-        (get_local $$16)
-       )
-      )
-      ;;@ renderer.c:624:0
-      (set_local $$18
-       (get_local $$2)
-      )
-      (set_local $$19
-       (i32.add
-        (get_local $$18)
-        (i32.const 20)
-       )
-      )
-      (set_local $$20
-       (i32.add
-        (get_local $$19)
-        (i32.const 4)
-       )
-      )
-      (set_local $$21
-       (i32.load
-        (get_local $$20)
-       )
-      )
-      ;;@ renderer.c:625:0
-      (set_local $$22
-       (get_local $$3)
-      )
-      (set_local $$23
-       (i32.add
-        (get_local $$22)
-        (i32.const 60)
-       )
-      )
-      (set_local $$24
-       (i32.load
-        (get_local $$23)
-       )
-      )
-      ;;@ renderer.c:626:0
-      (set_local $$25
-       (get_local $$3)
-      )
-      ;;@ renderer.c:622:0
-      (call $_render_text
-       (get_local $$17)
-       (get_local $$4)
-       (get_local $$5)
-       (get_local $$21)
-       (get_local $$24)
-       (get_local $$25)
+      (call $_mark_background_start
+       (get_local $$43)
+       (get_local $$46)
+       (get_local $$49)
+       (get_local $$52)
       )
       (set_global $STACKTOP
        (get_local $sp)
       )
-      ;;@ renderer.c:641:0
+      ;;@ renderer.c:676:0
       (return)
      )
     )
     (block
-     ;;@ renderer.c:630:0
-     (set_local $$6
-      (i32.const 0)
+     ;;@ renderer.c:667:0
+     (set_local $$53
+      (get_local $$3)
      )
-     (loop $while-in
-      (block $while-out
-       (set_local $$26
-        (get_local $$6)
-       )
-       (set_local $$27
-        (get_local $$2)
-       )
-       (set_local $$28
-        (i32.add
-         (get_local $$27)
-         (i32.const 20)
-        )
-       )
-       (set_local $$29
-        (i32.load
-         (get_local $$28)
-        )
-       )
-       (set_local $$30
-        (i32.load
-         (get_local $$29)
-        )
-       )
-       (set_local $$31
-        (i32.lt_u
-         (get_local $$26)
-         (get_local $$30)
-        )
-       )
-       (if
-        (i32.eqz
-         (get_local $$31)
-        )
-        (br $while-out)
-       )
-       ;;@ renderer.c:631:0
-       (set_local $$32
-        (get_local $$2)
-       )
-       (set_local $$33
-        (i32.add
-         (get_local $$32)
-         (i32.const 20)
-        )
-       )
-       (set_local $$34
-        (i32.load
-         (get_local $$33)
-        )
-       )
-       (set_local $$35
-        (i32.add
-         (get_local $$34)
-         (i32.const 12)
-        )
-       )
-       (set_local $$36
-        (i32.load
-         (get_local $$35)
-        )
-       )
-       (set_local $$37
-        (get_local $$6)
-       )
-       (set_local $$38
-        (i32.add
-         (get_local $$36)
-         (i32.shl
-          (get_local $$37)
-          (i32.const 2)
-         )
-        )
-       )
-       (set_local $$39
-        (i32.load
-         (get_local $$38)
-        )
-       )
-       (set_local $$40
-        (get_local $$3)
-       )
-       (call $_render_node
-        (get_local $$39)
-        (get_local $$40)
-       )
-       ;;@ renderer.c:630:0
-       (set_local $$41
-        (get_local $$6)
-       )
-       (set_local $$42
-        (i32.add
-         (get_local $$41)
-         (i32.const 1)
-        )
-       )
-       (set_local $$6
-        (get_local $$42)
-       )
-       (br $while-in)
+     (set_local $$54
+      (get_local $$2)
+     )
+     (set_local $$55
+      (i32.add
+       (get_local $$54)
+       (i32.const 4)
       )
+     )
+     (set_local $$56
+      (f32.load
+       (get_local $$55)
+      )
+     )
+     (set_local $$57
+      (get_local $$2)
+     )
+     (set_local $$58
+      (i32.add
+       (get_local $$57)
+       (i32.const 8)
+      )
+     )
+     (set_local $$59
+      (f32.load
+       (get_local $$58)
+      )
+     )
+     (call $_mark_background_end
+      (get_local $$53)
+      (get_local $$56)
+      (get_local $$59)
      )
      (set_global $STACKTOP
       (get_local $sp)
      )
-     ;;@ renderer.c:641:0
+     ;;@ renderer.c:676:0
      (return)
     )
    )
    (block
-    ;;@ renderer.c:636:0
-    (set_local $$43
+    ;;@ renderer.c:671:0
+    (set_local $$60
      (get_local $$2)
     )
-    (set_local $$44
+    (set_local $$61
      (i32.load
-      (get_local $$43)
+      (get_local $$60)
      )
     )
     (i32.store
      (get_local $$vararg_buffer)
-     (get_local $$44)
+     (get_local $$61)
     )
     (drop
      (call $_printf
@@ -66507,12 +66842,12 @@
       (get_local $$vararg_buffer)
      )
     )
-    ;;@ renderer.c:637:0
+    ;;@ renderer.c:672:0
     (call $_abort)
    )
   )
  )
- (func $_render_text (; 177 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32)
+ (func $_render_text (; 179 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -67104,7 +67439,7 @@
   (set_local $$11
    (get_local $$5)
   )
-  ;;@ renderer.c:1134:0
+  ;;@ renderer.c:1175:0
   (set_local $$23
    (get_local $$8)
   )
@@ -67156,13 +67491,13 @@
       (set_global $STACKTOP
        (get_local $sp)
       )
-      ;;@ renderer.c:1225:0
+      ;;@ renderer.c:1266:0
       (return)
      )
     )
    )
   )
-  ;;@ renderer.c:1138:0
+  ;;@ renderer.c:1179:0
   (set_local $$32
    (get_local $$6)
   )
@@ -67202,7 +67537,7 @@
       (br $label$break$L5)
      )
     )
-    ;;@ renderer.c:1140:0
+    ;;@ renderer.c:1181:0
     (set_local $$36
      (get_local $$12)
     )
@@ -67230,7 +67565,7 @@
      (if
       (get_local $$39)
       (block
-       ;;@ renderer.c:1141:0
+       ;;@ renderer.c:1182:0
        (set_local $$40
         (get_local $$11)
        )
@@ -67288,7 +67623,7 @@
         (get_local $$48)
         (get_local $$50)
        )
-       ;;@ renderer.c:1142:0
+       ;;@ renderer.c:1183:0
        (set_local $$51
         (get_local $$7)
        )
@@ -67298,7 +67633,7 @@
        )
       )
       (block
-       ;;@ renderer.c:1145:0
+       ;;@ renderer.c:1186:0
        (set_local $$52
         (get_local $$12)
        )
@@ -67325,7 +67660,7 @@
        (if
         (get_local $$55)
         (block
-         ;;@ renderer.c:1146:0
+         ;;@ renderer.c:1187:0
          (set_local $$56
           (get_local $$11)
          )
@@ -67372,7 +67707,7 @@
          (br $do-once)
         )
        )
-       ;;@ renderer.c:1151:0
+       ;;@ renderer.c:1192:0
        (set_local $$64
         (get_local $$7)
        )
@@ -67424,7 +67759,7 @@
          )
         )
        )
-       ;;@ renderer.c:1154:0
+       ;;@ renderer.c:1195:0
        (set_local $$73
         (get_local $$8)
        )
@@ -67481,7 +67816,7 @@
          )
         )
        )
-       ;;@ renderer.c:1158:0
+       ;;@ renderer.c:1199:0
        (set_local $$13
         (i32.const 0)
        )
@@ -67502,7 +67837,7 @@
           )
           (br $while-out)
          )
-         ;;@ renderer.c:1159:0
+         ;;@ renderer.c:1200:0
          (set_local $$84
           (get_local $$9)
          )
@@ -67573,7 +67908,7 @@
           (get_local $$96)
           (get_local $$85)
          )
-         ;;@ renderer.c:1160:0
+         ;;@ renderer.c:1201:0
          (set_local $$97
           (get_local $$9)
          )
@@ -67650,7 +67985,7 @@
           (get_local $$110)
           (get_local $$99)
          )
-         ;;@ renderer.c:1161:0
+         ;;@ renderer.c:1202:0
          (set_local $$111
           (get_local $$9)
          )
@@ -67727,7 +68062,7 @@
           (get_local $$124)
           (get_local $$113)
          )
-         ;;@ renderer.c:1162:0
+         ;;@ renderer.c:1203:0
          (set_local $$125
           (get_local $$9)
          )
@@ -67804,7 +68139,7 @@
           (get_local $$138)
           (get_local $$127)
          )
-         ;;@ renderer.c:1158:0
+         ;;@ renderer.c:1199:0
          (set_local $$139
           (get_local $$13)
          )
@@ -67820,7 +68155,7 @@
          (br $while-in)
         )
        )
-       ;;@ renderer.c:1166:0
+       ;;@ renderer.c:1207:0
        (set_local $$141
         (get_local $$11)
        )
@@ -67840,7 +68175,7 @@
          (get_local $$143)
         )
        )
-       ;;@ renderer.c:1167:0
+       ;;@ renderer.c:1208:0
        (set_local $$145
         (get_local $$11)
        )
@@ -67879,7 +68214,7 @@
          (get_local $$151)
         )
        )
-       ;;@ renderer.c:1168:0
+       ;;@ renderer.c:1209:0
        (set_local $$153
         (get_local $$12)
        )
@@ -67903,7 +68238,7 @@
        (set_local $$157
         (get_local $$8)
        )
-       ;;@ renderer.c:1169:0
+       ;;@ renderer.c:1210:0
        (set_local $$158
         (get_local $$11)
        )
@@ -67923,7 +68258,7 @@
          (get_local $$160)
         )
        )
-       ;;@ renderer.c:1166:0
+       ;;@ renderer.c:1207:0
        (call $_get_baked_quad_scaled
         (get_local $$144)
         (get_local $$148)
@@ -67935,7 +68270,7 @@
         (get_local $$14)
         (i32.const 1)
        )
-       ;;@ renderer.c:1172:0
+       ;;@ renderer.c:1213:0
        (set_local $$162
         (f32.load
          (get_local $$14)
@@ -67988,7 +68323,7 @@
         (get_local $$15)
         (get_local $$16)
        )
-       ;;@ renderer.c:1174:0
+       ;;@ renderer.c:1215:0
        (set_local $$171
         (i32.add
          (get_local $$14)
@@ -68047,7 +68382,7 @@
         (get_local $$17)
         (get_local $$18)
        )
-       ;;@ renderer.c:1176:0
+       ;;@ renderer.c:1217:0
        (set_local $$181
         (i32.add
          (get_local $$14)
@@ -68106,7 +68441,7 @@
         (get_local $$19)
         (get_local $$20)
        )
-       ;;@ renderer.c:1178:0
+       ;;@ renderer.c:1219:0
        (set_local $$191
         (f32.load
          (get_local $$14)
@@ -68159,7 +68494,7 @@
         (get_local $$21)
         (get_local $$22)
        )
-       ;;@ renderer.c:1180:0
+       ;;@ renderer.c:1221:0
        (set_local $$200
         (f32.load
          (get_local $$15)
@@ -68218,7 +68553,7 @@
         (get_local $$209)
         (get_local $$200)
        )
-       ;;@ renderer.c:1181:0
+       ;;@ renderer.c:1222:0
        (set_local $$210
         (f32.load
          (get_local $$16)
@@ -68277,7 +68612,7 @@
         (get_local $$219)
         (get_local $$210)
        )
-       ;;@ renderer.c:1182:0
+       ;;@ renderer.c:1223:0
        (set_local $$220
         (i32.add
          (get_local $$14)
@@ -68342,7 +68677,7 @@
         (get_local $$230)
         (get_local $$221)
        )
-       ;;@ renderer.c:1183:0
+       ;;@ renderer.c:1224:0
        (set_local $$231
         (i32.add
          (get_local $$14)
@@ -68407,7 +68742,7 @@
         (get_local $$241)
         (get_local $$232)
        )
-       ;;@ renderer.c:1185:0
+       ;;@ renderer.c:1226:0
        (set_local $$242
         (f32.load
          (get_local $$17)
@@ -68466,7 +68801,7 @@
         (get_local $$251)
         (get_local $$242)
        )
-       ;;@ renderer.c:1186:0
+       ;;@ renderer.c:1227:0
        (set_local $$252
         (f32.load
          (get_local $$18)
@@ -68525,7 +68860,7 @@
         (get_local $$261)
         (get_local $$252)
        )
-       ;;@ renderer.c:1187:0
+       ;;@ renderer.c:1228:0
        (set_local $$262
         (i32.add
          (get_local $$14)
@@ -68590,7 +68925,7 @@
         (get_local $$272)
         (get_local $$263)
        )
-       ;;@ renderer.c:1188:0
+       ;;@ renderer.c:1229:0
        (set_local $$273
         (i32.add
          (get_local $$14)
@@ -68655,7 +68990,7 @@
         (get_local $$283)
         (get_local $$274)
        )
-       ;;@ renderer.c:1190:0
+       ;;@ renderer.c:1231:0
        (set_local $$284
         (f32.load
          (get_local $$19)
@@ -68714,7 +69049,7 @@
         (get_local $$293)
         (get_local $$284)
        )
-       ;;@ renderer.c:1191:0
+       ;;@ renderer.c:1232:0
        (set_local $$294
         (f32.load
          (get_local $$20)
@@ -68773,7 +69108,7 @@
         (get_local $$303)
         (get_local $$294)
        )
-       ;;@ renderer.c:1192:0
+       ;;@ renderer.c:1233:0
        (set_local $$304
         (i32.add
          (get_local $$14)
@@ -68838,7 +69173,7 @@
         (get_local $$314)
         (get_local $$305)
        )
-       ;;@ renderer.c:1193:0
+       ;;@ renderer.c:1234:0
        (set_local $$315
         (i32.add
          (get_local $$14)
@@ -68903,7 +69238,7 @@
         (get_local $$325)
         (get_local $$316)
        )
-       ;;@ renderer.c:1195:0
+       ;;@ renderer.c:1236:0
        (set_local $$326
         (f32.load
          (get_local $$21)
@@ -68962,7 +69297,7 @@
         (get_local $$335)
         (get_local $$326)
        )
-       ;;@ renderer.c:1196:0
+       ;;@ renderer.c:1237:0
        (set_local $$336
         (f32.load
          (get_local $$22)
@@ -69021,7 +69356,7 @@
         (get_local $$345)
         (get_local $$336)
        )
-       ;;@ renderer.c:1197:0
+       ;;@ renderer.c:1238:0
        (set_local $$346
         (i32.add
          (get_local $$14)
@@ -69086,7 +69421,7 @@
         (get_local $$356)
         (get_local $$347)
        )
-       ;;@ renderer.c:1198:0
+       ;;@ renderer.c:1239:0
        (set_local $$357
         (i32.add
          (get_local $$14)
@@ -69151,7 +69486,7 @@
         (get_local $$367)
         (get_local $$358)
        )
-       ;;@ renderer.c:1200:0
+       ;;@ renderer.c:1241:0
        (set_local $$368
         (get_local $$11)
        )
@@ -69228,7 +69563,7 @@
         (get_local $$380)
         (get_local $$372)
        )
-       ;;@ renderer.c:1201:0
+       ;;@ renderer.c:1242:0
        (set_local $$381
         (get_local $$11)
        )
@@ -69305,7 +69640,7 @@
         (get_local $$393)
         (get_local $$385)
        )
-       ;;@ renderer.c:1202:0
+       ;;@ renderer.c:1243:0
        (set_local $$394
         (get_local $$11)
        )
@@ -69382,7 +69717,7 @@
         (get_local $$406)
         (get_local $$398)
        )
-       ;;@ renderer.c:1203:0
+       ;;@ renderer.c:1244:0
        (set_local $$407
         (get_local $$11)
        )
@@ -69459,7 +69794,7 @@
         (get_local $$419)
         (get_local $$411)
        )
-       ;;@ renderer.c:1204:0
+       ;;@ renderer.c:1245:0
        (set_local $$420
         (get_local $$11)
        )
@@ -69536,7 +69871,7 @@
         (get_local $$432)
         (get_local $$424)
        )
-       ;;@ renderer.c:1205:0
+       ;;@ renderer.c:1246:0
        (set_local $$433
         (get_local $$11)
        )
@@ -69613,7 +69948,7 @@
         (get_local $$445)
         (get_local $$437)
        )
-       ;;@ renderer.c:1207:0
+       ;;@ renderer.c:1248:0
        (set_local $$446
         (get_local $$11)
        )
@@ -69638,7 +69973,7 @@
         (get_local $$447)
         (get_local $$449)
        )
-       ;;@ renderer.c:1208:0
+       ;;@ renderer.c:1249:0
        (set_local $$450
         (get_local $$11)
        )
@@ -69663,7 +69998,7 @@
         (get_local $$451)
         (get_local $$453)
        )
-       ;;@ renderer.c:1214:0
+       ;;@ renderer.c:1255:0
        (set_local $$454
         (get_local $$11)
        )
@@ -69701,7 +70036,7 @@
        (if
         (get_local $$460)
         (block
-         ;;@ renderer.c:1215:0
+         ;;@ renderer.c:1256:0
          (set_local $$461
           (get_local $$11)
          )
@@ -69726,7 +70061,7 @@
           (get_local $$462)
           (get_local $$464)
          )
-         ;;@ renderer.c:1216:0
+         ;;@ renderer.c:1257:0
          (set_local $$465
           (get_local $$11)
          )
@@ -69782,7 +70117,7 @@
          )
         )
        )
-       ;;@ renderer.c:1219:0
+       ;;@ renderer.c:1260:0
        (set_local $$475
         (get_local $$11)
        )
@@ -69820,7 +70155,7 @@
        (if
         (get_local $$481)
         (block
-         ;;@ renderer.c:1220:0
+         ;;@ renderer.c:1261:0
          (set_local $$482
           (get_local $$11)
          )
@@ -69845,7 +70180,7 @@
           (get_local $$483)
           (get_local $$485)
          )
-         ;;@ renderer.c:1221:0
+         ;;@ renderer.c:1262:0
          (set_local $$486
           (get_local $$11)
          )
@@ -69899,7 +70234,7 @@
           (get_local $$495)
           (get_local $$493)
          )
-         ;;@ renderer.c:1222:0
+         ;;@ renderer.c:1263:0
          (set_local $$496
           (get_local $$11)
          )
@@ -69958,7 +70293,7 @@
       )
      )
     )
-    ;;@ renderer.c:1138:0
+    ;;@ renderer.c:1179:0
     (set_local $$506
      (get_local $$12)
     )
@@ -69983,12 +70318,2203 @@
     (set_global $STACKTOP
      (get_local $sp)
     )
-    ;;@ renderer.c:1225:0
+    ;;@ renderer.c:1266:0
     (return)
    )
   )
  )
- (func $_get_baked_quad_scaled (; 178 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (param $$6 f32) (param $$7 i32) (param $$8 i32)
+ (func $_mark_background_start (; 180 ;) (param $$0 i32) (param $$1 i32) (param $$2 f32) (param $$3 f32)
+  (local $$10 i32)
+  (local $$11 i32)
+  (local $$12 f32)
+  (local $$13 i32)
+  (local $$14 i32)
+  (local $$15 i32)
+  (local $$16 i32)
+  (local $$17 i32)
+  (local $$18 i32)
+  (local $$19 i32)
+  (local $$20 i32)
+  (local $$21 i32)
+  (local $$22 i32)
+  (local $$23 i32)
+  (local $$24 i32)
+  (local $$25 i32)
+  (local $$26 f32)
+  (local $$27 i32)
+  (local $$28 i32)
+  (local $$29 i32)
+  (local $$30 i32)
+  (local $$31 i32)
+  (local $$32 i32)
+  (local $$33 i32)
+  (local $$34 i32)
+  (local $$35 i32)
+  (local $$36 i32)
+  (local $$37 i32)
+  (local $$38 i32)
+  (local $$39 i32)
+  (local $$4 i32)
+  (local $$40 f32)
+  (local $$41 i32)
+  (local $$42 i32)
+  (local $$43 i32)
+  (local $$44 i32)
+  (local $$45 i32)
+  (local $$46 i32)
+  (local $$47 i32)
+  (local $$48 i32)
+  (local $$49 i32)
+  (local $$5 i32)
+  (local $$50 i32)
+  (local $$51 i32)
+  (local $$52 i32)
+  (local $$53 i32)
+  (local $$54 f32)
+  (local $$55 i32)
+  (local $$56 i32)
+  (local $$57 i32)
+  (local $$58 i32)
+  (local $$59 i32)
+  (local $$6 f32)
+  (local $$60 i32)
+  (local $$61 i32)
+  (local $$62 i32)
+  (local $$63 i32)
+  (local $$64 i32)
+  (local $$65 i32)
+  (local $$66 i32)
+  (local $$67 i32)
+  (local $$68 f32)
+  (local $$69 i32)
+  (local $$7 f32)
+  (local $$70 i32)
+  (local $$71 f32)
+  (local $$72 i32)
+  (local $$73 i32)
+  (local $$74 i32)
+  (local $$75 f32)
+  (local $$76 f32)
+  (local $$77 f32)
+  (local $$78 i32)
+  (local $$79 i32)
+  (local $$8 i32)
+  (local $$9 i32)
+  (local $label i32)
+  (local $sp i32)
+  (set_local $sp
+   (get_global $STACKTOP)
+  )
+  (set_global $STACKTOP
+   (i32.add
+    (get_global $STACKTOP)
+    (i32.const 32)
+   )
+  )
+  (if
+   (i32.ge_s
+    (get_global $STACKTOP)
+    (get_global $STACK_MAX)
+   )
+   (call $abortStackOverflow
+    (i32.const 32)
+   )
+  )
+  (set_local $$4
+   (get_local $$0)
+  )
+  (set_local $$5
+   (get_local $$1)
+  )
+  (set_local $$6
+   (get_local $$2)
+  )
+  (set_local $$7
+   (get_local $$3)
+  )
+  ;;@ renderer.c:1272:0
+  (set_local $$8
+   (i32.const 0)
+  )
+  (loop $while-in
+   (block $while-out
+    (set_local $$9
+     (get_local $$8)
+    )
+    (set_local $$10
+     (i32.lt_u
+      (get_local $$9)
+      (i32.const 4)
+     )
+    )
+    (if
+     (i32.eqz
+      (get_local $$10)
+     )
+     (br $while-out)
+    )
+    ;;@ renderer.c:1273:0
+    (set_local $$11
+     (get_local $$5)
+    )
+    (set_local $$12
+     (f32.load
+      (get_local $$11)
+     )
+    )
+    (set_local $$13
+     (get_local $$4)
+    )
+    (set_local $$14
+     (i32.add
+      (get_local $$13)
+      (i32.const 80)
+     )
+    )
+    (set_local $$15
+     (i32.load
+      (get_local $$14)
+     )
+    )
+    (set_local $$16
+     (get_local $$4)
+    )
+    (set_local $$17
+     (i32.add
+      (get_local $$16)
+      (i32.const 68)
+     )
+    )
+    (set_local $$18
+     (i32.load
+      (get_local $$17)
+     )
+    )
+    (set_local $$19
+     (get_local $$8)
+    )
+    (set_local $$20
+     (i32.shl
+      (get_local $$19)
+      (i32.const 2)
+     )
+    )
+    (set_local $$21
+     (i32.add
+      (get_local $$18)
+      (get_local $$20)
+     )
+    )
+    (set_local $$22
+     (i32.add
+      (get_local $$21)
+      (i32.const 0)
+     )
+    )
+    (set_local $$23
+     (i32.add
+      (get_local $$15)
+      (i32.shl
+       (get_local $$22)
+       (i32.const 2)
+      )
+     )
+    )
+    (f32.store
+     (get_local $$23)
+     (get_local $$12)
+    )
+    ;;@ renderer.c:1274:0
+    (set_local $$24
+     (get_local $$5)
+    )
+    (set_local $$25
+     (i32.add
+      (get_local $$24)
+      (i32.const 4)
+     )
+    )
+    (set_local $$26
+     (f32.load
+      (get_local $$25)
+     )
+    )
+    (set_local $$27
+     (get_local $$4)
+    )
+    (set_local $$28
+     (i32.add
+      (get_local $$27)
+      (i32.const 80)
+     )
+    )
+    (set_local $$29
+     (i32.load
+      (get_local $$28)
+     )
+    )
+    (set_local $$30
+     (get_local $$4)
+    )
+    (set_local $$31
+     (i32.add
+      (get_local $$30)
+      (i32.const 68)
+     )
+    )
+    (set_local $$32
+     (i32.load
+      (get_local $$31)
+     )
+    )
+    (set_local $$33
+     (get_local $$8)
+    )
+    (set_local $$34
+     (i32.shl
+      (get_local $$33)
+      (i32.const 2)
+     )
+    )
+    (set_local $$35
+     (i32.add
+      (get_local $$32)
+      (get_local $$34)
+     )
+    )
+    (set_local $$36
+     (i32.add
+      (get_local $$35)
+      (i32.const 1)
+     )
+    )
+    (set_local $$37
+     (i32.add
+      (get_local $$29)
+      (i32.shl
+       (get_local $$36)
+       (i32.const 2)
+      )
+     )
+    )
+    (f32.store
+     (get_local $$37)
+     (get_local $$26)
+    )
+    ;;@ renderer.c:1275:0
+    (set_local $$38
+     (get_local $$5)
+    )
+    (set_local $$39
+     (i32.add
+      (get_local $$38)
+      (i32.const 8)
+     )
+    )
+    (set_local $$40
+     (f32.load
+      (get_local $$39)
+     )
+    )
+    (set_local $$41
+     (get_local $$4)
+    )
+    (set_local $$42
+     (i32.add
+      (get_local $$41)
+      (i32.const 80)
+     )
+    )
+    (set_local $$43
+     (i32.load
+      (get_local $$42)
+     )
+    )
+    (set_local $$44
+     (get_local $$4)
+    )
+    (set_local $$45
+     (i32.add
+      (get_local $$44)
+      (i32.const 68)
+     )
+    )
+    (set_local $$46
+     (i32.load
+      (get_local $$45)
+     )
+    )
+    (set_local $$47
+     (get_local $$8)
+    )
+    (set_local $$48
+     (i32.shl
+      (get_local $$47)
+      (i32.const 2)
+     )
+    )
+    (set_local $$49
+     (i32.add
+      (get_local $$46)
+      (get_local $$48)
+     )
+    )
+    (set_local $$50
+     (i32.add
+      (get_local $$49)
+      (i32.const 2)
+     )
+    )
+    (set_local $$51
+     (i32.add
+      (get_local $$43)
+      (i32.shl
+       (get_local $$50)
+       (i32.const 2)
+      )
+     )
+    )
+    (f32.store
+     (get_local $$51)
+     (get_local $$40)
+    )
+    ;;@ renderer.c:1276:0
+    (set_local $$52
+     (get_local $$5)
+    )
+    (set_local $$53
+     (i32.add
+      (get_local $$52)
+      (i32.const 12)
+     )
+    )
+    (set_local $$54
+     (f32.load
+      (get_local $$53)
+     )
+    )
+    (set_local $$55
+     (get_local $$4)
+    )
+    (set_local $$56
+     (i32.add
+      (get_local $$55)
+      (i32.const 80)
+     )
+    )
+    (set_local $$57
+     (i32.load
+      (get_local $$56)
+     )
+    )
+    (set_local $$58
+     (get_local $$4)
+    )
+    (set_local $$59
+     (i32.add
+      (get_local $$58)
+      (i32.const 68)
+     )
+    )
+    (set_local $$60
+     (i32.load
+      (get_local $$59)
+     )
+    )
+    (set_local $$61
+     (get_local $$8)
+    )
+    (set_local $$62
+     (i32.shl
+      (get_local $$61)
+      (i32.const 2)
+     )
+    )
+    (set_local $$63
+     (i32.add
+      (get_local $$60)
+      (get_local $$62)
+     )
+    )
+    (set_local $$64
+     (i32.add
+      (get_local $$63)
+      (i32.const 3)
+     )
+    )
+    (set_local $$65
+     (i32.add
+      (get_local $$57)
+      (i32.shl
+       (get_local $$64)
+       (i32.const 2)
+      )
+     )
+    )
+    (f32.store
+     (get_local $$65)
+     (get_local $$54)
+    )
+    ;;@ renderer.c:1272:0
+    (set_local $$66
+     (get_local $$8)
+    )
+    (set_local $$67
+     (i32.add
+      (get_local $$66)
+      (i32.const 1)
+     )
+    )
+    (set_local $$8
+     (get_local $$67)
+    )
+    (br $while-in)
+   )
+  )
+  ;;@ renderer.c:1281:0
+  (set_local $$68
+   (get_local $$6)
+  )
+  (set_local $$69
+   (get_local $$4)
+  )
+  (set_local $$70
+   (i32.add
+    (get_local $$69)
+    (i32.const 84)
+   )
+  )
+  (f32.store
+   (get_local $$70)
+   (get_local $$68)
+  )
+  ;;@ renderer.c:1282:0
+  (set_local $$71
+   (get_local $$7)
+  )
+  (set_local $$72
+   (get_local $$4)
+  )
+  (set_local $$73
+   (i32.load
+    (get_local $$72)
+   )
+  )
+  (set_local $$74
+   (i32.add
+    (get_local $$73)
+    (i32.const 16)
+   )
+  )
+  (set_local $$75
+   (f32.load
+    (get_local $$74)
+   )
+  )
+  (set_local $$76
+   (f32.sub
+    (get_local $$71)
+    (get_local $$75)
+   )
+  )
+  (set_local $$77
+   (f32.add
+    (get_local $$76)
+    (f32.const 4)
+   )
+  )
+  (set_local $$78
+   (get_local $$4)
+  )
+  (set_local $$79
+   (i32.add
+    (get_local $$78)
+    (i32.const 88)
+   )
+  )
+  (f32.store
+   (get_local $$79)
+   (get_local $$77)
+  )
+  (set_global $STACKTOP
+   (get_local $sp)
+  )
+  ;;@ renderer.c:1283:0
+  (return)
+ )
+ (func $_mark_background_end (; 181 ;) (param $$0 i32) (param $$1 f32) (param $$2 f32)
+  (local $$10 i32)
+  (local $$100 i32)
+  (local $$101 i32)
+  (local $$102 i32)
+  (local $$103 i32)
+  (local $$104 i32)
+  (local $$105 i32)
+  (local $$106 i32)
+  (local $$107 i32)
+  (local $$108 i32)
+  (local $$109 i32)
+  (local $$11 i32)
+  (local $$110 i32)
+  (local $$111 f32)
+  (local $$112 i32)
+  (local $$113 i32)
+  (local $$114 i32)
+  (local $$115 i32)
+  (local $$116 i32)
+  (local $$117 i32)
+  (local $$118 i32)
+  (local $$119 i32)
+  (local $$12 f32)
+  (local $$120 i32)
+  (local $$121 f32)
+  (local $$122 i32)
+  (local $$123 i32)
+  (local $$124 i32)
+  (local $$125 i32)
+  (local $$126 i32)
+  (local $$127 i32)
+  (local $$128 i32)
+  (local $$129 i32)
+  (local $$13 i32)
+  (local $$130 i32)
+  (local $$131 i32)
+  (local $$132 i32)
+  (local $$133 i32)
+  (local $$134 i32)
+  (local $$135 i32)
+  (local $$136 i32)
+  (local $$137 i32)
+  (local $$138 i32)
+  (local $$139 i32)
+  (local $$14 i32)
+  (local $$140 i32)
+  (local $$141 i32)
+  (local $$142 i32)
+  (local $$143 i32)
+  (local $$144 i32)
+  (local $$145 i32)
+  (local $$146 i32)
+  (local $$147 i32)
+  (local $$148 i32)
+  (local $$149 f32)
+  (local $$15 f32)
+  (local $$150 i32)
+  (local $$151 i32)
+  (local $$152 i32)
+  (local $$153 i32)
+  (local $$154 i32)
+  (local $$155 i32)
+  (local $$156 i32)
+  (local $$157 i32)
+  (local $$158 i32)
+  (local $$159 f32)
+  (local $$16 f32)
+  (local $$160 i32)
+  (local $$161 i32)
+  (local $$162 i32)
+  (local $$163 i32)
+  (local $$164 i32)
+  (local $$165 i32)
+  (local $$166 i32)
+  (local $$167 i32)
+  (local $$168 i32)
+  (local $$169 i32)
+  (local $$17 f32)
+  (local $$170 i32)
+  (local $$171 i32)
+  (local $$172 i32)
+  (local $$173 i32)
+  (local $$174 i32)
+  (local $$175 i32)
+  (local $$176 i32)
+  (local $$177 i32)
+  (local $$178 i32)
+  (local $$179 i32)
+  (local $$18 f32)
+  (local $$180 i32)
+  (local $$181 i32)
+  (local $$182 i32)
+  (local $$183 i32)
+  (local $$184 i32)
+  (local $$185 i32)
+  (local $$186 i32)
+  (local $$187 i32)
+  (local $$188 i32)
+  (local $$189 i32)
+  (local $$19 f32)
+  (local $$190 i32)
+  (local $$191 i32)
+  (local $$192 i32)
+  (local $$193 i32)
+  (local $$194 i32)
+  (local $$195 i32)
+  (local $$196 i32)
+  (local $$197 i32)
+  (local $$198 i32)
+  (local $$199 i32)
+  (local $$20 f32)
+  (local $$200 i32)
+  (local $$201 i32)
+  (local $$202 i32)
+  (local $$203 i32)
+  (local $$204 i32)
+  (local $$205 i32)
+  (local $$206 i32)
+  (local $$207 i32)
+  (local $$208 i32)
+  (local $$209 i32)
+  (local $$21 i32)
+  (local $$210 i32)
+  (local $$211 i32)
+  (local $$212 i32)
+  (local $$213 i32)
+  (local $$214 i32)
+  (local $$215 i32)
+  (local $$216 i32)
+  (local $$217 i32)
+  (local $$218 i32)
+  (local $$219 i32)
+  (local $$22 i32)
+  (local $$220 i32)
+  (local $$221 i32)
+  (local $$23 f32)
+  (local $$24 i32)
+  (local $$25 i32)
+  (local $$26 f32)
+  (local $$27 f32)
+  (local $$28 f32)
+  (local $$29 i32)
+  (local $$3 i32)
+  (local $$30 i32)
+  (local $$31 f32)
+  (local $$32 i32)
+  (local $$33 i32)
+  (local $$34 f32)
+  (local $$35 f32)
+  (local $$36 i32)
+  (local $$37 i32)
+  (local $$38 i32)
+  (local $$39 i32)
+  (local $$4 f32)
+  (local $$40 i32)
+  (local $$41 i32)
+  (local $$42 i32)
+  (local $$43 i32)
+  (local $$44 i32)
+  (local $$45 f32)
+  (local $$46 i32)
+  (local $$47 i32)
+  (local $$48 i32)
+  (local $$49 i32)
+  (local $$5 f32)
+  (local $$50 i32)
+  (local $$51 i32)
+  (local $$52 i32)
+  (local $$53 i32)
+  (local $$54 i32)
+  (local $$55 i32)
+  (local $$56 i32)
+  (local $$57 i32)
+  (local $$58 i32)
+  (local $$59 i32)
+  (local $$6 i32)
+  (local $$60 i32)
+  (local $$61 i32)
+  (local $$62 i32)
+  (local $$63 i32)
+  (local $$64 i32)
+  (local $$65 i32)
+  (local $$66 i32)
+  (local $$67 i32)
+  (local $$68 i32)
+  (local $$69 i32)
+  (local $$7 i32)
+  (local $$70 i32)
+  (local $$71 i32)
+  (local $$72 i32)
+  (local $$73 f32)
+  (local $$74 i32)
+  (local $$75 i32)
+  (local $$76 i32)
+  (local $$77 i32)
+  (local $$78 i32)
+  (local $$79 i32)
+  (local $$8 i32)
+  (local $$80 i32)
+  (local $$81 i32)
+  (local $$82 i32)
+  (local $$83 f32)
+  (local $$84 i32)
+  (local $$85 i32)
+  (local $$86 i32)
+  (local $$87 i32)
+  (local $$88 i32)
+  (local $$89 i32)
+  (local $$9 i32)
+  (local $$90 i32)
+  (local $$91 i32)
+  (local $$92 i32)
+  (local $$93 i32)
+  (local $$94 i32)
+  (local $$95 i32)
+  (local $$96 i32)
+  (local $$97 i32)
+  (local $$98 i32)
+  (local $$99 i32)
+  (local $label i32)
+  (local $sp i32)
+  (set_local $sp
+   (get_global $STACKTOP)
+  )
+  (set_global $STACKTOP
+   (i32.add
+    (get_global $STACKTOP)
+    (i32.const 32)
+   )
+  )
+  (if
+   (i32.ge_s
+    (get_global $STACKTOP)
+    (get_global $STACK_MAX)
+   )
+   (call $abortStackOverflow
+    (i32.const 32)
+   )
+  )
+  (set_local $$6
+   (i32.add
+    (get_local $sp)
+    (i32.const 12)
+   )
+  )
+  (set_local $$7
+   (i32.add
+    (get_local $sp)
+    (i32.const 8)
+   )
+  )
+  (set_local $$8
+   (i32.add
+    (get_local $sp)
+    (i32.const 4)
+   )
+  )
+  (set_local $$9
+   (get_local $sp)
+  )
+  (set_local $$3
+   (get_local $$0)
+  )
+  (set_local $$4
+   (get_local $$1)
+  )
+  (set_local $$5
+   (get_local $$2)
+  )
+  ;;@ renderer.c:1287:0
+  (set_local $$10
+   (get_local $$3)
+  )
+  (set_local $$11
+   (i32.add
+    (get_local $$10)
+    (i32.const 84)
+   )
+  )
+  (set_local $$12
+   (f32.load
+    (get_local $$11)
+   )
+  )
+  (f32.store
+   (get_local $$6)
+   (get_local $$12)
+  )
+  ;;@ renderer.c:1288:0
+  (set_local $$13
+   (get_local $$3)
+  )
+  (set_local $$14
+   (i32.add
+    (get_local $$13)
+    (i32.const 88)
+   )
+  )
+  (set_local $$15
+   (f32.load
+    (get_local $$14)
+   )
+  )
+  (f32.store
+   (get_local $$7)
+   (get_local $$15)
+  )
+  ;;@ renderer.c:1289:0
+  (set_local $$16
+   (get_local $$4)
+  )
+  (f32.store
+   (get_local $$8)
+   (get_local $$16)
+  )
+  ;;@ renderer.c:1290:0
+  (set_local $$17
+   (get_local $$5)
+  )
+  (set_local $$18
+   (f32.add
+    (get_local $$17)
+    (f32.const 6)
+   )
+  )
+  (f32.store
+   (get_local $$9)
+   (get_local $$18)
+  )
+  ;;@ renderer.c:1292:0
+  (set_local $$19
+   (f32.load
+    (get_local $$6)
+   )
+  )
+  (set_local $$20
+   (f32.load
+    (get_local $$7)
+   )
+  )
+  (set_local $$21
+   (get_local $$3)
+  )
+  (set_local $$22
+   (i32.add
+    (get_local $$21)
+    (i32.const 4)
+   )
+  )
+  (set_local $$23
+   (f32.load
+    (get_local $$22)
+   )
+  )
+  (set_local $$24
+   (get_local $$3)
+  )
+  (set_local $$25
+   (i32.add
+    (get_local $$24)
+    (i32.const 8)
+   )
+  )
+  (set_local $$26
+   (f32.load
+    (get_local $$25)
+   )
+  )
+  (call $_convert_screen_coords_to_view_coords
+   (get_local $$19)
+   (get_local $$20)
+   (get_local $$23)
+   (get_local $$26)
+   (get_local $$6)
+   (get_local $$7)
+  )
+  ;;@ renderer.c:1293:0
+  (set_local $$27
+   (f32.load
+    (get_local $$8)
+   )
+  )
+  (set_local $$28
+   (f32.load
+    (get_local $$9)
+   )
+  )
+  (set_local $$29
+   (get_local $$3)
+  )
+  (set_local $$30
+   (i32.add
+    (get_local $$29)
+    (i32.const 4)
+   )
+  )
+  (set_local $$31
+   (f32.load
+    (get_local $$30)
+   )
+  )
+  (set_local $$32
+   (get_local $$3)
+  )
+  (set_local $$33
+   (i32.add
+    (get_local $$32)
+    (i32.const 8)
+   )
+  )
+  (set_local $$34
+   (f32.load
+    (get_local $$33)
+   )
+  )
+  (call $_convert_screen_coords_to_view_coords
+   (get_local $$27)
+   (get_local $$28)
+   (get_local $$31)
+   (get_local $$34)
+   (get_local $$8)
+   (get_local $$9)
+  )
+  ;;@ renderer.c:1295:0
+  (set_local $$35
+   (f32.load
+    (get_local $$6)
+   )
+  )
+  (set_local $$36
+   (get_local $$3)
+  )
+  (set_local $$37
+   (i32.add
+    (get_local $$36)
+    (i32.const 76)
+   )
+  )
+  (set_local $$38
+   (i32.load
+    (get_local $$37)
+   )
+  )
+  (set_local $$39
+   (get_local $$3)
+  )
+  (set_local $$40
+   (i32.add
+    (get_local $$39)
+    (i32.const 68)
+   )
+  )
+  (set_local $$41
+   (i32.load
+    (get_local $$40)
+   )
+  )
+  (set_local $$42
+   (i32.add
+    (get_local $$41)
+    (i32.const 0)
+   )
+  )
+  (set_local $$43
+   (i32.add
+    (get_local $$42)
+    (i32.const 0)
+   )
+  )
+  (set_local $$44
+   (i32.add
+    (get_local $$38)
+    (i32.shl
+     (get_local $$43)
+     (i32.const 2)
+    )
+   )
+  )
+  (f32.store
+   (get_local $$44)
+   (get_local $$35)
+  )
+  ;;@ renderer.c:1296:0
+  (set_local $$45
+   (f32.load
+    (get_local $$7)
+   )
+  )
+  (set_local $$46
+   (get_local $$3)
+  )
+  (set_local $$47
+   (i32.add
+    (get_local $$46)
+    (i32.const 76)
+   )
+  )
+  (set_local $$48
+   (i32.load
+    (get_local $$47)
+   )
+  )
+  (set_local $$49
+   (get_local $$3)
+  )
+  (set_local $$50
+   (i32.add
+    (get_local $$49)
+    (i32.const 68)
+   )
+  )
+  (set_local $$51
+   (i32.load
+    (get_local $$50)
+   )
+  )
+  (set_local $$52
+   (i32.add
+    (get_local $$51)
+    (i32.const 0)
+   )
+  )
+  (set_local $$53
+   (i32.add
+    (get_local $$52)
+    (i32.const 1)
+   )
+  )
+  (set_local $$54
+   (i32.add
+    (get_local $$48)
+    (i32.shl
+     (get_local $$53)
+     (i32.const 2)
+    )
+   )
+  )
+  (f32.store
+   (get_local $$54)
+   (get_local $$45)
+  )
+  ;;@ renderer.c:1297:0
+  (set_local $$55
+   (get_local $$3)
+  )
+  (set_local $$56
+   (i32.add
+    (get_local $$55)
+    (i32.const 76)
+   )
+  )
+  (set_local $$57
+   (i32.load
+    (get_local $$56)
+   )
+  )
+  (set_local $$58
+   (get_local $$3)
+  )
+  (set_local $$59
+   (i32.add
+    (get_local $$58)
+    (i32.const 68)
+   )
+  )
+  (set_local $$60
+   (i32.load
+    (get_local $$59)
+   )
+  )
+  (set_local $$61
+   (i32.add
+    (get_local $$60)
+    (i32.const 0)
+   )
+  )
+  (set_local $$62
+   (i32.add
+    (get_local $$61)
+    (i32.const 2)
+   )
+  )
+  (set_local $$63
+   (i32.add
+    (get_local $$57)
+    (i32.shl
+     (get_local $$62)
+     (i32.const 2)
+    )
+   )
+  )
+  (f32.store
+   (get_local $$63)
+   (f32.const 0)
+  )
+  ;;@ renderer.c:1298:0
+  (set_local $$64
+   (get_local $$3)
+  )
+  (set_local $$65
+   (i32.add
+    (get_local $$64)
+    (i32.const 76)
+   )
+  )
+  (set_local $$66
+   (i32.load
+    (get_local $$65)
+   )
+  )
+  (set_local $$67
+   (get_local $$3)
+  )
+  (set_local $$68
+   (i32.add
+    (get_local $$67)
+    (i32.const 68)
+   )
+  )
+  (set_local $$69
+   (i32.load
+    (get_local $$68)
+   )
+  )
+  (set_local $$70
+   (i32.add
+    (get_local $$69)
+    (i32.const 0)
+   )
+  )
+  (set_local $$71
+   (i32.add
+    (get_local $$70)
+    (i32.const 3)
+   )
+  )
+  (set_local $$72
+   (i32.add
+    (get_local $$66)
+    (i32.shl
+     (get_local $$71)
+     (i32.const 2)
+    )
+   )
+  )
+  (f32.store
+   (get_local $$72)
+   (f32.const 0)
+  )
+  ;;@ renderer.c:1300:0
+  (set_local $$73
+   (f32.load
+    (get_local $$8)
+   )
+  )
+  (set_local $$74
+   (get_local $$3)
+  )
+  (set_local $$75
+   (i32.add
+    (get_local $$74)
+    (i32.const 76)
+   )
+  )
+  (set_local $$76
+   (i32.load
+    (get_local $$75)
+   )
+  )
+  (set_local $$77
+   (get_local $$3)
+  )
+  (set_local $$78
+   (i32.add
+    (get_local $$77)
+    (i32.const 68)
+   )
+  )
+  (set_local $$79
+   (i32.load
+    (get_local $$78)
+   )
+  )
+  (set_local $$80
+   (i32.add
+    (get_local $$79)
+    (i32.const 4)
+   )
+  )
+  (set_local $$81
+   (i32.add
+    (get_local $$80)
+    (i32.const 0)
+   )
+  )
+  (set_local $$82
+   (i32.add
+    (get_local $$76)
+    (i32.shl
+     (get_local $$81)
+     (i32.const 2)
+    )
+   )
+  )
+  (f32.store
+   (get_local $$82)
+   (get_local $$73)
+  )
+  ;;@ renderer.c:1301:0
+  (set_local $$83
+   (f32.load
+    (get_local $$7)
+   )
+  )
+  (set_local $$84
+   (get_local $$3)
+  )
+  (set_local $$85
+   (i32.add
+    (get_local $$84)
+    (i32.const 76)
+   )
+  )
+  (set_local $$86
+   (i32.load
+    (get_local $$85)
+   )
+  )
+  (set_local $$87
+   (get_local $$3)
+  )
+  (set_local $$88
+   (i32.add
+    (get_local $$87)
+    (i32.const 68)
+   )
+  )
+  (set_local $$89
+   (i32.load
+    (get_local $$88)
+   )
+  )
+  (set_local $$90
+   (i32.add
+    (get_local $$89)
+    (i32.const 4)
+   )
+  )
+  (set_local $$91
+   (i32.add
+    (get_local $$90)
+    (i32.const 1)
+   )
+  )
+  (set_local $$92
+   (i32.add
+    (get_local $$86)
+    (i32.shl
+     (get_local $$91)
+     (i32.const 2)
+    )
+   )
+  )
+  (f32.store
+   (get_local $$92)
+   (get_local $$83)
+  )
+  ;;@ renderer.c:1302:0
+  (set_local $$93
+   (get_local $$3)
+  )
+  (set_local $$94
+   (i32.add
+    (get_local $$93)
+    (i32.const 76)
+   )
+  )
+  (set_local $$95
+   (i32.load
+    (get_local $$94)
+   )
+  )
+  (set_local $$96
+   (get_local $$3)
+  )
+  (set_local $$97
+   (i32.add
+    (get_local $$96)
+    (i32.const 68)
+   )
+  )
+  (set_local $$98
+   (i32.load
+    (get_local $$97)
+   )
+  )
+  (set_local $$99
+   (i32.add
+    (get_local $$98)
+    (i32.const 4)
+   )
+  )
+  (set_local $$100
+   (i32.add
+    (get_local $$99)
+    (i32.const 2)
+   )
+  )
+  (set_local $$101
+   (i32.add
+    (get_local $$95)
+    (i32.shl
+     (get_local $$100)
+     (i32.const 2)
+    )
+   )
+  )
+  (f32.store
+   (get_local $$101)
+   (f32.const 0)
+  )
+  ;;@ renderer.c:1303:0
+  (set_local $$102
+   (get_local $$3)
+  )
+  (set_local $$103
+   (i32.add
+    (get_local $$102)
+    (i32.const 76)
+   )
+  )
+  (set_local $$104
+   (i32.load
+    (get_local $$103)
+   )
+  )
+  (set_local $$105
+   (get_local $$3)
+  )
+  (set_local $$106
+   (i32.add
+    (get_local $$105)
+    (i32.const 68)
+   )
+  )
+  (set_local $$107
+   (i32.load
+    (get_local $$106)
+   )
+  )
+  (set_local $$108
+   (i32.add
+    (get_local $$107)
+    (i32.const 4)
+   )
+  )
+  (set_local $$109
+   (i32.add
+    (get_local $$108)
+    (i32.const 3)
+   )
+  )
+  (set_local $$110
+   (i32.add
+    (get_local $$104)
+    (i32.shl
+     (get_local $$109)
+     (i32.const 2)
+    )
+   )
+  )
+  (f32.store
+   (get_local $$110)
+   (f32.const 0)
+  )
+  ;;@ renderer.c:1305:0
+  (set_local $$111
+   (f32.load
+    (get_local $$8)
+   )
+  )
+  (set_local $$112
+   (get_local $$3)
+  )
+  (set_local $$113
+   (i32.add
+    (get_local $$112)
+    (i32.const 76)
+   )
+  )
+  (set_local $$114
+   (i32.load
+    (get_local $$113)
+   )
+  )
+  (set_local $$115
+   (get_local $$3)
+  )
+  (set_local $$116
+   (i32.add
+    (get_local $$115)
+    (i32.const 68)
+   )
+  )
+  (set_local $$117
+   (i32.load
+    (get_local $$116)
+   )
+  )
+  (set_local $$118
+   (i32.add
+    (get_local $$117)
+    (i32.const 8)
+   )
+  )
+  (set_local $$119
+   (i32.add
+    (get_local $$118)
+    (i32.const 0)
+   )
+  )
+  (set_local $$120
+   (i32.add
+    (get_local $$114)
+    (i32.shl
+     (get_local $$119)
+     (i32.const 2)
+    )
+   )
+  )
+  (f32.store
+   (get_local $$120)
+   (get_local $$111)
+  )
+  ;;@ renderer.c:1306:0
+  (set_local $$121
+   (f32.load
+    (get_local $$9)
+   )
+  )
+  (set_local $$122
+   (get_local $$3)
+  )
+  (set_local $$123
+   (i32.add
+    (get_local $$122)
+    (i32.const 76)
+   )
+  )
+  (set_local $$124
+   (i32.load
+    (get_local $$123)
+   )
+  )
+  (set_local $$125
+   (get_local $$3)
+  )
+  (set_local $$126
+   (i32.add
+    (get_local $$125)
+    (i32.const 68)
+   )
+  )
+  (set_local $$127
+   (i32.load
+    (get_local $$126)
+   )
+  )
+  (set_local $$128
+   (i32.add
+    (get_local $$127)
+    (i32.const 8)
+   )
+  )
+  (set_local $$129
+   (i32.add
+    (get_local $$128)
+    (i32.const 1)
+   )
+  )
+  (set_local $$130
+   (i32.add
+    (get_local $$124)
+    (i32.shl
+     (get_local $$129)
+     (i32.const 2)
+    )
+   )
+  )
+  (f32.store
+   (get_local $$130)
+   (get_local $$121)
+  )
+  ;;@ renderer.c:1307:0
+  (set_local $$131
+   (get_local $$3)
+  )
+  (set_local $$132
+   (i32.add
+    (get_local $$131)
+    (i32.const 76)
+   )
+  )
+  (set_local $$133
+   (i32.load
+    (get_local $$132)
+   )
+  )
+  (set_local $$134
+   (get_local $$3)
+  )
+  (set_local $$135
+   (i32.add
+    (get_local $$134)
+    (i32.const 68)
+   )
+  )
+  (set_local $$136
+   (i32.load
+    (get_local $$135)
+   )
+  )
+  (set_local $$137
+   (i32.add
+    (get_local $$136)
+    (i32.const 8)
+   )
+  )
+  (set_local $$138
+   (i32.add
+    (get_local $$137)
+    (i32.const 2)
+   )
+  )
+  (set_local $$139
+   (i32.add
+    (get_local $$133)
+    (i32.shl
+     (get_local $$138)
+     (i32.const 2)
+    )
+   )
+  )
+  (f32.store
+   (get_local $$139)
+   (f32.const 0)
+  )
+  ;;@ renderer.c:1308:0
+  (set_local $$140
+   (get_local $$3)
+  )
+  (set_local $$141
+   (i32.add
+    (get_local $$140)
+    (i32.const 76)
+   )
+  )
+  (set_local $$142
+   (i32.load
+    (get_local $$141)
+   )
+  )
+  (set_local $$143
+   (get_local $$3)
+  )
+  (set_local $$144
+   (i32.add
+    (get_local $$143)
+    (i32.const 68)
+   )
+  )
+  (set_local $$145
+   (i32.load
+    (get_local $$144)
+   )
+  )
+  (set_local $$146
+   (i32.add
+    (get_local $$145)
+    (i32.const 8)
+   )
+  )
+  (set_local $$147
+   (i32.add
+    (get_local $$146)
+    (i32.const 3)
+   )
+  )
+  (set_local $$148
+   (i32.add
+    (get_local $$142)
+    (i32.shl
+     (get_local $$147)
+     (i32.const 2)
+    )
+   )
+  )
+  (f32.store
+   (get_local $$148)
+   (f32.const 0)
+  )
+  ;;@ renderer.c:1310:0
+  (set_local $$149
+   (f32.load
+    (get_local $$6)
+   )
+  )
+  (set_local $$150
+   (get_local $$3)
+  )
+  (set_local $$151
+   (i32.add
+    (get_local $$150)
+    (i32.const 76)
+   )
+  )
+  (set_local $$152
+   (i32.load
+    (get_local $$151)
+   )
+  )
+  (set_local $$153
+   (get_local $$3)
+  )
+  (set_local $$154
+   (i32.add
+    (get_local $$153)
+    (i32.const 68)
+   )
+  )
+  (set_local $$155
+   (i32.load
+    (get_local $$154)
+   )
+  )
+  (set_local $$156
+   (i32.add
+    (get_local $$155)
+    (i32.const 12)
+   )
+  )
+  (set_local $$157
+   (i32.add
+    (get_local $$156)
+    (i32.const 0)
+   )
+  )
+  (set_local $$158
+   (i32.add
+    (get_local $$152)
+    (i32.shl
+     (get_local $$157)
+     (i32.const 2)
+    )
+   )
+  )
+  (f32.store
+   (get_local $$158)
+   (get_local $$149)
+  )
+  ;;@ renderer.c:1311:0
+  (set_local $$159
+   (f32.load
+    (get_local $$9)
+   )
+  )
+  (set_local $$160
+   (get_local $$3)
+  )
+  (set_local $$161
+   (i32.add
+    (get_local $$160)
+    (i32.const 76)
+   )
+  )
+  (set_local $$162
+   (i32.load
+    (get_local $$161)
+   )
+  )
+  (set_local $$163
+   (get_local $$3)
+  )
+  (set_local $$164
+   (i32.add
+    (get_local $$163)
+    (i32.const 68)
+   )
+  )
+  (set_local $$165
+   (i32.load
+    (get_local $$164)
+   )
+  )
+  (set_local $$166
+   (i32.add
+    (get_local $$165)
+    (i32.const 12)
+   )
+  )
+  (set_local $$167
+   (i32.add
+    (get_local $$166)
+    (i32.const 1)
+   )
+  )
+  (set_local $$168
+   (i32.add
+    (get_local $$162)
+    (i32.shl
+     (get_local $$167)
+     (i32.const 2)
+    )
+   )
+  )
+  (f32.store
+   (get_local $$168)
+   (get_local $$159)
+  )
+  ;;@ renderer.c:1312:0
+  (set_local $$169
+   (get_local $$3)
+  )
+  (set_local $$170
+   (i32.add
+    (get_local $$169)
+    (i32.const 76)
+   )
+  )
+  (set_local $$171
+   (i32.load
+    (get_local $$170)
+   )
+  )
+  (set_local $$172
+   (get_local $$3)
+  )
+  (set_local $$173
+   (i32.add
+    (get_local $$172)
+    (i32.const 68)
+   )
+  )
+  (set_local $$174
+   (i32.load
+    (get_local $$173)
+   )
+  )
+  (set_local $$175
+   (i32.add
+    (get_local $$174)
+    (i32.const 12)
+   )
+  )
+  (set_local $$176
+   (i32.add
+    (get_local $$175)
+    (i32.const 2)
+   )
+  )
+  (set_local $$177
+   (i32.add
+    (get_local $$171)
+    (i32.shl
+     (get_local $$176)
+     (i32.const 2)
+    )
+   )
+  )
+  (f32.store
+   (get_local $$177)
+   (f32.const 0)
+  )
+  ;;@ renderer.c:1313:0
+  (set_local $$178
+   (get_local $$3)
+  )
+  (set_local $$179
+   (i32.add
+    (get_local $$178)
+    (i32.const 76)
+   )
+  )
+  (set_local $$180
+   (i32.load
+    (get_local $$179)
+   )
+  )
+  (set_local $$181
+   (get_local $$3)
+  )
+  (set_local $$182
+   (i32.add
+    (get_local $$181)
+    (i32.const 68)
+   )
+  )
+  (set_local $$183
+   (i32.load
+    (get_local $$182)
+   )
+  )
+  (set_local $$184
+   (i32.add
+    (get_local $$183)
+    (i32.const 12)
+   )
+  )
+  (set_local $$185
+   (i32.add
+    (get_local $$184)
+    (i32.const 3)
+   )
+  )
+  (set_local $$186
+   (i32.add
+    (get_local $$180)
+    (i32.shl
+     (get_local $$185)
+     (i32.const 2)
+    )
+   )
+  )
+  (f32.store
+   (get_local $$186)
+   (f32.const 0)
+  )
+  ;;@ renderer.c:1315:0
+  (set_local $$187
+   (get_local $$3)
+  )
+  (set_local $$188
+   (i32.add
+    (get_local $$187)
+    (i32.const 68)
+   )
+  )
+  (set_local $$189
+   (i32.load
+    (get_local $$188)
+   )
+  )
+  (set_local $$190
+   (i32.add
+    (get_local $$189)
+    (i32.const 16)
+   )
+  )
+  (i32.store
+   (get_local $$188)
+   (get_local $$190)
+  )
+  ;;@ renderer.c:1318:0
+  (set_local $$191
+   (get_local $$3)
+  )
+  (set_local $$192
+   (i32.add
+    (get_local $$191)
+    (i32.const 68)
+   )
+  )
+  (set_local $$193
+   (i32.load
+    (get_local $$192)
+   )
+  )
+  (set_local $$194
+   (get_local $$3)
+  )
+  (set_local $$195
+   (i32.add
+    (get_local $$194)
+    (i32.const 72)
+   )
+  )
+  (set_local $$196
+   (i32.load
+    (get_local $$195)
+   )
+  )
+  (set_local $$197
+   (i32.eq
+    (get_local $$193)
+    (get_local $$196)
+   )
+  )
+  (if
+   (i32.eqz
+    (get_local $$197)
+   )
+   (block
+    (set_global $STACKTOP
+     (get_local $sp)
+    )
+    ;;@ renderer.c:1323:0
+    (return)
+   )
+  )
+  ;;@ renderer.c:1319:0
+  (set_local $$198
+   (get_local $$3)
+  )
+  (set_local $$199
+   (i32.add
+    (get_local $$198)
+    (i32.const 72)
+   )
+  )
+  (set_local $$200
+   (i32.load
+    (get_local $$199)
+   )
+  )
+  (set_local $$201
+   (i32.shl
+    (get_local $$200)
+    (i32.const 1)
+   )
+  )
+  (i32.store
+   (get_local $$199)
+   (get_local $$201)
+  )
+  ;;@ renderer.c:1320:0
+  (set_local $$202
+   (get_local $$3)
+  )
+  (set_local $$203
+   (i32.add
+    (get_local $$202)
+    (i32.const 76)
+   )
+  )
+  (set_local $$204
+   (i32.load
+    (get_local $$203)
+   )
+  )
+  (set_local $$205
+   (get_local $$3)
+  )
+  (set_local $$206
+   (i32.add
+    (get_local $$205)
+    (i32.const 72)
+   )
+  )
+  (set_local $$207
+   (i32.load
+    (get_local $$206)
+   )
+  )
+  (set_local $$208
+   (i32.shl
+    (get_local $$207)
+    (i32.const 4)
+   )
+  )
+  (set_local $$209
+   (call $_realloc
+    (get_local $$204)
+    (get_local $$208)
+   )
+  )
+  (set_local $$210
+   (get_local $$3)
+  )
+  (set_local $$211
+   (i32.add
+    (get_local $$210)
+    (i32.const 76)
+   )
+  )
+  (i32.store
+   (get_local $$211)
+   (get_local $$209)
+  )
+  ;;@ renderer.c:1321:0
+  (set_local $$212
+   (get_local $$3)
+  )
+  (set_local $$213
+   (i32.add
+    (get_local $$212)
+    (i32.const 80)
+   )
+  )
+  (set_local $$214
+   (i32.load
+    (get_local $$213)
+   )
+  )
+  (set_local $$215
+   (get_local $$3)
+  )
+  (set_local $$216
+   (i32.add
+    (get_local $$215)
+    (i32.const 72)
+   )
+  )
+  (set_local $$217
+   (i32.load
+    (get_local $$216)
+   )
+  )
+  (set_local $$218
+   (i32.shl
+    (get_local $$217)
+    (i32.const 4)
+   )
+  )
+  (set_local $$219
+   (call $_realloc
+    (get_local $$214)
+    (get_local $$218)
+   )
+  )
+  (set_local $$220
+   (get_local $$3)
+  )
+  (set_local $$221
+   (i32.add
+    (get_local $$220)
+    (i32.const 80)
+   )
+  )
+  (i32.store
+   (get_local $$221)
+   (get_local $$219)
+  )
+  (set_global $STACKTOP
+   (get_local $sp)
+  )
+  ;;@ renderer.c:1323:0
+  (return)
+ )
+ (func $_convert_screen_coords_to_view_coords (; 182 ;) (param $$0 f32) (param $$1 f32) (param $$2 f32) (param $$3 f32) (param $$4 i32) (param $$5 i32)
+  (local $$10 i32)
+  (local $$11 i32)
+  (local $$12 f32)
+  (local $$13 f32)
+  (local $$14 f32)
+  (local $$15 f32)
+  (local $$16 f32)
+  (local $$17 i32)
+  (local $$18 f32)
+  (local $$19 f32)
+  (local $$20 f32)
+  (local $$21 f32)
+  (local $$22 f32)
+  (local $$23 f32)
+  (local $$24 i32)
+  (local $$6 f32)
+  (local $$7 f32)
+  (local $$8 f32)
+  (local $$9 f32)
+  (local $label i32)
+  (local $sp i32)
+  (set_local $sp
+   (get_global $STACKTOP)
+  )
+  (set_global $STACKTOP
+   (i32.add
+    (get_global $STACKTOP)
+    (i32.const 32)
+   )
+  )
+  (if
+   (i32.ge_s
+    (get_global $STACKTOP)
+    (get_global $STACK_MAX)
+   )
+   (call $abortStackOverflow
+    (i32.const 32)
+   )
+  )
+  (set_local $$6
+   (get_local $$0)
+  )
+  (set_local $$7
+   (get_local $$1)
+  )
+  (set_local $$8
+   (get_local $$2)
+  )
+  (set_local $$9
+   (get_local $$3)
+  )
+  (set_local $$10
+   (get_local $$4)
+  )
+  (set_local $$11
+   (get_local $$5)
+  )
+  ;;@ renderer.c:1394:0
+  (set_local $$12
+   (get_local $$6)
+  )
+  (set_local $$13
+   (f32.mul
+    (get_local $$12)
+    (f32.const 2)
+   )
+  )
+  (set_local $$14
+   (get_local $$8)
+  )
+  (set_local $$15
+   (f32.div
+    (get_local $$13)
+    (get_local $$14)
+   )
+  )
+  (set_local $$16
+   (f32.sub
+    (get_local $$15)
+    (f32.const 1)
+   )
+  )
+  (set_local $$17
+   (get_local $$10)
+  )
+  (f32.store
+   (get_local $$17)
+   (get_local $$16)
+  )
+  ;;@ renderer.c:1395:0
+  (set_local $$18
+   (get_local $$7)
+  )
+  (set_local $$19
+   (f32.mul
+    (get_local $$18)
+    (f32.const 2)
+   )
+  )
+  (set_local $$20
+   (get_local $$9)
+  )
+  (set_local $$21
+   (f32.div
+    (get_local $$19)
+    (get_local $$20)
+   )
+  )
+  (set_local $$22
+   (f32.sub
+    (get_local $$21)
+    (f32.const 1)
+   )
+  )
+  (set_local $$23
+   (f32.neg
+    (get_local $$22)
+   )
+  )
+  (set_local $$24
+   (get_local $$11)
+  )
+  (f32.store
+   (get_local $$24)
+   (get_local $$23)
+  )
+  (set_global $STACKTOP
+   (get_local $sp)
+  )
+  ;;@ renderer.c:1396:0
+  (return)
+ )
+ (func $_get_baked_quad_scaled (; 183 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (param $$6 f32) (param $$7 i32) (param $$8 i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -70184,7 +72710,7 @@
   (set_local $$17
    (get_local $$8)
   )
-  ;;@ renderer.c:1360:0
+  ;;@ renderer.c:1406:0
   (set_local $$24
    (get_local $$17)
   )
@@ -70204,7 +72730,7 @@
   (set_local $$18
    (get_local $$26)
   )
-  ;;@ renderer.c:1361:0
+  ;;@ renderer.c:1407:0
   (set_local $$27
    (get_local $$10)
   )
@@ -70239,7 +72765,7 @@
   (set_local $$20
    (get_local $$32)
   )
-  ;;@ renderer.c:1362:0
+  ;;@ renderer.c:1408:0
   (set_local $$33
    (get_local $$12)
   )
@@ -70252,18 +72778,18 @@
   (if
    (get_local $$34)
    (block
-    ;;@ renderer.c:1363:0
+    ;;@ renderer.c:1409:0
     (drop
      (call $_printf
       (i32.const 5849)
       (get_local $$vararg_buffer)
      )
     )
-    ;;@ renderer.c:1364:0
+    ;;@ renderer.c:1410:0
     (call $_abort)
    )
    (block
-    ;;@ renderer.c:1366:0
+    ;;@ renderer.c:1412:0
     (set_local $$35
      (get_local $$9)
     )
@@ -70282,7 +72808,7 @@
     (set_local $$21
      (get_local $$37)
     )
-    ;;@ renderer.c:1367:0
+    ;;@ renderer.c:1413:0
     (set_local $$38
      (get_local $$13)
     )
@@ -70344,7 +72870,7 @@
     (set_local $$22
      (get_local $$49)
     )
-    ;;@ renderer.c:1368:0
+    ;;@ renderer.c:1414:0
     (set_local $$50
      (get_local $$14)
     )
@@ -70406,7 +72932,7 @@
     (set_local $$23
      (get_local $$61)
     )
-    ;;@ renderer.c:1370:0
+    ;;@ renderer.c:1416:0
     (set_local $$62
      (get_local $$22)
     )
@@ -70431,7 +72957,7 @@
      (get_local $$66)
      (get_local $$65)
     )
-    ;;@ renderer.c:1371:0
+    ;;@ renderer.c:1417:0
     (set_local $$67
      (get_local $$23)
     )
@@ -70462,7 +72988,7 @@
      (get_local $$72)
      (get_local $$70)
     )
-    ;;@ renderer.c:1372:0
+    ;;@ renderer.c:1418:0
     (set_local $$73
      (get_local $$22)
     )
@@ -70553,7 +73079,7 @@
      (get_local $$90)
      (get_local $$88)
     )
-    ;;@ renderer.c:1373:0
+    ;;@ renderer.c:1419:0
     (set_local $$91
      (get_local $$23)
     )
@@ -70650,7 +73176,7 @@
      (get_local $$109)
      (get_local $$107)
     )
-    ;;@ renderer.c:1375:0
+    ;;@ renderer.c:1421:0
     (set_local $$110
      (get_local $$21)
     )
@@ -70692,7 +73218,7 @@
      (get_local $$117)
      (get_local $$115)
     )
-    ;;@ renderer.c:1376:0
+    ;;@ renderer.c:1422:0
     (set_local $$118
      (get_local $$21)
     )
@@ -70740,7 +73266,7 @@
      (get_local $$126)
      (get_local $$124)
     )
-    ;;@ renderer.c:1377:0
+    ;;@ renderer.c:1423:0
     (set_local $$127
      (get_local $$21)
     )
@@ -70788,7 +73314,7 @@
      (get_local $$135)
      (get_local $$133)
     )
-    ;;@ renderer.c:1378:0
+    ;;@ renderer.c:1424:0
     (set_local $$136
      (get_local $$21)
     )
@@ -70836,7 +73362,7 @@
      (get_local $$144)
      (get_local $$142)
     )
-    ;;@ renderer.c:1380:0
+    ;;@ renderer.c:1426:0
     (set_local $$145
      (get_local $$21)
     )
@@ -70881,145 +73407,12 @@
     (set_global $STACKTOP
      (get_local $sp)
     )
-    ;;@ renderer.c:1381:0
+    ;;@ renderer.c:1427:0
     (return)
    )
   )
  )
- (func $_convert_screen_coords_to_view_coords (; 179 ;) (param $$0 f32) (param $$1 f32) (param $$2 f32) (param $$3 f32) (param $$4 i32) (param $$5 i32)
-  (local $$10 i32)
-  (local $$11 i32)
-  (local $$12 f32)
-  (local $$13 f32)
-  (local $$14 f32)
-  (local $$15 f32)
-  (local $$16 f32)
-  (local $$17 i32)
-  (local $$18 f32)
-  (local $$19 f32)
-  (local $$20 f32)
-  (local $$21 f32)
-  (local $$22 f32)
-  (local $$23 f32)
-  (local $$24 i32)
-  (local $$6 f32)
-  (local $$7 f32)
-  (local $$8 f32)
-  (local $$9 f32)
-  (local $label i32)
-  (local $sp i32)
-  (set_local $sp
-   (get_global $STACKTOP)
-  )
-  (set_global $STACKTOP
-   (i32.add
-    (get_global $STACKTOP)
-    (i32.const 32)
-   )
-  )
-  (if
-   (i32.ge_s
-    (get_global $STACKTOP)
-    (get_global $STACK_MAX)
-   )
-   (call $abortStackOverflow
-    (i32.const 32)
-   )
-  )
-  (set_local $$6
-   (get_local $$0)
-  )
-  (set_local $$7
-   (get_local $$1)
-  )
-  (set_local $$8
-   (get_local $$2)
-  )
-  (set_local $$9
-   (get_local $$3)
-  )
-  (set_local $$10
-   (get_local $$4)
-  )
-  (set_local $$11
-   (get_local $$5)
-  )
-  ;;@ renderer.c:1348:0
-  (set_local $$12
-   (get_local $$6)
-  )
-  (set_local $$13
-   (f32.mul
-    (get_local $$12)
-    (f32.const 2)
-   )
-  )
-  (set_local $$14
-   (get_local $$8)
-  )
-  (set_local $$15
-   (f32.div
-    (get_local $$13)
-    (get_local $$14)
-   )
-  )
-  (set_local $$16
-   (f32.sub
-    (get_local $$15)
-    (f32.const 1)
-   )
-  )
-  (set_local $$17
-   (get_local $$10)
-  )
-  (f32.store
-   (get_local $$17)
-   (get_local $$16)
-  )
-  ;;@ renderer.c:1349:0
-  (set_local $$18
-   (get_local $$7)
-  )
-  (set_local $$19
-   (f32.mul
-    (get_local $$18)
-    (f32.const 2)
-   )
-  )
-  (set_local $$20
-   (get_local $$9)
-  )
-  (set_local $$21
-   (f32.div
-    (get_local $$19)
-    (get_local $$20)
-   )
-  )
-  (set_local $$22
-   (f32.sub
-    (get_local $$21)
-    (f32.const 1)
-   )
-  )
-  (set_local $$23
-   (f32.neg
-    (get_local $$22)
-   )
-  )
-  (set_local $$24
-   (get_local $$11)
-  )
-  (f32.store
-   (get_local $$24)
-   (get_local $$23)
-  )
-  (set_global $STACKTOP
-   (get_local $sp)
-  )
-  ;;@ renderer.c:1350:0
-  (return)
- )
- (func $_get_text_width (; 180 ;) (param $$0 i32) (param $$1 i32) (result f32)
+ (func $_get_text_width (; 184 ;) (param $$0 i32) (param $$1 i32) (result f32)
   (local $$10 f32)
   (local $$11 f32)
   (local $$12 f32)
@@ -71060,13 +73453,13 @@
   (set_local $$3
    (get_local $$1)
   )
-  ;;@ renderer.c:539:0
+  ;;@ renderer.c:558:0
   (set_local $$4
    (f32.const 0)
   )
   (loop $while-in
    (block $while-out
-    ;;@ renderer.c:540:0
+    ;;@ renderer.c:559:0
     (set_local $$5
      (get_local $$2)
     )
@@ -71093,7 +73486,7 @@
      )
      (br $while-out)
     )
-    ;;@ renderer.c:541:0
+    ;;@ renderer.c:560:0
     (set_local $$8
      (get_local $$3)
     )
@@ -71120,7 +73513,7 @@
     (set_local $$4
      (get_local $$12)
     )
-    ;;@ renderer.c:542:0
+    ;;@ renderer.c:561:0
     (set_local $$13
      (get_local $$2)
     )
@@ -71136,7 +73529,7 @@
     (br $while-in)
    )
   )
-  ;;@ renderer.c:544:0
+  ;;@ renderer.c:563:0
   (set_local $$15
    (get_local $$4)
   )
@@ -71147,544 +73540,7 @@
    (get_local $$15)
   )
  )
- (func $_mark_background_start (; 181 ;) (param $$0 i32) (param $$1 i32)
-  (local $$10 i32)
-  (local $$11 i32)
-  (local $$12 i32)
-  (local $$13 i32)
-  (local $$14 i32)
-  (local $$15 i32)
-  (local $$16 i32)
-  (local $$17 i32)
-  (local $$18 i32)
-  (local $$19 i32)
-  (local $$2 i32)
-  (local $$20 i32)
-  (local $$21 i32)
-  (local $$22 f32)
-  (local $$23 i32)
-  (local $$24 i32)
-  (local $$25 i32)
-  (local $$26 i32)
-  (local $$27 i32)
-  (local $$28 i32)
-  (local $$29 i32)
-  (local $$3 i32)
-  (local $$30 i32)
-  (local $$31 i32)
-  (local $$32 i32)
-  (local $$33 i32)
-  (local $$34 i32)
-  (local $$35 i32)
-  (local $$36 f32)
-  (local $$37 i32)
-  (local $$38 i32)
-  (local $$39 i32)
-  (local $$4 i32)
-  (local $$40 i32)
-  (local $$41 i32)
-  (local $$42 i32)
-  (local $$43 i32)
-  (local $$44 i32)
-  (local $$45 i32)
-  (local $$46 i32)
-  (local $$47 i32)
-  (local $$48 i32)
-  (local $$49 i32)
-  (local $$5 i32)
-  (local $$50 f32)
-  (local $$51 i32)
-  (local $$52 i32)
-  (local $$53 i32)
-  (local $$54 i32)
-  (local $$55 i32)
-  (local $$56 i32)
-  (local $$57 i32)
-  (local $$58 i32)
-  (local $$59 i32)
-  (local $$6 i32)
-  (local $$60 i32)
-  (local $$61 i32)
-  (local $$62 i32)
-  (local $$63 i32)
-  (local $$64 i32)
-  (local $$65 i32)
-  (local $$66 f32)
-  (local $$67 i32)
-  (local $$68 i32)
-  (local $$69 i32)
-  (local $$7 i32)
-  (local $$70 i32)
-  (local $$71 f32)
-  (local $$72 i32)
-  (local $$73 i32)
-  (local $$74 i32)
-  (local $$75 f32)
-  (local $$76 f32)
-  (local $$77 f32)
-  (local $$78 i32)
-  (local $$79 i32)
-  (local $$8 f32)
-  (local $$9 i32)
-  (local $label i32)
-  (local $sp i32)
-  (set_local $sp
-   (get_global $STACKTOP)
-  )
-  (set_global $STACKTOP
-   (i32.add
-    (get_global $STACKTOP)
-    (i32.const 16)
-   )
-  )
-  (if
-   (i32.ge_s
-    (get_global $STACKTOP)
-    (get_global $STACK_MAX)
-   )
-   (call $abortStackOverflow
-    (i32.const 16)
-   )
-  )
-  (set_local $$2
-   (get_local $$0)
-  )
-  (set_local $$3
-   (get_local $$1)
-  )
-  ;;@ renderer.c:1229:0
-  (set_local $$4
-   (i32.const 0)
-  )
-  (loop $while-in
-   (block $while-out
-    (set_local $$5
-     (get_local $$4)
-    )
-    (set_local $$6
-     (i32.lt_u
-      (get_local $$5)
-      (i32.const 4)
-     )
-    )
-    (if
-     (i32.eqz
-      (get_local $$6)
-     )
-     (br $while-out)
-    )
-    ;;@ renderer.c:1230:0
-    (set_local $$7
-     (get_local $$3)
-    )
-    (set_local $$8
-     (f32.load
-      (get_local $$7)
-     )
-    )
-    (set_local $$9
-     (get_local $$2)
-    )
-    (set_local $$10
-     (i32.add
-      (get_local $$9)
-      (i32.const 80)
-     )
-    )
-    (set_local $$11
-     (i32.load
-      (get_local $$10)
-     )
-    )
-    (set_local $$12
-     (get_local $$2)
-    )
-    (set_local $$13
-     (i32.add
-      (get_local $$12)
-      (i32.const 68)
-     )
-    )
-    (set_local $$14
-     (i32.load
-      (get_local $$13)
-     )
-    )
-    (set_local $$15
-     (get_local $$4)
-    )
-    (set_local $$16
-     (i32.shl
-      (get_local $$15)
-      (i32.const 2)
-     )
-    )
-    (set_local $$17
-     (i32.add
-      (get_local $$14)
-      (get_local $$16)
-     )
-    )
-    (set_local $$18
-     (i32.add
-      (get_local $$17)
-      (i32.const 0)
-     )
-    )
-    (set_local $$19
-     (i32.add
-      (get_local $$11)
-      (i32.shl
-       (get_local $$18)
-       (i32.const 2)
-      )
-     )
-    )
-    (f32.store
-     (get_local $$19)
-     (get_local $$8)
-    )
-    ;;@ renderer.c:1231:0
-    (set_local $$20
-     (get_local $$3)
-    )
-    (set_local $$21
-     (i32.add
-      (get_local $$20)
-      (i32.const 4)
-     )
-    )
-    (set_local $$22
-     (f32.load
-      (get_local $$21)
-     )
-    )
-    (set_local $$23
-     (get_local $$2)
-    )
-    (set_local $$24
-     (i32.add
-      (get_local $$23)
-      (i32.const 80)
-     )
-    )
-    (set_local $$25
-     (i32.load
-      (get_local $$24)
-     )
-    )
-    (set_local $$26
-     (get_local $$2)
-    )
-    (set_local $$27
-     (i32.add
-      (get_local $$26)
-      (i32.const 68)
-     )
-    )
-    (set_local $$28
-     (i32.load
-      (get_local $$27)
-     )
-    )
-    (set_local $$29
-     (get_local $$4)
-    )
-    (set_local $$30
-     (i32.shl
-      (get_local $$29)
-      (i32.const 2)
-     )
-    )
-    (set_local $$31
-     (i32.add
-      (get_local $$28)
-      (get_local $$30)
-     )
-    )
-    (set_local $$32
-     (i32.add
-      (get_local $$31)
-      (i32.const 1)
-     )
-    )
-    (set_local $$33
-     (i32.add
-      (get_local $$25)
-      (i32.shl
-       (get_local $$32)
-       (i32.const 2)
-      )
-     )
-    )
-    (f32.store
-     (get_local $$33)
-     (get_local $$22)
-    )
-    ;;@ renderer.c:1232:0
-    (set_local $$34
-     (get_local $$3)
-    )
-    (set_local $$35
-     (i32.add
-      (get_local $$34)
-      (i32.const 8)
-     )
-    )
-    (set_local $$36
-     (f32.load
-      (get_local $$35)
-     )
-    )
-    (set_local $$37
-     (get_local $$2)
-    )
-    (set_local $$38
-     (i32.add
-      (get_local $$37)
-      (i32.const 80)
-     )
-    )
-    (set_local $$39
-     (i32.load
-      (get_local $$38)
-     )
-    )
-    (set_local $$40
-     (get_local $$2)
-    )
-    (set_local $$41
-     (i32.add
-      (get_local $$40)
-      (i32.const 68)
-     )
-    )
-    (set_local $$42
-     (i32.load
-      (get_local $$41)
-     )
-    )
-    (set_local $$43
-     (get_local $$4)
-    )
-    (set_local $$44
-     (i32.shl
-      (get_local $$43)
-      (i32.const 2)
-     )
-    )
-    (set_local $$45
-     (i32.add
-      (get_local $$42)
-      (get_local $$44)
-     )
-    )
-    (set_local $$46
-     (i32.add
-      (get_local $$45)
-      (i32.const 2)
-     )
-    )
-    (set_local $$47
-     (i32.add
-      (get_local $$39)
-      (i32.shl
-       (get_local $$46)
-       (i32.const 2)
-      )
-     )
-    )
-    (f32.store
-     (get_local $$47)
-     (get_local $$36)
-    )
-    ;;@ renderer.c:1233:0
-    (set_local $$48
-     (get_local $$3)
-    )
-    (set_local $$49
-     (i32.add
-      (get_local $$48)
-      (i32.const 12)
-     )
-    )
-    (set_local $$50
-     (f32.load
-      (get_local $$49)
-     )
-    )
-    (set_local $$51
-     (get_local $$2)
-    )
-    (set_local $$52
-     (i32.add
-      (get_local $$51)
-      (i32.const 80)
-     )
-    )
-    (set_local $$53
-     (i32.load
-      (get_local $$52)
-     )
-    )
-    (set_local $$54
-     (get_local $$2)
-    )
-    (set_local $$55
-     (i32.add
-      (get_local $$54)
-      (i32.const 68)
-     )
-    )
-    (set_local $$56
-     (i32.load
-      (get_local $$55)
-     )
-    )
-    (set_local $$57
-     (get_local $$4)
-    )
-    (set_local $$58
-     (i32.shl
-      (get_local $$57)
-      (i32.const 2)
-     )
-    )
-    (set_local $$59
-     (i32.add
-      (get_local $$56)
-      (get_local $$58)
-     )
-    )
-    (set_local $$60
-     (i32.add
-      (get_local $$59)
-      (i32.const 3)
-     )
-    )
-    (set_local $$61
-     (i32.add
-      (get_local $$53)
-      (i32.shl
-       (get_local $$60)
-       (i32.const 2)
-      )
-     )
-    )
-    (f32.store
-     (get_local $$61)
-     (get_local $$50)
-    )
-    ;;@ renderer.c:1229:0
-    (set_local $$62
-     (get_local $$4)
-    )
-    (set_local $$63
-     (i32.add
-      (get_local $$62)
-      (i32.const 1)
-     )
-    )
-    (set_local $$4
-     (get_local $$63)
-    )
-    (br $while-in)
-   )
-  )
-  ;;@ renderer.c:1236:0
-  (set_local $$64
-   (get_local $$2)
-  )
-  (set_local $$65
-   (i32.add
-    (get_local $$64)
-    (i32.const 12)
-   )
-  )
-  (set_local $$66
-   (f32.load
-    (get_local $$65)
-   )
-  )
-  (set_local $$67
-   (get_local $$2)
-  )
-  (set_local $$68
-   (i32.add
-    (get_local $$67)
-    (i32.const 84)
-   )
-  )
-  (f32.store
-   (get_local $$68)
-   (get_local $$66)
-  )
-  ;;@ renderer.c:1237:0
-  (set_local $$69
-   (get_local $$2)
-  )
-  (set_local $$70
-   (i32.add
-    (get_local $$69)
-    (i32.const 16)
-   )
-  )
-  (set_local $$71
-   (f32.load
-    (get_local $$70)
-   )
-  )
-  (set_local $$72
-   (get_local $$2)
-  )
-  (set_local $$73
-   (i32.load
-    (get_local $$72)
-   )
-  )
-  (set_local $$74
-   (i32.add
-    (get_local $$73)
-    (i32.const 16)
-   )
-  )
-  (set_local $$75
-   (f32.load
-    (get_local $$74)
-   )
-  )
-  (set_local $$76
-   (f32.sub
-    (get_local $$71)
-    (get_local $$75)
-   )
-  )
-  (set_local $$77
-   (f32.add
-    (get_local $$76)
-    (f32.const 4)
-   )
-  )
-  (set_local $$78
-   (get_local $$2)
-  )
-  (set_local $$79
-   (i32.add
-    (get_local $$78)
-    (i32.const 88)
-   )
-  )
-  (f32.store
-   (get_local $$79)
-   (get_local $$77)
-  )
-  (set_global $STACKTOP
-   (get_local $sp)
-  )
-  ;;@ renderer.c:1238:0
-  (return)
- )
- (func $_render_type (; 182 ;) (param $$0 i32) (param $$1 i32)
+ (func $_render_type (; 185 ;) (param $$0 i32) (param $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -71826,7 +73682,7 @@
   (set_local $$3
    (get_local $$1)
   )
-  ;;@ renderer.c:1282:0
+  ;;@ renderer.c:1328:0
   (set_local $$11
    (get_local $$3)
   )
@@ -71871,7 +73727,7 @@
   (set_local $$4
    (get_local $$18)
   )
-  ;;@ renderer.c:1284:0
+  ;;@ renderer.c:1330:0
   (set_local $$19
    (get_local $$2)
   )
@@ -71893,7 +73749,7 @@
        )
       )
       (block
-       ;;@ renderer.c:1286:0
+       ;;@ renderer.c:1332:0
        (set_local $$21
         (get_local $$3)
        )
@@ -71933,7 +73789,7 @@
         (get_local $$5)
         (get_local $$27)
        )
-       ;;@ renderer.c:1287:0
+       ;;@ renderer.c:1333:0
        (set_local $$28
         (get_local $$4)
        )
@@ -71957,12 +73813,12 @@
        (set_global $STACKTOP
         (get_local $sp)
        )
-       ;;@ renderer.c:1315:0
+       ;;@ renderer.c:1361:0
        (return)
       )
      )
      (block
-      ;;@ renderer.c:1291:0
+      ;;@ renderer.c:1337:0
       (set_local $$31
        (get_local $$2)
       )
@@ -71984,7 +73840,7 @@
        (get_local $$33)
        (get_local $$34)
       )
-      ;;@ renderer.c:1292:0
+      ;;@ renderer.c:1338:0
       (set_local $$35
        (get_local $$3)
       )
@@ -72024,7 +73880,7 @@
        (get_local $$6)
        (get_local $$41)
       )
-      ;;@ renderer.c:1293:0
+      ;;@ renderer.c:1339:0
       (set_local $$42
        (get_local $$4)
       )
@@ -72045,7 +73901,7 @@
         (get_local $$6)
        )
       )
-      ;;@ renderer.c:1294:0
+      ;;@ renderer.c:1340:0
       (set_local $$45
        (call $_malloc
         (i32.const 19)
@@ -72054,7 +73910,7 @@
       (set_local $$7
        (get_local $$45)
       )
-      ;;@ renderer.c:1296:0
+      ;;@ renderer.c:1342:0
       (set_local $$46
        (get_local $$7)
       )
@@ -72090,7 +73946,7 @@
         (get_local $$vararg_buffer)
        )
       )
-      ;;@ renderer.c:1297:0
+      ;;@ renderer.c:1343:0
       (set_local $$51
        (get_local $$3)
       )
@@ -72119,7 +73975,7 @@
        (get_local $$8)
        (get_local $$55)
       )
-      ;;@ renderer.c:1298:0
+      ;;@ renderer.c:1344:0
       (set_local $$56
        (get_local $$4)
       )
@@ -72140,7 +73996,7 @@
         (get_local $$8)
        )
       )
-      ;;@ renderer.c:1301:0
+      ;;@ renderer.c:1347:0
       (set_local $$59
        (get_local $$3)
       )
@@ -72180,7 +74036,7 @@
        (get_local $$9)
        (get_local $$65)
       )
-      ;;@ renderer.c:1302:0
+      ;;@ renderer.c:1348:0
       (set_local $$66
        (get_local $$4)
       )
@@ -72204,12 +74060,12 @@
       (set_global $STACKTOP
        (get_local $sp)
       )
-      ;;@ renderer.c:1315:0
+      ;;@ renderer.c:1361:0
       (return)
      )
     )
     (block
-     ;;@ renderer.c:1306:0
+     ;;@ renderer.c:1352:0
      (set_local $$69
       (get_local $$2)
      )
@@ -72231,7 +74087,7 @@
       (get_local $$71)
       (get_local $$72)
      )
-     ;;@ renderer.c:1307:0
+     ;;@ renderer.c:1353:0
      (set_local $$73
       (get_local $$3)
      )
@@ -72271,7 +74127,7 @@
       (get_local $$10)
       (get_local $$79)
      )
-     ;;@ renderer.c:1308:0
+     ;;@ renderer.c:1354:0
      (set_local $$80
       (get_local $$4)
      )
@@ -72295,7 +74151,7 @@
      (set_global $STACKTOP
       (get_local $sp)
      )
-     ;;@ renderer.c:1315:0
+     ;;@ renderer.c:1361:0
      (return)
     )
    )
@@ -72307,7 +74163,7 @@
    )
   )
  )
- (func $_render_space (; 183 ;) (param $$0 i32)
+ (func $_render_space (; 186 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -72355,7 +74211,7 @@
   (set_local $$1
    (get_local $$0)
   )
-  ;;@ renderer.c:1321:0
+  ;;@ renderer.c:1367:0
   (set_local $$4
    (get_local $$1)
   )
@@ -72400,7 +74256,7 @@
   (set_local $$2
    (get_local $$11)
   )
-  ;;@ renderer.c:1322:0
+  ;;@ renderer.c:1368:0
   (set_local $$12
    (get_local $$1)
   )
@@ -72440,7 +74296,7 @@
    (get_local $$3)
    (get_local $$18)
   )
-  ;;@ renderer.c:1323:0
+  ;;@ renderer.c:1369:0
   (set_local $$19
    (get_local $$2)
   )
@@ -72464,10 +74320,10 @@
   (set_global $STACKTOP
    (get_local $sp)
   )
-  ;;@ renderer.c:1324:0
+  ;;@ renderer.c:1370:0
   (return)
  )
- (func $_render_indent (; 184 ;) (param $$0 i32)
+ (func $_render_indent (; 187 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 f32)
   (local $$11 f32)
@@ -72504,7 +74360,7 @@
   (set_local $$1
    (get_local $$0)
   )
-  ;;@ renderer.c:1318:0
+  ;;@ renderer.c:1364:0
   (set_local $$2
    (get_local $$1)
   )
@@ -72571,1567 +74427,10 @@
   (set_global $STACKTOP
    (get_local $sp)
   )
-  ;;@ renderer.c:1319:0
+  ;;@ renderer.c:1365:0
   (return)
  )
- (func $_mark_background_end (; 185 ;) (param $$0 i32)
-  (local $$1 i32)
-  (local $$10 i32)
-  (local $$100 i32)
-  (local $$101 i32)
-  (local $$102 i32)
-  (local $$103 i32)
-  (local $$104 i32)
-  (local $$105 i32)
-  (local $$106 i32)
-  (local $$107 i32)
-  (local $$108 i32)
-  (local $$109 i32)
-  (local $$11 f32)
-  (local $$110 i32)
-  (local $$111 f32)
-  (local $$112 i32)
-  (local $$113 i32)
-  (local $$114 i32)
-  (local $$115 i32)
-  (local $$116 i32)
-  (local $$117 i32)
-  (local $$118 i32)
-  (local $$119 i32)
-  (local $$12 i32)
-  (local $$120 i32)
-  (local $$121 f32)
-  (local $$122 i32)
-  (local $$123 i32)
-  (local $$124 i32)
-  (local $$125 i32)
-  (local $$126 i32)
-  (local $$127 i32)
-  (local $$128 i32)
-  (local $$129 i32)
-  (local $$13 i32)
-  (local $$130 i32)
-  (local $$131 i32)
-  (local $$132 i32)
-  (local $$133 i32)
-  (local $$134 i32)
-  (local $$135 i32)
-  (local $$136 i32)
-  (local $$137 i32)
-  (local $$138 i32)
-  (local $$139 i32)
-  (local $$14 f32)
-  (local $$140 i32)
-  (local $$141 i32)
-  (local $$142 i32)
-  (local $$143 i32)
-  (local $$144 i32)
-  (local $$145 i32)
-  (local $$146 i32)
-  (local $$147 i32)
-  (local $$148 i32)
-  (local $$149 f32)
-  (local $$15 i32)
-  (local $$150 i32)
-  (local $$151 i32)
-  (local $$152 i32)
-  (local $$153 i32)
-  (local $$154 i32)
-  (local $$155 i32)
-  (local $$156 i32)
-  (local $$157 i32)
-  (local $$158 i32)
-  (local $$159 f32)
-  (local $$16 i32)
-  (local $$160 i32)
-  (local $$161 i32)
-  (local $$162 i32)
-  (local $$163 i32)
-  (local $$164 i32)
-  (local $$165 i32)
-  (local $$166 i32)
-  (local $$167 i32)
-  (local $$168 i32)
-  (local $$169 i32)
-  (local $$17 f32)
-  (local $$170 i32)
-  (local $$171 i32)
-  (local $$172 i32)
-  (local $$173 i32)
-  (local $$174 i32)
-  (local $$175 i32)
-  (local $$176 i32)
-  (local $$177 i32)
-  (local $$178 i32)
-  (local $$179 i32)
-  (local $$18 f32)
-  (local $$180 i32)
-  (local $$181 i32)
-  (local $$182 i32)
-  (local $$183 i32)
-  (local $$184 i32)
-  (local $$185 i32)
-  (local $$186 i32)
-  (local $$187 i32)
-  (local $$188 i32)
-  (local $$189 i32)
-  (local $$19 f32)
-  (local $$190 i32)
-  (local $$191 i32)
-  (local $$192 i32)
-  (local $$193 i32)
-  (local $$194 i32)
-  (local $$195 i32)
-  (local $$196 i32)
-  (local $$197 i32)
-  (local $$198 i32)
-  (local $$199 i32)
-  (local $$2 i32)
-  (local $$20 f32)
-  (local $$200 i32)
-  (local $$201 i32)
-  (local $$202 i32)
-  (local $$203 i32)
-  (local $$204 i32)
-  (local $$205 i32)
-  (local $$206 i32)
-  (local $$207 i32)
-  (local $$208 i32)
-  (local $$209 i32)
-  (local $$21 i32)
-  (local $$210 i32)
-  (local $$211 i32)
-  (local $$212 i32)
-  (local $$213 i32)
-  (local $$214 i32)
-  (local $$215 i32)
-  (local $$216 i32)
-  (local $$217 i32)
-  (local $$218 i32)
-  (local $$219 i32)
-  (local $$22 i32)
-  (local $$220 i32)
-  (local $$221 i32)
-  (local $$23 f32)
-  (local $$24 i32)
-  (local $$25 i32)
-  (local $$26 f32)
-  (local $$27 f32)
-  (local $$28 f32)
-  (local $$29 i32)
-  (local $$3 i32)
-  (local $$30 i32)
-  (local $$31 f32)
-  (local $$32 i32)
-  (local $$33 i32)
-  (local $$34 f32)
-  (local $$35 f32)
-  (local $$36 i32)
-  (local $$37 i32)
-  (local $$38 i32)
-  (local $$39 i32)
-  (local $$4 i32)
-  (local $$40 i32)
-  (local $$41 i32)
-  (local $$42 i32)
-  (local $$43 i32)
-  (local $$44 i32)
-  (local $$45 f32)
-  (local $$46 i32)
-  (local $$47 i32)
-  (local $$48 i32)
-  (local $$49 i32)
-  (local $$5 i32)
-  (local $$50 i32)
-  (local $$51 i32)
-  (local $$52 i32)
-  (local $$53 i32)
-  (local $$54 i32)
-  (local $$55 i32)
-  (local $$56 i32)
-  (local $$57 i32)
-  (local $$58 i32)
-  (local $$59 i32)
-  (local $$6 i32)
-  (local $$60 i32)
-  (local $$61 i32)
-  (local $$62 i32)
-  (local $$63 i32)
-  (local $$64 i32)
-  (local $$65 i32)
-  (local $$66 i32)
-  (local $$67 i32)
-  (local $$68 i32)
-  (local $$69 i32)
-  (local $$7 i32)
-  (local $$70 i32)
-  (local $$71 i32)
-  (local $$72 i32)
-  (local $$73 f32)
-  (local $$74 i32)
-  (local $$75 i32)
-  (local $$76 i32)
-  (local $$77 i32)
-  (local $$78 i32)
-  (local $$79 i32)
-  (local $$8 f32)
-  (local $$80 i32)
-  (local $$81 i32)
-  (local $$82 i32)
-  (local $$83 f32)
-  (local $$84 i32)
-  (local $$85 i32)
-  (local $$86 i32)
-  (local $$87 i32)
-  (local $$88 i32)
-  (local $$89 i32)
-  (local $$9 i32)
-  (local $$90 i32)
-  (local $$91 i32)
-  (local $$92 i32)
-  (local $$93 i32)
-  (local $$94 i32)
-  (local $$95 i32)
-  (local $$96 i32)
-  (local $$97 i32)
-  (local $$98 i32)
-  (local $$99 i32)
-  (local $label i32)
-  (local $sp i32)
-  (set_local $sp
-   (get_global $STACKTOP)
-  )
-  (set_global $STACKTOP
-   (i32.add
-    (get_global $STACKTOP)
-    (i32.const 32)
-   )
-  )
-  (if
-   (i32.ge_s
-    (get_global $STACKTOP)
-    (get_global $STACK_MAX)
-   )
-   (call $abortStackOverflow
-    (i32.const 32)
-   )
-  )
-  (set_local $$2
-   (i32.add
-    (get_local $sp)
-    (i32.const 12)
-   )
-  )
-  (set_local $$3
-   (i32.add
-    (get_local $sp)
-    (i32.const 8)
-   )
-  )
-  (set_local $$4
-   (i32.add
-    (get_local $sp)
-    (i32.const 4)
-   )
-  )
-  (set_local $$5
-   (get_local $sp)
-  )
-  (set_local $$1
-   (get_local $$0)
-  )
-  ;;@ renderer.c:1241:0
-  (set_local $$6
-   (get_local $$1)
-  )
-  (set_local $$7
-   (i32.add
-    (get_local $$6)
-    (i32.const 84)
-   )
-  )
-  (set_local $$8
-   (f32.load
-    (get_local $$7)
-   )
-  )
-  (f32.store
-   (get_local $$2)
-   (get_local $$8)
-  )
-  ;;@ renderer.c:1242:0
-  (set_local $$9
-   (get_local $$1)
-  )
-  (set_local $$10
-   (i32.add
-    (get_local $$9)
-    (i32.const 88)
-   )
-  )
-  (set_local $$11
-   (f32.load
-    (get_local $$10)
-   )
-  )
-  (f32.store
-   (get_local $$3)
-   (get_local $$11)
-  )
-  ;;@ renderer.c:1243:0
-  (set_local $$12
-   (get_local $$1)
-  )
-  (set_local $$13
-   (i32.add
-    (get_local $$12)
-    (i32.const 12)
-   )
-  )
-  (set_local $$14
-   (f32.load
-    (get_local $$13)
-   )
-  )
-  (f32.store
-   (get_local $$4)
-   (get_local $$14)
-  )
-  ;;@ renderer.c:1244:0
-  (set_local $$15
-   (get_local $$1)
-  )
-  (set_local $$16
-   (i32.add
-    (get_local $$15)
-    (i32.const 16)
-   )
-  )
-  (set_local $$17
-   (f32.load
-    (get_local $$16)
-   )
-  )
-  (set_local $$18
-   (f32.add
-    (get_local $$17)
-    (f32.const 6)
-   )
-  )
-  (f32.store
-   (get_local $$5)
-   (get_local $$18)
-  )
-  ;;@ renderer.c:1246:0
-  (set_local $$19
-   (f32.load
-    (get_local $$2)
-   )
-  )
-  (set_local $$20
-   (f32.load
-    (get_local $$3)
-   )
-  )
-  (set_local $$21
-   (get_local $$1)
-  )
-  (set_local $$22
-   (i32.add
-    (get_local $$21)
-    (i32.const 4)
-   )
-  )
-  (set_local $$23
-   (f32.load
-    (get_local $$22)
-   )
-  )
-  (set_local $$24
-   (get_local $$1)
-  )
-  (set_local $$25
-   (i32.add
-    (get_local $$24)
-    (i32.const 8)
-   )
-  )
-  (set_local $$26
-   (f32.load
-    (get_local $$25)
-   )
-  )
-  (call $_convert_screen_coords_to_view_coords
-   (get_local $$19)
-   (get_local $$20)
-   (get_local $$23)
-   (get_local $$26)
-   (get_local $$2)
-   (get_local $$3)
-  )
-  ;;@ renderer.c:1247:0
-  (set_local $$27
-   (f32.load
-    (get_local $$4)
-   )
-  )
-  (set_local $$28
-   (f32.load
-    (get_local $$5)
-   )
-  )
-  (set_local $$29
-   (get_local $$1)
-  )
-  (set_local $$30
-   (i32.add
-    (get_local $$29)
-    (i32.const 4)
-   )
-  )
-  (set_local $$31
-   (f32.load
-    (get_local $$30)
-   )
-  )
-  (set_local $$32
-   (get_local $$1)
-  )
-  (set_local $$33
-   (i32.add
-    (get_local $$32)
-    (i32.const 8)
-   )
-  )
-  (set_local $$34
-   (f32.load
-    (get_local $$33)
-   )
-  )
-  (call $_convert_screen_coords_to_view_coords
-   (get_local $$27)
-   (get_local $$28)
-   (get_local $$31)
-   (get_local $$34)
-   (get_local $$4)
-   (get_local $$5)
-  )
-  ;;@ renderer.c:1249:0
-  (set_local $$35
-   (f32.load
-    (get_local $$2)
-   )
-  )
-  (set_local $$36
-   (get_local $$1)
-  )
-  (set_local $$37
-   (i32.add
-    (get_local $$36)
-    (i32.const 76)
-   )
-  )
-  (set_local $$38
-   (i32.load
-    (get_local $$37)
-   )
-  )
-  (set_local $$39
-   (get_local $$1)
-  )
-  (set_local $$40
-   (i32.add
-    (get_local $$39)
-    (i32.const 68)
-   )
-  )
-  (set_local $$41
-   (i32.load
-    (get_local $$40)
-   )
-  )
-  (set_local $$42
-   (i32.add
-    (get_local $$41)
-    (i32.const 0)
-   )
-  )
-  (set_local $$43
-   (i32.add
-    (get_local $$42)
-    (i32.const 0)
-   )
-  )
-  (set_local $$44
-   (i32.add
-    (get_local $$38)
-    (i32.shl
-     (get_local $$43)
-     (i32.const 2)
-    )
-   )
-  )
-  (f32.store
-   (get_local $$44)
-   (get_local $$35)
-  )
-  ;;@ renderer.c:1250:0
-  (set_local $$45
-   (f32.load
-    (get_local $$3)
-   )
-  )
-  (set_local $$46
-   (get_local $$1)
-  )
-  (set_local $$47
-   (i32.add
-    (get_local $$46)
-    (i32.const 76)
-   )
-  )
-  (set_local $$48
-   (i32.load
-    (get_local $$47)
-   )
-  )
-  (set_local $$49
-   (get_local $$1)
-  )
-  (set_local $$50
-   (i32.add
-    (get_local $$49)
-    (i32.const 68)
-   )
-  )
-  (set_local $$51
-   (i32.load
-    (get_local $$50)
-   )
-  )
-  (set_local $$52
-   (i32.add
-    (get_local $$51)
-    (i32.const 0)
-   )
-  )
-  (set_local $$53
-   (i32.add
-    (get_local $$52)
-    (i32.const 1)
-   )
-  )
-  (set_local $$54
-   (i32.add
-    (get_local $$48)
-    (i32.shl
-     (get_local $$53)
-     (i32.const 2)
-    )
-   )
-  )
-  (f32.store
-   (get_local $$54)
-   (get_local $$45)
-  )
-  ;;@ renderer.c:1251:0
-  (set_local $$55
-   (get_local $$1)
-  )
-  (set_local $$56
-   (i32.add
-    (get_local $$55)
-    (i32.const 76)
-   )
-  )
-  (set_local $$57
-   (i32.load
-    (get_local $$56)
-   )
-  )
-  (set_local $$58
-   (get_local $$1)
-  )
-  (set_local $$59
-   (i32.add
-    (get_local $$58)
-    (i32.const 68)
-   )
-  )
-  (set_local $$60
-   (i32.load
-    (get_local $$59)
-   )
-  )
-  (set_local $$61
-   (i32.add
-    (get_local $$60)
-    (i32.const 0)
-   )
-  )
-  (set_local $$62
-   (i32.add
-    (get_local $$61)
-    (i32.const 2)
-   )
-  )
-  (set_local $$63
-   (i32.add
-    (get_local $$57)
-    (i32.shl
-     (get_local $$62)
-     (i32.const 2)
-    )
-   )
-  )
-  (f32.store
-   (get_local $$63)
-   (f32.const 0)
-  )
-  ;;@ renderer.c:1252:0
-  (set_local $$64
-   (get_local $$1)
-  )
-  (set_local $$65
-   (i32.add
-    (get_local $$64)
-    (i32.const 76)
-   )
-  )
-  (set_local $$66
-   (i32.load
-    (get_local $$65)
-   )
-  )
-  (set_local $$67
-   (get_local $$1)
-  )
-  (set_local $$68
-   (i32.add
-    (get_local $$67)
-    (i32.const 68)
-   )
-  )
-  (set_local $$69
-   (i32.load
-    (get_local $$68)
-   )
-  )
-  (set_local $$70
-   (i32.add
-    (get_local $$69)
-    (i32.const 0)
-   )
-  )
-  (set_local $$71
-   (i32.add
-    (get_local $$70)
-    (i32.const 3)
-   )
-  )
-  (set_local $$72
-   (i32.add
-    (get_local $$66)
-    (i32.shl
-     (get_local $$71)
-     (i32.const 2)
-    )
-   )
-  )
-  (f32.store
-   (get_local $$72)
-   (f32.const 0)
-  )
-  ;;@ renderer.c:1254:0
-  (set_local $$73
-   (f32.load
-    (get_local $$4)
-   )
-  )
-  (set_local $$74
-   (get_local $$1)
-  )
-  (set_local $$75
-   (i32.add
-    (get_local $$74)
-    (i32.const 76)
-   )
-  )
-  (set_local $$76
-   (i32.load
-    (get_local $$75)
-   )
-  )
-  (set_local $$77
-   (get_local $$1)
-  )
-  (set_local $$78
-   (i32.add
-    (get_local $$77)
-    (i32.const 68)
-   )
-  )
-  (set_local $$79
-   (i32.load
-    (get_local $$78)
-   )
-  )
-  (set_local $$80
-   (i32.add
-    (get_local $$79)
-    (i32.const 4)
-   )
-  )
-  (set_local $$81
-   (i32.add
-    (get_local $$80)
-    (i32.const 0)
-   )
-  )
-  (set_local $$82
-   (i32.add
-    (get_local $$76)
-    (i32.shl
-     (get_local $$81)
-     (i32.const 2)
-    )
-   )
-  )
-  (f32.store
-   (get_local $$82)
-   (get_local $$73)
-  )
-  ;;@ renderer.c:1255:0
-  (set_local $$83
-   (f32.load
-    (get_local $$3)
-   )
-  )
-  (set_local $$84
-   (get_local $$1)
-  )
-  (set_local $$85
-   (i32.add
-    (get_local $$84)
-    (i32.const 76)
-   )
-  )
-  (set_local $$86
-   (i32.load
-    (get_local $$85)
-   )
-  )
-  (set_local $$87
-   (get_local $$1)
-  )
-  (set_local $$88
-   (i32.add
-    (get_local $$87)
-    (i32.const 68)
-   )
-  )
-  (set_local $$89
-   (i32.load
-    (get_local $$88)
-   )
-  )
-  (set_local $$90
-   (i32.add
-    (get_local $$89)
-    (i32.const 4)
-   )
-  )
-  (set_local $$91
-   (i32.add
-    (get_local $$90)
-    (i32.const 1)
-   )
-  )
-  (set_local $$92
-   (i32.add
-    (get_local $$86)
-    (i32.shl
-     (get_local $$91)
-     (i32.const 2)
-    )
-   )
-  )
-  (f32.store
-   (get_local $$92)
-   (get_local $$83)
-  )
-  ;;@ renderer.c:1256:0
-  (set_local $$93
-   (get_local $$1)
-  )
-  (set_local $$94
-   (i32.add
-    (get_local $$93)
-    (i32.const 76)
-   )
-  )
-  (set_local $$95
-   (i32.load
-    (get_local $$94)
-   )
-  )
-  (set_local $$96
-   (get_local $$1)
-  )
-  (set_local $$97
-   (i32.add
-    (get_local $$96)
-    (i32.const 68)
-   )
-  )
-  (set_local $$98
-   (i32.load
-    (get_local $$97)
-   )
-  )
-  (set_local $$99
-   (i32.add
-    (get_local $$98)
-    (i32.const 4)
-   )
-  )
-  (set_local $$100
-   (i32.add
-    (get_local $$99)
-    (i32.const 2)
-   )
-  )
-  (set_local $$101
-   (i32.add
-    (get_local $$95)
-    (i32.shl
-     (get_local $$100)
-     (i32.const 2)
-    )
-   )
-  )
-  (f32.store
-   (get_local $$101)
-   (f32.const 0)
-  )
-  ;;@ renderer.c:1257:0
-  (set_local $$102
-   (get_local $$1)
-  )
-  (set_local $$103
-   (i32.add
-    (get_local $$102)
-    (i32.const 76)
-   )
-  )
-  (set_local $$104
-   (i32.load
-    (get_local $$103)
-   )
-  )
-  (set_local $$105
-   (get_local $$1)
-  )
-  (set_local $$106
-   (i32.add
-    (get_local $$105)
-    (i32.const 68)
-   )
-  )
-  (set_local $$107
-   (i32.load
-    (get_local $$106)
-   )
-  )
-  (set_local $$108
-   (i32.add
-    (get_local $$107)
-    (i32.const 4)
-   )
-  )
-  (set_local $$109
-   (i32.add
-    (get_local $$108)
-    (i32.const 3)
-   )
-  )
-  (set_local $$110
-   (i32.add
-    (get_local $$104)
-    (i32.shl
-     (get_local $$109)
-     (i32.const 2)
-    )
-   )
-  )
-  (f32.store
-   (get_local $$110)
-   (f32.const 0)
-  )
-  ;;@ renderer.c:1259:0
-  (set_local $$111
-   (f32.load
-    (get_local $$4)
-   )
-  )
-  (set_local $$112
-   (get_local $$1)
-  )
-  (set_local $$113
-   (i32.add
-    (get_local $$112)
-    (i32.const 76)
-   )
-  )
-  (set_local $$114
-   (i32.load
-    (get_local $$113)
-   )
-  )
-  (set_local $$115
-   (get_local $$1)
-  )
-  (set_local $$116
-   (i32.add
-    (get_local $$115)
-    (i32.const 68)
-   )
-  )
-  (set_local $$117
-   (i32.load
-    (get_local $$116)
-   )
-  )
-  (set_local $$118
-   (i32.add
-    (get_local $$117)
-    (i32.const 8)
-   )
-  )
-  (set_local $$119
-   (i32.add
-    (get_local $$118)
-    (i32.const 0)
-   )
-  )
-  (set_local $$120
-   (i32.add
-    (get_local $$114)
-    (i32.shl
-     (get_local $$119)
-     (i32.const 2)
-    )
-   )
-  )
-  (f32.store
-   (get_local $$120)
-   (get_local $$111)
-  )
-  ;;@ renderer.c:1260:0
-  (set_local $$121
-   (f32.load
-    (get_local $$5)
-   )
-  )
-  (set_local $$122
-   (get_local $$1)
-  )
-  (set_local $$123
-   (i32.add
-    (get_local $$122)
-    (i32.const 76)
-   )
-  )
-  (set_local $$124
-   (i32.load
-    (get_local $$123)
-   )
-  )
-  (set_local $$125
-   (get_local $$1)
-  )
-  (set_local $$126
-   (i32.add
-    (get_local $$125)
-    (i32.const 68)
-   )
-  )
-  (set_local $$127
-   (i32.load
-    (get_local $$126)
-   )
-  )
-  (set_local $$128
-   (i32.add
-    (get_local $$127)
-    (i32.const 8)
-   )
-  )
-  (set_local $$129
-   (i32.add
-    (get_local $$128)
-    (i32.const 1)
-   )
-  )
-  (set_local $$130
-   (i32.add
-    (get_local $$124)
-    (i32.shl
-     (get_local $$129)
-     (i32.const 2)
-    )
-   )
-  )
-  (f32.store
-   (get_local $$130)
-   (get_local $$121)
-  )
-  ;;@ renderer.c:1261:0
-  (set_local $$131
-   (get_local $$1)
-  )
-  (set_local $$132
-   (i32.add
-    (get_local $$131)
-    (i32.const 76)
-   )
-  )
-  (set_local $$133
-   (i32.load
-    (get_local $$132)
-   )
-  )
-  (set_local $$134
-   (get_local $$1)
-  )
-  (set_local $$135
-   (i32.add
-    (get_local $$134)
-    (i32.const 68)
-   )
-  )
-  (set_local $$136
-   (i32.load
-    (get_local $$135)
-   )
-  )
-  (set_local $$137
-   (i32.add
-    (get_local $$136)
-    (i32.const 8)
-   )
-  )
-  (set_local $$138
-   (i32.add
-    (get_local $$137)
-    (i32.const 2)
-   )
-  )
-  (set_local $$139
-   (i32.add
-    (get_local $$133)
-    (i32.shl
-     (get_local $$138)
-     (i32.const 2)
-    )
-   )
-  )
-  (f32.store
-   (get_local $$139)
-   (f32.const 0)
-  )
-  ;;@ renderer.c:1262:0
-  (set_local $$140
-   (get_local $$1)
-  )
-  (set_local $$141
-   (i32.add
-    (get_local $$140)
-    (i32.const 76)
-   )
-  )
-  (set_local $$142
-   (i32.load
-    (get_local $$141)
-   )
-  )
-  (set_local $$143
-   (get_local $$1)
-  )
-  (set_local $$144
-   (i32.add
-    (get_local $$143)
-    (i32.const 68)
-   )
-  )
-  (set_local $$145
-   (i32.load
-    (get_local $$144)
-   )
-  )
-  (set_local $$146
-   (i32.add
-    (get_local $$145)
-    (i32.const 8)
-   )
-  )
-  (set_local $$147
-   (i32.add
-    (get_local $$146)
-    (i32.const 3)
-   )
-  )
-  (set_local $$148
-   (i32.add
-    (get_local $$142)
-    (i32.shl
-     (get_local $$147)
-     (i32.const 2)
-    )
-   )
-  )
-  (f32.store
-   (get_local $$148)
-   (f32.const 0)
-  )
-  ;;@ renderer.c:1264:0
-  (set_local $$149
-   (f32.load
-    (get_local $$2)
-   )
-  )
-  (set_local $$150
-   (get_local $$1)
-  )
-  (set_local $$151
-   (i32.add
-    (get_local $$150)
-    (i32.const 76)
-   )
-  )
-  (set_local $$152
-   (i32.load
-    (get_local $$151)
-   )
-  )
-  (set_local $$153
-   (get_local $$1)
-  )
-  (set_local $$154
-   (i32.add
-    (get_local $$153)
-    (i32.const 68)
-   )
-  )
-  (set_local $$155
-   (i32.load
-    (get_local $$154)
-   )
-  )
-  (set_local $$156
-   (i32.add
-    (get_local $$155)
-    (i32.const 12)
-   )
-  )
-  (set_local $$157
-   (i32.add
-    (get_local $$156)
-    (i32.const 0)
-   )
-  )
-  (set_local $$158
-   (i32.add
-    (get_local $$152)
-    (i32.shl
-     (get_local $$157)
-     (i32.const 2)
-    )
-   )
-  )
-  (f32.store
-   (get_local $$158)
-   (get_local $$149)
-  )
-  ;;@ renderer.c:1265:0
-  (set_local $$159
-   (f32.load
-    (get_local $$5)
-   )
-  )
-  (set_local $$160
-   (get_local $$1)
-  )
-  (set_local $$161
-   (i32.add
-    (get_local $$160)
-    (i32.const 76)
-   )
-  )
-  (set_local $$162
-   (i32.load
-    (get_local $$161)
-   )
-  )
-  (set_local $$163
-   (get_local $$1)
-  )
-  (set_local $$164
-   (i32.add
-    (get_local $$163)
-    (i32.const 68)
-   )
-  )
-  (set_local $$165
-   (i32.load
-    (get_local $$164)
-   )
-  )
-  (set_local $$166
-   (i32.add
-    (get_local $$165)
-    (i32.const 12)
-   )
-  )
-  (set_local $$167
-   (i32.add
-    (get_local $$166)
-    (i32.const 1)
-   )
-  )
-  (set_local $$168
-   (i32.add
-    (get_local $$162)
-    (i32.shl
-     (get_local $$167)
-     (i32.const 2)
-    )
-   )
-  )
-  (f32.store
-   (get_local $$168)
-   (get_local $$159)
-  )
-  ;;@ renderer.c:1266:0
-  (set_local $$169
-   (get_local $$1)
-  )
-  (set_local $$170
-   (i32.add
-    (get_local $$169)
-    (i32.const 76)
-   )
-  )
-  (set_local $$171
-   (i32.load
-    (get_local $$170)
-   )
-  )
-  (set_local $$172
-   (get_local $$1)
-  )
-  (set_local $$173
-   (i32.add
-    (get_local $$172)
-    (i32.const 68)
-   )
-  )
-  (set_local $$174
-   (i32.load
-    (get_local $$173)
-   )
-  )
-  (set_local $$175
-   (i32.add
-    (get_local $$174)
-    (i32.const 12)
-   )
-  )
-  (set_local $$176
-   (i32.add
-    (get_local $$175)
-    (i32.const 2)
-   )
-  )
-  (set_local $$177
-   (i32.add
-    (get_local $$171)
-    (i32.shl
-     (get_local $$176)
-     (i32.const 2)
-    )
-   )
-  )
-  (f32.store
-   (get_local $$177)
-   (f32.const 0)
-  )
-  ;;@ renderer.c:1267:0
-  (set_local $$178
-   (get_local $$1)
-  )
-  (set_local $$179
-   (i32.add
-    (get_local $$178)
-    (i32.const 76)
-   )
-  )
-  (set_local $$180
-   (i32.load
-    (get_local $$179)
-   )
-  )
-  (set_local $$181
-   (get_local $$1)
-  )
-  (set_local $$182
-   (i32.add
-    (get_local $$181)
-    (i32.const 68)
-   )
-  )
-  (set_local $$183
-   (i32.load
-    (get_local $$182)
-   )
-  )
-  (set_local $$184
-   (i32.add
-    (get_local $$183)
-    (i32.const 12)
-   )
-  )
-  (set_local $$185
-   (i32.add
-    (get_local $$184)
-    (i32.const 3)
-   )
-  )
-  (set_local $$186
-   (i32.add
-    (get_local $$180)
-    (i32.shl
-     (get_local $$185)
-     (i32.const 2)
-    )
-   )
-  )
-  (f32.store
-   (get_local $$186)
-   (f32.const 0)
-  )
-  ;;@ renderer.c:1269:0
-  (set_local $$187
-   (get_local $$1)
-  )
-  (set_local $$188
-   (i32.add
-    (get_local $$187)
-    (i32.const 68)
-   )
-  )
-  (set_local $$189
-   (i32.load
-    (get_local $$188)
-   )
-  )
-  (set_local $$190
-   (i32.add
-    (get_local $$189)
-    (i32.const 16)
-   )
-  )
-  (i32.store
-   (get_local $$188)
-   (get_local $$190)
-  )
-  ;;@ renderer.c:1272:0
-  (set_local $$191
-   (get_local $$1)
-  )
-  (set_local $$192
-   (i32.add
-    (get_local $$191)
-    (i32.const 68)
-   )
-  )
-  (set_local $$193
-   (i32.load
-    (get_local $$192)
-   )
-  )
-  (set_local $$194
-   (get_local $$1)
-  )
-  (set_local $$195
-   (i32.add
-    (get_local $$194)
-    (i32.const 72)
-   )
-  )
-  (set_local $$196
-   (i32.load
-    (get_local $$195)
-   )
-  )
-  (set_local $$197
-   (i32.eq
-    (get_local $$193)
-    (get_local $$196)
-   )
-  )
-  (if
-   (i32.eqz
-    (get_local $$197)
-   )
-   (block
-    (set_global $STACKTOP
-     (get_local $sp)
-    )
-    ;;@ renderer.c:1277:0
-    (return)
-   )
-  )
-  ;;@ renderer.c:1273:0
-  (set_local $$198
-   (get_local $$1)
-  )
-  (set_local $$199
-   (i32.add
-    (get_local $$198)
-    (i32.const 72)
-   )
-  )
-  (set_local $$200
-   (i32.load
-    (get_local $$199)
-   )
-  )
-  (set_local $$201
-   (i32.shl
-    (get_local $$200)
-    (i32.const 1)
-   )
-  )
-  (i32.store
-   (get_local $$199)
-   (get_local $$201)
-  )
-  ;;@ renderer.c:1274:0
-  (set_local $$202
-   (get_local $$1)
-  )
-  (set_local $$203
-   (i32.add
-    (get_local $$202)
-    (i32.const 76)
-   )
-  )
-  (set_local $$204
-   (i32.load
-    (get_local $$203)
-   )
-  )
-  (set_local $$205
-   (get_local $$1)
-  )
-  (set_local $$206
-   (i32.add
-    (get_local $$205)
-    (i32.const 72)
-   )
-  )
-  (set_local $$207
-   (i32.load
-    (get_local $$206)
-   )
-  )
-  (set_local $$208
-   (i32.shl
-    (get_local $$207)
-    (i32.const 4)
-   )
-  )
-  (set_local $$209
-   (call $_realloc
-    (get_local $$204)
-    (get_local $$208)
-   )
-  )
-  (set_local $$210
-   (get_local $$1)
-  )
-  (set_local $$211
-   (i32.add
-    (get_local $$210)
-    (i32.const 76)
-   )
-  )
-  (i32.store
-   (get_local $$211)
-   (get_local $$209)
-  )
-  ;;@ renderer.c:1275:0
-  (set_local $$212
-   (get_local $$1)
-  )
-  (set_local $$213
-   (i32.add
-    (get_local $$212)
-    (i32.const 80)
-   )
-  )
-  (set_local $$214
-   (i32.load
-    (get_local $$213)
-   )
-  )
-  (set_local $$215
-   (get_local $$1)
-  )
-  (set_local $$216
-   (i32.add
-    (get_local $$215)
-    (i32.const 72)
-   )
-  )
-  (set_local $$217
-   (i32.load
-    (get_local $$216)
-   )
-  )
-  (set_local $$218
-   (i32.shl
-    (get_local $$217)
-    (i32.const 4)
-   )
-  )
-  (set_local $$219
-   (call $_realloc
-    (get_local $$214)
-    (get_local $$218)
-   )
-  )
-  (set_local $$220
-   (get_local $$1)
-  )
-  (set_local $$221
-   (i32.add
-    (get_local $$220)
-    (i32.const 80)
-   )
-  )
-  (i32.store
-   (get_local $$221)
-   (get_local $$219)
-  )
-  (set_global $STACKTOP
-   (get_local $sp)
-  )
-  ;;@ renderer.c:1277:0
-  (return)
- )
- (func $_init_parser (; 186 ;)
+ (func $_init_parser (; 188 ;)
   (local $label i32)
   (local $sp i32)
   (set_local $sp
@@ -74144,7 +74443,7 @@
   ;;@ parser.c:6:0
   (return)
  )
- (func $_init_type_infos (; 187 ;)
+ (func $_init_type_infos (; 189 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -74420,7 +74719,7 @@
   ;;@ parser.c:636:0
   (return)
  )
- (func $_init_infer (; 188 ;)
+ (func $_init_infer (; 190 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $label i32)
@@ -74457,7 +74756,7 @@
   ;;@ parser.c:828:0
   (return)
  )
- (func $_make_type_info_integer (; 189 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_type_info_integer (; 191 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -74556,7 +74855,7 @@
    (get_local $$13)
   )
  )
- (func $_make_type_info_ident (; 190 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_type_info_ident (; 192 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -74736,7 +75035,7 @@
    (i32.const 0)
   )
  )
- (func $_make_type_info_float (; 191 ;) (param $$0 i32) (result i32)
+ (func $_make_type_info_float (; 193 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -74811,7 +75110,7 @@
    (get_local $$8)
   )
  )
- (func $_make_type_info_void (; 192 ;) (result i32)
+ (func $_make_type_info_void (; 194 ;) (result i32)
   (local $$0 i32)
   (local $$1 i32)
   (local $$2 i32)
@@ -74862,7 +75161,7 @@
    (get_local $$3)
   )
  )
- (func $_init_user_types (; 193 ;)
+ (func $_init_user_types (; 195 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$vararg_buffer i32)
@@ -74932,7 +75231,7 @@
   ;;@ parser.c:640:0
   (return)
  )
- (func $_get_new_type_info (; 194 ;) (result i32)
+ (func $_get_new_type_info (; 196 ;) (result i32)
   (local $$0 i32)
   (local $$1 i32)
   (local $$2 i32)
@@ -74974,7 +75273,7 @@
    (get_local $$3)
   )
  )
- (func $_set_serial (; 195 ;) (param $$0 i32)
+ (func $_set_serial (; 197 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -75045,7 +75344,7 @@
   ;;@ parser.c:27:0
   (return)
  )
- (func $_code_kind_to_string (; 196 ;) (param $$0 i32) (result i32)
+ (func $_code_kind_to_string (; 198 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -75386,7 +75685,7 @@
    (get_local $$4)
   )
  )
- (func $_make_procedure (; 197 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (result i32)
+ (func $_make_procedure (; 199 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -75664,7 +75963,7 @@
    (get_local $$41)
   )
  )
- (func $_get_new_code_node (; 198 ;) (param $$0 i32) (result i32)
+ (func $_get_new_code_node (; 200 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -75962,7 +76261,7 @@
    (get_local $$37)
   )
  )
- (func $_make_block (; 199 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_block (; 201 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -76207,7 +76506,7 @@
    (get_local $$31)
   )
  )
- (func $_make_call (; 200 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_make_call (; 202 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -76414,7 +76713,7 @@
    (get_local $$28)
   )
  )
- (func $_make_declaration (; 201 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (result i32)
+ (func $_make_declaration (; 203 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -76639,7 +76938,7 @@
    (get_local $$34)
   )
  )
- (func $_make_reference (; 202 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_reference (; 204 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -76732,7 +77031,7 @@
    (get_local $$12)
   )
  )
- (func $_make_dereference (; 203 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_dereference (; 205 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -76825,7 +77124,7 @@
    (get_local $$12)
   )
  )
- (func $_make_array_index (; 204 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_make_array_index (; 206 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -76949,7 +77248,7 @@
    (get_local $$18)
   )
  )
- (func $_make_dot_operator (; 205 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_make_dot_operator (; 207 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -77073,7 +77372,7 @@
    (get_local $$18)
   )
  )
- (func $_make_return (; 206 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_return (; 208 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -77166,7 +77465,7 @@
    (get_local $$12)
   )
  )
- (func $_make_struct (; 207 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_struct (; 209 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -77259,7 +77558,7 @@
    (get_local $$12)
   )
  )
- (func $_make_if (; 208 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_make_if (; 210 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -77406,7 +77705,7 @@
    (get_local $$21)
   )
  )
- (func $_make_else (; 209 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_else (; 211 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -77522,7 +77821,7 @@
    (get_local $$15)
   )
  )
- (func $_make_while (; 210 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_make_while (; 212 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -77646,7 +77945,7 @@
    (get_local $$18)
   )
  )
- (func $_make_do_while (; 211 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_make_do_while (; 213 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -77770,7 +78069,7 @@
    (get_local $$18)
   )
  )
- (func $_make_for (; 212 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (result i32)
+ (func $_make_for (; 214 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -77956,7 +78255,7 @@
    (get_local $$30)
   )
  )
- (func $_make_break (; 213 ;) (param $$0 i32) (result i32)
+ (func $_make_break (; 215 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -78025,7 +78324,7 @@
    (get_local $$7)
   )
  )
- (func $_make_continue (; 214 ;) (param $$0 i32) (result i32)
+ (func $_make_continue (; 216 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -78094,7 +78393,7 @@
    (get_local $$7)
   )
  )
- (func $_make_increment (; 215 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_increment (; 217 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -78187,7 +78486,7 @@
    (get_local $$12)
   )
  )
- (func $_make_decrement (; 216 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_decrement (; 218 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -78280,7 +78579,7 @@
    (get_local $$12)
   )
  )
- (func $_make_assign (; 217 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_make_assign (; 219 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -78404,7 +78703,7 @@
    (get_local $$18)
   )
  )
- (func $_make_opassign (; 218 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (result i32)
+ (func $_make_opassign (; 220 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -78559,7 +78858,7 @@
    (get_local $$24)
   )
  )
- (func $_make_binary_operation (; 219 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (result i32)
+ (func $_make_binary_operation (; 221 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -78714,7 +79013,7 @@
    (get_local $$24)
   )
  )
- (func $_make_ident (; 220 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_make_ident (; 222 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -78838,7 +79137,7 @@
    (get_local $$18)
   )
  )
- (func $_make_literal_int (; 221 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_literal_int (; 223 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -78953,7 +79252,7 @@
    (get_local $$15)
   )
  )
- (func $_make_literal_uint (; 222 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_literal_uint (; 224 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -79068,7 +79367,7 @@
    (get_local $$15)
   )
  )
- (func $_make_literal_float (; 223 ;) (param $$0 i32) (param $$1 f32) (result i32)
+ (func $_make_literal_float (; 225 ;) (param $$0 i32) (param $$1 f32) (result i32)
   (local $$10 i32)
   (local $$11 f32)
   (local $$12 f64)
@@ -79189,7 +79488,7 @@
    (get_local $$16)
   )
  )
- (func $_make_literal_bool (; 224 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_literal_bool (; 226 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -79304,7 +79603,7 @@
    (get_local $$15)
   )
  )
- (func $_make_string (; 225 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_string (; 227 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -79430,7 +79729,7 @@
    (get_local $$17)
   )
  )
- (func $_make_parens (; 226 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_parens (; 228 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -79523,7 +79822,7 @@
    (get_local $$12)
   )
  )
- (func $_make_native_code (; 227 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_native_code (; 229 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -79616,7 +79915,7 @@
    (get_local $$12)
   )
  )
- (func $_add_user_type (; 228 ;) (param $$0 i32) (param $$1 i32)
+ (func $_add_user_type (; 230 ;) (param $$0 i32) (param $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
   (local $$4 i32)
@@ -79691,7 +79990,7 @@
   ;;@ parser.c:643:0
   (return)
  )
- (func $_index_of_string (; 229 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_index_of_string (; 231 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -79881,7 +80180,7 @@
    (i32.const 0)
   )
  )
- (func $_map_name_to_type (; 230 ;) (param $$0 i32) (result i32)
+ (func $_map_name_to_type (; 232 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -80131,7 +80430,7 @@
    (i32.const 0)
   )
  )
- (func $_map_name_to_native_type (; 231 ;) (param $$0 i32) (result i32)
+ (func $_map_name_to_native_type (; 233 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -80634,7 +80933,7 @@
    (get_local $$55)
   )
  )
- (func $_make_type_info_array (; 232 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_type_info_array (; 234 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -80784,7 +81083,7 @@
    (get_local $$21)
   )
  )
- (func $_make_type_info_pointer (; 233 ;) (param $$0 i32) (result i32)
+ (func $_make_type_info_pointer (; 235 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -80894,7 +81193,7 @@
    (get_local $$13)
   )
  )
- (func $_make_type_info_struct_dummy (; 234 ;) (result i32)
+ (func $_make_type_info_struct_dummy (; 236 ;) (result i32)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -81164,7 +81463,7 @@
    (get_local $$35)
   )
  )
- (func $_fill_type_info_struct (; 235 ;) (param $$0 i32) (result i32)
+ (func $_fill_type_info_struct (; 237 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -81718,7 +82017,7 @@
    (i32.const 0)
   )
  )
- (func $_infer (; 236 ;) (param $$0 i32) (result i32)
+ (func $_infer (; 238 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$100 i32)
@@ -84913,7 +85212,7 @@
    )
   )
  )
- (func $_infer_push_block (; 237 ;) (param $$0 i32)
+ (func $_infer_push_block (; 239 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -85081,7 +85380,7 @@
   ;;@ parser.c:836:0
   (return)
  )
- (func $_infer_pop_block (; 238 ;)
+ (func $_infer_pop_block (; 240 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -85193,7 +85492,7 @@
    )
   )
  )
- (func $_infer_decl_of_ident (; 239 ;) (param $$0 i32) (result i32)
+ (func $_infer_decl_of_ident (; 241 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -85631,7 +85930,7 @@
    (i32.const 0)
   )
  )
- (func $_is_operator_boolean (; 240 ;) (param $$0 i32) (result i32)
+ (func $_is_operator_boolean (; 242 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -85833,7 +86132,7 @@
    (get_local $$22)
   )
  )
- (func $_map_operator_to_precedence (; 241 ;) (param $$0 i32) (result i32)
+ (func $_map_operator_to_precedence (; 243 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -86401,7 +86700,7 @@
    (get_local $$57)
   )
  )
- (func $_maybe_binary (; 242 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_maybe_binary (; 244 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -86727,7 +87026,7 @@
    )
   )
  )
- (func $_parse_rvalue_atom (; 243 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_rvalue_atom (; 245 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -87605,7 +87904,7 @@
    (get_local $$110)
   )
  )
- (func $_parse_reference (; 244 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_reference (; 246 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -87723,7 +88022,7 @@
    (i32.const 1)
   )
  )
- (func $_parse_dereference (; 245 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_dereference (; 247 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -88058,7 +88357,7 @@
    (i32.const 0)
   )
  )
- (func $_parse_literal (; 246 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_literal (; 248 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -88921,7 +89220,7 @@
    )
   )
  )
- (func $_parse_string (; 247 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_string (; 249 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -89028,7 +89327,7 @@
    (i32.const 1)
   )
  )
- (func $_parse_rvalue (; 248 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_rvalue (; 250 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -89235,7 +89534,7 @@
    )
   )
  )
- (func $_parse_lvalue (; 249 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_lvalue (; 251 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -89804,7 +90103,7 @@
    (get_local $$72)
   )
  )
- (func $_parse_ident (; 250 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_ident (; 252 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -90014,7 +90313,7 @@
    (get_local $$26)
   )
  )
- (func $_parse_call (; 251 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_call (; 253 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -90254,7 +90553,7 @@
    (get_local $$31)
   )
  )
- (func $_parse_array_index (; 252 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_array_index (; 254 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -90687,7 +90986,7 @@
    (get_local $$55)
   )
  )
- (func $_parse_dot_operator (; 253 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_dot_operator (; 255 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -90937,7 +91236,7 @@
    (get_local $$33)
   )
  )
- (func $_delimited (; 254 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (param $$6 i32) (result i32)
+ (func $_delimited (; 256 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (param $$6 i32) (result i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -92025,7 +92324,7 @@
    (i32.const 1)
   )
  )
- (func $_is_one_of (; 255 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_is_one_of (; 257 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -92210,7 +92509,7 @@
    (i32.const 0)
   )
  )
- (func $_inject_stdlib (; 256 ;) (param $$0 i32) (param $$1 i32)
+ (func $_inject_stdlib (; 258 ;) (param $$0 i32) (param $$1 i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -92923,7 +93222,7 @@
   ;;@ parser.c:1206:0
   (return)
  )
- (func $_parse (; 257 ;) (param $$0 i32) (result i32)
+ (func $_parse (; 259 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -93128,7 +93427,7 @@
    (get_local $$27)
   )
  )
- (func $_parse_statement (; 258 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_statement (; 260 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -94785,7 +95084,7 @@
    (get_local $$204)
   )
  )
- (func $_parse_block (; 259 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_block (; 261 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$2 i32)
@@ -94882,7 +95181,7 @@
    (i32.const 1)
   )
  )
- (func $_parse_if (; 260 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_if (; 262 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -95155,7 +95454,7 @@
    (i32.const 0)
   )
  )
- (func $_parse_else (; 261 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_else (; 263 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -95491,7 +95790,7 @@
    (i32.const 1)
   )
  )
- (func $_parse_while (; 262 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_while (; 264 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -95773,7 +96072,7 @@
    (i32.const 0)
   )
  )
- (func $_parse_do_while (; 263 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_do_while (; 265 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -96197,7 +96496,7 @@
    (i32.const 0)
   )
  )
- (func $_parse_for (; 264 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_for (; 266 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -97209,7 +97508,7 @@
    (i32.const 0)
   )
  )
- (func $_parse_continue (; 265 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_continue (; 267 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$2 i32)
   (local $$3 i32)
   (local $$4 i32)
@@ -97285,7 +97584,7 @@
    (i32.const 1)
   )
  )
- (func $_parse_break (; 266 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_break (; 268 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$2 i32)
   (local $$3 i32)
   (local $$4 i32)
@@ -97361,7 +97660,7 @@
    (i32.const 1)
   )
  )
- (func $_parse_return (; 267 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_return (; 269 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -97564,7 +97863,7 @@
    (i32.const 1)
   )
  )
- (func $_parse_struct_declaration (; 268 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_struct_declaration (; 270 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -97804,7 +98103,7 @@
    (i32.const 1)
   )
  )
- (func $_parse_type (; 269 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_parse_type (; 271 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -98451,7 +98750,7 @@
    (get_local $$90)
   )
  )
- (func $_parse_procedure_declaration (; 270 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_parse_procedure_declaration (; 272 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -98830,7 +99129,7 @@
    (i32.const 1)
   )
  )
- (func $_parse_declaration_precomputed_type (; 271 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_parse_declaration_precomputed_type (; 273 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -99109,7 +99408,7 @@
    (i32.const 1)
   )
  )
- (func $_parse_increment (; 272 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_increment (; 274 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -99212,7 +99511,7 @@
    (i32.const 1)
   )
  )
- (func $_parse_decrement (; 273 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_decrement (; 275 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -99315,7 +99614,7 @@
    (i32.const 1)
   )
  )
- (func $_parse_assign (; 274 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_assign (; 276 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -99460,7 +99759,7 @@
    (i32.const 1)
   )
  )
- (func $_parse_opassign (; 275 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_opassign (; 277 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -99743,7 +100042,7 @@
    (i32.const 1)
   )
  )
- (func $_parse_param (; 276 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_param (; 278 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -99897,7 +100196,7 @@
    )
   )
  )
- (func $_parse_pointer_type (; 277 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_parse_pointer_type (; 279 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -100247,7 +100546,7 @@
    (get_local $$46)
   )
  )
- (func $_parse_array_type (; 278 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_parse_array_type (; 280 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -100736,7 +101035,7 @@
    )
   )
  )
- (func $_tokenize (; 279 ;) (param $$0 i32) (result i32)
+ (func $_tokenize (; 281 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -101105,7 +101404,7 @@
    (get_local $$42)
   )
  )
- (func $_read_token (; 280 ;) (param $$0 i32) (param $$1 i32)
+ (func $_read_token (; 282 ;) (param $$0 i32) (param $$1 i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -102536,7 +102835,7 @@
    )
   )
  )
- (func $_is_whitespace (; 281 ;) (param $$0 i32) (result i32)
+ (func $_is_whitespace (; 283 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -102646,7 +102945,7 @@
    (get_local $$12)
   )
  )
- (func $_read_while (; 282 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_read_while (; 284 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -102996,7 +103295,7 @@
    (get_local $$50)
   )
  )
- (func $_is_not_newline (; 283 ;) (param $$0 i32) (result i32)
+ (func $_is_not_newline (; 285 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -103064,7 +103363,7 @@
    (get_local $$6)
   )
  )
- (func $_is_not_mlc_end (; 284 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_is_not_mlc_end (; 286 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -103176,7 +103475,7 @@
    (get_local $$13)
   )
  )
- (func $_read_while_lookahead (; 285 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_read_while_lookahead (; 287 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -103564,7 +103863,7 @@
    (i32.const 0)
   )
  )
- (func $_is_ident_start (; 286 ;) (param $$0 i32) (result i32)
+ (func $_is_ident_start (; 288 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -103704,7 +104003,7 @@
    (get_local $$15)
   )
  )
- (func $_is_ident_char (; 287 ;) (param $$0 i32) (result i32)
+ (func $_is_ident_char (; 289 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -103811,7 +104110,7 @@
    (get_local $$12)
   )
  )
- (func $_is_one_of_strings (; 288 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_is_one_of_strings (; 290 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -103997,7 +104296,7 @@
    (i32.const 0)
   )
  )
- (func $_is_string_start (; 289 ;) (param $$0 i32) (result i32)
+ (func $_is_string_start (; 291 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -104065,7 +104364,7 @@
    (get_local $$6)
   )
  )
- (func $_is_not_string_end (; 290 ;) (param $$0 i32) (result i32)
+ (func $_is_not_string_end (; 292 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -104133,7 +104432,7 @@
    (get_local $$6)
   )
  )
- (func $_escape_string (; 291 ;) (param $$0 i32) (result i32)
+ (func $_escape_string (; 293 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -104617,7 +104916,7 @@
    (get_local $$65)
   )
  )
- (func $_is_punc (; 292 ;) (param $$0 i32) (result i32)
+ (func $_is_punc (; 294 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -104661,7 +104960,7 @@
    (get_local $$3)
   )
  )
- (func $_is_op_char (; 293 ;) (param $$0 i32) (result i32)
+ (func $_is_op_char (; 295 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -104705,7 +105004,7 @@
    (get_local $$3)
   )
  )
- (func $_is_digit (; 294 ;) (param $$0 i32) (result i32)
+ (func $_is_digit (; 296 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -104750,7 +105049,7 @@
    (get_local $$3)
   )
  )
- (func $_is_digit_or_dot (; 295 ;) (param $$0 i32) (result i32)
+ (func $_is_digit_or_dot (; 297 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -104854,7 +105153,7 @@
    (get_local $$11)
   )
  )
- (func $_is_in_range (; 296 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_is_in_range (; 298 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -104991,7 +105290,7 @@
    (get_local $$18)
   )
  )
- (func $_init_run (; 297 ;) (param $$0 i32)
+ (func $_init_run (; 299 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$2 i32)
@@ -105195,7 +105494,7 @@
   ;;@ run.c:26:0
   (return)
  )
- (func $_get_memory (; 298 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_get_memory (; 300 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -105352,7 +105651,7 @@
    (i32.const 0)
   )
  )
- (func $_set_memory (; 299 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
+ (func $_set_memory (; 301 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -105500,7 +105799,7 @@
   ;;@ run.c:43:0
   (return)
  )
- (func $_add_node_to_execution_stack (; 300 ;) (param $$0 i32)
+ (func $_add_node_to_execution_stack (; 302 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -105596,7 +105895,7 @@
   ;;@ run.c:49:0
   (return)
  )
- (func $_add_name_use (; 301 ;) (param $$0 i32)
+ (func $_add_name_use (; 303 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -105855,7 +106154,7 @@
    )
   )
  )
- (func $_get_name_uses (; 302 ;) (param $$0 i32) (result i32)
+ (func $_get_name_uses (; 304 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -106095,7 +106394,7 @@
    (i32.const 0)
   )
  )
- (func $_math_binop (; 303 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_math_binop (; 305 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -110545,7 +110844,7 @@
    )
   )
  )
- (func $_math_solve (; 304 ;) (param $$0 i32) (result i32)
+ (func $_math_solve (; 306 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -110751,7 +111050,7 @@
    (i32.const 0)
   )
  )
- (func $_run_rvalue (; 305 ;) (param $$0 i32) (result i32)
+ (func $_run_rvalue (; 307 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -111456,7 +111755,7 @@
    (get_local $$91)
   )
  )
- (func $_get_ident_result (; 306 ;) (param $$0 i32) (result i32)
+ (func $_get_ident_result (; 308 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -111603,7 +111902,7 @@
    (get_local $$20)
   )
  )
- (func $_run_call (; 307 ;) (param $$0 i32)
+ (func $_run_call (; 309 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -112178,7 +112477,7 @@
   ;;@ run.c:559:0
   (return)
  )
- (func $_run_lvalue (; 308 ;) (param $$0 i32) (result i32)
+ (func $_run_lvalue (; 310 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$100 i32)
@@ -114110,7 +114409,7 @@
    (i32.const 0)
   )
  )
- (func $_get_result (; 309 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_get_result (; 311 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -114662,7 +114961,7 @@
    (get_local $$67)
   )
  )
- (func $_fill_result_str (; 310 ;) (param $$0 i32)
+ (func $_fill_result_str (; 312 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -115277,7 +115576,7 @@
    )
   )
  )
- (func $_maybe_cast (; 311 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_maybe_cast (; 313 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -115764,7 +116063,7 @@
    (i32.const 0)
   )
  )
- (func $_get_result_ptr (; 312 ;) (param $$0 i32) (result i32)
+ (func $_get_result_ptr (; 314 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -116032,7 +116331,7 @@
    (i32.const 0)
   )
  )
- (func $_transform (; 313 ;) (param $$0 i32)
+ (func $_transform (; 315 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$100 i32)
@@ -117553,7 +117852,7 @@
    )
   )
  )
- (func $_run_statement (; 314 ;) (param $$0 i32) (result i32)
+ (func $_run_statement (; 316 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$100 i32)
@@ -123352,7 +123651,7 @@
    (get_local $$745)
   )
  )
- (func $_run_start_block (; 315 ;) (param $$0 i32)
+ (func $_run_start_block (; 317 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -123573,7 +123872,7 @@
    )
   )
  )
- (func $_run_end_block (; 316 ;) (param $$0 i32)
+ (func $_run_end_block (; 318 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -123817,7 +124116,7 @@
   ;;@ run.c:757:0
   (return)
  )
- (func $_convert_to_bool (; 317 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_convert_to_bool (; 319 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -124099,7 +124398,7 @@
    (get_local $$33)
   )
  )
- (func $_clone (; 318 ;) (param $$0 i32) (result i32)
+ (func $_clone (; 320 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$100 i32)
@@ -127363,7 +127662,7 @@
    (get_local $$442)
   )
  )
- (func $_map_original_to_clone (; 319 ;) (param $$0 i32) (result i32)
+ (func $_map_original_to_clone (; 321 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -127596,7 +127895,7 @@
    (i32.const 0)
   )
  )
- (func $_init (; 320 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_init (; 322 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$2 i32)
   (local $$3 i32)
   (local $$4 i32)
@@ -127705,7 +128004,7 @@
    (i32.const 1)
   )
  )
- (func $_deinit (; 321 ;) (result i32)
+ (func $_deinit (; 323 ;) (result i32)
   (local $$0 i32)
   (local $label i32)
   (local $sp i32)
@@ -127735,7 +128034,7 @@
    (i32.const 1)
   )
  )
- (func $_step (; 322 ;)
+ (func $_step (; 324 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$2 i32)
@@ -127788,7 +128087,7 @@
   ;;@ debugger.c:180:0
   (return)
  )
- (func $_resize (; 323 ;) (param $$0 i32) (param $$1 i32)
+ (func $_resize (; 325 ;) (param $$0 i32) (param $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
   (local $$4 i32)
@@ -127853,7 +128152,7 @@
   ;;@ debugger.c:186:0
   (return)
  )
- (func $_set_text (; 324 ;) (param $$0 i32)
+ (func $_set_text (; 326 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -128091,7 +128390,7 @@
   ;;@ debugger.c:210:0
   (return)
  )
- (func $_keydown (; 325 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_keydown (; 327 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -128850,7 +129149,7 @@
    (get_local $$88)
   )
  )
- (func $_move_up_line (; 326 ;)
+ (func $_move_up_line (; 328 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -129186,7 +129485,7 @@
   ;;@ debugger.c:95:0
   (return)
  )
- (func $_move_down_line (; 327 ;)
+ (func $_move_down_line (; 329 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -129552,7 +129851,7 @@
   ;;@ debugger.c:119:0
   (return)
  )
- (func $_move_left_line (; 328 ;)
+ (func $_move_left_line (; 330 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -129738,7 +130037,7 @@
   ;;@ debugger.c:128:0
   (return)
  )
- (func $_move_right_line (; 329 ;)
+ (func $_move_right_line (; 331 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -129941,7 +130240,7 @@
   ;;@ debugger.c:137:0
   (return)
  )
- (func $_main (; 330 ;) (result i32)
+ (func $_main (; 332 ;) (result i32)
   (local $$0 i32)
   (local $label i32)
   (local $sp i32)
@@ -129974,7 +130273,7 @@
    (i32.const 0)
   )
  )
- (func $_malloc (; 331 ;) (param $$0 i32) (result i32)
+ (func $_malloc (; 333 ;) (param $$0 i32) (result i32)
   (local $$$0 i32)
   (local $$$0$i$i i32)
   (local $$$0$i$i$i i32)
@@ -140836,7 +141135,7 @@
    (get_local $$$0)
   )
  )
- (func $_free (; 332 ;) (param $$0 i32)
+ (func $_free (; 334 ;) (param $$0 i32)
   (local $$$0211$i i32)
   (local $$$0211$in$i i32)
   (local $$$0381438 i32)
@@ -144206,7 +144505,7 @@
   )
   (return)
  )
- (func $_realloc (; 333 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_realloc (; 335 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -144438,7 +144737,7 @@
    (get_local $$$1)
   )
  )
- (func $_try_realloc_chunk (; 334 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_try_realloc_chunk (; 336 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$$1271 i32)
   (local $$$1271$be i32)
   (local $$$1271$ph i32)
@@ -146255,7 +146554,7 @@
    )
   )
  )
- (func $_dispose_chunk (; 335 ;) (param $$0 i32) (param $$1 i32)
+ (func $_dispose_chunk (; 337 ;) (param $$0 i32) (param $$1 i32)
   (local $$$041722 i32)
   (local $$$0418$lcssa i32)
   (local $$$041821 i32)
@@ -149429,7 +149728,7 @@
   )
   (return)
  )
- (func $___stdio_close (; 336 ;) (param $$0 i32) (result i32)
+ (func $___stdio_close (; 338 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -149497,7 +149796,7 @@
    (get_local $$5)
   )
  )
- (func $___stdio_write (; 337 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $___stdio_write (; 339 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$$0 i32)
   (local $$$04756 i32)
   (local $$$04855 i32)
@@ -150061,7 +150360,7 @@
    (get_local $$$051)
   )
  )
- (func $___stdio_seek (; 338 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $___stdio_seek (; 340 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$$pre i32)
   (local $$10 i32)
   (local $$3 i32)
@@ -150209,7 +150508,7 @@
    (get_local $$10)
   )
  )
- (func $___syscall_ret (; 339 ;) (param $$0 i32) (result i32)
+ (func $___syscall_ret (; 341 ;) (param $$0 i32) (result i32)
   (local $$$0 i32)
   (local $$1 i32)
   (local $$2 i32)
@@ -150253,7 +150552,7 @@
    (get_local $$$0)
   )
  )
- (func $___errno_location (; 340 ;) (result i32)
+ (func $___errno_location (; 342 ;) (result i32)
   (local $label i32)
   (local $sp i32)
   (set_local $sp
@@ -150263,7 +150562,7 @@
    (i32.const 9820)
   )
  )
- (func $_dummy_734 (; 341 ;) (param $$0 i32) (result i32)
+ (func $_dummy_734 (; 343 ;) (param $$0 i32) (result i32)
   (local $label i32)
   (local $sp i32)
   (set_local $sp
@@ -150273,7 +150572,7 @@
    (get_local $$0)
   )
  )
- (func $___stdio_read (; 342 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $___stdio_read (; 344 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$$0 i32)
   (local $$$cast i32)
   (local $$10 i32)
@@ -150627,7 +150926,7 @@
    (get_local $$$0)
   )
  )
- (func $___stdout_write (; 343 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $___stdout_write (; 345 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -150785,7 +151084,7 @@
    (get_local $$14)
   )
  )
- (func $_strtox_764 (; 344 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i64) (result i64)
+ (func $_strtox_764 (; 346 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i64) (result i64)
   (local $$$sink i32)
   (local $$10 i32)
   (local $$11 i64)
@@ -150964,7 +151263,7 @@
    (get_local $$11)
   )
  )
- (func $___shlim (; 345 ;) (param $$0 i32) (param $$1 i32)
+ (func $___shlim (; 347 ;) (param $$0 i32) (param $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -151088,7 +151387,7 @@
   )
   (return)
  )
- (func $___intscan (; 346 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i64) (result i64)
+ (func $___intscan (; 348 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i64) (result i64)
   (local $$$0 i64)
   (local $$$0153209 i64)
   (local $$$0154215 i32)
@@ -153530,7 +153829,7 @@
    (get_local $$$0)
   )
  )
- (func $___shgetc (; 347 ;) (param $$0 i32) (result i32)
+ (func $___shgetc (; 349 ;) (param $$0 i32) (result i32)
   (local $$$0 i32)
   (local $$$phi$trans$insert i32)
   (local $$$phi$trans$insert28 i32)
@@ -153947,7 +154246,7 @@
    (get_local $$$0)
   )
  )
- (func $_isspace (; 348 ;) (param $$0 i32) (result i32)
+ (func $_isspace (; 350 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -153992,7 +154291,7 @@
    (get_local $$4)
   )
  )
- (func $___uflow (; 349 ;) (param $$0 i32) (result i32)
+ (func $___uflow (; 351 ;) (param $$0 i32) (result i32)
   (local $$$0 i32)
   (local $$1 i32)
   (local $$2 i32)
@@ -154105,7 +154404,7 @@
    (get_local $$$0)
   )
  )
- (func $___toread (; 350 ;) (param $$0 i32) (result i32)
+ (func $___toread (; 352 ;) (param $$0 i32) (result i32)
   (local $$$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -154361,7 +154660,7 @@
    (get_local $$$0)
   )
  )
- (func $_strtoll (; 351 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i64)
+ (func $_strtoll (; 353 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i64)
   (local $$3 i64)
   (local $label i32)
   (local $sp i32)
@@ -154380,7 +154679,7 @@
    (get_local $$3)
   )
  )
- (func $_strtoul (; 352 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_strtoul (; 354 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$3 i64)
   (local $$4 i32)
   (local $label i32)
@@ -154405,7 +154704,7 @@
    (get_local $$4)
   )
  )
- (func $_copysign (; 353 ;) (param $$0 f64) (param $$1 f64) (result f64)
+ (func $_copysign (; 355 ;) (param $$0 f64) (param $$1 f64) (result f64)
   (local $$2 i64)
   (local $$3 i64)
   (local $$4 i64)
@@ -154454,7 +154753,7 @@
    (get_local $$7)
   )
  )
- (func $_strcmp (; 354 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_strcmp (; 356 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$$011 i32)
   (local $$$0710 i32)
   (local $$$lcssa i32)
@@ -154649,7 +154948,7 @@
    (get_local $$14)
   )
  )
- (func $_isdigit (; 355 ;) (param $$0 i32) (result i32)
+ (func $_isdigit (; 357 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -154680,7 +154979,7 @@
    (get_local $$3)
   )
  )
- (func $_vsnprintf (; 356 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (result i32)
+ (func $_vsnprintf (; 358 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (result i32)
   (local $$$0 i32)
   (local $$$014 i32)
   (local $$$015 i32)
@@ -155134,7 +155433,7 @@
    (get_local $$$0)
   )
  )
- (func $_vfprintf (; 357 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_vfprintf (; 359 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$$0 i32)
   (local $$$1 i32)
   (local $$10 i32)
@@ -155603,7 +155902,7 @@
    (get_local $$$0)
   )
  )
- (func $_printf_core (; 358 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (result i32)
+ (func $_printf_core (; 360 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (result i32)
   (local $$$ i32)
   (local $$$0 i32)
   (local $$$0228 i32)
@@ -159468,7 +159767,7 @@
    (get_local $$$0)
   )
  )
- (func $___lockfile (; 359 ;) (param $$0 i32) (result i32)
+ (func $___lockfile (; 361 ;) (param $$0 i32) (result i32)
   (local $label i32)
   (local $sp i32)
   (set_local $sp
@@ -159478,7 +159777,7 @@
    (i32.const 0)
   )
  )
- (func $___unlockfile (; 360 ;) (param $$0 i32)
+ (func $___unlockfile (; 362 ;) (param $$0 i32)
   (local $label i32)
   (local $sp i32)
   (set_local $sp
@@ -159486,7 +159785,7 @@
   )
   (return)
  )
- (func $_out (; 361 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
+ (func $_out (; 363 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
   (local $$3 i32)
   (local $$4 i32)
   (local $$5 i32)
@@ -159524,7 +159823,7 @@
   )
   (return)
  )
- (func $_getint (; 362 ;) (param $$0 i32) (result i32)
+ (func $_getint (; 364 ;) (param $$0 i32) (result i32)
   (local $$$0$lcssa i32)
   (local $$$04 i32)
   (local $$1 i32)
@@ -159682,7 +159981,7 @@
    (get_local $$$0$lcssa)
   )
  )
- (func $_pop_arg (; 363 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
+ (func $_pop_arg (; 365 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
   (local $$$mask i32)
   (local $$$mask31 i32)
   (local $$10 i32)
@@ -160761,7 +161060,7 @@
   )
   (return)
  )
- (func $_fmt_x (; 364 ;) (param $$0 i64) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_fmt_x (; 366 ;) (param $$0 i64) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$$05$lcssa i32)
   (local $$$056 i32)
   (local $$$07 i64)
@@ -160889,7 +161188,7 @@
    (get_local $$$05$lcssa)
   )
  )
- (func $_fmt_o (; 365 ;) (param $$0 i64) (param $$1 i32) (result i32)
+ (func $_fmt_o (; 367 ;) (param $$0 i64) (param $$1 i32) (result i32)
   (local $$$0$lcssa i32)
   (local $$$045 i64)
   (local $$$06 i32)
@@ -160993,7 +161292,7 @@
    (get_local $$$0$lcssa)
   )
  )
- (func $_fmt_u (; 366 ;) (param $$0 i64) (param $$1 i32) (result i32)
+ (func $_fmt_u (; 368 ;) (param $$0 i64) (param $$1 i32) (result i32)
   (local $$$010$lcssa$off0 i32)
   (local $$$01013 i64)
   (local $$$012 i32)
@@ -161225,7 +161524,7 @@
    (get_local $$$1$lcssa)
   )
  )
- (func $_strerror (; 367 ;) (param $$0 i32) (result i32)
+ (func $_strerror (; 369 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -161259,7 +161558,7 @@
    (get_local $$4)
   )
  )
- (func $_memchr (; 368 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_memchr (; 370 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$$0$lcssa i32)
   (local $$$035$lcssa i32)
   (local $$$035$lcssa65 i32)
@@ -161840,7 +162139,7 @@
    (get_local $$39)
   )
  )
- (func $_pad_670 (; 369 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32)
+ (func $_pad_670 (; 371 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32)
   (local $$$0$lcssa i32)
   (local $$$011 i32)
   (local $$10 i32)
@@ -162015,7 +162314,7 @@
   )
   (return)
  )
- (func $_wctomb (; 370 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_wctomb (; 372 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$$0 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -162052,7 +162351,7 @@
    (get_local $$$0)
   )
  )
- (func $_fmt_fp (; 371 ;) (param $$0 i32) (param $$1 f64) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (result i32)
+ (func $_fmt_fp (; 373 ;) (param $$0 i32) (param $$1 f64) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (result i32)
   (local $$$ i32)
   (local $$$0 i32)
   (local $$$0463$lcssa i32)
@@ -166692,7 +166991,7 @@
    (get_local $$$560)
   )
  )
- (func $___DOUBLE_BITS_671 (; 372 ;) (param $$0 f64) (result i64)
+ (func $___DOUBLE_BITS_671 (; 374 ;) (param $$0 f64) (result i64)
   (local $$1 i64)
   (local $label i32)
   (local $sp i32)
@@ -166708,7 +167007,7 @@
    (get_local $$1)
   )
  )
- (func $_frexpl (; 373 ;) (param $$0 f64) (param $$1 i32) (result f64)
+ (func $_frexpl (; 375 ;) (param $$0 f64) (param $$1 i32) (result f64)
   (local $$2 f64)
   (local $label i32)
   (local $sp i32)
@@ -166725,7 +167024,7 @@
    (get_local $$2)
   )
  )
- (func $_frexp (; 374 ;) (param $$0 f64) (param $$1 i32) (result f64)
+ (func $_frexp (; 376 ;) (param $$0 f64) (param $$1 i32) (result f64)
   (local $$$0 f64)
   (local $$$016 f64)
   (local $$10 i32)
@@ -166905,7 +167204,7 @@
    (get_local $$$0)
   )
  )
- (func $_wcrtomb (; 375 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_wcrtomb (; 377 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$$0 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -167421,7 +167720,7 @@
    (get_local $$$0)
   )
  )
- (func $___pthread_self_447 (; 376 ;) (result i32)
+ (func $___pthread_self_447 (; 378 ;) (result i32)
   (local $$0 i32)
   (local $label i32)
   (local $sp i32)
@@ -167435,7 +167734,7 @@
    (get_local $$0)
   )
  )
- (func $_pthread_self (; 377 ;) (result i32)
+ (func $_pthread_self (; 379 ;) (result i32)
   (local $label i32)
   (local $sp i32)
   (set_local $sp
@@ -167445,7 +167744,7 @@
    (i32.const 4208)
   )
  )
- (func $___pthread_self_107 (; 378 ;) (result i32)
+ (func $___pthread_self_107 (; 380 ;) (result i32)
   (local $$0 i32)
   (local $label i32)
   (local $sp i32)
@@ -167459,7 +167758,7 @@
    (get_local $$0)
   )
  )
- (func $___strerror_l (; 379 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $___strerror_l (; 381 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$$012$lcssa i32)
   (local $$$01214 i32)
   (local $$$016 i32)
@@ -167688,7 +167987,7 @@
    (get_local $$16)
   )
  )
- (func $___lctrans (; 380 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $___lctrans (; 382 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$2 i32)
   (local $label i32)
   (local $sp i32)
@@ -167705,7 +168004,7 @@
    (get_local $$2)
   )
  )
- (func $___lctrans_impl (; 381 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $___lctrans_impl (; 383 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$$0 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -167776,7 +168075,7 @@
    (get_local $$8)
   )
  )
- (func $___mo_lookup (; 382 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $___mo_lookup (; 384 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$$090 i32)
   (local $$$094 i32)
   (local $$$191 i32)
@@ -168371,7 +168670,7 @@
    (get_local $$$4)
   )
  )
- (func $_swapc (; 383 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_swapc (; 385 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$2 i32)
   (local $$3 i32)
   (local $$spec$select i32)
@@ -168402,7 +168701,7 @@
    (get_local $$spec$select)
   )
  )
- (func $___fwritex (; 384 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $___fwritex (; 386 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$$03846 i32)
   (local $$$042 i32)
   (local $$$1 i32)
@@ -168811,7 +169110,7 @@
    (get_local $$$1)
   )
  )
- (func $___towrite (; 385 ;) (param $$0 i32) (result i32)
+ (func $___towrite (; 387 ;) (param $$0 i32) (result i32)
   (local $$$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -169006,7 +169305,7 @@
    (get_local $$$0)
   )
  )
- (func $_sn_write (; 386 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_sn_write (; 388 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$$cast i32)
   (local $$10 i32)
   (local $$3 i32)
@@ -169092,7 +169391,7 @@
    (get_local $$2)
   )
  )
- (func $___floatscan (; 387 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result f64)
+ (func $___floatscan (; 389 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result f64)
   (local $$$0 i32)
   (local $$$0102 i32)
   (local $$$0103 i32)
@@ -170675,7 +170974,7 @@
    (get_local $$$0111)
   )
  )
- (func $_hexfloat (; 388 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (result f64)
+ (func $_hexfloat (; 390 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (result f64)
   (local $$$0 i32)
   (local $$$0$be i32)
   (local $$$0$ph i32)
@@ -172574,7 +172873,7 @@
    (get_local $$$0169)
   )
  )
- (func $_decfloat (; 389 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (result f64)
+ (func $_decfloat (; 391 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (result f64)
   (local $$$0324 i32)
   (local $$$0324$be i32)
   (local $$$0327480 i32)
@@ -176729,7 +177028,7 @@
    (get_local $$$1)
   )
  )
- (func $_scanexp (; 390 ;) (param $$0 i32) (param $$1 i32) (result i64)
+ (func $_scanexp (; 392 ;) (param $$0 i32) (param $$1 i32) (result i64)
   (local $$$0 i32)
   (local $$$047$lcssa70 i64)
   (local $$$04752 i64)
@@ -177565,7 +177864,7 @@
    (get_local $$$050)
   )
  )
- (func $_scalbn (; 391 ;) (param $$0 f64) (param $$1 i32) (result f64)
+ (func $_scalbn (; 393 ;) (param $$0 f64) (param $$1 i32) (result f64)
   (local $$$0 f64)
   (local $$$020 i32)
   (local $$10 f64)
@@ -177788,7 +178087,7 @@
    (get_local $$20)
   )
  )
- (func $_copysignl (; 392 ;) (param $$0 f64) (param $$1 f64) (result f64)
+ (func $_copysignl (; 394 ;) (param $$0 f64) (param $$1 f64) (result f64)
   (local $$2 f64)
   (local $label i32)
   (local $sp i32)
@@ -177805,7 +178104,7 @@
    (get_local $$2)
   )
  )
- (func $_fmodl (; 393 ;) (param $$0 f64) (param $$1 f64) (result f64)
+ (func $_fmodl (; 395 ;) (param $$0 f64) (param $$1 f64) (result f64)
   (local $$2 f64)
   (local $label i32)
   (local $sp i32)
@@ -177822,7 +178121,7 @@
    (get_local $$2)
   )
  )
- (func $_scalbnl (; 394 ;) (param $$0 f64) (param $$1 i32) (result f64)
+ (func $_scalbnl (; 396 ;) (param $$0 f64) (param $$1 i32) (result f64)
   (local $$2 f64)
   (local $label i32)
   (local $sp i32)
@@ -177839,7 +178138,7 @@
    (get_local $$2)
   )
  )
- (func $_fmod (; 395 ;) (param $$0 f64) (param $$1 f64) (result f64)
+ (func $_fmod (; 397 ;) (param $$0 f64) (param $$1 f64) (result f64)
   (local $$$0 i64)
   (local $$$068101 i64)
   (local $$$070 f64)
@@ -178681,7 +178980,7 @@
    (get_local $$$070)
   )
  )
- (func $___DOUBLE_BITS_273 (; 396 ;) (param $$0 f64) (result i64)
+ (func $___DOUBLE_BITS_273 (; 398 ;) (param $$0 f64) (result i64)
   (local $$1 i64)
   (local $label i32)
   (local $sp i32)
@@ -178697,7 +178996,7 @@
    (get_local $$1)
   )
  )
- (func $_strlen (; 397 ;) (param $$0 i32) (result i32)
+ (func $_strlen (; 399 ;) (param $$0 i32) (result i32)
   (local $$$0 i32)
   (local $$$014 i32)
   (local $$$015$lcssa i32)
@@ -178990,7 +179289,7 @@
    (get_local $$$014)
   )
  )
- (func $_strchr (; 398 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_strchr (; 400 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$2 i32)
   (local $$3 i32)
   (local $$4 i32)
@@ -179047,7 +179346,7 @@
    (get_local $$6)
   )
  )
- (func $___strchrnul (; 399 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $___strchrnul (; 401 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$$0 i32)
   (local $$$029$lcssa i32)
   (local $$$02936 i32)
@@ -179501,7 +179800,7 @@
    (get_local $$$0)
   )
  )
- (func $_snprintf (; 400 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$varargs i32) (result i32)
+ (func $_snprintf (; 402 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$varargs i32) (result i32)
   (local $$3 i32)
   (local $$4 i32)
   (local $label i32)
@@ -179546,7 +179845,7 @@
    (get_local $$4)
   )
  )
- (func $___unlist_locked_file (; 401 ;) (param $$0 i32)
+ (func $___unlist_locked_file (; 403 ;) (param $$0 i32)
   (local $$$pre i32)
   (local $$$sink i32)
   (local $$1 i32)
@@ -179685,7 +179984,7 @@
   )
   (return)
  )
- (func $___pthread_self_606 (; 402 ;) (result i32)
+ (func $___pthread_self_606 (; 404 ;) (result i32)
   (local $$0 i32)
   (local $label i32)
   (local $sp i32)
@@ -179699,7 +179998,7 @@
    (get_local $$0)
   )
  )
- (func $_fopen (; 403 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_fopen (; 405 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$$0 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -179953,7 +180252,7 @@
    (get_local $$$0)
   )
  )
- (func $___fmodeflags (; 404 ;) (param $$0 i32) (result i32)
+ (func $___fmodeflags (; 406 ;) (param $$0 i32) (result i32)
   (local $$$ i32)
   (local $$$0 i32)
   (local $$$2 i32)
@@ -180153,7 +180452,7 @@
    (get_local $$spec$select14)
   )
  )
- (func $___fdopen (; 405 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $___fdopen (; 407 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$$0 i32)
   (local $$$pre i32)
   (local $$10 i32)
@@ -180732,7 +181031,7 @@
    (get_local $$$0)
   )
  )
- (func $___ofl_add (; 406 ;) (param $$0 i32) (result i32)
+ (func $___ofl_add (; 408 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -180799,7 +181098,7 @@
    (get_local $$0)
   )
  )
- (func $___ofl_lock (; 407 ;) (result i32)
+ (func $___ofl_lock (; 409 ;) (result i32)
   (local $label i32)
   (local $sp i32)
   (set_local $sp
@@ -180812,7 +181111,7 @@
    (i32.const 9832)
   )
  )
- (func $___ofl_unlock (; 408 ;)
+ (func $___ofl_unlock (; 410 ;)
   (local $label i32)
   (local $sp i32)
   (set_local $sp
@@ -180823,7 +181122,7 @@
   )
   (return)
  )
- (func $_fclose (; 409 ;) (param $$0 i32) (result i32)
+ (func $_fclose (; 411 ;) (param $$0 i32) (result i32)
   (local $$$pre i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -181106,7 +181405,7 @@
    (get_local $$25)
   )
  )
- (func $_fflush (; 410 ;) (param $$0 i32) (result i32)
+ (func $_fflush (; 412 ;) (param $$0 i32) (result i32)
   (local $$$0 i32)
   (local $$$023 i32)
   (local $$$02325 i32)
@@ -181431,7 +181730,7 @@
    (get_local $$$0)
   )
  )
- (func $___fflush_unlocked (; 411 ;) (param $$0 i32) (result i32)
+ (func $___fflush_unlocked (; 413 ;) (param $$0 i32) (result i32)
   (local $$$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -181650,7 +181949,7 @@
    (get_local $$$0)
   )
  )
- (func $_feof (; 412 ;) (param $$0 i32) (result i32)
+ (func $_feof (; 414 ;) (param $$0 i32) (result i32)
   (local $$$lobit i32)
   (local $$$lobit8 i32)
   (local $$$lobit9 i32)
@@ -181758,7 +182057,7 @@
    (get_local $$$lobit9)
   )
  )
- (func $_ferror (; 413 ;) (param $$0 i32) (result i32)
+ (func $_ferror (; 415 ;) (param $$0 i32) (result i32)
   (local $$$lobit i32)
   (local $$$lobit8 i32)
   (local $$$lobit9 i32)
@@ -181866,7 +182165,7 @@
    (get_local $$$lobit9)
   )
  )
- (func $_fread (; 414 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (result i32)
+ (func $_fread (; 416 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (result i32)
   (local $$$ i32)
   (local $$$0 i32)
   (local $$$054 i32)
@@ -182300,7 +182599,7 @@
    (get_local $$$0)
   )
  )
- (func $_printf (; 415 ;) (param $$0 i32) (param $$varargs i32) (result i32)
+ (func $_printf (; 417 ;) (param $$0 i32) (param $$varargs i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -182350,7 +182649,7 @@
    (get_local $$3)
   )
  )
- (func $_atof (; 416 ;) (param $$0 i32) (result f64)
+ (func $_atof (; 418 ;) (param $$0 i32) (result f64)
   (local $$1 f64)
   (local $label i32)
   (local $sp i32)
@@ -182367,7 +182666,7 @@
    (get_local $$1)
   )
  )
- (func $_strtod (; 417 ;) (param $$0 i32) (param $$1 i32) (result f64)
+ (func $_strtod (; 419 ;) (param $$0 i32) (param $$1 i32) (result f64)
   (local $$2 f64)
   (local $label i32)
   (local $sp i32)
@@ -182385,7 +182684,7 @@
    (get_local $$2)
   )
  )
- (func $_strtox (; 418 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result f64)
+ (func $_strtox (; 420 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result f64)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -182661,7 +182960,7 @@
    (get_local $$8)
   )
  )
- (func $_atoi (; 419 ;) (param $$0 i32) (result i32)
+ (func $_atoi (; 421 ;) (param $$0 i32) (result i32)
   (local $$$0 i32)
   (local $$$010$lcssa i32)
   (local $$$01015 i32)
@@ -182966,10 +183265,10 @@
    (get_local $$21)
   )
  )
- (func $runPostSets (; 420 ;)
+ (func $runPostSets (; 422 ;)
   (nop)
  )
- (func $_llvm_bswap_i32 (; 421 ;) (param $x i32) (result i32)
+ (func $_llvm_bswap_i32 (; 423 ;) (param $x i32) (result i32)
   (return
    (i32.or
     (i32.or
@@ -183010,7 +183309,7 @@
    )
   )
  )
- (func $_memcpy (; 422 ;) (param $dest i32) (param $src i32) (param $num i32) (result i32)
+ (func $_memcpy (; 424 ;) (param $dest i32) (param $src i32) (param $num i32) (result i32)
   (local $ret i32)
   (local $aligned_dest_end i32)
   (local $block_aligned_dest_end i32)
@@ -183545,7 +183844,7 @@
    (get_local $ret)
   )
  )
- (func $_memset (; 423 ;) (param $ptr i32) (param $value i32) (param $num i32) (result i32)
+ (func $_memset (; 425 ;) (param $ptr i32) (param $value i32) (param $num i32) (result i32)
   (local $end i32)
   (local $aligned_end i32)
   (local $block_aligned_end i32)
@@ -183841,7 +184140,7 @@
    )
   )
  )
- (func $_sbrk (; 424 ;) (param $increment i32) (result i32)
+ (func $_sbrk (; 426 ;) (param $increment i32) (result i32)
   (local $oldDynamicTop i32)
   (local $oldDynamicTopOnChange i32)
   (local $newDynamicTop i32)
@@ -183921,7 +184220,7 @@
    (get_local $oldDynamicTop)
   )
  )
- (func $dynCall_ii (; 425 ;) (param $index i32) (param $a1 i32) (result i32)
+ (func $dynCall_ii (; 427 ;) (param $index i32) (param $a1 i32) (result i32)
   (return
    (call_indirect (type $FUNCSIG$ii)
     (get_local $a1)
@@ -183935,7 +184234,7 @@
    )
   )
  )
- (func $dynCall_iii (; 426 ;) (param $index i32) (param $a1 i32) (param $a2 i32) (result i32)
+ (func $dynCall_iii (; 428 ;) (param $index i32) (param $a1 i32) (param $a2 i32) (result i32)
   (return
    (call_indirect (type $FUNCSIG$iii)
     (get_local $a1)
@@ -183950,7 +184249,7 @@
    )
   )
  )
- (func $dynCall_iiii (; 427 ;) (param $index i32) (param $a1 i32) (param $a2 i32) (param $a3 i32) (result i32)
+ (func $dynCall_iiii (; 429 ;) (param $index i32) (param $a1 i32) (param $a2 i32) (param $a3 i32) (result i32)
   (return
    (call_indirect (type $FUNCSIG$iiii)
     (get_local $a1)
@@ -183966,7 +184265,7 @@
    )
   )
  )
- (func $dynCall_v (; 428 ;) (param $index i32)
+ (func $dynCall_v (; 430 ;) (param $index i32)
   (call_indirect (type $FUNCSIG$v)
    (i32.add
     (i32.and
@@ -183977,7 +184276,7 @@
    )
   )
  )
- (func $dynCall_vi (; 429 ;) (param $index i32) (param $a1 i32)
+ (func $dynCall_vi (; 431 ;) (param $index i32) (param $a1 i32)
   (call_indirect (type $FUNCSIG$vi)
    (get_local $a1)
    (i32.add
@@ -183989,7 +184288,7 @@
    )
   )
  )
- (func $b0 (; 430 ;) (param $p0 i32) (result i32)
+ (func $b0 (; 432 ;) (param $p0 i32) (result i32)
   (call $nullFunc_ii
    (i32.const 0)
   )
@@ -183997,7 +184296,7 @@
    (i32.const 0)
   )
  )
- (func $b1 (; 431 ;) (param $p0 i32) (param $p1 i32) (result i32)
+ (func $b1 (; 433 ;) (param $p0 i32) (param $p1 i32) (result i32)
   (call $nullFunc_iii
    (i32.const 1)
   )
@@ -184005,7 +184304,7 @@
    (i32.const 0)
   )
  )
- (func $b2 (; 432 ;) (param $p0 i32) (param $p1 i32) (param $p2 i32) (result i32)
+ (func $b2 (; 434 ;) (param $p0 i32) (param $p1 i32) (param $p2 i32) (result i32)
   (call $nullFunc_iiii
    (i32.const 2)
   )
@@ -184013,12 +184312,12 @@
    (i32.const 0)
   )
  )
- (func $b3 (; 433 ;)
+ (func $b3 (; 435 ;)
   (call $nullFunc_v
    (i32.const 3)
   )
  )
- (func $b4 (; 434 ;) (param $p0 i32)
+ (func $b4 (; 436 ;) (param $p0 i32)
   (call $nullFunc_vi
    (i32.const 4)
   )

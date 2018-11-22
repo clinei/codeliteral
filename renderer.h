@@ -167,6 +167,9 @@ struct Render_Node* make_text(struct Render_Nodes* render_nodes,
                               GLfloat* color);
 struct Render_Node* make_list(struct Render_Nodes* render_nodes,
                               enum List_Direction direction);
+struct Render_Node* make_background_start(struct Render_Nodes* render_nodes,
+                                          GLfloat* color);
+struct Render_Node* make_background_end(struct Render_Nodes* render_nodes);
 
 void render(struct Code_Node* node);
 void render_code_node(struct Code_Node* node,
@@ -186,8 +189,11 @@ void render_indent(struct Render_Data* render_data);
 void render_space(struct Render_Data* render_data);
 void render_newline(struct Render_Data* render_data);
 
-void mark_background_start(struct Render_Data* render_data, GLfloat* bg_color);
-void mark_background_end(struct Render_Data* render_data);
+void mark_background_start(struct Render_Data* render_data,
+                           GLfloat* bg_color,
+                           float x, float y);
+void mark_background_end(struct Render_Data* render_data,
+                         float x, float y);
 
 void convert_screen_coords_to_view_coords(float x, float y,
                                           float width, float height,
