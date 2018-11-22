@@ -166,13 +166,13 @@ struct Render_Node* make_list(struct Render_Nodes* render_nodes,
 
     return node;
 }
-struct Render_Node* make_background_start(struct Render_Nodes* render_nodes,
+struct Render_Node* make_background_begin(struct Render_Nodes* render_nodes,
                                           GLfloat* color) {
     
     struct Render_Node* node = get_new_render_node(render_nodes);
-    node->kind = RENDER_KIND_BACKGROUND_START;
+    node->kind = RENDER_KIND_BACKGROUND_BEGIN;
 
-    node->background_start.color = color;
+    node->background_begin.color = color;
 
     return node;
 }
@@ -180,6 +180,20 @@ struct Render_Node* make_background_end(struct Render_Nodes* render_nodes) {
     
     struct Render_Node* node = get_new_render_node(render_nodes);
     node->kind = RENDER_KIND_BACKGROUND_END;
+
+    return node;
+}
+struct Render_Node* make_cursor_begin(struct Render_Nodes* render_nodes) {
+    
+    struct Render_Node* node = get_new_render_node(render_nodes);
+    node->kind = RENDER_KIND_CURSOR_BEGIN;
+
+    return node;
+}
+struct Render_Node* make_cursor_end(struct Render_Nodes* render_nodes) {
+    
+    struct Render_Node* node = get_new_render_node(render_nodes);
+    node->kind = RENDER_KIND_CURSOR_END;
 
     return node;
 }
@@ -438,8 +452,10 @@ void destroy_render_node(struct Render_Node* node) {
             break;
         }
         case RENDER_KIND_TEXT:
-        case RENDER_KIND_BACKGROUND_START:
-        case RENDER_KIND_BACKGROUND_END:{
+        case RENDER_KIND_BACKGROUND_BEGIN:
+        case RENDER_KIND_BACKGROUND_END:
+        case RENDER_KIND_CURSOR_BEGIN:
+        case RENDER_KIND_CURSOR_END:{
             break;
         }
         default:{
@@ -466,10 +482,6 @@ void render(struct Code_Node* node) {
 
     struct Render_Data* render_data = &my_render_data;
 
-    /*
-    render_data->xpos = 0;
-    render_data->ypos = render_data->font_atlas->font_size * 2;
-    */
     render_data->indent_level = 0;
     render_data->line_height = 1.01;
 
@@ -496,11 +508,47 @@ void render(struct Code_Node* node) {
 
     render_code_node(node, render_data);
 
-    interaction_data.scroll_y = 0;
-    // interaction_data.scroll_y = interaction_data.cursor->offset_y;
-    render_data->debugger_root->x = -interaction_data.scroll_x;
-    render_data->debugger_root->y = -interaction_data.scroll_y + render_data->font_atlas->font_size;
+    render_data->layout_data.curr_x = 0;
+    render_data->layout_data.curr_y = 0;
     layout_node(render_data->debugger_root, NULL, render_data);
+
+	float position_y = render_data->cursor_begin->y - interaction_data.scroll_y;
+	float midpoint_y = render_data->height / 2;
+	float radius_y = render_data->height / 8;
+
+	float position_x = render_data->cursor_begin->x - interaction_data.scroll_x;
+	float midpoint_x = render_data->width / 2;
+	float radius_x = render_data->width / 8;
+    
+    float target_x = render_data->cursor_begin->x - midpoint_x;
+    if (target_x < 0) {
+        target_x = 0;
+    }
+    float target_y = render_data->cursor_begin->y - midpoint_y;
+    if (target_y < 0) {
+        target_y = 0;
+    }
+
+    bool instant_scroll = true;
+
+	if ((position_x < (midpoint_x - radius_x) ||
+		 position_x > (midpoint_x + radius_x) ||
+		 position_y < (midpoint_y - radius_y) ||
+		 position_y > (midpoint_y + radius_y)) &&
+        (render_data->cursor_begin->y > midpoint_y ||
+         render_data->cursor_begin->y < interaction_data.scroll_y)) {
+
+		if (instant_scroll) {
+			interaction_data.scroll_x = target_x;
+			interaction_data.scroll_y = target_y;
+		}
+		else {
+            // interpolate
+		}
+	}
+
+    render_data->offset_x = -interaction_data.scroll_x;
+    render_data->offset_y = -interaction_data.scroll_y + render_data->font_atlas->font_size;
 
     render_node(render_data->debugger_root, render_data);
 
@@ -568,14 +616,15 @@ void layout_node(struct Render_Node* node,
 
     // printf("layout_node: (%u)\n", node->kind);
 
+    /*
     if (parent == NULL) {
         render_data->layout_data.curr_x = node->x;
         render_data->layout_data.curr_y = node->y;
     }
-    else {
-        node->x = render_data->layout_data.curr_x;
-        node->y = render_data->layout_data.curr_y;
-    }
+    */
+
+    node->x = render_data->layout_data.curr_x;
+    node->y = render_data->layout_data.curr_y;
 
     switch (node->kind) {
         case RENDER_KIND_TEXT:{
@@ -616,8 +665,10 @@ void layout_node(struct Render_Node* node,
             }
             break;
         }
-        case RENDER_KIND_BACKGROUND_START:
-        case RENDER_KIND_BACKGROUND_END:{
+        case RENDER_KIND_BACKGROUND_BEGIN:
+        case RENDER_KIND_BACKGROUND_END:
+        case RENDER_KIND_CURSOR_BEGIN:
+        case RENDER_KIND_CURSOR_END:{
             node->width = 0;
             node->height = 0;
             break;
@@ -640,10 +691,10 @@ void layout_node(struct Render_Node* node,
 }
 
 void render_node(struct Render_Node* node, struct Render_Data* render_data) {
+    float x = node->x + render_data->offset_x;
+    float y = node->y + render_data->offset_y;
     switch (node->kind) {
         case RENDER_KIND_TEXT:{
-            float x = node->x;
-            float y = node->y;
             render_text(node->text.text,
                         &x, &y,
                         node->text.color,
@@ -657,14 +708,18 @@ void render_node(struct Render_Node* node, struct Render_Data* render_data) {
             }
             break;
         }
-        case RENDER_KIND_BACKGROUND_START:{
+        case RENDER_KIND_BACKGROUND_BEGIN:{
             // @Incomplete
             // we need a stack
-            mark_background_start(render_data, node->background_start.color, node->x, node->y);
+            mark_background_begin(render_data, node->background_begin.color, x, y);
             break;
         }
         case RENDER_KIND_BACKGROUND_END:{
-            mark_background_end(render_data, node->x, node->y);
+            mark_background_end(render_data, x, y);
+            break;
+        }
+        case RENDER_KIND_CURSOR_BEGIN:
+        case RENDER_KIND_CURSOR_END:{
             break;
         }
         default:{
@@ -688,18 +743,13 @@ void render_code_node(struct Code_Node* node,
     */
 
     struct Render_Node* last_line = *render_data->debugger_root->list.elements->last;
-
-    // @Incomplete
-    // need to add background start and end render nodes to the line
     if (node == interaction_data.cursor) {
-        struct Render_Node* cursor_begin = make_background_start(render_data->render_nodes, render_data->cursor_color);
+        struct Render_Node* cursor_background_begin = make_background_begin(render_data->render_nodes, render_data->cursor_color);
+        array_push(last_line->list.elements, &cursor_background_begin);
+        struct Render_Node* cursor_begin = make_cursor_begin(render_data->render_nodes);
         array_push(last_line->list.elements, &cursor_begin);
+        render_data->cursor_begin = cursor_begin;
         render_data->cursor_line = render_data->line_index;
-        /*
-        mark_background_start(render_data, render_data->cursor_color);
-        node->offset_x = render_data->xpos + interaction_data.scroll_x;
-        node->offset_y = render_data->ypos + interaction_data.scroll_y;
-        */
     }
 
     // printf("render_node: (%s)\n", code_kind_to_string(node->kind));
@@ -1132,20 +1182,14 @@ void render_code_node(struct Code_Node* node,
             break;
         }
         case CODE_KIND_NATIVE_CODE:{
-            render_text("{", &render_data->xpos, &render_data->ypos,
-                        render_data->fg_color,
-                        render_data->bg_color,
-                        render_data);
+            struct Render_Node* open_bracket = make_text(render_data->render_nodes, "{", render_data->fg_color);
+            array_push(last_line->list.elements, &open_bracket);
             render_space(render_data);
-            render_text("[native code]", &render_data->xpos, &render_data->ypos,
-                        hilite_comment_fg_color,
-                        render_data->bg_color,
-                        render_data);
+            struct Render_Node* text = make_text(render_data->render_nodes, "[native_code]", hilite_comment_fg_color);
+            array_push(last_line->list.elements, &text);
             render_space(render_data);
-            render_text("}", &render_data->xpos, &render_data->ypos,
-                        render_data->fg_color,
-                        render_data->bg_color,
-                        render_data);
+            struct Render_Node* close_bracket = make_text(render_data->render_nodes, "}", render_data->fg_color);
+            array_push(last_line->list.elements, &close_bracket);
             break;
         }
         default:{
@@ -1161,9 +1205,10 @@ void render_code_node(struct Code_Node* node,
     }
     
     if (node == interaction_data.cursor) {
-        struct Render_Node* cursor_end = make_background_end(render_data->render_nodes);
+        struct Render_Node* cursor_background_end = make_background_end(render_data->render_nodes);
+        array_push(last_line->list.elements, &cursor_background_end);
+        struct Render_Node* cursor_end = make_cursor_end(render_data->render_nodes);
         array_push(last_line->list.elements, &cursor_end);
-        // mark_background_end(render_data);
     }
 }
 
@@ -1266,7 +1311,7 @@ void render_text(char* text, float* xpos, float* ypos,
     }
 }
 
-void mark_background_start(struct Render_Data* render_data,
+void mark_background_begin(struct Render_Data* render_data,
                            GLfloat* color,
                            float x, float y) {
     
@@ -1279,14 +1324,14 @@ void mark_background_start(struct Render_Data* render_data,
 
     // @Incomplete
     // we need a stack
-    render_data->mark_start_xpos = x;
-    render_data->mark_start_ypos = y - render_data->font_atlas->font_size + 4;
+    render_data->mark_begin_xpos = x;
+    render_data->mark_begin_ypos = y - render_data->font_atlas->font_size + 4;
 }
 void mark_background_end(struct Render_Data* render_data,
                          float x, float y) {
 
-    float start_xpos = render_data->mark_start_xpos;
-    float start_ypos = render_data->mark_start_ypos;
+    float start_xpos = render_data->mark_begin_xpos;
+    float start_ypos = render_data->mark_begin_ypos;
     float end_xpos = x;
     float end_ypos = y + 6;
 

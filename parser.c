@@ -2102,9 +2102,6 @@ struct Code_Node* get_new_code_node(struct Code_Nodes* code_nodes) {
     node->should_expand = false;
     node->str = NULL;
 
-    node->offset_x = 0;
-    node->offset_y = 0;
-
     return node;
 }
 

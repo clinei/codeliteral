@@ -240,9 +240,6 @@ struct Code_Node {
     bool should_expand;
     char* str;
 
-    float offset_x;
-    float offset_y;
-
     union {
         struct Code_Procedure procedure;
         struct Code_Call call;

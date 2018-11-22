@@ -46,10 +46,6 @@ struct Render_Data {
     struct Atlas* font_atlas;
     float width;
     float height;
-    float xpos;
-    float ypos;
-    float line_height;
-    size_t indent_level;
 
     size_t coords_length;
     size_t coords_capacity;
@@ -68,17 +64,23 @@ struct Render_Data {
     GLfloat* bg_coords;
     GLfloat* bg_colors;
 
-    float mark_start_xpos;
-    float mark_start_ypos;
+    float mark_begin_xpos;
+    float mark_begin_ypos;
+    size_t indent_level;
     size_t block_depth;
 
     struct Lines_Array* lines;
     size_t line_index;
     size_t cursor_line;
 
+    struct Layout_Data layout_data;
     struct Render_Nodes* render_nodes;
     struct Render_Node* debugger_root;
-    struct Layout_Data layout_data;
+    struct Render_Node* cursor_begin;
+    
+    float offset_x;
+    float offset_y;
+    float line_height;
 };
 struct Render_Data my_render_data;
 
@@ -130,14 +132,16 @@ struct Render_List {
     struct Render_Node_Array* elements;
     enum List_Direction direction;
 };
-struct Render_Background_Start {
+struct Render_Background_Begin {
     GLfloat* color;
 };
 enum Render_Kind {
     RENDER_KIND_TEXT,
     RENDER_KIND_LIST,
-    RENDER_KIND_BACKGROUND_START,
-    RENDER_KIND_BACKGROUND_END
+    RENDER_KIND_BACKGROUND_BEGIN,
+    RENDER_KIND_BACKGROUND_END,
+    RENDER_KIND_CURSOR_BEGIN,
+    RENDER_KIND_CURSOR_END
 };
 struct Render_Node {
     enum Render_Kind kind;
@@ -150,7 +154,7 @@ struct Render_Node {
     union {
         struct Render_Text text;
         struct Render_List list;
-        struct Render_Background_Start background_start;
+        struct Render_Background_Begin background_begin;
     };
 };
 
@@ -167,9 +171,11 @@ struct Render_Node* make_text(struct Render_Nodes* render_nodes,
                               GLfloat* color);
 struct Render_Node* make_list(struct Render_Nodes* render_nodes,
                               enum List_Direction direction);
-struct Render_Node* make_background_start(struct Render_Nodes* render_nodes,
+struct Render_Node* make_background_begin(struct Render_Nodes* render_nodes,
                                           GLfloat* color);
 struct Render_Node* make_background_end(struct Render_Nodes* render_nodes);
+struct Render_Node* make_cursor_begin(struct Render_Nodes* render_nodes);
+struct Render_Node* make_cursor_end(struct Render_Nodes* render_nodes);
 
 void render(struct Code_Node* node);
 void render_code_node(struct Code_Node* node,
@@ -189,7 +195,7 @@ void render_indent(struct Render_Data* render_data);
 void render_space(struct Render_Data* render_data);
 void render_newline(struct Render_Data* render_data);
 
-void mark_background_start(struct Render_Data* render_data,
+void mark_background_begin(struct Render_Data* render_data,
                            GLfloat* bg_color,
                            float x, float y);
 void mark_background_end(struct Render_Data* render_data,
