@@ -1020,10 +1020,12 @@ void linked_list() {
 	List_Node first;
 }
 int main() {
+	/*
 	float f;
 	f = 0.3 - 0.2;
 	print(f);
-	tests();
+	*/
+	// tests();
     int local_variable = 3;
 	some_function(local_variable);
 	factorial(local_variable);
