@@ -50,13 +50,21 @@ bool test_floats() {
 }
 bool test_if_else(){
 	bool passed = true;
+
 	int i = 0;
+	if (false) i = 1;
+	else if (true) i = 2;
+	else i = 3;
+	passed &= i == 2;
+
 	if (false) i = 1;
 	else if (false) i = 2;
 	else if (true) i = 3;
 	else if (true) i = 4;
 	else if (true) i = 5;
+	else i = 6;
 	passed &= i == 3;
+
 	if (false) {
 		i = 0;
 	}
@@ -165,12 +173,20 @@ bool test_struct_array() {
 	bool passed = true;
 	struct Person {
 		uint age;
+		uint pad1;
+		uint pad2;
+		uint pad3;
+		uint pad4;
+		uint pad5;
+		uint pad6;
 	};
 	// @@@
 	// decl ptr: 16
 	Person[2] people;
 	// begin has same decl ptr: 16
 	for (int i = 0; i < people.length; i += 1) {
+		people[i].age;
+		(i + 1) * 10;
 		people[i].age = (i + 1) * 10;
 	};
 	passed &= people[0].age == 10;
@@ -203,12 +219,12 @@ bool test_inc_dec() {
 // }
 bool test_string() {
 	bool passed = true;
-	char* str = "Hello, World!";
+	string str = "Hello, World!";
 	passed &= str == "Hello, World!";
 	str = "Hi there.";
 	passed &= str == "Hi there.";
-	char* str2 = "I'm here, too!";
-	passed &= str2 == "I'm here, too!";
+	string str2 = "I'm here, too!";
+	passed &= str != str2;
 	str = str2;
 	passed &= str == "I'm here, too!";
 	return passed;
@@ -224,9 +240,9 @@ void tests() {
 	test_struct_array();
 	test_do_while();
 	test_nested_loop();
-	test_inc_dec();
+	// test_inc_dec();
 	// test_unary();
-	test_string();
+	// test_string();
 }
 int some_other_function(char number) {
 	while (number > 0) {
@@ -268,94 +284,45 @@ void fizzbuzz(ushort number) {
 		else if (i % 3 == 0) {
 			printf("%s\n", "Fizz");
 		}
+		// this else still runs when the else if was run
+		// it should not
 		else {
 			printf("%u\n", i);
 		}
 	}
 }
-void linked_list() {
-	struct List_Node {
-		void* data;
-		List_Node*[2] links;
-	};
-	List_Node first;
-}
 int main() {
-	float f;
-	f = 0.3 - 0.2;
-	printf("%f\n", f);
-	tests();
+	// bug with strings and comments
+	// tests();
     int local_variable = 3;
-	some_function(local_variable);
-	factorial(local_variable);
+	// some_function(local_variable);
+	// factorial(local_variable);
+
+	// test_if_else();
+
 	fizzbuzz(15);
+	
+	int i = 3;
+	if (i % 15 == 0) {
+		printf("%s\n", "FizzBuzz");
+	}
+	else if (i % 5 == 0) {
+		printf("%s\n", "Buzz");
+	}
+	else if (i % 3 == 0) {
+		printf("%s\n", "Fizz");
+	}
+	// comment
+	// yes
+	else {
+		printf("%u\n", i);
+	}
+
 	// linked_list();
 	return local_variable;
 }
 main();
 `;
-// */
-/*
-const code = `
-bool test_nested_loop() {
-	bool passed = true;
-	int[6] results;
-	int width = 2;
-	int height = 3;
-	int i = 0;
-	for (int width_iter = 0; width_iter < width; width_iter += 1) {
-		for (int height_iter = 0; height_iter < height; height_iter += 1) {
-			int d = width_iter * height + height_iter;
-			results[i] = d;
-			i += 1;
-		}
-	}
-	for (int j = 0; j < 6; j += 1) {
-		passed &= results[j] == j;
-	}
-	return passed;
-}
-void fizzbuzz(ushort number) {
-	for (uint i = 1; i <= number; i += 1) {
-		if (i % 15 == 0) {
-			printf("%s\n", "FizzBuzz");
-		}
-		else if (i % 5 == 0) {
-			printf("%s\n", "Buzz");
-		}
-		else if (i % 3 == 0) {
-			printf("%s\n", "Fizz");
-		}
-		else {
-			printf("%u\n", i);
-		}
-	}
-}
-bool test_pointer() {
-	bool passed = true;
-	int a = 0;
-	int* b;
-	b = &a;
-	*b = 12345;
-	passed &= a == 12345;
-	a = 0;
-	int** c;
-	c = &b;
-	**c = 12345;
-	passed &= a == 12345;
-	int d = 0;
-	d = **c;
-	passed &= d == 12345;
-	return passed;
-}
-void main() {
-	// fizzbuzz(10);
-	// test_nested_loop();
-	// test_pointer();
-}
-main();
-`;
-*/
 
 function main() {
 

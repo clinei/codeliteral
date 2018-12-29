@@ -4,11 +4,14 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <memory.h>
+#include <assert.h>
 
 #include <emscripten.h>
 #include <emscripten/html5.h>
 #include <GLES2/gl2.h>
 #include <EGL/egl.h>
+
+#include "debug.h"
 
 GLuint compile_shader(GLenum type, const char* source);
 GLuint create_program(const char* vertex_shader_filename, const char* fragment_shader_filename);

@@ -70,20 +70,32 @@ struct Code_Node* math_binop(struct Code_Node* left, char* op, struct Code_Node*
 
     // @Incomplete
     // we need to compromise between left and right types
+    struct Type_Info* left_type = left->type;
+    if (left_type->kind == TYPE_INFO_TAG_IDENT) {
+        left_type = left_type->ident.type;
+    }
+    struct Type_Info* right_type = right->type;
+    if (right_type->kind == TYPE_INFO_TAG_IDENT) {
+        right_type = right_type->ident.type;
+    }
+
     char type = 0;
-    if (left->type == Native_Type_Bool) {
+    if (left_type == Native_Type_Bool) {
         type = 1;
     }
-    else if (left->type->ident.type->kind == TYPE_INFO_TAG_INTEGER) {
-        if (left->type->ident.type->integer.is_signed) {
+    else if (left_type->kind == TYPE_INFO_TAG_INTEGER) {
+        if (left_type->integer.is_signed) {
             type = 2;
         }
         else {
             type = 3;
         }
     }
-    else if (left->type->ident.type->kind == TYPE_INFO_TAG_FLOAT) {
+    else if (left_type->kind == TYPE_INFO_TAG_FLOAT) {
         type = 4;
+    }
+    else if (left_type->kind == TYPE_INFO_TAG_STRING) {
+        type = 5;
     }
 
     // @Ugh
@@ -361,7 +373,22 @@ struct Code_Node* math_binop(struct Code_Node* left, char* op, struct Code_Node*
             return make_literal_float(run_data.code_nodes, result);
         }
     }
+    else if (type == 5) {
+        // string
+        bool result;
+        if (strcmp(op, "==") == 0) {
+            result = strcmp(left->string_.pointer, right->string_.pointer) == 0;
+        }
+        else if (strcmp(op, "!=") == 0) {
+            result = strcmp(left->string_.pointer, right->string_.pointer) != 0;
+        }
+        else {
+            printf("math_binop not implemented for string op kind: (%s)\n", op);
+        }
+        return make_literal_bool(run_data.code_nodes, result);
+    }
     else {
+        printf("math_binop not implemented for type kind: %d\n", left->type->kind);
         abort();
         return NULL;
     }
@@ -401,6 +428,10 @@ void* get_result_ptr(struct Code_Node* node) {
         }
         case CODE_KIND_LITERAL_BOOL:{
             return &(node->result->literal_bool.value);
+            break;
+        }
+        case CODE_KIND_STRING:{
+            return &(node->result->string_.pointer);
             break;
         }
         default:{
@@ -518,6 +549,10 @@ struct Code_Node* get_result(void* value, struct Type_Info* type) {
         case TYPE_INFO_TAG_STRUCT:{
             return NULL;
         }
+        case TYPE_INFO_TAG_STRING:{
+            result = make_string(run_data.code_nodes, *(char**)value);
+            break;
+        }
         default:{
             printf("get_result not implemented for type kind %u\n", type->kind);
             abort();
@@ -530,7 +565,6 @@ struct Code_Node* get_result(void* value, struct Type_Info* type) {
 }
 struct Code_Node* get_ident_result(struct Code_Node* node) {
     void* value = get_memory(node->ident.declaration->declaration.pointer, node->type->size_in_bytes);
-    printf("ptr: %zu\n", ((size_t)value) % 4);
     return get_result(value, node->type);
 }
 void run_call(struct Code_Node* node) {
@@ -540,6 +574,7 @@ void run_call(struct Code_Node* node) {
     run_data.last_call = node;
     struct Code_Node* proc = node->call.ident->ident.declaration->declaration.expression;
     if (proc->procedure.block->kind == CODE_KIND_BLOCK) {
+        printf("entering %s\n", node->call.ident->ident.name);
         transform(node);
         struct Code_Node_Array* extras = run_data.last_block->block.extras->first + run_data.statement_index;
         array_push(extras, &(node->transformed));
@@ -549,11 +584,9 @@ void run_call(struct Code_Node* node) {
     }
     else if (proc->procedure.block->kind == CODE_KIND_NATIVE_CODE) {
         printf("native code\n");
-        /*
         for (size_t i = 0; i < node->call.args->length; i += 1) {
             run_rvalue(node->call.args->first[i]);
         }
-        */
         // @Incomplete
         // need to import a libc, like musl
     }
@@ -574,14 +607,16 @@ struct Code_Node* maybe_cast(struct Code_Node* lhs, struct Code_Node* rhs) {
             rhs = make_literal_int(run_data.code_nodes, value);
         }
         else if (lhs_type->integer.is_signed == false && rhs_type->integer.is_signed == true) {
-            printf("can't convert signed int expression to unsigned\n");
-            abort();
+            unsigned long int value = (unsigned long int)rhs->literal_int.value;
+            rhs = make_literal_uint(run_data.code_nodes, value);
+            // @Incomplete
+            // possible underflow
         }
     }
     return rhs;
 }
 size_t run_lvalue(struct Code_Node* node) {
-    printf("run_lvalue: (%s)\n", code_kind_to_string(node->kind));
+    // printf("run_lvalue: (%s)\n", code_kind_to_string(node->kind));
     node->was_run = true;
     size_t result = 0;
     switch (node->kind) {
@@ -693,6 +728,70 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
             node->result = node;
             return node;
         }
+        case CODE_KIND_INCREMENT:{
+            // @Incomplete
+            // pointer types
+            void* real_pointer = (void*)(run_data.memory + run_lvalue(node->increment.ident));
+            struct Code_Node* prev = get_result(real_pointer, node->type);
+            switch (prev->kind) {
+                case CODE_KIND_LITERAL_INT:{
+                    prev->literal_int.value += 1;
+                    break;
+                }
+                case CODE_KIND_LITERAL_UINT:{
+                    prev->literal_uint.value += 1;
+                    break;
+                }
+                case CODE_KIND_LITERAL_FLOAT:{
+                    prev->literal_float.value += 1;
+                    break;
+                }
+                case CODE_KIND_LITERAL_BOOL:{
+                    prev->literal_bool.value = prev->literal_bool.value == 0;
+                    break;
+                }
+                default:{
+                    printf("tried to increment (%s)\n", code_kind_to_string(prev->kind));
+                    abort();
+                    break;
+                }
+            }
+            node->result = prev;
+            break;
+        }
+        case CODE_KIND_DECREMENT:{
+            // @Incomplete
+            // pointer types
+            void* real_pointer = (void*)(run_data.memory + run_lvalue(node->increment.ident));
+            struct Code_Node* prev = get_result(real_pointer, node->type);
+            switch (prev->kind) {
+                case CODE_KIND_LITERAL_INT:{
+                    prev->literal_int.value -= 1;
+                    break;
+                }
+                case CODE_KIND_LITERAL_UINT:{
+                    prev->literal_uint.value -= 1;
+                    break;
+                }
+                case CODE_KIND_LITERAL_FLOAT:{
+                    prev->literal_float.value -= 1;
+                    break;
+                }
+                case CODE_KIND_LITERAL_BOOL:{
+                    // C doesn't allow this, but we do
+                    // works the same as increment
+                    prev->literal_bool.value = prev->literal_bool.value == 0;
+                    break;
+                }
+                default:{
+                    printf("tried to increment (%s)\n", code_kind_to_string(prev->kind));
+                    abort();
+                    break;
+                }
+            }
+            node->result = prev;
+            break;
+        }
         case CODE_KIND_BINARY_OPERATION:{
             result = math_solve(node);
             add_node_to_execution_stack(node);
@@ -777,7 +876,7 @@ void run_end_block(struct Code_Node* node) {
     }
 }
 struct Code_Node* run_statement(struct Code_Node* node) {
-    printf("run_statement: (%s)\n", code_kind_to_string(node->kind));
+    // printf("run_statement: (%s)\n", code_kind_to_string(node->kind));
     if (node->was_run) {
         return node;
     }
@@ -855,12 +954,20 @@ struct Code_Node* run_statement(struct Code_Node* node) {
             size_t alignment_pad = (align - (run_data.stack_pointer % align)) % align;
             node->declaration.pointer = run_data.stack_pointer + alignment_pad;
             node->declaration.alignment_pad = alignment_pad;
+            if (type->size_in_bytes == 0) {
+                printf("size is 0!\n");
+                printf("type: %d\n", type->kind);
+                printf("type2: %d\n", type->array.elem_type->kind);
+                printf("elem size: %zu\n", type->array.elem_type->ident.type->size_in_bytes);
+            }
             run_data.stack_pointer += alignment_pad + type->size_in_bytes;
             array_push(run_data.last_block->block.allocations, &node);
-            printf("decl ptr: %zu\n", node->declaration.pointer);
+            // printf("decl ptr: %zu\n", node->declaration.pointer);
 
             if (expression != NULL) {
                 run_rvalue(expression);
+                // maybe_cast(node->declaration.ident, expression);
+                /**/
                 struct Type_Info* expr_type = expression->type;
                 if (expr_type->kind == TYPE_INFO_TAG_IDENT) {
                     expr_type = expr_type->ident.type;
@@ -868,15 +975,16 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                 if (type->kind == TYPE_INFO_TAG_INTEGER && expr_type->kind == TYPE_INFO_TAG_INTEGER) {
                     if (type->integer.is_signed == true && expr_type->integer.is_signed == false) {
                         signed long int value = (signed long int)expression->result->literal_uint.value;
-                        char* str = expression->result->str;
                         expression->result = make_literal_int(run_data.code_nodes, value);
-                        expression->result->str = str;
+                        fill_result_str(expression->result);
                     }
                     else if (type->integer.is_signed == false && expr_type->integer.is_signed == true) {
-                        printf("can't convert signed int expression to unsigned\n");
-                        abort();
+                        unsigned long int value = (unsigned long int)expression->result->literal_int.value;
+                        expression->result = make_literal_uint(run_data.code_nodes, value);
+                        fill_result_str(expression->result);
                     }
                 }
+                /**/
                 set_memory(node->declaration.pointer, get_result_ptr(expression), node->declaration.type->size_in_bytes);
             }
             break;
@@ -932,8 +1040,11 @@ struct Code_Node* run_statement(struct Code_Node* node) {
             run_data.statement_index = 0;
             run_start_block(node->transformed);
             bool should_run = true;
+            size_t i = 0;
             while (should_run) {
-                run_data.statement_index += 1;
+                run_data.last_loop->broken = false;
+                run_data.last_loop->continued = false;
+                run_data.statement_index = i;
                 struct Extras* loop_extras = malloc(sizeof(struct Code_Node_Array));
                 array_init(loop_extras, sizeof(struct Code_Node*), 2);
                 array_push(node->transformed->block.extras, loop_extras);
@@ -952,6 +1063,7 @@ struct Code_Node* run_statement(struct Code_Node* node) {
 
                     break;
                 }
+                i += 1;
             }
             run_end_block(node->transformed);
             run_data.last_block = prev_last_block;
@@ -972,8 +1084,11 @@ struct Code_Node* run_statement(struct Code_Node* node) {
             run_start_block(node->transformed);
             bool first = true;
             bool should_run = true;
+            size_t i = 0;
             while (should_run) {
-                run_data.statement_index += 1;
+                run_data.last_loop->broken = false;
+                run_data.last_loop->continued = false;
+                run_data.statement_index = i;
                 struct Extras* loop_extras = malloc(sizeof(struct Code_Node_Array));
                 array_init(loop_extras, sizeof(struct Code_Node*), 2);
                 array_push(node->transformed->block.extras, loop_extras);
@@ -999,6 +1114,7 @@ struct Code_Node* run_statement(struct Code_Node* node) {
 
                     break;
                 }
+                i += 1;
             }
             run_end_block(node->transformed);
             run_data.last_block = prev_last_block;
@@ -1033,8 +1149,11 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                 array_push(node->for_.expression->block.statements, &(node->for_.cycle_end));
             }
             bool should_run = true;
+            size_t i = 0;
             while (should_run) {
-                run_data.statement_index += 1;
+                run_data.last_loop->broken = false;
+                run_data.last_loop->continued = false;
+                run_data.statement_index = i;
                 struct Extras* loop_extras = malloc(sizeof(struct Code_Node_Array));
                 array_init(loop_extras, sizeof(struct Code_Node*), 2);
                 array_push(node->transformed->block.extras, loop_extras);
@@ -1059,6 +1178,7 @@ struct Code_Node* run_statement(struct Code_Node* node) {
 
                     break;
                 }
+                i += 1;
             }
             run_end_block(node->transformed);
             run_data.last_block = prev_last_block;

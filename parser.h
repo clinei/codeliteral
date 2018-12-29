@@ -72,31 +72,17 @@ enum Code_Kind {
 };
 char* code_kind_to_string(enum Code_Kind kind);
 
-struct Code_Procedure_Params {
-    size_t length;
-    size_t capacity;
-    size_t element_size;
-    struct Code_Node** first;
-    struct Code_Node** last;
-};
 struct Code_Procedure {
-    struct Code_Procedure_Params* params;
+    struct Code_Node_Array* params;
     bool has_varargs;
 	struct Type_Info* return_type;
 	struct Code_Node* block;
 
     struct Code_Node* return_ident;
 };
-struct Code_Call_Args {
-    size_t length;
-    size_t capacity;
-    size_t element_size;
-    struct Code_Node** first;
-    struct Code_Node** last;
-};
 struct Code_Call {
 	struct Code_Node* ident;
-    struct Code_Call_Args* args;
+    struct Code_Node_Array* args;
 
     bool returned;
     struct Code_Node* return_ident;
@@ -133,8 +119,10 @@ struct Extras {
 struct Code_Block {
     struct Code_Node_Array* statements;
     struct Code_Node_Array* declarations;
+    struct Code_Node_Array* typedefs;
     struct Code_Node_Array* allocations;
     struct Extras* extras;
+    struct Code_Node* parent;
     // which of these do we actually need?
     struct Code_Node* transformed_from;
     bool is_transformed_block;
@@ -301,13 +289,13 @@ struct Type_Info* make_type_info_ident(char* name, struct Type_Info* type);
 struct Type_Info* make_type_info_void();
 
 struct Code_Node* make_procedure(struct Code_Nodes* code_nodes,
-                                 struct Code_Procedure_Params* params,
+                                 struct Code_Node_Array* params,
                                  bool has_varargs,
                                  struct Type_Info* return_type,
                                  struct Code_Node* block);
 struct Code_Node* make_call(struct Code_Nodes* code_nodes,
                             struct Code_Node* ident,
-                            struct Code_Call_Args* args);
+                            struct Code_Node_Array* args);
 struct Code_Node* make_declaration(struct Code_Nodes* code_nodes,
                                    struct Type_Info* type,
                                    struct Code_Node* ident,
@@ -382,6 +370,11 @@ struct Code_Node* make_parens(struct Code_Nodes* code_nodes,
                               struct Code_Node* expression);
 struct Code_Node* make_native_code(struct Code_Nodes* code_nodes,
                                    void* func_ptr);
+
+struct Parse_Data {
+    struct Code_Node* last_block;
+};
+struct Parse_Data parse_data;
 
 enum Type_Info_Tag {
     TYPE_INFO_TAG_INTEGER = 0,
@@ -460,6 +453,7 @@ struct Type_Info* Native_Type_Long;
 struct Type_Info* Native_Type_ULong;
 struct Type_Info* Native_Type_Float;
 struct Type_Info* Native_Type_Double;
+struct Type_Info* Native_Type_String;
 struct Type_Info* Native_Type_Void;
 struct Type_Info* Native_Type_Size_t;
 
@@ -491,79 +485,79 @@ struct Infer_Data {
 };
 
 struct Code_Nodes* parse(struct Token_Array* token_array);
-bool parse_statement(struct Token_Array* token_array,
+struct Code_Node* parse_statement(struct Token_Array* token_array,
                      struct Code_Nodes* code_nodes);
-bool parse_if(struct Token_Array* token_array,
+struct Code_Node* parse_if(struct Token_Array* token_array,
               struct Code_Nodes* code_nodes);
-bool parse_else(struct Token_Array* token_array,
+struct Code_Node* parse_else(struct Token_Array* token_array,
                 struct Code_Nodes* code_nodes);
-bool parse_while(struct Token_Array* token_array,
+struct Code_Node* parse_while(struct Token_Array* token_array,
                  struct Code_Nodes* code_nodes);
-bool parse_do_while(struct Token_Array* token_array,
+struct Code_Node* parse_do_while(struct Token_Array* token_array,
                     struct Code_Nodes* code_nodes);
-bool parse_for(struct Token_Array* token_array,
+struct Code_Node* parse_for(struct Token_Array* token_array,
                struct Code_Nodes* code_nodes);
-bool parse_continue(struct Token_Array* token_array,
+struct Code_Node* parse_continue(struct Token_Array* token_array,
                     struct Code_Nodes* code_nodes);
-bool parse_break(struct Token_Array* token_array,
+struct Code_Node* parse_break(struct Token_Array* token_array,
                  struct Code_Nodes* code_nodes);
-bool parse_return(struct Token_Array* token_array,
+struct Code_Node* parse_return(struct Token_Array* token_array,
                   struct Code_Nodes* code_nodes);
-bool parse_block(struct Token_Array*,
-                 struct Code_Nodes* code_nodes);
-bool parse_increment(struct Token_Array*,
-                     struct Code_Nodes* code_nodes);
-bool parse_decrement(struct Token_Array*,
-                     struct Code_Nodes* code_nodes);
-bool parse_rvalue(struct Token_Array* token_array,
-                  struct Code_Nodes* code_nodes);
-bool parse_rvalue_atom(struct Token_Array* token_array,
-                       struct Code_Nodes* code_nodes);
-bool parse_lvalue(struct Token_Array* token_array,
-                  struct Code_Nodes* code_nodes);
-bool parse_procedure_declaration(struct Token_Array* token_array,
-                                 struct Code_Nodes* code_nodes,
-                                 struct Type_Info* return_type);
-bool parse_param(struct Token_Array* token_array,
-                 struct Code_Nodes* code_nodes);
-bool parse_declaration(struct Token_Array* token_array,
-                       struct Code_Nodes* code_nodes);
-bool parse_declaration_precomputed_type(struct Token_Array* token_array,
-                                        struct Code_Nodes* code_nodes,
-                                        struct Type_Info* type);
-bool parse_struct_declaration(struct Token_Array* token_array,
+struct Code_Node* parse_block(struct Token_Array*,
                               struct Code_Nodes* code_nodes);
-bool parse_assign(struct Token_Array* token_array,
-                  struct Code_Nodes* code_nodes);
-bool parse_opassign(struct Token_Array* token_array,
-                    struct Code_Nodes* code_nodes);
-bool parse_type(struct Token_Array* token_array,
-                struct Code_Nodes* code_nodes,
-                struct Type_Info** out_type);
-bool parse_array_type(struct Token_Array* token_array,
-                      struct Type_Info* prev_type,
-                      struct Type_Info** out_type);
-bool parse_pointer_type(struct Token_Array* token_array,
-                        struct Type_Info* prev_type,
-                        struct Type_Info** out_type);
-bool parse_call(struct Token_Array* token_array,
-                struct Code_Nodes* code_nodes);
-bool parse_string(struct Token_Array* token_array,
-                  struct Code_Nodes* code_nodes);
-bool parse_literal(struct Token_Array* token_array,
-                   struct Code_Nodes* code_nodes);
-bool parse_ident(struct Token_Array* token_array,
-                 struct Code_Nodes* code_nodes);
-bool parse_reference(struct Token_Array* token_array,
-                     struct Code_Nodes* code_nodes);
-bool parse_dereference(struct Token_Array* token_array,
-                       struct Code_Nodes* code_nodes);
-bool parse_array_index(struct Token_Array* token_array,
-                       struct Code_Nodes* code_nodes);
-bool parse_dot_operator(struct Token_Array* token_array,
-                        struct Code_Nodes* code_nodes);
-bool delimited(char* start, char* stop, char* separator,
-               bool (*elem_func)(struct Token_Array*, struct Code_Nodes*),
+struct Code_Node* parse_increment(struct Token_Array*,
+                                  struct Code_Nodes* code_nodes);
+struct Code_Node* parse_decrement(struct Token_Array*,
+                                  struct Code_Nodes* code_nodes);
+struct Code_Node* parse_rvalue(struct Token_Array* token_array,
+                               struct Code_Nodes* code_nodes);
+struct Code_Node* parse_rvalue_atom(struct Token_Array* token_array,
+                                    struct Code_Nodes* code_nodes);
+struct Code_Node* parse_lvalue(struct Token_Array* token_array,
+                               struct Code_Nodes* code_nodes);
+struct Code_Node* parse_procedure_declaration(struct Token_Array* token_array,
+                                              struct Code_Nodes* code_nodes,
+                                              struct Type_Info* return_type);
+struct Code_Node* parse_param(struct Token_Array* token_array,
+                              struct Code_Nodes* code_nodes);
+struct Code_Node* parse_declaration(struct Token_Array* token_array,
+                                    struct Code_Nodes* code_nodes);
+struct Code_Node* parse_declaration_precomputed_type(struct Token_Array* token_array,
+                                                     struct Code_Nodes* code_nodes,
+                                                     struct Type_Info* type);
+struct Code_Node* parse_struct_declaration(struct Token_Array* token_array,
+                                           struct Code_Nodes* code_nodes);
+struct Code_Node* parse_assign(struct Token_Array* token_array,
+                               struct Code_Nodes* code_nodes);
+struct Code_Node* parse_opassign(struct Token_Array* token_array,
+                                 struct Code_Nodes* code_nodes);
+struct Code_Node* parse_call(struct Token_Array* token_array,
+                             struct Code_Nodes* code_nodes);
+struct Code_Node* parse_string(struct Token_Array* token_array,
+                               struct Code_Nodes* code_nodes);
+struct Code_Node* parse_literal(struct Token_Array* token_array,
+                                struct Code_Nodes* code_nodes);
+struct Code_Node* parse_ident(struct Token_Array* token_array,
+                              struct Code_Nodes* code_nodes);
+struct Code_Node* parse_reference(struct Token_Array* token_array,
+                                  struct Code_Nodes* code_nodes);
+struct Code_Node* parse_dereference(struct Token_Array* token_array,
+                                    struct Code_Nodes* code_nodes);
+struct Code_Node* parse_array_index(struct Token_Array* token_array,
+                                    struct Code_Nodes* code_nodes);
+struct Code_Node* parse_dot_operator(struct Token_Array* token_array,
+                                     struct Code_Nodes* code_nodes);
+struct Type_Info* parse_type(struct Token_Array* token_array,
+                             struct Code_Nodes* code_nodes,
+                             struct Type_Info** out_type);
+struct Type_Info* parse_array_type(struct Token_Array* token_array,
+                                   struct Type_Info* prev_type,
+                                   struct Type_Info** out_type);
+struct Type_Info* parse_pointer_type(struct Token_Array* token_array,
+                                     struct Type_Info* prev_type,
+                                     struct Type_Info** out_type);
+void delimited(char* start, char* stop, char* separator,
+               struct Code_Node* (*elem_func)(struct Token_Array*, struct Code_Nodes*),
                struct Dynamic_Array* results,
                struct Token_Array* token_array,
                struct Code_Nodes* code_nodes);

@@ -35,6 +35,8 @@ array concatenation
 casts
 test ints
 
+add asserts everywhere
+
 Graphics Ideas:
 
 backgrounds need a stack approach

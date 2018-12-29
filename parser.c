@@ -1,5 +1,7 @@
 #include "parser.h"
 
+struct Code_Node* get_decl_of_ident(char* ident_name);
+
 void init_parser() {
     init_type_infos();
     init_infer();
@@ -128,7 +130,7 @@ char* code_kind_to_string(enum Code_Kind kind) {
 }
 
 struct Code_Node* make_procedure(struct Code_Nodes* code_nodes,
-                                 struct Code_Procedure_Params* params,
+                                 struct Code_Node_Array* params,
                                  bool has_varargs,
                                  struct Type_Info* return_type,
                                  struct Code_Node* block) {
@@ -137,7 +139,7 @@ struct Code_Node* make_procedure(struct Code_Nodes* code_nodes,
 	node->kind = CODE_KIND_PROCEDURE;
 
     if (params == NULL) {
-        params = malloc(sizeof(struct Code_Procedure_Params));
+        params = malloc(sizeof(struct Code_Node_Array));
         array_init(params, sizeof(struct Code_Node*), 10);
     }
     if (block == NULL) {
@@ -157,15 +159,16 @@ struct Code_Node* make_procedure(struct Code_Nodes* code_nodes,
 
 struct Code_Node* make_call(struct Code_Nodes* code_nodes,
                             struct Code_Node* ident,
-                            struct Code_Call_Args* args) {
+                            struct Code_Node_Array* args) {
 
 	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_CALL;
 
     if (args == NULL) {
-        args = malloc(sizeof(struct Code_Call_Args));
+        args = malloc(sizeof(struct Code_Node_Array));
         array_init(args, sizeof(struct Code_Node*), 10);
     }
+
 	node->call.ident = ident;
 	node->call.args = args;
 
@@ -266,12 +269,18 @@ struct Code_Node* make_block(struct Code_Nodes* code_nodes,
         array_init(statements, sizeof(struct Code_Node*), 10);
     }
 	node->block.statements = statements;
-    node->block.declarations = NULL;
+
+    node->block.declarations = malloc(sizeof(struct Code_Node_Array));
+    array_init(node->block.declarations, sizeof(struct Code_Node*), 10);
+
+    node->block.typedefs = malloc(sizeof(struct Code_Node_Array));
+    array_init(node->block.typedefs, sizeof(struct Code_Node*), 10);
     
     node->block.allocations = NULL;
     node->block.is_transformed_block = false;
     node->block.transformed_from = NULL;
     node->block.extras = NULL;
+    node->block.parent = NULL;
 
 	set_serial(node);
 
@@ -579,6 +588,7 @@ struct Code_Node* make_string(struct Code_Nodes* code_nodes,
 
 	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_STRING;
+    node->type = Native_Type_String;
 
 	node->string_.pointer = pointer;
     node->string_.length = strlen(pointer);
@@ -618,6 +628,7 @@ void init_type_infos() {
     type_infos = malloc(sizeof(struct Type_Infos));
     array_init(type_infos, sizeof(struct Type_Info), 1000);
 
+    Native_Type_Size_t = make_type_info_ident("size_t", make_type_info_integer(4, false));
     Native_Type_Char = make_type_info_ident("char", make_type_info_integer(1, false));
     Native_Type_UChar = make_type_info_ident("uchar", make_type_info_integer(1, false));
     Native_Type_Bool = make_type_info_ident("bool", make_type_info_integer(1, false));
@@ -629,17 +640,8 @@ void init_type_infos() {
     Native_Type_ULong = make_type_info_ident("ulong", make_type_info_integer(8, false));
     Native_Type_Float = make_type_info_ident("float", make_type_info_float(4));
     Native_Type_Double = make_type_info_ident("double", make_type_info_float(8));
+    Native_Type_String = make_type_info_ident("string", make_type_info_string());
     Native_Type_Void = make_type_info_ident("void", make_type_info_void());
-    Native_Type_Size_t = make_type_info_ident("size_t", make_type_info_integer(4, false));
-
-    init_user_types();
-}
-void init_user_types() {
-    user_types = malloc(sizeof(struct User_Types));
-    soa_init((struct Dynamic_SOA*)user_types, 1000, 2, sizeof(char*), sizeof(struct Type_Info*));
-}
-void add_user_type(char* name, struct Type_Info* user_type) {
-    soa_push((struct Dynamic_SOA*)user_types, name, user_type);
 }
 size_t index_of_string(char* str, char** strings, size_t length) {
     for (size_t i = 0; i < length; i += 1) {
@@ -650,10 +652,11 @@ size_t index_of_string(char* str, char** strings, size_t length) {
     return length;
 }
 struct Type_Info* map_name_to_type(char* name) {
-    for (size_t i = 0; i < user_types->length; i += 1) {
-        if (strcmp(user_types->names[i], name) == 0) {
-            return user_types->types[i];
-        }
+    struct Code_Node* decl = get_decl_of_ident(name);
+    if (decl != NULL && decl->declaration.expression != NULL &&
+        decl->declaration.expression->kind == CODE_KIND_STRUCT) {
+
+        return decl->declaration.expression->type;
     }
     return map_name_to_native_type(name);
 }
@@ -690,6 +693,9 @@ struct Type_Info* map_name_to_native_type(char* name) {
     }
     else if (strcmp(name, "double") == 0) {
         return Native_Type_Double;
+    }
+    else if (strcmp(name, "string") == 0) {
+        return Native_Type_String;
     }
     else if (strcmp(name, "void") == 0) {
         return Native_Type_Void;
@@ -734,6 +740,7 @@ struct Type_Info* make_type_info_array(struct Type_Info* elem_type, size_t lengt
 struct Type_Info* make_type_info_string() {
     struct Type_Info* info = get_new_type_info();
     info->kind = TYPE_INFO_TAG_STRING;
+    info->size_in_bytes = Native_Type_Size_t->size_in_bytes;
     
     return info;
 }
@@ -787,6 +794,7 @@ struct Type_Info* fill_type_info_struct(struct Code_Node* struct_) {
             info->struct_.members_length += 1;
         }
         else {
+            printf("struct member was not a declaration!\n");
             abort();
         }
     }
@@ -829,10 +837,6 @@ void init_infer() {
 void infer_push_block(struct Code_Node* block) {
     array_push(infer_data.block_stack, &block);
     infer_data.last_block = block;
-    if (block->block.declarations == NULL) {
-        block->block.declarations = malloc(sizeof(struct Code_Node_Array));
-        array_init(block->block.declarations, sizeof(struct Code_Node*), 10);
-    }
 }
 void infer_pop_block() {
     array_pop(infer_data.block_stack);
@@ -860,6 +864,47 @@ struct Code_Node* infer_decl_of_ident(struct Code_Node* ident) {
     }
     return NULL;
 }
+struct Code_Node* get_decl_of_ident(char* ident_name) {
+    struct Code_Node* block = parse_data.last_block;
+    while (block != NULL) {
+        for (size_t j = 0; j < block->block.declarations->length; j += 1) {
+            struct Code_Node* decl = block->block.declarations->first[j];
+            if (decl->kind == CODE_KIND_DECLARATION) {
+                if (strcmp(decl->declaration.ident->ident.name, ident_name) == 0) {
+                    return decl;
+                }
+            }
+            else abort();
+        }
+        block = block->block.parent;
+    }
+    return NULL;
+}
+
+size_t infer_type_size(struct Type_Info* type) {
+    size_t result = 0;
+    switch (type->kind) {
+        case TYPE_INFO_TAG_IDENT:{
+            result = infer_type_size(type->ident.type);
+            break;
+        }
+        case TYPE_INFO_TAG_ARRAY:{
+            result = infer_type_size(type->array.elem_type) * type->array.length;
+            break;
+        }
+        case TYPE_INFO_TAG_STRUCT:{
+            result = type->size_in_bytes;
+            break;
+        }
+        default:{
+            result = type->size_in_bytes;
+            break;
+        }
+    }
+    type->size_in_bytes = result;
+    return result;
+}
+
 struct Code_Node* infer(struct Code_Node* node) {
     // printf("infer kind: (%s)\n", code_kind_to_string(node->kind));
     switch (node->kind) {
@@ -885,16 +930,18 @@ struct Code_Node* infer(struct Code_Node* node) {
             break;
         }
         case CODE_KIND_DECLARATION:{
-            // should error here when ident already declared in current scope
-            array_push(infer_data.last_block->block.declarations, &node);
+            node->declaration.ident->ident.declaration = node;
             infer(node->declaration.ident);
             if (node->declaration.expression != NULL) {
                 infer(node->declaration.expression);
             }
+            // structs have to be inferred to know their size, so we have to fix every type they are used to reflect the actual size
+            if (node->declaration.type != NULL) {
+                node->declaration.type->size_in_bytes = infer_type_size(node->declaration.type);
+            }
             break;
         }
         case CODE_KIND_IDENT:{
-            node->ident.declaration = infer_decl_of_ident(node);
             node->type = node->ident.declaration->declaration.type;
             break;
         }
@@ -908,10 +955,12 @@ struct Code_Node* infer(struct Code_Node* node) {
         }
         case CODE_KIND_INCREMENT:{
             infer(node->increment.ident);
+            node->type = node->increment.ident->type;
             break;
         }
         case CODE_KIND_DECREMENT:{
             infer(node->decrement.ident);
+            node->type = node->decrement.ident->type;
             break;
         }
         case CODE_KIND_ASSIGN:{
@@ -968,7 +1017,6 @@ struct Code_Node* infer(struct Code_Node* node) {
             break;
         }
         case CODE_KIND_STRUCT:{
-            fill_type_info_struct(node);
             break;
         }
         case CODE_KIND_STRING:{
@@ -1149,7 +1197,7 @@ void inject_stdlib(struct Code_Nodes* code_nodes,
     struct Type_Info* malloc_return_type = make_type_info_pointer(Native_Type_Void);
 
     bool malloc_has_varargs = false;
-    struct Code_Procedure_Params* malloc_params = malloc(sizeof(struct Code_Procedure_Params));
+    struct Code_Node_Array* malloc_params = malloc(sizeof(struct Code_Node_Array));
     array_init(malloc_params, sizeof(struct Code_Node*), 1);
 
     struct Type_Info* num_bytes_type = Native_Type_Size_t;
@@ -1164,12 +1212,13 @@ void inject_stdlib(struct Code_Nodes* code_nodes,
     struct Code_Node* malloc_decl = make_declaration(code_nodes, NULL, malloc_ident, malloc_proc);
 
     array_push(statements, &malloc_decl);
+    array_push(parse_data.last_block->block.declarations, &malloc_decl);
 
     // void free(void* ptr)
     struct Type_Info* free_return_type = Native_Type_Void;
 
     bool free_has_varargs = false;
-    struct Code_Procedure_Params* free_params = malloc(sizeof(struct Code_Procedure_Params));
+    struct Code_Node_Array* free_params = malloc(sizeof(struct Code_Node_Array));
     array_init(free_params, sizeof(struct Code_Node*), 1);
 
     struct Type_Info* ptr_type = make_type_info_pointer(Native_Type_Void);
@@ -1184,12 +1233,13 @@ void inject_stdlib(struct Code_Nodes* code_nodes,
     struct Code_Node* free_decl = make_declaration(code_nodes, NULL, free_ident, free_proc);
 
     array_push(statements, &free_decl);
+    array_push(parse_data.last_block->block.declarations, &free_decl);
     
     // void printf(char* fmt, ...)
     struct Type_Info* printf_return_type = Native_Type_Void;
 
     bool printf_has_varargs = true;
-    struct Code_Procedure_Params* printf_params = malloc(sizeof(struct Code_Procedure_Params));
+    struct Code_Node_Array* printf_params = malloc(sizeof(struct Code_Node_Array));
     array_init(printf_params, sizeof(struct Code_Node*), 1);
 
     struct Type_Info* fmt_type = make_type_info_pointer(Native_Type_Char);
@@ -1205,25 +1255,29 @@ void inject_stdlib(struct Code_Nodes* code_nodes,
     struct Code_Node* printf_decl = make_declaration(code_nodes, NULL, printf_ident, printf_proc);
 
     array_push(statements, &printf_decl);
+    array_push(parse_data.last_block->block.declarations, &printf_decl);
 }
 struct Code_Nodes* parse(struct Token_Array* token_array) {
     struct Code_Nodes* code_nodes = malloc(sizeof(struct Code_Nodes));
-    array_init(code_nodes, sizeof(struct Code_Node), 10000);
+    array_init(code_nodes, sizeof(struct Code_Node), 100000);
     token_array->curr_token = token_array->first;
 
     struct Code_Node_Array* statements = malloc(sizeof(struct Code_Node_Array));
     array_init(statements, sizeof(struct Code_Node*), 10);
     struct Code_Node* global_block = make_block(code_nodes, statements);
+    parse_data.last_block = global_block;
 
     inject_stdlib(code_nodes, statements);
 
     delimited(NULL, NULL, ";", &parse_statement, statements, token_array, code_nodes);
     code_nodes->first->block.is_transformed_block = true;
+    
+    parse_data.last_block = NULL;
 
     return code_nodes;
 }
-bool parse_statement(struct Token_Array* token_array,
-                     struct Code_Nodes* code_nodes) {
+struct Code_Node* parse_statement(struct Token_Array* token_array,
+                                  struct Code_Nodes* code_nodes) {
 
     // printf("parse_statement: %s\n", token_array->curr_token->str);
     struct Token* next_token = &token_array->curr_token[1];
@@ -1260,14 +1314,15 @@ bool parse_statement(struct Token_Array* token_array,
         }
     }
     else if (token_array->curr_token->kind == TOKEN_KIND_IDENT) {
-        struct Type_Info* type;
         // @Incomplete
         // statements other than declarations
         // that have a type on the left hand side
         // are errors but not handled yet
-        bool was_type = parse_type(token_array, code_nodes, &type);
+        struct Type_Info* type = NULL;
+        parse_type(token_array, code_nodes, &type);
         next_token = &token_array->curr_token[1];
-        if (was_type && token_array->curr_token->kind == TOKEN_KIND_IDENT) {
+
+        if (type != NULL && token_array->curr_token->kind == TOKEN_KIND_IDENT) {
             if (next_token->str[0] == '(') {
                 return parse_procedure_declaration(token_array, code_nodes, type);
             }
@@ -1276,8 +1331,8 @@ bool parse_statement(struct Token_Array* token_array,
             }
         }
     }
-    bool was_lvalue = parse_lvalue(token_array, code_nodes);
-    if (was_lvalue) {
+    struct Code_Node* lvalue = parse_lvalue(token_array, code_nodes);
+    if (lvalue != NULL) {
         if (token_array->curr_token->kind == TOKEN_KIND_OP) {
             if (strcmp(token_array->curr_token->str, "++") == 0) {
                 return parse_increment(token_array, code_nodes);
@@ -1296,17 +1351,17 @@ bool parse_statement(struct Token_Array* token_array,
             }
             else {
                 // actually, we have a problem
-                return true;
+                return lvalue;
             }
         }
         else {
-            return true;
+            return lvalue;
         }
     }
     return parse_rvalue(token_array, code_nodes);
 }
-bool parse_rvalue_atom(struct Token_Array* token_array,
-                       struct Code_Nodes* code_nodes) {
+struct Code_Node* parse_rvalue_atom(struct Token_Array* token_array,
+                                    struct Code_Nodes* code_nodes) {
 
     if (strcmp(token_array->curr_token->str, "&") == 0) {
         return parse_reference(token_array, code_nodes);
@@ -1323,25 +1378,23 @@ bool parse_rvalue_atom(struct Token_Array* token_array,
         return parse_string(token_array, code_nodes);
     }
     else if (strcmp(token_array->curr_token->str, "true") == 0) {
+        token_array->curr_token++;
         struct Code_Node* bool_literal = make_literal_bool(code_nodes, true);
         bool_literal->str = "true";
-        token_array->curr_token++;
-        return true;
+        return bool_literal;
     }
     else if (strcmp(token_array->curr_token->str, "false") == 0) {
+        token_array->curr_token++;
         struct Code_Node* bool_literal = make_literal_bool(code_nodes, false);
         bool_literal->str = "false";
-        token_array->curr_token++;
-        return true;
+        return bool_literal;
     }
     else if (token_array->curr_token->str[0] == '(') {
         token_array->curr_token++;
-        parse_rvalue(token_array, code_nodes);
-        struct Code_Node* expression = code_nodes->last;
+        struct Code_Node* expression = parse_rvalue(token_array, code_nodes);
         if (token_array->curr_token->str[0] == ')') {
             token_array->curr_token++;
-            make_parens(code_nodes, expression);
-            return true;
+            return make_parens(code_nodes, expression);
         }
         else abort();
     }
@@ -1349,89 +1402,81 @@ bool parse_rvalue_atom(struct Token_Array* token_array,
         return parse_lvalue(token_array, code_nodes);
     }
 }
-bool parse_rvalue(struct Token_Array* token_array,
-                  struct Code_Nodes* code_nodes) {
+struct Code_Node* parse_rvalue(struct Token_Array* token_array,
+                               struct Code_Nodes* code_nodes) {
 
     struct Token* prev_token = token_array->curr_token;
-    if (parse_rvalue_atom(token_array, code_nodes) == false) {
-        return false;
+    struct Code_Node* atom = parse_rvalue_atom(token_array, code_nodes);
+    if (atom == NULL) {
+        return NULL;
     }
     enum Operator_Precedence prec = map_operator_to_precedence(token_array->curr_token->str);
     if (prec != OPERATOR_PRECEDENCE_NONE) {
         maybe_binary(OPERATOR_PRECEDENCE_LAST, token_array, code_nodes);
-        return true;
+        return code_nodes->last;
     }
     else {
-        return true;
+        return atom;
     }
 }
-bool parse_lvalue(struct Token_Array* token_array,
-                  struct Code_Nodes* code_nodes) {
+struct Code_Node* parse_lvalue(struct Token_Array* token_array,
+                               struct Code_Nodes* code_nodes) {
 
     // printf("parse_lvalue: %s\n", token_array->curr_token->str);
-    bool ret = false;
     if (token_array->curr_token->str[0] == '*') {
         return parse_dereference(token_array, code_nodes);
     }
     struct Token* prev_token = 0;
     struct Token* prev_token_2 = 0;
+    struct Token* start_token = token_array->curr_token;
     do {
         prev_token = token_array->curr_token;
         prev_token_2 = token_array->curr_token;
         
-        if (parse_ident(token_array, code_nodes)) {
-            ret = true;
+        if (parse_ident(token_array, code_nodes) == NULL) {
+            token_array->curr_token = prev_token_2;
         }
-        else {
+
+        if (start_token == token_array->curr_token) {
+            return NULL;
+        }
+
+        prev_token_2 = token_array->curr_token;
+        if (parse_call(token_array, code_nodes) == NULL) {
             token_array->curr_token = prev_token_2;
         }
 
         prev_token_2 = token_array->curr_token;
-        if (ret && parse_call(token_array, code_nodes)) {
-            ret = true;
-        }
-        else {
+        if (parse_array_index(token_array, code_nodes) == NULL) {
             token_array->curr_token = prev_token_2;
         }
 
         prev_token_2 = token_array->curr_token;
-        if (parse_array_index(token_array, code_nodes)) {
-            ret = true;
-        }
-        else {
-            token_array->curr_token = prev_token_2;
-        }
-
-        prev_token_2 = token_array->curr_token;
-        if (parse_dot_operator(token_array, code_nodes)) {
-            ret = true;
-        }
-        else {
+        if (parse_dot_operator(token_array, code_nodes) == NULL) {
             token_array->curr_token = prev_token_2;
         }
     } while (prev_token < token_array->curr_token);
 
-    return ret;
+    return code_nodes->last;
 }
-bool parse_call(struct Token_Array* token_array,
+struct Code_Node* parse_call(struct Token_Array* token_array,
                 struct Code_Nodes* code_nodes) {
 
     if (token_array->curr_token->str != NULL &&
         strcmp(token_array->curr_token->str, "(") == 0) {
         
         struct Code_Node* ident = code_nodes->last;
-        struct Code_Call_Args* args = malloc(sizeof(struct Code_Call_Args));
+        struct Code_Node_Array* args = malloc(sizeof(struct Code_Node_Array));
         array_init(args, sizeof(struct Code_Node*), 10);
         delimited("(", ")", ",", &parse_rvalue, args, token_array, code_nodes);
-        make_call(code_nodes, ident, args);
-        return true;
+        return make_call(code_nodes, ident, args);
     }
     else {
-        return false;
+        return NULL;
     }
 }
-bool parse_literal(struct Token_Array* token_array,
-                   struct Code_Nodes* code_nodes) {
+struct Code_Node* parse_literal(struct Token_Array* token_array,
+                                struct Code_Nodes* code_nodes) {
 
     bool minus = false;
     if (strcmp(token_array->curr_token->str, "-") == 0) {
@@ -1468,121 +1513,102 @@ bool parse_literal(struct Token_Array* token_array,
         uint_literal->str = str;
     }
     token_array->curr_token++;
-    return true;
+    return code_nodes->last;
 }
-bool parse_string(struct Token_Array* token_array,
-                  struct Code_Nodes* code_nodes) {
+struct Code_Node* parse_string(struct Token_Array* token_array,
+                               struct Code_Nodes* code_nodes) {
 
-    make_string(code_nodes, token_array->curr_token->str);
+    struct Code_Node* str = make_string(code_nodes, token_array->curr_token->str);
     token_array->curr_token++;
-    return true;
+    return str;
 }
-bool parse_reference(struct Token_Array* token_array,
-                     struct Code_Nodes* code_nodes) {
+struct Code_Node* parse_reference(struct Token_Array* token_array,
+                                  struct Code_Nodes* code_nodes) {
 
     token_array->curr_token++;
-    parse_lvalue(token_array, code_nodes);
-    struct Code_Node* expression = code_nodes->last;
-    make_reference(code_nodes, expression);
-    return true;
+    struct Code_Node* expression = parse_lvalue(token_array, code_nodes);
+    return make_reference(code_nodes, expression);
 }
-bool parse_dereference(struct Token_Array* token_array,
+struct Code_Node* parse_dereference(struct Token_Array* token_array,
                        struct Code_Nodes* code_nodes) {
 
     char* str = token_array->curr_token->str;
     size_t levels = strlen(token_array->curr_token->str);
     token_array->curr_token++;
-    parse_lvalue(token_array, code_nodes);
-    struct Code_Node* node = code_nodes->last;
+    struct Code_Node* node = parse_lvalue(token_array, code_nodes);
     for (size_t i = 0; i < levels; i += 1) {
         if (str[i] == '*') {
-            make_dereference(code_nodes, node);
-            node = code_nodes->last;
+            node = make_dereference(code_nodes, node);
         }
         else abort();
     }
-    return true;
+    return node;
 }
-bool parse_array_index(struct Token_Array* token_array,
-                       struct Code_Nodes* code_nodes) {
+struct Code_Node* parse_array_index(struct Token_Array* token_array,
+                                    struct Code_Nodes* code_nodes) {
 
     struct Code_Node* array = code_nodes->last;
     if (token_array->curr_token->str[0] == '[') {
         token_array->curr_token++;
-        bool had_index = false;
-        bool was_lvalue = parse_lvalue(token_array, code_nodes);
-        if (was_lvalue) {
-            had_index = true;
+        struct Code_Node* index = parse_lvalue(token_array, code_nodes);
+        if (index == NULL) {
+            index = parse_rvalue(token_array, code_nodes);
         }
-        else {
-            bool was_rvalue = parse_rvalue(token_array, code_nodes);
-            if (was_rvalue) {
-                had_index = true;
-            }
-            else abort();
-        }
-        if (had_index) {
-            struct Code_Node* index = code_nodes->last;
+        if (index != NULL) {
             if (token_array->curr_token->str[0] == ']') {
                 token_array->curr_token++;
-                make_array_index(code_nodes, array, index);
-                return true;
+                return make_array_index(code_nodes, array, index);
             }
             else abort();
         }
         else abort();
     }
-    return false;
+    return NULL;
 }
-bool parse_dot_operator(struct Token_Array* token_array,
-                        struct Code_Nodes* code_nodes) {
+struct Code_Node* parse_dot_operator(struct Token_Array* token_array,
+                                     struct Code_Nodes* code_nodes) {
 
     struct Code_Node* left = code_nodes->last;
     if (strcmp(token_array->curr_token->str, ".") == 0) {
         token_array->curr_token++;
-        bool has_right = parse_ident(token_array, code_nodes);
-        if (has_right) {
-            struct Code_Node* right = code_nodes->last;
-            make_dot_operator(code_nodes, left, right);
-            return true;
+        struct Code_Node* right = parse_ident(token_array, code_nodes);
+        if (right) {
+            return make_dot_operator(code_nodes, left, right);
         }
         else abort();
     }
-    return false;
+    return NULL;
 }
-bool parse_ident(struct Token_Array* token_array,
+struct Code_Node* parse_ident(struct Token_Array* token_array,
                  struct Code_Nodes* code_nodes) {
 
     if (token_array->curr_token->kind == TOKEN_KIND_IDENT &&
         token_array->curr_token->str != NULL) {
 
-        make_ident(code_nodes, token_array->curr_token->str, NULL);
-
+        char* ident_name = token_array->curr_token->str;
         token_array->curr_token++;
-        return true;
+        struct Code_Node* ident_decl = get_decl_of_ident(ident_name);
+        return make_ident(code_nodes, ident_name, ident_decl);
     }
     else {
-        return false;
+        return NULL;
     }
 }
-bool parse_if(struct Token_Array* token_array,
+struct Code_Node* parse_if(struct Token_Array* token_array,
               struct Code_Nodes* code_nodes) {
 
     token_array->curr_token++;
     token_array->curr_token++;
-    parse_rvalue(token_array, code_nodes);
-    struct Code_Node* condition = code_nodes->last;
+    struct Code_Node* condition = parse_rvalue(token_array, code_nodes);
     if (strcmp(token_array->curr_token->str, ")") == 0) {
         token_array->curr_token++;
     }
     else abort();
-    parse_statement(token_array, code_nodes);
-    struct Code_Node* expression = code_nodes->last;
-    make_if(code_nodes, condition, expression);
-    return true;
+    struct Code_Node* expression = parse_statement(token_array, code_nodes);
+    return make_if(code_nodes, condition, expression);
 }
-bool parse_else(struct Token_Array* token_array,
-                struct Code_Nodes* code_nodes) {
+struct Code_Node* parse_else(struct Token_Array* token_array,
+                             struct Code_Nodes* code_nodes) {
 
     struct Code_Node* if_expr;
     struct Code_Node* maybe_if = code_nodes->last;
@@ -1597,38 +1623,33 @@ bool parse_else(struct Token_Array* token_array,
     else {
         printf("else statement does not follow an if statement\n");
         abort();
-        return false;
+        return NULL;
     }
     token_array->curr_token++;
-    parse_statement(token_array, code_nodes);
-    struct Code_Node* expression = code_nodes->last;
+    struct Code_Node* expression = parse_statement(token_array, code_nodes);
     struct Code_Node* else_expr = make_else(code_nodes, expression);
     else_expr->else_.if_expr = if_expr;
     if_expr->if_.else_expr = else_expr;
-    return true;
+    return else_expr;
 }
-bool parse_while(struct Token_Array* token_array,
+struct Code_Node* parse_while(struct Token_Array* token_array,
                  struct Code_Nodes* code_nodes) {
 
     token_array->curr_token++;
     token_array->curr_token++;
-    parse_rvalue(token_array, code_nodes);
-    struct Code_Node* condition = code_nodes->last;
+    struct Code_Node* condition = parse_rvalue(token_array, code_nodes);
     if (token_array->curr_token->str[0] == ')') {
         token_array->curr_token++;
     }
     else abort();
-    parse_statement(token_array, code_nodes);
-    struct Code_Node* expression = code_nodes->last;
-    make_while(code_nodes, condition, expression);
-    return true;
+    struct Code_Node* expression = parse_statement(token_array, code_nodes);
+    return make_while(code_nodes, condition, expression);
 }
-bool parse_do_while(struct Token_Array* token_array,
-                    struct Code_Nodes* code_nodes) {
+struct Code_Node* parse_do_while(struct Token_Array* token_array,
+                                 struct Code_Nodes* code_nodes) {
 
     token_array->curr_token++;
-    parse_statement(token_array, code_nodes);
-    struct Code_Node* expression = code_nodes->last;
+    struct Code_Node* expression = parse_statement(token_array, code_nodes);
     if (strcmp(token_array->curr_token->str, "while") == 0) {
         token_array->curr_token++;
     }
@@ -1637,23 +1658,19 @@ bool parse_do_while(struct Token_Array* token_array,
         token_array->curr_token++;
     }
     else abort();
-    parse_rvalue(token_array, code_nodes);
-    struct Code_Node* condition = code_nodes->last;
+    struct Code_Node* condition = parse_rvalue(token_array, code_nodes);
     if (token_array->curr_token->str[0] == ')') {
         token_array->curr_token++;
     }
     else abort();
-    make_do_while(code_nodes, condition, expression);
-    return true;
+    return make_do_while(code_nodes, condition, expression);
 }
-#define DEBUG_FOR false
-bool parse_for(struct Token_Array* token_array,
-               struct Code_Nodes* code_nodes) {
+struct Code_Node* parse_for(struct Token_Array* token_array,
+                            struct Code_Nodes* code_nodes) {
 
     struct Code_Node* begin = NULL;
     struct Code_Node* condition = NULL;
     struct Code_Node* cycle_end = NULL;
-    struct Code_Node* expression = NULL;
     token_array->curr_token++;
     if (token_array->curr_token->str[0] == '(') {
         token_array->curr_token++;
@@ -1662,16 +1679,9 @@ bool parse_for(struct Token_Array* token_array,
         printf("for starting paren missing!\n");
         abort();
     }
-    #if DEBUG_FOR
-    printf("for begin\n");
-    #endif
     if (token_array->curr_token->str[0] != ';') {
-        bool was_stmt = parse_statement(token_array, code_nodes);
-        if (was_stmt) {
-            #if DEBUG_FOR
-            printf("for begin true\n");
-            #endif
-            begin = code_nodes->last;
+        begin = parse_statement(token_array, code_nodes);
+        if (begin) {
             if (token_array->curr_token->str[0] == ';') {
                 token_array->curr_token++;
             }
@@ -1680,21 +1690,11 @@ bool parse_for(struct Token_Array* token_array,
         else abort();
     }
     else {
-        #if DEBUG_FOR
-        printf("for begin false\n");
-        #endif
         token_array->curr_token++;
     }
-    #if DEBUG_FOR
-    printf("for cond\n");
-    #endif
     if (token_array->curr_token->str[0] != ';') {
-        bool was_rvalue = parse_rvalue(token_array, code_nodes);
-        if (was_rvalue) {
-            #if DEBUG_FOR
-            printf("for cond true\n");
-            #endif
-            condition = code_nodes->last;
+        condition = parse_rvalue(token_array, code_nodes);
+        if (condition) {
             if (token_array->curr_token->str[0] == ';') {
                 token_array->curr_token++;
             }
@@ -1703,28 +1703,13 @@ bool parse_for(struct Token_Array* token_array,
         else abort();
     }
     else {
-        #if DEBUG_FOR
-        printf("for cond false\n");
-        #endif
         token_array->curr_token++;
     }
-    #if DEBUG_FOR
-    printf("for end\n");
-    #endif
     if (token_array->curr_token->str[0] != ')') {
-        bool was_stmt = parse_statement(token_array, code_nodes);
-        if (was_stmt) {
-            #if DEBUG_FOR
-            printf("for end true\n");
-            #endif
-            cycle_end = code_nodes->last;
+        cycle_end = parse_statement(token_array, code_nodes);
+        if (cycle_end) {
         }
         else abort();
-    }
-    else {
-        #if DEBUG_FOR
-        printf("for end false\n");
-        #endif
     }
     if (token_array->curr_token->str[0] == ')') {
         token_array->curr_token++;
@@ -1733,87 +1718,78 @@ bool parse_for(struct Token_Array* token_array,
         printf("for ending paren missing!\n");
         abort();
     }
-    #if DEBUG_FOR
-    printf("for expr\n");
-    #endif
-    bool was_stmt = parse_statement(token_array, code_nodes);
-    if (was_stmt) {
-        #if DEBUG_FOR
-        printf("for expr true\n");
-        #endif
-        expression = code_nodes->last;
-    }
-    else {
-        #if DEBUG_FOR
-        printf("for expr false\n");
-        #endif
+    struct Code_Node* expression = parse_statement(token_array, code_nodes);
+    if (expression == NULL) {
+        printf("for expression missing!\n");
         abort();
     }
-    make_for(code_nodes, begin, condition, cycle_end, expression);
-    return true;
+    return make_for(code_nodes, begin, condition, cycle_end, expression);
 }
-bool parse_continue(struct Token_Array* token_array,
-                    struct Code_Nodes* code_nodes) {
+struct Code_Node* parse_continue(struct Token_Array* token_array,
+                                 struct Code_Nodes* code_nodes) {
 
     token_array->curr_token++;
-    make_continue(code_nodes);
-    return true;
+    return make_continue(code_nodes);
 }
-bool parse_break(struct Token_Array* token_array,
-                 struct Code_Nodes* code_nodes) {
+struct Code_Node* parse_break(struct Token_Array* token_array,
+                              struct Code_Nodes* code_nodes) {
 
     token_array->curr_token++;
-    make_break(code_nodes);
-    return true;
+    return make_break(code_nodes);
 }
-bool parse_return(struct Token_Array* token_array,
-                  struct Code_Nodes* code_nodes) {
+struct Code_Node* parse_return(struct Token_Array* token_array,
+                               struct Code_Nodes* code_nodes) {
 
     token_array->curr_token++;
     struct Code_Node* expression = NULL;
     if (token_array->curr_token->str[0] != ';') {
-        parse_rvalue(token_array, code_nodes);
-        expression = code_nodes->last;
+        expression = parse_rvalue(token_array, code_nodes);
     }
-    make_return(code_nodes, expression);
-    return true;
+    return make_return(code_nodes, expression);
 }
-bool parse_block(struct Token_Array* token_array,
-                 struct Code_Nodes* code_nodes) {
+struct Code_Node* parse_block(struct Token_Array* token_array,
+                              struct Code_Nodes* code_nodes) {
 
     struct Code_Node_Array* statements = malloc(sizeof(struct Code_Node_Array));
     array_init(statements, sizeof(struct Code_Node*), 10);
+    struct Code_Node* block = make_block(code_nodes, statements);
+    block->block.parent = parse_data.last_block;
+    parse_data.last_block = block;
     delimited("{", "}", ";", &parse_statement, statements, token_array, code_nodes);
-    make_block(code_nodes, statements);
-    return true;
+    parse_data.last_block = block->block.parent;
+    return block;
 }
-bool parse_increment(struct Token_Array* token_array,
-                     struct Code_Nodes* code_nodes) {
+struct Code_Node* parse_block_preinit(struct Token_Array* token_array,
+                                      struct Code_Nodes* code_nodes,
+                                      struct Code_Node* block) {
+    
+    struct Code_Node* statements = block->block.statements;
+    delimited("{", "}", ";", &parse_statement, statements, token_array, code_nodes);
+    return block;
+}
+struct Code_Node* parse_increment(struct Token_Array* token_array,
+                                  struct Code_Nodes* code_nodes) {
 
     struct Code_Node* left = code_nodes->last;
     token_array->curr_token++;
-    make_increment(code_nodes, left);
-    return true;
+    return make_increment(code_nodes, left);
 }
-bool parse_decrement(struct Token_Array* token_array,
-                     struct Code_Nodes* code_nodes) {
+struct Code_Node* parse_decrement(struct Token_Array* token_array,
+                                  struct Code_Nodes* code_nodes) {
 
     struct Code_Node* left = code_nodes->last;
     token_array->curr_token++;
-    make_decrement(code_nodes, left);
-    return true;
+    return make_decrement(code_nodes, left);
 }
-bool parse_assign(struct Token_Array* token_array,
+struct Code_Node* parse_assign(struct Token_Array* token_array,
                   struct Code_Nodes* code_nodes) {
 
     struct Code_Node* left = code_nodes->last;
     token_array->curr_token++;
-    parse_rvalue(token_array, code_nodes);
-    struct Code_Node* right = code_nodes->last;
-    make_assign(code_nodes, left, right);
-    return true;
+    struct Code_Node* right = parse_rvalue(token_array, code_nodes);
+    return make_assign(code_nodes, left, right);
 }
-bool parse_opassign(struct Token_Array* token_array,
+struct Code_Node* parse_opassign(struct Token_Array* token_array,
                     struct Code_Nodes* code_nodes) {
 
     struct Code_Node* ident = code_nodes->last;
@@ -1822,49 +1798,51 @@ bool parse_opassign(struct Token_Array* token_array,
     memcpy(operation_type, token_array->curr_token->str, op_length);
     operation_type[op_length] = '\0';
     token_array->curr_token++;
-    parse_rvalue(token_array, code_nodes);
-    struct Code_Node* expr = code_nodes->last;
-    make_opassign(code_nodes, ident, operation_type, expr);
-    return true;
+    struct Code_Node* expr = parse_rvalue(token_array, code_nodes);
+    return make_opassign(code_nodes, ident, operation_type, expr);
 }
-bool parse_procedure_declaration(struct Token_Array* token_array,
-                                 struct Code_Nodes* code_nodes,
-                                 struct Type_Info* return_type) {
+struct Code_Node* parse_procedure_declaration(struct Token_Array* token_array,
+                                              struct Code_Nodes* code_nodes,
+                                              struct Type_Info* return_type) {
 
-    parse_ident(token_array, code_nodes);
-    struct Code_Node* ident = code_nodes->last;
-    token_array->curr_token++;
-    struct Code_Procedure_Params* params = malloc(sizeof(struct Code_Procedure_Params));
+    struct Code_Node* ident = parse_ident(token_array, code_nodes);
+    // the parameters are accessible only in the block, so we have to preinit the block
+    struct Code_Node* block = make_block(code_nodes, NULL);
+    struct Code_Node_Array* params = malloc(sizeof(struct Code_Node_Array));
     array_init(params, sizeof(struct Code_Node*), 10);
+    block->block.parent = parse_data.last_block;
+    parse_data.last_block = block;
     delimited("(", ")", ",", &parse_param, params, token_array, code_nodes);
+    parse_data.last_block = block->block.parent;
     bool has_varargs = false;
     if (strcmp(token_array->curr_token->str, "...") == 0) {
         has_varargs = true;
         token_array->curr_token++;
     }
-    token_array->curr_token++;
-    parse_block(token_array, code_nodes);
-    struct Code_Node* block = code_nodes->last;
-    make_procedure(code_nodes, params, has_varargs, return_type, block);
-    struct Code_Node* proc = code_nodes->last;
+    struct Code_Node* proc = make_procedure(code_nodes, params, has_varargs, return_type, block);
     // @Incomplete
     // should have function pointer type
-    make_declaration(code_nodes, NULL, ident, proc);
-    return true;
+    struct Code_Node* decl = make_declaration(code_nodes, NULL, ident, proc);
+    array_push(parse_data.last_block->block.declarations, &decl);
+    block->block.parent = parse_data.last_block;
+    parse_data.last_block = block;
+    block = parse_block_preinit(token_array, code_nodes, block);
+    parse_data.last_block = block->block.parent;
+    return decl;
 }
-bool parse_type(struct Token_Array* token_array,
-                struct Code_Nodes* code_nodes,
-                struct Type_Info** out_type) {
+struct Type_Info* parse_type(struct Token_Array* token_array,
+                             struct Code_Nodes* code_nodes,
+                             struct Type_Info** out_type) {
 
     struct Code_Node* prev_node = code_nodes->last;
     size_t prev_length = code_nodes->length;
     struct Token* prev_token = token_array->curr_token;
 
-    bool was_ident = parse_ident(token_array, code_nodes);
-    if (was_ident == false) {
-        return false;
+    struct Code_Node* ident = parse_ident(token_array, code_nodes);
+    if (ident == NULL) {
+        return NULL;
     }
-    char* ident_name = code_nodes->last->ident.name;
+    char* ident_name = ident->ident.name;
     code_nodes->length -= 1;
     code_nodes->last--;
     struct Type_Info* prev_type = map_name_to_type(ident_name);
@@ -1874,8 +1852,10 @@ bool parse_type(struct Token_Array* token_array,
         code_nodes->last = prev_node;
         code_nodes->length = prev_length;
         token_array->curr_token = prev_token;
-        return false;
+        return NULL;
     }
+
+    // @Hack
     if (prev_type->kind == TYPE_INFO_TAG_STRUCT) {
         prev_type = make_type_info_ident(ident_name, prev_type);
     }
@@ -1885,25 +1865,25 @@ bool parse_type(struct Token_Array* token_array,
         prev_token = token_array->curr_token;
         prev_token_2 = token_array->curr_token;
 
-        if (parse_pointer_type(token_array, prev_type, &prev_type) == false) {
+        if (parse_pointer_type(token_array, prev_type, &prev_type) == NULL) {
             token_array->curr_token = prev_token_2;
         }
 
         prev_token_2 = token_array->curr_token;
-        if (parse_array_type(token_array, prev_type, &prev_type) == false) {
+        if (parse_array_type(token_array, prev_type, &prev_type) == NULL) {
             token_array->curr_token = prev_token_2;
         }
     } while (prev_token < token_array->curr_token);
 
     *out_type = prev_type;
-    return true;
+    return prev_type;
 }
-bool parse_array_type(struct Token_Array* token_array,
-                      struct Type_Info* prev_type,
-                      struct Type_Info** out_type) {
+struct Type_Info* parse_array_type(struct Token_Array* token_array,
+                                   struct Type_Info* prev_type,
+                                   struct Type_Info** out_type) {
 
     if (token_array->curr_token->str[0] != '[') {
-        return false;
+        return NULL;
     }
     else {
         token_array->curr_token++;
@@ -1914,20 +1894,20 @@ bool parse_array_type(struct Token_Array* token_array,
                 token_array->curr_token++;
             }
             else abort();
-            return true;
+            return *out_type;
         }
         else if (token_array->curr_token->str[0] == ']') {
             token_array->curr_token++;
             *out_type = make_type_info_array(prev_type, 0);
-            return true;
+            return *out_type;
         }
         else abort();
-        return false;
+        return NULL;
     }
 }
-bool parse_pointer_type(struct Token_Array* token_array,
-                        struct Type_Info* prev_type,
-                        struct Type_Info** out_type) {
+struct Type_Info* parse_pointer_type(struct Token_Array* token_array,
+                                     struct Type_Info* prev_type,
+                                     struct Type_Info** out_type) {
 
     if (token_array->curr_token->str[0] != '*') {
         return false;
@@ -1942,77 +1922,72 @@ bool parse_pointer_type(struct Token_Array* token_array,
         }
         *out_type = prev_type;
         token_array->curr_token++;
-        return true;
+        return prev_type;
     }
 }
-bool parse_param(struct Token_Array* token_array,
-                 struct Code_Nodes* code_nodes) {
+struct Code_Node* parse_param(struct Token_Array* token_array,
+                              struct Code_Nodes* code_nodes) {
 
     // varargs
     if (strcmp(token_array->curr_token->str, "...") == 0) {
-        return false;
+        return NULL;
     }
     struct Type_Info* type;
     parse_type(token_array, code_nodes, &type);
     return parse_declaration_precomputed_type(token_array, code_nodes, type);
 }
-bool parse_declaration(struct Token_Array* token_array,
-                       struct Code_Nodes* code_nodes) {
+struct Code_Node* parse_declaration(struct Token_Array* token_array,
+                                    struct Code_Nodes* code_nodes) {
 
     struct Type_Info* type;
     parse_type(token_array, code_nodes, &type);
     return parse_declaration_precomputed_type(token_array, code_nodes, type);
 }
-bool parse_declaration_precomputed_type(struct Token_Array* token_array,
-                                        struct Code_Nodes* code_nodes,
-                                        struct Type_Info* type) {
+struct Code_Node* parse_declaration_precomputed_type(struct Token_Array* token_array,
+                                                     struct Code_Nodes* code_nodes,
+                                                     struct Type_Info* type) {
 
-    bool was_ident = parse_ident(token_array, code_nodes);
-    if (!was_ident) {
+    struct Code_Node* ident = parse_ident(token_array, code_nodes);
+    if (ident == NULL) {
         abort();
-        return false;
     }
-    struct Code_Node* ident = code_nodes->last;
+    struct Code_Node* prev_decl = get_decl_of_ident(ident->ident.name);
+    if (prev_decl != NULL) {
+        printf("(ident) %s already declared!\n", ident->ident.name);
+        abort();
+    }
     struct Code_Node* expression;
     if (strcmp(token_array->curr_token->str, "=") == 0) {
         token_array->curr_token++;
-        parse_rvalue(token_array, code_nodes);
-        expression = code_nodes->last;
+        expression = parse_rvalue(token_array, code_nodes);
     }
-    make_declaration(code_nodes, type, ident, expression);
-    return true;
+    struct Code_Node* decl = make_declaration(code_nodes, type, ident, expression);
+    array_push(parse_data.last_block->block.declarations, &decl);
+    return decl;
 }
-bool parse_struct_declaration(struct Token_Array* token_array,
-                              struct Code_Nodes* code_nodes) {
+struct Code_Node* parse_struct_declaration(struct Token_Array* token_array,
+                                           struct Code_Nodes* code_nodes) {
 
     token_array->curr_token++;
-    parse_ident(token_array, code_nodes);
-    struct Code_Node* ident = code_nodes->last;
+    struct Code_Node* ident = parse_ident(token_array, code_nodes);
     struct Type_Info* type = make_type_info_struct_dummy();
-    add_user_type(ident->ident.name, type);
-    parse_block(token_array, code_nodes);
-    struct Code_Node* block = code_nodes->last;
-    struct Code_Node* expression = make_struct(code_nodes, block);
+    struct Code_Node* expression = make_struct(code_nodes, NULL);
+    // need to have access to declaration because struct member can be the type we have yet to parse
+    struct Code_Node* decl = make_declaration(code_nodes, type, ident, expression);
+    array_push(parse_data.last_block->block.declarations, &decl);
+    struct Code_Node* block = parse_block(token_array, code_nodes);
     expression->type = type;
-    make_declaration(code_nodes, type, ident, expression);
-    return true;
+    expression->struct_.block = block;
+    fill_type_info_struct(expression);
+    return decl;
 }
-#define DEBUG_DELIM false
-#if DEBUG_DELIM
-int delim = 0;
-#endif
-bool delimited(char* start, char* stop, char* separator,
-               bool (*elem_func)(struct Token_Array*, struct Code_Nodes*),
+void delimited(char* start, char* stop, char* separator,
+               struct Code_Node* (*elem_func)(struct Token_Array*, struct Code_Nodes*),
                struct Dynamic_Array* results,
                struct Token_Array* token_array,
                struct Code_Nodes* code_nodes) {
 
-    #if DEBUG_DELIM
-    printf("start delim %d\n", delim);
-    delim++;
-    #endif
-
-    if (token_array->curr_token->str != NULL && stop != NULL &&
+    if (token_array->curr_token->str != NULL && start != NULL &&
         strcmp(token_array->curr_token->str, start) == 0) {
 
         token_array->curr_token++;
@@ -2044,15 +2019,12 @@ bool delimited(char* start, char* stop, char* separator,
         };
         if (token_array->curr_token->str != NULL) {
 
-            #if DEBUG_DELIM
-            printf("delim: %d, %s\n", token_array->curr_token->kind, token_array->curr_token->str);
-            #endif
-            bool was_elem = elem_func(token_array, code_nodes);
-            if (!was_elem) {
+            struct Code_Node* elem = elem_func(token_array, code_nodes);
+            if (elem == NULL) {
                 break;
             }
             else {
-                array_push(results, &(code_nodes->last));
+                array_push(results, &elem);
             }
         }
         
@@ -2067,12 +2039,6 @@ bool delimited(char* start, char* stop, char* separator,
 
         token_array->curr_token++;
     }
-    #if DEBUG_DELIM
-    delim--;
-    printf("end delim %d\n", delim);
-    #endif
-
-    return true;
 }
 
 struct Code_Node* get_new_code_node(struct Code_Nodes* code_nodes) {

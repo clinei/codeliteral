@@ -53,7 +53,7 @@ void init_renderer() {
     my_render_data.cursor_line = 0;
 
     my_render_data.render_nodes = malloc(sizeof(struct Render_Nodes));
-    array_init(my_render_data.render_nodes, sizeof(struct Render_Node), 10000);
+    array_init(my_render_data.render_nodes, sizeof(struct Render_Node), 100000);
 
     my_render_data.debugger_root = make_list(my_render_data.render_nodes, LIST_DIRECTION_VERTICAL);
 }
@@ -148,6 +148,10 @@ struct Render_Node* make_text(struct Render_Nodes* render_nodes,
 
     struct Render_Node* node = get_new_render_node(render_nodes);
     node->kind = RENDER_KIND_TEXT;
+
+    if (text == NULL) {
+        abort();
+    }
 
     node->text.text = text;
     node->text.color = color;
@@ -288,6 +292,24 @@ void find_expanded_nodes(struct Code_Node* node) {
             node->should_expand = node->binary_operation.left->demands_expand |
                                   node->binary_operation.right->demands_expand;
 
+            break;
+        }
+        case CODE_KIND_INCREMENT:{
+            find_expanded_nodes(node->increment.ident);
+            node->demands_expand = node->increment.ident->demands_expand;
+            node->should_expand = true;
+            break;
+        }
+        case CODE_KIND_DECREMENT:{
+            find_expanded_nodes(node->decrement.ident);
+            node->demands_expand = node->decrement.ident->demands_expand;
+            node->should_expand = true;
+            break;
+        }
+        case CODE_KIND_PARENS:{
+            find_expanded_nodes(node->parens.expression);
+            node->demands_expand = node->parens.expression->demands_expand;
+            node->should_expand = true;
             break;
         }
         case CODE_KIND_CALL:{
@@ -789,12 +811,18 @@ void render_code_node(struct Code_Node* node,
         case CODE_KIND_ELSE:{
             struct Render_Node* else_keyword = make_text(render_data->render_nodes, "else ", hilite_keyword_fg_color);
             array_push(last_line->list.elements, &else_keyword);
-            render_code_node(node->else_.expression, render_data);
-            if (node->else_.expression->kind != CODE_KIND_BLOCK &&
-                node->else_.expression->kind != CODE_KIND_IF) {
+            if (node->else_.expression->was_run) {
+                render_code_node(node->else_.expression, render_data);
+                if (node->else_.expression->kind != CODE_KIND_BLOCK &&
+                    node->else_.expression->kind != CODE_KIND_IF) {
 
                     struct Render_Node* semicolon = make_text(render_data->render_nodes, ";", render_data->fg_color);
                     array_push(last_line->list.elements, &semicolon);
+                }
+            }
+            else {
+                struct Render_Node* empty_block = make_text(render_data->render_nodes, "{}", render_data->fg_color);
+                array_push(last_line->list.elements, &empty_block);
             }
             break;
         }
@@ -1099,8 +1127,13 @@ void render_code_node(struct Code_Node* node,
         case CODE_KIND_LITERAL_UINT:
         case CODE_KIND_LITERAL_FLOAT:
         case CODE_KIND_LITERAL_BOOL:{
-            struct Render_Node* literal = make_text(render_data->render_nodes, node->str, hilite_literal_fg_color);
-            array_push(last_line->list.elements, &literal);
+            if (node->str != NULL) {
+                struct Render_Node* literal = make_text(render_data->render_nodes, node->str, hilite_literal_fg_color);
+                array_push(last_line->list.elements, &literal);
+            }
+            else {
+                printf("bug!! (%s)\n", code_kind_to_string(node->kind));
+            }
             break;
         }
         case CODE_KIND_STRING:{
@@ -1140,6 +1173,9 @@ void render_code_node(struct Code_Node* node,
                     stmt->declaration.expression != NULL && run_data.did_run &&
                     stmt->declaration.expression->kind == CODE_KIND_PROCEDURE) {
 
+                    continue;
+                }
+                if (stmt->was_run == false) {
                     continue;
                 }
                 if (stmt->should_expand == false &&
