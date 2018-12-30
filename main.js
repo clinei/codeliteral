@@ -1,5 +1,10 @@
 "use strict";
 
+// need to fix
+// textarea width
+// in desktop and mobile
+// and mobile in general
+
 let code = `/*  CONTROLS
 
 	W - move up        F - show values
@@ -23,18 +28,105 @@ let code = `/*  CONTROLS
 
 /*  ABOUT THIS
 
-This here is a proof of concept of a tool that enables you to
-understand your program as it executes. You walk through
-the execution using whatever method suits you best,
-utilizing a highly interactive and visual keyboard-only interface
-that integrates the display of valuable information like
-the state of variables or the result of operations
-into your actual code, replacing questions with quick answers.
+This here is a proof of concept, a tool that enables you to
+understand the activities of your program as it executes. You
+traverse meaningful links between code segments, utilizing
+a highly interactive and visual keyboard-only interface that
+integrates the display of valuable information such as
+the state of variables or the result of operations into
+your actual code, replacing questions with answers.
 
-The language used for this demonstration works like C,
-there is no preprocessor, not all features are supported,
-there are structs and arrays and even pointers, and also bugs,
-only a print function is available from the standard library.
+No longer are you limited by one-way breakpoints and clunky
+out-of-context watch lists as used in traditional debuggers.
+You can rapidly ask both simple and complex questions and
+get quick and straight answers. You can actually engage in
+a dialogue with your program. There is very little confusion,
+your goal is always known and straightforward, and you have
+an easy time picking the right tool for the job.
+
+Okay, enough of the marketing talk.
+
+This is very far from a full implementation of an idea
+I had when reading an email written by John Carmack,
+the lead programmer of the popular game Doom, and a few
+other things. He had taken a codebase and copied the contents
+of every function into where it was called, and replaced
+the parameters with arguments so it would actually compile.
+The resulting code was big, the variable names repetitive,
+but all the assumptions that were hidden in the space
+between the different contexts were laid bare for all to see.
+He discovered redundant checks, special cases, optimizations
+and other interesting things very quickly, all because
+the contexts were now more visible and not as vague.
+
+He did it by hand, but I figured that it shouldn't be
+too hard to automate it. Since I was gonna make something
+that would help people find bugs, I thought about other
+features that would help in that regard. Having to switch
+mental contexts and look somewhere far away to find out
+the value of a variable is pretty tedious, right? Let's
+make it so the variable in question gets replaced by the
+value at that point in time. The result would be the same,
+would it not? The same could be done with simple math operations.
+Two plus two is four, minus one is three, quick maths.
+This would let you look at the values of many variables at once,
+without breaking the context, and enabling more rapid interaction.
+
+If we duplicate the body of a function every time it is called,
+we could do the same for loops. Every time we run an iteration,
+we create an if statement with the loop condition, and the
+expression. For loops also add a beginning statement and
+a statement at the end of a cycle.
+
+I implemented function call and loop unrolling, value showing,
+moving up and down between lines, and moving left and right
+on one line, and then I realized that moving doesn't have to
+be that linear. Moving could also happen along relationships
+between code elements. An element could refer to a memory
+address whose contents are changed and used in different
+places in the code, and you could record those changes
+and uses to later be able to move between them. You could
+use that to go to where something got a bad value. This
+feature is extremely useful in solving average complexity
+bugs that would take you at least 10 times more time to do
+with a traditional forward-only debugger.
+
+There is yet another non-linear way to move between code
+elements. Functions may be called many times, and loops
+may run many times. In fact, that is their entire purpose.
+Your code needs to work in every case, so I added a way to
+move between different executions of the same code elements.
+If you have a bug in code like that, you can easily check
+the other executions for explanations why that specific
+context is broken and why the others are not. The other
+contexts will help you in the process of elimination.
+
+If we want to be as informative as possible, we have to
+eliminate the uninformative elements, like conditional
+code that did not actually run. There is a way to hide
+areas of code that did run but don't interest you. There
+is a way to mark some code as interesting so you can
+come back to it later.
+
+There are a few more advanced features that I want to add
+that would require you to use the mouse, but they would be
+very worth it. One is conditional breakpoints, and the other
+is more detailed and maybe custom analysis of the data.
+
+I am reinventing the wheel with some of the features.
+Moving between clones is just treating the cursor as a
+breakpoint. Moving between changes and uses is just a
+data breakpoint. Recording the execution is time travel
+debugging or reversible debugging. The novel idea is the
+representation and the rapid interaction. The feasability
+of using this for large desktop programs remains to be seen.
+
+The language used for this demonstration works like C.
+There is no preprocessor, not all features are supported.
+There are structs and arrays and even pointers, and also bugs.
+Only a print function is available from the standard library.
+Everything is interpreted but there is a static type system
+and virtual memory.
 
 There is a C and WebAssembly port using Emscripten in progress.
 The ultimate goal is to have a standalone program that can debug
@@ -59,6 +151,7 @@ void bigger_bug() {
 	"You can use WASD to move, too";
 	int[5] arr;
 	"We fill an array with ascending numbers";
+	"This used to be a for loop, but we unroll it";
 	for (int i = 0; i < arr.length; i += 1) {
 		arr[i] = i;
 	}

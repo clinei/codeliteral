@@ -152,7 +152,7 @@ tr.separator {
 #source {
 	
 	min-width: 200px;
-	width: 600px;
+	width: 660px;
 	min-height: calc(20 * 12pt);
 	color: rgb(200, 200, 200);
 	font-family: SourceCodePro, monospace;
