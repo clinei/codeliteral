@@ -63,9 +63,9 @@ He did it by hand, but I figured that it shouldn't be
 too hard to automate it. Since I was gonna make something
 that would help people find bugs, I thought about other
 features that would help in that regard. Having to switch
-mental contexts and look somewhere far away to find out
+mental contexts and look away from the code to find out
 the value of a variable is pretty tedious, right? Let's
-make it so the variable in question gets replaced by the
+make it so the variable in the code gets replaced by the
 value at that point in time. The result would be the same,
 would it not? The same could be done with simple math operations.
 Two plus two is four, minus one is three, quick maths.
@@ -75,8 +75,8 @@ without breaking the context, and enabling more rapid interaction.
 If we duplicate the body of a function every time it is called,
 we could do the same for loops. Every time we run an iteration,
 we create an if statement with the loop condition, and the
-expression. For loops also add a beginning statement and
-a statement at the end of a cycle.
+block. For loops add a beginning statement and another statement
+at the end of a cycle.
 
 I implemented function call and loop unrolling, value showing,
 moving up and down between lines, and moving left and right
