@@ -1,11 +1,342 @@
 "use strict";
 
-function main() {
+let code = `/*  CONTROLS
 
-	map_controls();
+	W - move up        F - show values
+	S - move down      E - show elems
+	A - move left      C - show changes
+	D - move right     G - expand all
 
-	start_debugging();
+	X - step next      R - prev clone
+	Z - step back      T - next clone
+
+	H - prev change    Y - prev use
+	J - next change    U - next use
+
+	K - set point      , - prev point
+	L - remove point   . - next point
+
+	I - hide zone
+	O - show zone
+
+*/
+
+/*  ABOUT THIS
+
+This here is a proof of concept of a tool that enables you to
+understand your program as it executes. You walk through
+the execution using whatever method suits you best,
+utilizing a highly interactive and visual keyboard-only interface
+that integrates the display of valuable information like
+the state of variables or the result of operations
+into your actual code, replacing questions with quick answers.
+
+The language used for this demonstration works like C,
+there is no preprocessor, not all features are supported,
+there are structs and arrays and even pointers, and also bugs,
+only a print function is available from the standard library.
+
+There is a C and WebAssembly port using Emscripten in progress.
+A ultimate goal is to have a standalone program that can debug
+raw executables, and integrate more directly with languages.
+
+*/
+
+int small_bug(int num, int denom) {
+	"Why is this 0?";
+	int answer = num / denom;
+	"Press E to see the elements";
+	"You can press E and F many times";
+	"Correct result is 0.666.. but integer division rounds to 0";
+	float fnum = num;
+	float fdenom = denom;
+	float fanswer = fnum / fdenom;
+	"We need to use floating point types to avoid this error";
+	return answer;
 }
+
+void bigger_bug() {
+	"You can use WASD to move, too";
+	int[5] arr;
+	"We fill an array with ascending numbers";
+	for (int i = 0; i < arr.length; i += 1) {
+		arr[i] = i;
+	}
+	"We do something with some of the elements";
+	for (int j = 0; j < arr.length; j += 1) {
+		if (j == 2) {
+			arr[j] = 50;
+			"Press C to see the value before it was changed";
+			"You can toggle it just like E and F";
+		}
+		else if (j == 3) {
+			arr[j] += 2;
+		}
+		else if (j == 4) {
+			arr[j] = 55;
+		}
+		else {
+			"Nothing with this one";
+		}
+	}
+	"Some elements are too big, so we cut them down";
+	for (int k = 0; k < arr.length; k += 1) {
+		if (arr[k] > 50) {
+			"Cutting down another way";
+			arr[k] = 5;
+		}
+		else if (arr[k] == 50) {
+			"Cutting down one way";
+			arr[k] = 5;
+		}
+		else {
+			"We don't touch this one";
+		}
+	}
+	"The results";
+	for (int l = 0; l < arr.length; l += 1) {
+		if (arr[l] == 5) {
+			"Move the cursor to arr[l]";
+			"Press H to go where the value came from, the prev change";
+			"Press J to jump back here, the next change";
+			arr[l] = 0;
+		}
+	}
+	"You can also press Y and U to jump to prev use and next use";
+}
+
+int factorial(short number) {
+	if (number > 1) {
+		return factorial(number - 1) * number;
+	}
+	else {
+		"A clone is one instance of code that has been executed many times";
+		"Many calls of the same function, or many cycles of the same loop";
+		"Press R to jump to prev clone";
+		"Press T to jump to next clone";
+		"For example, go to int return_factorial and press R and T";
+		"You can also jump between rarely accessed conditional code";
+		"like the terminating return statement of recursive factorial";
+		"on the next line";
+		return 1;
+	}
+}
+
+void fizzbuzz(int number) {
+	"That's it for now, you can try out your new skills on FizzBuzz";
+	"or you can write your own code in the other panel";
+	for (int i = 1; i <= number; i += 1) {
+		if (i % 15 == 0) {
+			print("FizzBuzz");
+		}
+		else if (i % 5 == 0) {
+			print("Buzz");
+		}
+		else if (i % 3 == 0) {
+			print("Fizz");
+		}
+		else {
+			print(i);
+		}
+	}
+}
+
+/*
+struct List_Node {
+	int data;
+	List_Node* next;
+};
+List_Node* index_of(List_Node* first, int value) {
+	// broken, need to autocast
+	first.next;
+	return first;
+}
+void linked_list() {
+	List_Node first;
+	List_Node second;
+	List_Node third;
+	first.data = 1;
+	second.data = 2;
+	third.data = 3;
+	first.next = &second;
+	second.next = &third;
+	third.next = 0;
+	index_of(first);
+}
+*/
+
+int main() {
+	"Press F to see what the call below returned";
+	"and then press X to go inside it";
+	small_bug(2, 3);
+	bigger_bug();
+	// linked_list();
+	factorial(5);
+	factorial(3);
+	fizzbuzz(15);
+	return 0;
+}
+"Start here";
+"Z - move back";
+"X - move next";
+main();
+`;
+
+const old_code = `
+bool test_nested_loop() {
+	bool passed = true;
+	int[6] results;
+	int width = 2;
+	int height = 3;
+	int i = 0;
+	for (int width_iter = 0; width_iter < width; width_iter += 1) {
+		for (int height_iter = 0; height_iter < height; height_iter += 1) {
+			int d = width_iter * height + height_iter;
+			results[i] = d;
+			i += 1;
+		}
+	}
+	for (int j = 0; j < 6; j += 1) {
+		passed &= results[j] == j;
+	}
+	return passed;
+}
+bool test_array() {
+	bool passed = true;
+	int[8] arr;
+	passed &= arr.length == 8;
+	arr[7] = 12345;
+	passed &= arr[7] == 12345;
+	arr[0] = arr[7];
+	passed &= arr[0] == 12345;
+	return passed;
+}
+bool test_pointer() {
+	bool passed = true;
+	int a = 0;
+	int* b;
+	b = &a;
+	*b = 12345;
+	passed &= a == 12345;
+	a = 0;
+	int** c;
+	c = &b;
+	**c = 12345;
+	passed &= a == 12345;
+	int d = 0;
+	d = **c;
+	passed &= d == 12345;
+	return passed;
+}
+bool test_malloc_free() {
+	bool passed = true;
+	uchar* ptr = malloc(1);
+	*ptr = 123;
+	passed &= *ptr == 123;
+	free(ptr);
+	uint* ptr2 = malloc(4);
+	*ptr2 = 12345;
+	passed &= *ptr2 == 12345;
+	free(ptr2);
+	return passed;
+}
+bool test_heap() {
+	bool passed = true;
+	for (uint i = 0; i < 100; i += 1) {
+		void* ptr  = malloc(1);
+		free(ptr);
+	}
+	return passed;
+}
+bool test_struct() {
+	bool passed = true;
+	struct Car {
+		uint type;
+		uint age;
+	}
+	struct Person {
+		uint age;
+		Car car;
+	}
+	Person steve;
+	steve.age = 20;
+	passed &= steve.age == 20;
+	steve.car.age = 2;
+	passed &= steve.car.age == 2;
+	steve.age += 4;
+	passed &= steve.age == 24;
+	steve.car.age += 4;
+	passed &= steve.car.age == 6;
+	return passed;
+}
+bool test_struct_array() {
+	bool passed = true;
+	struct Person {
+		uint age;
+	}
+	Person[2] people;
+	for (int i = 0; i < people.length; i += 1) {
+		people[i].age = (i + 1) * 10;
+	}
+	passed &= people[0].age == 10;
+	passed &= people[1].age == 20;
+	return passed;
+}
+bool test_do_while() {
+	bool passed = true;
+	int n = 1;
+	do {
+		n += 1;
+	} while (n < 1)
+	passed &= n == 2;
+	return passed;
+}
+bool test_inc_dec() {
+	bool passed = true;
+	int m = 0;
+	m++;
+	passed &= m == 1;
+	m--;
+	passed &= m == 0;
+	return passed;
+}
+/*
+bool test_unary() {
+	bool passed = true;
+	int n = 1;
+	passed &= -n == -1;
+	return passed;
+}
+*/
+bool test_string() {
+	bool passed = true;
+	string str = "Hello, World!";
+	passed &= str == "Hello, World!";
+	str = "Hi there.";
+	passed &= str == "Hi there.";
+	string str2 = "I'm here, too!";
+	passed &= str2 == "I'm here, too!";
+	str = str2;
+	passed &= str == "I'm here, too!";
+	return passed;
+}
+void tests() {
+	test_array();
+	test_pointer();
+	test_malloc_free();
+	// test_heap();
+	// test_dynamic_array();
+	test_struct();
+	test_struct_array();
+	test_do_while();
+	test_nested_loop();
+	test_inc_dec();
+	// test_unary();
+	test_string();
+}`;
+
+let Global_Block;
+let Main_call;
 
 let values_shown = false;
 let lhs_values_shown = false;
@@ -15,12 +346,76 @@ let expand_all = false;
 let inspection_mode = false;
 let memory_mode = false;
 
+let debug_gui_elem;
+let source_gui_elem;
+let run_gui_elem;
+let reset_gui_elem;
+
+function main() {
+
+	debug_gui_elem = document.getElementById("code");
+	source_gui_elem = document.getElementById("source");
+	run_gui_elem = document.getElementById("run");
+	reset_gui_elem = document.getElementById("reset");
+
+	map_controls();
+	
+	init_text();
+
+	start_debugging();
+
+	debug_gui_elem.focus();
+}
+
+function init_text() {
+	code_composed = false;
+
+	let stored_code = window.localStorage.getItem("code");
+	if (!stored_code) {
+		window.localStorage.setItem("code", code);
+	}
+	else {
+		code = stored_code;
+	}
+
+	source_gui_elem.value = code;
+
+	Global_Block = parse(tokenize(code));
+	Main_call = Global_Block.statements[Global_Block.statements.length-1];
+	Stdlib_Block.statements.push(Global_Block);
+	infer(Stdlib_Block);
+	fill_rodata();
+	
+	code_composed = true;
+
+}
+function set_text(text) {
+	window.localStorage.setItem("code", text);
+}
+function reset_text() {
+	window.localStorage.removeItem("code");
+}
+
 function map_controls() {
 
 	document.addEventListener("keydown", document_keydown);
 	document.addEventListener("keyup", document_keyup);
+	debug_gui_elem.addEventListener("mouseup", function(event) {
+		debug_gui_elem.is_focused = true;
+	});
+	source_gui_elem.addEventListener("mouseup", function(event) {
+		debug_gui_elem.is_focused = false;
+	});
 	slider_element.addEventListener("mousedown", slider_mousedown);
 	slider_element.addEventListener("mouseup", slider_mouseup);
+	run_gui_elem.addEventListener("mouseup", function(event) {
+		set_text(source_gui_elem.value);
+		location.reload();
+	});
+	reset_gui_elem.addEventListener("mouseup", function(event) {
+		reset_text();
+		location.reload();
+	});
 }
 
 let instant_scroll = false;
@@ -38,15 +433,19 @@ function document_keyup(event) {
 
 function document_keydown(event) {
 
-	// press B
-	if (event.keyCode == 66) {
+	if (debug_gui_elem.is_focused == false) {
+		return;
+	}
+
+	// press Z
+	if (event.keyCode == 90) {
 
 		step_back();
 		print();
 	}
 
-	// press N
-	if (event.keyCode == 78) {
+	// press X
+	if (event.keyCode == 88) {
 
 		step_next();
 		print();
@@ -815,222 +1214,6 @@ Stdlib_Block.statements = [
 	Stdlib_Block.statements.push(infer(parse(tokenize(string_code))).statements[0]);
 }
 
-let code = `
-bool test_nested_loop() {
-	bool passed = true;
-	int[6] results;
-	int width = 2;
-	int height = 3;
-	int i = 0;
-	for (int width_iter = 0; width_iter < width; width_iter += 1) {
-		for (int height_iter = 0; height_iter < height; height_iter += 1) {
-			int d = width_iter * height + height_iter;
-			results[i] = d;
-			i += 1;
-		}
-	}
-	for (int j = 0; j < 6; j += 1) {
-		passed &= results[j] == j;
-	}
-	return passed;
-}
-bool test_array() {
-	bool passed = true;
-	int[8] arr;
-	passed &= arr.length == 8;
-	arr[7] = 12345;
-	passed &= arr[7] == 12345;
-	arr[0] = arr[7];
-	passed &= arr[0] == 12345;
-	return passed;
-}
-bool test_pointer() {
-	bool passed = true;
-	int a = 0;
-	int* b;
-	b = &a;
-	*b = 12345;
-	passed &= a == 12345;
-	a = 0;
-	int** c;
-	c = &b;
-	**c = 12345;
-	passed &= a == 12345;
-	int d = 0;
-	d = **c;
-	passed &= d == 12345;
-	return passed;
-}
-bool test_malloc_free() {
-	bool passed = true;
-	uchar* ptr = malloc(1);
-	*ptr = 123;
-	passed &= *ptr == 123;
-	free(ptr);
-	uint* ptr2 = malloc(4);
-	*ptr2 = 12345;
-	passed &= *ptr2 == 12345;
-	free(ptr2);
-	return passed;
-}
-bool test_heap() {
-	bool passed = true;
-	for (uint i = 0; i < 100; i += 1) {
-		void* ptr  = malloc(1);
-		free(ptr);
-	}
-	return passed;
-}
-bool test_struct() {
-	bool passed = true;
-	struct Car {
-		uint type;
-		uint age;
-	}
-	struct Person {
-		uint age;
-		Car car;
-	}
-	Person steve;
-	steve.age = 20;
-	passed &= steve.age == 20;
-	steve.car.age = 2;
-	passed &= steve.car.age == 2;
-	steve.age += 4;
-	passed &= steve.age == 24;
-	steve.car.age += 4;
-	passed &= steve.car.age == 6;
-	return passed;
-}
-bool test_struct_array() {
-	bool passed = true;
-	struct Person {
-		uint age;
-	}
-	Person[2] people;
-	for (int i = 0; i < people.length; i += 1) {
-		people[i].age = (i + 1) * 10;
-	}
-	passed &= people[0].age == 10;
-	passed &= people[1].age == 20;
-	return passed;
-}
-bool test_do_while() {
-	bool passed = true;
-	int n = 1;
-	do {
-		n += 1;
-	} while (n < 1)
-	passed &= n == 2;
-	return passed;
-}
-bool test_inc_dec() {
-	bool passed = true;
-	int m = 0;
-	m++;
-	passed &= m == 1;
-	m--;
-	passed &= m == 0;
-	return passed;
-}
-/*
-bool test_unary() {
-	bool passed = true;
-	int n = 1;
-	passed &= -n == -1;
-	return passed;
-}
-*/
-bool test_string() {
-	bool passed = true;
-	string str = "Hello, World!";
-	passed &= str == "Hello, World!";
-	str = "Hi there.";
-	passed &= str == "Hi there.";
-	string str2 = "I'm here, too!";
-	passed &= str2 == "I'm here, too!";
-	str = str2;
-	passed &= str == "I'm here, too!";
-	return passed;
-}
-void tests() {
-	test_array();
-	test_pointer();
-	test_malloc_free();
-	// test_heap();
-	// test_dynamic_array();
-	test_struct();
-	test_struct_array();
-	test_do_while();
-	test_nested_loop();
-	test_inc_dec();
-	// test_unary();
-	test_string();
-}
-int some_other_function(char number) {
-	while (number > 0) {
-		if (number > 50) {
-			number -= 5;
-			continue;
-		}
-		if (number < 40) {
-			number = 5;
-			break;
-		}
-		number -= 10;
-	}
-	return number;
-}
-int some_function(uchar num_iters) {
-	int sum = 0;
-	for (int i = 0; i < num_iters; i += 1) {
-		sum += i * 20;
-	}
-	return some_other_function(sum);
-}
-int factorial(short number) {
-	if (number > 1) {
-		return factorial(number - 1) * number;
-	}
-	else {
-		return 1;
-	}
-}
-void fizzbuzz(ushort number) {
-	for (uint i = 1; i <= number; i += 1) {
-		if (i % 15 == 0) {
-			print("FizzBuzz");
-		}
-		else if (i % 5 == 0) {
-			print("Buzz");
-		}
-		else if (i % 3 == 0) {
-			print("Fizz");
-		}
-		else {
-			print(i);
-		}
-	}
-}
-void linked_list() {
-	struct List_Node {
-		void* data;
-		List_Node*[2] links;
-	};
-	List_Node first;
-}
-int main() {
-    int local_variable = 5;
-	factorial(local_variable);
-	fizzbuzz(15);
-	return local_variable;
-}
-main();
-`;
-let Global_Block = parse(tokenize(code));
-Stdlib_Block.statements.push(Global_Block);
-infer(Stdlib_Block);
-fill_rodata();
 function fill_rodata() {
 	for (let i = 0; i < strings.length; i += 1) {
 		let string = strings[i];
@@ -1044,8 +1227,6 @@ function fill_rodata() {
 		stack_pointer += elem_type.size_in_bytes * string.length;
 	}
 }
-let Main_call = Global_Block.statements[Global_Block.statements.length-1];
-code_composed = true;
 
 let code_element = document.getElementById("code");
 
@@ -1094,6 +1275,10 @@ function print() {
 	
 	print_to_dom(Global_Block, code_element, code_element, true, false);
 	
+	if (!map_line_to_execution_indices[current_line]) {
+		console.log("something went really wrong");
+		return;
+	}
 	column_index = map_line_to_execution_indices[current_line].indexOf(execution_index);
 
 	let printed_cursor = map_expr_to_printed.get(inspection_cursor);
@@ -1277,8 +1462,9 @@ function run_lvalue(node, push_index = true) {
 		add_memory_use(lhs_pointer, node.ident);
 		node.ident.last_return = prev_value;
 		node.ident.last_return_node = make_literal(prev_value);
+		node.ident.last_return_node.base.type = node.ident.base.type;
 
-		let result = math_binop(prev_value, node.operation_type, expression_value);
+		let result = math_binop(node.ident.last_return_node, node.operation_type, node.expression.last_return_node);
 
 		set_memory(lhs_pointer, node.ident.base.type, result);
 		add_memory_change(lhs_pointer, node.ident);
@@ -1299,10 +1485,16 @@ function run_lvalue(node, push_index = true) {
 	}
 	else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
 
+		if (node.array.base.type.base.kind != Type_Kind.ARRAY) {
+			throw Error
+		}
+
 		node.array.is_lhs = node.is_lhs;
 
-		return_value = run_lvalue(node.array) + run_rvalue(node.index) * node.base.type.size_in_bytes;
+		node.base.pointer = run_lvalue(node.array) + run_rvalue(node.index) * node.base.type.size_in_bytes;
+		return_value = node.base.pointer;
 		return_node = make_literal(return_value);
+		return_node.type = node.array.base.type.elem_type;
 		
 		if (push_index) {
 			add_node_to_execution_stack(node);
@@ -1324,6 +1516,8 @@ function run_lvalue(node, push_index = true) {
 			return_value = proc.apply(null, values);
 			if (return_value) {
 				return_node = make_literal(return_value);
+				// :TypeNeeded
+				return_node.type;
 			}
 			node.returned = true;
 
@@ -1357,6 +1551,7 @@ function run_lvalue(node, push_index = true) {
 		
 		let pointer = run_lvalue(node.expression);
 		return_value = get_memory(pointer, Types.size_t);
+		// :TypeNeeded
 		return_node = make_literal(return_value);
 
 		if (push_index) {
@@ -1389,6 +1584,7 @@ function run_lvalue(node, push_index = true) {
 						return_value = get_memory(base_pointer + length_offset, length_type);
 						return_node = make_literal(return_value);
 					}
+					// :TypeNeeded
 				}
 				else {
 					throw Error
@@ -1429,6 +1625,7 @@ function run_lvalue(node, push_index = true) {
 
 			return_value = pointer;
 			return_node = make_literal(return_value);
+			// :TypeNeeded
 		}
 		add_node_to_execution_stack(node);
 	}
@@ -1574,7 +1771,10 @@ function run_rvalue(node, push_index = true) {
 	}
 	else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
 
-		return_value = get_memory(run_lvalue(node), node.base.type);
+		let pointer = run_lvalue(node);
+		add_memory_use(pointer, node);
+
+		return_value = get_memory(pointer, node.base.type);
 		return_node = make_literal(return_value);
 	}
 	else if (node.base.kind == Code_Kind.DEREFERENCE) {
@@ -1623,7 +1823,13 @@ function run_rvalue(node, push_index = true) {
 	else {
 		return_value = run_lvalue(node);
 		return_node = node.last_return_node;
+		if (!return_node) {
+			return_node = make_literal(return_value);
+			return_node.base.type = node.base.type;
+		}
 	}
+
+	return_node.base.type = node.base.type;
 
 	node.last_return = return_value;
 	node.last_return_node = return_node;
@@ -1907,60 +2113,68 @@ function math_binop(left, operation_type, right) {
 	                             left.base.type.base.kind == Type_Kind.ARRAY) ||
 				   right.base && (right.base.type.base.kind == Type_Kind.STRING ||
 								  right.base.type.base.kind == Type_Kind.ARRAY);
+	let is_float = left.base && left.base.type.base.kind == Type_Kind.FLOAT && 
+				   right.base && right.base.type.base.kind == Type_Kind.FLOAT;
+
 	// we are piggybacking on Javascript's operations,
 	// especially string compare, need to rewrite when porting to C
 	if (operation_type == "+") {
-		return left + right;
+		return left.value + right.value;
 	}
 	else if (operation_type == "-") {
-		return left - right;
+		return left.value - right.value;
 	}
 	else if (operation_type == "*") {
-		return left * right;
+		return left.value * right.value;
 	}
 	else if (operation_type == "/") {
-		// emulate actual int division
-		return Math.floor(left / right);
+		if (is_float) {
+			return left.value / right.value;
+		}
+		else {
+			// emulate actual int division
+			return Math.floor(left.value / right.value);
+		}
 	}
 	else if (operation_type == "%") {
-		return left % right;
+		return left.value % right.value;
 	}
 	else if (operation_type == "<") {
-		return left < right;
+		return left.value < right.value;
 	}
 	else if (operation_type == ">") {
-		return left > right;
+		return left.value > right.value;
 	}
 	else if (operation_type == "<=") {
-		return left <= right;
+		return left.value <= right.value;
 	}
 	else if (operation_type == ">=") {
-		return left >= right;
+		return left.value >= right.value;
 	}
 	else if (operation_type == "==") {
-		return left == right;
+		return left.value == right.value;
 	}
 	else if (operation_type == "!=") {
-		return left != right;
+		return left.value != right.value;
 	}
 	else if (operation_type == "&&") {
-		return left && right;
+		return left.value && right.value;
 	}
 	else if (operation_type == "||") {
-		return left || right;
+		return left.value || right.value;
 	}
 	else if (operation_type == "&") {
-		return left & right;
+		return left.value & right.value;
 	}
 	else if (operation_type == "|") {
-		return left | right;
+		return left.value | right.value;
 	}
 }
 function math_solve(node) {
 	if (node.base.kind == Code_Kind.BINARY_OPERATION) {
-		let left = run_rvalue(node.left);
-		let right = run_rvalue(node.right);
-		return math_binop(left, node.operation_type, right);
+		run_rvalue(node.left);
+		run_rvalue(node.right);
+		return math_binop(node.left.last_return_node, node.operation_type, node.right.last_return_node);
 	}
 	else if (node.base.kind == Code_Kind.IDENT) {
 		let ident = node;
@@ -2405,6 +2619,13 @@ function mark_containment(node) {
 		                          node.right.contains_inspection || node.right.is_inspection;
 		node.contains_execution = node.left.contains_execution || node.left.is_execution ||
 		                          node.right.contains_execution || node.right.is_execution;
+	}
+	else if (node.base.kind == Code_Kind.INCREMENT) {
+		mark_containment(node.ident);
+
+		node.contains_flowpoint = node.ident.contains_flowpoint || node.ident.is_flowpoint;
+		node.contains_inspection = node.ident.contains_inspection || node.ident.is_inspection;
+		node.contains_execution = node.ident.contains_execution || node.ident.is_execution;
 	}
 	else if (node.base.kind == Code_Kind.PARENS) {
 

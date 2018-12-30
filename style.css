@@ -49,6 +49,7 @@ tr.separator {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	min-width: calc(50% - 2em);
 }
 
 .wrapper2 {
@@ -57,11 +58,15 @@ tr.separator {
 @media (min-aspect-ratio: 11/9) {
 
 	.wrapper {
-		width: calc(50em - 2em);
+		width: calc(70% - 2em);
 	}
 	.wrapper2 {
 		width: 100%;
 		flex-direction: row;
+	}
+	.wrapper3 {
+		margin-left: 1em;
+		margin-top: 0;
 	}
 	#code {
 		height: calc(100% - 4em);
@@ -75,9 +80,38 @@ tr.separator {
 	.wrapper2 {
 		flex-direction: column;
 	}
+	.wrapper3 {
+		margin-left: 0;
+		margin-top: 1em;
+	}
 	#code {
 		height: calc(100% - 24em);
 	}
+	#source {
+		max-width: calc(100% - 1em);
+	}
+}
+
+.wrapper3 {
+	display: flex;
+	flex-direction: column;
+	align-items: left;
+}
+.wrapper3 > *:first-child {
+	margin-top: 0 !important;
+}
+.wrapper3 > * {
+	margin-top: 1em;
+}
+.wrapper4 {
+	display: flex;
+	flex-direction: row;
+}
+.wrapper4 > *:first-child {
+	margin-left: 0 !important;
+}
+.wrapper4 > * {
+	margin-left: 1em;
 }
 
 .key {
@@ -106,7 +140,22 @@ tr.separator {
 
 	width: 100%;
 	margin: 1em;
+	margin-top: 0 !important;
 	padding: 0;
+}
+
+#source {
+	
+	min-width: 200px;
+	width: 600px;
+	min-height: calc(20 * 12pt);
+	color: rgb(200, 200, 200);
+	font-size: 12pt;
+	background-color: rgb(37, 37, 37);
+	border: 0.1em solid rgba(0, 0, 0, 0.2);
+}
+textarea {
+	tab-size: 4;
 }
 
 block {

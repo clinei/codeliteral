@@ -8,55 +8,17 @@
 
 		<div class="wrapper2">
 			<div class="wrapper">
-				<div id="code"></div>
 				<input id="slider" type="range" min="0" max="0"></input>
+				<div id="code"></div>
 			</div>
 			
-			<p id="instructions">
-				<table>
-					<tr>
-						<td><div class="key">W</div> move up</td>
-						<td><div class="key">A</div> move left</td>
-						<td><div class="key">N</div> step next</td>
-					</tr>
-					<tr>
-						<td><div class="key">S</div> move down</td>
-						<td><div class="key">D</div> move right</td>
-						<td><div class="key">B</div> step back</td>
-					</tr>
-					<tr class="separator"></tr>
-					<tr>
-						<td><div class="key">H</div> prev change</td>
-						<td><div class="key">Y</div> prev use</td>
-						<td><div class="key">R</div> prev clone</td>
-					</tr>
-					<tr>
-						<td><div class="key">J</div> next change</td>
-						<td><div class="key">U</div> next use</td>
-						<td><div class="key">T</div> next clone</td>
-					</tr>
-					<tr class="separator"></tr>
-					<tr>
-						<td><div class="key">K</div> set point</td>
-						<td><div class="key">,</div> prev point</td>
-						<td><div class="key">I</div> hide zone</td>
-					</tr>
-					<tr>
-						<td><div class="key">L</div> remove point</td>
-						<td><div class="key">.</div> next point</td>
-						<td><div class="key">O</div> show zone</td>
-					</tr>
-					<tr class="separator"></tr>
-					<tr>
-						<td><div class="key">F</div> show values</td>
-						<td><div class="key">E</div> show elems</td>
-					</tr>
-					<tr>
-						<td><div class="key">C</div> show changes</td>
-						<td><div class="key">G</div> expand all</td>
-					</tr>
-				</table>
-			</p>
+			<div class="wrapper3">
+				<div class="wrapper4">
+					<input type="button" value="run" id="run" />
+					<input type="button" value="reset" id="reset" />
+				</div>
+				<textarea id="source" spellcheck="false"></textarea>
+			</div>
 		</div>
 
 		<script src="main.js" type="text/javascript"></script>
