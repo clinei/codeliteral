@@ -54,6 +54,7 @@ tr.separator {
 
 .wrapper2 {
 	display: flex;
+	height: 100%;
 }
 @media (min-aspect-ratio: 11/9) {
 
@@ -69,6 +70,8 @@ tr.separator {
 		margin-top: 0;
 	}
 	#code {
+		min-height: calc(100% - 4em);
+		max-height: calc(100% - 4em);
 		height: calc(100% - 4em);
 	}
 }
@@ -85,6 +88,8 @@ tr.separator {
 		margin-top: 1em;
 	}
 	#code {
+		min-height: calc(100% - 24em);
+		max-height: calc(100% - 24em);
 		height: calc(100% - 24em);
 	}
 	#source {
@@ -150,11 +155,14 @@ tr.separator {
 	width: 600px;
 	min-height: calc(20 * 12pt);
 	color: rgb(200, 200, 200);
+	font-family: SourceCodePro, monospace;
 	font-size: 12pt;
 	background-color: rgb(37, 37, 37);
 	border: 0.1em solid rgba(0, 0, 0, 0.2);
 }
 textarea {
+	-o-tab-size: 4;
+	-moz-tab-size: 4;
 	tab-size: 4;
 }
 
