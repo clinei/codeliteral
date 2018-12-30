@@ -37,7 +37,7 @@ there are structs and arrays and even pointers, and also bugs,
 only a print function is available from the standard library.
 
 There is a C and WebAssembly port using Emscripten in progress.
-A ultimate goal is to have a standalone program that can debug
+The ultimate goal is to have a standalone program that can debug
 raw executables, and integrate more directly with languages.
 
 */
@@ -1280,6 +1280,10 @@ function print() {
 		return;
 	}
 	column_index = map_line_to_execution_indices[current_line].indexOf(execution_index);
+	if (column_index < 0) {
+		console.log("something went really wrong");
+		return;
+	}
 
 	let printed_cursor = map_expr_to_printed.get(inspection_cursor);
 	let curr_top = printed_cursor.getBoundingClientRect().top - code_element.getBoundingClientRect().top;
