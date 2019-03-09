@@ -300,16 +300,13 @@ int main() {
     int local_variable = 3;
 	// some_function(local_variable);
 
-	// bug when no declaration
 	factorial(local_variable);
-
-	// bug, return ident not correct name
-	fun(1);
+	factorial(local_variable);
 
 	// fizzbuzz(15);
 
 	// linked_list();
-	// return local_variable;
+	return local_variable;
 }
 main();
 `;

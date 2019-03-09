@@ -846,22 +846,6 @@ void infer_pop_block() {
     }
 }
 
-struct Code_Node* infer_decl_of_ident(struct Code_Node* ident) {
-    for (size_t i = infer_data.block_stack->length - 1; i >= 0; i -= 1) {
-        struct Code_Node* block = infer_data.block_stack->first[i];
-        for (size_t j = 0; j < block->block.declarations->length; j += 1) {
-            struct Code_Node* decl = block->block.declarations->first[j];
-            // printf("%s, %s\n", decl->declaration.ident->ident.name, ident->ident.name);
-            if (decl->kind == CODE_KIND_DECLARATION) {
-                if (strcmp(decl->declaration.ident->ident.name, ident->ident.name) == 0) {
-                    return decl;
-                }
-            }
-            else abort();
-        }
-    }
-    return NULL;
-}
 struct Code_Node* get_decl_of_ident(char* ident_name) {
     struct Code_Node* block = parse_data.last_block;
     while (block != NULL) {
@@ -940,6 +924,10 @@ struct Code_Node* infer(struct Code_Node* node) {
             break;
         }
         case CODE_KIND_IDENT:{
+            if (node->ident.declaration == NULL) {
+                printf("ident \"%s\" not declared!\n", node->ident.name);
+                abort();
+            }
             node->type = node->ident.declaration->declaration.type;
             break;
         }
@@ -1578,7 +1566,7 @@ struct Code_Node* parse_dot_operator(struct Token_Array* token_array,
     return NULL;
 }
 struct Code_Node* parse_ident(struct Token_Array* token_array,
-                 struct Code_Nodes* code_nodes) {
+                              struct Code_Nodes* code_nodes) {
 
     if (token_array->curr_token->kind == TOKEN_KIND_IDENT &&
         token_array->curr_token->str != NULL) {
@@ -1593,7 +1581,7 @@ struct Code_Node* parse_ident(struct Token_Array* token_array,
     }
 }
 struct Code_Node* parse_if(struct Token_Array* token_array,
-              struct Code_Nodes* code_nodes) {
+                           struct Code_Nodes* code_nodes) {
 
     token_array->curr_token++;
     token_array->curr_token++;

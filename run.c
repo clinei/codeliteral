@@ -599,6 +599,7 @@ void run_call(struct Code_Node* node) {
         struct Code_Node_Array* extras = run_data.last_block->block.extras->first + run_data.statement_index;
         array_push(extras, &(node->transformed));
         run_statement(node->transformed);
+        node->call.return_ident = clone(node->call.return_ident);
         add_node_to_execution_stack(node);
         printf("exiting %s\n", node->call.ident->ident.name);
     }
@@ -1463,7 +1464,7 @@ void transform(struct Code_Node* node) {
             node->transformed = clone(proc->transformed);
             node->transformed->block.transformed_from = node;
             struct Code_Node* return_decl = node->transformed->block.statements->first[0];
-            node->call.return_ident = clone(return_decl->declaration.ident);
+            node->call.return_ident = return_decl->declaration.ident;
 
             for (size_t i = 0; i < proc->procedure.params->length; i += 1) {
                 struct Code_Node* param = node->transformed->block.statements->first[i + 1];
