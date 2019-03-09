@@ -289,14 +289,24 @@ void fizzbuzz(ushort number) {
 		}
 	}
 }
+void fun(short number) {
+	if (number == 1) {
+		fun(2);
+	}
+}
 int main() {
 	// bug with strings and comments
 	// tests();
-    // int local_variable = 3;
+    int local_variable = 3;
 	// some_function(local_variable);
-	// factorial(local_variable);
 
-	test_if_else();
+	// bug when no declaration
+	factorial(local_variable);
+
+	// bug, return ident not correct name
+	fun(1);
+
+	// fizzbuzz(15);
 
 	// linked_list();
 	// return local_variable;

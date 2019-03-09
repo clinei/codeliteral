@@ -65,6 +65,14 @@ EM_BOOL keydown(int event_type, const struct EmscriptenKeyboardEvent* event, voi
         move_right_line();
         consumed = true;
     }
+    else if (strcmp(event->key, "r") == 0) {
+        prev_clone();
+        consumed = true;
+    }
+    else if (strcmp(event->key, "t") == 0) {
+        next_clone();
+        consumed = true;
+    }
     return consumed;
 }
 
@@ -134,6 +142,46 @@ void move_right_line() {
         interaction_data.cursor = node;
         interaction_data.execution_index = node->execution_index;
     }
+}
+
+void prev_clone() {
+    struct Indices_Array* indices = map_original_to_indices(interaction_data.cursor->original);
+    size_t curr_index = interaction_data.cursor->execution_index;
+    size_t prev_index = find_prev_index_in_array(indices, curr_index);
+    struct Code_Node* node = run_data.execution_stack->first[prev_index];
+    interaction_data.cursor = node;
+    interaction_data.execution_index = node->execution_index;
+}
+void next_clone() {
+    struct Indices_Array* indices = map_original_to_indices(interaction_data.cursor->original);
+    size_t curr_index = interaction_data.cursor->execution_index;
+    size_t next_index = find_next_index_in_array(indices, curr_index);
+    struct Code_Node* node = run_data.execution_stack->first[next_index];
+    interaction_data.cursor = node;
+    interaction_data.execution_index = node->execution_index;
+}
+
+size_t find_prev_index_in_array(struct Indices_Array* array, size_t index) {
+	size_t i = array->length;
+	while (i > 0) {
+		i -= 1;
+        size_t prev_index = array->first[i];
+		if (prev_index < index) {
+			return prev_index;
+		}
+	}
+	return index;
+}
+size_t find_next_index_in_array(struct Indices_Array* array, size_t index) {
+	size_t i = 0;
+	while (i < array->length) {
+        size_t next_index = array->first[i];
+		if (next_index > index) {
+			return next_index;
+		}
+		i += 1;
+	}
+	return index;
 }
 
 EMSCRIPTEN_KEEPALIVE

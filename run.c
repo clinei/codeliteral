@@ -16,6 +16,9 @@ void init_run(struct Code_Nodes* code_nodes) {
     run_data.original_to_clone = malloc(sizeof(struct Original_To_Clone_Map_SOA));
     soa_init(run_data.original_to_clone, 100, 2, sizeof(struct Code_Node*), sizeof(struct Code_Node*));
 
+    run_data.original_to_indices = malloc(sizeof(struct Original_To_Indices_Map_SOA));
+    soa_init(run_data.original_to_indices, 100, 2, sizeof(struct Code_Node*), sizeof(struct Indices_Array*));
+
     run_data.count_uses = true;
     run_data.name_uses = malloc(sizeof(struct Name_Uses_Map_SOA));
     soa_init(run_data.name_uses, 100, 2, sizeof(char*), sizeof(size_t));
@@ -42,10 +45,27 @@ void set_memory(size_t offset, void* data, size_t num_bytes) {
     memcpy(run_data.memory + offset, data, num_bytes);
 }
 
+struct Indices_Array* map_original_to_indices(struct Code_Node* original) {
+    for (size_t i = 0; i < run_data.original_to_indices->length; i += 1) {
+        if (run_data.original_to_indices->originals[i] == original) {
+            return run_data.original_to_indices->indices[i];
+        }
+    }
+    return NULL;
+}
+
 void add_node_to_execution_stack(struct Code_Node* node) {
     node->is_on_execution_stack = true;
     node->execution_index = run_data.execution_stack->length;
     array_push(run_data.execution_stack, &node);
+
+    struct Indices_Array* indices = map_original_to_indices(node->original);
+    if (indices == NULL) {
+        indices = malloc(sizeof(struct Indices_Array));
+        array_init(indices, sizeof(size_t), 100);
+        soa_push(run_data.original_to_indices, node->original, indices);
+    }
+    array_push(indices, &node->execution_index);
 }
 
 void add_name_use(char* name) {
@@ -1209,21 +1229,16 @@ struct Code_Node* map_original_to_clone(struct Code_Node* original) {
     }
     return NULL;
 }
+// returns true if replace, false if add
 bool add_or_replace_original_to_clone(struct Code_Node* original, struct Code_Node* cloned) {
-    bool had_clone = false;
     for (size_t i = 0; i < run_data.original_to_clone->length; i += 1) {
         if (run_data.original_to_clone->originals[i] == original) {
-            // replace
             run_data.original_to_clone->clones[i] = cloned;
-            had_clone = true;
-            break;
+            return true;
         }
     }
-    if (had_clone == false) {
-        // add
-        soa_push(run_data.original_to_clone, original, cloned);
-    }
-    return had_clone;
+    soa_push(run_data.original_to_clone, original, cloned);
+    return false;
 }
 
 struct Code_Node* clone(struct Code_Node* node) {
@@ -1412,6 +1427,7 @@ struct Code_Node* clone(struct Code_Node* node) {
     }
 
     cloned->type = node->type;
+    cloned->original = node;
 
     return cloned;
 }

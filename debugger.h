@@ -18,6 +18,12 @@ void move_down_line();
 void move_left_line();
 void move_right_line();
 
+void prev_clone();
+void next_clone();
+
+size_t find_prev_index_in_array(struct Indices_Array* array, size_t index);
+size_t find_next_index_in_array(struct Indices_Array* array, size_t index);
+
 EMSCRIPTEN_KEEPALIVE
 int init(int start_width, int start_height);
 EMSCRIPTEN_KEEPALIVE

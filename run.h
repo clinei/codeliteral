@@ -12,6 +12,21 @@ struct Original_To_Clone_Map_SOA {
     struct Code_Node** originals;
     struct Code_Node** clones;
 };
+struct Indices_Array {
+    size_t length;
+    size_t capacity;
+    size_t element_size;
+    size_t* first;
+    size_t* last;
+};
+struct Original_To_Indices_Map_SOA {
+    size_t length;
+    size_t capacity;
+    size_t members_length;
+    size_t* element_sizes;
+    struct Code_Node** originals;
+    struct Indices_Array** indices;
+};
 struct Name_Uses_Map_SOA {
     size_t length;
     size_t capacity;
@@ -24,6 +39,7 @@ struct Run_Data {
     struct Code_Nodes* code_nodes;
     struct Code_Node_Array* execution_stack;
     struct Original_To_Clone_Map_SOA* original_to_clone;
+    struct Original_To_Indices_Map_SOA* original_to_indices;
 
     void* memory;
     size_t memory_size;
@@ -47,6 +63,8 @@ struct Code_Node* math_solve(struct Code_Node* node);
 size_t run_lvalue(struct Code_Node* node);
 struct Code_Node* run_rvalue(struct Code_Node* node);
 struct Code_Node* run_statement(struct Code_Node* node);
+
+struct Indices_Array* map_original_to_indices(struct Code_Node* original);
 
 struct Code_Node* clone(struct Code_Node* node);
 void transform(struct Code_Node* node);
