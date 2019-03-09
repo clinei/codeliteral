@@ -129,6 +129,8 @@ struct Code_Block {
 };
 struct Code_Return {
     struct Code_Node* expression;
+    // for moving between clones and uses and changes
+    struct Code_Node* ident;
 };
 struct Code_Struct {
     struct Code_Node* block;
@@ -313,7 +315,8 @@ struct Code_Node* make_dot_operator(struct Code_Nodes* code_nodes,
 struct Code_Node* make_block(struct Code_Nodes* code_nodes,
                              struct Code_Node_Array* statements);
 struct Code_Node* make_return(struct Code_Nodes* code_nodes,
-                              struct Code_Node* expression);
+                              struct Code_Node* expression,
+                              struct Code_Node* ident);
 struct Code_Node* make_struct(struct Code_Nodes* code_nodes,
                               struct Code_Node* block);
 struct Code_Node* make_if(struct Code_Nodes* code_nodes,

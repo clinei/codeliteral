@@ -1348,7 +1348,7 @@ struct Code_Node* clone(struct Code_Node* node) {
             break;
         }
         case CODE_KIND_RETURN:{
-            cloned = make_return(run_data.code_nodes, clone(node->return_.expression));
+            cloned = make_return(run_data.code_nodes, clone(node->return_.expression), node->return_.ident);
             break;
         }
         case CODE_KIND_INCREMENT:{
@@ -1476,11 +1476,14 @@ void transform(struct Code_Node* node) {
         }
         case CODE_KIND_RETURN:{
             struct Code_Node* return_ident = run_data.last_call->call.return_ident;
+            node->return_.ident->ident.name = return_ident->ident.name;
+            node->return_.ident->ident.declaration = return_ident->ident.declaration;
+            node->return_.ident->type = return_ident->type;
             if (return_ident->type == Native_Type_Void) {
-                node->transformed = clone(return_ident);
+                node->transformed = clone(node->return_.ident);
             }
             else {
-                node->transformed = make_assign(run_data.code_nodes, clone(return_ident), node->return_.expression);
+                node->transformed = make_assign(run_data.code_nodes, clone(node->return_.ident), node->return_.expression);
             }
             break;
         }

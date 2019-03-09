@@ -288,12 +288,18 @@ struct Code_Node* make_block(struct Code_Nodes* code_nodes,
 }
 
 struct Code_Node* make_return(struct Code_Nodes* code_nodes,
-                              struct Code_Node* expression) {
+                              struct Code_Node* expression,
+                              struct Code_Node* ident) {
 
 	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_RETURN;
 
 	node->return_.expression = expression;
+
+    if (ident == NULL) {
+        ident = make_ident(code_nodes, NULL, NULL);
+    }
+    node->return_.ident = ident;
 
 	set_serial(node);
 
@@ -1730,7 +1736,7 @@ struct Code_Node* parse_return(struct Token_Array* token_array,
     if (token_array->curr_token->str[0] != ';') {
         expression = parse_rvalue(token_array, code_nodes);
     }
-    return make_return(code_nodes, expression);
+    return make_return(code_nodes, expression, NULL);
 }
 struct Code_Node* parse_block(struct Token_Array* token_array,
                               struct Code_Nodes* code_nodes) {
