@@ -323,8 +323,6 @@ struct Code_Node* make_if(struct Code_Nodes* code_nodes,
 	node->if_.condition = condition;
 	node->if_.expression = expression;
 
-    node->if_.else_expr = NULL;
-
 	set_serial(node);
 
 	return node;
@@ -1629,7 +1627,6 @@ struct Code_Node* parse_else(struct Token_Array* token_array,
     struct Code_Node* expression = parse_statement(token_array, code_nodes);
     struct Code_Node* else_expr = make_else(code_nodes, expression);
     else_expr->else_.if_expr = if_expr;
-    if_expr->if_.else_expr = else_expr;
     return else_expr;
 }
 struct Code_Node* parse_while(struct Token_Array* token_array,

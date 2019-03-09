@@ -193,7 +193,7 @@ Module['FS_createPath']('/assets', 'shaders', true, true);
   }
 
  }
- loadPackage({"files": [{"audio": 0, "start": 0, "crunched": 0, "end": 285388, "filename": "/assets/fonts/SourceCodeVariable-Roman.ttf"}, {"audio": 0, "start": 285388, "crunched": 0, "end": 285496, "filename": "/assets/shaders/quad.frag.glsl"}, {"audio": 0, "start": 285496, "crunched": 0, "end": 285684, "filename": "/assets/shaders/quad.vert.glsl"}, {"audio": 0, "start": 285684, "crunched": 0, "end": 285937, "filename": "/assets/shaders/texture_atlas.frag.glsl"}, {"audio": 0, "start": 285937, "crunched": 0, "end": 286173, "filename": "/assets/shaders/texture_atlas.vert.glsl"}], "remote_package_size": 286173, "package_uuid": "4e5a694f-ef33-402f-a742-abc6b5815af5"});
+ loadPackage({"files": [{"audio": 0, "start": 0, "crunched": 0, "end": 285388, "filename": "/assets/fonts/SourceCodeVariable-Roman.ttf"}, {"audio": 0, "start": 285388, "crunched": 0, "end": 285496, "filename": "/assets/shaders/quad.frag.glsl"}, {"audio": 0, "start": 285496, "crunched": 0, "end": 285684, "filename": "/assets/shaders/quad.vert.glsl"}, {"audio": 0, "start": 285684, "crunched": 0, "end": 285937, "filename": "/assets/shaders/texture_atlas.frag.glsl"}, {"audio": 0, "start": 285937, "crunched": 0, "end": 286173, "filename": "/assets/shaders/texture_atlas.vert.glsl"}], "remote_package_size": 286173, "package_uuid": "a3fa2fcf-d639-4c0a-9fa0-4254703782f9"});
 
 })();
 

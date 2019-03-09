@@ -18,7 +18,7 @@ function set_text(new_text) {
     writeAsciiToMemory(new_text, ptr);
     call_set_text(ptr);
 }
-// /*
+
 const code = `
 bool test_floats() {
 	bool passed = true;
@@ -284,8 +284,6 @@ void fizzbuzz(ushort number) {
 		else if (i % 3 == 0) {
 			printf("%s\n", "Fizz");
 		}
-		// this else still runs when the else if was run
-		// it should not
 		else {
 			printf("%u\n", i);
 		}
@@ -294,32 +292,14 @@ void fizzbuzz(ushort number) {
 int main() {
 	// bug with strings and comments
 	// tests();
-    int local_variable = 3;
+    // int local_variable = 3;
 	// some_function(local_variable);
 	// factorial(local_variable);
 
-	// test_if_else();
-
-	fizzbuzz(15);
-	
-	int i = 3;
-	if (i % 15 == 0) {
-		printf("%s\n", "FizzBuzz");
-	}
-	else if (i % 5 == 0) {
-		printf("%s\n", "Buzz");
-	}
-	else if (i % 3 == 0) {
-		printf("%s\n", "Fizz");
-	}
-	// comment
-	// yes
-	else {
-		printf("%u\n", i);
-	}
+	test_if_else();
 
 	// linked_list();
-	return local_variable;
+	// return local_variable;
 }
 main();
 `;

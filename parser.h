@@ -136,7 +136,6 @@ struct Code_Struct {
 struct Code_If {
     struct Code_Node* condition;
     struct Code_Node* expression;
-    struct Code_Node* else_expr;
 };
 struct Code_Else {
     struct Code_Node* expression;

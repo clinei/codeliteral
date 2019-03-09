@@ -14,11 +14,11 @@ void init_run(struct Code_Nodes* code_nodes) {
     array_init(run_data.execution_stack, sizeof(struct Code_Node*), 10);
 
     run_data.original_to_clone = malloc(sizeof(struct Original_To_Clone_Map_SOA));
-    soa_init((struct Dynamic_SOA*)run_data.original_to_clone, 100, 2, sizeof(struct Code_Node*), sizeof(struct Code_Node*));
+    soa_init(run_data.original_to_clone, 100, 2, sizeof(struct Code_Node*), sizeof(struct Code_Node*));
 
     run_data.count_uses = true;
     run_data.name_uses = malloc(sizeof(struct Name_Uses_Map_SOA));
-    soa_init((struct Dynamic_SOA*)run_data.name_uses, 100, 2, sizeof(char*), sizeof(size_t));
+    soa_init(run_data.name_uses, 100, 2, sizeof(char*), sizeof(size_t));
 
     run_data.memory_size = 1000;
     run_data.memory = malloc(run_data.memory_size);
@@ -55,7 +55,7 @@ void add_name_use(char* name) {
             return;
         }
     }
-    soa_push((struct Dynamic_SOA*)run_data.name_uses, name, 1);
+    soa_push(run_data.name_uses, name, 1);
 }
 size_t get_name_uses(char* name) {
     for (size_t i = 0; i < run_data.name_uses->length; i += 1) {
@@ -1002,17 +1002,6 @@ struct Code_Node* run_statement(struct Code_Node* node) {
             if (should_run) {
                 run_statement(node->if_.expression);
             }
-            else {
-                size_t maybe_else_index = run_data.statement_index + 1;
-                if (maybe_else_index < run_data.last_block->block.statements->length) {
-                    struct Code_Node* maybe_else = run_data.last_block->block.statements->first[maybe_else_index];
-                    if (maybe_else->kind == CODE_KIND_ELSE) {
-                        node->if_.else_expr = maybe_else;
-                        maybe_else->else_.if_expr = node;
-                        run_statement(maybe_else);
-                    }
-                }
-            }
             break;
         }
         case CODE_KIND_ELSE:{
@@ -1220,6 +1209,22 @@ struct Code_Node* map_original_to_clone(struct Code_Node* original) {
     }
     return NULL;
 }
+bool add_or_replace_original_to_clone(struct Code_Node* original, struct Code_Node* cloned) {
+    bool had_clone = false;
+    for (size_t i = 0; i < run_data.original_to_clone->length; i += 1) {
+        if (run_data.original_to_clone->originals[i] == original) {
+            // replace
+            run_data.original_to_clone->clones[i] = cloned;
+            had_clone = true;
+            break;
+        }
+    }
+    if (had_clone == false) {
+        // add
+        soa_push(run_data.original_to_clone, original, cloned);
+    }
+    return had_clone;
+}
 
 struct Code_Node* clone(struct Code_Node* node) {
     // printf("clone: (%s)\n", code_kind_to_string(node->kind));
@@ -1264,16 +1269,8 @@ struct Code_Node* clone(struct Code_Node* node) {
             }
             cloned = make_declaration(run_data.code_nodes, node->declaration.type, clone(node->declaration.ident), expression);
             cloned->declaration.ident->ident.declaration = cloned;
-            // @Incomplete
-            // need associative array
-            for (size_t i = 0; i < run_data.original_to_clone->length; i += 1) {
-                if (run_data.original_to_clone->originals[i] == node) {
-                    // overwrite
-                    run_data.original_to_clone->clones[i] = cloned;
-                    break;
-                }
-            }
-            soa_push((struct Dynamic_SOA*)run_data.original_to_clone, node, cloned);
+
+            add_or_replace_original_to_clone(node, cloned);
             break;
         }
         case CODE_KIND_IDENT:{
@@ -1294,7 +1291,7 @@ struct Code_Node* clone(struct Code_Node* node) {
         }
         case CODE_KIND_IF:{
             cloned = make_if(run_data.code_nodes, clone(node->if_.condition), clone(node->if_.expression));
-            soa_push((struct Dynamic_SOA*)run_data.original_to_clone, node, cloned);
+            add_or_replace_original_to_clone(node, cloned);
             break;
         }
         case CODE_KIND_ELSE:{
