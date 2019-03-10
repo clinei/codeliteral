@@ -182,7 +182,7 @@ void render_code_node(struct Code_Node* node,
                       struct Render_Data* render_data);
 void render_type(struct Type_Info* type,
                  struct Render_Data* render_data);
-void layout_node(struct Render_Node* node,
+bool layout_node(struct Render_Node* node,
                  struct Render_Node* parent,
                  struct Render_Data* render_data);
 void render_node(struct Render_Node* node,

@@ -228,11 +228,6 @@ void next_change() {
         return;
     }
     struct Indices_Array* indices = map_changes_to_indices(interaction_data.cursor->pointer);
-    printf("pointer: %zu\n", interaction_data.cursor->pointer);
-    for (size_t i = 0; i < indices->length; i += 1) {
-        printf("%zu\n", indices->first[i]);
-    }
-    printf("-------------------\n");
     if (indices == NULL) {
         printf("change indices not found!\n");
         return;

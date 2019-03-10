@@ -632,7 +632,8 @@ float get_text_width(char* text, struct Atlas* font_atlas) {
     }
     return width;
 }
-void layout_node(struct Render_Node* node,
+// returns true if should prune element from list, false if not
+bool layout_node(struct Render_Node* node,
                  struct Render_Node* parent,
                  struct Render_Data* render_data) {
 
@@ -648,6 +649,19 @@ void layout_node(struct Render_Node* node,
     node->x = render_data->layout_data.curr_x;
     node->y = render_data->layout_data.curr_y;
 
+    float screen_x = node->x + render_data->offset_x;
+    float screen_y = node->y + render_data->offset_y;
+    
+    /*
+    // clip
+    if (0 > screen_x || screen_x > render_data->width) {
+        return true;
+    }
+    if (0 > screen_y || screen_y > render_data->height) {
+        return true;
+    }
+    */
+
     switch (node->kind) {
         case RENDER_KIND_TEXT:{
             node->width = get_text_width(node->text.text, render_data->font_atlas);
@@ -659,7 +673,11 @@ void layout_node(struct Render_Node* node,
             float max_cross_distance = 0;
             for (size_t i = 0; i < node->list.elements->length; i += 1) {
                 struct Render_Node* elem = node->list.elements->first[i];
-                layout_node(elem, node, render_data);
+                bool should_prune = layout_node(elem, node, render_data);
+                if (should_prune) {
+                    node->list.elements->first[i] = NULL;
+                    continue;
+                }
                 if (node->list.direction == LIST_DIRECTION_VERTICAL) {
                     render_data->layout_data.curr_y += elem->height;
                     render_data->layout_data.curr_x = node->x;
@@ -710,11 +728,25 @@ void layout_node(struct Render_Node* node,
     */
     
     // printf("exit layout_node: (%u)\n", node->kind);
+    return false;
 }
 
 void render_node(struct Render_Node* node, struct Render_Data* render_data) {
+    if (node == NULL) {
+        // was pruned
+        return;
+    }
     float x = node->x + render_data->offset_x;
     float y = node->y + render_data->offset_y;
+    /*
+    // clip
+    if (0 > y || y > render_data->height) {
+        return;
+    }
+    if (0 > x || x > render_data->width) {
+        return;
+    }
+    */
     switch (node->kind) {
         case RENDER_KIND_TEXT:{
             render_text(node->text.text,
@@ -754,15 +786,6 @@ void render_node(struct Render_Node* node, struct Render_Data* render_data) {
 
 void render_code_node(struct Code_Node* node,
                       struct Render_Data* render_data) {
-
-    // @Refactor
-    // should be in layout_node
-    /*
-    // clip
-    if (0 > render_data->ypos && render_data->ypos > render_data->height) {
-        return;
-    }
-    */
 
     struct Render_Node* last_line = *render_data->debugger_root->list.elements->last;
     if (node == interaction_data.cursor) {
@@ -1254,7 +1277,7 @@ void render_text(char* text, float* xpos, float* ypos,
                  struct Render_Data* render_data) {
 
     // clip
-    if (0 > *ypos && *ypos > render_data->height) {
+    if (0 > *ypos || *ypos > render_data->height) {
         return;
     }
 
@@ -1271,10 +1294,10 @@ void render_text(char* text, float* xpos, float* ypos,
         }
         
         // clip
-        if (0 > *xpos && *xpos > render_data->width) {
+        if (0 > *xpos || *xpos > render_data->width) {
             continue;
         }
-        if (0 > *ypos && *ypos > render_data->height) {
+        if (0 > *ypos || *ypos > render_data->height) {
             break;
         }
 
