@@ -276,16 +276,16 @@ int factorial(short number) {
 void fizzbuzz(ushort number) {
 	for (uint i = 1; i <= number; i += 1) {
 		if (i % 15 == 0) {
-			printf("%s\n", "FizzBuzz");
+			"FizzBuzz";
 		}
 		else if (i % 5 == 0) {
-			printf("%s\n", "Buzz");
+			"Buzz";
 		}
 		else if (i % 3 == 0) {
-			printf("%s\n", "Fizz");
+			"Fizz";
 		}
 		else {
-			printf("%u\n", i);
+			i;
 		}
 	}
 }
@@ -300,10 +300,9 @@ int main() {
     int local_variable = 3;
 	// some_function(local_variable);
 
-	factorial(local_variable);
-	factorial(local_variable);
+	// factorial(local_variable);
 
-	// fizzbuzz(15);
+	fizzbuzz(15);
 
 	// linked_list();
 	return local_variable;

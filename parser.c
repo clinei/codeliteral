@@ -2052,6 +2052,7 @@ struct Code_Node* get_new_code_node(struct Code_Nodes* code_nodes) {
     node->is_lhs = false;
     node->is_on_execution_stack = false;
     node->execution_index = 0;
+    node->pointer = 0xdeadbeef;
     node->original = node;
     node->result = NULL;
     node->transformed = NULL;

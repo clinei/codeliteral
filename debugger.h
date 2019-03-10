@@ -21,6 +21,12 @@ void move_right_line();
 void prev_clone();
 void next_clone();
 
+void prev_use();
+void next_use();
+
+void prev_change();
+void next_change();
+
 size_t find_prev_index_in_array(struct Indices_Array* array, size_t index);
 size_t find_next_index_in_array(struct Indices_Array* array, size_t index);
 
