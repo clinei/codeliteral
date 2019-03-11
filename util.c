@@ -77,6 +77,98 @@ void array_clear_after(struct Dynamic_Array* array, size_t index) {
     array->length = index + 1;
     array->last = (void*)((size_t)array->first + array->element_size * (index - 1));
 }
+bool array_splice(struct Dynamic_Array* array, size_t insert_index,
+                  size_t remove_count, size_t add_count, void* new_elements) {
+    if (insert_index > array->length) {
+        printf("can't splice beyond array bounds! (length: %zu, index: %zu)\n", array->length, insert_index);
+        abort();
+    }
+    if (remove_count > array->length) {
+        printf("can't remove more elements than exist in the array! (length: %zu, remove_count: %zu)\n", array->length, remove_count);
+        abort();
+    }
+    if (insert_index + remove_count > array->length) {
+        printf("can't remove past the array length! (length: %zu, index: %zu, remove_end: %zu)\n", array->length, insert_index, insert_index + remove_count);
+        abort();
+    }
+    size_t copy_index = insert_index + remove_count;
+    size_t copy_count = array->length - copy_index;
+    size_t copy_num_bytes = array->element_size * copy_count;
+    void* copy_ptr = malloc(copy_num_bytes);
+    memcpy(copy_ptr, array->first + copy_index * array->element_size, copy_num_bytes);
+    array->length = array->length - remove_count + add_count;
+    bool did_realloc = array_maybe_realloc(array);
+    void* insert_ptr = array->first + insert_index * array->element_size;
+    size_t insert_num_bytes = array->element_size * add_count;
+    memcpy(insert_ptr, new_elements, insert_num_bytes);
+    insert_index += add_count;
+    insert_ptr += insert_num_bytes;
+    memcpy(insert_ptr, copy_ptr, copy_num_bytes);
+    array->last += array->element_size * add_count;
+    array->last -= array->element_size * remove_count;
+    return did_realloc;
+}
+// Returns:
+//   the index of the element in the array if one exists
+//   otherwise `array->length`
+size_t find_index(struct Dynamic_Array* array, void* element) {
+    size_t i = 0;
+    void* curr_elem = array->first;
+    while (i < array->length) {
+        if (memcmp(curr_elem, element, array->element_size) == 0) {
+            return i;
+        }
+        i += 1;
+        curr_elem += array->element_size;
+    }
+    return array->length;
+}
+size_t find_index_reverse(struct Dynamic_Array* array, void* element) {
+    size_t i = array->length;
+    void* curr_elem = array->last + array->element_size;
+    while (i > 0) {
+        i -= 1;
+        curr_elem -= array->element_size;
+        if (memcmp(curr_elem, element, array->element_size) == 0) {
+            return i;
+        }
+    }
+    return array->length;
+}
+// Parameters:
+//   `compare` - a pointer to a function that takes pointers to two values of the element type,
+//               typecasts them, and returns `1` if the first element is "bigger" than the second one,
+//               or `-1` if the first element is smaller, or `0` if they are equal.
+// Returns:
+//   the index of the element that is "bigger" than the element passed in,
+//   otherwise `array->length`
+size_t find_next_index(struct Dynamic_Array* array, void* element, int (*compare)(void*, void*)) {
+    size_t i = 0;
+    void* curr_elem = array->first;
+    while (i < array->length) {
+        if (compare(curr_elem, element) > 0) {
+            return i;
+        }
+        i += 1;
+        curr_elem += array->element_size;
+    }
+    return array->length;
+}
+// Returns:
+//   the index of the element that is "smaller" than the element passed in,
+//   otherwise `array->length`
+size_t find_prev_index(struct Dynamic_Array* array, void* element, int (*compare)(void*, void*)) {
+    size_t i = array->length;
+    void* curr_elem = array->last + array->element_size;
+    while (i > 0) {
+        i -= 1;
+        curr_elem -= array->element_size;
+        if (compare(curr_elem, element) < 0) {
+            return i;
+        }
+    }
+    return array->length;
+}
 bool array_maybe_realloc(struct Dynamic_Array* array) {
     if (array->length == array->capacity) {
         array->capacity *= 2;

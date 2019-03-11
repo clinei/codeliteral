@@ -37,6 +37,12 @@ void array_pop(struct Dynamic_Array* array);
 bool array_next(struct Dynamic_Array* array);
 void array_clear(struct Dynamic_Array* array);
 void array_clear_after(struct Dynamic_Array* array, size_t index);
+bool array_splice(struct Dynamic_Array* array, size_t insert_index,
+                  size_t remove_count, size_t add_count, void* new_elements);
+size_t find_index(struct Dynamic_Array* array, void* element);
+size_t find_index_reverse(struct Dynamic_Array* array, void* element);
+size_t find_next_index(struct Dynamic_Array* array, void* element, int (*compare)(void*, void*));
+size_t find_prev_index(struct Dynamic_Array* array, void* element, int (*compare)(void*, void*));
 bool array_maybe_realloc(struct Dynamic_Array* array);
 void array_destroy(struct Dynamic_Array* array);
 

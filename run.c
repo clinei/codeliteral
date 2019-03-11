@@ -872,7 +872,7 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
         }
         case CODE_KIND_IDENT:{
             run_lvalue(node);
-            result = get_ident_result(node);
+            result = node->result;
             break;
         }
         case CODE_KIND_CALL:{

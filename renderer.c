@@ -23,9 +23,27 @@ void init_renderer() {
 
     my_render_data.font_atlas = malloc(sizeof(struct Atlas));
     init_atlas(my_render_data.font_atlas, "assets/fonts/SourceCodeVariable-Roman.ttf", 24.0, 4, 128);
+
     my_render_data.fg_color = malloc(sizeof(GLfloat) * 4);
     my_render_data.bg_color = malloc(sizeof(GLfloat) * 4);
     my_render_data.cursor_color = malloc(sizeof(GLfloat) * 4);
+    my_render_data.flowpoint_bg_colors = malloc(sizeof(GLfloat) * 4 * 10);
+
+    GLfloat white[4] =        { 230 / 255.0f, 230 / 255.0f, 230 / 255.0f, 1 };
+    GLfloat bg_color[4] =     {   0 / 255.0f,   0 / 255.0f,   0 / 255.0f, 0 };
+    GLfloat cursor_color[4] = { 120 / 255.0f,  60 / 255.0f,  20 / 255.0f, 1 };
+
+    memcpy(my_render_data.fg_color, &white, sizeof(GLfloat) * 4);
+    memcpy(my_render_data.bg_color, &bg_color, sizeof(GLfloat) * 4);
+    memcpy(my_render_data.cursor_color, &cursor_color, sizeof(GLfloat) * 4);
+    
+    GLfloat flowpoint_bg_color[4] = { 200 / 255.0f, 40 / 255.0f, 40 / 255.0f, 1 };
+    for (size_t i = 0; i < 10; i += 1) {
+        memcpy(my_render_data.flowpoint_bg_colors + i * 4, &flowpoint_bg_color, sizeof(GLfloat) * 4);
+    }
+
+    my_render_data.bg_layer_stack = malloc(sizeof(struct Background_Layer_Array));
+    array_init(my_render_data.bg_layer_stack, sizeof(struct Background_Layer), 10);
 
     my_render_data.coords_length = 0;
     my_render_data.coords_capacity = 1000 * 4;
@@ -497,11 +515,6 @@ void render(struct Code_Node* node) {
     // printf("cursor kind: (%s)\n", code_kind_to_string(interaction_data.cursor->kind));
     // printf("-----new frame\n");
 
-    GLfloat white[4] =        { 230 / 255.0f, 230 / 255.0f, 230 / 255.0f, 1 };
-    GLfloat clear_color[4] =  { 37 / 255.0f, 37 / 255.0f, 37 / 255.0f, 1 };
-    GLfloat bg_color[4] =     { 120 / 255.0f, 60 / 255.0f, 20 / 255.0f, 0 };
-    GLfloat cursor_color[4] = { 120 / 255.0f, 60 / 255.0f, 20 / 255.0f, 1 };
-
     struct Render_Data* render_data = &my_render_data;
 
     render_data->indent_level = 0;
@@ -512,10 +525,6 @@ void render(struct Code_Node* node) {
     render_data->bg_coords_length = 0;
 
     render_data->block_depth = 0;
-    
-    memcpy(render_data->fg_color, &white, sizeof(GLfloat) * 4);
-    memcpy(render_data->bg_color, &bg_color, sizeof(GLfloat) * 4);
-    memcpy(render_data->cursor_color, &cursor_color, sizeof(GLfloat) * 4);
 
     find_expanded_nodes(node);
 
@@ -576,6 +585,7 @@ void render(struct Code_Node* node) {
 
     emscripten_webgl_make_context_current(debugger_context);
 
+    GLfloat clear_color[4] =  { 37 / 255.0f, 37 / 255.0f, 37 / 255.0f, 1 };
 	glClearColor(clear_color[0], clear_color[1], clear_color[2], clear_color[3]);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glEnable(GL_BLEND);
@@ -788,6 +798,7 @@ void render_code_node(struct Code_Node* node,
                       struct Render_Data* render_data) {
 
     struct Render_Node* last_line = *render_data->debugger_root->list.elements->last;
+
     if (node == interaction_data.cursor) {
         struct Render_Node* cursor_background_begin = make_background_begin(render_data->render_nodes, render_data->cursor_color);
         array_push(last_line->list.elements, &cursor_background_begin);
@@ -795,6 +806,19 @@ void render_code_node(struct Code_Node* node,
         array_push(last_line->list.elements, &cursor_begin);
         render_data->cursor_begin = cursor_begin;
         render_data->cursor_line = render_data->line_index;
+    }
+    
+    bool is_flowpoint = false;
+
+    if (node->execution_index != 0xdeadbeef) {
+        struct Indices_Array* indices = interaction_data.flows->first + interaction_data.flow_index;
+        size_t flowpoint_index = find_index(indices, &node->execution_index);
+        if (flowpoint_index < indices->length) {
+            is_flowpoint = true;
+            GLfloat* flow_color = render_data->flowpoint_bg_colors + interaction_data.flow_index * 4;
+            struct Render_Node* flowpoint_background_begin = make_background_begin(render_data->render_nodes, flow_color);
+            array_push(last_line->list.elements, &flowpoint_background_begin);
+        }
     }
 
     // printf("render_node: (%s)\n", code_kind_to_string(node->kind));
@@ -1263,6 +1287,11 @@ void render_code_node(struct Code_Node* node,
         array_push(nodes, &node);
     }
     
+    if (is_flowpoint) {
+        struct Render_Node* flowpoint_background_end = make_background_end(render_data->render_nodes);
+        array_push(last_line->list.elements, &flowpoint_background_end);
+    }
+
     if (node == interaction_data.cursor) {
         struct Render_Node* cursor_background_end = make_background_end(render_data->render_nodes);
         array_push(last_line->list.elements, &cursor_background_end);
@@ -1373,26 +1402,37 @@ void render_text(char* text, float* xpos, float* ypos,
 void mark_background_begin(struct Render_Data* render_data,
                            GLfloat* color,
                            float x, float y) {
-    
+
+    struct Background_Layer bg_layer;
+    bg_layer.color = color;
+    bg_layer.x = x;
+    bg_layer.y = y - render_data->font_atlas->font_size + 4;
+
+    array_push(render_data->bg_layer_stack, &bg_layer);
+}
+void mark_background_end(struct Render_Data* render_data,
+                         float x, float y) {
+
+    struct Background_Layer* bg_layer = render_data->bg_layer_stack->last;
+    float start_xpos = bg_layer->x;
+    float start_ypos = bg_layer->y;
+    GLfloat* color = bg_layer->color;
+    /*
+    printf("x: %f\n", start_xpos);
+    printf("y: %f\n", start_ypos);
+    printf("color: %zu\n", color);
+    printf("red: %f\n", color[0]);
+    printf("---------------------\n");
+    */
+    float end_xpos = x;
+    float end_ypos = y + 6;
+
     for (size_t i = 0; i < 4; i += 1) {
         render_data->bg_colors[render_data->bg_coords_length + 4 * i + 0] = color[0];
         render_data->bg_colors[render_data->bg_coords_length + 4 * i + 1] = color[1];
         render_data->bg_colors[render_data->bg_coords_length + 4 * i + 2] = color[2];
         render_data->bg_colors[render_data->bg_coords_length + 4 * i + 3] = color[3];
     }
-
-    // @Incomplete
-    // we need a stack
-    render_data->mark_begin_xpos = x;
-    render_data->mark_begin_ypos = y - render_data->font_atlas->font_size + 4;
-}
-void mark_background_end(struct Render_Data* render_data,
-                         float x, float y) {
-
-    float start_xpos = render_data->mark_begin_xpos;
-    float start_ypos = render_data->mark_begin_ypos;
-    float end_xpos = x;
-    float end_ypos = y + 6;
 
     convert_screen_coords_to_view_coords(start_xpos, start_ypos, render_data->width, render_data->height, &start_xpos, &start_ypos);
     convert_screen_coords_to_view_coords(end_xpos, end_ypos, render_data->width, render_data->height, &end_xpos, &end_ypos);
@@ -1425,6 +1465,8 @@ void mark_background_end(struct Render_Data* render_data,
         render_data->bg_coords = realloc(render_data->bg_coords, sizeof(GLfloat) * 4 * render_data->bg_coords_capacity);
         render_data->bg_colors = realloc(render_data->bg_colors, sizeof(GLfloat) * 4 * render_data->bg_coords_capacity);
     }
+
+    array_pop(render_data->bg_layer_stack);
 }
 
 void render_type(struct Type_Info* type,

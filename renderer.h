@@ -42,6 +42,18 @@ struct Layout_Data {
     float curr_x;
     float curr_y;
 };
+struct Background_Layer {
+    float x;
+    float y;
+    GLfloat* color;
+};
+struct Background_Layer_Array {
+    size_t length;
+    size_t capacity;
+    size_t element_size;
+    struct Background_Layer* first;
+    struct Background_Layer* last;
+};
 struct Render_Data {
     struct Atlas* font_atlas;
     float width;
@@ -58,6 +70,9 @@ struct Render_Data {
     GLfloat* fg_color;
     GLfloat* bg_color;
     GLfloat* cursor_color;
+    GLfloat* flowpoint_bg_colors;
+
+    struct Background_Layer_Array* bg_layer_stack;
 
     size_t bg_coords_length;
     size_t bg_coords_capacity;

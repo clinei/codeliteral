@@ -289,9 +289,6 @@ void fizzbuzz(ushort number) {
 		}
 	}
 }
-void fun(int number) {
-	number += 1;
-}
 int main() {
 	// bug with strings and comments
 	// tests();
@@ -302,10 +299,7 @@ int main() {
 
 	// setting and moving between points is next
 
-	// fizzbuzz(1000);
-
-	// alignment fault
-	fun(1);
+	fizzbuzz(30);
 
 	// linked_list();
 	return local_variable;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "parser.h"
+#include "interaction.h"
 
 void init_run();
 
@@ -11,13 +12,6 @@ struct Original_To_Clone_Map_SOA {
     size_t* element_sizes;
     struct Code_Node** originals;
     struct Code_Node** clones;
-};
-struct Indices_Array {
-    size_t length;
-    size_t capacity;
-    size_t element_size;
-    size_t* first;
-    size_t* last;
 };
 struct Original_To_Indices_Map_SOA {
     size_t length;

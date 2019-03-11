@@ -89,6 +89,62 @@ EM_BOOL keydown(int event_type, const struct EmscriptenKeyboardEvent* event, voi
         next_change();
         consumed = true;
     }
+    else if (strcmp(event->key, "k") == 0) {
+        add_flowpoint();
+        consumed = true;
+    }
+    else if (strcmp(event->key, "l") == 0) {
+        remove_flowpoint();
+        consumed = true;
+    }
+    else if (strcmp(event->key, ",") == 0) {
+        prev_flowpoint();
+        consumed = true;
+    }
+    else if (strcmp(event->key, ".") == 0) {
+        next_flowpoint();
+        consumed = true;
+    }
+    else if (strcmp(event->key, "0") == 0) {
+        interaction_data.flow_index = 0;
+        consumed = true;
+    }
+    else if (strcmp(event->key, "1") == 0) {
+        interaction_data.flow_index = 1;
+        consumed = true;
+    }
+    else if (strcmp(event->key, "2") == 0) {
+        interaction_data.flow_index = 2;
+        consumed = true;
+    }
+    else if (strcmp(event->key, "3") == 0) {
+        interaction_data.flow_index = 3;
+        consumed = true;
+    }
+    else if (strcmp(event->key, "4") == 0) {
+        interaction_data.flow_index = 4;
+        consumed = true;
+    }
+    else if (strcmp(event->key, "5") == 0) {
+        interaction_data.flow_index = 5;
+        consumed = true;
+    }
+    else if (strcmp(event->key, "6") == 0) {
+        interaction_data.flow_index = 6;
+        consumed = true;
+    }
+    else if (strcmp(event->key, "7") == 0) {
+        interaction_data.flow_index = 7;
+        consumed = true;
+    }
+    else if (strcmp(event->key, "8") == 0) {
+        interaction_data.flow_index = 8;
+        consumed = true;
+    }
+    else if (strcmp(event->key, "9") == 0) {
+        interaction_data.flow_index = 9;
+        consumed = true;
+    }
     return consumed;
 }
 
@@ -162,16 +218,16 @@ void move_right_line() {
 
 void prev_clone() {
     struct Indices_Array* indices = map_original_to_indices(interaction_data.cursor->original);
-    size_t curr_index = interaction_data.cursor->execution_index;
-    size_t prev_index = find_prev_index_in_array(indices, curr_index);
+    size_t curr_index = interaction_data.execution_index;
+    size_t prev_index = find_prev_elem_in_indices_array(indices, curr_index);
     struct Code_Node* node = run_data.execution_stack->first[prev_index];
     interaction_data.cursor = node;
     interaction_data.execution_index = node->execution_index;
 }
 void next_clone() {
     struct Indices_Array* indices = map_original_to_indices(interaction_data.cursor->original);
-    size_t curr_index = interaction_data.cursor->execution_index;
-    size_t next_index = find_next_index_in_array(indices, curr_index);
+    size_t curr_index = interaction_data.execution_index;
+    size_t next_index = find_next_elem_in_indices_array(indices, curr_index);
     struct Code_Node* node = run_data.execution_stack->first[next_index];
     interaction_data.cursor = node;
     interaction_data.execution_index = node->execution_index;
@@ -186,8 +242,8 @@ void prev_use() {
         printf("use indices not found!\n");
         return;
     }
-    size_t curr_index = interaction_data.cursor->execution_index;
-    size_t prev_index = find_prev_index_in_array(indices, curr_index);
+    size_t curr_index = interaction_data.execution_index;
+    size_t prev_index = find_prev_elem_in_indices_array(indices, curr_index);
     struct Code_Node* node = run_data.execution_stack->first[prev_index];
     interaction_data.cursor = node;
     interaction_data.execution_index = node->execution_index;
@@ -201,8 +257,8 @@ void next_use() {
         printf("use indices not found!\n");
         return;
     }
-    size_t curr_index = interaction_data.cursor->execution_index;
-    size_t next_index = find_next_index_in_array(indices, curr_index);
+    size_t curr_index = interaction_data.execution_index;
+    size_t next_index = find_next_elem_in_indices_array(indices, curr_index);
     struct Code_Node* node = run_data.execution_stack->first[next_index];
     interaction_data.cursor = node;
     interaction_data.execution_index = node->execution_index;
@@ -217,8 +273,8 @@ void prev_change() {
         printf("change indices not found!\n");
         return;
     }
-    size_t curr_index = interaction_data.cursor->execution_index;
-    size_t prev_index = find_prev_index_in_array(indices, curr_index);
+    size_t curr_index = interaction_data.execution_index;
+    size_t prev_index = find_prev_elem_in_indices_array(indices, curr_index);
     struct Code_Node* node = run_data.execution_stack->first[prev_index];
     interaction_data.cursor = node;
     interaction_data.execution_index = node->execution_index;
@@ -232,34 +288,100 @@ void next_change() {
         printf("change indices not found!\n");
         return;
     }
-    size_t curr_index = interaction_data.cursor->execution_index;
-    size_t next_index = find_next_index_in_array(indices, curr_index);
+    size_t curr_index = interaction_data.execution_index;
+    size_t next_index = find_next_elem_in_indices_array(indices, curr_index);
     struct Code_Node* node = run_data.execution_stack->first[next_index];
     interaction_data.cursor = node;
     interaction_data.execution_index = node->execution_index;
 }
 
-size_t find_prev_index_in_array(struct Indices_Array* array, size_t index) {
-	size_t i = array->length;
-	while (i > 0) {
-		i -= 1;
-        size_t prev_index = array->first[i];
-		if (prev_index < index) {
-			return prev_index;
-		}
-	}
-	return index;
+void add_flowpoint() {
+    if (interaction_data.flow_index >= interaction_data.flows->length) {
+        printf("flow index out of bounds when trying to add flowpoint!\n");
+        return;
+    }
+    struct Indices_Array* indices = interaction_data.flows->first + interaction_data.flow_index;
+    size_t curr_index = interaction_data.execution_index;
+    size_t flowpoint_index = find_next_index(indices, &curr_index, &compare_indices);
+    if (indices->length == 0) {
+        flowpoint_index = 0;
+    }
+    else if (indices->first[flowpoint_index] == curr_index) {
+        // no duplicates
+        return;
+    }
+    array_splice(indices, flowpoint_index, 0, 1, &curr_index);
 }
-size_t find_next_index_in_array(struct Indices_Array* array, size_t index) {
-	size_t i = 0;
-	while (i < array->length) {
-        size_t next_index = array->first[i];
-		if (next_index > index) {
-			return next_index;
-		}
-		i += 1;
-	}
-	return index;
+void remove_flowpoint() {
+    if (interaction_data.flow_index >= interaction_data.flows->length) {
+        printf("flow index out of bounds when trying to remove flowpoint!\n");
+        return;
+    }
+    struct Indices_Array* indices = interaction_data.flows->first + interaction_data.flow_index;
+    size_t curr_index = interaction_data.execution_index;
+    size_t flowpoint_index = find_index(indices, &curr_index);
+    if (flowpoint_index < indices->length) {
+        array_splice(indices, flowpoint_index, 1, 0, NULL);
+    }
+}
+
+void prev_flowpoint() {
+    if (interaction_data.flow_index >= interaction_data.flows->length) {
+        printf("flow index out of bounds when trying to go to prev flowpoint!\n");
+        return;
+    }
+    struct Indices_Array* indices = interaction_data.flows->first + interaction_data.flow_index;
+    size_t curr_index = interaction_data.execution_index;
+    size_t prev_index = find_prev_elem_in_indices_array(indices, curr_index);
+
+    struct Indices_Array* array = indices;
+    struct Code_Node* node = run_data.execution_stack->first[prev_index];
+    interaction_data.cursor = node;
+    interaction_data.execution_index = prev_index;
+}
+void next_flowpoint() {
+    if (interaction_data.flow_index >= interaction_data.flows->length) {
+        printf("flow index out of bounds when trying to go to next flowpoint!\n");
+        return;
+    }
+    struct Indices_Array* indices = interaction_data.flows->first + interaction_data.flow_index;
+    size_t curr_index = interaction_data.execution_index;
+    size_t next_index = find_next_elem_in_indices_array(indices, curr_index);
+    struct Code_Node* node = run_data.execution_stack->first[next_index];
+    interaction_data.cursor = node;
+    interaction_data.execution_index = next_index;
+}
+
+int compare_indices(void* a, void* b) {
+    size_t left = *(size_t*)a;
+    size_t right = *(size_t*)b;
+    if (left > right) {
+        return 1;
+    }
+    else if (left < right) {
+        return -1;
+    }
+    else {
+        return 0;
+    }
+}
+size_t find_prev_elem_in_indices_array(struct Indices_Array* array, size_t index) {
+    size_t prev_index = find_prev_index(array, &index, &compare_indices);
+    if (prev_index == array->length) {
+        return index;
+    }
+    else {
+        return array->first[prev_index];
+    }
+}
+size_t find_next_elem_in_indices_array(struct Indices_Array* array, size_t index) {
+    size_t next_index = find_next_index(array, &index, &compare_indices);
+    if (next_index == array->length) {
+        return index;
+    }
+    else {
+        return array->first[next_index];
+    }
 }
 
 EMSCRIPTEN_KEEPALIVE
@@ -267,18 +389,9 @@ int init(int start_width, int start_height) {
 
     init_parser();
     init_renderer();
+    init_interaction();
 
     resize(start_width, start_height);
-
-    interaction_data.show_values = false;
-    interaction_data.show_changes = false;
-    interaction_data.show_parens = false;
-    interaction_data.show_elements = false;
-    interaction_data.expand_all = false;
-    interaction_data.execution_index = 0;
-    interaction_data.column_index = 0;
-    interaction_data.scroll_x = 0;
-    interaction_data.scroll_y = 0;
 
     emscripten_set_keydown_callback("#window", NULL, false, &keydown);
     emscripten_set_main_loop(&step, 20, 0);

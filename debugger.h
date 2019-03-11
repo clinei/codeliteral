@@ -27,8 +27,16 @@ void next_use();
 void prev_change();
 void next_change();
 
-size_t find_prev_index_in_array(struct Indices_Array* array, size_t index);
-size_t find_next_index_in_array(struct Indices_Array* array, size_t index);
+void add_flowpoint();
+void remove_flowpoint();
+
+void prev_flowpoint();
+void next_flowpoint();
+
+int compare_indices(void* a, void* b);
+
+size_t find_prev_elem_in_indices_array(struct Indices_Array* array, size_t index);
+size_t find_next_elem_in_indices_array(struct Indices_Array* array, size_t index);
 
 EMSCRIPTEN_KEEPALIVE
 int init(int start_width, int start_height);
