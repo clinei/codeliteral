@@ -1635,9 +1635,6 @@ function run_lvalue(node, push_index = true) {
 				return_value = run_result;
 				return_node = node.last_return_node;
 			}
-			else {
-				return_value = null;
-			}
 		}
 
 		call_stack.pop();
@@ -1922,7 +1919,6 @@ function run_rvalue(node, push_index = true) {
 		return_node = node.last_return_node;
 		if (!return_node) {
 			return_node = make_literal(return_value);
-			return_node.base.type = node.base.type;
 		}
 	}
 
@@ -3009,8 +3005,8 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 			}
 		}
 		else if ((node.is_lhs ? lhs_values_shown : values_shown) &&
-		    node.last_return_node !== null &&
-			typeof node.last_return_node !== "undefined") {
+			node.last_return_node !== null && typeof node.last_return_node !== "undefined" &&
+			typeof node.last_return !== "undefined") {
 
 			print_to_dom(node.last_return_node, expr, block_print_target, false, false);
 
