@@ -1913,6 +1913,7 @@ function run_rvalue(node, push_index = true) {
 		}
 		
 		return_node = make_literal(return_value);
+		add_node_to_execution_stack(node);
 	}
 	else {
 		return_value = run_lvalue(node);
@@ -2921,6 +2922,10 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		order_last = true;
 	}
+
+	if (should_expand_node) {
+		push_index = false;
+	}
 	
 	if (push_index && order_last == false && node.execution_index >= 0 && !is_blocklevel_expanded_call) {
 		if (map_line_to_execution_indices[line_count]) {
@@ -3357,9 +3362,8 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	else if (node.base.kind == Code_Kind.DOT_OPERATOR) {
 		
 		// @Copypaste
-		if ((node.is_lhs ? lhs_values_shown : values_shown) &&
-		    node.last_return_node !== null &&
-		    typeof node.last_return_node !== "undefined") {
+		if ((node.is_lhs ? lhs_values_shown : values_shown) && should_expand_node == false &&
+		    node.last_return_node !== null && typeof node.last_return_node !== "undefined") {
 
 			print_to_dom(node.last_return_node, expr, block_print_target, false, false);
 		}
