@@ -3343,9 +3343,8 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
 
 		// @Copypaste
-		if ((node.is_lhs ? lhs_values_shown : values_shown) &&
-		    node.last_return_node !== null &&
-		    typeof node.last_return_node !== "undefined") {
+		if ((node.is_lhs ? lhs_values_shown : values_shown) && should_expand_node == false &&
+		    node.last_return_node !== null && typeof node.last_return_node !== "undefined") {
 
 			print_to_dom(node.last_return_node, expr, block_print_target, false, false);
 		}
