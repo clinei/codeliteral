@@ -218,26 +218,26 @@ block {
 
 /* Syntax Highlighting */
 .code-literal {
-	color: rgb(15, 218, 184);
+	color: rgb(60, 180, 160);
 }
 .code-string {
-	color: rgb(15, 218, 184);
+	color: rgb(60, 180, 160);
 }
 .code-ident {
-	color: rgb(220, 220, 220);
+	color: rgb(210, 200, 200);
 }
 .code-type {
-	color: rgb(118, 140, 252);
+	color: rgb(90, 150, 200);
 }
 .code-func {
-	color: rgb(220, 221, 140);
+	color: rgb(210, 210, 140);
 }
 .code-return, .code-return > .code-ident {
-	color: rgb(231, 250, 236);
+	color: rgb(210, 226, 210);
 }
 .code-keyword {
 	color: rgb(248, 130, 248);
 }
 .code-op {
-	color: rgb(80, 240, 80);
+	color: rgb(120, 200, 80);
 }

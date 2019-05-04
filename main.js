@@ -2904,6 +2904,12 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		print_to_dom(node.transformed, block_print_target, block_print_target, true);
 
+		if (node.base.kind == Code_Kind.CALL) {
+			let last = block_print_target.children[block_print_target.children.length-1];
+			let ident = last.children[0].children[0].children[1];
+			ident.classList.add("code-return");
+		}
+
 		if (node.base.kind == Code_Kind.BINARY_OPERATION ||
 			node.base.kind == Code_Kind.RETURN ||
 			node.base.kind == Code_Kind.BLOCK ||
@@ -2945,10 +2951,12 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		if (is_transformed_block) {
 
-			// style += "background-color: rgba("+ palette[palette_index] +", 0.03)";
-			style += "background-color: rgba(250, 250, 250, 0.02)";
+			// style += "background-color: rgba(250, 250, 250, 0.02)";
+			/*
+			style += "background-color: rgba("+ palette[palette_index] +", 0.03)";
 			palette_index += 1;
 			palette_index %= palette.length;
+			*/
 		}
 		else {
 
