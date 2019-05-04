@@ -269,7 +269,7 @@ int main() {
 	fizzbuzz(15);
 	return 0;
 }
-"Start here";
+"Starting tutorial";
 "Z - move back";
 "X - move next";
 main();
@@ -2951,6 +2951,8 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		if (is_transformed_block) {
 
+			// @Temporary
+			// better visibility
 			// style += "background-color: rgba(250, 250, 250, 0.02)";
 			/*
 			style += "background-color: rgba("+ palette[palette_index] +", 0.03)";
@@ -2974,9 +2976,12 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 			if (stmt_elem.children.length > 0) {
 
 				if (stmt.base.kind != Code_Kind.NEWLINE &&
-					stmt.base.kind != Code_Kind.IF &&
-					stmt.base.kind != Code_Kind.ELSE &&
-					stmt.base.kind != Code_Kind.WHILE) {
+					stmt.base.kind != Code_Kind.IF      &&
+					stmt.base.kind != Code_Kind.ELSE    &&
+					stmt.base.kind != Code_Kind.WHILE   &&
+					// @Temporary
+					// better visibility
+					stmt.base.kind != Code_Kind.STRING  ) {
 
 					stmt_elem.appendChild(document.createTextNode(";"));
 				}
@@ -3388,10 +3393,17 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	}
 	else if (node.base.kind == Code_Kind.STRING) {
 
+		expr.classList.add("code-comment");
+		expr.appendChild(document.createTextNode("//  "));
+		expr.appendChild(document.createTextNode(node.str));
+		// @Temporary
+		// better visibility
+		/*
 		expr.classList.add("code-string");
 		expr.appendChild(document.createTextNode("\""));
 		expr.appendChild(document.createTextNode(node.str));
 		expr.appendChild(document.createTextNode("\""));
+		*/
 
 		print_target.appendChild(expr);
 	}
