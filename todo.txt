@@ -56,6 +56,11 @@ render_type should not use snprintf, we should prerender type str
 
 Ideas:
 
+add a way to jump to the original code in the text editor, maybe as a toggle that makes the original code get selected when moving between nodes
+
+side-by-side view of original and evaluated code, maybe this is useful?
+have to deal with mismatching lines, though
+
 we could let the user know at a glance when they use garbage memory
 for that, we need to track set_memory and allocations and deallocations in a more detailed way
 
