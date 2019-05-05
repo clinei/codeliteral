@@ -3105,6 +3105,9 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		if (node.condition.last_return) {
 			print_to_dom(node.expression, print_target, block_print_target);
 		}
+		else {
+			expr.appendChild(document.createTextNode("{}"));
+		}
 	}
 	else if (node.base.kind == Code_Kind.ELSE) {
 
