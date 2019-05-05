@@ -119,15 +119,6 @@ tr.separator {
 	margin-left: 1em;
 }
 
-.key {
-
-	display: inline;
-
-	color: rgb(180, 180, 50);
-
-	font-weight: bold;
-}
-
 #code {
 
 	position: relative;
@@ -179,9 +170,18 @@ block {
 	width: 100%;
 }
 
-.active_cursor, .flow-1, .flow-2, .flow-3, .flow-4, .flow-5, .flow-6, .flow-7, .flow-8, .flow-9 {
+stmt {
+	margin-bottom: 4px;
+}
 
-	border-radius: 0.2em;
+.active_cursor, .active-cursor > * {
+	border-radius: 0.1em;
+}
+
+.flow-1, .flow-2, .flow-3, .flow-4, .flow-5, .flow-6, .flow-7, .flow-8, .flow-9, .flow-0 {
+	border-radius: 0.1em;
+	border-bottom-style: solid;
+	border-bottom-width: 2px;
 }
 
 .active_cursor, .active_cursor * {
@@ -191,18 +191,36 @@ block {
 	z-index: 10;
 }
 
-.flow-1, .flow-1 > .code-ident {
-
-	color: rgb(250, 220, 60) !important;
-
-	background-color: rgb(202, 13, 57);
+.flow-1 {
+	border-bottom-color: rgb(200, 200, 60);
 }
-
 .flow-2 {
-
-	color: rgb(250, 220, 60) !important;
-
-	background-color: rgb(6, 116, 15);
+	border-bottom-color: rgb(3, 200, 16);
+}
+.flow-3 {
+	border-bottom-color: rgb(250, 40, 40);
+}
+.flow-4 {
+	border-bottom-color: rgb(0, 160, 250);
+}
+.flow-5 {
+	border-bottom-color: rgb(230, 130, 60);
+}
+.flow-6 {
+	border-bottom-color: rgb(250, 100, 160);
+}
+.flow-7 {
+	border-bottom-color: rgb(40, 160, 160);
+}
+/* repeat */
+.flow-8 {
+	border-bottom-color: rgb(200, 200, 60);
+}
+.flow-9 {
+	border-bottom-color: rgb(3, 200, 16);
+}
+.flow-0 {
+	border-bottom-color: rgb(250, 40, 40);
 }
 
 ::selection {

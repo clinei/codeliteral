@@ -137,8 +137,6 @@ raw executables, and integrate more directly with languages.
 int small_bug(int num, int denom) {
 	"Why is this 0?";
 	int answer = num / denom;
-	"Press E to see the elements";
-	"You can press E and F many times";
 	"Correct result is 0.666.. but integer division rounds to 0";
 	float fnum = num;
 	float fdenom = denom;
@@ -147,55 +145,76 @@ int small_bug(int num, int denom) {
 	return answer;
 }
 
-void bigger_bug() {
-	"You can use WASD to move, too";
+int square(int n) {
+	if (n == 1) {
+		"When a variable name has already occurred";
+		"we increment a number and add it to the name";
+	}
+	else if (n == 0) {
+		"Only the code that was run is shown";
+		"because anything else is not relevant";
+		"like that if statement above";
+	}
+	else if (n == 2) {
+		"You can use R and T to move between";
+		"different calls of the same function, too";
+	}
+	return n * n;
+}
+
+void loops() {
+	"We fill an array with 5 ascending numbers";
 	int[5] arr;
-	"We fill an array with ascending numbers";
-	"This used to be a for loop, but we unroll it";
+	"This was a for loop, but we moved the initializer";
+	"and turned every cycle into an if statement";
+	"Press R and T to move between the cycles";
+	"or any execution of the same code";
 	for (int i = 0; i < arr.length; i += 1) {
 		arr[i] = i;
 	}
-	"We do something with some of the elements";
+	"We square the numbers";
+	"Press X or Z to go inside calls";
 	for (int j = 0; j < arr.length; j += 1) {
-		if (j == 2) {
-			arr[j] = 50;
-			"Press C to see the value before it was changed";
-			"You can toggle it just like E and F";
+		arr[j] = square(arr[j]);
+	}
+	"We do some processing";
+	for (int k = 0; k < arr.length; k += 1) {
+		if (arr[k] == 4) {
+			arr[k] = 50;
 		}
-		else if (j == 3) {
-			arr[j] += 2;
+		else if (arr[k] == 9) {
+			arr[k] -= 4;
 		}
-		else if (j == 4) {
-			arr[j] = 55;
-		}
-		else {
-			"Nothing with this one";
+		else if (arr[k] == 16) {
+			arr[k] = 55;
 		}
 	}
-	"Some elements are too big, so we cut them down";
-	for (int k = 0; k < arr.length; k += 1) {
-		if (arr[k] > 50) {
-			"Cutting down another way";
-			arr[k] = 5;
+	"Some elements are too big, so we make them smaller";
+	for (int l = 0; l < arr.length; l += 1) {
+		if (arr[l] > 50) {
+			"Second one made smaller";
+			"Both have the same value";
+			"but for different reasons";
+			arr[l] = 5;
 		}
-		else if (arr[k] == 50) {
-			"Cutting down one way";
-			arr[k] = 5;
-		}
-		else {
-			"We don't touch this one";
+		else if (arr[l] == 50) {
+			"First one made smaller";
+			arr[l] = 5;
 		}
 	}
 	"The results";
-	for (int l = 0; l < arr.length; l += 1) {
-		if (arr[l] == 5) {
-			"Move the cursor to arr[l]";
-			"Press H to go where the value came from, the prev change";
-			"Press J to jump back here, the next change";
-			arr[l] = 0;
+	for (int m = 0; m < arr.length; m += 1) {
+		if (arr[m] == 5) {
+			"Why is this value 5?";
+			"Press K to mark a point of interest";
+			"Press , and . to move between points of interest";
+			"Press L to become disinterested";
+			"Press 0-9 to select the active array of points";
+			arr[m] = arr[m];
 		}
 	}
-	"You can also press Y and U to jump to prev use and next use";
+	"That's it for now, you can explore the extra functions in main";
+	"or write your own code in the other panel";
 }
 
 int factorial(short number) {
@@ -203,26 +222,23 @@ int factorial(short number) {
 		return factorial(number - 1) * number;
 	}
 	else {
-		"A clone is one instance of code that has been executed many times";
-		"Many calls of the same function, or many cycles of the same loop";
-		"Press R to jump to prev clone";
-		"Press T to jump to next clone";
-		"For example, go to int return_factorial and press R and T";
-		"You can also jump between rarely accessed conditional code";
-		"like the terminating return statement of recursive factorial";
-		"on the next line";
+		"You can use R and T to jump between";
+		"rarely accessed conditional code";
+		"like the following return statement";
+		"that terminates a recursive factorial";
 		return 1;
 	}
 }
 
 void fizzbuzz(int number) {
-	"That's it for now, you can try out your new skills on FizzBuzz";
-	"or you can write your own code in the other panel";
 	for (int i = 1; i <= number; i += 1) {
 		if (i % 15 == 0) {
 			print("FizzBuzz");
 		}
 		else if (i % 5 == 0) {
+			"You can use R and T to jump between";
+			"rarely accessed conditional code";
+			"like this special loop case";
 			print("Buzz");
 		}
 		else if (i % 3 == 0) {
@@ -258,20 +274,67 @@ void linked_list() {
 }
 */
 
+int simple_code(int param, int other_param) {
+	"Read the code and try to guess the return value"
+	int temp = param + other_param;
+	temp *= param * 2;
+	other_param += 3;
+	temp += other_param;
+	"or press F a few times to see the values directly"
+	return temp;
+}
+int complex_code(int param1, int param2, int param3) {
+	"WASD to move faster";
+	int foo = param1;
+	int bar = param2;
+	int qux = param3;
+	if (foo > 1) {
+		"Press E to see the elements of math expressions";
+		bar = foo + qux;
+		qux -= foo;
+	}
+	if ((bar - foo) * bar - 50 > 10) {
+		"or go into the expressions with WASD and ZX";
+		"and show values and hide elements";
+		"and move around with ZX";
+		"to see every step of the calculation";
+		qux += 4;
+		bar += 2;
+	}
+	if (qux) {
+		if (qux == 10) {
+			"Knowing what values things have is not enough";
+			"You want to know _why_";
+			"Press H to see where a value was changed last";
+			"Press J to see where a value was changed next";
+			qux += bar - 2;
+			bar += 3;
+		}
+		if (qux == 20) {
+			"Press C to see what the value was before";
+			qux *= 2;
+		}
+	}
+	"Use your new tricks to find out";
+	"how we got this return value";
+	return qux;
+}
+
 int main() {
-	"Press F to see what the call below returned";
-	"and then press X to go inside it";
-	small_bug(2, 3);
-	bigger_bug();
+	"Z to move backward";
+	simple_code(1, 2);
+	complex_code(2, 4, 8);
+	loops();
+
 	// linked_list();
+	fizzbuzz(15);
 	factorial(5);
 	factorial(3);
-	fizzbuzz(15);
+	small_bug(2, 3);
 	return 0;
 }
 "Starting tutorial";
-"Z - move back";
-"X - move next";
+"X to move forward";
 main();
 `;
 
@@ -511,7 +574,7 @@ function map_controls() {
 	});
 }
 
-let instant_scroll = false;
+let instant_scroll = true;
 
 function slider_mousedown() {
 	instant_scroll = true;
@@ -521,7 +584,8 @@ function slider_mouseup() {
 }
 
 function document_keyup(event) {
-	instant_scroll = false;
+	instant_scroll = true;
+	// instant_scroll = false;
 }
 
 function document_keydown(event) {
@@ -1066,7 +1130,7 @@ let map_original_to_clone = new Map();
 let debugging = false;
 let execution_cursor = null;
 let execution_index = 0;
-let idents_used = new Set();
+let idents_used = new Map();
 let call_stack = new Array();
 let block_stack = new Array();
 let loop_stack = new Array();
@@ -1391,24 +1455,20 @@ function print() {
 
 	let diff_top = curr_top - prev_top;
 
-	// @@@
-	// @Incomplete
 	if (diff_top > (midpoint_y + radius_y)) {
 
 		code_element.scrollTop = printed_cursor.offsetTop - prev_top;
 	}
 
-	if (position_x < (midpoint_x - radius_x) ||
-		position_x > (midpoint_x + radius_x) ||
-		position_y < (midpoint_y - radius_y) ||
+	if (position_y < (midpoint_y - radius_y) ||
 		position_y > (midpoint_y + radius_y)) {
+		
+		code_element.scrollTop = printed_cursor.offsetTop - midpoint_y;
+	}
+	if (position_x < (midpoint_x - radius_x) ||
+		position_x > (midpoint_x + radius_x)) {
 
-		if (instant_scroll) {
-			code_element.scrollTop = printed_cursor.offsetTop - midpoint_y;
-		}
-		else {
-			printed_cursor.scrollIntoView(code_element.scroll_options);
-		}
+		printed_cursor.scrollIntoView(code_element.scroll_options);
 	}
 	
 	prev_top = curr_top;
@@ -1485,13 +1545,7 @@ function run_lvalue(node, push_index = true) {
 		if (push_index) {
 			add_node_to_execution_stack(node);
 		}
-
-		/*
-		// :Refactor
-		if (node.is_lhs != true && node.execution_index) {
-			map_ident_to_uses.get(node.declaration.ident).push(node.execution_index);
-		}
-		*/
+		node.name = node.declaration.ident.name;
 
 		if (node.declaration.type.name != "void") {
 			return_value = node.declaration.pointer;
@@ -1776,13 +1830,6 @@ function run_rvalue(node, push_index = true) {
 	}
 	else if (node.base.kind == Code_Kind.IDENT) {
 
-		/*
-		// :Refactor
-		if (node.execution_index) {
-			map_ident_to_uses.get(node.declaration.ident).push(node.execution_index);
-		}
-		*/
-
 		if (node.declaration.type.name == "void") {	
 			throw Error;
 		}
@@ -2013,8 +2060,8 @@ function run_statement(node, push_index = true) {
 			add_memory_use(node.pointer, node.ident);
 			add_memory_change(node.pointer, node.ident);
 		}
-		
-		idents_used.add(node.ident.name);
+
+		node.ident.name = get_final_name(node.ident.original.name);
 
 		return_value = expression_value;
 	}
@@ -2391,31 +2438,21 @@ function clone(node, set_original = true) {
 		}
 
 		let decl = make_declaration(clone(node.ident), expr, type);
-
-		decl.ident.name = get_final_name(node.ident.original.name);
-
+		// decl.ident.name = get_final_name(node.ident.original.name);
 		map_original_to_clone.set(node, decl);
-
 		cloned = decl;
 	}
 	else if (node.base.kind == Code_Kind.IDENT) {
-
 		let ident = make_ident(node.name);
-
-		// @Cleanup
 		let decl_clone = map_original_to_clone.get(node.declaration);
-
 		if (decl_clone) {
-
 			ident.declaration = decl_clone;
 			ident.name = decl_clone.ident.name;
 		}
 		else {
-
 			// @Audit
 			ident.declaration = node.declaration;
 		}
-
 		cloned = ident;
 	}
 	else if (node.base.kind == Code_Kind.MINUS) {
@@ -2491,18 +2528,16 @@ function clone(node, set_original = true) {
 }
 
 function get_final_name(name) {
-
 	let final_name = name;
-
-	let count = 1;
-
-	while (idents_used.has(final_name)) {
-
+	let count = idents_used.get(name);
+	if (count) {
 		count += 1;
-
-		final_name = name +"_"+ count;
+		final_name = name + "_" + count;
 	}
-
+	else {
+		count = 1;
+	}
+	idents_used.set(name, count);
 	return final_name;
 }
 
@@ -2569,6 +2604,7 @@ function transform(node) {
 		// @Hack
 		code_composed = false;
 		let cloned_ident = clone(ident);
+		last_call.transformed.return_ident = clone(ident);
 		code_composed = true;
 		cloned_ident.original = node.original;
 		// @Copypaste

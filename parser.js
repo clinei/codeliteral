@@ -886,6 +886,9 @@ function infer(node) {
         infer(node.condition);
     }
     else if (node.base.kind == Code_Kind.FOR) {
+        let for_scope = make_block();
+        infer_block_stack.push(for_scope);
+        for_scope.declarations = new Array();
         if (node.begin) {
             infer(node.begin);
         }
@@ -896,6 +899,7 @@ function infer(node) {
             infer(node.cycle_end);
         }
         infer(node.expression);
+        infer_block_stack.pop();
     }
     else if (node.base.kind == Code_Kind.CALL) {
         infer(node.ident);
@@ -1429,7 +1433,8 @@ function parse(tokens) {
         }
         // cdecl function pointer syntax is dumb
         // not gonna implement
-        while (curr_token.str[0] == "*") {
+        // need the second condition to stop `temp *=` parsing as a pointer type
+        while (curr_token.str[0] == "*" && curr_token.str.split().every(a => a == "*")) {
             curr_type = parse_pointer_type(curr_type);
             curr_token = tokens[token_index];
         }
