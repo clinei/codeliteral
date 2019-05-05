@@ -1662,6 +1662,10 @@ struct Code_Node* parse_for(struct Token_Array* token_array,
     struct Code_Node* begin = NULL;
     struct Code_Node* condition = NULL;
     struct Code_Node* cycle_end = NULL;
+    struct Code_Node* for_scope = make_block(code_nodes, NULL);
+    for_scope->block.parent = parse_data.last_block;
+    struct Code_Node* prev_last_block = parse_data.last_block;
+    parse_data.last_block = for_scope;
     token_array->curr_token++;
     if (token_array->curr_token->str[0] == '(') {
         token_array->curr_token++;
@@ -1714,6 +1718,7 @@ struct Code_Node* parse_for(struct Token_Array* token_array,
         printf("for expression missing!\n");
         abort();
     }
+    parse_data.last_block = prev_last_block;
     return make_for(code_nodes, begin, condition, cycle_end, expression);
 }
 struct Code_Node* parse_continue(struct Token_Array* token_array,

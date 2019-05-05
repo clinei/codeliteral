@@ -985,8 +985,8 @@ struct Code_Node* run_statement(struct Code_Node* node) {
             }
             // guarantee unique variable names
             char* ident_name = node->declaration.ident->ident.name;
-            size_t uses = get_name_uses(ident_name);
-            if (uses > 0) {
+            size_t uses = get_name_uses(ident_name) + 1;
+            if (uses > 1) {
                 int chars_needed = snprintf(NULL, 0, "%s_%zu", ident_name, uses) + 1;
                 char* new_ident_name = malloc(sizeof(char) * chars_needed);
                 int more_chars_needed = snprintf(new_ident_name, chars_needed, "%s_%zu", ident_name, uses);
