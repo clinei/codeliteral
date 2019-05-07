@@ -173,24 +173,32 @@ bool test_struct_array() {
 	bool passed = true;
 	struct Person {
 		uint age;
-		uint pad1;
-		uint pad2;
-		uint pad3;
-		uint pad4;
-		uint pad5;
-		uint pad6;
 	};
-	// @@@
-	// decl ptr: 16
 	Person[2] people;
-	// begin has same decl ptr: 16
 	for (int i = 0; i < people.length; i += 1) {
-		people[i].age;
-		(i + 1) * 10;
 		people[i].age = (i + 1) * 10;
 	};
 	passed &= people[0].age == 10;
 	passed &= people[1].age == 20;
+	return passed;
+}
+bool test_while_break_continue() {
+	bool passed = true;
+	bool stop = false;
+	int n = 0;
+	while (n < 10) {
+		if (stop) {
+			n = 4;
+			break;
+		}
+		if (n == 2) {
+			stop = true;
+			continue;
+			passed = false;
+		}
+		n += 1;
+	}
+	passed &= n == 4;
 	return passed;
 }
 bool test_do_while() {
@@ -204,11 +212,14 @@ bool test_do_while() {
 }
 bool test_inc_dec() {
 	bool passed = true;
-	int m = 0;
+	int m = 4;
 	m++;
-	passed &= m == 1;
+	m++;
+	m++;
+	passed &= m == 7;
 	m--;
-	passed &= m == 0;
+	m--;
+	passed &= m == 5;
 	return passed;
 }
 // bool test_unary() {
@@ -238,11 +249,12 @@ void tests() {
 	// test_dynamic_array();
 	test_struct();
 	test_struct_array();
+	test_while_break_continue();
 	test_do_while();
 	test_nested_loop();
-	// test_inc_dec();
+	test_inc_dec();
 	// test_unary();
-	// test_string();
+	test_string();
 }
 int some_other_function(char number) {
 	while (number > 0) {
@@ -292,12 +304,13 @@ void fizzbuzz(ushort number) {
 int main() {
 	// bug with strings and comments
 	// tests();
+
+	test_struct_array();
+
     int local_variable = 3;
 	// some_function(local_variable);
 
 	// factorial(local_variable);
-
-	// setting and moving between points is next
 
 	fizzbuzz(30);
 

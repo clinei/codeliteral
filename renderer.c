@@ -267,8 +267,10 @@ void find_expanded_nodes(struct Code_Node* node) {
         case CODE_KIND_IF:{
             find_expanded_nodes(node->if_.condition);
             find_expanded_nodes(node->if_.expression);
-            node->demands_expand = node->if_.condition->demands_expand |
-                                   node->if_.expression->demands_expand;
+
+            node->demands_expand |= node->if_.condition->demands_expand;
+            node->demands_expand |= node->if_.expression->demands_expand;
+
             node->should_expand = node->if_.expression->was_run;
             if (run_data.did_run == false) {
                 node->should_expand = true;
@@ -288,40 +290,52 @@ void find_expanded_nodes(struct Code_Node* node) {
         case CODE_KIND_ASSIGN:{
             find_expanded_nodes(node->assign.ident);
             find_expanded_nodes(node->assign.expression);
-            node->demands_expand = node->assign.ident->demands_expand |
-                                   node->assign.expression->demands_expand;
+
+            node->demands_expand |= node->assign.ident->demands_expand;
+            node->demands_expand |= node->assign.expression->demands_expand;
+
             node->should_expand = true;
             break;
         }
         case CODE_KIND_OPASSIGN:{
             find_expanded_nodes(node->opassign.ident);
             find_expanded_nodes(node->opassign.expression);
-            node->demands_expand = node->opassign.ident->demands_expand |
-                                   node->opassign.expression->demands_expand;
+
+            node->demands_expand |= node->opassign.ident->demands_expand;
+            node->demands_expand |= node->opassign.expression->demands_expand;
+
             node->should_expand = true;
             break;
         }
         case CODE_KIND_BINARY_OPERATION:{
             find_expanded_nodes(node->binary_operation.left);
             find_expanded_nodes(node->binary_operation.right);
-            node->demands_expand = node->binary_operation.left->demands_expand |
-                                   node->binary_operation.right->demands_expand |
-                                   (node == interaction_data.cursor);
-            node->should_expand = node->binary_operation.left->demands_expand |
-                                  node->binary_operation.right->demands_expand;
+
+            node->demands_expand |= node->binary_operation.left->demands_expand;
+            node->demands_expand |= node->binary_operation.right->demands_expand;
+            node->demands_expand |= node == interaction_data.cursor;
+
+            node->should_expand |= node->binary_operation.left->demands_expand;
+            node->should_expand |= node->binary_operation.right->demands_expand;
 
             break;
         }
         case CODE_KIND_INCREMENT:{
             find_expanded_nodes(node->increment.ident);
-            node->demands_expand = node->increment.ident->demands_expand;
-            node->should_expand = true;
+
+            node->demands_expand |= node->increment.ident->demands_expand;
+            node->demands_expand |= node == interaction_data.cursor;
+
+            node->should_expand = node->increment.ident->demands_expand;
             break;
         }
         case CODE_KIND_DECREMENT:{
             find_expanded_nodes(node->decrement.ident);
-            node->demands_expand = node->decrement.ident->demands_expand;
-            node->should_expand = true;
+
+            node->demands_expand |= node->decrement.ident->demands_expand;
+            node->demands_expand |= node == interaction_data.cursor;
+
+            node->should_expand = node->decrement.ident->demands_expand;
             break;
         }
         case CODE_KIND_PARENS:{
@@ -348,28 +362,30 @@ void find_expanded_nodes(struct Code_Node* node) {
                     node->demands_expand |= arg->demands_expand;
                 }
             }
-            if (node == interaction_data.cursor) {
-                node->demands_expand = true;
-            }
+            node->demands_expand |= node == interaction_data.cursor;
             break;
         }
         case CODE_KIND_ARRAY_INDEX:{
             find_expanded_nodes(node->array_index.array);
             find_expanded_nodes(node->array_index.index);
-            node->demands_expand = node->array_index.array->demands_expand |
-                                   node->array_index.index->demands_expand |
-                                   (node == interaction_data.cursor);
-            node->should_expand = node->array_index.array->demands_expand |
-                                  node->array_index.index->demands_expand;
+
+            node->demands_expand |= node->array_index.array->demands_expand;
+            node->demands_expand |= node->array_index.index->demands_expand;
+            node->demands_expand |= node == interaction_data.cursor;
+
+            node->should_expand |= node->array_index.array->demands_expand;
+            node->should_expand |= node->array_index.index->demands_expand;
         }
         case CODE_KIND_DOT_OPERATOR:{
             find_expanded_nodes(node->dot_operator.left);
             find_expanded_nodes(node->dot_operator.right);
-            node->demands_expand = node->dot_operator.left->demands_expand |
-                                   node->dot_operator.right->demands_expand |
-                                   (node == interaction_data.cursor);
-            node->should_expand = node->dot_operator.left->demands_expand |
-                                  node->dot_operator.right->demands_expand;
+
+            node->demands_expand |= node->dot_operator.left->demands_expand;
+            node->demands_expand |= node->dot_operator.right->demands_expand;
+            node->demands_expand |= node == interaction_data.cursor;
+
+            node->should_expand |= node->dot_operator.left->demands_expand;
+            node->should_expand |= node->dot_operator.right->demands_expand;
             break;
         }
         case CODE_KIND_WHILE:{
@@ -435,7 +451,12 @@ void find_expanded_nodes(struct Code_Node* node) {
         }
         case CODE_KIND_STRUCT:{
             find_expanded_nodes(node->struct_.block);
-            node->struct_.block->should_expand = true;
+            node->struct_.block->should_expand = node->struct_.block->demands_expand;
+            node->demands_expand = node->struct_.block->demands_expand;
+            node->should_expand = node->demands_expand;
+            if (interaction_data.expand_all) {
+                node->struct_.block->should_expand = true;
+            }
             break;
         }
         case CODE_KIND_IDENT:{
@@ -444,15 +465,19 @@ void find_expanded_nodes(struct Code_Node* node) {
         }
         case CODE_KIND_REFERENCE:{
             find_expanded_nodes(node->reference.expression);
-            node->demands_expand = node->reference.expression->demands_expand |
-                                   (node == interaction_data.cursor);
+
+            node->demands_expand |= node->reference.expression->demands_expand;
+            node->demands_expand |= node == interaction_data.cursor;
+
             node->should_expand = node->reference.expression->demands_expand;
             break;
         }
         case CODE_KIND_DEREFERENCE:{
             find_expanded_nodes(node->dereference.expression);
-            node->demands_expand = node->dereference.expression->demands_expand |
-                                   (node == interaction_data.cursor);
+
+            node->demands_expand |= node->dereference.expression->demands_expand;
+            node->demands_expand |= node == interaction_data.cursor;
+
             node->should_expand = node->dereference.expression->demands_expand;
             break;
         }
@@ -931,15 +956,25 @@ void render_code_node(struct Code_Node* node,
             break;
         }
         case CODE_KIND_INCREMENT:{
-            render_code_node(node->increment.ident, render_data);
-            struct Render_Node* op = make_text(render_data->render_nodes, "++", hilite_op_fg_color);
-            array_push(last_line->list.elements, &op);
+            if (interaction_data.show_values && node->should_expand == false && node->result != NULL) {
+                render_code_node(node->result, render_data);
+            }
+            else {
+                render_code_node(node->increment.ident, render_data);
+                struct Render_Node* op = make_text(render_data->render_nodes, "++", hilite_op_fg_color);
+                array_push(last_line->list.elements, &op);
+            }
             break;
         }
         case CODE_KIND_DECREMENT:{
-            render_code_node(node->increment.ident, render_data);
-            struct Render_Node* op = make_text(render_data->render_nodes, "--", hilite_op_fg_color);
-            array_push(last_line->list.elements, &op);
+            if (interaction_data.show_values && node->should_expand == false && node->result != NULL) {
+                render_code_node(node->result, render_data);
+            }
+            else {
+                render_code_node(node->increment.ident, render_data);
+                struct Render_Node* op = make_text(render_data->render_nodes, "--", hilite_op_fg_color);
+                array_push(last_line->list.elements, &op);
+            }
             break;
         }
         case CODE_KIND_DECLARATION:{
@@ -1077,11 +1112,11 @@ void render_code_node(struct Code_Node* node,
         }
         case CODE_KIND_CALL:{
             if ((node->is_lhs ? interaction_data.show_changes : interaction_data.show_values) &&
-                (node->should_expand == false && interaction_data.expand_all == false) && node->result != NULL) {
+                (node->should_expand == false) && node->result != NULL) {
                 
                 render_code_node(node->result, render_data);
             }
-            else if (node->should_expand || interaction_data.expand_all) {
+            else if (node->should_expand) {
                 render_code_node(node->call.return_ident, render_data);
             }
             else {

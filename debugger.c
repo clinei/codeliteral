@@ -97,11 +97,11 @@ EM_BOOL keydown(int event_type, const struct EmscriptenKeyboardEvent* event, voi
         remove_flowpoint();
         consumed = true;
     }
-    else if (strcmp(event->key, ",") == 0) {
+    else if (strcmp(event->key, "i") == 0) {
         prev_flowpoint();
         consumed = true;
     }
-    else if (strcmp(event->key, ".") == 0) {
+    else if (strcmp(event->key, "o") == 0) {
         next_flowpoint();
         consumed = true;
     }
@@ -143,6 +143,11 @@ EM_BOOL keydown(int event_type, const struct EmscriptenKeyboardEvent* event, voi
     }
     else if (strcmp(event->key, "9") == 0) {
         interaction_data.flow_index = 9;
+        consumed = true;
+    }
+    else if (strcmp(event->key, "q") == 0) {
+        // :Debug
+        printf("serial: %zu\n", interaction_data.cursor->serial);
         consumed = true;
     }
     return consumed;

@@ -633,7 +633,6 @@ struct Code_Node* get_ident_result(struct Code_Node* node) {
     return get_result(value, node->type);
 }
 void run_call(struct Code_Node* node) {
-    add_node_to_execution_stack(node);
     node->was_run = true;
     struct Code_Node* prev_last_call = run_data.last_call;
     run_data.last_call = node;
@@ -679,6 +678,7 @@ struct Code_Node* maybe_cast(struct Code_Node* lhs, struct Code_Node* rhs) {
             // possible underflow
         }
     }
+    fill_result_str(rhs);
     return rhs;
 }
 size_t run_lvalue(struct Code_Node* node) {
@@ -767,12 +767,10 @@ size_t run_lvalue(struct Code_Node* node) {
         case CODE_KIND_DEREFERENCE:{
             add_node_to_execution_stack(node);
             node->dereference.expression->is_lhs = node->is_lhs;
-            size_t pointer = run_lvalue(node->dereference.expression);
-            void* real_pointer = get_memory_tracked(pointer, sizeof(size_t));
-            result = *(size_t*)real_pointer;
-            // @Incomplete
-            // many dereferences in a row don't show the result of each dereference
-            node->result = get_result(real_pointer, node->dereference.expression->type);
+            struct Code_Node* loc = run_rvalue(node->dereference.expression);
+            size_t pointer = loc->literal_uint.value;
+            node->result = loc;
+            result = pointer;
             break;
         }
         case CODE_KIND_PARENS:{
@@ -804,7 +802,8 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
         case CODE_KIND_INCREMENT:{
             // @Incomplete
             // pointer types
-            void* real_pointer = (void*)(run_data.memory + run_lvalue(node->increment.ident));
+            size_t pointer = run_lvalue(node->increment.ident);
+            void* real_pointer = (void*)(run_data.memory + pointer);
             struct Code_Node* prev = get_result(real_pointer, node->type);
             switch (prev->kind) {
                 case CODE_KIND_LITERAL_INT:{
@@ -830,12 +829,17 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
                 }
             }
             node->result = prev;
+            node->result->str = NULL;
+            set_memory_tracked(pointer, get_result_ptr(node), node->type->size_in_bytes);
+            add_node_to_execution_stack(node);
+            result = prev;
             break;
         }
         case CODE_KIND_DECREMENT:{
             // @Incomplete
             // pointer types
-            void* real_pointer = (void*)(run_data.memory + run_lvalue(node->increment.ident));
+            size_t pointer = run_lvalue(node->increment.ident);
+            void* real_pointer = (void*)(run_data.memory + pointer);
             struct Code_Node* prev = get_result(real_pointer, node->type);
             switch (prev->kind) {
                 case CODE_KIND_LITERAL_INT:{
@@ -863,6 +867,10 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
                 }
             }
             node->result = prev;
+            node->result->str = NULL;
+            set_memory_tracked(pointer, get_result_ptr(node), node->type->size_in_bytes);
+            add_node_to_execution_stack(node);
+            result = prev;
             break;
         }
         case CODE_KIND_BINARY_OPERATION:{
@@ -893,15 +901,21 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
 
                 left->is_lhs = node->is_lhs;
                 right->is_lhs = node->is_lhs;
+                add_node_to_execution_stack(left);
+                add_node_to_execution_stack(right);
                 result = make_literal_uint(run_data.code_nodes, left->type->array.length);
             }
             else {
                 result = get_result(get_memory_tracked(run_lvalue(node), node->type->size_in_bytes), node->type);
             }
+            add_node_to_execution_stack(node);
             break;
         }
         case CODE_KIND_REFERENCE:{
-            if (node->reference.expression->kind != CODE_KIND_IDENT) {
+            // @Audit
+            // No idea why I made this restriction
+            // maybe it's not necessary anymore
+            if (false && node->reference.expression->kind != CODE_KIND_IDENT) {
                 printf("references can only be done on idents for now\n");
                 abort();
             }
@@ -910,7 +924,11 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
             break;
         }
         case CODE_KIND_DEREFERENCE:{
-            void* value = get_memory_tracked(run_lvalue(node), node->type->size_in_bytes);
+            add_node_to_execution_stack(node);
+            node->dereference.expression->is_lhs = node->is_lhs;
+            struct Code_Node* loc = run_rvalue(node->dereference.expression);
+            size_t pointer = loc->literal_uint.value;
+            void* value = get_memory_tracked(pointer, node->type->size_in_bytes);
             result = get_result(value, node->type);
             break;
         }
@@ -996,12 +1014,16 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                 add_name_use(ident_name);
             }
             struct Code_Node* expression = node->declaration.expression;
-            if (expression != NULL &&
-                (expression->kind == CODE_KIND_PROCEDURE ||
-                 expression->kind == CODE_KIND_STRUCT
-                )) {
-
-                break;
+            if (expression != NULL) {
+                if (expression->kind == CODE_KIND_PROCEDURE) {
+                    break;
+                }
+                if (expression->kind == CODE_KIND_STRUCT) {
+                    // @Incomplete
+                    // We should make initializers instead of using memory
+                    run_statement(expression->struct_.block);
+                    break;
+                }
             }
             add_node_to_execution_stack(node->declaration.ident);
             if (type->kind == TYPE_INFO_TAG_VOID) {
@@ -1256,6 +1278,7 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                 break;
             }
             run_data.last_loop->broken = true;
+            add_node_to_execution_stack(node);
             break;
         }
         case CODE_KIND_CONTINUE:{
@@ -1265,6 +1288,7 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                 break;
             }
             run_data.last_loop->continued = true;
+            add_node_to_execution_stack(node);
             break;
         }
         default:{

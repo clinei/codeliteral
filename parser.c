@@ -23,9 +23,39 @@ const char* keyword_strings[11] = {
 const size_t keyword_strings_length = 11;
 
 size_t next_serial = 0;
-void set_serial(struct Code_Node* node) {
+struct Code_Node* get_new_code_node(struct Code_Nodes* code_nodes) {
+
+    bool was_realloc = array_next(code_nodes);
+
+    // @Incomplete
+    // if realloc, we need to fix pointers using a diff
+    // actually, we can store pointers as diffs from the base pointer
+    // and when we need to dereference, we add it to the base pointer
+    // that way, we don't have to fix pointers
+
+    struct Code_Node* node = code_nodes->last;
+
+    node->type = NULL;
+
+    node->was_run = false;
+    node->broken = false;
+    node->continued = false;
+    node->is_lhs = false;
+    node->is_on_execution_stack = false;
+    node->execution_index = 0xdeadbeef;
+    node->pointer = 0xdeadbeef;
+    node->original = node;
+    node->result = NULL;
+    node->transformed = NULL;
+
+    node->demands_expand = false;
+    node->should_expand = false;
+    node->str = NULL;
+
     node->serial = next_serial;
 	next_serial += 1;
+
+    return node;
 }
 
 char* code_kind_to_string(enum Code_Kind kind) {
@@ -152,8 +182,6 @@ struct Code_Node* make_procedure(struct Code_Nodes* code_nodes,
 
     node->procedure.return_ident = NULL;
 
-	set_serial(node);
-
 	return node;
 }
 
@@ -175,8 +203,6 @@ struct Code_Node* make_call(struct Code_Nodes* code_nodes,
     node->call.returned = false;
     node->call.return_ident = NULL;
 
-	set_serial(node);
-
 	return node;
 }
 
@@ -197,8 +223,6 @@ struct Code_Node* make_declaration(struct Code_Nodes* code_nodes,
 	ident->ident.declaration = node;
     ident->type = type;
 	
-	set_serial(node);
-
 	return node;
 }
 
@@ -210,8 +234,6 @@ struct Code_Node* make_reference(struct Code_Nodes* code_nodes,
 
 	node->reference.expression = expression;
     
-	set_serial(node);
-
 	return node;
 }
 
@@ -222,8 +244,6 @@ struct Code_Node* make_dereference(struct Code_Nodes* code_nodes,
 	node->kind = CODE_KIND_DEREFERENCE;
 
 	node->dereference.expression = expression;
-
-	set_serial(node);
 
 	return node;
 }
@@ -238,8 +258,6 @@ struct Code_Node* make_array_index(struct Code_Nodes* code_nodes,
 	node->array_index.array = array;
 	node->array_index.index = index;
 
-	set_serial(node);
-
 	return node;
 }
 
@@ -252,8 +270,6 @@ struct Code_Node* make_dot_operator(struct Code_Nodes* code_nodes,
 
 	node->dot_operator.left = left;
 	node->dot_operator.right = right;
-
-	set_serial(node);
 
 	return node;
 }
@@ -282,8 +298,6 @@ struct Code_Node* make_block(struct Code_Nodes* code_nodes,
     node->block.extras = NULL;
     node->block.parent = NULL;
 
-	set_serial(node);
-
 	return node;
 }
 
@@ -301,8 +315,6 @@ struct Code_Node* make_return(struct Code_Nodes* code_nodes,
     }
     node->return_.ident = ident;
 
-	set_serial(node);
-
 	return node;
 }
 
@@ -313,8 +325,6 @@ struct Code_Node* make_struct(struct Code_Nodes* code_nodes,
 	node->kind = CODE_KIND_STRUCT;
 
 	node->struct_.block = block;
-
-	set_serial(node);
 
 	return node;
 }
@@ -329,8 +339,6 @@ struct Code_Node* make_if(struct Code_Nodes* code_nodes,
 	node->if_.condition = condition;
 	node->if_.expression = expression;
 
-	set_serial(node);
-
 	return node;
 }
 
@@ -343,8 +351,6 @@ struct Code_Node* make_else(struct Code_Nodes* code_nodes,
 	node->else_.expression = expression;
 
     node->else_.if_expr = NULL;
-
-	set_serial(node);
 
 	return node;
 }
@@ -359,8 +365,6 @@ struct Code_Node* make_while(struct Code_Nodes* code_nodes,
 	node->while_.condition = condition;
 	node->while_.expression = expression;
 
-	set_serial(node);
-
 	return node;
 }
 
@@ -373,8 +377,6 @@ struct Code_Node* make_do_while(struct Code_Nodes* code_nodes,
 
 	node->do_while_.condition = condition;
 	node->do_while_.expression = expression;
-
-	set_serial(node);
 
 	return node;
 }
@@ -393,8 +395,6 @@ struct Code_Node* make_for(struct Code_Nodes* code_nodes,
 	node->for_.cycle_end = cycle_end;
 	node->for_.expression = expression;
 
-	set_serial(node);
-
 	return node;
 }
 
@@ -403,8 +403,6 @@ struct Code_Node* make_break(struct Code_Nodes* code_nodes) {
 	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_BREAK;
 
-	set_serial(node);
-
 	return node;
 }
 
@@ -412,8 +410,6 @@ struct Code_Node* make_continue(struct Code_Nodes* code_nodes) {
 
 	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_CONTINUE;
-
-	set_serial(node);
 
 	return node;
 }
@@ -426,8 +422,6 @@ struct Code_Node* make_minus(struct Code_Nodes* code_nodes,
 
 	node->minus.expression = expression;
 
-	set_serial(node);
-
 	return node;
 }
 
@@ -438,8 +432,6 @@ struct Code_Node* make_not(struct Code_Nodes* code_nodes,
 	node->kind = CODE_KIND_NOT;
 
 	node->not.expression = expression;
-
-	set_serial(node);
 
 	return node;
 }
@@ -452,8 +444,6 @@ struct Code_Node* make_increment(struct Code_Nodes* code_nodes,
 
 	node->increment.ident = ident;
 
-	set_serial(node);
-
 	return node;
 }
 
@@ -464,8 +454,6 @@ struct Code_Node* make_decrement(struct Code_Nodes* code_nodes,
 	node->kind = CODE_KIND_DECREMENT;
 
 	node->decrement.ident = ident;
-
-	set_serial(node);
 
 	return node;
 }
@@ -479,8 +467,6 @@ struct Code_Node* make_assign(struct Code_Nodes* code_nodes,
 
 	node->assign.ident = ident;
 	node->assign.expression = expression;
-
-	set_serial(node);
 
 	return node;
 }
@@ -497,8 +483,6 @@ struct Code_Node* make_opassign(struct Code_Nodes* code_nodes,
 	node->opassign.operation_type = operation_type;
 	node->opassign.expression = expression;
 
-	set_serial(node);
-
 	return node;
 }
 
@@ -514,8 +498,6 @@ struct Code_Node* make_binary_operation(struct Code_Nodes* code_nodes,
 	node->binary_operation.operation_type = operation_type;
 	node->binary_operation.right = right;
 
-	set_serial(node);
-
 	return node;
 }
 
@@ -529,8 +511,6 @@ struct Code_Node* make_ident(struct Code_Nodes* code_nodes,
 	node->ident.name = name;
 	node->ident.declaration = declaration;
 
-	set_serial(node);
-
 	return node;
 }
 
@@ -543,8 +523,6 @@ struct Code_Node* make_literal_int(struct Code_Nodes* code_nodes,
 
 	node->literal_int.value = value;
 
-	set_serial(node);
-
 	return node;
 }
 struct Code_Node* make_literal_uint(struct Code_Nodes* code_nodes,
@@ -555,8 +533,6 @@ struct Code_Node* make_literal_uint(struct Code_Nodes* code_nodes,
     node->type = Native_Type_UInt;
 
 	node->literal_uint.value = value;
-
-	set_serial(node);
 
 	return node;
 }
@@ -569,8 +545,6 @@ struct Code_Node* make_literal_float(struct Code_Nodes* code_nodes,
 
 	node->literal_float.value = value;
 
-	set_serial(node);
-
 	return node;
 }
 struct Code_Node* make_literal_bool(struct Code_Nodes* code_nodes,
@@ -581,8 +555,6 @@ struct Code_Node* make_literal_bool(struct Code_Nodes* code_nodes,
     node->type = Native_Type_Bool;
 
 	node->literal_bool.value = value;
-
-	set_serial(node);
 
 	return node;
 }
@@ -597,8 +569,6 @@ struct Code_Node* make_string(struct Code_Nodes* code_nodes,
 	node->string_.pointer = pointer;
     node->string_.length = strlen(pointer);
 
-	set_serial(node);
-
 	return node;
 }
 
@@ -610,8 +580,6 @@ struct Code_Node* make_parens(struct Code_Nodes* code_nodes,
 
 	node->parens.expression = expression;
 
-	set_serial(node);
-
 	return node;
 }
 
@@ -622,8 +590,6 @@ struct Code_Node* make_native_code(struct Code_Nodes* code_nodes,
 	node->kind = CODE_KIND_NATIVE_CODE;
 
 	node->native_code.func_ptr = func_ptr;
-
-	set_serial(node);
 
 	return node;
 }
@@ -2035,38 +2001,6 @@ void delimited(char* start, char* stop, char* separator,
 
         token_array->curr_token++;
     }
-}
-
-struct Code_Node* get_new_code_node(struct Code_Nodes* code_nodes) {
-
-    bool was_realloc = array_next(code_nodes);
-
-    // @Incomplete
-    // if realloc, we need to fix pointers using a diff
-    // actually, we can store pointers as diffs from the base pointer
-    // and when we need to dereference, we add it to the base pointer
-    // that way, we don't have to fix pointers
-
-    struct Code_Node* node = code_nodes->last;
-
-    node->type = NULL;
-
-    node->was_run = false;
-    node->broken = false;
-    node->continued = false;
-    node->is_lhs = false;
-    node->is_on_execution_stack = false;
-    node->execution_index = 0xdeadbeef;
-    node->pointer = 0xdeadbeef;
-    node->original = node;
-    node->result = NULL;
-    node->transformed = NULL;
-
-    node->demands_expand = false;
-    node->should_expand = false;
-    node->str = NULL;
-
-    return node;
 }
 
 struct Token_Array* tokenize(char* input) {
