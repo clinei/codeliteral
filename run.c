@@ -35,6 +35,36 @@ void init_run(struct Code_Nodes* code_nodes) {
     run_data.stack_pointer = 0;
 }
 
+void add_memory_use(size_t offset, size_t execution_index) {
+    struct Indices_Array* indices = map_uses_to_indices(offset);
+    if (indices == NULL) {
+        indices = malloc(sizeof(struct Indices_Array));
+        array_init(indices, sizeof(size_t), 100);
+        soa_push(run_data.uses_to_indices, offset, indices);
+    }
+    bool should_push = true;
+    if (indices->length > 0) {
+        size_t last_index = indices->first[indices->length-1];
+        if (last_index > execution_index - 2) {
+            // should_push = false;
+        }
+    }
+    if (should_push) {
+        array_push(indices, &execution_index);
+    }
+    if (offset == 0) {
+        // abort();
+    }
+}
+void add_memory_change(size_t offset, size_t execution_index) {
+    struct Indices_Array* indices = map_changes_to_indices(offset);
+    if (indices == NULL) {
+        indices = malloc(sizeof(struct Indices_Array));
+        array_init(indices, sizeof(size_t), 100);
+        soa_push(run_data.changes_to_indices, offset, indices);
+    }
+    array_push(indices, &execution_index);
+}
 void* get_memory(size_t offset, size_t num_bytes) {
     if (offset + num_bytes > run_data.memory_size) {
         printf("invalid attempt to get_memory at address %zu until %zu (max address is %zu)\n", offset, offset + num_bytes, run_data.memory_size);
@@ -44,13 +74,7 @@ void* get_memory(size_t offset, size_t num_bytes) {
     return run_data.memory + offset;
 }
 void* get_memory_tracked(size_t offset, size_t num_bytes) {
-    struct Indices_Array* indices = map_uses_to_indices(offset);
-    if (indices == NULL) {
-        indices = malloc(sizeof(struct Indices_Array));
-        array_init(indices, sizeof(size_t), 100);
-        soa_push(run_data.uses_to_indices, offset, indices);
-    }
-    array_push(indices, &run_data.execution_index);
+    add_memory_use(offset, run_data.execution_index);
     return get_memory(offset, num_bytes);
 }
 void set_memory(size_t offset, void* data, size_t num_bytes) {
@@ -61,13 +85,7 @@ void set_memory(size_t offset, void* data, size_t num_bytes) {
     memcpy(run_data.memory + offset, data, num_bytes);
 }
 void set_memory_tracked(size_t offset, void* data, size_t num_bytes) {
-    struct Indices_Array* indices = map_changes_to_indices(offset);
-    if (indices == NULL) {
-        indices = malloc(sizeof(struct Indices_Array));
-        array_init(indices, sizeof(size_t), 100);
-        soa_push(run_data.changes_to_indices, offset, indices);
-    }
-    array_push(indices, &run_data.execution_index);
+    add_memory_change(offset, run_data.execution_index);
     set_memory(offset, data, num_bytes);
 }
 
@@ -380,6 +398,8 @@ struct Code_Node* math_binop(struct Code_Node* left, char* op, struct Code_Node*
     else if (type == 4) {
         double left_value = left->literal_float.value;
         double right_value = right->literal_float.value;
+        double epsilon = 0.0000001;
+        bool is_almost_equal = left_value - epsilon < right_value && left_value + epsilon > right_value;
         double result;
         bool is_bool_op = false;
         // @Copypaste
@@ -401,7 +421,10 @@ struct Code_Node* math_binop(struct Code_Node* left, char* op, struct Code_Node*
         }
         else if (strcmp(op, "<=") == 0) {
             is_bool_op = true;
-            result = left_value <= right_value;
+            // result = left_value <= right_value;
+            if (is_almost_equal) {
+                result = 1.0;
+            }
         }
         else if (strcmp(op, ">") == 0) {
             is_bool_op = true;
@@ -409,15 +432,24 @@ struct Code_Node* math_binop(struct Code_Node* left, char* op, struct Code_Node*
         }
         else if (strcmp(op, ">=") == 0) {
             is_bool_op = true;
-            result = left_value >= right_value;
+            // result = left_value >= right_value;
+            if (is_almost_equal) {
+                result = 1.0;
+            }
         }
         else if (strcmp(op, "!=") == 0) {
             is_bool_op = true;
-            result = left_value != right_value;
+            // result = left_value != right_value;
+            if (is_almost_equal == false) {
+                result = 1.0;
+            }
         }
         else if (strcmp(op, "==") == 0) {
             is_bool_op = true;
-            result = left_value == right_value;
+            // result = left_value == right_value;
+            if (is_almost_equal) {
+                result = 1.0;
+            }
         }
         else if (strcmp(op, "&&") == 0) {
             is_bool_op = true;
@@ -488,7 +520,16 @@ void* get_result_ptr(struct Code_Node* node) {
             break;
         }
         case CODE_KIND_LITERAL_FLOAT:{
-            return &(node->result->literal_float.value);
+            if (node->result->type->size_in_bytes == 4) {
+                return &(node->result->literal_float.value_f32);
+            }
+            else if (node->result->type->size_in_bytes == 8) {
+                return &(node->result->literal_float.value);
+            }
+            else {
+                printf("expected float type to have size 4 or 8 (was %zu)\n", node->result->type->size_in_bytes);
+                abort();
+            }
             break;
         }
         case CODE_KIND_LITERAL_BOOL:{
@@ -534,7 +575,7 @@ void fill_result_str(struct Code_Node* node) {
             double value = node->literal_float.value;
             int chars_needed = 20;
             char* str = malloc(sizeof(char) * chars_needed);
-            snprintf(str, chars_needed, "%.19f", value);
+            snprintf(str, chars_needed, "%.6f", value);
             node->str = str;
             break;
         }
@@ -603,7 +644,20 @@ struct Code_Node* get_result(void* value, struct Type_Info* type) {
         }
         case TYPE_INFO_TAG_FLOAT:{
             result = make_literal_float(run_data.code_nodes, 0);
-            memcpy(&result->literal_float.value, value, type->size_in_bytes);
+            if (type->size_in_bytes == 4) {
+                double value_f64 = *(float*)value;
+                memcpy(&result->literal_float.value, &value_f64, 8);
+                memcpy(&result->literal_float.value_f32, value, 4);
+            }
+            else if (type->size_in_bytes == 8) {
+                float value_f32 = *(double*)value;
+                memcpy(&result->literal_float.value, value, 8);
+                memcpy(&result->literal_float.value_f32, &value_f32, 4);
+            }
+            else {
+                printf("expected float type to have size 4 or 8 (was %zu)\n", type->size_in_bytes);
+                abort();
+            }
             break;
         }
         case TYPE_INFO_TAG_POINTER:{
@@ -629,7 +683,7 @@ struct Code_Node* get_result(void* value, struct Type_Info* type) {
     return result;
 }
 struct Code_Node* get_ident_result(struct Code_Node* node) {
-    void* value = get_memory_tracked(node->ident.declaration->declaration.pointer, node->type->size_in_bytes);
+    void* value = get_memory(node->ident.declaration->declaration.pointer, node->type->size_in_bytes);
     return get_result(value, node->type);
 }
 void run_call(struct Code_Node* node) {
@@ -638,17 +692,19 @@ void run_call(struct Code_Node* node) {
     run_data.last_call = node;
     struct Code_Node* proc = node->call.ident->ident.declaration->declaration.expression;
     if (proc->procedure.block->kind == CODE_KIND_BLOCK) {
-        printf("entering %s\n", node->call.ident->ident.name);
+        // printf("entering %s\n", node->call.ident->ident.name);
         transform(node);
         struct Code_Node_Array* extras = run_data.last_block->block.extras->first + run_data.statement_index;
         array_push(extras, &(node->transformed));
         run_statement(node->transformed);
-        node->call.return_ident = clone(node->call.return_ident);
         add_node_to_execution_stack(node);
-        printf("exiting %s\n", node->call.ident->ident.name);
+        node->pointer = node->call.return_ident->pointer;
+        add_memory_use(node->pointer, node->execution_index);
+        node->call.return_ident = clone(node->call.return_ident);
+        // printf("exiting %s\n", node->call.ident->ident.name);
     }
     else if (proc->procedure.block->kind == CODE_KIND_NATIVE_CODE) {
-        printf("native code\n");
+        // printf("native code\n");
         for (size_t i = 0; i < node->call.args->length; i += 1) {
             run_rvalue(node->call.args->first[i]);
         }
@@ -689,30 +745,31 @@ size_t run_lvalue(struct Code_Node* node) {
         case CODE_KIND_IDENT:{
             // would be nice if we could update names while cloning
             node->ident.name = node->ident.declaration->declaration.ident->ident.name;
-            add_node_to_execution_stack(node);
             node->pointer = node->ident.declaration->declaration.pointer;
             result = node->pointer;
+            // @Incomplete
+            // maybe we should not get the result here
             if (node->type->kind != TYPE_INFO_TAG_ARRAY) {
                 node->result = get_ident_result(node);
             }
             break;
         }
         case CODE_KIND_ASSIGN:{
+            // maybe this should be in run_rvalue
             struct Code_Node* lhs = node->assign.ident;
             struct Code_Node* rhs = node->assign.expression;
             lhs->is_lhs = true;
             size_t lhs_pointer = run_lvalue(lhs);
-            run_rvalue(rhs);
-            rhs->result = maybe_cast(lhs, rhs->result);
-            node->result = rhs->result;
+            add_node_to_execution_stack(lhs);
             void* prev_value = get_memory(lhs_pointer, lhs->type->size_in_bytes);
             if (lhs->type->kind != TYPE_INFO_TAG_ARRAY) {
                 lhs->result = get_result(prev_value, lhs->type);
             }
-            size_t old_execution_index = run_data.execution_index;
-            run_data.execution_index = lhs->execution_index;
-            set_memory_tracked(lhs_pointer, get_result_ptr(node), lhs->type->size_in_bytes);
-            run_data.execution_index = old_execution_index;
+            run_rvalue(rhs);
+            rhs->result = maybe_cast(lhs, rhs->result);
+            node->result = rhs->result;
+            set_memory(lhs_pointer, get_result_ptr(node), lhs->type->size_in_bytes);
+            add_memory_change(lhs_pointer, lhs->execution_index);
             break;
         }
         case CODE_KIND_OPASSIGN:{
@@ -720,14 +777,17 @@ size_t run_lvalue(struct Code_Node* node) {
             struct Code_Node* rhs = node->opassign.expression;
             lhs->is_lhs = true;
             size_t lhs_pointer = run_lvalue(lhs);
-            lhs->result = get_result(get_memory_tracked(lhs_pointer, lhs->type->size_in_bytes), lhs->type);
+            add_node_to_execution_stack(lhs);
+            add_memory_use(lhs_pointer, lhs->execution_index);
+            void* prev_value = get_memory(lhs_pointer, lhs->type->size_in_bytes);
+            if (lhs->type->kind != TYPE_INFO_TAG_ARRAY) {
+                lhs->result = get_result(prev_value, lhs->type);
+            }
             run_rvalue(rhs);
             rhs->result = maybe_cast(lhs, rhs->result);
             node->result = math_binop(lhs->result, node->opassign.operation_type, rhs->result);
-            size_t old_execution_index = run_data.execution_index;
-            run_data.execution_index = lhs->execution_index;
-            set_memory_tracked(lhs_pointer, get_result_ptr(node), lhs->type->size_in_bytes);
-            run_data.execution_index = old_execution_index;
+            set_memory(lhs_pointer, get_result_ptr(node), lhs->type->size_in_bytes);
+            add_memory_change(lhs_pointer, lhs->execution_index);
             break;
         }
         case CODE_KIND_CALL:{
@@ -739,16 +799,18 @@ size_t run_lvalue(struct Code_Node* node) {
             break;
         }
         case CODE_KIND_ARRAY_INDEX: {
-            size_t lhs_pointer = run_lvalue(node->array_index.array);
+            struct Code_Node* lhs = node->array_index.array;
+            size_t lhs_pointer = run_lvalue(lhs);
             run_rvalue(node->array_index.index);
             size_t index_result = (size_t)(*(int*)get_result_ptr(node->array_index.index));
-            size_t array_length = node->array_index.array->type->array.length;
+            size_t array_length = lhs->type->array.length;
             if (index_result >= array_length) {
                 printf("array index out of bounds! index: (%zu) length: (%zu)\n", index_result, array_length);
                 abort();
             }
             result = lhs_pointer + index_result * node->type->size_in_bytes;
-            add_node_to_execution_stack(node);
+            lhs->pointer = lhs_pointer;
+            node->pointer = result;
             break;
         }
         case CODE_KIND_DOT_OPERATOR:{
@@ -759,13 +821,11 @@ size_t run_lvalue(struct Code_Node* node) {
             struct Type_Info_Struct* struct_ = &(left->type->ident.type->struct_);
             size_t member_index = index_of_string(right->ident.name, struct_->member_names, struct_->members_length);
             result = run_lvalue(left) + struct_->offsets[member_index];
-            add_node_to_execution_stack(right);
-            // add_memory_use(result, right);
-
+            right->pointer = result;
+            node->pointer = result;
             break;
         }
         case CODE_KIND_DEREFERENCE:{
-            add_node_to_execution_stack(node);
             node->dereference.expression->is_lhs = node->is_lhs;
             struct Code_Node* loc = run_rvalue(node->dereference.expression);
             size_t pointer = loc->literal_uint.value;
@@ -783,6 +843,7 @@ size_t run_lvalue(struct Code_Node* node) {
             break;
         }
     }
+    node->pointer = result;
     return result;
 }
 struct Code_Node* run_rvalue(struct Code_Node* node) {
@@ -816,6 +877,7 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
                 }
                 case CODE_KIND_LITERAL_FLOAT:{
                     prev->literal_float.value += 1;
+                    prev->literal_float.value_f32 = prev->literal_float.value;
                     break;
                 }
                 case CODE_KIND_LITERAL_BOOL:{
@@ -852,6 +914,7 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
                 }
                 case CODE_KIND_LITERAL_FLOAT:{
                     prev->literal_float.value -= 1;
+                    prev->literal_float.value_f32 = prev->literal_float.value;
                     break;
                 }
                 case CODE_KIND_LITERAL_BOOL:{
@@ -881,6 +944,8 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
         case CODE_KIND_IDENT:{
             run_lvalue(node);
             result = node->result;
+            add_node_to_execution_stack(node);
+            add_memory_use(node->pointer, node->execution_index);
             break;
         }
         case CODE_KIND_CALL:{
@@ -901,14 +966,16 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
 
                 left->is_lhs = node->is_lhs;
                 right->is_lhs = node->is_lhs;
-                add_node_to_execution_stack(left);
-                add_node_to_execution_stack(right);
+                add_node_to_execution_stack(node);
                 result = make_literal_uint(run_data.code_nodes, left->type->array.length);
             }
             else {
-                result = get_result(get_memory_tracked(run_lvalue(node), node->type->size_in_bytes), node->type);
+                size_t pointer = run_lvalue(node);
+                void* real_pointer = get_memory(pointer, node->type->size_in_bytes);
+                result = get_result(real_pointer, node->type);
+                add_node_to_execution_stack(node);
+                add_memory_use(pointer, node->execution_index);
             }
-            add_node_to_execution_stack(node);
             break;
         }
         case CODE_KIND_REFERENCE:{
@@ -1021,7 +1088,9 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                 if (expression->kind == CODE_KIND_STRUCT) {
                     // @Incomplete
                     // We should make initializers instead of using memory
+                    run_data.count_uses = false;
                     run_statement(expression->struct_.block);
+                    run_data.count_uses = true;
                     break;
                 }
             }
@@ -1045,9 +1114,14 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                 abort();
             }
             size_t alignment_pad = (align - (run_data.stack_pointer % align)) % align;
-            node->declaration.pointer = run_data.stack_pointer + alignment_pad;
-            node->declaration.ident->pointer = node->declaration.pointer;
+            size_t pointer = run_data.stack_pointer + alignment_pad;
+            node->declaration.pointer = pointer;
+            node->declaration.ident->pointer = pointer;
             node->declaration.alignment_pad = alignment_pad;
+            // fake, but useful for moving between returns and their declarations
+            // @Incomplete
+            // doesn't work for void pointers, because they have no memory location
+            add_memory_change(pointer, node->declaration.ident->execution_index);
             if (type->size_in_bytes == 0) {
                 printf("size is 0!\n");
                 printf("type: %d\n", type->kind);
@@ -1060,29 +1134,8 @@ struct Code_Node* run_statement(struct Code_Node* node) {
 
             if (expression != NULL) {
                 run_rvalue(expression);
-                // maybe_cast(node->declaration.ident, expression);
-                /**/
-                struct Type_Info* expr_type = expression->type;
-                if (expr_type->kind == TYPE_INFO_TAG_IDENT) {
-                    expr_type = expr_type->ident.type;
-                }
-                if (type->kind == TYPE_INFO_TAG_INTEGER && expr_type->kind == TYPE_INFO_TAG_INTEGER) {
-                    if (type->integer.is_signed == true && expr_type->integer.is_signed == false) {
-                        signed long int value = (signed long int)expression->result->literal_uint.value;
-                        expression->result = make_literal_int(run_data.code_nodes, value);
-                        fill_result_str(expression->result);
-                    }
-                    else if (type->integer.is_signed == false && expr_type->integer.is_signed == true) {
-                        unsigned long int value = (unsigned long int)expression->result->literal_int.value;
-                        expression->result = make_literal_uint(run_data.code_nodes, value);
-                        fill_result_str(expression->result);
-                    }
-                }
-                /**/
-                size_t old_execution_index = run_data.execution_index;
-                run_data.execution_index = node->declaration.ident->execution_index;
-                set_memory_tracked(node->declaration.pointer, get_result_ptr(expression), node->declaration.type->size_in_bytes);
-                run_data.execution_index = old_execution_index;
+                expression->result = maybe_cast(node->declaration.ident, expression->result);
+                set_memory(node->declaration.pointer, get_result_ptr(expression), type->size_in_bytes);
             }
             break;
         }

@@ -147,7 +147,10 @@ EM_BOOL keydown(int event_type, const struct EmscriptenKeyboardEvent* event, voi
     }
     else if (strcmp(event->key, "q") == 0) {
         // :Debug
-        printf("serial: %zu\n", interaction_data.cursor->serial);
+        printf("index:   %zu\n", interaction_data.cursor->execution_index);
+        printf("serial:  %zu\n", interaction_data.cursor->serial);
+        printf("pointer: %zu\n", interaction_data.cursor->pointer);
+        printf("\n");
         consumed = true;
     }
     return consumed;

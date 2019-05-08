@@ -1,6 +1,10 @@
 Bugs:
 
+jumping to a use makes it impossible to go left when it should be possible
+going to right makes it possible again
+
 convert node pointers to diffs from the base
+so we can resize the Code_Node array
 
 scrolling needs a separate layout pass
 

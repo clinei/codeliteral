@@ -537,13 +537,14 @@ struct Code_Node* make_literal_uint(struct Code_Nodes* code_nodes,
 	return node;
 }
 struct Code_Node* make_literal_float(struct Code_Nodes* code_nodes,
-                                     float value) {
+                                     double value) {
 
 	struct Code_Node* node = get_new_code_node(code_nodes);
 	node->kind = CODE_KIND_LITERAL_FLOAT;
     node->type = Native_Type_Float;
 
 	node->literal_float.value = value;
+	node->literal_float.value_f32 = value;
 
 	return node;
 }

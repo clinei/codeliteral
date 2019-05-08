@@ -195,6 +195,7 @@ struct Code_Literal_Uint {
 };
 struct Code_Literal_Float {
     double value;
+    float value_f32;
 };
 struct Code_Literal_Bool {
     bool value;
@@ -365,7 +366,7 @@ struct Code_Node* make_literal_int(struct Code_Nodes* code_nodes,
 struct Code_Node* make_literal_uint(struct Code_Nodes* code_nodes,
                                     unsigned long int value);
 struct Code_Node* make_literal_float(struct Code_Nodes* code_nodes,
-                                     float value);
+                                     double value);
 struct Code_Node* make_literal_bool(struct Code_Nodes* code_nodes,
                                     bool value);
 struct Code_Node* make_string(struct Code_Nodes* code_nodes,

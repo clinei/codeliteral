@@ -22,30 +22,33 @@ function set_text(new_text) {
 const code = `
 bool test_floats() {
 	bool passed = true;
-	// broken, but different from native
-	// divergent behavior
-	passed &= 0.3 - 0.2 == 0.1 == false;
 	passed &= 0.3 - 0.2 < 0.10001;
-	passed &= 0.3 - 0.2 > 0.10000;
-	passed &= 0.3 + 0.2 == 0.5;
-	passed &= 0.3 / 0.2 == 1.5;
-	passed &= 0.3 * 0.2 == 0.06 == false;
+	passed &= 0.3 - 0.2 > 0.09999;
+	passed &= 0.3 + 0.2 < 0.50001;
+	passed &= 0.3 + 0.2 > 0.49999;
+	passed &= 0.3 / 0.2 < 1.50001;
+	passed &= 0.3 / 0.2 > 1.49999;
+	passed &= 0.3 * 0.2 < 0.06001;
+	passed &= 0.3 * 0.2 > 0.05999;
 	passed &= 0.3 < 0.2 == false;
-	passed &= 0.3 < 0.3 == false;
 	passed &= 0.3 < 0.4 == true;
 	passed &= 0.3 <= 0.2 == false;
-	passed &= 0.3 <= 0.3 == true;
 	passed &= 0.3 <= 0.4 == true;
 	passed &= 0.3 > 0.2 == true;
-	passed &= 0.3 > 0.3 == false;
 	passed &= 0.3 > 0.4 == false;
 	passed &= 0.3 >= 0.2 == true;
-	passed &= 0.3 >= 0.3 == true;
 	passed &= 0.3 >= 0.4 == false;
 	passed &= 0.3 == 0.2 == false;
 	passed &= 0.3 == 0.3 == true;
 	passed &= 0.3 != 0.2 == true;
 	passed &= 0.3 != 0.3 == false;
+	float floot = 1.3;
+	float flaat = floot;
+	passed &= floot == flaat;
+	passed &= floot == 1.3;
+	passed &= flaat == 1.3;
+	floot += flaat;
+	passed &= floot == flaat + 1.3;
 	return passed;
 }
 bool test_if_else(){
@@ -169,6 +172,37 @@ bool test_struct() {
 	passed &= steve.car.age == 6;
 	return passed;
 }
+bool test_nested_struct() {
+	bool passed = true;
+	struct Car_Model {
+		uint type;
+		uint date;
+	};
+	struct Car {
+		uint date;
+		Car_Model model;
+	};
+	struct Person {
+		uint age;
+		Car car;
+	};
+	struct Company {
+		uint age;
+		Person leader;
+	};
+	Company company;
+	company.age = 5;
+	company.leader.age = 33;
+	company.leader.car.date = 20170104;
+	company.leader.car.model.type = 42;
+	company.leader.car.model.date = 20120601;
+	passed &= company.age == 5;
+	passed &= company.leader.age == 33;
+	passed &= company.leader.car.date == 20170104;
+	passed &= company.leader.car.model.type == 42;
+	passed &= company.leader.car.model.date == 20120601;
+	return passed;
+}
 bool test_struct_array() {
 	bool passed = true;
 	struct Person {
@@ -180,6 +214,29 @@ bool test_struct_array() {
 	};
 	passed &= people[0].age == 10;
 	passed &= people[1].age == 20;
+	return passed;
+}
+bool test_nested_struct_array() {
+	bool passed = true;
+	
+	struct Wheel {
+		float pressure;
+	};
+	struct Car {
+		Wheel[4] wheels;
+		uint date;
+	};
+	struct Person {
+		Car[4] cars;
+		uint age;
+	};
+	struct Company {
+		Person[10] employees;
+		uint age;
+	};
+	Company company;
+	company.employees[3].cars[3].wheels[3].pressure = 1.2;
+	passed &= company.employees[3].cars[3].wheels[3].pressure == 1.2;
 	return passed;
 }
 bool test_while_break_continue() {
@@ -249,6 +306,8 @@ void tests() {
 	// test_dynamic_array();
 	test_struct();
 	test_struct_array();
+	test_nested_struct();
+	test_nested_struct_array();
 	test_while_break_continue();
 	test_do_while();
 	test_nested_loop();
@@ -304,8 +363,6 @@ void fizzbuzz(ushort number) {
 int main() {
 	// bug with strings and comments
 	// tests();
-
-	test_struct_array();
 
     int local_variable = 3;
 	// some_function(local_variable);
