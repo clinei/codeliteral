@@ -627,7 +627,7 @@ struct Type_Info* map_name_to_type(char* name) {
     if (decl != NULL && decl->declaration.expression != NULL &&
         decl->declaration.expression->kind == CODE_KIND_STRUCT) {
 
-        return decl->declaration.expression->type;
+        return decl->declaration.type;
     }
     return map_name_to_native_type(name);
 }
@@ -765,7 +765,7 @@ struct Type_Info* fill_type_info_struct(struct Code_Node* struct_) {
             info->struct_.members_length += 1;
         }
         else {
-            printf("struct member was not a declaration!\n");
+            printf("struct members can only be declarations, was (%s)\n", code_kind_to_string(stmt->kind));
             abort();
         }
     }
@@ -861,7 +861,7 @@ size_t infer_type_size(struct Type_Info* type) {
 }
 
 struct Code_Node* infer(struct Code_Node* node) {
-    // printf("infer kind: (%s)\n", code_kind_to_string(node->kind));
+    // printf("infer kind: (%s), serial: (%zu)\n", code_kind_to_string(node->kind), node->serial);
     switch (node->kind) {
         case CODE_KIND_BLOCK:{
             infer_push_block(node);
@@ -952,27 +952,37 @@ struct Code_Node* infer(struct Code_Node* node) {
         case CODE_KIND_DOT_OPERATOR:{
             struct Code_Node* left = node->dot_operator.left;
             struct Code_Node* right = node->dot_operator.right;
+            if (right->kind != CODE_KIND_IDENT) {
+                printf("only idents can be on the right side of dot operators, was (%s)\n", code_kind_to_string(right->kind));
+                abort();
+            }
             infer(left);
-            if (right->kind == CODE_KIND_IDENT) {
-                if (left->type->kind == TYPE_INFO_TAG_IDENT) {
-                    if (left->type->ident.type->kind == TYPE_INFO_TAG_STRUCT) {
-                        struct Type_Info_Struct* struct_ = &(left->type->ident.type->struct_);
-                        size_t member_index = index_of_string(right->ident.name, struct_->member_names, struct_->members_length);
-                        right->type = struct_->members[member_index];
-                    }
-                    else abort();
-                }
-                else if (left->type->kind == TYPE_INFO_TAG_ARRAY) {
-                    if (strcmp(right->ident.name, "length") == 0) {
-                        right->type = Native_Type_Size_t;
-                    }
-                    else abort();
+            // @Cleanup
+            // :DotOperatorDedupe
+            struct Type_Info* left_type = left->type;
+            if (left_type->kind == TYPE_INFO_TAG_POINTER) {
+                left_type = left_type->pointer.elem_type;
+            }
+            if (left_type->kind == TYPE_INFO_TAG_IDENT) {
+                left_type = left_type->ident.type;
+            }
+            if (left_type->kind == TYPE_INFO_TAG_POINTER) {
+                printf("dot operators can only dereference one level deep!\n");
+                abort();
+            }
+            if (left_type->kind == TYPE_INFO_TAG_STRUCT) {
+                struct Type_Info_Struct* struct_ = &(left_type->struct_);
+                size_t member_index = index_of_string(right->ident.name, struct_->member_names, struct_->members_length);
+                right->type = struct_->members[member_index];
+            }
+            else if (left_type->kind == TYPE_INFO_TAG_ARRAY) {
+                if (strcmp(right->ident.name, "length") == 0) {
+                    right->type = Native_Type_Size_t;
                 }
                 else abort();
             }
             else abort();
             node->type = right->type;
-            // abort();
             break;
         }
         case CODE_KIND_STRUCT:{
@@ -1042,6 +1052,17 @@ struct Code_Node* infer(struct Code_Node* node) {
             break;
         }
         case CODE_KIND_BINARY_OPERATION:{
+            // @ParsingError
+            //     one.two == three
+            // groups like
+            //     one.(two == three)
+            // instead of
+            //     (one.two) == three
+            // but only in a statement
+            /*
+            printf("left:  (%s)\n", code_kind_to_string(node->binary_operation.left->kind));
+            printf("right: (%s)\n", code_kind_to_string(node->binary_operation.right->kind));
+            */
             infer(node->binary_operation.left);
             infer(node->binary_operation.right);
             if (is_operator_boolean(node->binary_operation.operation_type)) {

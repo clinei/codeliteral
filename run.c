@@ -497,6 +497,14 @@ struct Code_Node* math_solve(struct Code_Node* node) {
         case CODE_KIND_BINARY_OPERATION:{
             struct Code_Node* left_result = run_rvalue(node->binary_operation.left);
             struct Code_Node* right_result = run_rvalue(node->binary_operation.right);
+            if (node->binary_operation.left->type->kind  == TYPE_INFO_TAG_POINTER) {
+                // @Incomplete
+                // do pointer math
+                size_t elem_size = node->binary_operation.left->type.pointer->elem_type->size_in_bytes;
+                // unsigned type madness
+                right_result->kind;
+                // multiply by size
+            }
             result = math_binop(left_result, node->binary_operation.operation_type, right_result);
             break;
         }
@@ -816,11 +824,28 @@ size_t run_lvalue(struct Code_Node* node) {
         case CODE_KIND_DOT_OPERATOR:{
             struct Code_Node* left = node->dot_operator.left;
             struct Code_Node* right = node->dot_operator.right;
+            struct Type_Info* left_type = left->type;
+            // @Cleanup
+            // :DotOperatorDedupe
+            if (left_type->kind == TYPE_INFO_TAG_POINTER) {
+                left_type = left_type->pointer.elem_type;
+            }
+            if (left_type->kind == TYPE_INFO_TAG_IDENT) {
+                left_type = left_type->ident.type;
+            }
+            if (left_type->kind == TYPE_INFO_TAG_POINTER) {
+                printf("dot operators can only dereference one level deep!\n");
+                abort();
+            }
+            size_t pointer = run_lvalue(left);
+            if (left->type->kind == TYPE_INFO_TAG_POINTER) {
+                pointer = *(size_t*)get_memory(pointer, node->type->size_in_bytes);
+            }
             left->is_lhs = node->is_lhs;
             right->is_lhs = node->is_lhs;
-            struct Type_Info_Struct* struct_ = &(left->type->ident.type->struct_);
+            struct Type_Info_Struct* struct_ = &(left_type->struct_);
             size_t member_index = index_of_string(right->ident.name, struct_->member_names, struct_->members_length);
-            result = run_lvalue(left) + struct_->offsets[member_index];
+            result = pointer + struct_->offsets[member_index];
             right->pointer = result;
             node->pointer = result;
             break;
@@ -861,22 +886,24 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
             return node;
         }
         case CODE_KIND_INCREMENT:{
-            // @Incomplete
-            // pointer types
             size_t pointer = run_lvalue(node->increment.ident);
             void* real_pointer = (void*)(run_data.memory + pointer);
             struct Code_Node* prev = get_result(real_pointer, node->type);
+            size_t amount = 1;
+            if (node->type->kind == TYPE_INFO_TAG_POINTER) {
+                amount = node->type->pointer.elem_type->size_in_bytes;
+            }
             switch (prev->kind) {
                 case CODE_KIND_LITERAL_INT:{
-                    prev->literal_int.value += 1;
+                    prev->literal_int.value += amount;
                     break;
                 }
                 case CODE_KIND_LITERAL_UINT:{
-                    prev->literal_uint.value += 1;
+                    prev->literal_uint.value += amount;
                     break;
                 }
                 case CODE_KIND_LITERAL_FLOAT:{
-                    prev->literal_float.value += 1;
+                    prev->literal_float.value += amount;
                     prev->literal_float.value_f32 = prev->literal_float.value;
                     break;
                 }
@@ -892,33 +919,38 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
             }
             node->result = prev;
             node->result->str = NULL;
-            set_memory_tracked(pointer, get_result_ptr(node), node->type->size_in_bytes);
+            node->pointer = pointer;
+            add_node_to_execution_stack(node->increment.ident);
+            set_memory(pointer, get_result_ptr(node), node->type->size_in_bytes);
+            add_memory_change(pointer, node->increment.ident->execution_index);
             add_node_to_execution_stack(node);
             result = prev;
             break;
         }
         case CODE_KIND_DECREMENT:{
-            // @Incomplete
-            // pointer types
             size_t pointer = run_lvalue(node->increment.ident);
             void* real_pointer = (void*)(run_data.memory + pointer);
             struct Code_Node* prev = get_result(real_pointer, node->type);
+            size_t amount = 1;
+            if (node->type->kind == TYPE_INFO_TAG_POINTER) {
+                amount = node->type->size_in_bytes;
+            }
             switch (prev->kind) {
                 case CODE_KIND_LITERAL_INT:{
-                    prev->literal_int.value -= 1;
+                    prev->literal_int.value -= amount;
                     break;
                 }
                 case CODE_KIND_LITERAL_UINT:{
-                    prev->literal_uint.value -= 1;
+                    prev->literal_uint.value -= amount;
                     break;
                 }
                 case CODE_KIND_LITERAL_FLOAT:{
-                    prev->literal_float.value -= 1;
+                    prev->literal_float.value -= amount;
                     prev->literal_float.value_f32 = prev->literal_float.value;
                     break;
                 }
                 case CODE_KIND_LITERAL_BOOL:{
-                    // C doesn't allow this, but we do
+                    // C doesn't allow this, but we do.
                     // works the same as increment
                     prev->literal_bool.value = prev->literal_bool.value == 0;
                     break;
@@ -931,7 +963,10 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
             }
             node->result = prev;
             node->result->str = NULL;
-            set_memory_tracked(pointer, get_result_ptr(node), node->type->size_in_bytes);
+            node->pointer = pointer;
+            add_node_to_execution_stack(node->increment.ident);
+            set_memory(pointer, get_result_ptr(node), node->type->size_in_bytes);
+            add_memory_change(pointer, node->increment.ident->execution_index);
             add_node_to_execution_stack(node);
             result = prev;
             break;
@@ -987,6 +1022,7 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
                 abort();
             }
             add_node_to_execution_stack(node);
+            add_node_to_execution_stack(node->reference.expression);
             result = make_literal_uint(run_data.code_nodes, run_lvalue(node->reference.expression));
             break;
         }
@@ -995,7 +1031,8 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
             node->dereference.expression->is_lhs = node->is_lhs;
             struct Code_Node* loc = run_rvalue(node->dereference.expression);
             size_t pointer = loc->literal_uint.value;
-            void* value = get_memory_tracked(pointer, node->type->size_in_bytes);
+            void* value = get_memory(pointer, node->type->size_in_bytes);
+            add_memory_use(pointer, node->execution_index);
             result = get_result(value, node->type);
             break;
         }

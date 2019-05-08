@@ -131,6 +131,20 @@ bool test_pointer() {
 	passed &= d == 12345;
 	return passed;
 }
+bool test_array_pointer() {
+	bool passed = true;
+	int[4] arr;
+	int* head = &arr;
+	for (int i = 0; i < arr.length; i++) {
+		*head = i + 1;
+		head++;
+	}
+	passed &= arr[0] == 1;
+	passed &= arr[1] == 2;
+	passed &= arr[2] == 3;
+	passed &= arr[3] == 4;
+	return passed;
+}
 bool test_malloc_free() {
 	bool passed = true;
 	uchar* ptr = malloc(1);
@@ -239,6 +253,15 @@ bool test_nested_struct_array() {
 	passed &= company.employees[3].cars[3].wheels[3].pressure == 1.2;
 	return passed;
 }
+bool test_struct_pointer_dot() {
+	struct Foo {
+		int value;
+	};
+	Foo foo;
+	Foo* ptr = &foo;
+	ptr.value = 42;
+	ptr.value = ptr.value;
+}
 bool test_while_break_continue() {
 	bool passed = true;
 	bool stop = false;
@@ -301,6 +324,7 @@ void tests() {
 	test_if_else();
 	test_array();
 	test_pointer();
+	test_array_pointer();
 	// test_malloc_free();
 	// test_heap();
 	// test_dynamic_array();
@@ -308,6 +332,7 @@ void tests() {
 	test_struct_array();
 	test_nested_struct();
 	test_nested_struct_array();
+	test_struct_pointer_dot();
 	test_while_break_continue();
 	test_do_while();
 	test_nested_loop();
@@ -315,26 +340,21 @@ void tests() {
 	// test_unary();
 	test_string();
 }
-int some_other_function(char number) {
-	while (number > 0) {
-		if (number > 50) {
-			number -= 5;
-			continue;
-		}
-		if (number < 40) {
-			number = 5;
-			break;
-		}
-		number -= 10;
-	}
-	return number;
-}
-int some_function(uchar num_iters) {
-	int sum = 0;
-	for (int i = 0; i < num_iters; i += 1) {
-		sum += i * 20;
-	}
-	return some_other_function(sum);
+void linked_list() {
+	struct List_Item {
+		int value;
+		List_Item* next;
+	};
+	List_Item[4] list;
+	list[0].value = 1;
+	list[1].value = 2;
+	list[2].value = 3;
+	list[3].value = 4;
+	list[0].next = &list[1];
+	list[1].next = &list[2];
+	list[2].next = &list[3];
+	list[3].next = 0;
+	list[0].next.next.next.value = list[0].next.next.next.value;
 }
 int factorial(short number) {
 	if (number > 1) {
@@ -364,12 +384,24 @@ int main() {
 	// bug with strings and comments
 	// tests();
 
+	// parsing bug
+	struct One {
+		int two;
+	};
+	One one;
+	int three = 1;
+	one.two = three;
+	// this works
+	bool comp = one.two == three;
+	// this breaks
+	// one.two == three;
+
     int local_variable = 3;
 	// some_function(local_variable);
 
 	// factorial(local_variable);
 
-	fizzbuzz(30);
+	// fizzbuzz(30);
 
 	// linked_list();
 	return local_variable;

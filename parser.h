@@ -381,7 +381,7 @@ struct Parse_Data {
 };
 struct Parse_Data parse_data;
 
-enum Type_Info_Tag {
+enum TYPE_INFO {
     TYPE_INFO_TAG_INTEGER = 0,
     TYPE_INFO_TAG_FLOAT = 1,
     TYPE_INFO_TAG_VOID = 2,
@@ -425,7 +425,7 @@ struct Type_Info_Ident {
     struct Type_Info* type;
 };
 struct Type_Info {
-    enum Type_Info_Tag kind;
+    enum TYPE_INFO kind;
     size_t size_in_bytes;
 
     union {

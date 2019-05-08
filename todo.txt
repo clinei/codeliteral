@@ -1,12 +1,17 @@
 Bugs:
 
+parsing error, groups like this:
+list[0].next.(value == 2);
+instead of this:
+(list[0].next.value) == 2;
+
 jumping to a use makes it impossible to go left when it should be possible
 going to right makes it possible again
 
-convert node pointers to diffs from the base
-so we can resize the Code_Node array
-
-scrolling needs a separate layout pass
+reallocation of type_infos and code_node_array means we have to fix pointers in the tree
+we have to calculate the diff of the last block and then add that to every pointer
+or we can have node pointers relative to the base, that way we don't have to recalculate
+but we have to convert from relative pointers to absolute every time we traverse the tree
 
 we should use flags instead of bools
 
@@ -14,14 +19,13 @@ structs need alignment padding
 
 else if can put a transformed block between an else if chain, not good visually
 
-reallocation of type_infos and code_node_array means we have to fix pointers in the tree
-we have to calculate the diff of the last block and then add that to every pointer
-
-scrolling not implemented
+scrolling needs a separate layout pass
 
 we call the left hand side "ident",
 that is wrong, it's an lvalue
 we should rename it
+
+TYPE_INFO_TAG_IDENT should not exist or should be removed during infer
 
 unary minus and not operators not implemented
 
