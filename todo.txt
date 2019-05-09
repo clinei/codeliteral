@@ -1,4 +1,4 @@
-Bugs:
+## Bugs:
 
 jumping to a use makes it impossible to go left when it should be possible
 going to right makes it possible again
@@ -36,7 +36,29 @@ test ints
 
 add asserts everywhere
 
-Graphics Ideas:
+## Design Issues:
+
+functions declared inside other functions can have the same name as
+some other nested function, for example:
+```
+int outer() {
+    int inner(int param) {
+        return param;
+    }
+    return inner(42);
+}
+int other_outer() {
+    int inner(int param) {
+        return param * param;
+    }
+    return inner(42);
+}
+```
+how should we name the parameters and return values?
+I guess they are gonna clash just like local variables, which is probably okay,
+as confusion about identity can be solved by moving between clones
+
+## Graphics Ideas:
 
 backgrounds need a stack approach
 
@@ -44,7 +66,7 @@ render fonts ourself
 render font vertices directly
 try font hinting
 
-Implementation Ideas:
+## Implementation Ideas:
 
 import a libc, like musl, so we can printf
 that requires a preprocessor

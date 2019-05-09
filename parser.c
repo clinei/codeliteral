@@ -873,6 +873,19 @@ struct Code_Node* get_decl_of_ident(char* ident_name) {
     }
     return NULL;
 }
+struct Code_Node* get_decl_of_ident_current_scope(char* ident_name) {
+    struct Code_Node* block = parse_data.last_block;
+    for (size_t j = 0; j < block->block.declarations->length; j += 1) {
+        struct Code_Node* decl = block->block.declarations->first[j];
+        if (decl->kind == CODE_KIND_DECLARATION) {
+            if (strcmp(decl->declaration.ident->ident.name, ident_name) == 0) {
+                return decl;
+            }
+        }
+        else abort();
+    }
+    return NULL;
+}
 
 size_t infer_type_size(struct Type_Info* type) {
     size_t result = 0;
@@ -1110,8 +1123,8 @@ struct Code_Node* infer(struct Code_Node* node) {
 }
 
 bool is_operator_boolean(char* operator){
-    return strcmp(operator, ">")  == 0 || strcmp(operator, ">=") == 0 ||
-           strcmp(operator, "<")  == 0 || strcmp(operator, "<=") == 0 ||
+    return strcmp(operator, ">")  == 0 || strcmp(operator, ">=") == 0 || strcmp(operator, "&&") == 0 ||
+           strcmp(operator, "<")  == 0 || strcmp(operator, "<=") == 0 || strcmp(operator, "||") == 0 ||
            strcmp(operator, "==") == 0 || strcmp(operator, "!=") == 0;
 }
 
@@ -1971,7 +1984,7 @@ struct Code_Node* parse_declaration_precomputed_type(struct Token_Array* token_a
     if (ident == NULL) {
         abort();
     }
-    struct Code_Node* prev_decl = get_decl_of_ident(ident->ident.name);
+    struct Code_Node* prev_decl = get_decl_of_ident_current_scope(ident->ident.name);
     if (prev_decl != NULL) {
         printf("(ident) %s already declared!\n", ident->ident.name);
         abort();

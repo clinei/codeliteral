@@ -250,7 +250,7 @@ struct Code_Node* math_binop(struct Code_Node* left, char* op, struct Code_Node*
         signed long int left_value = left->literal_int.value;
         signed long int right_value = right->literal_int.value;
         signed long int result;
-        bool is_bool_op = false;
+        bool is_bool_op = is_operator_boolean(op);
         // @Copypaste
         if (strcmp(op, "+") == 0) {
             result = left_value + right_value;
@@ -277,35 +277,27 @@ struct Code_Node* math_binop(struct Code_Node* left, char* op, struct Code_Node*
             result = left_value | right_value;
         }
         else if (strcmp(op, "<") == 0) {
-            is_bool_op = true;
             result = left_value < right_value;
         }
         else if (strcmp(op, "<=") == 0) {
-            is_bool_op = true;
             result = left_value <= right_value;
         }
         else if (strcmp(op, ">") == 0) {
-            is_bool_op = true;
             result = left_value > right_value;
         }
         else if (strcmp(op, ">=") == 0) {
-            is_bool_op = true;
             result = left_value >= right_value;
         }
         else if (strcmp(op, "!=") == 0) {
-            is_bool_op = true;
             result = left_value != right_value;
         }
         else if (strcmp(op, "==") == 0) {
-            is_bool_op = true;
             result = left_value == right_value;
         }
         else if (strcmp(op, "&&") == 0) {
-            is_bool_op = true;
             result = left_value && right_value;
         }
         else if (strcmp(op, "||") == 0) {
-            is_bool_op = true;
             result = left_value || right_value;
         }
         else {
@@ -326,7 +318,7 @@ struct Code_Node* math_binop(struct Code_Node* left, char* op, struct Code_Node*
         unsigned long int left_value = left->literal_uint.value;
         unsigned long int right_value = right->literal_uint.value;
         unsigned long int result;
-        bool is_bool_op = false;
+        bool is_bool_op = is_operator_boolean(op);
         // @Copypaste
         if (strcmp(op, "+") == 0) {
             result = left_value + right_value;
@@ -353,35 +345,27 @@ struct Code_Node* math_binop(struct Code_Node* left, char* op, struct Code_Node*
             result = left_value | right_value;
         }
         else if (strcmp(op, "<") == 0) {
-            is_bool_op = true;
             result = left_value < right_value;
         }
         else if (strcmp(op, "<=") == 0) {
-            is_bool_op = true;
             result = left_value <= right_value;
         }
         else if (strcmp(op, ">") == 0) {
-            is_bool_op = true;
             result = left_value > right_value;
         }
         else if (strcmp(op, ">=") == 0) {
-            is_bool_op = true;
             result = left_value >= right_value;
         }
         else if (strcmp(op, "!=") == 0) {
-            is_bool_op = true;
             result = left_value != right_value;
         }
         else if (strcmp(op, "==") == 0) {
-            is_bool_op = true;
             result = left_value == right_value;
         }
         else if (strcmp(op, "&&") == 0) {
-            is_bool_op = true;
             result = left_value && right_value;
         }
         else if (strcmp(op, "||") == 0) {
-            is_bool_op = true;
             result = left_value || right_value;
         }
         else {
@@ -401,7 +385,7 @@ struct Code_Node* math_binop(struct Code_Node* left, char* op, struct Code_Node*
         double epsilon = 0.0000001;
         bool is_almost_equal = left_value - epsilon < right_value && left_value + epsilon > right_value;
         double result;
-        bool is_bool_op = false;
+        bool is_bool_op = is_operator_boolean(op);
         // @Copypaste
         if (strcmp(op, "+") == 0) {
             result = left_value + right_value;
@@ -416,47 +400,39 @@ struct Code_Node* math_binop(struct Code_Node* left, char* op, struct Code_Node*
             result = left_value / right_value;
         }
         else if (strcmp(op, "<") == 0) {
-            is_bool_op = true;
             result = left_value < right_value;
         }
         else if (strcmp(op, "<=") == 0) {
-            is_bool_op = true;
             // result = left_value <= right_value;
             if (is_almost_equal) {
                 result = 1.0;
             }
         }
         else if (strcmp(op, ">") == 0) {
-            is_bool_op = true;
             result = left_value > right_value;
         }
         else if (strcmp(op, ">=") == 0) {
-            is_bool_op = true;
             // result = left_value >= right_value;
             if (is_almost_equal) {
                 result = 1.0;
             }
         }
         else if (strcmp(op, "!=") == 0) {
-            is_bool_op = true;
             // result = left_value != right_value;
             if (is_almost_equal == false) {
                 result = 1.0;
             }
         }
         else if (strcmp(op, "==") == 0) {
-            is_bool_op = true;
             // result = left_value == right_value;
             if (is_almost_equal) {
                 result = 1.0;
             }
         }
         else if (strcmp(op, "&&") == 0) {
-            is_bool_op = true;
             result = left_value && right_value;
         }
         else if (strcmp(op, "||") == 0) {
-            is_bool_op = true;
             result = left_value || right_value;
         }
         else {
@@ -525,7 +501,7 @@ struct Code_Node* math_solve(struct Code_Node* node) {
                 abort();
             }
             if (ptr_result != NULL) {
-                if (strcmp(operation_type, "+") == 0 ||
+                if (strcmp(operation_type, "+") == 0 || is_operator_boolean(operation_type) ||
                     strcmp(operation_type, "-") == 0) {
                 }
                 else {
@@ -1151,6 +1127,8 @@ struct Code_Node* run_statement(struct Code_Node* node) {
             break;
         }
         case CODE_KIND_DECLARATION:{
+            struct Type_Info* type = node->declaration.type;
+            struct Code_Node* expression = node->declaration.expression;
             // guarantee unique variable names
             char* ident_name = node->declaration.ident->ident.name;
             char* new_ident_name = ident_name;
@@ -1161,16 +1139,10 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                 int more_chars_needed = snprintf(new_ident_name, chars_needed, "%s_%zu", ident_name, uses);
                 node->declaration.ident->ident.name = new_ident_name;
             }
-            if (run_data.count_uses) {
+            if (run_data.count_uses && !(expression != NULL && expression->kind == CODE_KIND_PROCEDURE)) {
                 add_name_use(ident_name);
-                ident_name = new_ident_name;
             }
-            struct Type_Info* type = node->declaration.type;
-            if (type == NULL) {
-                printf("decl type was null! ident: \"%s\"", ident_name);
-                break;
-            }
-            struct Code_Node* expression = node->declaration.expression;
+            ident_name = new_ident_name;
             if (expression != NULL) {
                 if (expression->kind == CODE_KIND_PROCEDURE) {
                     break;
@@ -1189,6 +1161,10 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                     }
                     break;
                 }
+            }
+            if (type == NULL) {
+                printf("decl type was null! ident: \"%s\"\n", ident_name);
+                break;
             }
             if (type->kind == TYPE_INFO_TAG_IDENT) {
                 type = type->ident.type;

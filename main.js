@@ -397,16 +397,83 @@ void linked_list() {
 		int value;
 		List_Item* next;
 	};
-	List_Item[4] list;
-	list[0].value = 1;
-	list[1].value = 2;
-	list[2].value = 3;
-	list[3].value = 4;
+	// don't go over the limit
+	List_Item[10] list;
+	list[0].value = 20;
+	list[1].value = 10;
 	list[0].next = &list[1];
-	list[1].next = &list[2];
-	list[2].next = &list[3];
-	list[3].next = 0;
-	list[0].next.next.next.value = list[0].next.next.next.value;
+	list[1].next = 0;
+	uint length(List_Item* list) {
+		uint i = 1;
+		while (list.next != 0) {
+			list = list.next;
+			i++;
+		}
+		return i;
+	}
+	length(&list);
+	List_Item* elem_at_index(List_Item* list, uint index) {
+		// check for name clashes
+		uint len = length(list);
+		if (index >= len) {
+			// out of bounds
+			return 0;
+		}
+		return list + index;
+	}
+	void insert(List_Item* list, int value) {
+		while (list.next != 0) {
+			list = list.next;
+		}
+		list.next = list + 1;
+		// we would malloc
+		// but we don't have it yet
+		list++;
+		list.value = value;
+		list.next = 0;
+	}
+	insert(&list, 40);
+	insert(&list, 30);
+	length(&list);
+	void print(List_Item* list) {
+		while (list.next != 0) {
+			list.value;
+			list = list.next;
+		}
+		if (true) {
+			list.value;
+			list = list;
+		}
+	}
+	print(&list);
+	/*
+	algorithm quicksort(A, lo, hi) is
+		if lo < hi then
+			p := partition(A, lo, hi)
+			quicksort(A, lo, p - 1)
+			quicksort(A, p + 1, hi)
+
+	algorithm partition(A, lo, hi) is
+		pivot := A[hi]
+		i := lo
+		for j := lo to hi - 1 do
+			if A[j] < pivot then
+				swap A[i] with A[j]
+				i := i + 1
+		swap A[i] with A[hi]
+		return i
+	*/
+	void quicksort(List_Item* list, uint lo, uint hi) {
+		;
+	}
+	void partition(List_Item* list, uint lo, uint hi) {
+		;
+	}
+	void sort(List_Item* list) {
+		quicksort(list, 0, length(list) - 1);
+	}
+	sort(&list);
+	print(&list);
 }
 int factorial(short number) {
 	if (number > 1) {
@@ -443,7 +510,6 @@ int main() {
 
 	// fizzbuzz(30);
 
-	linked_list();
 	linked_list();
 	return local_variable;
 }
