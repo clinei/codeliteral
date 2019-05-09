@@ -1,7 +1,5 @@
 Bugs:
 
-type names that are used many times are not updated in declaration
-
 jumping to a use makes it impossible to go left when it should be possible
 going to right makes it possible again
 

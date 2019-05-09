@@ -193,7 +193,7 @@ Module['FS_createPath']('/assets', 'shaders', true, true);
   }
 
  }
- loadPackage({"files": [{"start": 0, "audio": 0, "end": 285388, "filename": "/assets/fonts/SourceCodeVariable-Roman.ttf"}, {"start": 285388, "audio": 0, "end": 285496, "filename": "/assets/shaders/quad.frag.glsl"}, {"start": 285496, "audio": 0, "end": 285684, "filename": "/assets/shaders/quad.vert.glsl"}, {"start": 285684, "audio": 0, "end": 285937, "filename": "/assets/shaders/texture_atlas.frag.glsl"}, {"start": 285937, "audio": 0, "end": 286173, "filename": "/assets/shaders/texture_atlas.vert.glsl"}], "remote_package_size": 286173, "package_uuid": "8fda5fe0-64b3-4ce6-9348-cc12ac052867"});
+ loadPackage({"files": [{"start": 0, "audio": 0, "end": 285388, "filename": "/assets/fonts/SourceCodeVariable-Roman.ttf"}, {"start": 285388, "audio": 0, "end": 285496, "filename": "/assets/shaders/quad.frag.glsl"}, {"start": 285496, "audio": 0, "end": 285684, "filename": "/assets/shaders/quad.vert.glsl"}, {"start": 285684, "audio": 0, "end": 285937, "filename": "/assets/shaders/texture_atlas.frag.glsl"}, {"start": 285937, "audio": 0, "end": 286173, "filename": "/assets/shaders/texture_atlas.vert.glsl"}], "remote_package_size": 286173, "package_uuid": "f3701e57-a4eb-4965-be02-b2456a7f1002"});
 
 })();
 
@@ -1478,11 +1478,11 @@ function updateGlobalBufferViews() {
 
 
 var STATIC_BASE = 1024,
-    STACK_BASE = 10512,
+    STACK_BASE = 10592,
     STACKTOP = STACK_BASE,
-    STACK_MAX = 5253392,
-    DYNAMIC_BASE = 5253392,
-    DYNAMICTOP_PTR = 10480;
+    STACK_MAX = 5253472,
+    DYNAMIC_BASE = 5253472,
+    DYNAMICTOP_PTR = 10560;
 
 assert(STACK_BASE % 16 === 0, 'stack must start aligned');
 assert(DYNAMIC_BASE % 16 === 0, 'heap must start aligned');
@@ -1956,7 +1956,7 @@ var ASM_CONSTS = [];
 
 
 
-// STATICTOP = STATIC_BASE + 9488;
+// STATICTOP = STATIC_BASE + 9568;
 /* global initializers */ /*__ATINIT__.push();*/
 
 
@@ -1967,7 +1967,7 @@ var ASM_CONSTS = [];
 
 
 /* no memory initializer */
-var tempDoublePtr = 10496
+var tempDoublePtr = 10576
 assert(tempDoublePtr % 8 == 0);
 
 function copyTempFloat(ptr) { // functions, because inlining this code increases code size too much

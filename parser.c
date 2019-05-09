@@ -1878,11 +1878,6 @@ struct Type_Info* parse_type(struct Token_Array* token_array,
         return NULL;
     }
 
-    // @Hack
-    if (prev_type->kind == TYPE_INFO_TAG_STRUCT) {
-        prev_type = make_type_info_ident(ident_name, prev_type);
-    }
-
     struct Token* prev_token_2 = 0;
     do {
         prev_token = token_array->curr_token;
@@ -1996,9 +1991,10 @@ struct Code_Node* parse_struct_declaration(struct Token_Array* token_array,
     token_array->curr_token++;
     struct Code_Node* ident = parse_ident(token_array, code_nodes);
     struct Type_Info* type = make_type_info_struct_dummy();
+    struct Type_Info* type_ident = make_type_info_ident(ident->ident.name, type);
     struct Code_Node* expression = make_struct(code_nodes, NULL);
-    // need to have access to declaration because struct member can be the type we have yet to parse
-    struct Code_Node* decl = make_declaration(code_nodes, type, ident, expression);
+    // need to have access to declaration because struct member can contain the type we have yet to parse
+    struct Code_Node* decl = make_declaration(code_nodes, type_ident, ident, expression);
     array_push(parse_data.last_block->block.declarations, &decl);
     struct Code_Node* block = parse_block(token_array, code_nodes);
     expression->type = type;

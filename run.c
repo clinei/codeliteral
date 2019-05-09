@@ -1151,24 +1151,24 @@ struct Code_Node* run_statement(struct Code_Node* node) {
             break;
         }
         case CODE_KIND_DECLARATION:{
-            struct Type_Info* type = node->declaration.type;
-            if (type == NULL) {
-                break;
-            }
-            if (type->kind == TYPE_INFO_TAG_IDENT) {
-                type = type->ident.type;
-            }
             // guarantee unique variable names
             char* ident_name = node->declaration.ident->ident.name;
+            char* new_ident_name = ident_name;
             size_t uses = get_name_uses(ident_name) + 1;
             if (uses > 1) {
                 int chars_needed = snprintf(NULL, 0, "%s_%zu", ident_name, uses) + 1;
-                char* new_ident_name = malloc(sizeof(char) * chars_needed);
+                new_ident_name = malloc(sizeof(char) * chars_needed);
                 int more_chars_needed = snprintf(new_ident_name, chars_needed, "%s_%zu", ident_name, uses);
                 node->declaration.ident->ident.name = new_ident_name;
             }
             if (run_data.count_uses) {
                 add_name_use(ident_name);
+                ident_name = new_ident_name;
+            }
+            struct Type_Info* type = node->declaration.type;
+            if (type == NULL) {
+                printf("decl type was null! ident: \"%s\"", ident_name);
+                break;
             }
             struct Code_Node* expression = node->declaration.expression;
             if (expression != NULL) {
@@ -1181,8 +1181,17 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                     run_data.count_uses = false;
                     run_statement(expression->struct_.block);
                     run_data.count_uses = true;
+                    if (type->kind == TYPE_INFO_TAG_IDENT) {
+                        type->ident.name = ident_name;
+                    }
+                    else {
+                        printf("struct declaration type was not an ident type!\n");
+                    }
                     break;
                 }
+            }
+            if (type->kind == TYPE_INFO_TAG_IDENT) {
+                type = type->ident.type;
             }
             add_node_to_execution_stack(node->declaration.ident);
             if (type->kind == TYPE_INFO_TAG_VOID) {

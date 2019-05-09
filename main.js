@@ -444,6 +444,7 @@ int main() {
 	// fizzbuzz(30);
 
 	linked_list();
+	linked_list();
 	return local_variable;
 }
 main();
