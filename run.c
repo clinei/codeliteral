@@ -496,8 +496,11 @@ struct Code_Node* math_solve(struct Code_Node* node) {
     switch (node->kind) {
         case CODE_KIND_BINARY_OPERATION:{
             char* operation_type = node->binary_operation.operation_type;
-            struct Code_Node* left_result = run_rvalue(node->binary_operation.left);
-            struct Code_Node* right_result = run_rvalue(node->binary_operation.right);
+            run_rvalue(node->binary_operation.left);
+            run_rvalue(node->binary_operation.right);
+            node->binary_operation.right->result = maybe_cast(node->binary_operation.left->result, node->binary_operation.right->result);
+            struct Code_Node* left_result = node->binary_operation.left->result;
+            struct Code_Node* right_result = node->binary_operation.right->result;
             struct Code_Node* ptr_result = NULL;
             struct Code_Node* add_result = NULL;
             size_t elem_size;
@@ -829,15 +832,8 @@ size_t run_lvalue(struct Code_Node* node) {
             struct Code_Node* rhs = node->opassign.expression;
             lhs->is_lhs = true;
             size_t lhs_pointer = run_lvalue(lhs);
-            add_node_to_execution_stack(lhs);
-            add_memory_use(lhs_pointer, lhs->execution_index);
-            void* prev_value = get_memory(lhs_pointer, lhs->type->size_in_bytes);
-            if (lhs->type->kind != TYPE_INFO_TAG_ARRAY) {
-                lhs->result = get_result(prev_value, lhs->type);
-            }
-            run_rvalue(rhs);
-            rhs->result = maybe_cast(lhs, rhs->result);
-            node->result = math_binop(lhs->result, node->opassign.operation_type, rhs->result);
+            struct Code_Node* binop = make_binary_operation(run_data.code_nodes, lhs, node->opassign.operation_type, rhs);
+            node->result = math_solve(binop);
             set_memory(lhs_pointer, get_result_ptr(node), lhs->type->size_in_bytes);
             add_memory_change(lhs_pointer, lhs->execution_index);
             break;
@@ -854,10 +850,23 @@ size_t run_lvalue(struct Code_Node* node) {
             struct Code_Node* lhs = node->array_index.array;
             size_t lhs_pointer = run_lvalue(lhs);
             run_rvalue(node->array_index.index);
+            // @Incomplete
+            // index can be negative
             size_t index_result = (size_t)(*(int*)get_result_ptr(node->array_index.index));
-            size_t array_length = lhs->type->array.length;
-            if (index_result >= array_length) {
-                printf("array index out of bounds! index: (%zu) length: (%zu)\n", index_result, array_length);
+            if (lhs->type->kind == TYPE_INFO_TAG_ARRAY) {
+                // array bounds check
+                size_t array_length = lhs->type->array.length;
+                if (index_result >= array_length) {
+                    printf("array index out of bounds! index: (%zu) length: (%zu)\n", index_result, array_length);
+                    abort();
+                }
+            }
+            else if (lhs->type->kind == TYPE_INFO_TAG_POINTER) {
+                size_t* value = get_memory(lhs_pointer, lhs->type->size_in_bytes);
+                lhs_pointer = *value;
+            }
+            else {
+                printf("array indexes can only be done on arrays and pointers, was (%s)\n", type_kind_to_string(lhs->type->kind));
                 abort();
             }
             result = lhs_pointer + index_result * node->type->size_in_bytes;
@@ -972,12 +981,12 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
             break;
         }
         case CODE_KIND_DECREMENT:{
-            size_t pointer = run_lvalue(node->increment.ident);
+            size_t pointer = run_lvalue(node->decrement.ident);
             void* real_pointer = (void*)(run_data.memory + pointer);
             struct Code_Node* prev = get_result(real_pointer, node->type);
             size_t amount = 1;
             if (node->type->kind == TYPE_INFO_TAG_POINTER) {
-                amount = node->type->size_in_bytes;
+                amount = node->type->pointer.elem_type->size_in_bytes;
             }
             switch (prev->kind) {
                 case CODE_KIND_LITERAL_INT:{
@@ -1000,7 +1009,7 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
                     break;
                 }
                 default:{
-                    printf("tried to increment (%s)\n", code_kind_to_string(prev->kind));
+                    printf("tried to decrement (%s)\n", code_kind_to_string(prev->kind));
                     abort();
                     break;
                 }
@@ -1008,9 +1017,9 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
             node->result = prev;
             node->result->str = NULL;
             node->pointer = pointer;
-            add_node_to_execution_stack(node->increment.ident);
+            add_node_to_execution_stack(node->decrement.ident);
             set_memory(pointer, get_result_ptr(node), node->type->size_in_bytes);
-            add_memory_change(pointer, node->increment.ident->execution_index);
+            add_memory_change(pointer, node->decrement.ident->execution_index);
             add_node_to_execution_stack(node);
             result = prev;
             break;

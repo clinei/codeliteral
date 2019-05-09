@@ -158,6 +158,37 @@ char* code_kind_to_string(enum Code_Kind kind) {
         }
     }
 }
+char* type_kind_to_string(enum Type_Info_Tag kind) {
+    switch (kind) {
+        case TYPE_INFO_TAG_INTEGER:{
+            return "integer";
+        }
+        case TYPE_INFO_TAG_FLOAT:{
+            return "float";
+        }
+        case TYPE_INFO_TAG_VOID:{
+            return "void";
+        }
+        case TYPE_INFO_TAG_ARRAY:{
+            return "array";
+        }
+        case TYPE_INFO_TAG_POINTER:{
+            return "pointer";
+        }
+        case TYPE_INFO_TAG_STRING:{
+            return "string";
+        }
+        case TYPE_INFO_TAG_FUNCTION_POINTER:{
+            return "function pointer";
+        }
+        case TYPE_INFO_TAG_STRUCT:{
+            return "struct";
+        }
+        case TYPE_INFO_TAG_IDENT:{
+            return "ident";
+        }
+    }
+}
 
 struct Code_Node* make_procedure(struct Code_Nodes* code_nodes,
                                  struct Code_Node_Array* params,
@@ -1058,17 +1089,6 @@ struct Code_Node* infer(struct Code_Node* node) {
             break;
         }
         case CODE_KIND_BINARY_OPERATION:{
-            // @ParsingError
-            //     one.two == three
-            // groups like
-            //     one.(two == three)
-            // instead of
-            //     (one.two) == three
-            // but only in a statement
-            /*
-            printf("left:  (%s)\n", code_kind_to_string(node->binary_operation.left->kind));
-            printf("right: (%s)\n", code_kind_to_string(node->binary_operation.right->kind));
-            */
             infer(node->binary_operation.left);
             infer(node->binary_operation.right);
             if (is_operator_boolean(node->binary_operation.operation_type)) {
@@ -1164,6 +1184,7 @@ bool maybe_binary(enum Operator_Precedence prev_prec,
 
     enum Operator_Precedence curr_prec = map_operator_to_precedence(token_array->curr_token->str);
     if (curr_prec < prev_prec) {
+        // printf("maybe_binary: %s\n", token_array->curr_token->str);
         struct Code_Node* left = code_nodes->last;
         char* op = token_array->curr_token->str;
         token_array->curr_token++;
@@ -1266,6 +1287,10 @@ struct Code_Node* parse_statement(struct Token_Array* token_array,
                                   struct Code_Nodes* code_nodes) {
 
     // printf("parse_statement: %s\n", token_array->curr_token->str);
+    // in case we need to backtrack, store the current state
+    struct Code_Node* prev_node = code_nodes->last;
+    size_t prev_length = code_nodes->length;
+    struct Token* prev_token = token_array->curr_token;
     struct Token* next_token = &token_array->curr_token[1];
     if (strcmp(token_array->curr_token->str, "{") == 0) {
         return parse_block(token_array, code_nodes);
@@ -1330,7 +1355,12 @@ struct Code_Node* parse_statement(struct Token_Array* token_array,
                 return parse_assign(token_array, code_nodes);
             }
             else if (map_operator_to_precedence(token_array->curr_token->str) != OPERATOR_PRECEDENCE_NONE) {
-                token_array->curr_token--;
+                // @Cleanup
+                // this feels very messy
+                // backtrack, this is a binary operation
+                code_nodes->last = prev_node;
+                code_nodes->length = prev_length;
+                token_array->curr_token = prev_token;
             }
             else if (token_array->curr_token->str[strlen(token_array->curr_token->str)-1] == '=') {
                 return parse_opassign(token_array, code_nodes);
@@ -1349,6 +1379,7 @@ struct Code_Node* parse_statement(struct Token_Array* token_array,
 struct Code_Node* parse_rvalue_atom(struct Token_Array* token_array,
                                     struct Code_Nodes* code_nodes) {
 
+    // printf("parse_rvalue_atom: %s\n", token_array->curr_token->str);
     if (strcmp(token_array->curr_token->str, "&") == 0) {
         return parse_reference(token_array, code_nodes);
     }
@@ -1391,6 +1422,7 @@ struct Code_Node* parse_rvalue_atom(struct Token_Array* token_array,
 struct Code_Node* parse_rvalue(struct Token_Array* token_array,
                                struct Code_Nodes* code_nodes) {
 
+    // printf("parse_rvalue: %s\n", token_array->curr_token->str);
     struct Token* prev_token = token_array->curr_token;
     struct Code_Node* atom = parse_rvalue_atom(token_array, code_nodes);
     if (atom == NULL) {

@@ -70,7 +70,6 @@ enum Code_Kind {
     CODE_KIND_LITERAL_BOOL = 31,
     CODE_KIND_NATIVE_CODE = 32,
 };
-char* code_kind_to_string(enum Code_Kind kind);
 
 struct Code_Procedure {
     struct Code_Node_Array* params;
@@ -381,7 +380,7 @@ struct Parse_Data {
 };
 struct Parse_Data parse_data;
 
-enum TYPE_INFO {
+enum Type_Info_Tag {
     TYPE_INFO_TAG_INTEGER = 0,
     TYPE_INFO_TAG_FLOAT = 1,
     TYPE_INFO_TAG_VOID = 2,
@@ -425,7 +424,7 @@ struct Type_Info_Ident {
     struct Type_Info* type;
 };
 struct Type_Info {
-    enum TYPE_INFO kind;
+    enum Type_Info_Tag kind;
     size_t size_in_bytes;
 
     union {
@@ -474,8 +473,12 @@ struct User_Types* user_types;
 
 void add_user_type(char* name, struct Type_Info* user_type);
 size_t index_of_string(char* str, char** strings, size_t length);
+
 struct Type_Info* map_name_to_type(char* name);
 struct Type_Info* map_name_to_native_type(char* name);
+
+char* code_kind_to_string(enum Code_Kind kind);
+char* type_kind_to_string(enum Type_Info_Tag kind);
 
 struct Code_Node* infer(struct Code_Node* node);
 struct Type_Info* infer_type(struct Code_Node* node);

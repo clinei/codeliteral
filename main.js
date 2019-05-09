@@ -145,6 +145,42 @@ bool test_array_pointer() {
 	passed &= arr[3] == 4;
 	return passed;
 }
+bool test_pointer_math() {
+	bool passed = true;
+	struct Foo {
+		int one;
+		int two;
+	};
+	Foo[2] arr;
+	// dot operators can dereference one level deep
+	// just like the -> operator in C
+	Foo* head = &arr;
+	head.one = 1;
+	head.two = 2;
+	head++;
+	head.one = 3;
+	head.two = 4;
+	head--;
+	passed &= arr[0].one == 1;
+	passed &= arr[0].two == 2;
+	passed &= arr[1].one == 3;
+	passed &= arr[1].two == 4;
+	// pointers can be array indexed
+	passed &= head[0].one == 1;
+	passed &= head[0].two == 2;
+	passed &= head[1].one == 3;
+	passed &= head[1].two == 4;
+	// these mechanics work together
+	Foo*[2] ptr_arr;
+	ptr_arr[0] = &arr[0];
+	ptr_arr[1] = &arr[1];
+	Foo** ptr_arr_ptr = &ptr_arr;
+	passed &= ptr_arr_ptr[0].one == 1;
+	passed &= ptr_arr_ptr[0].two == 2;
+	passed &= ptr_arr_ptr[1].one == 3;
+	passed &= ptr_arr_ptr[1].two == 4;
+	return passed;
+}
 bool test_malloc_free() {
 	bool passed = true;
 	uchar* ptr = malloc(1);
@@ -325,6 +361,7 @@ void tests() {
 	test_array();
 	test_pointer();
 	test_array_pointer();
+	test_pointer_math();
 	// test_malloc_free();
 	// test_heap();
 	// test_dynamic_array();
@@ -340,23 +377,21 @@ void tests() {
 	// test_unary();
 	test_string();
 }
-/*
-void bugs() {
-	// The size of this struct is infinity or zero
-	struct Recurse {
-		Recurse bug;
-	};
-	// The same thing can happen with indirect recursion
-	// but because our language has forward declaration
-	// we are safe, for now
-	struct Recurse2 {
-		Recurse3 bug;
-	};
-	struct Recurse3 {
-		Recurse2 bug;
-	};
-}
-*/
+// void bugs() {
+// 	// The size of this struct is infinity or zero
+// 	struct Recurse {
+// 		Recurse bug;
+// 	};
+// 	// The same thing can happen with indirect recursion
+// 	// but because our language has forward declaration
+// 	// we are safe, for now
+// 	struct Recurse2 {
+// 		Recurse3 bug;
+// 	};
+// 	struct Recurse3 {
+// 		Recurse2 bug;
+// 	};
+// }
 void linked_list() {
 	struct List_Item {
 		int value;
@@ -401,45 +436,6 @@ int main() {
 	// bug with strings and comments
 	// tests();
 
-	// pointer math
-	struct Foo {
-		int one;
-		int two;
-	};
-	Foo[2] foo;
-	Foo* ptr = &foo;
-	// bug, the values aren't changed
-	ptr.one = 1;
-	ptr.two = 2;
-	ptr;
-	ptr += 1;
-	ptr.one = 3;
-	ptr.two = 4;
-	// array index must work through pointers
-	// just like dot operators
-	/*
-	ptr[0].one;
-	ptr[0].two;
-	ptr[1].one;
-	ptr[1].two;
-	*/
-	foo[0].one;
-	foo[0].two;
-	foo[1].one;
-	foo[1].two;
-
-	// parsing bug
-	struct One {
-		int two;
-	};
-	One one;
-	int three = 1;
-	one.two = three;
-	// this works
-	bool comp = one.two == three;
-	// this breaks
-	// one.two == three;
-
     int local_variable = 3;
 	// some_function(local_variable);
 
@@ -447,7 +443,7 @@ int main() {
 
 	// fizzbuzz(30);
 
-	// linked_list();
+	linked_list();
 	return local_variable;
 }
 main();

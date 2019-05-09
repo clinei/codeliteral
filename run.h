@@ -65,6 +65,8 @@ struct Run_Data run_data;
 struct Code_Node* math_binop(struct Code_Node* left, char* op, struct Code_Node* right);
 struct Code_Node* math_solve(struct Code_Node* node);
 
+struct Code_Node* maybe_cast(struct Code_Node* lhs, struct Code_Node* rhs);
+
 size_t run_lvalue(struct Code_Node* node);
 struct Code_Node* run_rvalue(struct Code_Node* node);
 struct Code_Node* run_statement(struct Code_Node* node);
