@@ -283,6 +283,7 @@ struct Code_Node* get_new_code_node(struct Code_Nodes* code_nodes);
 
 struct Type_Info* make_type_info_integer(size_t size_in_bytes, bool is_signed);
 struct Type_Info* make_type_info_float(size_t size_in_bytes);
+struct Type_Info* make_type_info_array(struct Type_Info* elem_type, size_t length, char* length_str);
 struct Type_Info* make_type_info_string();
 struct Type_Info* make_type_info_pointer(struct Type_Info* elem_type);
 struct Type_Info* make_type_info_function_pointer(struct Type_Info* return_type,
@@ -399,6 +400,7 @@ struct Type_Info_Float {
 struct Type_Info_Array { // static
     struct Type_Info* elem_type;
     size_t length;
+    char* length_str;
 };
 struct Type_Info_String {
     size_t length;

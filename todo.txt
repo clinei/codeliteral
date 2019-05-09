@@ -1,9 +1,6 @@
 Bugs:
 
-parsing error, groups like this:
-list[0].next.(value == 2);
-instead of this:
-(list[0].next.value) == 2;
+type names that are used many times are not updated in declaration
 
 jumping to a use makes it impossible to go left when it should be possible
 going to right makes it possible again
@@ -26,13 +23,9 @@ that is wrong, it's an lvalue
 we should rename it
 
 TYPE_INFO_TAG_IDENT should not exist or should be removed during infer
+it makes it harder to do things later in the pipeline
 
 unary minus and not operators not implemented
-
-when we show values or changes, save the previous cursor, 
-and when we go back and haven't moved, set the cursor back to the previous one
-`m = a.[b].c` (F) `m = [42]` (F) `m = a.[b].c`
-`m = a.[b].c` (F) `m = [42]` (A) `[m] = 42` (F) `[m] = a.b.c`
 
 pressing V should only show parens when operator precedence changes
 
@@ -57,10 +50,6 @@ Implementation Ideas:
 
 import a libc, like musl, so we can printf
 that requires a preprocessor
-
-struct Code_Node should use flags instead of bools
-
-render_type should not use snprintf, we should prerender type str
 
 Ideas:
 

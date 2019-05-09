@@ -1519,13 +1519,8 @@ void render_type(struct Type_Info* type,
             render_type(type->array.elem_type, render_data);
             struct Render_Node* open_angle_brace = make_text(render_data->render_nodes, "[", render_data->fg_color);
             array_push(last_line->list.elements, &open_angle_brace);
-            char* length = malloc(sizeof(char) * 19);
-            // @Refactor
-            snprintf(length, 19, "%zu", type->array.length);
-            struct Render_Node* length_node = make_text(render_data->render_nodes, length, hilite_literal_fg_color);
+            struct Render_Node* length_node = make_text(render_data->render_nodes, type->array.length_str, hilite_literal_fg_color);
             array_push(last_line->list.elements, &length_node);
-            // @MemoryLeak
-            // free(length);
             struct Render_Node* close_angle_brace = make_text(render_data->render_nodes, "]", render_data->fg_color);
             array_push(last_line->list.elements, &close_angle_brace);
             break;

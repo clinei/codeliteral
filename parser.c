@@ -729,13 +729,14 @@ struct Type_Info* make_type_info_float(size_t size_in_bytes) {
     
     return info;
 }
-struct Type_Info* make_type_info_array(struct Type_Info* elem_type, size_t length) {
+struct Type_Info* make_type_info_array(struct Type_Info* elem_type, size_t length, char* length_str) {
     struct Type_Info* info = get_new_type_info();
     info->kind = TYPE_INFO_TAG_ARRAY;
     info->size_in_bytes = elem_type->size_in_bytes * length;
 
     info->array.elem_type = elem_type;
     info->array.length = length;
+    info->array.length_str = length_str;
 
     return info;
 }
@@ -1910,7 +1911,7 @@ struct Type_Info* parse_array_type(struct Token_Array* token_array,
     else {
         token_array->curr_token++;
         if (token_array->curr_token->kind == TOKEN_KIND_LITERAL) {
-            *out_type = make_type_info_array(prev_type, atoi(token_array->curr_token->str));
+            *out_type = make_type_info_array(prev_type, atoi(token_array->curr_token->str), token_array->curr_token->str);
             token_array->curr_token++;
             if (token_array->curr_token->str[0] == ']') {
                 token_array->curr_token++;
@@ -1919,8 +1920,10 @@ struct Type_Info* parse_array_type(struct Token_Array* token_array,
             return *out_type;
         }
         else if (token_array->curr_token->str[0] == ']') {
+            printf("dynamic arrays not yet implemented!\n");
+            abort();
             token_array->curr_token++;
-            *out_type = make_type_info_array(prev_type, 0);
+            *out_type = make_type_info_array(prev_type, 0, "");
             return *out_type;
         }
         else abort();
