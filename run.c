@@ -495,17 +495,61 @@ struct Code_Node* math_solve(struct Code_Node* node) {
     struct Code_Node* result = NULL;
     switch (node->kind) {
         case CODE_KIND_BINARY_OPERATION:{
+            char* operation_type = node->binary_operation.operation_type;
             struct Code_Node* left_result = run_rvalue(node->binary_operation.left);
             struct Code_Node* right_result = run_rvalue(node->binary_operation.right);
-            if (node->binary_operation.left->type->kind  == TYPE_INFO_TAG_POINTER) {
-                // @Incomplete
-                // do pointer math
-                size_t elem_size = node->binary_operation.left->type.pointer->elem_type->size_in_bytes;
-                // unsigned type madness
-                right_result->kind;
-                // multiply by size
+            struct Code_Node* ptr_result = NULL;
+            struct Code_Node* add_result = NULL;
+            size_t elem_size;
+            if (node->binary_operation.left->type->kind == TYPE_INFO_TAG_POINTER &&
+                node->binary_operation.right->type->kind != TYPE_INFO_TAG_POINTER) {
+
+                ptr_result = left_result;
+                add_result = right_result;
+                elem_size = node->binary_operation.left->type->pointer.elem_type->size_in_bytes;
             }
-            result = math_binop(left_result, node->binary_operation.operation_type, right_result);
+            else if (node->binary_operation.left->type->kind != TYPE_INFO_TAG_POINTER &&
+                     node->binary_operation.right->type->kind == TYPE_INFO_TAG_POINTER) {
+
+                ptr_result = right_result;
+                add_result = left_result;
+                elem_size = node->binary_operation.right->type->pointer.elem_type->size_in_bytes;
+            }
+            else if (node->binary_operation.left->type->kind == TYPE_INFO_TAG_POINTER &&
+                     node->binary_operation.right->type->kind == TYPE_INFO_TAG_POINTER) {
+
+                printf("can't do binary operations with two pointers!\n");
+                abort();
+            }
+            if (ptr_result != NULL) {
+                if (strcmp(operation_type, "+") == 0 ||
+                    strcmp(operation_type, "-") == 0) {
+                }
+                else {
+                    printf("only + and - are allowed for pointer math, was (%s)\n", operation_type);
+                    abort();
+                }
+                if (elem_size == 0) {
+                    elem_size = 1;
+                }
+                // @Incomplete
+                // @UserExperience
+                // will the user understand why 4 + 1 = 12?
+                switch (add_result->kind) {
+                    case CODE_KIND_LITERAL_UINT:{
+                        add_result->literal_uint.value *= elem_size;
+                        break;
+                    }
+                    case CODE_KIND_LITERAL_INT:{
+                        add_result->literal_int.value *= elem_size;
+                        break;
+                    }
+                    default:{
+                        break;
+                    }
+                }
+            }
+            result = math_binop(left_result, operation_type, right_result);
             break;
         }
         default:{

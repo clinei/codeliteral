@@ -340,6 +340,23 @@ void tests() {
 	// test_unary();
 	test_string();
 }
+/*
+void bugs() {
+	// The size of this struct is infinity or zero
+	struct Recurse {
+		Recurse bug;
+	};
+	// The same thing can happen with indirect recursion
+	// but because our language has forward declaration
+	// we are safe, for now
+	struct Recurse2 {
+		Recurse3 bug;
+	};
+	struct Recurse3 {
+		Recurse2 bug;
+	};
+}
+*/
 void linked_list() {
 	struct List_Item {
 		int value;
@@ -383,6 +400,33 @@ void fizzbuzz(ushort number) {
 int main() {
 	// bug with strings and comments
 	// tests();
+
+	// pointer math
+	struct Foo {
+		int one;
+		int two;
+	};
+	Foo[2] foo;
+	Foo* ptr = &foo;
+	// bug, the values aren't changed
+	ptr.one = 1;
+	ptr.two = 2;
+	ptr;
+	ptr += 1;
+	ptr.one = 3;
+	ptr.two = 4;
+	// array index must work through pointers
+	// just like dot operators
+	/*
+	ptr[0].one;
+	ptr[0].two;
+	ptr[1].one;
+	ptr[1].two;
+	*/
+	foo[0].one;
+	foo[0].two;
+	foo[1].one;
+	foo[1].two;
 
 	// parsing bug
 	struct One {

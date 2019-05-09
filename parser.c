@@ -757,6 +757,12 @@ struct Type_Info* fill_type_info_struct(struct Code_Node* struct_) {
     for (size_t i = 0; i < struct_->struct_.block->block.statements->length; i += 1) {
         struct Code_Node* stmt = struct_->struct_.block->block.statements->first[i];
         if (stmt->kind == CODE_KIND_DECLARATION) {
+            if (stmt->declaration.type->kind == TYPE_INFO_TAG_IDENT) {
+                if (stmt->declaration.type->ident.type == info) {
+                    printf("can't have recursive struct members! (%s)\n", stmt->declaration.type->ident.name);
+                    abort();
+                }
+            }
             infer(stmt);
             info->struct_.offsets[i] = size_in_bytes;
             info->struct_.members[i] = stmt->declaration.type;
