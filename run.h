@@ -1,5 +1,7 @@
 #pragma once
 
+#include <setjmp.h>
+
 #include "parser.h"
 #include "interaction.h"
 
@@ -56,6 +58,7 @@ struct Run_Data {
     size_t execution_index;
 
     bool did_run;
+    jmp_buf abort_jmp;
 
     bool count_uses;
     struct Name_Uses_Map_SOA* name_uses;

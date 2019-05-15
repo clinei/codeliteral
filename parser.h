@@ -596,7 +596,7 @@ enum Operator_Precedence {
     OPERATOR_PRECEDENCE_MODULO = 3,
 };
 enum Operator_Precedence map_operator_to_precedence(char* operator);
-bool is_operator_boolean(char* operation_type);
+bool is_operator_result_boolean(char* operation_type);
 bool maybe_binary(enum Operator_Precedence prev_prec,
                   struct Token_Array* token_array,
                   struct Code_Nodes* code_nodes);

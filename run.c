@@ -118,6 +118,7 @@ struct Indices_Array* map_original_to_indices(struct Code_Node* original) {
 
 void add_node_to_execution_stack(struct Code_Node* node) {
     run_data.execution_index = run_data.execution_stack->length;
+    // printf("adding %zu\n", run_data.execution_index);
     node->is_on_execution_stack = true;
     node->execution_index = run_data.execution_index;
     array_push(run_data.execution_stack, &node);
@@ -250,7 +251,7 @@ struct Code_Node* math_binop(struct Code_Node* left, char* op, struct Code_Node*
         signed long int left_value = left->literal_int.value;
         signed long int right_value = right->literal_int.value;
         signed long int result;
-        bool is_bool_op = is_operator_boolean(op);
+        bool is_bool_op = is_operator_result_boolean(op);
         // @Copypaste
         if (strcmp(op, "+") == 0) {
             result = left_value + right_value;
@@ -318,7 +319,7 @@ struct Code_Node* math_binop(struct Code_Node* left, char* op, struct Code_Node*
         unsigned long int left_value = left->literal_uint.value;
         unsigned long int right_value = right->literal_uint.value;
         unsigned long int result;
-        bool is_bool_op = is_operator_boolean(op);
+        bool is_bool_op = is_operator_result_boolean(op);
         // @Copypaste
         if (strcmp(op, "+") == 0) {
             result = left_value + right_value;
@@ -385,7 +386,7 @@ struct Code_Node* math_binop(struct Code_Node* left, char* op, struct Code_Node*
         double epsilon = 0.0000001;
         bool is_almost_equal = left_value - epsilon < right_value && left_value + epsilon > right_value;
         double result;
-        bool is_bool_op = is_operator_boolean(op);
+        bool is_bool_op = is_operator_result_boolean(op);
         // @Copypaste
         if (strcmp(op, "+") == 0) {
             result = left_value + right_value;
@@ -501,7 +502,7 @@ struct Code_Node* math_solve(struct Code_Node* node) {
                 abort();
             }
             if (ptr_result != NULL) {
-                if (strcmp(operation_type, "+") == 0 || is_operator_boolean(operation_type) ||
+                if (strcmp(operation_type, "+") == 0 || is_operator_result_boolean(operation_type) ||
                     strcmp(operation_type, "-") == 0) {
                 }
                 else {
@@ -718,7 +719,6 @@ struct Code_Node* get_ident_result(struct Code_Node* node) {
     return get_result(value, node->type);
 }
 void run_call(struct Code_Node* node) {
-    node->was_run = true;
     struct Code_Node* prev_last_call = run_data.last_call;
     run_data.last_call = node;
     struct Code_Node* proc = node->call.ident->ident.declaration->declaration.expression;
@@ -738,6 +738,16 @@ void run_call(struct Code_Node* node) {
         // printf("native code\n");
         for (size_t i = 0; i < node->call.args->length; i += 1) {
             run_rvalue(node->call.args->first[i]);
+        }
+        if (strcmp(node->call.ident->ident.name, "abort") == 0) {
+            printf("abort()\n");
+            add_node_to_execution_stack(node);
+            // @Incomplete
+            // lots of weird bugs
+            longjmp(run_data.abort_jmp, 1);
+        }
+        else {
+            add_node_to_execution_stack(node);
         }
         // @Incomplete
         // need to import a libc, like musl
@@ -776,6 +786,7 @@ size_t run_lvalue(struct Code_Node* node) {
         case CODE_KIND_IDENT:{
             // would be nice if we could update names while cloning
             node->ident.name = node->ident.declaration->declaration.ident->ident.name;
+            // printf("ident name: %s\n", node->ident.name);
             node->pointer = node->ident.declaration->declaration.pointer;
             result = node->pointer;
             // @Incomplete
@@ -1008,6 +1019,7 @@ struct Code_Node* run_rvalue(struct Code_Node* node) {
         case CODE_KIND_IDENT:{
             run_lvalue(node);
             result = node->result;
+            // printf("[] %s = %s\n", node->ident.name, result->str);
             add_node_to_execution_stack(node);
             add_memory_use(node->pointer, node->execution_index);
             break;
@@ -1100,6 +1112,9 @@ void run_end_block(struct Code_Node* node) {
 struct Code_Node* run_statement(struct Code_Node* node) {
     // printf("run_statement: (%s)\n", code_kind_to_string(node->kind));
     if (node->was_run) {
+        // @Audit
+        // this should never run
+        // abort();
         return node;
     }
     node->was_run = true;
@@ -1116,8 +1131,7 @@ struct Code_Node* run_statement(struct Code_Node* node) {
                 run_data.statement_index = i;
                 run_statement(node->block.statements->first[i]);
                 if ((run_data.last_call != NULL && run_data.last_call->call.returned) ||
-                    (run_data.last_loop != NULL && 
-                     (run_data.last_loop->broken || run_data.last_loop->continued))) {
+                    (run_data.last_loop != NULL && (run_data.last_loop->broken || run_data.last_loop->continued))) {
 
                     break;
                 }

@@ -451,7 +451,12 @@ void set_text(char* new_text) {
     
     init_run(code_nodes);
 
-    run_statement(code_nodes->first);
+    if (setjmp(run_data.abort_jmp)) {
+        // aborted
+    }
+    else {
+        run_statement(code_nodes->first);
+    }
     run_data.did_run = true;
     interaction_data.cursor = run_data.execution_stack->first[0];
 }

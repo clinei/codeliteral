@@ -1105,7 +1105,7 @@ struct Code_Node* infer(struct Code_Node* node) {
         case CODE_KIND_BINARY_OPERATION:{
             infer(node->binary_operation.left);
             infer(node->binary_operation.right);
-            if (is_operator_boolean(node->binary_operation.operation_type)) {
+            if (is_operator_result_boolean(node->binary_operation.operation_type)) {
                 node->type = Native_Type_Bool;
             }
             else {
@@ -1122,7 +1122,7 @@ struct Code_Node* infer(struct Code_Node* node) {
     return node;
 }
 
-bool is_operator_boolean(char* operator){
+bool is_operator_result_boolean(char* operator){
     return strcmp(operator, ">")  == 0 || strcmp(operator, ">=") == 0 || strcmp(operator, "&&") == 0 ||
            strcmp(operator, "<")  == 0 || strcmp(operator, "<=") == 0 || strcmp(operator, "||") == 0 ||
            strcmp(operator, "==") == 0 || strcmp(operator, "!=") == 0;
@@ -1277,6 +1277,18 @@ void inject_stdlib(struct Code_Nodes* code_nodes,
 
     array_push(statements, &printf_decl);
     array_push(parse_data.last_block->block.declarations, &printf_decl);
+
+    // void abort()
+    struct Type_Info* abort_return_type = Native_Type_Void;
+
+    struct Code_Node* abort_block = make_native_code(code_nodes, NULL);
+    struct Code_Node* abort_proc = make_procedure(code_nodes, NULL, false, abort_return_type, abort_block);
+
+    struct Code_Node* abort_ident = make_ident(code_nodes, "abort", NULL);
+    struct Code_Node* abort_decl = make_declaration(code_nodes, NULL, abort_ident, abort_proc);
+
+    array_push(statements, &abort_decl);
+    array_push(parse_data.last_block->block.declarations, &abort_decl);
 }
 struct Code_Nodes* parse(struct Token_Array* token_array) {
     struct Code_Nodes* code_nodes = malloc(sizeof(struct Code_Nodes));

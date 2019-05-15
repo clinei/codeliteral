@@ -7,23 +7,25 @@
  (type $FUNCSIG$jiji (func (param i32 i64 i32) (result i64)))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$i (func (result i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (type $FUNCSIG$vdddd (func (param f64 f64 f64 f64)))
  (type $FUNCSIG$viiiiiiiii (func (param i32 i32 i32 i32 i32 i32 i32 i32 i32)))
  (type $FUNCSIG$viiiiii (func (param i32 i32 i32 i32 i32 i32)))
  (import "env" "memory" (memory $memory 256))
- (data (i32.const 1024) "\00\00\80?\00\00\00\00\00\00\00\00\00\00\80?\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\f1\f0p=\db\daZ?\b9\b88?\00\00\80?\dd\dc\\?\dd\dc\\?\dd\dc\\?\00\00\80?\ed\ec\ec>\8d\8c\0c?\fd\fc|?\00\00\80?\f9\f8x?\83\82\02?\f9\f8x?\00\00\80?\a1\a0\a0>\f1\f0p?\a1\a0\a0>\00\00\80?\a1\a0\a0>\b5\b44?\a1\a0\a0>\00\00\80?\e7\e6f?\e7\e6f?\e7\e6f?\00\00\80?\f1\f0\f0>\f1\f0p>\a1\a0\a0=\00\00\80?\c9\c8H?\a1\a0 >\a1\a0 >\00\00\80?\95\94\14>\95\94\14>\95\94\14>\00\00\80?i\11\00\00l\11\00\00q\11\00\00\87\17\00\00\8c\17\00\00w\11\00\00z\11\00\00~\11\00\00\87\11\00\00\8d\11\00\00\94\11\00\00\00\00\00\00\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\00\01\02\03\04\05\06\07\08\t\ff\ff\ff\ff\ff\ff\ff\n\0b\0c\0d\0e\0f\10\11\12\13\14\15\16\17\18\19\1a\1b\1c\1d\1e\1f !\"#\ff\ff\ff\ff\ff\ff\n\0b\0c\0d\0e\0f\10\11\12\13\14\15\16\17\18\19\1a\1b\1c\1d\1e\1f !\"#\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\11\00\n\00\11\11\11\00\00\00\00\05\00\00\00\00\00\00\t\00\00\00\00\0b\00\00\00\00\00\00\00\00\11\00\0f\n\11\11\11\03\n\07\00\01\13\t\0b\0b\00\00\t\06\0b\00\00\0b\00\06\11\00\00\00\11\11\11\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\0b\00\00\00\00\00\00\00\00\11\00\n\n\11\11\11\00\n\00\00\02\00\t\0b\00\00\00\t\00\0b\00\00\0b\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\0c\00\00\00\00\00\00\00\00\00\00\00\0c\00\00\00\00\0c\00\00\00\00\t\0c\00\00\00\00\00\0c\00\00\0c\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\0e\00\00\00\00\00\00\00\00\00\00\00\0d\00\00\00\04\0d\00\00\00\00\t\0e\00\00\00\00\00\0e\00\00\0e\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\00\00\00\00\0f\00\00\00\00\0f\00\00\00\00\t\10\00\00\00\00\00\10\00\00\10\00\00\12\00\00\00\12\12\12\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\12\00\00\00\12\12\12\00\00\00\00\00\00\t\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\0b\00\00\00\00\00\00\00\00\00\00\00\n\00\00\00\00\n\00\00\00\00\t\0b\00\00\00\00\00\0b\00\00\0b\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\0c\00\00\00\00\00\00\00\00\00\00\00\0c\00\00\00\00\0c\00\00\00\00\t\0c\00\00\00\00\00\0c\00\00\0c\00\000123456789ABCDEF\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\05\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\03\00\00\00\b8\1c\00\00\00\04\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\n\ff\ff\ff\ff\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\ff\ff\ff\ff\ff\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\08\00\00\00\08\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\e0#\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00_p\89\00\ff\t/\0f./stb_truetype.h\00stbtt_FindGlyphIndex\00unicode_codepoint <= ttUSHORT(data + endCount + 2*item)\00output_ctx.num_vertices == count_ctx.num_vertices\00stbtt__GetGlyphShapeT2\00stbtt__cff_int\00n >= 1 && n <= 4\00stbtt__buf_get\00size < 0x40000000\00stbtt__new_buf\00!(o > b->size || o < 0)\00stbtt__buf_seek\00offsize >= 1 && offsize <= 4\00stbtt__cff_get_index\00b0 >= 28\00stbtt__cff_skip_operand\00i >= 0 && i < count\00stbtt__cff_index_get\00stbtt__GetGlyphShapeTT\00!info->cff.size\00stbtt__GetGlyfOffset\00z->direction\00stbtt__rasterize_sorted_edges\00z->ey >= scan_y_top\00e->ey >= y_top\00stbtt__fill_active_edges_new\00e->sy <= y_bottom && e->ey >= y_top\00x >= 0 && x < len\00fabs(area) <= 1.01f\00y0 < y1\00stbtt__handle_clipped_edge\00e->sy <= e->ey\00x1 <= x+1\00x1 >= x\00x1 <= x\00x1 >= x+1\00x1 >= x && x1 <= x+1\00x0 >= x && x0 <= x+1 && x1 >= x && x1 <= x+1\00z != ((void*)0)\00stbtt__new_active\00cmap\00loca\00head\00glyf\00hhea\00hmtx\00kern\00GPOS\00CFF \00maxp\00ttcf\00typ1\00OTTO\00x+gw < pw\00stbtt_BakeFontBitmap_internal\00y+gh < ph\00can\'t splice beyond array bounds! (length: %zu, index: %zu)\n\00can\'t remove more elements than exist in the array! (length: %zu, remove_count: %zu)\n\00can\'t remove past the array length! (length: %zu, index: %zu, remove_end: %zu)\n\00failed creating shader!\n\00%s\n\00rb\00printlog: Not a shader or a program\n\00%s\00glLinkProgram: \00assets/fonts/SourceCodeVariable-Roman.ttf\00assets/shaders/texture_atlas.vert.glsl\00assets/shaders/texture_atlas.frag.glsl\00coord\00fg_coord\00tex\00assets/shaders/quad.vert.glsl\00assets/shaders/quad.frag.glsl\00color\00debugger\00find_expanded_nodes not implemented for node kind (%s)\n\00trying to destroy node kind %u\n\00render_node not implemented for kind: %u\n\00char_index is less than 0, did you forget to null-terminate a string?\n\00layout_node not implemented for node kind: %u\n\00if \00) \00{}\00else \00while \00do \00for \00, \00struct \00[\00]\00bug!! (%s)\n\00\"\00[native_code]\00render_code_node not implemented for code kind: (%s)\n\00 \00if\00else\00while\00do\00for\00continue\00break\00return\00struct\00size_t\00char\00uchar\00bool\00short\00ushort\00int\00uint\00long\00ulong\00float\00double\00string\00void\00double type_info_ident!\n\00do while\00ident\00increment\00decrement\00minus\00not\00assign\00opassign\00block\00procedure\00declaration\00reference\00dereference\00array index\00dot operator\00call\00binary operation\00parens\00literal int\00literal uint\00literal float\00literal bool\00native code\00integer\00array\00pointer\00function pointer\00can\'t have recursive struct members! (%s)\n\00struct members can only be declarations, was (%s)\n\00ident \"%s\" not declared!\n\00only idents can be on the right side of dot operators, was (%s)\n\00=\00?\00(\00)\00,\00parsing_error!\n\00num_bytes\00malloc\00ptr\00free\00fmt\00printf\00;\00{\00++\00--\00(ident) %s already declared!\n\00...\00}\00dynamic arrays not yet implemented!\n\00for starting paren missing!\n\00for ending paren missing!\n\00for expression missing!\n\00else statement does not follow an if statement\n\00lexing error!\n\00encountered some weird character we don\'t handle yet: %u\n\00+-*/%=&|<>!\00.,;:(){}[]\"\'\00 \t\0d\n\00invalid attempt to get_memory at address %zu until %zu (max address is %zu)\n\00+\00-\00*\00/\00%\00<\00<=\00>\00>=\00!=\00==\00&\00^\00|\00&&\00||\00math_binop not implemented for bool op kind: (%s)\n\00math_binop not implemented for int op kind: (%s)\n\00math_binop not implemented for uint op kind: (%s)\n\00math_binop not implemented for float op kind: (%s)\n\00math_binop not implemented for string op kind: (%s)\n\00math_binop not implemented for type kind: %d\n\00can\'t do binary operations with two pointers!\n\00only + and - are allowed for pointer math, was (%s)\n\00math_solve not implemented for node kind: (%s)\n\00%ld\00%lu\00%.6f\00true\00false\00fill_result_str not implemented for node kind: (%s)\n\00tried to increment (%s)\n\00tried to decrement (%s)\n\00length\00cloning not implemented for node kind: (%s)\n\00%s_%zu\00struct declaration type was not an ident type!\n\00decl type was null! ident: \"%s\"\n\00alignment is zero!\n\00size is 0!\n\00type: %d\n\00type2: %d\n\00elem size: %zu\n\00trying to break out of a non-existant loop!\n\00trying to continue a non-existant loop!\n\00return_\00transform not implemented for node kind: (%s)\n\00expected float type to have size 4 or 8 (was %zu)\n\00get_result_ptr not implemented for node kind: (%s)\n\00get_result not implemented for type kind %u\n\00array index out of bounds! index: (%zu) length: (%zu)\n\00array indexes can only be done on arrays and pointers, was (%s)\n\00dot operators can only dereference one level deep!\n\00run_lvalue not implemented for node kind: (%s)\n\00#window\00f\00c\00g\00e\00v\00z\00x\00w\00s\00a\00d\00r\00t\00y\00u\00h\00j\00k\00l\00i\00o\000\001\002\003\004\005\006\007\008\009\00q\00index:   %zu\n\00serial:  %zu\n\00pointer: %zu\n\00\n\00flow index out of bounds when trying to go to next flowpoint!\n\00flow index out of bounds when trying to go to prev flowpoint!\n\00flow index out of bounds when trying to remove flowpoint!\n\00flow index out of bounds when trying to add flowpoint!\n\00change indices not found!\n\00use indices not found!\n\00\00\01\02\04\07\03\06\05\00-+   0X0x\00(null)\00-0X+0X 0X-0x+0x 0x\00inf\00INF\00NAN\00.\00infinity\00nan\00rwa")
- (import "env" "table" (table $table 204 204 funcref))
- (elem (global.get $__table_base) $b0 $___stdio_close $b0 $b0 $b0 $b0 $_malloc $b0 $b0 $b0 $b0 $_is_whitespace $_is_not_newline $b0 $_is_ident_char $_is_not_string_end $_is_op_char $_is_digit_or_dot $b0 $b0 $b0 $b0 $b0 $b0 $b0 $b0 $b0 $b0 $b0 $b0 $b0 $b0 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $_fmt_fp $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b2 $b2 $b2 $b2 $b2 $_parse_rvalue $b2 $b2 $_printf $_parse_statement $_parse_param $b2 $b2 $_is_not_mlc_end $b2 $b2 $b2 $b2 $b2 $b2 $_compare_indices $b2 $b2 $b2 $b2 $b2 $b2 $b2 $b2 $b2 $b2 $b2 $b3 $b3 $___stdout_write $b3 $_sn_write $b3 $b3 $b3 $b3 $b3 $b3 $b3 $b3 $b3 $b3 $b3 $b3 $b3 $_keydown $b3 $b3 $___stdio_write $b3 $b3 $___stdio_read $b3 $b3 $b3 $b3 $b3 $b3 $b3 $b4 $b4 $b4 $___stdio_seek $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $_step $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b6 $b6 $b6 $b6 $b6 $b6 $b6 $_free $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $_pop_arg_long_double $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7)
+ (data (i32.const 1024) "\00\00\80?\00\00\00\00\00\00\00\00\00\00\80?\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\f1\f0p=\db\daZ?\b9\b88?\00\00\80?\dd\dc\\?\dd\dc\\?\dd\dc\\?\00\00\80?\ed\ec\ec>\8d\8c\0c?\fd\fc|?\00\00\80?\f9\f8x?\83\82\02?\f9\f8x?\00\00\80?\a1\a0\a0>\f1\f0p?\a1\a0\a0>\00\00\80?\a1\a0\a0>\b5\b44?\a1\a0\a0>\00\00\80?\e7\e6f?\e7\e6f?\e7\e6f?\00\00\80?\f1\f0\f0>\f1\f0p>\a1\a0\a0=\00\00\80?\c9\c8H?\a1\a0 >\a1\a0 >\00\00\80?\95\94\14>\95\94\14>\95\94\14>\00\00\80?i\11\00\00l\11\00\00q\11\00\00\87\17\00\00\8c\17\00\00w\11\00\00z\11\00\00~\11\00\00\87\11\00\00\8d\11\00\00\94\11\00\00\00\00\00\00\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\00\01\02\03\04\05\06\07\08\t\ff\ff\ff\ff\ff\ff\ff\n\0b\0c\0d\0e\0f\10\11\12\13\14\15\16\17\18\19\1a\1b\1c\1d\1e\1f !\"#\ff\ff\ff\ff\ff\ff\n\0b\0c\0d\0e\0f\10\11\12\13\14\15\16\17\18\19\1a\1b\1c\1d\1e\1f !\"#\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\ff\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\11\00\n\00\11\11\11\00\00\00\00\05\00\00\00\00\00\00\t\00\00\00\00\0b\00\00\00\00\00\00\00\00\11\00\0f\n\11\11\11\03\n\07\00\01\13\t\0b\0b\00\00\t\06\0b\00\00\0b\00\06\11\00\00\00\11\11\11\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\0b\00\00\00\00\00\00\00\00\11\00\n\n\11\11\11\00\n\00\00\02\00\t\0b\00\00\00\t\00\0b\00\00\0b\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\0c\00\00\00\00\00\00\00\00\00\00\00\0c\00\00\00\00\0c\00\00\00\00\t\0c\00\00\00\00\00\0c\00\00\0c\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\0e\00\00\00\00\00\00\00\00\00\00\00\0d\00\00\00\04\0d\00\00\00\00\t\0e\00\00\00\00\00\0e\00\00\0e\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\00\00\00\00\0f\00\00\00\00\0f\00\00\00\00\t\10\00\00\00\00\00\10\00\00\10\00\00\12\00\00\00\12\12\12\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\12\00\00\00\12\12\12\00\00\00\00\00\00\t\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\0b\00\00\00\00\00\00\00\00\00\00\00\n\00\00\00\00\n\00\00\00\00\t\0b\00\00\00\00\00\0b\00\00\0b\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\0c\00\00\00\00\00\00\00\00\00\00\00\0c\00\00\00\00\0c\00\00\00\00\t\0c\00\00\00\00\00\0c\00\00\0c\00\000123456789ABCDEF\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\05\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\00\00\00\03\00\00\00\e8\1c\00\00\00\04\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\n\ff\ff\ff\ff\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\ff\ff\ff\ff\ff\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\08\00\00\00\08\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\f0$\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00_p\89\00\ff\t/\0f./stb_truetype.h\00stbtt_FindGlyphIndex\00unicode_codepoint <= ttUSHORT(data + endCount + 2*item)\00output_ctx.num_vertices == count_ctx.num_vertices\00stbtt__GetGlyphShapeT2\00stbtt__cff_int\00n >= 1 && n <= 4\00stbtt__buf_get\00size < 0x40000000\00stbtt__new_buf\00!(o > b->size || o < 0)\00stbtt__buf_seek\00offsize >= 1 && offsize <= 4\00stbtt__cff_get_index\00b0 >= 28\00stbtt__cff_skip_operand\00i >= 0 && i < count\00stbtt__cff_index_get\00stbtt__GetGlyphShapeTT\00!info->cff.size\00stbtt__GetGlyfOffset\00z->direction\00stbtt__rasterize_sorted_edges\00z->ey >= scan_y_top\00e->ey >= y_top\00stbtt__fill_active_edges_new\00e->sy <= y_bottom && e->ey >= y_top\00x >= 0 && x < len\00fabs(area) <= 1.01f\00y0 < y1\00stbtt__handle_clipped_edge\00e->sy <= e->ey\00x1 <= x+1\00x1 >= x\00x1 <= x\00x1 >= x+1\00x1 >= x && x1 <= x+1\00x0 >= x && x0 <= x+1 && x1 >= x && x1 <= x+1\00z != ((void*)0)\00stbtt__new_active\00cmap\00loca\00head\00glyf\00hhea\00hmtx\00kern\00GPOS\00CFF \00maxp\00ttcf\00typ1\00OTTO\00x+gw < pw\00stbtt_BakeFontBitmap_internal\00y+gh < ph\00can\'t splice beyond array bounds! (length: %zu, index: %zu)\n\00can\'t remove more elements than exist in the array! (length: %zu, remove_count: %zu)\n\00can\'t remove past the array length! (length: %zu, index: %zu, remove_end: %zu)\n\00failed creating shader!\n\00%s\n\00rb\00printlog: Not a shader or a program\n\00%s\00glLinkProgram: \00assets/fonts/SourceCodeVariable-Roman.ttf\00assets/shaders/texture_atlas.vert.glsl\00assets/shaders/texture_atlas.frag.glsl\00coord\00fg_coord\00tex\00assets/shaders/quad.vert.glsl\00assets/shaders/quad.frag.glsl\00color\00debugger\00find_expanded_nodes not implemented for node kind (%s)\n\00trying to destroy node kind %u\n\00render_node not implemented for kind: %u\n\00char_index is less than 0, did you forget to null-terminate a string?\n\00layout_node not implemented for node kind: %u\n\00if \00) \00{}\00else \00while \00do \00for \00, \00struct \00[\00]\00bug!! (%s)\n\00\"\00[native_code]\00render_code_node not implemented for code kind: (%s)\n\00 \00if\00else\00while\00do\00for\00continue\00break\00return\00struct\00size_t\00char\00uchar\00bool\00short\00ushort\00int\00uint\00long\00ulong\00float\00double\00string\00void\00double type_info_ident!\n\00do while\00ident\00increment\00decrement\00minus\00not\00assign\00opassign\00block\00procedure\00declaration\00reference\00dereference\00array index\00dot operator\00call\00binary operation\00parens\00literal int\00literal uint\00literal float\00literal bool\00native code\00integer\00array\00pointer\00function pointer\00can\'t have recursive struct members! (%s)\n\00struct members can only be declarations, was (%s)\n\00ident \"%s\" not declared!\n\00only idents can be on the right side of dot operators, was (%s)\n\00=\00?\00(\00)\00,\00parsing_error!\n\00num_bytes\00malloc\00ptr\00free\00fmt\00printf\00;\00{\00++\00--\00(ident) %s already declared!\n\00...\00}\00dynamic arrays not yet implemented!\n\00for starting paren missing!\n\00for ending paren missing!\n\00for expression missing!\n\00else statement does not follow an if statement\n\00lexing error!\n\00encountered some weird character we don\'t handle yet: %u\n\00+-*/%=&|<>!\00.,;:(){}[]\"\'\00 \t\0d\n\00invalid attempt to get_memory at address %zu until %zu (max address is %zu)\n\00+\00-\00*\00/\00%\00<\00<=\00>\00>=\00!=\00==\00&\00^\00|\00&&\00||\00math_binop not implemented for bool op kind: (%s)\n\00math_binop not implemented for int op kind: (%s)\n\00math_binop not implemented for uint op kind: (%s)\n\00math_binop not implemented for float op kind: (%s)\n\00math_binop not implemented for string op kind: (%s)\n\00math_binop not implemented for type kind: %d\n\00can\'t do binary operations with two pointers!\n\00only + and - are allowed for pointer math, was (%s)\n\00math_solve not implemented for node kind: (%s)\n\00%ld\00%lu\00%.6f\00true\00false\00fill_result_str not implemented for node kind: (%s)\n\00tried to increment (%s)\n\00tried to decrement (%s)\n\00[] %s = %s\n\00length\00entering %s\n\00exiting %s\n\00abort\00abort()\n\00cloning not implemented for node kind: (%s)\n\00%s_%zu\00struct declaration type was not an ident type!\n\00decl type was null! ident: \"%s\"\n\00alignment is zero!\n\00size is 0!\n\00type: %d\n\00type2: %d\n\00elem size: %zu\n\00trying to break out of a non-existant loop!\n\00trying to continue a non-existant loop!\n\00return_\00transform not implemented for node kind: (%s)\n\00expected float type to have size 4 or 8 (was %zu)\n\00get_result_ptr not implemented for node kind: (%s)\n\00get_result not implemented for type kind %u\n\00array index out of bounds! index: (%zu) length: (%zu)\n\00array indexes can only be done on arrays and pointers, was (%s)\n\00dot operators can only dereference one level deep!\n\00run_lvalue not implemented for node kind: (%s)\n\00#window\00f\00c\00g\00e\00v\00z\00x\00w\00s\00a\00d\00r\00t\00y\00u\00h\00j\00k\00l\00i\00o\000\001\002\003\004\005\006\007\008\009\00q\00index:   %zu\n\00serial:  %zu\n\00pointer: %zu\n\00\n\00flow index out of bounds when trying to go to next flowpoint!\n\00flow index out of bounds when trying to go to prev flowpoint!\n\00flow index out of bounds when trying to remove flowpoint!\n\00flow index out of bounds when trying to add flowpoint!\n\00change indices not found!\n\00use indices not found!\n\00\00\01\02\04\07\03\06\05\00-+   0X0x\00(null)\00-0X+0X 0X-0x+0x 0x\00inf\00INF\00NAN\00.\00infinity\00nan\00rwa")
+ (import "env" "table" (table $table 228 228 funcref))
+ (elem (global.get $__table_base) $b0 $___stdio_close $b0 $b0 $b0 $b0 $_malloc $b0 $b0 $b0 $b0 $_is_whitespace $_is_not_newline $b0 $_is_ident_char $_is_not_string_end $_is_op_char $_is_digit_or_dot $b0 $b0 $_tokenize $_parse $_infer $b0 $_run_statement $b0 $b0 $b0 $b0 $b0 $b0 $b0 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $b1 $_fmt_fp $b1 $b1 $b1 $b1 $b2 $b2 $b2 $b2 $b2 $_parse_rvalue $b2 $b2 $_printf $_parse_statement $_parse_param $b2 $b2 $_is_not_mlc_end $b2 $b2 $b2 $b2 $b2 $b2 $b2 $b2 $b2 $b2 $b2 $_compare_indices $b2 $b2 $b2 $b2 $b2 $b2 $b3 $b3 $___stdout_write $b3 $_sn_write $b3 $b3 $b3 $b3 $b3 $b3 $b3 $b3 $b3 $b3 $b3 $b3 $b3 $_keydown $b3 $b3 $b3 $b3 $b3 $b3 $b3 $___stdio_write $b3 $b3 $___stdio_read $b3 $b3 $b4 $b4 $b4 $___stdio_seek $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $_step $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b5 $b6 $b6 $b6 $b6 $b6 $b6 $b6 $_free $b6 $b6 $b6 $b6 $b6 $b6 $b6 $b6 $b6 $b6 $b6 $b6 $b6 $b6 $b6 $_init_run $b6 $b6 $b6 $b6 $b6 $b6 $b6 $b6 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $b7 $_pop_arg_long_double $b7 $b7 $b7)
  (import "env" "__memory_base" (global $__memory_base i32))
  (import "env" "__table_base" (global $__table_base i32))
  (import "env" "tempDoublePtr" (global $tempDoublePtr$asm2wasm$import i32))
  (import "env" "DYNAMICTOP_PTR" (global $DYNAMICTOP_PTR$asm2wasm$import i32))
  (import "global" "NaN" (global $nan$asm2wasm$import f64))
  (import "global" "Infinity" (global $inf$asm2wasm$import f64))
+ (import "env" "setTempRet0" (func $setTempRet0 (param i32)))
+ (import "env" "getTempRet0" (func $getTempRet0 (result i32)))
  (import "env" "abortStackOverflow" (func $abortStackOverflow (param i32)))
  (import "env" "segfault" (func $segfault))
  (import "env" "alignfault" (func $alignfault))
@@ -36,6 +38,8 @@
  (import "env" "nullFunc_v" (func $nullFunc_v (param i32)))
  (import "env" "nullFunc_vi" (func $nullFunc_vi (param i32)))
  (import "env" "nullFunc_vii" (func $nullFunc_vii (param i32)))
+ (import "env" "invoke_ii" (func $invoke_ii (param i32 i32) (result i32)))
+ (import "env" "invoke_vi" (func $invoke_vi (param i32 i32)))
  (import "env" "___assert_fail" (func $___assert_fail (param i32 i32 i32 i32)))
  (import "env" "___lock" (func $___lock (param i32)))
  (import "env" "___setErrNo" (func $___setErrNo (param i32)))
@@ -91,8 +95,8 @@
  (import "env" "_glUniform1i" (func $_glUniform1i (param i32 i32)))
  (import "env" "_glUseProgram" (func $_glUseProgram (param i32)))
  (import "env" "_glVertexAttribPointer" (func $_glVertexAttribPointer (param i32 i32 i32 i32 i32 i32)))
+ (import "env" "_longjmp" (func $_longjmp (param i32 i32)))
  (import "env" "abortOnCannotGrowMemory" (func $abortOnCannotGrowMemory (param i32) (result i32)))
- (import "env" "setTempRet0" (func $setTempRet0 (param i32)))
  (global $tempDoublePtr (mut i32) (global.get $tempDoublePtr$asm2wasm$import))
  (global $DYNAMICTOP_PTR (mut i32) (global.get $DYNAMICTOP_PTR$asm2wasm$import))
  (global $__THREW__ (mut i32) (i32.const 0))
@@ -105,8 +109,8 @@
  (global $tempDouble (mut f64) (f64.const 0))
  (global $nan (mut f64) (global.get $nan$asm2wasm$import))
  (global $inf (mut f64) (global.get $inf$asm2wasm$import))
- (global $STACKTOP (mut i32) (i32.const 10592))
- (global $STACK_MAX (mut i32) (i32.const 5253472))
+ (global $STACKTOP (mut i32) (i32.const 10800))
+ (global $STACK_MAX (mut i32) (i32.const 5253680))
  (global $tempFloat (mut f32) (f32.const 0))
  (global $f0 (mut f32) (f32.const 0))
  (export "__growWasmMemory" (func $__growWasmMemory))
@@ -119,10 +123,14 @@
  (export "_malloc" (func $_malloc))
  (export "_memcpy" (func $_memcpy))
  (export "_memset" (func $_memset))
+ (export "_realloc" (func $_realloc))
  (export "_resize" (func $_resize))
+ (export "_saveSetjmp" (func $_saveSetjmp))
  (export "_sbrk" (func $_sbrk))
+ (export "_setThrew" (func $_setThrew))
  (export "_set_text" (func $_set_text))
  (export "_step" (func $_step))
+ (export "_testSetjmp" (func $_testSetjmp))
  (export "dynCall_ii" (func $dynCall_ii))
  (export "dynCall_iidiiii" (func $dynCall_iidiiii))
  (export "dynCall_iii" (func $dynCall_iii))
@@ -135,12 +143,12 @@
  (export "stackAlloc" (func $stackAlloc))
  (export "stackRestore" (func $stackRestore))
  (export "stackSave" (func $stackSave))
- (func $__growWasmMemory (; 69 ;) (param $newSize i32) (result i32)
+ (func $__growWasmMemory (; 73 ;) (param $newSize i32) (result i32)
   (grow_memory
    (local.get $newSize)
   )
  )
- (func $stackAlloc (; 70 ;) (param $size i32) (result i32)
+ (func $stackAlloc (; 74 ;) (param $size i32) (result i32)
   (local $ret i32)
   (local.set $ret
    (global.get $STACKTOP)
@@ -173,17 +181,17 @@
    (local.get $ret)
   )
  )
- (func $stackSave (; 71 ;) (result i32)
+ (func $stackSave (; 75 ;) (result i32)
   (return
    (global.get $STACKTOP)
   )
  )
- (func $stackRestore (; 72 ;) (param $top i32)
+ (func $stackRestore (; 76 ;) (param $top i32)
   (global.set $STACKTOP
    (local.get $top)
   )
  )
- (func $establishStackSpace (; 73 ;) (param $stackBase i32) (param $stackMax i32)
+ (func $establishStackSpace (; 77 ;) (param $stackBase i32) (param $stackMax i32)
   (global.set $STACKTOP
    (local.get $stackBase)
   )
@@ -191,7 +199,7 @@
    (local.get $stackMax)
   )
  )
- (func $SAFE_HEAP_STORE (; 74 ;) (param $dest i32) (param $value i32) (param $bytes i32)
+ (func $SAFE_HEAP_STORE (; 78 ;) (param $dest i32) (param $value i32) (param $bytes i32)
   (if
    (i32.le_s
     (local.get $dest)
@@ -254,7 +262,7 @@
    )
   )
  )
- (func $SAFE_HEAP_STORE_D (; 75 ;) (param $dest i32) (param $value f64) (param $bytes i32)
+ (func $SAFE_HEAP_STORE_D (; 79 ;) (param $dest i32) (param $value f64) (param $bytes i32)
   (if
    (i32.le_s
     (local.get $dest)
@@ -309,7 +317,7 @@
    )
   )
  )
- (func $SAFE_HEAP_LOAD (; 76 ;) (param $dest i32) (param $bytes i32) (param $unsigned i32) (result i32)
+ (func $SAFE_HEAP_LOAD (; 80 ;) (param $dest i32) (param $bytes i32) (param $unsigned i32) (result i32)
   (if
    (i32.le_s
     (local.get $dest)
@@ -389,7 +397,7 @@
    )
   )
  )
- (func $SAFE_HEAP_LOAD_D (; 77 ;) (param $dest i32) (param $bytes i32) (result f64)
+ (func $SAFE_HEAP_LOAD_D (; 81 ;) (param $dest i32) (param $bytes i32) (result f64)
   (if
    (i32.le_s
     (local.get $dest)
@@ -444,7 +452,7 @@
    )
   )
  )
- (func $SAFE_FT_MASK (; 78 ;) (param $value i32) (param $mask i32) (result i32)
+ (func $SAFE_FT_MASK (; 82 ;) (param $value i32) (param $mask i32) (result i32)
   (local $ret i32)
   (local.set $ret
    (i32.and
@@ -463,7 +471,7 @@
    (local.get $ret)
   )
  )
- (func $_stbtt_FindGlyphIndex (; 79 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_stbtt_FindGlyphIndex (; 83 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -1260,7 +1268,7 @@
    (local.get $$95)
    ;;@ ./stb_truetype.h:1463:0
    (call $___assert_fail
-    (i32.const 6905)
+    (i32.const 6957)
     (i32.const 2596)
     (i32.const 1463)
     (i32.const 2613)
@@ -1329,7 +1337,7 @@
        )
        ;;@ ./stb_truetype.h:1534:0
        (call $___assert_fail
-        (i32.const 6905)
+        (i32.const 6957)
         (i32.const 2596)
         (i32.const 1534)
         (i32.const 2613)
@@ -2772,7 +2780,7 @@
    )
   )
  )
- (func $_ttUSHORT (; 80 ;) (param $$0 i32) (result i32)
+ (func $_ttUSHORT (; 84 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -2867,7 +2875,7 @@
    (local.get $$11)
   )
  )
- (func $_ttSHORT (; 81 ;) (param $$0 i32) (result i32)
+ (func $_ttSHORT (; 85 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -2962,7 +2970,7 @@
    (local.get $$11)
   )
  )
- (func $_ttULONG (; 82 ;) (param $$0 i32) (result i32)
+ (func $_ttULONG (; 86 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -3126,7 +3134,7 @@
    (local.get $$22)
   )
  )
- (func $_stbtt_GetGlyphShape (; 83 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_stbtt_GetGlyphShape (; 87 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -3257,7 +3265,7 @@
    )
   )
  )
- (func $_stbtt__GetGlyphShapeTT (; 84 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_stbtt__GetGlyphShapeTT (; 88 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -6398,7 +6406,7 @@
        )
        ;;@ ./stb_truetype.h:1840:0
        (call $___assert_fail
-        (i32.const 6905)
+        (i32.const 6957)
         (i32.const 2596)
         (i32.const 1840)
         (i32.const 3007)
@@ -8222,7 +8230,7 @@
       )
       ;;@ ./stb_truetype.h:1787:0
       (call $___assert_fail
-       (i32.const 6905)
+       (i32.const 6957)
        (i32.const 2596)
        (i32.const 1787)
        (i32.const 3007)
@@ -8320,7 +8328,7 @@
    (local.get $$706)
   )
  )
- (func $_stbtt__GetGlyphShapeT2 (; 85 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_stbtt__GetGlyphShapeT2 (; 89 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -8661,7 +8669,7 @@
    (local.get $$33)
   )
  )
- (func $_stbtt__run_charstring (; 86 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_stbtt__run_charstring (; 90 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$$byval_copy i32)
   (local $$$byval_copy4 i32)
   (local $$10 i32)
@@ -14134,7 +14142,7 @@
    (i32.const 0)
   )
  )
- (func $_stbtt__cff_index_get (; 87 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
+ (func $_stbtt__cff_index_get (; 91 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -14404,7 +14412,7 @@
    )
   )
  )
- (func $_stbtt__buf_get8 (; 88 ;) (param $$0 i32) (result i32)
+ (func $_stbtt__buf_get8 (; 92 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -14560,7 +14568,7 @@
    )
   )
  )
- (func $_stbtt__buf_skip (; 89 ;) (param $$0 i32) (param $$1 i32)
+ (func $_stbtt__buf_skip (; 93 ;) (param $$0 i32) (param $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
   (local $$4 i32)
@@ -14632,7 +14640,7 @@
   ;;@ ./stb_truetype.h:1123:0
   (return)
  )
- (func $_stbtt__csctx_rmove_to (; 90 ;) (param $$0 i32) (param $$1 f32) (param $$2 f32)
+ (func $_stbtt__csctx_rmove_to (; 94 ;) (param $$0 i32) (param $$1 f32) (param $$2 f32)
   (local $$10 f32)
   (local $$11 f32)
   (local $$12 i32)
@@ -14858,7 +14866,7 @@
   ;;@ ./stb_truetype.h:1900:0
   (return)
  )
- (func $_stbtt__csctx_rline_to (; 91 ;) (param $$0 i32) (param $$1 f32) (param $$2 f32)
+ (func $_stbtt__csctx_rline_to (; 95 ;) (param $$0 i32) (param $$1 f32) (param $$2 f32)
   (local $$10 f32)
   (local $$11 f32)
   (local $$12 i32)
@@ -15024,7 +15032,7 @@
   ;;@ ./stb_truetype.h:1907:0
   (return)
  )
- (func $_stbtt__csctx_rccurve_to (; 92 ;) (param $$0 i32) (param $$1 f32) (param $$2 f32) (param $$3 f32) (param $$4 f32) (param $$5 f32) (param $$6 f32)
+ (func $_stbtt__csctx_rccurve_to (; 96 ;) (param $$0 i32) (param $$1 f32) (param $$2 f32) (param $$3 f32) (param $$4 f32) (param $$5 f32) (param $$6 f32)
   (local $$10 f32)
   (local $$11 f32)
   (local $$12 f32)
@@ -15348,7 +15356,7 @@
   ;;@ ./stb_truetype.h:1918:0
   (return)
  )
- (func $_stbtt__cid_get_glyph_subrs (; 93 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
+ (func $_stbtt__cid_get_glyph_subrs (; 97 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
   (local $$$byval_copy i32)
   (local $$$byval_copy1 i32)
   (local $$$byval_copy2 i32)
@@ -15810,7 +15818,7 @@
   )
   (return)
  )
- (func $_stbtt__get_subr (; 94 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
+ (func $_stbtt__get_subr (; 98 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
   (local $$$byval_copy i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -16003,7 +16011,7 @@
   ;;@ ./stb_truetype.h:1932:0
   (return)
  )
- (func $_stbtt__csctx_close_shape (; 95 ;) (param $$0 i32)
+ (func $_stbtt__csctx_close_shape (; 99 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 f32)
@@ -16197,7 +16205,7 @@
   ;;@ ./stb_truetype.h:1892:0
   (return)
  )
- (func $_stbtt__buf_get (; 96 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_stbtt__buf_get (; 100 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -16365,7 +16373,7 @@
    (local.get $$13)
   )
  )
- (func $_stbtt__cff_int (; 97 ;) (param $$0 i32) (result i32)
+ (func $_stbtt__cff_int (; 101 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -16723,7 +16731,7 @@
    )
    ;;@ ./stb_truetype.h:1179:0
    (call $___assert_fail
-    (i32.const 6905)
+    (i32.const 6957)
     (i32.const 2596)
     (i32.const 1179)
     (i32.const 2763)
@@ -16753,7 +16761,7 @@
    (local.get $$43)
   )
  )
- (func $_stbtt__csctx_v (; 98 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (param $$6 i32) (param $$7 i32)
+ (func $_stbtt__csctx_v (; 102 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (param $$6 i32) (param $$7 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -17147,7 +17155,7 @@
   ;;@ ./stb_truetype.h:1886:0
   (return)
  )
- (func $_stbtt__track_vertex (; 99 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
+ (func $_stbtt__track_vertex (; 103 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -17594,7 +17602,7 @@
   ;;@ ./stb_truetype.h:1870:0
   (return)
  )
- (func $_stbtt_setvertex (; 100 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32)
+ (func $_stbtt_setvertex (; 104 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -17766,7 +17774,7 @@
   ;;@ ./stb_truetype.h:1550:0
   (return)
  )
- (func $_stbtt__cff_index_count (; 101 ;) (param $$0 i32) (result i32)
+ (func $_stbtt__cff_index_count (; 105 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -17819,7 +17827,7 @@
    (local.get $$4)
   )
  )
- (func $_stbtt__new_buf (; 102 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
+ (func $_stbtt__new_buf (; 106 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$3 i32)
@@ -17937,7 +17945,7 @@
    )
   )
  )
- (func $_stbtt__buf_seek (; 103 ;) (param $$0 i32) (param $$1 i32)
+ (func $_stbtt__buf_seek (; 107 ;) (param $$0 i32) (param $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -18144,7 +18152,7 @@
    )
   )
  )
- (func $_stbtt__get_subrs (; 104 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
+ (func $_stbtt__get_subrs (; 108 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -18386,7 +18394,7 @@
   ;;@ ./stb_truetype.h:1332:0
   (return)
  )
- (func $_stbtt__dict_get_ints (; 105 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32)
+ (func $_stbtt__dict_get_ints (; 109 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -18579,7 +18587,7 @@
    )
   )
  )
- (func $_stbtt__buf_range (; 106 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32)
+ (func $_stbtt__buf_range (; 110 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -18831,7 +18839,7 @@
   ;;@ ./stb_truetype.h:1155:0
   (return)
  )
- (func $_stbtt__cff_get_index (; 107 ;) (param $$0 i32) (param $$1 i32)
+ (func $_stbtt__cff_get_index (; 111 ;) (param $$0 i32) (param $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -19081,7 +19089,7 @@
   )
   (return)
  )
- (func $_stbtt__dict_get (; 108 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
+ (func $_stbtt__dict_get (; 112 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -19415,7 +19423,7 @@
    )
   )
  )
- (func $_stbtt__buf_peek8 (; 109 ;) (param $$0 i32) (result i32)
+ (func $_stbtt__buf_peek8 (; 113 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -19560,7 +19568,7 @@
    )
   )
  )
- (func $_stbtt__cff_skip_operand (; 110 ;) (param $$0 i32)
+ (func $_stbtt__cff_skip_operand (; 114 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -19818,7 +19826,7 @@
    )
   )
  )
- (func $_stbtt__GetGlyfOffset (; 111 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_stbtt__GetGlyfOffset (; 115 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -20408,7 +20416,7 @@
    (local.get $$85)
   )
  )
- (func $_stbtt__close_shape (; 112 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (param $$6 i32) (param $$7 i32) (param $$8 i32) (param $$9 i32) (result i32)
+ (func $_stbtt__close_shape (; 116 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (param $$6 i32) (param $$7 i32) (param $$8 i32) (param $$9 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -20745,7 +20753,7 @@
    )
   )
  )
- (func $_stbtt_GetGlyphBox (; 113 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (result i32)
+ (func $_stbtt_GetGlyphBox (; 117 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -21227,7 +21235,7 @@
    (local.get $$72)
   )
  )
- (func $_stbtt__GetGlyphInfoT2 (; 114 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (result i32)
+ (func $_stbtt__GetGlyphInfoT2 (; 118 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -21649,7 +21657,7 @@
    (local.get $$53)
   )
  )
- (func $_stbtt_GetGlyphHMetrics (; 115 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32)
+ (func $_stbtt_GetGlyphHMetrics (; 119 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -22255,7 +22263,7 @@
    )
   )
  )
- (func $_stbtt_GetCodepointHMetrics (; 116 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32)
+ (func $_stbtt_GetCodepointHMetrics (; 120 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -22332,7 +22340,7 @@
   ;;@ ./stb_truetype.h:2560:0
   (return)
  )
- (func $_stbtt__find_table (; 117 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_stbtt__find_table (; 121 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -22864,7 +22872,7 @@
    (i32.const 0)
   )
  )
- (func $_stbtt_ScaleForPixelHeight (; 118 ;) (param $$0 i32) (param $$1 f32) (result f32)
+ (func $_stbtt_ScaleForPixelHeight (; 122 ;) (param $$0 i32) (param $$1 f32) (result f32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -23062,7 +23070,7 @@
    (local.get $$29)
   )
  )
- (func $_stbtt_GetGlyphBitmapBoxSubpixel (; 119 ;) (param $$0 i32) (param $$1 i32) (param $$2 f32) (param $$3 f32) (param $$4 f32) (param $$5 f32) (param $$6 i32) (param $$7 i32) (param $$8 i32) (param $$9 i32)
+ (func $_stbtt_GetGlyphBitmapBoxSubpixel (; 123 ;) (param $$0 i32) (param $$1 i32) (param $$2 f32) (param $$3 f32) (param $$4 f32) (param $$5 f32) (param $$6 i32) (param $$7 i32) (param $$8 i32) (param $$9 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 f32)
@@ -23629,7 +23637,7 @@
    )
   )
  )
- (func $_stbtt_GetGlyphBitmapBox (; 120 ;) (param $$0 i32) (param $$1 i32) (param $$2 f32) (param $$3 f32) (param $$4 i32) (param $$5 i32) (param $$6 i32) (param $$7 i32)
+ (func $_stbtt_GetGlyphBitmapBox (; 124 ;) (param $$0 i32) (param $$1 i32) (param $$2 f32) (param $$3 f32) (param $$4 i32) (param $$5 i32) (param $$6 i32) (param $$7 i32)
   (local $$10 f32)
   (local $$11 f32)
   (local $$12 i32)
@@ -23733,7 +23741,7 @@
   ;;@ ./stb_truetype.h:2631:0
   (return)
  )
- (func $_stbtt_Rasterize (; 121 ;) (param $$0 i32) (param $$1 f32) (param $$2 i32) (param $$3 i32) (param $$4 f32) (param $$5 f32) (param $$6 f32) (param $$7 f32) (param $$8 i32) (param $$9 i32) (param $$10 i32) (param $$11 i32)
+ (func $_stbtt_Rasterize (; 125 ;) (param $$0 i32) (param $$1 f32) (param $$2 i32) (param $$3 i32) (param $$4 f32) (param $$5 f32) (param $$6 f32) (param $$7 f32) (param $$8 i32) (param $$9 i32) (param $$10 i32) (param $$11 i32)
   (local $$12 i32)
   (local $$13 f32)
   (local $$14 i32)
@@ -24020,7 +24028,7 @@
   ;;@ ./stb_truetype.h:3519:0
   (return)
  )
- (func $_stbtt_FlattenCurves (; 122 ;) (param $$0 i32) (param $$1 i32) (param $$2 f32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (result i32)
+ (func $_stbtt_FlattenCurves (; 126 ;) (param $$0 i32) (param $$1 i32) (param $$2 f32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (result i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 f32)
@@ -25709,7 +25717,7 @@
    (i32.const 0)
   )
  )
- (func $_stbtt__rasterize (; 123 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 f32) (param $$5 f32) (param $$6 f32) (param $$7 f32) (param $$8 i32) (param $$9 i32) (param $$10 i32) (param $$11 i32)
+ (func $_stbtt__rasterize (; 127 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 f32) (param $$5 f32) (param $$6 f32) (param $$7 f32) (param $$8 i32) (param $$9 i32) (param $$10 i32) (param $$11 i32)
   (local $$100 i32)
   (local $$101 i32)
   (local $$102 i32)
@@ -26891,7 +26899,7 @@
   ;;@ ./stb_truetype.h:3358:0
   (return)
  )
- (func $_stbtt__sort_edges (; 124 ;) (param $$0 i32) (param $$1 i32)
+ (func $_stbtt__sort_edges (; 128 ;) (param $$0 i32) (param $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
   (local $$4 i32)
@@ -26952,7 +26960,7 @@
   ;;@ ./stb_truetype.h:3296:0
   (return)
  )
- (func $_stbtt__rasterize_sorted_edges (; 125 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (param $$6 i32)
+ (func $_stbtt__rasterize_sorted_edges (; 129 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (param $$6 i32)
   (local $$10 i32)
   (local $$100 f32)
   (local $$101 f32)
@@ -28340,7 +28348,7 @@
    )
   )
  )
- (func $_stbtt__hheap_free (; 126 ;) (param $$0 i32) (param $$1 i32)
+ (func $_stbtt__hheap_free (; 130 ;) (param $$0 i32) (param $$1 i32)
   (local $$10 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -28421,7 +28429,7 @@
   ;;@ ./stb_truetype.h:2684:0
   (return)
  )
- (func $_stbtt__new_active (; 127 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 f32) (param $$4 i32) (result i32)
+ (func $_stbtt__new_active (; 131 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 f32) (param $$4 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 f32)
@@ -28954,7 +28962,7 @@
    (local.get $$82)
   )
  )
- (func $_stbtt__fill_active_edges_new (; 128 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 f32)
+ (func $_stbtt__fill_active_edges_new (; 132 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 f32)
   (local $$10 f32)
   (local $$100 i32)
   (local $$101 f32)
@@ -32143,7 +32151,7 @@
    )
   )
  )
- (func $_stbtt__hheap_cleanup (; 129 ;) (param $$0 i32) (param $$1 i32)
+ (func $_stbtt__hheap_cleanup (; 133 ;) (param $$0 i32) (param $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -32247,7 +32255,7 @@
   ;;@ ./stb_truetype.h:2694:0
   (return)
  )
- (func $_stbtt__handle_clipped_edge (; 130 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 f32) (param $$4 f32) (param $$5 f32) (param $$6 f32)
+ (func $_stbtt__handle_clipped_edge (; 134 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 f32) (param $$4 f32) (param $$5 f32) (param $$6 f32)
   (local $$10 f32)
   (local $$100 i32)
   (local $$101 f32)
@@ -33594,7 +33602,7 @@
   ;;@ ./stb_truetype.h:2952:0
   (return)
  )
- (func $_stbtt__hheap_alloc (; 131 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_stbtt__hheap_alloc (; 135 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -34015,7 +34023,7 @@
    (local.get $$59)
   )
  )
- (func $_stbtt__sort_edges_quicksort (; 132 ;) (param $$0 i32) (param $$1 i32)
+ (func $_stbtt__sort_edges_quicksort (; 136 ;) (param $$0 i32) (param $$1 i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -35222,7 +35230,7 @@
   ;;@ ./stb_truetype.h:3290:0
   (return)
  )
- (func $_stbtt__sort_edges_ins_sort (; 133 ;) (param $$0 i32) (param $$1 i32)
+ (func $_stbtt__sort_edges_ins_sort (; 137 ;) (param $$0 i32) (param $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -35655,7 +35663,7 @@
   ;;@ ./stb_truetype.h:3228:0
   (return)
  )
- (func $_stbtt__add_point (; 134 ;) (param $$0 i32) (param $$1 i32) (param $$2 f32) (param $$3 f32)
+ (func $_stbtt__add_point (; 138 ;) (param $$0 i32) (param $$1 i32) (param $$2 f32) (param $$3 f32)
   (local $$10 f32)
   (local $$11 i32)
   (local $$12 i32)
@@ -35783,7 +35791,7 @@
   ;;@ ./stb_truetype.h:3365:0
   (return)
  )
- (func $_stbtt__tesselate_curve (; 135 ;) (param $$0 i32) (param $$1 i32) (param $$2 f32) (param $$3 f32) (param $$4 f32) (param $$5 f32) (param $$6 f32) (param $$7 f32) (param $$8 f32) (param $$9 i32) (result i32)
+ (func $_stbtt__tesselate_curve (; 139 ;) (param $$0 i32) (param $$1 i32) (param $$2 f32) (param $$3 f32) (param $$4 f32) (param $$5 f32) (param $$6 f32) (param $$7 f32) (param $$8 f32) (param $$9 i32) (result i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -36357,7 +36365,7 @@
    (local.get $$103)
   )
  )
- (func $_stbtt__tesselate_cubic (; 136 ;) (param $$0 i32) (param $$1 i32) (param $$2 f32) (param $$3 f32) (param $$4 f32) (param $$5 f32) (param $$6 f32) (param $$7 f32) (param $$8 f32) (param $$9 f32) (param $$10 f32) (param $$11 i32)
+ (func $_stbtt__tesselate_cubic (; 140 ;) (param $$0 i32) (param $$1 i32) (param $$2 f32) (param $$3 f32) (param $$4 f32) (param $$5 f32) (param $$6 f32) (param $$7 f32) (param $$8 f32) (param $$9 f32) (param $$10 f32) (param $$11 i32)
   (local $$100 f32)
   (local $$101 f32)
   (local $$102 f32)
@@ -37435,7 +37443,7 @@
    )
   )
  )
- (func $_stbtt_MakeGlyphBitmapSubpixel (; 137 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 f32) (param $$6 f32) (param $$7 f32) (param $$8 f32) (param $$9 i32)
+ (func $_stbtt_MakeGlyphBitmapSubpixel (; 141 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 f32) (param $$6 f32) (param $$7 f32) (param $$8 f32) (param $$9 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -37792,7 +37800,7 @@
   ;;@ ./stb_truetype.h:3588:0
   (return)
  )
- (func $_stbtt_MakeGlyphBitmap (; 138 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 f32) (param $$6 f32) (param $$7 i32)
+ (func $_stbtt_MakeGlyphBitmap (; 142 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 f32) (param $$6 f32) (param $$7 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -37896,7 +37904,7 @@
   ;;@ ./stb_truetype.h:3593:0
   (return)
  )
- (func $_stbtt_GetFontOffsetForIndex (; 139 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_stbtt_GetFontOffsetForIndex (; 143 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$2 i32)
   (local $$3 i32)
   (local $$4 i32)
@@ -37948,7 +37956,7 @@
    (local.get $$6)
   )
  )
- (func $_stbtt_InitFont (; 140 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_stbtt_InitFont (; 144 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$3 i32)
   (local $$4 i32)
   (local $$5 i32)
@@ -38009,7 +38017,7 @@
    (local.get $$9)
   )
  )
- (func $_stbtt_InitFont_internal (; 141 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_stbtt_InitFont_internal (; 145 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$$byval_copy i32)
   (local $$$byval_copy1 i32)
   (local $$$byval_copy2 i32)
@@ -40029,7 +40037,7 @@
    (local.get $$220)
   )
  )
- (func $_stbtt_GetFontOffsetForIndex_internal (; 142 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_stbtt_GetFontOffsetForIndex_internal (; 146 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -40505,7 +40513,7 @@
    (local.get $$59)
   )
  )
- (func $_stbtt__isfont (; 143 ;) (param $$0 i32) (result i32)
+ (func $_stbtt__isfont (; 147 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$100 i32)
@@ -41494,7 +41502,7 @@
    (local.get $$122)
   )
  )
- (func $_ttLONG (; 144 ;) (param $$0 i32) (result i32)
+ (func $_ttLONG (; 148 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -41658,7 +41666,7 @@
    (local.get $$22)
   )
  )
- (func $_stbtt_BakeFontBitmap (; 145 ;) (param $$0 i32) (param $$1 i32) (param $$2 f32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (param $$6 i32) (param $$7 i32) (param $$8 i32) (result i32)
+ (func $_stbtt_BakeFontBitmap (; 149 ;) (param $$0 i32) (param $$1 i32) (param $$2 f32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (param $$6 i32) (param $$7 i32) (param $$8 i32) (result i32)
   (local $$10 i32)
   (local $$11 f32)
   (local $$12 i32)
@@ -41773,7 +41781,7 @@
    (local.get $$27)
   )
  )
- (func $_stbtt_BakeFontBitmap_internal (; 146 ;) (param $$0 i32) (param $$1 i32) (param $$2 f32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (param $$6 i32) (param $$7 i32) (param $$8 i32) (result i32)
+ (func $_stbtt_BakeFontBitmap_internal (; 150 ;) (param $$0 i32) (param $$1 i32) (param $$2 f32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (param $$6 i32) (param $$7 i32) (param $$8 i32) (result i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -42885,7 +42893,7 @@
    (i32.const 0)
   )
  )
- (func $_array_init (; 147 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
+ (func $_array_init (; 151 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -43062,7 +43070,7 @@
   ;;@ util.c:26:0
   (return)
  )
- (func $_array_push (; 148 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_array_push (; 152 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -43232,7 +43240,7 @@
    (local.get $$24)
   )
  )
- (func $_array_maybe_realloc (; 149 ;) (param $$0 i32) (result i32)
+ (func $_array_maybe_realloc (; 153 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -43529,7 +43537,7 @@
    )
   )
  )
- (func $_array_pop (; 150 ;) (param $$0 i32)
+ (func $_array_pop (; 154 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -43665,7 +43673,7 @@
   ;;@ util.c:52:0
   (return)
  )
- (func $_array_next (; 151 ;) (param $$0 i32) (result i32)
+ (func $_array_next (; 155 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -43785,7 +43793,7 @@
    (local.get $$15)
   )
  )
- (func $_array_clear (; 152 ;) (param $$0 i32)
+ (func $_array_clear (; 156 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -43890,7 +43898,7 @@
   ;;@ util.c:67:0
   (return)
  )
- (func $_array_splice (; 153 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (result i32)
+ (func $_array_splice (; 157 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (result i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -44705,7 +44713,7 @@
    (i32.const 0)
   )
  )
- (func $_find_index (; 154 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_find_index (; 158 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -44956,7 +44964,7 @@
    (i32.const 0)
   )
  )
- (func $_find_next_index (; 155 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_find_next_index (; 159 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -45204,7 +45212,7 @@
    (i32.const 0)
   )
  )
- (func $_find_prev_index (; 156 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_find_prev_index (; 160 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -45487,7 +45495,7 @@
    (i32.const 0)
   )
  )
- (func $_array_destroy (; 157 ;) (param $$0 i32)
+ (func $_array_destroy (; 161 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -45539,7 +45547,7 @@
   ;;@ util.c:203:0
   (return)
  )
- (func $_soa_init (; 158 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$varargs i32)
+ (func $_soa_init (; 162 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$varargs i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -45966,7 +45974,7 @@
   ;;@ util.c:240:0
   (return)
  )
- (func $_soa_push (; 159 ;) (param $$0 i32) (param $$varargs i32) (result i32)
+ (func $_soa_push (; 163 ;) (param $$0 i32) (param $$varargs i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -46386,7 +46394,7 @@
    (local.get $$55)
   )
  )
- (func $_soa_maybe_realloc (; 160 ;) (param $$0 i32) (result i32)
+ (func $_soa_maybe_realloc (; 164 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -46713,7 +46721,7 @@
    (local.get $$45)
   )
  )
- (func $_compile_shader (; 161 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_compile_shader (; 165 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -46979,7 +46987,7 @@
    (local.get $$28)
   )
  )
- (func $_read_file (; 162 ;) (param $$0 i32) (result i32)
+ (func $_read_file (; 166 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -47344,7 +47352,7 @@
    (local.get $$50)
   )
  )
- (func $_print_log (; 163 ;) (param $$0 i32)
+ (func $_print_log (; 167 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -47625,7 +47633,7 @@
   ;;@ util.c:377:0
   (return)
  )
- (func $_create_program (; 164 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_create_program (; 168 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -47850,7 +47858,7 @@
     ;;@ util.c:398:0
     (drop
      (call $_printf
-      (i32.const 6969)
+      (i32.const 7021)
       (local.get $$vararg_buffer1)
      )
     )
@@ -47878,7 +47886,7 @@
    )
   )
  )
- (func $_init_interaction (; 165 ;)
+ (func $_init_interaction (; 169 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -47914,52 +47922,52 @@
   )
   ;;@ interaction.c:4:0
   (i32.store8
-   (i32.const 9224)
+   (i32.const 9496)
    (i32.const 0)
   )
   ;;@ interaction.c:5:0
   (i32.store8
-   (i32.const 9228)
+   (i32.const 9500)
    (i32.const 0)
   )
   ;;@ interaction.c:6:0
   (i32.store8
-   (i32.const 9348)
+   (i32.const 9552)
    (i32.const 0)
   )
   ;;@ interaction.c:7:0
   (i32.store8
-   (i32.const 9236)
+   (i32.const 9508)
    (i32.const 0)
   )
   ;;@ interaction.c:8:0
   (i32.store8
-   (i32.const 9232)
+   (i32.const 9504)
    (i32.const 0)
   )
   ;;@ interaction.c:9:0
   (i32.store
-   (i32.const 9240)
+   (i32.const 9512)
    (i32.const 0)
   )
   ;;@ interaction.c:10:0
   (i32.store
-   (i32.const 9244)
+   (i32.const 9516)
    (i32.const 0)
   )
   ;;@ interaction.c:11:0
   (i32.store
-   (i32.const 9248)
+   (i32.const 9520)
    (i32.const 1)
   )
   ;;@ interaction.c:12:0
   (f32.store
-   (i32.const 9260)
+   (i32.const 9532)
    (f32.const 0)
   )
   ;;@ interaction.c:13:0
   (f32.store
-   (i32.const 9264)
+   (i32.const 9536)
    (f32.const 0)
   )
   ;;@ interaction.c:15:0
@@ -47969,13 +47977,13 @@
    )
   )
   (i32.store
-   (i32.const 9252)
+   (i32.const 9524)
    (local.get $$2)
   )
   ;;@ interaction.c:16:0
   (local.set $$3
    (i32.load
-    (i32.const 9252)
+    (i32.const 9524)
    )
   )
   (call $_array_init
@@ -48007,7 +48015,7 @@
     ;;@ interaction.c:18:0
     (local.set $$6
      (i32.load
-      (i32.const 9252)
+      (i32.const 9524)
      )
     )
     (drop
@@ -48018,7 +48026,7 @@
     ;;@ interaction.c:19:0
     (local.set $$7
      (i32.load
-      (i32.const 9252)
+      (i32.const 9524)
      )
     )
     (local.set $$8
@@ -48066,7 +48074,7 @@
   ;;@ interaction.c:22:0
   (return)
  )
- (func $_init_renderer (; 166 ;)
+ (func $_init_renderer (; 170 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -48168,7 +48176,7 @@
   ;;@ renderer.c:20:0
   (local.set $$6
    (i32.load
-    (i32.const 8444)
+    (i32.const 8492)
    )
   )
   (drop
@@ -48187,13 +48195,13 @@
    )
   )
   (i32.store
-   (i32.const 8448)
+   (i32.const 8496)
    (local.get $$7)
   )
   ;;@ renderer.c:25:0
   (local.set $$8
    (i32.load
-    (i32.const 8448)
+    (i32.const 8496)
    )
   )
   (call $_init_atlas
@@ -48210,7 +48218,7 @@
    )
   )
   (i32.store
-   (i32.const 8488)
+   (i32.const 8536)
    (local.get $$9)
   )
   ;;@ renderer.c:28:0
@@ -48220,7 +48228,7 @@
    )
   )
   (i32.store
-   (i32.const 8492)
+   (i32.const 8540)
    (local.get $$10)
   )
   ;;@ renderer.c:29:0
@@ -48230,7 +48238,7 @@
    )
   )
   (i32.store
-   (i32.const 8496)
+   (i32.const 8544)
    (local.get $$11)
   )
   ;;@ renderer.c:30:0
@@ -48240,7 +48248,7 @@
    )
   )
   (i32.store
-   (i32.const 8500)
+   (i32.const 8548)
    (local.get $$12)
   )
   (i64.store
@@ -48296,7 +48304,7 @@
   ;;@ renderer.c:36:0
   (local.set $$13
    (i32.load
-    (i32.const 8488)
+    (i32.const 8536)
    )
   )
   (i64.store align=4
@@ -48320,7 +48328,7 @@
   ;;@ renderer.c:37:0
   (local.set $$14
    (i32.load
-    (i32.const 8492)
+    (i32.const 8540)
    )
   )
   (i64.store align=4
@@ -48344,7 +48352,7 @@
   ;;@ renderer.c:38:0
   (local.set $$15
    (i32.load
-    (i32.const 8496)
+    (i32.const 8544)
    )
   )
   (i64.store align=4
@@ -48408,7 +48416,7 @@
     ;;@ renderer.c:42:0
     (local.set $$18
      (i32.load
-      (i32.const 8500)
+      (i32.const 8548)
      )
     )
     (local.set $$19
@@ -48470,13 +48478,13 @@
    )
   )
   (i32.store
-   (i32.const 8504)
+   (i32.const 8552)
    (local.get $$24)
   )
   ;;@ renderer.c:46:0
   (local.set $$25
    (i32.load
-    (i32.const 8504)
+    (i32.const 8552)
    )
   )
   (call $_array_init
@@ -48486,18 +48494,18 @@
   )
   ;;@ renderer.c:48:0
   (i32.store
-   (i32.const 8460)
+   (i32.const 8508)
    (i32.const 0)
   )
   ;;@ renderer.c:49:0
   (i32.store
-   (i32.const 8464)
+   (i32.const 8512)
    (i32.const 4000)
   )
   ;;@ renderer.c:50:0
   (local.set $$26
    (i32.load
-    (i32.const 8464)
+    (i32.const 8512)
    )
   )
   (local.set $$27
@@ -48512,13 +48520,13 @@
    )
   )
   (i32.store
-   (i32.const 8468)
+   (i32.const 8516)
    (local.get $$28)
   )
   ;;@ renderer.c:51:0
   (local.set $$29
    (i32.load
-    (i32.const 8464)
+    (i32.const 8512)
    )
   )
   (local.set $$30
@@ -48533,23 +48541,23 @@
    )
   )
   (i32.store
-   (i32.const 8472)
+   (i32.const 8520)
    (local.get $$31)
   )
   ;;@ renderer.c:52:0
   (i32.store
-   (i32.const 8476)
+   (i32.const 8524)
    (i32.const 0)
   )
   ;;@ renderer.c:53:0
   (i32.store
-   (i32.const 8480)
+   (i32.const 8528)
    (i32.const 6000)
   )
   ;;@ renderer.c:54:0
   (local.set $$32
    (i32.load
-    (i32.const 8480)
+    (i32.const 8528)
    )
   )
   (local.set $$33
@@ -48564,23 +48572,23 @@
    )
   )
   (i32.store
-   (i32.const 8484)
+   (i32.const 8532)
    (local.get $$34)
   )
   ;;@ renderer.c:56:0
   (i32.store
-   (i32.const 8508)
+   (i32.const 8556)
    (i32.const 0)
   )
   ;;@ renderer.c:57:0
   (i32.store
-   (i32.const 8512)
+   (i32.const 8560)
    (i32.const 400)
   )
   ;;@ renderer.c:58:0
   (local.set $$35
    (i32.load
-    (i32.const 8512)
+    (i32.const 8560)
    )
   )
   (local.set $$36
@@ -48595,13 +48603,13 @@
    )
   )
   (i32.store
-   (i32.const 8516)
+   (i32.const 8564)
    (local.get $$37)
   )
   ;;@ renderer.c:59:0
   (local.set $$38
    (i32.load
-    (i32.const 8512)
+    (i32.const 8560)
    )
   )
   (local.set $$39
@@ -48616,7 +48624,7 @@
    )
   )
   (i32.store
-   (i32.const 8520)
+   (i32.const 8568)
    (local.get $$40)
   )
   ;;@ renderer.c:62:0
@@ -48626,13 +48634,13 @@
    )
   )
   (i32.store
-   (i32.const 8540)
+   (i32.const 8588)
    (local.get $$41)
   )
   ;;@ renderer.c:63:0
   (local.set $$42
    (i32.load
-    (i32.const 8540)
+    (i32.const 8588)
    )
   )
   (call $_array_init
@@ -48664,7 +48672,7 @@
     ;;@ renderer.c:67:0
     (local.set $$45
      (i32.load
-      (i32.const 8540)
+      (i32.const 8588)
      )
     )
     (drop
@@ -48675,7 +48683,7 @@
     ;;@ renderer.c:68:0
     (local.set $$46
      (i32.load
-      (i32.const 8540)
+      (i32.const 8588)
      )
     )
     (local.set $$47
@@ -48712,7 +48720,7 @@
   )
   ;;@ renderer.c:71:0
   (i32.store
-   (i32.const 8548)
+   (i32.const 8596)
    (i32.const 0)
   )
   ;;@ renderer.c:73:0
@@ -48722,13 +48730,13 @@
    )
   )
   (i32.store
-   (i32.const 8560)
+   (i32.const 8608)
    (local.get $$51)
   )
   ;;@ renderer.c:74:0
   (local.set $$52
    (i32.load
-    (i32.const 8560)
+    (i32.const 8608)
    )
   )
   (call $_array_init
@@ -48739,7 +48747,7 @@
   ;;@ renderer.c:76:0
   (local.set $$53
    (i32.load
-    (i32.const 8560)
+    (i32.const 8608)
    )
   )
   (local.set $$54
@@ -48749,7 +48757,7 @@
    )
   )
   (i32.store
-   (i32.const 8564)
+   (i32.const 8612)
    (local.get $$54)
   )
   (global.set $STACKTOP
@@ -48758,7 +48766,7 @@
   ;;@ renderer.c:77:0
   (return)
  )
- (func $_init_gl (; 167 ;)
+ (func $_init_gl (; 171 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$2 i32)
@@ -48864,7 +48872,7 @@
    )
   )
   (i32.store
-   (i32.const 8444)
+   (i32.const 8492)
    (local.get $$7)
   )
   (global.set $STACKTOP
@@ -48873,7 +48881,7 @@
   ;;@ renderer.c:88:0
   (return)
  )
- (func $_init_quad_program (; 168 ;)
+ (func $_init_quad_program (; 172 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$2 i32)
@@ -48917,7 +48925,7 @@
    (local.get $$0)
   )
   (i32.store
-   (i32.const 8584)
+   (i32.const 8632)
    (local.get $$2)
   )
   ;;@ renderer.c:96:0
@@ -48938,7 +48946,7 @@
    )
   )
   (i32.store
-   (i32.const 8600)
+   (i32.const 8648)
    (local.get $$5)
   )
   ;;@ renderer.c:98:0
@@ -48952,23 +48960,23 @@
    )
   )
   (i32.store
-   (i32.const 8604)
+   (i32.const 8652)
    (local.get $$7)
   )
   ;;@ renderer.c:100:0
   (call $_glGenBuffers
    (i32.const 1)
-   (i32.const 8588)
+   (i32.const 8636)
   )
   ;;@ renderer.c:101:0
   (call $_glGenBuffers
    (i32.const 1)
-   (i32.const 8592)
+   (i32.const 8640)
   )
   ;;@ renderer.c:102:0
   (call $_glGenBuffers
    (i32.const 1)
-   (i32.const 8596)
+   (i32.const 8644)
   )
   (global.set $STACKTOP
    (local.get $sp)
@@ -48976,7 +48984,7 @@
   ;;@ renderer.c:103:0
   (return)
  )
- (func $_init_atlas_program (; 169 ;)
+ (func $_init_atlas_program (; 173 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$2 i32)
@@ -49022,7 +49030,7 @@
    (local.get $$0)
   )
   (i32.store
-   (i32.const 8608)
+   (i32.const 8656)
    (local.get $$2)
   )
   ;;@ renderer.c:113:0
@@ -49043,7 +49051,7 @@
    )
   )
   (i32.store
-   (i32.const 8624)
+   (i32.const 8672)
    (local.get $$5)
   )
   ;;@ renderer.c:115:0
@@ -49057,7 +49065,7 @@
    )
   )
   (i32.store
-   (i32.const 8628)
+   (i32.const 8676)
    (local.get $$7)
   )
   ;;@ renderer.c:116:0
@@ -49071,23 +49079,23 @@
    )
   )
   (i32.store
-   (i32.const 8632)
+   (i32.const 8680)
    (local.get $$9)
   )
   ;;@ renderer.c:118:0
   (call $_glGenBuffers
    (i32.const 1)
-   (i32.const 8612)
+   (i32.const 8660)
   )
   ;;@ renderer.c:119:0
   (call $_glGenBuffers
    (i32.const 1)
-   (i32.const 8616)
+   (i32.const 8664)
   )
   ;;@ renderer.c:120:0
   (call $_glGenBuffers
    (i32.const 1)
-   (i32.const 8620)
+   (i32.const 8668)
   )
   (global.set $STACKTOP
    (local.get $sp)
@@ -49095,7 +49103,7 @@
   ;;@ renderer.c:121:0
   (return)
  )
- (func $_init_atlas (; 170 ;) (param $$0 i32) (param $$1 i32) (param $$2 f32) (param $$3 f32) (param $$4 i32)
+ (func $_init_atlas (; 174 ;) (param $$0 i32) (param $$1 i32) (param $$2 f32) (param $$3 f32) (param $$4 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -49434,7 +49442,7 @@
   ;;@ renderer.c:139:0
   (local.set $$55
    (i32.load
-    (i32.const 8608)
+    (i32.const 8656)
    )
   )
   (call $_glUseProgram
@@ -49462,7 +49470,7 @@
   ;;@ renderer.c:144:0
   (local.set $$57
    (i32.load
-    (i32.const 8632)
+    (i32.const 8680)
    )
   )
   (call $_glUniform1i
@@ -49848,7 +49856,7 @@
   ;;@ renderer.c:161:0
   (return)
  )
- (func $_make_list (; 171 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_list (; 175 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -49985,7 +49993,7 @@
    (local.get $$18)
   )
  )
- (func $_get_new_render_node (; 172 ;) (param $$0 i32) (result i32)
+ (func $_get_new_render_node (; 176 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -50050,7 +50058,7 @@
    (local.get $$7)
   )
  )
- (func $_make_text (; 173 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_make_text (; 177 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -50188,7 +50196,7 @@
    (i32.const 0)
   )
  )
- (func $_make_background_begin (; 174 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_background_begin (; 178 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$2 i32)
@@ -50273,7 +50281,7 @@
    (local.get $$11)
   )
  )
- (func $_make_background_end (; 175 ;) (param $$0 i32) (result i32)
+ (func $_make_background_end (; 179 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -50334,7 +50342,7 @@
    (local.get $$6)
   )
  )
- (func $_make_cursor_begin (; 176 ;) (param $$0 i32) (result i32)
+ (func $_make_cursor_begin (; 180 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -50395,7 +50403,7 @@
    (local.get $$6)
   )
  )
- (func $_make_cursor_end (; 177 ;) (param $$0 i32) (result i32)
+ (func $_make_cursor_end (; 181 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -50456,7 +50464,7 @@
    (local.get $$6)
   )
  )
- (func $_find_expanded_nodes (; 178 ;) (param $$0 i32)
+ (func $_find_expanded_nodes (; 182 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$100 i32)
@@ -51574,7 +51582,7 @@
                                   ;;@ renderer.c:242:0
                                   (local.set $$39
                                    (i32.load8_s
-                                    (i32.const 9328)
+                                    (i32.const 8740)
                                    )
                                   )
                                   (local.set $$40
@@ -51651,7 +51659,7 @@
                                  ;;@ renderer.c:251:0
                                  (local.set $$48
                                   (i32.load8_s
-                                   (i32.const 9328)
+                                   (i32.const 8740)
                                   )
                                  )
                                  (local.set $$49
@@ -52184,7 +52192,7 @@
                                ;;@ renderer.c:275:0
                                (local.set $$133
                                 (i32.load8_s
-                                 (i32.const 9328)
+                                 (i32.const 8740)
                                 )
                                )
                                (local.set $$134
@@ -52332,7 +52340,7 @@
                               ;;@ renderer.c:284:0
                               (local.set $$155
                                (i32.load8_s
-                                (i32.const 9328)
+                                (i32.const 8740)
                                )
                               )
                               (local.set $$156
@@ -53008,7 +53016,7 @@
                            )
                            (local.set $$265
                             (i32.load
-                             (i32.const 9256)
+                             (i32.const 9528)
                             )
                            )
                            (local.set $$266
@@ -53301,7 +53309,7 @@
                           )
                           (local.set $$315
                            (i32.load
-                            (i32.const 9256)
+                            (i32.const 9528)
                            )
                           )
                           (local.set $$316
@@ -53491,7 +53499,7 @@
                          )
                          (local.set $$347
                           (i32.load
-                           (i32.const 9256)
+                           (i32.const 9528)
                           )
                          )
                          (local.set $$348
@@ -53764,7 +53772,7 @@
                           ;;@ renderer.c:351:0
                           (local.set $$391
                            (i32.load8_s
-                            (i32.const 9232)
+                            (i32.const 9504)
                            )
                           )
                           (local.set $$392
@@ -54076,7 +54084,7 @@
                        )
                        (local.set $$441
                         (i32.load
-                         (i32.const 9256)
+                         (i32.const 9528)
                         )
                        )
                        (local.set $$442
@@ -54325,7 +54333,7 @@
                       )
                       (local.set $$483
                        (i32.load
-                        (i32.const 9256)
+                        (i32.const 9528)
                        )
                       )
                       (local.set $$484
@@ -55285,7 +55293,7 @@
                   (block
                    (local.set $$692
                     (i32.load8_s
-                     (i32.const 9328)
+                     (i32.const 8740)
                     )
                    )
                    (local.set $$693
@@ -55561,7 +55569,7 @@
                 ;;@ renderer.c:457:0
                 (local.set $$737
                  (i32.load8_s
-                  (i32.const 9232)
+                  (i32.const 9504)
                  )
                 )
                 (local.set $$738
@@ -55627,7 +55635,7 @@
                )
                (local.set $$744
                 (i32.load
-                 (i32.const 9256)
+                 (i32.const 9528)
                 )
                )
                (local.set $$745
@@ -55761,7 +55769,7 @@
               )
               (local.set $$766
                (i32.load
-                (i32.const 9256)
+                (i32.const 9528)
                )
               )
               (local.set $$767
@@ -55951,7 +55959,7 @@
              )
              (local.set $$798
               (i32.load
-               (i32.const 9256)
+               (i32.const 9528)
               )
              )
              (local.set $$799
@@ -56059,7 +56067,7 @@
         )
         (local.set $$815
          (i32.load
-          (i32.const 9256)
+          (i32.const 9528)
          )
         )
         (local.set $$816
@@ -56203,7 +56211,7 @@
       )
       (local.set $$836
        (i32.load
-        (i32.const 9256)
+        (i32.const 9528)
        )
       )
       (local.set $$837
@@ -56470,7 +56478,7 @@
   )
   (local.set $$550
    (i32.load
-    (i32.const 9256)
+    (i32.const 9528)
    )
   )
   (local.set $$551
@@ -56669,7 +56677,7 @@
   ;;@ renderer.c:511:0
   (return)
  )
- (func $_destroy_render_node (; 179 ;) (param $$0 i32)
+ (func $_destroy_render_node (; 183 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -56791,7 +56799,7 @@
    )
   )
  )
- (func $_destroy_render_nodes (; 180 ;) (param $$0 i32)
+ (func $_destroy_render_nodes (; 184 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -56909,7 +56917,7 @@
   ;;@ renderer.c:537:0
   (return)
  )
- (func $_render (; 181 ;) (param $$0 i32)
+ (func $_render (; 185 ;) (param $$0 i32)
   (local $$$old i32)
   (local $$$old1 i32)
   (local $$1 i32)
@@ -57182,7 +57190,7 @@
   )
   ;;@ renderer.c:543:0
   (local.set $$2
-   (i32.const 8448)
+   (i32.const 8496)
   )
   ;;@ renderer.c:545:0
   (local.set $$13
@@ -57493,7 +57501,7 @@
   )
   (local.set $$62
    (f32.load
-    (i32.const 9264)
+    (i32.const 9536)
    )
   )
   (local.set $$63
@@ -57581,7 +57589,7 @@
   )
   (local.set $$77
    (f32.load
-    (i32.const 9260)
+    (i32.const 9532)
    )
   )
   (local.set $$78
@@ -57970,7 +57978,7 @@
        )
        (local.set $$137
         (f32.load
-         (i32.const 9264)
+         (i32.const 9536)
         )
        )
        (local.set $$138
@@ -58015,7 +58023,7 @@
       (local.get $$9)
      )
      (f32.store
-      (i32.const 9260)
+      (i32.const 9532)
       (local.get $$141)
      )
      ;;@ renderer.c:599:0
@@ -58023,7 +58031,7 @@
       (local.get $$10)
      )
      (f32.store
-      (i32.const 9264)
+      (i32.const 9536)
       (local.get $$142)
      )
     )
@@ -58032,7 +58040,7 @@
   ;;@ renderer.c:606:0
   (local.set $$143
    (f32.load
-    (i32.const 9260)
+    (i32.const 9532)
    )
   )
   (local.set $$144
@@ -58056,7 +58064,7 @@
   ;;@ renderer.c:607:0
   (local.set $$147
    (f32.load
-    (i32.const 9264)
+    (i32.const 9536)
    )
   )
   (local.set $$148
@@ -58127,7 +58135,7 @@
   ;;@ renderer.c:611:0
   (local.set $$160
    (i32.load
-    (i32.const 8444)
+    (i32.const 8492)
    )
   )
   (drop
@@ -58227,7 +58235,7 @@
   ;;@ renderer.c:621:0
   (local.set $$168
    (i32.load
-    (i32.const 8584)
+    (i32.const 8632)
    )
   )
   (call $_glUseProgram
@@ -58236,7 +58244,7 @@
   ;;@ renderer.c:623:0
   (local.set $$169
    (i32.load
-    (i32.const 8588)
+    (i32.const 8636)
    )
   )
   (call $_glBindBuffer
@@ -58287,7 +58295,7 @@
   ;;@ renderer.c:625:0
   (local.set $$177
    (i32.load
-    (i32.const 8600)
+    (i32.const 8648)
    )
   )
   (call $_glEnableVertexAttribArray
@@ -58296,7 +58304,7 @@
   ;;@ renderer.c:626:0
   (local.set $$178
    (i32.load
-    (i32.const 8600)
+    (i32.const 8648)
    )
   )
   (call $_glVertexAttribPointer
@@ -58310,7 +58318,7 @@
   ;;@ renderer.c:628:0
   (local.set $$179
    (i32.load
-    (i32.const 8592)
+    (i32.const 8640)
    )
   )
   (call $_glBindBuffer
@@ -58361,7 +58369,7 @@
   ;;@ renderer.c:630:0
   (local.set $$187
    (i32.load
-    (i32.const 8604)
+    (i32.const 8652)
    )
   )
   (call $_glEnableVertexAttribArray
@@ -58370,7 +58378,7 @@
   ;;@ renderer.c:631:0
   (local.set $$188
    (i32.load
-    (i32.const 8604)
+    (i32.const 8652)
    )
   )
   (call $_glVertexAttribPointer
@@ -58384,7 +58392,7 @@
   ;;@ renderer.c:633:0
   (local.set $$189
    (i32.load
-    (i32.const 8620)
+    (i32.const 8668)
    )
   )
   (call $_glBindBuffer
@@ -58504,7 +58512,7 @@
   ;;@ renderer.c:639:0
   (local.set $$206
    (i32.load
-    (i32.const 8608)
+    (i32.const 8656)
    )
   )
   (call $_glUseProgram
@@ -58531,7 +58539,7 @@
   ;;@ renderer.c:642:0
   (local.set $$210
    (i32.load
-    (i32.const 8632)
+    (i32.const 8680)
    )
   )
   (call $_glUniform1i
@@ -58541,7 +58549,7 @@
   ;;@ renderer.c:644:0
   (local.set $$211
    (i32.load
-    (i32.const 8612)
+    (i32.const 8660)
    )
   )
   (call $_glBindBuffer
@@ -58592,7 +58600,7 @@
   ;;@ renderer.c:646:0
   (local.set $$219
    (i32.load
-    (i32.const 8624)
+    (i32.const 8672)
    )
   )
   (call $_glEnableVertexAttribArray
@@ -58601,7 +58609,7 @@
   ;;@ renderer.c:647:0
   (local.set $$220
    (i32.load
-    (i32.const 8624)
+    (i32.const 8672)
    )
   )
   (call $_glVertexAttribPointer
@@ -58615,7 +58623,7 @@
   ;;@ renderer.c:649:0
   (local.set $$221
    (i32.load
-    (i32.const 8616)
+    (i32.const 8664)
    )
   )
   (call $_glBindBuffer
@@ -58666,7 +58674,7 @@
   ;;@ renderer.c:651:0
   (local.set $$229
    (i32.load
-    (i32.const 8628)
+    (i32.const 8676)
    )
   )
   (call $_glEnableVertexAttribArray
@@ -58675,7 +58683,7 @@
   ;;@ renderer.c:652:0
   (local.set $$230
    (i32.load
-    (i32.const 8628)
+    (i32.const 8676)
    )
   )
   (call $_glVertexAttribPointer
@@ -58689,7 +58697,7 @@
   ;;@ renderer.c:654:0
   (local.set $$231
    (i32.load
-    (i32.const 8620)
+    (i32.const 8668)
    )
   )
   (call $_glBindBuffer
@@ -58764,7 +58772,7 @@
   ;;@ renderer.c:660:0
   (return)
  )
- (func $_render_newline (; 182 ;) (param $$0 i32)
+ (func $_render_newline (; 186 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -59144,7 +59152,7 @@
   ;;@ renderer.c:1573:0
   (return)
  )
- (func $_render_code_node (; 183 ;) (param $$0 i32) (param $$1 i32)
+ (func $_render_code_node (; 187 ;) (param $$0 i32) (param $$1 i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$1000 i32)
@@ -61114,7 +61122,7 @@
   )
   (local.set $$96
    (i32.load
-    (i32.const 9256)
+    (i32.const 9528)
    )
   )
   (local.set $$97
@@ -61313,7 +61321,7 @@
     ;;@ renderer.c:839:0
     (local.set $$127
      (i32.load
-      (i32.const 9252)
+      (i32.const 9524)
      )
     )
     (local.set $$128
@@ -61329,7 +61337,7 @@
     )
     (local.set $$130
      (i32.load
-      (i32.const 9248)
+      (i32.const 9520)
      )
     )
     (local.set $$131
@@ -61410,7 +61418,7 @@
       )
       (local.set $$143
        (i32.load
-        (i32.const 9248)
+        (i32.const 9520)
        )
       )
       (local.set $$144
@@ -63547,7 +63555,7 @@
                             ;;@ renderer.c:959:0
                             (local.set $$466
                              (i32.load8_s
-                              (i32.const 9224)
+                              (i32.const 9496)
                              )
                             )
                             (local.set $$467
@@ -63730,7 +63738,7 @@
                            ;;@ renderer.c:970:0
                            (local.set $$493
                             (i32.load8_s
-                             (i32.const 9224)
+                             (i32.const 9496)
                             )
                            )
                            (local.set $$494
@@ -65267,7 +65275,7 @@
                        ;;@ renderer.c:1060:0
                        (local.set $$729
                         (i32.load8_s
-                         (i32.const 9224)
+                         (i32.const 9496)
                         )
                        )
                        (local.set $$730
@@ -65481,7 +65489,7 @@
                        (block
                         (local.set $$761
                          (i32.load8_s
-                          (i32.const 9228)
+                          (i32.const 9500)
                          )
                         )
                         (local.set $$762
@@ -65506,7 +65514,7 @@
                        (block
                         (local.set $$764
                          (i32.load8_s
-                          (i32.const 9224)
+                          (i32.const 9496)
                          )
                         )
                         (local.set $$765
@@ -65732,7 +65740,7 @@
                       (block
                        (local.set $$796
                         (i32.load8_s
-                         (i32.const 9228)
+                         (i32.const 9500)
                         )
                        )
                        (local.set $$797
@@ -65757,7 +65765,7 @@
                       (block
                        (local.set $$799
                         (i32.load8_s
-                         (i32.const 9224)
+                         (i32.const 9496)
                         )
                        )
                        (local.set $$800
@@ -66088,7 +66096,7 @@
                      (block
                       (local.set $$849
                        (i32.load8_s
-                        (i32.const 9228)
+                        (i32.const 9500)
                        )
                       )
                       (local.set $$850
@@ -66113,7 +66121,7 @@
                      (block
                       (local.set $$852
                        (i32.load8_s
-                        (i32.const 9224)
+                        (i32.const 9496)
                        )
                       )
                       (local.set $$853
@@ -66286,7 +66294,7 @@
                     (local.set $$878
                      (call $_make_text
                       (local.get $$874)
-                      (i32.const 7320)
+                      (i32.const 7372)
                       (local.get $$877)
                      )
                     )
@@ -66383,7 +66391,7 @@
                     (block
                      (local.set $$892
                       (i32.load8_s
-                       (i32.const 9228)
+                       (i32.const 9500)
                       )
                      )
                      (local.set $$893
@@ -66408,7 +66416,7 @@
                     (block
                      (local.set $$895
                       (i32.load8_s
-                       (i32.const 9224)
+                       (i32.const 9496)
                       )
                      )
                      (local.set $$896
@@ -67110,7 +67118,7 @@
                ;;@ renderer.c:1163:0
                (local.set $$998
                 (i32.load8_s
-                 (i32.const 9224)
+                 (i32.const 9496)
                 )
                )
                (local.set $$999
@@ -67187,7 +67195,7 @@
                     (block
                      (local.set $$1010
                       (i32.load8_s
-                       (i32.const 9236)
+                       (i32.const 9508)
                       )
                      )
                      (local.set $$1011
@@ -67241,7 +67249,7 @@
                ;;@ renderer.c:1171:0
                (local.set $$1017
                 (i32.load8_s
-                 (i32.const 9348)
+                 (i32.const 9552)
                 )
                )
                (local.set $$1018
@@ -67462,7 +67470,7 @@
                ;;@ renderer.c:1181:0
                (local.set $$1051
                 (i32.load8_s
-                 (i32.const 9348)
+                 (i32.const 9552)
                 )
                )
                (local.set $$1052
@@ -67731,7 +67739,7 @@
               (block
                (local.set $$1092
                 (i32.load8_s
-                 (i32.const 9228)
+                 (i32.const 9500)
                 )
                )
                (local.set $$1093
@@ -67756,7 +67764,7 @@
               (block
                (local.set $$1095
                 (i32.load8_s
-                 (i32.const 9224)
+                 (i32.const 9496)
                 )
                )
                (local.set $$1096
@@ -68747,7 +68755,7 @@
                 ;;@ renderer.c:1247:0
                 (local.set $$1244
                  (i32.load8_s
-                  (i32.const 9232)
+                  (i32.const 9504)
                  )
                 )
                 (local.set $$1245
@@ -69000,7 +69008,7 @@
               (block
                (local.set $$1281
                 (i32.load8_s
-                 (i32.const 9328)
+                 (i32.const 8740)
                 )
                )
                (local.set $$1282
@@ -70205,7 +70213,7 @@
   )
   (local.set $$1461
    (i32.load
-    (i32.const 9256)
+    (i32.const 9528)
    )
   )
   (local.set $$1462
@@ -70322,7 +70330,7 @@
   ;;@ renderer.c:1336:0
   (return)
  )
- (func $_layout_node (; 184 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_layout_node (; 188 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$100 f32)
   (local $$101 f32)
@@ -71535,7 +71543,7 @@
    (i32.const 0)
   )
  )
- (func $_render_node (; 185 ;) (param $$0 i32) (param $$1 i32)
+ (func $_render_node (; 189 ;) (param $$0 i32) (param $$1 i32)
   (local $$10 i32)
   (local $$11 f32)
   (local $$12 i32)
@@ -72050,7 +72058,7 @@
    )
   )
  )
- (func $_render_text (; 186 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32)
+ (func $_render_text (; 190 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -75541,7 +75549,7 @@
    )
   )
  )
- (func $_mark_background_begin (; 187 ;) (param $$0 i32) (param $$1 i32) (param $$2 f32) (param $$3 f32)
+ (func $_mark_background_begin (; 191 ;) (param $$0 i32) (param $$1 i32) (param $$2 f32) (param $$3 f32)
   (local $$10 i32)
   (local $$11 f32)
   (local $$12 f32)
@@ -75690,7 +75698,7 @@
   ;;@ renderer.c:1447:0
   (return)
  )
- (func $_mark_background_end (; 188 ;) (param $$0 i32) (param $$1 f32) (param $$2 f32)
+ (func $_mark_background_end (; 192 ;) (param $$0 i32) (param $$1 f32) (param $$2 f32)
   (local $$10 i32)
   (local $$100 f32)
   (local $$101 i32)
@@ -77720,7 +77728,7 @@
   ;;@ renderer.c:1505:0
   (return)
  )
- (func $_convert_screen_coords_to_view_coords (; 189 ;) (param $$0 f32) (param $$1 f32) (param $$2 f32) (param $$3 f32) (param $$4 i32) (param $$5 i32)
+ (func $_convert_screen_coords_to_view_coords (; 193 ;) (param $$0 f32) (param $$1 f32) (param $$2 f32) (param $$3 f32) (param $$4 i32) (param $$5 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 f32)
@@ -77853,7 +77861,7 @@
   ;;@ renderer.c:1580:0
   (return)
  )
- (func $_get_baked_quad_scaled (; 190 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (param $$6 f32) (param $$7 i32) (param $$8 i32)
+ (func $_get_baked_quad_scaled (; 194 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (param $$6 f32) (param $$7 i32) (param $$8 i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -78751,7 +78759,7 @@
    )
   )
  )
- (func $_get_text_width (; 191 ;) (param $$0 i32) (param $$1 i32) (result f32)
+ (func $_get_text_width (; 195 ;) (param $$0 i32) (param $$1 i32) (result f32)
   (local $$10 f32)
   (local $$11 f32)
   (local $$12 f32)
@@ -78879,7 +78887,7 @@
    (local.get $$15)
   )
  )
- (func $_render_type (; 192 ;) (param $$0 i32) (param $$1 i32)
+ (func $_render_type (; 196 ;) (param $$0 i32) (param $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -79463,7 +79471,7 @@
    )
   )
  )
- (func $_render_space (; 193 ;) (param $$0 i32)
+ (func $_render_space (; 197 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -79623,7 +79631,7 @@
   ;;@ renderer.c:1554:0
   (return)
  )
- (func $_render_indent (; 194 ;) (param $$0 i32)
+ (func $_render_indent (; 198 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -79887,7 +79895,7 @@
   ;;@ renderer.c:1549:0
   (return)
  )
- (func $_init_parser (; 195 ;)
+ (func $_init_parser (; 199 ;)
   (local $label i32)
   (local $sp i32)
   (local.set $sp
@@ -79900,7 +79908,7 @@
   ;;@ parser.c:8:0
   (return)
  )
- (func $_init_type_infos (; 196 ;)
+ (func $_init_type_infos (; 200 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -79943,13 +79951,13 @@
    )
   )
   (i32.store
-   (i32.const 8384)
+   (i32.const 8432)
    (local.get $$0)
   )
   ;;@ parser.c:631:0
   (local.set $$1
    (i32.load
-    (i32.const 8384)
+    (i32.const 8432)
    )
   )
   (call $_array_init
@@ -79971,7 +79979,7 @@
    )
   )
   (i32.store
-   (i32.const 8440)
+   (i32.const 8488)
    (local.get $$3)
   )
   ;;@ parser.c:634:0
@@ -79988,7 +79996,7 @@
    )
   )
   (i32.store
-   (i32.const 8388)
+   (i32.const 8436)
    (local.get $$5)
   )
   ;;@ parser.c:635:0
@@ -80005,7 +80013,7 @@
    )
   )
   (i32.store
-   (i32.const 8392)
+   (i32.const 8440)
    (local.get $$7)
   )
   ;;@ parser.c:636:0
@@ -80022,7 +80030,7 @@
    )
   )
   (i32.store
-   (i32.const 8396)
+   (i32.const 8444)
    (local.get $$9)
   )
   ;;@ parser.c:637:0
@@ -80039,7 +80047,7 @@
    )
   )
   (i32.store
-   (i32.const 8400)
+   (i32.const 8448)
    (local.get $$11)
   )
   ;;@ parser.c:638:0
@@ -80056,7 +80064,7 @@
    )
   )
   (i32.store
-   (i32.const 8404)
+   (i32.const 8452)
    (local.get $$13)
   )
   ;;@ parser.c:639:0
@@ -80073,7 +80081,7 @@
    )
   )
   (i32.store
-   (i32.const 8408)
+   (i32.const 8456)
    (local.get $$15)
   )
   ;;@ parser.c:640:0
@@ -80090,7 +80098,7 @@
    )
   )
   (i32.store
-   (i32.const 8412)
+   (i32.const 8460)
    (local.get $$17)
   )
   ;;@ parser.c:641:0
@@ -80107,7 +80115,7 @@
    )
   )
   (i32.store
-   (i32.const 8416)
+   (i32.const 8464)
    (local.get $$19)
   )
   ;;@ parser.c:642:0
@@ -80124,7 +80132,7 @@
    )
   )
   (i32.store
-   (i32.const 8420)
+   (i32.const 8468)
    (local.get $$21)
   )
   ;;@ parser.c:643:0
@@ -80140,7 +80148,7 @@
    )
   )
   (i32.store
-   (i32.const 8424)
+   (i32.const 8472)
    (local.get $$23)
   )
   ;;@ parser.c:644:0
@@ -80156,7 +80164,7 @@
    )
   )
   (i32.store
-   (i32.const 8428)
+   (i32.const 8476)
    (local.get $$25)
   )
   ;;@ parser.c:645:0
@@ -80170,7 +80178,7 @@
    )
   )
   (i32.store
-   (i32.const 8432)
+   (i32.const 8480)
    (local.get $$27)
   )
   ;;@ parser.c:646:0
@@ -80184,13 +80192,13 @@
    )
   )
   (i32.store
-   (i32.const 8436)
+   (i32.const 8484)
    (local.get $$29)
   )
   ;;@ parser.c:647:0
   (return)
  )
- (func $_init_infer (; 197 ;)
+ (func $_init_infer (; 201 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $label i32)
@@ -80205,13 +80213,13 @@
    )
   )
   (i32.store
-   (i32.const 9340)
+   (i32.const 9544)
    (local.get $$0)
   )
   ;;@ parser.c:842:0
   (local.set $$1
    (i32.load
-    (i32.const 9340)
+    (i32.const 9544)
    )
   )
   (call $_array_init
@@ -80222,7 +80230,7 @@
   ;;@ parser.c:845:0
   (return)
  )
- (func $_make_type_info_integer (; 198 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_type_info_integer (; 202 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -80321,7 +80329,7 @@
    (local.get $$13)
   )
  )
- (func $_make_type_info_ident (; 199 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_type_info_ident (; 203 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -80501,7 +80509,7 @@
    (i32.const 0)
   )
  )
- (func $_make_type_info_float (; 200 ;) (param $$0 i32) (result i32)
+ (func $_make_type_info_float (; 204 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -80576,7 +80584,7 @@
    (local.get $$8)
   )
  )
- (func $_make_type_info_string (; 201 ;) (result i32)
+ (func $_make_type_info_string (; 205 ;) (result i32)
   (local $$0 i32)
   (local $$1 i32)
   (local $$2 i32)
@@ -80624,7 +80632,7 @@
   ;;@ parser.c:746:0
   (local.set $$3
    (i32.load
-    (i32.const 8440)
+    (i32.const 8488)
    )
   )
   (local.set $$4
@@ -80662,7 +80670,7 @@
    (local.get $$8)
   )
  )
- (func $_make_type_info_void (; 202 ;) (result i32)
+ (func $_make_type_info_void (; 206 ;) (result i32)
   (local $$0 i32)
   (local $$1 i32)
   (local $$2 i32)
@@ -80713,7 +80721,7 @@
    (local.get $$3)
   )
  )
- (func $_get_new_type_info (; 203 ;) (result i32)
+ (func $_get_new_type_info (; 207 ;) (result i32)
   (local $$0 i32)
   (local $$1 i32)
   (local $$2 i32)
@@ -80726,7 +80734,7 @@
   ;;@ parser.c:713:0
   (local.set $$0
    (i32.load
-    (i32.const 8384)
+    (i32.const 8432)
    )
   )
   (drop
@@ -80737,7 +80745,7 @@
   ;;@ parser.c:714:0
   (local.set $$1
    (i32.load
-    (i32.const 8384)
+    (i32.const 8432)
    )
   )
   (local.set $$2
@@ -80755,7 +80763,7 @@
    (local.get $$3)
   )
  )
- (func $_get_new_code_node (; 204 ;) (param $$0 i32) (result i32)
+ (func $_get_new_code_node (; 208 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -81054,7 +81062,7 @@
   ;;@ parser.c:55:0
   (local.set $$38
    (i32.load
-    (i32.const 8636)
+    (i32.const 8908)
    )
   )
   (local.set $$39
@@ -81073,7 +81081,7 @@
   ;;@ parser.c:56:0
   (local.set $$41
    (i32.load
-    (i32.const 8636)
+    (i32.const 8908)
    )
   )
   (local.set $$42
@@ -81083,7 +81091,7 @@
    )
   )
   (i32.store
-   (i32.const 8636)
+   (i32.const 8908)
    (local.get $$42)
   )
   ;;@ parser.c:58:0
@@ -81097,7 +81105,7 @@
    (local.get $$43)
   )
  )
- (func $_code_kind_to_string (; 205 ;) (param $$0 i32) (result i32)
+ (func $_code_kind_to_string (; 209 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -81438,7 +81446,7 @@
    (local.get $$4)
   )
  )
- (func $_type_kind_to_string (; 206 ;) (param $$0 i32) (result i32)
+ (func $_type_kind_to_string (; 210 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -81572,7 +81580,7 @@
    (local.get $$4)
   )
  )
- (func $_make_procedure (; 207 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (result i32)
+ (func $_make_procedure (; 211 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -81842,7 +81850,7 @@
    (local.get $$40)
   )
  )
- (func $_make_block (; 208 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_block (; 212 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -82197,7 +82205,7 @@
    (local.get $$46)
   )
  )
- (func $_make_call (; 209 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_make_call (; 213 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -82396,7 +82404,7 @@
    (local.get $$27)
   )
  )
- (func $_make_declaration (; 210 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (result i32)
+ (func $_make_declaration (; 214 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -82613,7 +82621,7 @@
    (local.get $$33)
   )
  )
- (func $_make_reference (; 211 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_reference (; 215 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$2 i32)
@@ -82698,7 +82706,7 @@
    (local.get $$11)
   )
  )
- (func $_make_dereference (; 212 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_dereference (; 216 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$2 i32)
@@ -82783,7 +82791,7 @@
    (local.get $$11)
   )
  )
- (func $_make_array_index (; 213 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_make_array_index (; 217 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -82899,7 +82907,7 @@
    (local.get $$17)
   )
  )
- (func $_make_dot_operator (; 214 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_make_dot_operator (; 218 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -83015,7 +83023,7 @@
    (local.get $$17)
   )
  )
- (func $_make_return (; 215 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_make_return (; 219 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -83164,7 +83172,7 @@
    (local.get $$21)
   )
  )
- (func $_make_ident (; 216 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_make_ident (; 220 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -83280,7 +83288,7 @@
    (local.get $$17)
   )
  )
- (func $_make_struct (; 217 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_struct (; 221 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$2 i32)
@@ -83365,7 +83373,7 @@
    (local.get $$11)
   )
  )
- (func $_make_if (; 218 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_make_if (; 222 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -83481,7 +83489,7 @@
    (local.get $$17)
   )
  )
- (func $_make_else (; 219 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_else (; 223 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -83589,7 +83597,7 @@
    (local.get $$14)
   )
  )
- (func $_make_while (; 220 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_make_while (; 224 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -83705,7 +83713,7 @@
    (local.get $$17)
   )
  )
- (func $_make_do_while (; 221 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_make_do_while (; 225 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -83821,7 +83829,7 @@
    (local.get $$17)
   )
  )
- (func $_make_for (; 222 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (result i32)
+ (func $_make_for (; 226 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -83999,7 +84007,7 @@
    (local.get $$29)
   )
  )
- (func $_make_break (; 223 ;) (param $$0 i32) (result i32)
+ (func $_make_break (; 227 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -84060,7 +84068,7 @@
    (local.get $$6)
   )
  )
- (func $_make_continue (; 224 ;) (param $$0 i32) (result i32)
+ (func $_make_continue (; 228 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -84121,7 +84129,7 @@
    (local.get $$6)
   )
  )
- (func $_make_increment (; 225 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_increment (; 229 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$2 i32)
@@ -84206,7 +84214,7 @@
    (local.get $$11)
   )
  )
- (func $_make_decrement (; 226 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_decrement (; 230 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$2 i32)
@@ -84291,7 +84299,7 @@
    (local.get $$11)
   )
  )
- (func $_make_assign (; 227 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_make_assign (; 231 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -84407,7 +84415,7 @@
    (local.get $$17)
   )
  )
- (func $_make_opassign (; 228 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (result i32)
+ (func $_make_opassign (; 232 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -84554,7 +84562,7 @@
    (local.get $$23)
   )
  )
- (func $_make_binary_operation (; 229 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (result i32)
+ (func $_make_binary_operation (; 233 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -84701,7 +84709,7 @@
    (local.get $$23)
   )
  )
- (func $_make_literal_int (; 230 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_literal_int (; 234 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -84764,7 +84772,7 @@
   ;;@ parser.c:553:0
   (local.set $$8
    (i32.load
-    (i32.const 8408)
+    (i32.const 8456)
    )
   )
   (local.set $$9
@@ -84808,7 +84816,7 @@
    (local.get $$14)
   )
  )
- (func $_make_literal_uint (; 231 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_literal_uint (; 235 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -84871,7 +84879,7 @@
   ;;@ parser.c:564:0
   (local.set $$8
    (i32.load
-    (i32.const 8412)
+    (i32.const 8460)
    )
   )
   (local.set $$9
@@ -84915,7 +84923,7 @@
    (local.get $$14)
   )
  )
- (func $_make_literal_float (; 232 ;) (param $$0 i32) (param $$1 f64) (result i32)
+ (func $_make_literal_float (; 236 ;) (param $$0 i32) (param $$1 f64) (result i32)
   (local $$10 i32)
   (local $$11 f64)
   (local $$12 i32)
@@ -84983,7 +84991,7 @@
   ;;@ parser.c:575:0
   (local.set $$8
    (i32.load
-    (i32.const 8424)
+    (i32.const 8472)
    )
   )
   (local.set $$9
@@ -85055,7 +85063,7 @@
    (local.get $$19)
   )
  )
- (func $_make_literal_bool (; 233 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_literal_bool (; 237 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -85118,7 +85126,7 @@
   ;;@ parser.c:587:0
   (local.set $$8
    (i32.load
-    (i32.const 8396)
+    (i32.const 8444)
    )
   )
   (local.set $$9
@@ -85162,7 +85170,7 @@
    (local.get $$14)
   )
  )
- (func $_make_string (; 234 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_string (; 238 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -85230,7 +85238,7 @@
   ;;@ parser.c:599:0
   (local.set $$8
    (i32.load
-    (i32.const 8432)
+    (i32.const 8480)
    )
   )
   (local.set $$9
@@ -85302,7 +85310,7 @@
    (local.get $$19)
   )
  )
- (func $_make_parens (; 235 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_parens (; 239 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$2 i32)
@@ -85387,7 +85395,7 @@
    (local.get $$11)
   )
  )
- (func $_make_native_code (; 236 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_make_native_code (; 240 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$2 i32)
@@ -85472,7 +85480,7 @@
    (local.get $$11)
   )
  )
- (func $_index_of_string (; 237 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_index_of_string (; 241 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -85662,7 +85670,7 @@
    (i32.const 0)
   )
  )
- (func $_map_name_to_type (; 238 ;) (param $$0 i32) (result i32)
+ (func $_map_name_to_type (; 242 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -85856,7 +85864,7 @@
    (local.get $$24)
   )
  )
- (func $_get_decl_of_ident (; 239 ;) (param $$0 i32) (result i32)
+ (func $_get_decl_of_ident (; 243 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -85925,7 +85933,7 @@
   ;;@ parser.c:861:0
   (local.set $$6
    (i32.load
-    (i32.const 9268)
+    (i32.const 9540)
    )
   )
   (local.set $$3
@@ -86227,7 +86235,7 @@
    (i32.const 0)
   )
  )
- (func $_map_name_to_native_type (; 240 ;) (param $$0 i32) (result i32)
+ (func $_map_name_to_native_type (; 244 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -86333,7 +86341,7 @@
      ;;@ parser.c:667:0
      (local.set $$6
       (i32.load
-       (i32.const 8388)
+       (i32.const 8436)
       )
      )
      (local.set $$1
@@ -86363,7 +86371,7 @@
        ;;@ parser.c:670:0
        (local.set $$10
         (i32.load
-         (i32.const 8392)
+         (i32.const 8440)
         )
        )
        (local.set $$1
@@ -86394,7 +86402,7 @@
        ;;@ parser.c:673:0
        (local.set $$14
         (i32.load
-         (i32.const 8396)
+         (i32.const 8444)
         )
        )
        (local.set $$1
@@ -86425,7 +86433,7 @@
        ;;@ parser.c:676:0
        (local.set $$18
         (i32.load
-         (i32.const 8400)
+         (i32.const 8448)
         )
        )
        (local.set $$1
@@ -86456,7 +86464,7 @@
        ;;@ parser.c:679:0
        (local.set $$22
         (i32.load
-         (i32.const 8404)
+         (i32.const 8452)
         )
        )
        (local.set $$1
@@ -86487,7 +86495,7 @@
        ;;@ parser.c:682:0
        (local.set $$26
         (i32.load
-         (i32.const 8408)
+         (i32.const 8456)
         )
        )
        (local.set $$1
@@ -86518,7 +86526,7 @@
        ;;@ parser.c:685:0
        (local.set $$30
         (i32.load
-         (i32.const 8412)
+         (i32.const 8460)
         )
        )
        (local.set $$1
@@ -86549,7 +86557,7 @@
        ;;@ parser.c:688:0
        (local.set $$34
         (i32.load
-         (i32.const 8416)
+         (i32.const 8464)
         )
        )
        (local.set $$1
@@ -86580,7 +86588,7 @@
        ;;@ parser.c:691:0
        (local.set $$38
         (i32.load
-         (i32.const 8420)
+         (i32.const 8468)
         )
        )
        (local.set $$1
@@ -86611,7 +86619,7 @@
        ;;@ parser.c:694:0
        (local.set $$42
         (i32.load
-         (i32.const 8424)
+         (i32.const 8472)
         )
        )
        (local.set $$1
@@ -86642,7 +86650,7 @@
        ;;@ parser.c:697:0
        (local.set $$46
         (i32.load
-         (i32.const 8428)
+         (i32.const 8476)
         )
        )
        (local.set $$1
@@ -86673,7 +86681,7 @@
        ;;@ parser.c:700:0
        (local.set $$50
         (i32.load
-         (i32.const 8432)
+         (i32.const 8480)
         )
        )
        (local.set $$1
@@ -86704,7 +86712,7 @@
        ;;@ parser.c:703:0
        (local.set $$54
         (i32.load
-         (i32.const 8436)
+         (i32.const 8484)
         )
        )
        (local.set $$1
@@ -86735,7 +86743,7 @@
        ;;@ parser.c:706:0
        (local.set $$58
         (i32.load
-         (i32.const 8440)
+         (i32.const 8488)
         )
        )
        (local.set $$1
@@ -86765,7 +86773,7 @@
    (local.get $$59)
   )
  )
- (func $_make_type_info_array (; 241 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_make_type_info_array (; 245 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -86946,7 +86954,7 @@
    (local.get $$27)
   )
  )
- (func $_make_type_info_pointer (; 242 ;) (param $$0 i32) (result i32)
+ (func $_make_type_info_pointer (; 246 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -87001,7 +87009,7 @@
   ;;@ parser.c:753:0
   (local.set $$5
    (i32.load
-    (i32.const 8440)
+    (i32.const 8488)
    )
   )
   (local.set $$6
@@ -87056,7 +87064,7 @@
    (local.get $$13)
   )
  )
- (func $_make_type_info_struct_dummy (; 243 ;) (result i32)
+ (func $_make_type_info_struct_dummy (; 247 ;) (result i32)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -87326,7 +87334,7 @@
    (local.get $$35)
   )
  )
- (func $_fill_type_info_struct (; 244 ;) (param $$0 i32) (result i32)
+ (func $_fill_type_info_struct (; 248 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -88061,7 +88069,7 @@
    (i32.const 0)
   )
  )
- (func $_infer (; 245 ;) (param $$0 i32) (result i32)
+ (func $_infer (; 249 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$100 i32)
@@ -89931,7 +89939,7 @@
                  ;;@ parser.c:1021:0
                  (drop
                   (call $_printf
-                   (i32.const 6755)
+                   (i32.const 6807)
                    (local.get $$vararg_buffer4)
                   )
                  )
@@ -90102,7 +90110,7 @@
                   (local.set $$231
                    (call $_strcmp
                     (local.get $$230)
-                    (i32.const 6137)
+                    (i32.const 6149)
                    )
                   )
                   (local.set $$232
@@ -90117,7 +90125,7 @@
                     ;;@ parser.c:1031:0
                     (local.set $$233
                      (i32.load
-                      (i32.const 8440)
+                      (i32.const 8488)
                      )
                     )
                     (local.set $$234
@@ -90250,7 +90258,7 @@
                )
               )
               (local.set $$376
-               (call $_is_operator_boolean
+               (call $_is_operator_result_boolean
                 (local.get $$375)
                )
               )
@@ -90272,7 +90280,7 @@
                 ;;@ parser.c:1109:0
                 (local.set $$378
                  (i32.load
-                  (i32.const 8396)
+                  (i32.const 8444)
                  )
                 )
                 (local.set $$379
@@ -91262,7 +91270,7 @@
    )
   )
  )
- (func $_infer_push_block (; 246 ;) (param $$0 i32)
+ (func $_infer_push_block (; 250 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -91296,7 +91304,7 @@
   ;;@ parser.c:847:0
   (local.set $$2
    (i32.load
-    (i32.const 9340)
+    (i32.const 9544)
    )
   )
   (drop
@@ -91312,7 +91320,7 @@
    )
   )
   (i32.store
-   (i32.const 9344)
+   (i32.const 9548)
    (local.get $$3)
   )
   (global.set $STACKTOP
@@ -91321,7 +91329,7 @@
   ;;@ parser.c:849:0
   (return)
  )
- (func $_infer_pop_block (; 247 ;)
+ (func $_infer_pop_block (; 251 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -91342,7 +91350,7 @@
   ;;@ parser.c:851:0
   (local.set $$0
    (i32.load
-    (i32.const 9340)
+    (i32.const 9544)
    )
   )
   (call $_array_pop
@@ -91351,7 +91359,7 @@
   ;;@ parser.c:852:0
   (local.set $$1
    (i32.load
-    (i32.const 9340)
+    (i32.const 9544)
    )
   )
   (local.set $$2
@@ -91375,7 +91383,7 @@
   ;;@ parser.c:853:0
   (local.set $$4
    (i32.load
-    (i32.const 9340)
+    (i32.const 9544)
    )
   )
   (local.set $$5
@@ -91391,7 +91399,7 @@
   )
   (local.set $$7
    (i32.load
-    (i32.const 9340)
+    (i32.const 9544)
    )
   )
   (local.set $$8
@@ -91420,13 +91428,13 @@
    )
   )
   (i32.store
-   (i32.const 9344)
+   (i32.const 9548)
    (local.get $$11)
   )
   ;;@ parser.c:858:0
   (return)
  )
- (func $_infer_type_size (; 248 ;) (param $$0 i32) (result i32)
+ (func $_infer_type_size (; 252 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -91660,7 +91668,7 @@
    (local.get $$28)
   )
  )
- (func $_is_operator_boolean (; 249 ;) (param $$0 i32) (result i32)
+ (func $_is_operator_result_boolean (; 253 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -91914,7 +91922,7 @@
    (local.get $$28)
   )
  )
- (func $_get_decl_of_ident_current_scope (; 250 ;) (param $$0 i32) (result i32)
+ (func $_get_decl_of_ident_current_scope (; 254 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -91979,7 +91987,7 @@
   ;;@ parser.c:877:0
   (local.set $$6
    (i32.load
-    (i32.const 9268)
+    (i32.const 9540)
    )
   )
   (local.set $$3
@@ -92245,7 +92253,7 @@
    (i32.const 0)
   )
  )
- (func $_map_operator_to_precedence (; 251 ;) (param $$0 i32) (result i32)
+ (func $_map_operator_to_precedence (; 255 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -92813,7 +92821,7 @@
    (local.get $$57)
   )
  )
- (func $_maybe_binary (; 252 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_maybe_binary (; 256 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -93139,7 +93147,7 @@
    )
   )
  )
- (func $_parse_rvalue_atom (; 253 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_rvalue_atom (; 257 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -93270,7 +93278,7 @@
   (local.set $$4
    (local.get $$1)
   )
-  ;;@ parser.c:1397:0
+  ;;@ parser.c:1409:0
   (local.set $$8
    (local.get $$3)
   )
@@ -93314,7 +93322,7 @@
   (if
    (local.get $$14)
    (block
-    ;;@ parser.c:1398:0
+    ;;@ parser.c:1410:0
     (local.set $$16
      (local.get $$4)
     )
@@ -93327,7 +93335,7 @@
     (local.set $$2
      (local.get $$17)
     )
-    ;;@ parser.c:1435:0
+    ;;@ parser.c:1447:0
     (local.set $$105
      (local.get $$2)
     )
@@ -93339,7 +93347,7 @@
     )
    )
   )
-  ;;@ parser.c:1400:0
+  ;;@ parser.c:1412:0
   (local.set $$18
    (i32.add
     (local.get $$15)
@@ -93388,7 +93396,7 @@
   (if
    (local.get $$24)
    (block
-    ;;@ parser.c:1401:0
+    ;;@ parser.c:1413:0
     (local.set $$26
      (local.get $$4)
     )
@@ -93401,7 +93409,7 @@
     (local.set $$2
      (local.get $$27)
     )
-    ;;@ parser.c:1435:0
+    ;;@ parser.c:1447:0
     (local.set $$105
      (local.get $$2)
     )
@@ -93413,7 +93421,7 @@
     )
    )
   )
-  ;;@ parser.c:1403:0
+  ;;@ parser.c:1415:0
   (local.set $$28
    (i32.add
     (local.get $$25)
@@ -93441,7 +93449,7 @@
     (local.get $$31)
    )
    (block
-    ;;@ parser.c:1404:0
+    ;;@ parser.c:1416:0
     (local.set $$32
      (local.get $$3)
     )
@@ -93472,7 +93480,7 @@
       (local.get $$36)
      )
      (block
-      ;;@ parser.c:1408:0
+      ;;@ parser.c:1420:0
       (local.set $$40
        (local.get $$3)
       )
@@ -93504,7 +93512,7 @@
       (if
        (local.get $$44)
        (block
-        ;;@ parser.c:1409:0
+        ;;@ parser.c:1421:0
         (local.set $$46
          (local.get $$4)
         )
@@ -93517,7 +93525,7 @@
         (local.set $$2
          (local.get $$47)
         )
-        ;;@ parser.c:1435:0
+        ;;@ parser.c:1447:0
         (local.set $$105
          (local.get $$2)
         )
@@ -93529,7 +93537,7 @@
         )
        )
       )
-      ;;@ parser.c:1411:0
+      ;;@ parser.c:1423:0
       (local.set $$48
        (i32.add
         (local.get $$45)
@@ -93581,7 +93589,7 @@
       (if
        (local.get $$53)
        (block
-        ;;@ parser.c:1412:0
+        ;;@ parser.c:1424:0
         (local.set $$57
          (i32.add
           (local.get $$56)
@@ -93592,7 +93600,7 @@
          (local.get $$55)
          (local.get $$57)
         )
-        ;;@ parser.c:1413:0
+        ;;@ parser.c:1425:0
         (local.set $$58
          (local.get $$4)
         )
@@ -93605,7 +93613,7 @@
         (local.set $$5
          (local.get $$59)
         )
-        ;;@ parser.c:1414:0
+        ;;@ parser.c:1426:0
         (local.set $$60
          (local.get $$5)
         )
@@ -93619,14 +93627,14 @@
          (local.get $$61)
          (i32.const 6023)
         )
-        ;;@ parser.c:1415:0
+        ;;@ parser.c:1427:0
         (local.set $$62
          (local.get $$5)
         )
         (local.set $$2
          (local.get $$62)
         )
-        ;;@ parser.c:1435:0
+        ;;@ parser.c:1447:0
         (local.set $$105
          (local.get $$2)
         )
@@ -93638,7 +93646,7 @@
         )
        )
       )
-      ;;@ parser.c:1417:0
+      ;;@ parser.c:1429:0
       (local.set $$63
        (i32.add
         (local.get $$56)
@@ -93679,7 +93687,7 @@
       (if
        (local.get $$66)
        (block
-        ;;@ parser.c:1418:0
+        ;;@ parser.c:1430:0
         (local.set $$70
          (i32.add
           (local.get $$69)
@@ -93690,7 +93698,7 @@
          (local.get $$68)
          (local.get $$70)
         )
-        ;;@ parser.c:1419:0
+        ;;@ parser.c:1431:0
         (local.set $$71
          (local.get $$4)
         )
@@ -93703,7 +93711,7 @@
         (local.set $$6
          (local.get $$72)
         )
-        ;;@ parser.c:1420:0
+        ;;@ parser.c:1432:0
         (local.set $$73
          (local.get $$6)
         )
@@ -93717,14 +93725,14 @@
          (local.get $$74)
          (i32.const 6028)
         )
-        ;;@ parser.c:1421:0
+        ;;@ parser.c:1433:0
         (local.set $$75
          (local.get $$6)
         )
         (local.set $$2
          (local.get $$75)
         )
-        ;;@ parser.c:1435:0
+        ;;@ parser.c:1447:0
         (local.set $$105
          (local.get $$2)
         )
@@ -93736,7 +93744,7 @@
         )
        )
       )
-      ;;@ parser.c:1423:0
+      ;;@ parser.c:1435:0
       (local.set $$76
        (i32.add
         (local.get $$69)
@@ -93776,7 +93784,7 @@
         (local.get $$80)
        )
        (block
-        ;;@ parser.c:1433:0
+        ;;@ parser.c:1445:0
         (local.set $$103
          (local.get $$4)
         )
@@ -93789,7 +93797,7 @@
         (local.set $$2
          (local.get $$104)
         )
-        ;;@ parser.c:1435:0
+        ;;@ parser.c:1447:0
         (local.set $$105
          (local.get $$2)
         )
@@ -93801,7 +93809,7 @@
         )
        )
       )
-      ;;@ parser.c:1424:0
+      ;;@ parser.c:1436:0
       (local.set $$82
        (i32.add
         (local.get $$81)
@@ -93823,7 +93831,7 @@
        (local.get $$82)
        (local.get $$84)
       )
-      ;;@ parser.c:1425:0
+      ;;@ parser.c:1437:0
       (local.set $$85
        (local.get $$3)
       )
@@ -93839,7 +93847,7 @@
       (local.set $$7
        (local.get $$87)
       )
-      ;;@ parser.c:1426:0
+      ;;@ parser.c:1438:0
       (local.set $$88
        (local.get $$3)
       )
@@ -93889,10 +93897,10 @@
        (i32.eqz
         (local.get $$95)
        )
-       ;;@ parser.c:1430:0
+       ;;@ parser.c:1442:0
        (call $_abort)
       )
-      ;;@ parser.c:1427:0
+      ;;@ parser.c:1439:0
       (local.set $$96
        (local.get $$3)
       )
@@ -93917,7 +93925,7 @@
        (local.get $$97)
        (local.get $$99)
       )
-      ;;@ parser.c:1428:0
+      ;;@ parser.c:1440:0
       (local.set $$100
        (local.get $$4)
       )
@@ -93933,7 +93941,7 @@
       (local.set $$2
        (local.get $$102)
       )
-      ;;@ parser.c:1435:0
+      ;;@ parser.c:1447:0
       (local.set $$105
        (local.get $$2)
       )
@@ -93947,7 +93955,7 @@
     )
    )
   )
-  ;;@ parser.c:1406:0
+  ;;@ parser.c:1418:0
   (local.set $$37
    (local.get $$3)
   )
@@ -93963,7 +93971,7 @@
   (local.set $$2
    (local.get $$39)
   )
-  ;;@ parser.c:1435:0
+  ;;@ parser.c:1447:0
   (local.set $$105
    (local.get $$2)
   )
@@ -93974,7 +93982,7 @@
    (local.get $$105)
   )
  )
- (func $_parse_reference (; 254 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_reference (; 258 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -94014,7 +94022,7 @@
   (local.set $$3
    (local.get $$1)
   )
-  ;;@ parser.c:1560:0
+  ;;@ parser.c:1572:0
   (local.set $$5
    (local.get $$2)
   )
@@ -94039,7 +94047,7 @@
    (local.get $$6)
    (local.get $$8)
   )
-  ;;@ parser.c:1561:0
+  ;;@ parser.c:1573:0
   (local.set $$9
    (local.get $$2)
   )
@@ -94055,7 +94063,7 @@
   (local.set $$4
    (local.get $$11)
   )
-  ;;@ parser.c:1562:0
+  ;;@ parser.c:1574:0
   (local.set $$12
    (local.get $$3)
   )
@@ -94075,7 +94083,7 @@
    (local.get $$14)
   )
  )
- (func $_parse_dereference (; 255 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_dereference (; 259 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -94141,7 +94149,7 @@
   (local.set $$3
    (local.get $$1)
   )
-  ;;@ parser.c:1567:0
+  ;;@ parser.c:1579:0
   (local.set $$8
    (local.get $$2)
   )
@@ -94170,7 +94178,7 @@
   (local.set $$4
    (local.get $$12)
   )
-  ;;@ parser.c:1568:0
+  ;;@ parser.c:1580:0
   (local.set $$13
    (local.get $$2)
   )
@@ -94204,7 +94212,7 @@
   (local.set $$5
    (local.get $$18)
   )
-  ;;@ parser.c:1569:0
+  ;;@ parser.c:1581:0
   (local.set $$19
    (local.get $$2)
   )
@@ -94229,7 +94237,7 @@
    (local.get $$20)
    (local.get $$22)
   )
-  ;;@ parser.c:1570:0
+  ;;@ parser.c:1582:0
   (local.set $$23
    (local.get $$2)
   )
@@ -94245,7 +94253,7 @@
   (local.set $$6
    (local.get $$25)
   )
-  ;;@ parser.c:1571:0
+  ;;@ parser.c:1583:0
   (local.set $$7
    (i32.const 0)
   )
@@ -94274,7 +94282,7 @@
       (br $while-out)
      )
     )
-    ;;@ parser.c:1572:0
+    ;;@ parser.c:1584:0
     (local.set $$29
      (local.get $$4)
     )
@@ -94318,7 +94326,7 @@
       (br $while-out)
      )
     )
-    ;;@ parser.c:1573:0
+    ;;@ parser.c:1585:0
     (local.set $$35
      (local.get $$3)
     )
@@ -94334,7 +94342,7 @@
     (local.set $$6
      (local.get $$37)
     )
-    ;;@ parser.c:1571:0
+    ;;@ parser.c:1583:0
     (local.set $$38
      (local.get $$7)
     )
@@ -94355,7 +94363,7 @@
     (local.get $label)
     (i32.const 5)
    )
-   ;;@ parser.c:1575:0
+   ;;@ parser.c:1587:0
    (call $_abort)
    (if
     (i32.eq
@@ -94363,7 +94371,7 @@
      (i32.const 6)
     )
     (block
-     ;;@ parser.c:1577:0
+     ;;@ parser.c:1589:0
      (local.set $$40
       (local.get $$6)
      )
@@ -94380,7 +94388,7 @@
    (i32.const 0)
   )
  )
- (func $_parse_literal (; 256 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_literal (; 260 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -94525,11 +94533,11 @@
   (local.set $$3
    (local.get $$1)
   )
-  ;;@ parser.c:1513:0
+  ;;@ parser.c:1525:0
   (local.set $$4
    (i32.const 0)
   )
-  ;;@ parser.c:1514:0
+  ;;@ parser.c:1526:0
   (local.set $$15
    (local.get $$2)
   )
@@ -94570,11 +94578,11 @@
   (if
    (local.get $$21)
    (block
-    ;;@ parser.c:1515:0
+    ;;@ parser.c:1527:0
     (local.set $$4
      (i32.const 1)
     )
-    ;;@ parser.c:1516:0
+    ;;@ parser.c:1528:0
     (local.set $$22
      (local.get $$2)
     )
@@ -94601,7 +94609,7 @@
     )
    )
    (block
-    ;;@ parser.c:1518:0
+    ;;@ parser.c:1530:0
     (local.set $$26
      (local.get $$2)
     )
@@ -94642,7 +94650,7 @@
     (if
      (local.get $$32)
      (block
-      ;;@ parser.c:1519:0
+      ;;@ parser.c:1531:0
       (local.set $$33
        (local.get $$2)
       )
@@ -94671,7 +94679,7 @@
     )
    )
   )
-  ;;@ parser.c:1521:0
+  ;;@ parser.c:1533:0
   (local.set $$37
    (local.get $$2)
   )
@@ -94718,7 +94726,7 @@
   (if
    (local.get $$43)
    (block
-    ;;@ parser.c:1522:0
+    ;;@ parser.c:1534:0
     (local.set $$44
      (local.get $$2)
     )
@@ -94747,7 +94755,7 @@
     (local.set $$5
      (local.get $$48)
     )
-    ;;@ parser.c:1523:0
+    ;;@ parser.c:1535:0
     (local.set $$49
      (local.get $$2)
     )
@@ -94781,7 +94789,7 @@
     (local.set $$6
      (local.get $$54)
     )
-    ;;@ parser.c:1524:0
+    ;;@ parser.c:1536:0
     (local.set $$55
      (local.get $$4)
     )
@@ -94800,7 +94808,7 @@
     (if
      (local.get $$56)
      (block
-      ;;@ parser.c:1525:0
+      ;;@ parser.c:1537:0
       (local.set $$57
        (local.get $$6)
       )
@@ -94814,7 +94822,7 @@
       )
      )
     )
-    ;;@ parser.c:1527:0
+    ;;@ parser.c:1539:0
     (local.set $$59
      (local.get $$3)
     )
@@ -94830,7 +94838,7 @@
     (local.set $$7
      (local.get $$61)
     )
-    ;;@ parser.c:1528:0
+    ;;@ parser.c:1540:0
     (local.set $$62
      (local.get $$5)
     )
@@ -94847,7 +94855,7 @@
      (local.get $$64)
      (local.get $$62)
     )
-    ;;@ parser.c:1547:0
+    ;;@ parser.c:1559:0
     (local.set $$113
      (local.get $$2)
     )
@@ -94872,7 +94880,7 @@
      (local.get $$114)
      (local.get $$116)
     )
-    ;;@ parser.c:1548:0
+    ;;@ parser.c:1560:0
     (local.set $$117
      (local.get $$3)
     )
@@ -94895,7 +94903,7 @@
     )
    )
   )
-  ;;@ parser.c:1530:0
+  ;;@ parser.c:1542:0
   (local.set $$65
    (local.get $$4)
   )
@@ -94939,11 +94947,11 @@
   (if
    (local.get $$66)
    (block
-    ;;@ parser.c:1531:0
+    ;;@ parser.c:1543:0
     (local.set $$8
      (local.get $$71)
     )
-    ;;@ parser.c:1532:0
+    ;;@ parser.c:1544:0
     (local.set $$72
      (local.get $$2)
     )
@@ -94984,7 +94992,7 @@
     (local.set $$9
      (local.get $$78)
     )
-    ;;@ parser.c:1533:0
+    ;;@ parser.c:1545:0
     (local.set $$79
      (local.get $$9)
     )
@@ -94997,7 +95005,7 @@
     (local.set $$9
      (local.get $$80)
     )
-    ;;@ parser.c:1534:0
+    ;;@ parser.c:1546:0
     (local.set $$81
      (local.get $$3)
     )
@@ -95013,7 +95021,7 @@
     (local.set $$10
      (local.get $$83)
     )
-    ;;@ parser.c:1536:0
+    ;;@ parser.c:1548:0
     (local.set $$84
      (local.get $$8)
     )
@@ -95031,7 +95039,7 @@
     (local.set $$11
      (local.get $$86)
     )
-    ;;@ parser.c:1537:0
+    ;;@ parser.c:1549:0
     (local.set $$87
      (local.get $$11)
     )
@@ -95059,7 +95067,7 @@
      (local.get $$91)
      (local.get $$89)
     )
-    ;;@ parser.c:1538:0
+    ;;@ parser.c:1550:0
     (local.set $$92
      (local.get $$10)
     )
@@ -95078,7 +95086,7 @@
      (local.get $$94)
      (i32.const 45)
     )
-    ;;@ parser.c:1539:0
+    ;;@ parser.c:1551:0
     (local.set $$95
      (local.get $$10)
     )
@@ -95112,7 +95120,7 @@
       (local.get $$100)
      )
     )
-    ;;@ parser.c:1547:0
+    ;;@ parser.c:1559:0
     (local.set $$113
      (local.get $$2)
     )
@@ -95137,7 +95145,7 @@
      (local.get $$114)
      (local.get $$116)
     )
-    ;;@ parser.c:1548:0
+    ;;@ parser.c:1560:0
     (local.set $$117
      (local.get $$3)
     )
@@ -95160,11 +95168,11 @@
     )
    )
    (block
-    ;;@ parser.c:1542:0
+    ;;@ parser.c:1554:0
     (local.set $$12
      (local.get $$71)
     )
-    ;;@ parser.c:1543:0
+    ;;@ parser.c:1555:0
     (local.set $$101
      (local.get $$2)
     )
@@ -95200,7 +95208,7 @@
     (local.set $$13
      (local.get $$106)
     )
-    ;;@ parser.c:1544:0
+    ;;@ parser.c:1556:0
     (local.set $$107
      (local.get $$3)
     )
@@ -95216,7 +95224,7 @@
     (local.set $$14
      (local.get $$109)
     )
-    ;;@ parser.c:1545:0
+    ;;@ parser.c:1557:0
     (local.set $$110
      (local.get $$12)
     )
@@ -95233,7 +95241,7 @@
      (local.get $$112)
      (local.get $$110)
     )
-    ;;@ parser.c:1547:0
+    ;;@ parser.c:1559:0
     (local.set $$113
      (local.get $$2)
     )
@@ -95258,7 +95266,7 @@
      (local.get $$114)
      (local.get $$116)
     )
-    ;;@ parser.c:1548:0
+    ;;@ parser.c:1560:0
     (local.set $$117
      (local.get $$3)
     )
@@ -95282,7 +95290,7 @@
    )
   )
  )
- (func $_parse_string (; 257 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_string (; 261 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -95324,7 +95332,7 @@
   (local.set $$3
    (local.get $$1)
   )
-  ;;@ parser.c:1553:0
+  ;;@ parser.c:1565:0
   (local.set $$5
    (local.get $$3)
   )
@@ -95362,7 +95370,7 @@
   (local.set $$4
    (local.get $$11)
   )
-  ;;@ parser.c:1554:0
+  ;;@ parser.c:1566:0
   (local.set $$12
    (local.get $$2)
   )
@@ -95387,7 +95395,7 @@
    (local.get $$13)
    (local.get $$15)
   )
-  ;;@ parser.c:1555:0
+  ;;@ parser.c:1567:0
   (local.set $$16
    (local.get $$4)
   )
@@ -95398,7 +95406,7 @@
    (local.get $$16)
   )
  )
- (func $_parse_rvalue (; 258 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_rvalue (; 262 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -95454,7 +95462,7 @@
   (local.set $$4
    (local.get $$1)
   )
-  ;;@ parser.c:1440:0
+  ;;@ parser.c:1452:0
   (local.set $$8
    (local.get $$3)
   )
@@ -95472,7 +95480,7 @@
   (local.set $$5
    (local.get $$10)
   )
-  ;;@ parser.c:1441:0
+  ;;@ parser.c:1453:0
   (local.set $$11
    (local.get $$3)
   )
@@ -95488,7 +95496,7 @@
   (local.set $$6
    (local.get $$13)
   )
-  ;;@ parser.c:1442:0
+  ;;@ parser.c:1454:0
   (local.set $$14
    (local.get $$6)
   )
@@ -95501,11 +95509,11 @@
   (if
    (local.get $$15)
    (block
-    ;;@ parser.c:1443:0
+    ;;@ parser.c:1455:0
     (local.set $$2
      (i32.const 0)
     )
-    ;;@ parser.c:1453:0
+    ;;@ parser.c:1465:0
     (local.set $$30
      (local.get $$2)
     )
@@ -95517,7 +95525,7 @@
     )
    )
   )
-  ;;@ parser.c:1445:0
+  ;;@ parser.c:1457:0
   (local.set $$16
    (local.get $$3)
   )
@@ -95551,7 +95559,7 @@
   (local.set $$7
    (local.get $$21)
   )
-  ;;@ parser.c:1446:0
+  ;;@ parser.c:1458:0
   (local.set $$22
    (local.get $$7)
   )
@@ -95564,7 +95572,7 @@
   (if
    (local.get $$23)
    (block
-    ;;@ parser.c:1447:0
+    ;;@ parser.c:1459:0
     (local.set $$24
      (local.get $$3)
     )
@@ -95578,7 +95586,7 @@
       (local.get $$25)
      )
     )
-    ;;@ parser.c:1448:0
+    ;;@ parser.c:1460:0
     (local.set $$26
      (local.get $$4)
     )
@@ -95596,7 +95604,7 @@
     (local.set $$2
      (local.get $$28)
     )
-    ;;@ parser.c:1453:0
+    ;;@ parser.c:1465:0
     (local.set $$30
      (local.get $$2)
     )
@@ -95608,14 +95616,14 @@
     )
    )
    (block
-    ;;@ parser.c:1451:0
+    ;;@ parser.c:1463:0
     (local.set $$29
      (local.get $$6)
     )
     (local.set $$2
      (local.get $$29)
     )
-    ;;@ parser.c:1453:0
+    ;;@ parser.c:1465:0
     (local.set $$30
      (local.get $$2)
     )
@@ -95628,7 +95636,7 @@
    )
   )
  )
- (func $_parse_lvalue (; 259 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_lvalue (; 263 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -95732,7 +95740,7 @@
   (local.set $$4
    (local.get $$1)
   )
-  ;;@ parser.c:1458:0
+  ;;@ parser.c:1470:0
   (local.set $$8
    (local.get $$3)
   )
@@ -95781,7 +95789,7 @@
   (if
    (local.get $$15)
    (block
-    ;;@ parser.c:1459:0
+    ;;@ parser.c:1471:0
     (local.set $$16
      (local.get $$3)
     )
@@ -95797,7 +95805,7 @@
     (local.set $$2
      (local.get $$18)
     )
-    ;;@ parser.c:1493:0
+    ;;@ parser.c:1505:0
     (local.set $$78
      (local.get $$2)
     )
@@ -95809,15 +95817,15 @@
     )
    )
   )
-  ;;@ parser.c:1461:0
+  ;;@ parser.c:1473:0
   (local.set $$5
    (i32.const 0)
   )
-  ;;@ parser.c:1462:0
+  ;;@ parser.c:1474:0
   (local.set $$6
    (i32.const 0)
   )
-  ;;@ parser.c:1463:0
+  ;;@ parser.c:1475:0
   (local.set $$19
    (local.get $$3)
   )
@@ -95837,7 +95845,7 @@
   )
   (loop $while-in
    (block $while-out
-    ;;@ parser.c:1465:0
+    ;;@ parser.c:1477:0
     (local.set $$22
      (local.get $$3)
     )
@@ -95855,7 +95863,7 @@
     (local.set $$5
      (local.get $$24)
     )
-    ;;@ parser.c:1466:0
+    ;;@ parser.c:1478:0
     (local.set $$25
      (local.get $$3)
     )
@@ -95873,7 +95881,7 @@
     (local.set $$6
      (local.get $$27)
     )
-    ;;@ parser.c:1468:0
+    ;;@ parser.c:1480:0
     (local.set $$28
      (local.get $$3)
     )
@@ -95895,7 +95903,7 @@
     (if
      (local.get $$31)
      (block
-      ;;@ parser.c:1469:0
+      ;;@ parser.c:1481:0
       (local.set $$32
        (local.get $$6)
       )
@@ -95914,7 +95922,7 @@
       )
      )
     )
-    ;;@ parser.c:1472:0
+    ;;@ parser.c:1484:0
     (local.set $$35
      (local.get $$7)
     )
@@ -95947,7 +95955,7 @@
       (br $while-out)
      )
     )
-    ;;@ parser.c:1476:0
+    ;;@ parser.c:1488:0
     (local.set $$40
      (local.get $$3)
     )
@@ -95965,7 +95973,7 @@
     (local.set $$6
      (local.get $$42)
     )
-    ;;@ parser.c:1477:0
+    ;;@ parser.c:1489:0
     (local.set $$43
      (local.get $$3)
     )
@@ -95987,7 +95995,7 @@
     (if
      (local.get $$46)
      (block
-      ;;@ parser.c:1478:0
+      ;;@ parser.c:1490:0
       (local.set $$47
        (local.get $$6)
       )
@@ -96006,7 +96014,7 @@
       )
      )
     )
-    ;;@ parser.c:1481:0
+    ;;@ parser.c:1493:0
     (local.set $$50
      (local.get $$3)
     )
@@ -96024,7 +96032,7 @@
     (local.set $$6
      (local.get $$52)
     )
-    ;;@ parser.c:1482:0
+    ;;@ parser.c:1494:0
     (local.set $$53
      (local.get $$3)
     )
@@ -96046,7 +96054,7 @@
     (if
      (local.get $$56)
      (block
-      ;;@ parser.c:1483:0
+      ;;@ parser.c:1495:0
       (local.set $$57
        (local.get $$6)
       )
@@ -96065,7 +96073,7 @@
       )
      )
     )
-    ;;@ parser.c:1486:0
+    ;;@ parser.c:1498:0
     (local.set $$60
      (local.get $$3)
     )
@@ -96083,7 +96091,7 @@
     (local.set $$6
      (local.get $$62)
     )
-    ;;@ parser.c:1487:0
+    ;;@ parser.c:1499:0
     (local.set $$63
      (local.get $$3)
     )
@@ -96105,7 +96113,7 @@
     (if
      (local.get $$66)
      (block
-      ;;@ parser.c:1488:0
+      ;;@ parser.c:1500:0
       (local.set $$67
        (local.get $$6)
       )
@@ -96124,7 +96132,7 @@
       )
      )
     )
-    ;;@ parser.c:1490:0
+    ;;@ parser.c:1502:0
     (local.set $$70
      (local.get $$5)
     )
@@ -96168,11 +96176,11 @@
     (i32.const 7)
    )
    (block
-    ;;@ parser.c:1473:0
+    ;;@ parser.c:1485:0
     (local.set $$2
      (i32.const 0)
     )
-    ;;@ parser.c:1493:0
+    ;;@ parser.c:1505:0
     (local.set $$78
      (local.get $$2)
     )
@@ -96189,7 +96197,7 @@
      (i32.const 15)
     )
     (block
-     ;;@ parser.c:1492:0
+     ;;@ parser.c:1504:0
      (local.set $$75
       (local.get $$4)
      )
@@ -96207,7 +96215,7 @@
      (local.set $$2
       (local.get $$77)
      )
-     ;;@ parser.c:1493:0
+     ;;@ parser.c:1505:0
      (local.set $$78
       (local.get $$2)
      )
@@ -96224,7 +96232,7 @@
    (i32.const 0)
   )
  )
- (func $_parse_ident (; 260 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_ident (; 264 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -96283,7 +96291,7 @@
   (local.set $$4
    (local.get $$1)
   )
-  ;;@ parser.c:1617:0
+  ;;@ parser.c:1629:0
   (local.set $$7
    (local.get $$3)
   )
@@ -96312,7 +96320,7 @@
   (if
    (local.get $$11)
    (block
-    ;;@ parser.c:1618:0
+    ;;@ parser.c:1630:0
     (local.set $$12
      (local.get $$3)
     )
@@ -96347,7 +96355,7 @@
     (if
      (local.get $$17)
      (block
-      ;;@ parser.c:1620:0
+      ;;@ parser.c:1632:0
       (local.set $$18
        (local.get $$3)
       )
@@ -96376,7 +96384,7 @@
       (local.set $$5
        (local.get $$22)
       )
-      ;;@ parser.c:1621:0
+      ;;@ parser.c:1633:0
       (local.set $$23
        (local.get $$3)
       )
@@ -96401,7 +96409,7 @@
        (local.get $$24)
        (local.get $$26)
       )
-      ;;@ parser.c:1622:0
+      ;;@ parser.c:1634:0
       (local.set $$27
        (local.get $$5)
       )
@@ -96413,7 +96421,7 @@
       (local.set $$6
        (local.get $$28)
       )
-      ;;@ parser.c:1623:0
+      ;;@ parser.c:1635:0
       (local.set $$29
        (local.get $$4)
       )
@@ -96433,7 +96441,7 @@
       (local.set $$2
        (local.get $$32)
       )
-      ;;@ parser.c:1628:0
+      ;;@ parser.c:1640:0
       (local.set $$33
        (local.get $$2)
       )
@@ -96447,11 +96455,11 @@
     )
    )
   )
-  ;;@ parser.c:1626:0
+  ;;@ parser.c:1638:0
   (local.set $$2
    (i32.const 0)
   )
-  ;;@ parser.c:1628:0
+  ;;@ parser.c:1640:0
   (local.set $$33
    (local.get $$2)
   )
@@ -96462,7 +96470,7 @@
    (local.get $$33)
   )
  )
- (func $_parse_call (; 261 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_call (; 265 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -96520,7 +96528,7 @@
   (local.set $$4
    (local.get $$1)
   )
-  ;;@ parser.c:1497:0
+  ;;@ parser.c:1509:0
   (local.set $$7
    (local.get $$3)
   )
@@ -96555,7 +96563,7 @@
   (if
    (local.get $$12)
    (block
-    ;;@ parser.c:1498:0
+    ;;@ parser.c:1510:0
     (local.set $$13
      (local.get $$3)
     )
@@ -96596,7 +96604,7 @@
     (if
      (local.get $$19)
      (block
-      ;;@ parser.c:1500:0
+      ;;@ parser.c:1512:0
       (local.set $$20
        (local.get $$4)
       )
@@ -96614,7 +96622,7 @@
       (local.set $$5
        (local.get $$22)
       )
-      ;;@ parser.c:1501:0
+      ;;@ parser.c:1513:0
       (local.set $$23
        (call $_malloc
         (i32.const 20)
@@ -96623,7 +96631,7 @@
       (local.set $$6
        (local.get $$23)
       )
-      ;;@ parser.c:1502:0
+      ;;@ parser.c:1514:0
       (local.set $$24
        (local.get $$6)
       )
@@ -96632,7 +96640,7 @@
        (i32.const 4)
        (i32.const 10)
       )
-      ;;@ parser.c:1503:0
+      ;;@ parser.c:1515:0
       (local.set $$25
        (local.get $$6)
       )
@@ -96651,7 +96659,7 @@
        (local.get $$26)
        (local.get $$27)
       )
-      ;;@ parser.c:1504:0
+      ;;@ parser.c:1516:0
       (local.set $$28
        (local.get $$4)
       )
@@ -96671,7 +96679,7 @@
       (local.set $$2
        (local.get $$31)
       )
-      ;;@ parser.c:1509:0
+      ;;@ parser.c:1521:0
       (local.set $$32
        (local.get $$2)
       )
@@ -96685,11 +96693,11 @@
     )
    )
   )
-  ;;@ parser.c:1507:0
+  ;;@ parser.c:1519:0
   (local.set $$2
    (i32.const 0)
   )
-  ;;@ parser.c:1509:0
+  ;;@ parser.c:1521:0
   (local.set $$32
    (local.get $$2)
   )
@@ -96700,7 +96708,7 @@
    (local.get $$32)
   )
  )
- (func $_parse_array_index (; 262 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_array_index (; 266 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -96774,7 +96782,7 @@
   (local.set $$4
    (local.get $$1)
   )
-  ;;@ parser.c:1582:0
+  ;;@ parser.c:1594:0
   (local.set $$7
    (local.get $$4)
   )
@@ -96792,7 +96800,7 @@
   (local.set $$5
    (local.get $$9)
   )
-  ;;@ parser.c:1583:0
+  ;;@ parser.c:1595:0
   (local.set $$10
    (local.get $$3)
   )
@@ -96843,11 +96851,11 @@
     (local.get $$17)
    )
    (block
-    ;;@ parser.c:1598:0
+    ;;@ parser.c:1610:0
     (local.set $$2
      (i32.const 0)
     )
-    ;;@ parser.c:1599:0
+    ;;@ parser.c:1611:0
     (local.set $$48
      (local.get $$2)
     )
@@ -96859,7 +96867,7 @@
     )
    )
   )
-  ;;@ parser.c:1584:0
+  ;;@ parser.c:1596:0
   (local.set $$18
    (local.get $$3)
   )
@@ -96884,7 +96892,7 @@
    (local.get $$19)
    (local.get $$21)
   )
-  ;;@ parser.c:1585:0
+  ;;@ parser.c:1597:0
   (local.set $$22
    (local.get $$3)
   )
@@ -96900,7 +96908,7 @@
   (local.set $$6
    (local.get $$24)
   )
-  ;;@ parser.c:1586:0
+  ;;@ parser.c:1598:0
   (local.set $$25
    (local.get $$6)
   )
@@ -96913,7 +96921,7 @@
   (if
    (local.get $$26)
    (block
-    ;;@ parser.c:1587:0
+    ;;@ parser.c:1599:0
     (local.set $$27
      (local.get $$3)
     )
@@ -96931,7 +96939,7 @@
     )
    )
   )
-  ;;@ parser.c:1589:0
+  ;;@ parser.c:1601:0
   (local.set $$30
    (local.get $$6)
   )
@@ -96945,10 +96953,10 @@
    (i32.eqz
     (local.get $$31)
    )
-   ;;@ parser.c:1596:0
+   ;;@ parser.c:1608:0
    (call $_abort)
   )
-  ;;@ parser.c:1590:0
+  ;;@ parser.c:1602:0
   (local.set $$32
    (local.get $$3)
   )
@@ -96998,10 +97006,10 @@
    (i32.eqz
     (local.get $$39)
    )
-   ;;@ parser.c:1594:0
+   ;;@ parser.c:1606:0
    (call $_abort)
   )
-  ;;@ parser.c:1591:0
+  ;;@ parser.c:1603:0
   (local.set $$40
    (local.get $$3)
   )
@@ -97026,7 +97034,7 @@
    (local.get $$41)
    (local.get $$43)
   )
-  ;;@ parser.c:1592:0
+  ;;@ parser.c:1604:0
   (local.set $$44
    (local.get $$4)
   )
@@ -97046,7 +97054,7 @@
   (local.set $$2
    (local.get $$47)
   )
-  ;;@ parser.c:1599:0
+  ;;@ parser.c:1611:0
   (local.set $$48
    (local.get $$2)
   )
@@ -97057,7 +97065,7 @@
    (local.get $$48)
   )
  )
- (func $_parse_dot_operator (; 263 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_dot_operator (; 267 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -97113,7 +97121,7 @@
   (local.set $$4
    (local.get $$1)
   )
-  ;;@ parser.c:1603:0
+  ;;@ parser.c:1615:0
   (local.set $$7
    (local.get $$4)
   )
@@ -97131,7 +97139,7 @@
   (local.set $$5
    (local.get $$9)
   )
-  ;;@ parser.c:1604:0
+  ;;@ parser.c:1616:0
   (local.set $$10
    (local.get $$3)
   )
@@ -97160,7 +97168,7 @@
   (local.set $$15
    (call $_strcmp
     (local.get $$14)
-    (i32.const 7320)
+    (i32.const 7372)
    )
   )
   (local.set $$16
@@ -97174,11 +97182,11 @@
     (local.get $$16)
    )
    (block
-    ;;@ parser.c:1612:0
+    ;;@ parser.c:1624:0
     (local.set $$2
      (i32.const 0)
     )
-    ;;@ parser.c:1613:0
+    ;;@ parser.c:1625:0
     (local.set $$30
      (local.get $$2)
     )
@@ -97190,7 +97198,7 @@
     )
    )
   )
-  ;;@ parser.c:1605:0
+  ;;@ parser.c:1617:0
   (local.set $$17
    (local.get $$3)
   )
@@ -97215,7 +97223,7 @@
    (local.get $$18)
    (local.get $$20)
   )
-  ;;@ parser.c:1606:0
+  ;;@ parser.c:1618:0
   (local.set $$21
    (local.get $$3)
   )
@@ -97231,7 +97239,7 @@
   (local.set $$6
    (local.get $$23)
   )
-  ;;@ parser.c:1607:0
+  ;;@ parser.c:1619:0
   (local.set $$24
    (local.get $$6)
   )
@@ -97245,10 +97253,10 @@
    (i32.eqz
     (local.get $$25)
    )
-   ;;@ parser.c:1610:0
+   ;;@ parser.c:1622:0
    (call $_abort)
   )
-  ;;@ parser.c:1608:0
+  ;;@ parser.c:1620:0
   (local.set $$26
    (local.get $$4)
   )
@@ -97268,7 +97276,7 @@
   (local.set $$2
    (local.get $$29)
   )
-  ;;@ parser.c:1613:0
+  ;;@ parser.c:1625:0
   (local.set $$30
    (local.get $$2)
   )
@@ -97279,7 +97287,7 @@
    (local.get $$30)
   )
  )
- (func $_delimited (; 264 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (param $$6 i32)
+ (func $_delimited (; 268 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (param $$6 i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -97478,7 +97486,7 @@
   (local.set $$13
    (local.get $$6)
   )
-  ;;@ parser.c:2024:0
+  ;;@ parser.c:2036:0
   (local.set $$17
    (local.get $$12)
   )
@@ -97528,7 +97536,7 @@
   (if
    (local.get $$or$cond)
    (block
-    ;;@ parser.c:2025:0
+    ;;@ parser.c:2037:0
     (local.set $$25
      (local.get $$12)
     )
@@ -97572,7 +97580,7 @@
     (if
      (local.get $$32)
      (block
-      ;;@ parser.c:2027:0
+      ;;@ parser.c:2039:0
       (local.set $$33
        (local.get $$12)
       )
@@ -97601,11 +97609,11 @@
     )
    )
   )
-  ;;@ parser.c:2029:0
+  ;;@ parser.c:2041:0
   (local.set $$14
    (i32.const 0)
   )
-  ;;@ parser.c:2030:0
+  ;;@ parser.c:2042:0
   (local.set $$37
    (local.get $$12)
   )
@@ -97625,7 +97633,7 @@
   )
   (loop $while-in
    (block $while-out
-    ;;@ parser.c:2031:0
+    ;;@ parser.c:2043:0
     (local.set $$40
      (local.get $$12)
     )
@@ -97666,7 +97674,7 @@
      )
      (br $while-out)
     )
-    ;;@ parser.c:2033:0
+    ;;@ parser.c:2045:0
     (local.set $$47
      (local.get $$12)
     )
@@ -97716,7 +97724,7 @@
     (if
      (local.get $$or$cond3)
      (block
-      ;;@ parser.c:2034:0
+      ;;@ parser.c:2046:0
       (local.set $$55
        (local.get $$12)
       )
@@ -97763,7 +97771,7 @@
       )
      )
     )
-    ;;@ parser.c:2038:0
+    ;;@ parser.c:2050:0
     (local.set $$63
      (local.get $$14)
     )
@@ -97781,12 +97789,12 @@
     )
     (if
      (local.get $$64)
-     ;;@ parser.c:2039:0
+     ;;@ parser.c:2051:0
      (local.set $$14
       (i32.const 0)
      )
      (block
-      ;;@ parser.c:2041:0
+      ;;@ parser.c:2053:0
       (local.set $$65
        (local.get $$12)
       )
@@ -97836,7 +97844,7 @@
       (if
        (local.get $$or$cond5)
        (block
-        ;;@ parser.c:2042:0
+        ;;@ parser.c:2054:0
         (local.set $$73
          (local.get $$12)
         )
@@ -97880,7 +97888,7 @@
         (if
          (local.get $$80)
          (block
-          ;;@ parser.c:2044:0
+          ;;@ parser.c:2056:0
           (local.set $$81
            (local.get $$12)
           )
@@ -97905,7 +97913,7 @@
            (local.get $$82)
            (local.get $$84)
           )
-          ;;@ parser.c:2045:0
+          ;;@ parser.c:2057:0
           (local.set $$85
            (local.get $$12)
           )
@@ -97950,7 +97958,7 @@
       )
      )
     )
-    ;;@ parser.c:2049:0
+    ;;@ parser.c:2061:0
     (local.set $$92
      (local.get $$12)
     )
@@ -98000,7 +98008,7 @@
     (if
      (local.get $$or$cond7)
      (block
-      ;;@ parser.c:2050:0
+      ;;@ parser.c:2062:0
       (local.set $$100
        (local.get $$12)
       )
@@ -98047,7 +98055,7 @@
       )
      )
     )
-    ;;@ parser.c:2054:0
+    ;;@ parser.c:2066:0
     (local.set $$108
      (local.get $$12)
     )
@@ -98082,7 +98090,7 @@
     (if
      (local.get $$113)
      (block
-      ;;@ parser.c:2056:0
+      ;;@ parser.c:2068:0
       (local.set $$114
        (local.get $$10)
       )
@@ -98109,7 +98117,7 @@
        (local.get $$16)
        (local.get $$117)
       )
-      ;;@ parser.c:2057:0
+      ;;@ parser.c:2069:0
       (local.set $$118
        (i32.load
         (local.get $$16)
@@ -98125,7 +98133,7 @@
        (local.get $$119)
        (br $while-out)
       )
-      ;;@ parser.c:2061:0
+      ;;@ parser.c:2073:0
       (local.set $$120
        (local.get $$11)
       )
@@ -98137,7 +98145,7 @@
       )
      )
     )
-    ;;@ parser.c:2065:0
+    ;;@ parser.c:2077:0
     (local.set $$121
      (local.get $$15)
     )
@@ -98170,7 +98178,7 @@
       (br $while-out)
      )
     )
-    ;;@ parser.c:2069:0
+    ;;@ parser.c:2081:0
     (local.set $$126
      (local.get $$12)
     )
@@ -98197,18 +98205,18 @@
     (i32.const 19)
    )
    (block
-    ;;@ parser.c:2066:0
+    ;;@ parser.c:2078:0
     (drop
      (call $_printf
       (i32.const 5076)
       (local.get $$vararg_buffer)
      )
     )
-    ;;@ parser.c:2067:0
+    ;;@ parser.c:2079:0
     (call $_abort)
    )
   )
-  ;;@ parser.c:2071:0
+  ;;@ parser.c:2083:0
   (local.set $$129
    (local.get $$12)
   )
@@ -98263,11 +98271,11 @@
     (global.set $STACKTOP
      (local.get $sp)
     )
-    ;;@ parser.c:2076:0
+    ;;@ parser.c:2088:0
     (return)
    )
   )
-  ;;@ parser.c:2072:0
+  ;;@ parser.c:2084:0
   (local.set $$137
    (local.get $$12)
   )
@@ -98316,11 +98324,11 @@
     (global.set $STACKTOP
      (local.get $sp)
     )
-    ;;@ parser.c:2076:0
+    ;;@ parser.c:2088:0
     (return)
    )
   )
-  ;;@ parser.c:2074:0
+  ;;@ parser.c:2086:0
   (local.set $$145
    (local.get $$12)
   )
@@ -98348,10 +98356,10 @@
   (global.set $STACKTOP
    (local.get $sp)
   )
-  ;;@ parser.c:2076:0
+  ;;@ parser.c:2088:0
   (return)
  )
- (func $_is_one_of (; 265 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_is_one_of (; 269 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -98395,7 +98403,7 @@
   )
   (loop $while-in
    (block $while-out
-    ;;@ parser.c:2281:0
+    ;;@ parser.c:2293:0
     (local.set $$5
      (local.get $$3)
     )
@@ -98427,7 +98435,7 @@
       (br $while-out)
      )
     )
-    ;;@ parser.c:2282:0
+    ;;@ parser.c:2294:0
     (local.set $$8
      (local.get $$4)
     )
@@ -98472,7 +98480,7 @@
       (br $while-out)
      )
     )
-    ;;@ parser.c:2285:0
+    ;;@ parser.c:2297:0
     (local.set $$14
      (local.get $$3)
     )
@@ -98494,11 +98502,11 @@
     (i32.const 4)
    )
    (block
-    ;;@ parser.c:2283:0
+    ;;@ parser.c:2295:0
     (local.set $$2
      (i32.const 1)
     )
-    ;;@ parser.c:2288:0
+    ;;@ parser.c:2300:0
     (local.set $$16
      (local.get $$2)
     )
@@ -98515,11 +98523,11 @@
      (i32.const 6)
     )
     (block
-     ;;@ parser.c:2287:0
+     ;;@ parser.c:2299:0
      (local.set $$2
       (i32.const 0)
      )
-     ;;@ parser.c:2288:0
+     ;;@ parser.c:2300:0
      (local.set $$16
       (local.get $$2)
      )
@@ -98536,7 +98544,7 @@
    (i32.const 0)
   )
  )
- (func $_inject_stdlib (; 266 ;) (param $$0 i32) (param $$1 i32)
+ (func $_inject_stdlib (; 270 ;) (param $$0 i32) (param $$1 i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -98567,8 +98575,31 @@
   (local $$124 i32)
   (local $$125 i32)
   (local $$126 i32)
+  (local $$127 i32)
+  (local $$128 i32)
+  (local $$129 i32)
   (local $$13 i32)
+  (local $$130 i32)
+  (local $$131 i32)
+  (local $$132 i32)
+  (local $$133 i32)
+  (local $$134 i32)
+  (local $$135 i32)
+  (local $$136 i32)
+  (local $$137 i32)
+  (local $$138 i32)
+  (local $$139 i32)
   (local $$14 i32)
+  (local $$140 i32)
+  (local $$141 i32)
+  (local $$142 i32)
+  (local $$143 i32)
+  (local $$144 i32)
+  (local $$145 i32)
+  (local $$146 i32)
+  (local $$147 i32)
+  (local $$148 i32)
+  (local $$149 i32)
   (local $$15 i32)
   (local $$16 i32)
   (local $$17 i32)
@@ -98670,7 +98701,7 @@
   (global.set $STACKTOP
    (i32.add
     (global.get $STACKTOP)
-    (i32.const 128)
+    (i32.const 144)
    )
   )
   (if
@@ -98679,40 +98710,46 @@
     (global.get $STACK_MAX)
    )
    (call $abortStackOverflow
-    (i32.const 128)
+    (i32.const 144)
    )
   )
   (local.set $$9
    (i32.add
     (local.get $sp)
-    (i32.const 88)
+    (i32.const 108)
    )
   )
   (local.set $$13
    (i32.add
     (local.get $sp)
-    (i32.const 72)
+    (i32.const 92)
    )
   )
   (local.set $$19
    (i32.add
     (local.get $sp)
-    (i32.const 52)
+    (i32.const 72)
    )
   )
   (local.set $$23
    (i32.add
     (local.get $sp)
-    (i32.const 36)
+    (i32.const 56)
    )
   )
   (local.set $$29
    (i32.add
     (local.get $sp)
-    (i32.const 16)
+    (i32.const 36)
    )
   )
   (local.set $$33
+   (i32.add
+    (local.get $sp)
+    (i32.const 20)
+   )
+  )
+  (local.set $$38
    (local.get $sp)
   )
   (local.set $$2
@@ -98722,633 +98759,752 @@
    (local.get $$1)
   )
   ;;@ parser.c:1218:0
-  (local.set $$34
+  (local.set $$39
    (i32.load
-    (i32.const 8436)
+    (i32.const 8484)
    )
   )
-  (local.set $$35
+  (local.set $$40
    (call $_make_type_info_pointer
-    (local.get $$34)
+    (local.get $$39)
    )
   )
   (local.set $$4
-   (local.get $$35)
+   (local.get $$40)
   )
   ;;@ parser.c:1220:0
   (local.set $$5
    (i32.const 0)
   )
   ;;@ parser.c:1221:0
-  (local.set $$36
+  (local.set $$41
    (call $_malloc
     (i32.const 20)
    )
   )
   (local.set $$6
-   (local.get $$36)
+   (local.get $$41)
   )
   ;;@ parser.c:1222:0
-  (local.set $$37
+  (local.set $$42
    (local.get $$6)
   )
   (call $_array_init
-   (local.get $$37)
+   (local.get $$42)
    (i32.const 4)
    (i32.const 1)
   )
   ;;@ parser.c:1224:0
-  (local.set $$38
+  (local.set $$43
    (i32.load
-    (i32.const 8440)
+    (i32.const 8488)
    )
   )
   (local.set $$7
-   (local.get $$38)
+   (local.get $$43)
   )
   ;;@ parser.c:1225:0
-  (local.set $$39
+  (local.set $$44
    (local.get $$2)
   )
-  (local.set $$40
+  (local.set $$45
    (call $_make_ident
-    (local.get $$39)
+    (local.get $$44)
     (i32.const 5092)
     (i32.const 0)
    )
   )
   (local.set $$8
-   (local.get $$40)
+   (local.get $$45)
   )
   ;;@ parser.c:1226:0
-  (local.set $$41
+  (local.set $$46
    (local.get $$2)
   )
-  (local.set $$42
+  (local.set $$47
    (local.get $$7)
   )
-  (local.set $$43
+  (local.set $$48
    (local.get $$8)
   )
-  (local.set $$44
+  (local.set $$49
    (call $_make_declaration
-    (local.get $$41)
-    (local.get $$42)
-    (local.get $$43)
+    (local.get $$46)
+    (local.get $$47)
+    (local.get $$48)
     (i32.const 0)
    )
   )
   (i32.store
    (local.get $$9)
-   (local.get $$44)
+   (local.get $$49)
   )
   ;;@ parser.c:1228:0
-  (local.set $$45
+  (local.set $$50
    (local.get $$6)
   )
   (drop
    (call $_array_push
-    (local.get $$45)
+    (local.get $$50)
     (local.get $$9)
    )
   )
   ;;@ parser.c:1230:0
-  (local.set $$46
+  (local.set $$51
    (local.get $$2)
   )
-  (local.set $$47
+  (local.set $$52
    (call $_make_native_code
-    (local.get $$46)
+    (local.get $$51)
     (i32.const 6)
    )
   )
   (local.set $$10
-   (local.get $$47)
+   (local.get $$52)
   )
   ;;@ parser.c:1231:0
-  (local.set $$48
+  (local.set $$53
    (local.get $$2)
   )
-  (local.set $$49
+  (local.set $$54
    (local.get $$6)
   )
-  (local.set $$50
+  (local.set $$55
    (local.get $$5)
   )
-  (local.set $$51
+  (local.set $$56
    (local.get $$4)
   )
-  (local.set $$52
+  (local.set $$57
    (local.get $$10)
   )
-  (local.set $$53
+  (local.set $$58
    (call $_make_procedure
-    (local.get $$48)
-    (local.get $$49)
-    (local.get $$50)
-    (local.get $$51)
-    (local.get $$52)
+    (local.get $$53)
+    (local.get $$54)
+    (local.get $$55)
+    (local.get $$56)
+    (local.get $$57)
    )
   )
   (local.set $$11
-   (local.get $$53)
+   (local.get $$58)
   )
   ;;@ parser.c:1232:0
-  (local.set $$54
+  (local.set $$59
    (local.get $$2)
   )
-  (local.set $$55
+  (local.set $$60
    (call $_make_ident
-    (local.get $$54)
+    (local.get $$59)
     (i32.const 5102)
     (i32.const 0)
    )
   )
   (local.set $$12
-   (local.get $$55)
+   (local.get $$60)
   )
   ;;@ parser.c:1233:0
-  (local.set $$56
+  (local.set $$61
    (local.get $$2)
   )
-  (local.set $$57
+  (local.set $$62
    (local.get $$12)
   )
-  (local.set $$58
+  (local.set $$63
    (local.get $$11)
   )
-  (local.set $$59
+  (local.set $$64
    (call $_make_declaration
-    (local.get $$56)
+    (local.get $$61)
     (i32.const 0)
-    (local.get $$57)
-    (local.get $$58)
+    (local.get $$62)
+    (local.get $$63)
    )
   )
   (i32.store
    (local.get $$13)
-   (local.get $$59)
+   (local.get $$64)
   )
   ;;@ parser.c:1235:0
-  (local.set $$60
+  (local.set $$65
    (local.get $$3)
   )
   (drop
    (call $_array_push
-    (local.get $$60)
+    (local.get $$65)
     (local.get $$13)
    )
   )
   ;;@ parser.c:1236:0
-  (local.set $$61
+  (local.set $$66
    (i32.load
-    (i32.const 9268)
+    (i32.const 9540)
    )
   )
-  (local.set $$62
+  (local.set $$67
    (i32.add
-    (local.get $$61)
+    (local.get $$66)
     (i32.const 48)
    )
   )
-  (local.set $$63
+  (local.set $$68
    (i32.add
-    (local.get $$62)
+    (local.get $$67)
     (i32.const 4)
    )
   )
-  (local.set $$64
+  (local.set $$69
    (i32.load
-    (local.get $$63)
+    (local.get $$68)
    )
   )
   (drop
    (call $_array_push
-    (local.get $$64)
+    (local.get $$69)
     (local.get $$13)
    )
   )
   ;;@ parser.c:1239:0
-  (local.set $$65
+  (local.set $$70
    (i32.load
-    (i32.const 8436)
+    (i32.const 8484)
    )
   )
   (local.set $$14
-   (local.get $$65)
+   (local.get $$70)
   )
   ;;@ parser.c:1241:0
   (local.set $$15
    (i32.const 0)
   )
   ;;@ parser.c:1242:0
-  (local.set $$66
+  (local.set $$71
    (call $_malloc
     (i32.const 20)
    )
   )
   (local.set $$16
-   (local.get $$66)
+   (local.get $$71)
   )
   ;;@ parser.c:1243:0
-  (local.set $$67
+  (local.set $$72
    (local.get $$16)
   )
   (call $_array_init
-   (local.get $$67)
+   (local.get $$72)
    (i32.const 4)
    (i32.const 1)
   )
   ;;@ parser.c:1245:0
-  (local.set $$68
+  (local.set $$73
    (i32.load
-    (i32.const 8436)
+    (i32.const 8484)
    )
   )
-  (local.set $$69
+  (local.set $$74
    (call $_make_type_info_pointer
-    (local.get $$68)
+    (local.get $$73)
    )
   )
   (local.set $$17
-   (local.get $$69)
+   (local.get $$74)
   )
   ;;@ parser.c:1246:0
-  (local.set $$70
+  (local.set $$75
    (local.get $$2)
   )
-  (local.set $$71
+  (local.set $$76
    (call $_make_ident
-    (local.get $$70)
+    (local.get $$75)
     (i32.const 5109)
     (i32.const 0)
    )
   )
   (local.set $$18
-   (local.get $$71)
+   (local.get $$76)
   )
   ;;@ parser.c:1247:0
-  (local.set $$72
+  (local.set $$77
    (local.get $$2)
   )
-  (local.set $$73
+  (local.set $$78
    (local.get $$17)
   )
-  (local.set $$74
+  (local.set $$79
    (local.get $$18)
   )
-  (local.set $$75
+  (local.set $$80
    (call $_make_declaration
-    (local.get $$72)
-    (local.get $$73)
-    (local.get $$74)
+    (local.get $$77)
+    (local.get $$78)
+    (local.get $$79)
     (i32.const 0)
    )
   )
   (i32.store
    (local.get $$19)
-   (local.get $$75)
+   (local.get $$80)
   )
   ;;@ parser.c:1249:0
-  (local.set $$76
+  (local.set $$81
    (local.get $$16)
   )
   (drop
    (call $_array_push
-    (local.get $$76)
+    (local.get $$81)
     (local.get $$19)
    )
   )
   ;;@ parser.c:1251:0
-  (local.set $$77
+  (local.set $$82
    (local.get $$2)
   )
-  (local.set $$78
+  (local.set $$83
    (call $_make_native_code
-    (local.get $$77)
+    (local.get $$82)
     (i32.const 7)
    )
   )
   (local.set $$20
-   (local.get $$78)
+   (local.get $$83)
   )
   ;;@ parser.c:1252:0
-  (local.set $$79
+  (local.set $$84
    (local.get $$2)
   )
-  (local.set $$80
+  (local.set $$85
    (local.get $$16)
   )
-  (local.set $$81
+  (local.set $$86
    (local.get $$15)
   )
-  (local.set $$82
+  (local.set $$87
    (local.get $$14)
   )
-  (local.set $$83
+  (local.set $$88
    (local.get $$20)
   )
-  (local.set $$84
+  (local.set $$89
    (call $_make_procedure
-    (local.get $$79)
-    (local.get $$80)
-    (local.get $$81)
-    (local.get $$82)
-    (local.get $$83)
+    (local.get $$84)
+    (local.get $$85)
+    (local.get $$86)
+    (local.get $$87)
+    (local.get $$88)
    )
   )
   (local.set $$21
-   (local.get $$84)
+   (local.get $$89)
   )
   ;;@ parser.c:1253:0
-  (local.set $$85
+  (local.set $$90
    (local.get $$2)
   )
-  (local.set $$86
+  (local.set $$91
    (call $_make_ident
-    (local.get $$85)
+    (local.get $$90)
     (i32.const 5113)
     (i32.const 0)
    )
   )
   (local.set $$22
-   (local.get $$86)
+   (local.get $$91)
   )
   ;;@ parser.c:1254:0
-  (local.set $$87
+  (local.set $$92
    (local.get $$2)
   )
-  (local.set $$88
+  (local.set $$93
    (local.get $$22)
   )
-  (local.set $$89
+  (local.set $$94
    (local.get $$21)
   )
-  (local.set $$90
+  (local.set $$95
    (call $_make_declaration
-    (local.get $$87)
+    (local.get $$92)
     (i32.const 0)
-    (local.get $$88)
-    (local.get $$89)
+    (local.get $$93)
+    (local.get $$94)
    )
   )
   (i32.store
    (local.get $$23)
-   (local.get $$90)
+   (local.get $$95)
   )
   ;;@ parser.c:1256:0
-  (local.set $$91
+  (local.set $$96
    (local.get $$3)
   )
   (drop
    (call $_array_push
-    (local.get $$91)
+    (local.get $$96)
     (local.get $$23)
    )
   )
   ;;@ parser.c:1257:0
-  (local.set $$92
+  (local.set $$97
    (i32.load
-    (i32.const 9268)
+    (i32.const 9540)
    )
   )
-  (local.set $$93
+  (local.set $$98
    (i32.add
-    (local.get $$92)
+    (local.get $$97)
     (i32.const 48)
    )
   )
-  (local.set $$94
+  (local.set $$99
    (i32.add
-    (local.get $$93)
+    (local.get $$98)
     (i32.const 4)
    )
   )
-  (local.set $$95
+  (local.set $$100
    (i32.load
-    (local.get $$94)
+    (local.get $$99)
    )
   )
   (drop
    (call $_array_push
-    (local.get $$95)
+    (local.get $$100)
     (local.get $$23)
    )
   )
   ;;@ parser.c:1260:0
-  (local.set $$96
+  (local.set $$101
    (i32.load
-    (i32.const 8436)
+    (i32.const 8484)
    )
   )
   (local.set $$24
-   (local.get $$96)
+   (local.get $$101)
   )
   ;;@ parser.c:1262:0
   (local.set $$25
    (i32.const 1)
   )
   ;;@ parser.c:1263:0
-  (local.set $$97
+  (local.set $$102
    (call $_malloc
     (i32.const 20)
    )
   )
   (local.set $$26
-   (local.get $$97)
+   (local.get $$102)
   )
   ;;@ parser.c:1264:0
-  (local.set $$98
+  (local.set $$103
    (local.get $$26)
   )
   (call $_array_init
-   (local.get $$98)
+   (local.get $$103)
    (i32.const 4)
    (i32.const 1)
   )
   ;;@ parser.c:1266:0
-  (local.set $$99
+  (local.set $$104
    (i32.load
-    (i32.const 8388)
+    (i32.const 8436)
    )
   )
-  (local.set $$100
+  (local.set $$105
    (call $_make_type_info_pointer
-    (local.get $$99)
+    (local.get $$104)
    )
   )
   (local.set $$27
-   (local.get $$100)
+   (local.get $$105)
   )
   ;;@ parser.c:1267:0
-  (local.set $$101
+  (local.set $$106
    (local.get $$2)
   )
-  (local.set $$102
+  (local.set $$107
    (call $_make_ident
-    (local.get $$101)
+    (local.get $$106)
     (i32.const 5118)
     (i32.const 0)
    )
   )
   (local.set $$28
-   (local.get $$102)
+   (local.get $$107)
   )
   ;;@ parser.c:1268:0
-  (local.set $$103
+  (local.set $$108
    (local.get $$2)
   )
-  (local.set $$104
+  (local.set $$109
    (local.get $$27)
   )
-  (local.set $$105
+  (local.set $$110
    (local.get $$28)
   )
-  (local.set $$106
+  (local.set $$111
    (call $_make_declaration
-    (local.get $$103)
-    (local.get $$104)
-    (local.get $$105)
+    (local.get $$108)
+    (local.get $$109)
+    (local.get $$110)
     (i32.const 0)
    )
   )
   (i32.store
    (local.get $$29)
-   (local.get $$106)
+   (local.get $$111)
   )
   ;;@ parser.c:1270:0
-  (local.set $$107
+  (local.set $$112
    (local.get $$26)
   )
   (drop
    (call $_array_push
-    (local.get $$107)
+    (local.get $$112)
     (local.get $$29)
    )
   )
   ;;@ parser.c:1272:0
-  (local.set $$108
+  (local.set $$113
    (local.get $$2)
   )
-  (local.set $$109
+  (local.set $$114
    (call $_make_native_code
-    (local.get $$108)
+    (local.get $$113)
     (i32.const 8)
    )
   )
   (local.set $$30
-   (local.get $$109)
+   (local.get $$114)
   )
   ;;@ parser.c:1273:0
-  (local.set $$110
+  (local.set $$115
    (local.get $$2)
   )
-  (local.set $$111
+  (local.set $$116
    (local.get $$26)
   )
-  (local.set $$112
+  (local.set $$117
    (local.get $$25)
   )
-  (local.set $$113
+  (local.set $$118
    (local.get $$24)
   )
-  (local.set $$114
+  (local.set $$119
    (local.get $$30)
   )
-  (local.set $$115
+  (local.set $$120
    (call $_make_procedure
-    (local.get $$110)
-    (local.get $$111)
-    (local.get $$112)
-    (local.get $$113)
-    (local.get $$114)
+    (local.get $$115)
+    (local.get $$116)
+    (local.get $$117)
+    (local.get $$118)
+    (local.get $$119)
    )
   )
   (local.set $$31
-   (local.get $$115)
+   (local.get $$120)
   )
   ;;@ parser.c:1275:0
-  (local.set $$116
+  (local.set $$121
    (local.get $$2)
   )
-  (local.set $$117
+  (local.set $$122
    (call $_make_ident
-    (local.get $$116)
+    (local.get $$121)
     (i32.const 5122)
     (i32.const 0)
    )
   )
   (local.set $$32
-   (local.get $$117)
+   (local.get $$122)
   )
   ;;@ parser.c:1276:0
-  (local.set $$118
+  (local.set $$123
    (local.get $$2)
   )
-  (local.set $$119
+  (local.set $$124
    (local.get $$32)
   )
-  (local.set $$120
+  (local.set $$125
    (local.get $$31)
   )
-  (local.set $$121
+  (local.set $$126
    (call $_make_declaration
-    (local.get $$118)
+    (local.get $$123)
     (i32.const 0)
-    (local.get $$119)
-    (local.get $$120)
+    (local.get $$124)
+    (local.get $$125)
    )
   )
   (i32.store
    (local.get $$33)
-   (local.get $$121)
+   (local.get $$126)
   )
   ;;@ parser.c:1278:0
-  (local.set $$122
+  (local.set $$127
    (local.get $$3)
   )
   (drop
    (call $_array_push
-    (local.get $$122)
+    (local.get $$127)
     (local.get $$33)
    )
   )
   ;;@ parser.c:1279:0
-  (local.set $$123
+  (local.set $$128
    (i32.load
-    (i32.const 9268)
+    (i32.const 9540)
    )
   )
-  (local.set $$124
+  (local.set $$129
    (i32.add
-    (local.get $$123)
+    (local.get $$128)
     (i32.const 48)
    )
   )
-  (local.set $$125
+  (local.set $$130
    (i32.add
-    (local.get $$124)
+    (local.get $$129)
     (i32.const 4)
    )
   )
-  (local.set $$126
+  (local.set $$131
    (i32.load
-    (local.get $$125)
+    (local.get $$130)
    )
   )
   (drop
    (call $_array_push
-    (local.get $$126)
+    (local.get $$131)
     (local.get $$33)
+   )
+  )
+  ;;@ parser.c:1282:0
+  (local.set $$132
+   (i32.load
+    (i32.const 8484)
+   )
+  )
+  (local.set $$34
+   (local.get $$132)
+  )
+  ;;@ parser.c:1284:0
+  (local.set $$133
+   (local.get $$2)
+  )
+  (local.set $$134
+   (call $_make_native_code
+    (local.get $$133)
+    (i32.const 0)
+   )
+  )
+  (local.set $$35
+   (local.get $$134)
+  )
+  ;;@ parser.c:1285:0
+  (local.set $$135
+   (local.get $$2)
+  )
+  (local.set $$136
+   (local.get $$34)
+  )
+  (local.set $$137
+   (local.get $$35)
+  )
+  (local.set $$138
+   (call $_make_procedure
+    (local.get $$135)
+    (i32.const 0)
+    (i32.const 0)
+    (local.get $$136)
+    (local.get $$137)
+   )
+  )
+  (local.set $$36
+   (local.get $$138)
+  )
+  ;;@ parser.c:1287:0
+  (local.set $$139
+   (local.get $$2)
+  )
+  (local.set $$140
+   (call $_make_ident
+    (local.get $$139)
+    (i32.const 6181)
+    (i32.const 0)
+   )
+  )
+  (local.set $$37
+   (local.get $$140)
+  )
+  ;;@ parser.c:1288:0
+  (local.set $$141
+   (local.get $$2)
+  )
+  (local.set $$142
+   (local.get $$37)
+  )
+  (local.set $$143
+   (local.get $$36)
+  )
+  (local.set $$144
+   (call $_make_declaration
+    (local.get $$141)
+    (i32.const 0)
+    (local.get $$142)
+    (local.get $$143)
+   )
+  )
+  (i32.store
+   (local.get $$38)
+   (local.get $$144)
+  )
+  ;;@ parser.c:1290:0
+  (local.set $$145
+   (local.get $$3)
+  )
+  (drop
+   (call $_array_push
+    (local.get $$145)
+    (local.get $$38)
+   )
+  )
+  ;;@ parser.c:1291:0
+  (local.set $$146
+   (i32.load
+    (i32.const 9540)
+   )
+  )
+  (local.set $$147
+   (i32.add
+    (local.get $$146)
+    (i32.const 48)
+   )
+  )
+  (local.set $$148
+   (i32.add
+    (local.get $$147)
+    (i32.const 4)
+   )
+  )
+  (local.set $$149
+   (i32.load
+    (local.get $$148)
+   )
+  )
+  (drop
+   (call $_array_push
+    (local.get $$149)
+    (local.get $$38)
    )
   )
   (global.set $STACKTOP
    (local.get $sp)
   )
-  ;;@ parser.c:1280:0
+  ;;@ parser.c:1292:0
   (return)
  )
- (func $_parse (; 267 ;) (param $$0 i32) (result i32)
+ (func $_parse (; 271 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -99400,7 +99556,7 @@
   (local.set $$1
    (local.get $$0)
   )
-  ;;@ parser.c:1282:0
+  ;;@ parser.c:1294:0
   (local.set $$5
    (call $_malloc
     (i32.const 20)
@@ -99409,7 +99565,7 @@
   (local.set $$2
    (local.get $$5)
   )
-  ;;@ parser.c:1283:0
+  ;;@ parser.c:1295:0
   (local.set $$6
    (local.get $$2)
   )
@@ -99418,7 +99574,7 @@
    (i32.const 80)
    (i32.const 100000)
   )
-  ;;@ parser.c:1284:0
+  ;;@ parser.c:1296:0
   (local.set $$7
    (local.get $$1)
   )
@@ -99446,7 +99602,7 @@
    (local.get $$11)
    (local.get $$9)
   )
-  ;;@ parser.c:1286:0
+  ;;@ parser.c:1298:0
   (local.set $$12
    (call $_malloc
     (i32.const 20)
@@ -99455,7 +99611,7 @@
   (local.set $$3
    (local.get $$12)
   )
-  ;;@ parser.c:1287:0
+  ;;@ parser.c:1299:0
   (local.set $$13
    (local.get $$3)
   )
@@ -99464,7 +99620,7 @@
    (i32.const 4)
    (i32.const 10)
   )
-  ;;@ parser.c:1288:0
+  ;;@ parser.c:1300:0
   (local.set $$14
    (local.get $$2)
   )
@@ -99480,15 +99636,15 @@
   (local.set $$4
    (local.get $$16)
   )
-  ;;@ parser.c:1289:0
+  ;;@ parser.c:1301:0
   (local.set $$17
    (local.get $$4)
   )
   (i32.store
-   (i32.const 9268)
+   (i32.const 9540)
    (local.get $$17)
   )
-  ;;@ parser.c:1291:0
+  ;;@ parser.c:1303:0
   (local.set $$18
    (local.get $$2)
   )
@@ -99499,7 +99655,7 @@
    (local.get $$18)
    (local.get $$19)
   )
-  ;;@ parser.c:1293:0
+  ;;@ parser.c:1305:0
   (local.set $$20
    (local.get $$3)
   )
@@ -99518,7 +99674,7 @@
    (local.get $$21)
    (local.get $$22)
   )
-  ;;@ parser.c:1294:0
+  ;;@ parser.c:1306:0
   (local.set $$23
    (local.get $$2)
   )
@@ -99549,12 +99705,12 @@
    (local.get $$27)
    (i32.const 1)
   )
-  ;;@ parser.c:1296:0
+  ;;@ parser.c:1308:0
   (i32.store
-   (i32.const 9268)
+   (i32.const 9540)
    (i32.const 0)
   )
-  ;;@ parser.c:1298:0
+  ;;@ parser.c:1310:0
   (local.set $$28
    (local.get $$2)
   )
@@ -99565,7 +99721,7 @@
    (local.get $$28)
   )
  )
- (func $_parse_statement (; 268 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_statement (; 272 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -99818,7 +99974,7 @@
   (local.set $$4
    (local.get $$1)
   )
-  ;;@ parser.c:1305:0
+  ;;@ parser.c:1317:0
   (local.set $$11
    (local.get $$4)
   )
@@ -99836,7 +99992,7 @@
   (local.set $$5
    (local.get $$13)
   )
-  ;;@ parser.c:1306:0
+  ;;@ parser.c:1318:0
   (local.set $$14
    (local.get $$4)
   )
@@ -99848,7 +100004,7 @@
   (local.set $$6
    (local.get $$15)
   )
-  ;;@ parser.c:1307:0
+  ;;@ parser.c:1319:0
   (local.set $$16
    (local.get $$3)
   )
@@ -99866,7 +100022,7 @@
   (local.set $$7
    (local.get $$18)
   )
-  ;;@ parser.c:1308:0
+  ;;@ parser.c:1320:0
   (local.set $$19
    (local.get $$3)
   )
@@ -99890,7 +100046,7 @@
   (local.set $$8
    (local.get $$22)
   )
-  ;;@ parser.c:1309:0
+  ;;@ parser.c:1321:0
   (local.set $$23
    (local.get $$3)
   )
@@ -99934,7 +100090,7 @@
   (if
    (local.get $$29)
    (block
-    ;;@ parser.c:1310:0
+    ;;@ parser.c:1322:0
     (local.set $$31
      (local.get $$4)
     )
@@ -99947,7 +100103,7 @@
     (local.set $$2
      (local.get $$32)
     )
-    ;;@ parser.c:1392:0
+    ;;@ parser.c:1404:0
     (local.set $$221
      (local.get $$2)
     )
@@ -99959,7 +100115,7 @@
     )
    )
   )
-  ;;@ parser.c:1312:0
+  ;;@ parser.c:1324:0
   (local.set $$33
    (i32.add
     (local.get $$30)
@@ -99999,7 +100155,7 @@
   (if
    (local.get $$36)
    (block
-    ;;@ parser.c:1313:0
+    ;;@ parser.c:1325:0
     (local.set $$40
      (i32.add
       (local.get $$39)
@@ -100029,7 +100185,7 @@
     (if
      (local.get $$43)
      (block
-      ;;@ parser.c:1314:0
+      ;;@ parser.c:1326:0
       (local.set $$45
        (local.get $$4)
       )
@@ -100042,7 +100198,7 @@
       (local.set $$2
        (local.get $$46)
       )
-      ;;@ parser.c:1392:0
+      ;;@ parser.c:1404:0
       (local.set $$221
        (local.get $$2)
       )
@@ -100054,7 +100210,7 @@
       )
      )
     )
-    ;;@ parser.c:1316:0
+    ;;@ parser.c:1328:0
     (local.set $$47
      (i32.add
       (local.get $$44)
@@ -100095,7 +100251,7 @@
     (if
      (local.get $$52)
      (block
-      ;;@ parser.c:1317:0
+      ;;@ parser.c:1329:0
       (local.set $$54
        (local.get $$4)
       )
@@ -100108,7 +100264,7 @@
       (local.set $$2
        (local.get $$55)
       )
-      ;;@ parser.c:1392:0
+      ;;@ parser.c:1404:0
       (local.set $$221
        (local.get $$2)
       )
@@ -100120,7 +100276,7 @@
       )
      )
     )
-    ;;@ parser.c:1319:0
+    ;;@ parser.c:1331:0
     (local.set $$56
      (i32.add
       (local.get $$53)
@@ -100161,7 +100317,7 @@
     (if
      (local.get $$61)
      (block
-      ;;@ parser.c:1320:0
+      ;;@ parser.c:1332:0
       (local.set $$63
        (local.get $$4)
       )
@@ -100174,7 +100330,7 @@
       (local.set $$2
        (local.get $$64)
       )
-      ;;@ parser.c:1392:0
+      ;;@ parser.c:1404:0
       (local.set $$221
        (local.get $$2)
       )
@@ -100186,7 +100342,7 @@
       )
      )
     )
-    ;;@ parser.c:1322:0
+    ;;@ parser.c:1334:0
     (local.set $$65
      (i32.add
       (local.get $$62)
@@ -100227,7 +100383,7 @@
     (if
      (local.get $$70)
      (block
-      ;;@ parser.c:1323:0
+      ;;@ parser.c:1335:0
       (local.set $$72
        (local.get $$4)
       )
@@ -100240,7 +100396,7 @@
       (local.set $$2
        (local.get $$73)
       )
-      ;;@ parser.c:1392:0
+      ;;@ parser.c:1404:0
       (local.set $$221
        (local.get $$2)
       )
@@ -100252,7 +100408,7 @@
       )
      )
     )
-    ;;@ parser.c:1325:0
+    ;;@ parser.c:1337:0
     (local.set $$74
      (i32.add
       (local.get $$71)
@@ -100293,7 +100449,7 @@
     (if
      (local.get $$79)
      (block
-      ;;@ parser.c:1326:0
+      ;;@ parser.c:1338:0
       (local.set $$81
        (local.get $$4)
       )
@@ -100306,7 +100462,7 @@
       (local.set $$2
        (local.get $$82)
       )
-      ;;@ parser.c:1392:0
+      ;;@ parser.c:1404:0
       (local.set $$221
        (local.get $$2)
       )
@@ -100318,7 +100474,7 @@
       )
      )
     )
-    ;;@ parser.c:1328:0
+    ;;@ parser.c:1340:0
     (local.set $$83
      (i32.add
       (local.get $$80)
@@ -100359,7 +100515,7 @@
     (if
      (local.get $$88)
      (block
-      ;;@ parser.c:1329:0
+      ;;@ parser.c:1341:0
       (local.set $$90
        (local.get $$4)
       )
@@ -100372,7 +100528,7 @@
       (local.set $$2
        (local.get $$91)
       )
-      ;;@ parser.c:1392:0
+      ;;@ parser.c:1404:0
       (local.set $$221
        (local.get $$2)
       )
@@ -100384,7 +100540,7 @@
       )
      )
     )
-    ;;@ parser.c:1331:0
+    ;;@ parser.c:1343:0
     (local.set $$92
      (i32.add
       (local.get $$89)
@@ -100425,7 +100581,7 @@
     (if
      (local.get $$97)
      (block
-      ;;@ parser.c:1332:0
+      ;;@ parser.c:1344:0
       (local.set $$99
        (local.get $$4)
       )
@@ -100438,7 +100594,7 @@
       (local.set $$2
        (local.get $$100)
       )
-      ;;@ parser.c:1392:0
+      ;;@ parser.c:1404:0
       (local.set $$221
        (local.get $$2)
       )
@@ -100450,7 +100606,7 @@
       )
      )
     )
-    ;;@ parser.c:1334:0
+    ;;@ parser.c:1346:0
     (local.set $$101
      (i32.add
       (local.get $$98)
@@ -100491,7 +100647,7 @@
     (if
      (local.get $$106)
      (block
-      ;;@ parser.c:1335:0
+      ;;@ parser.c:1347:0
       (local.set $$108
        (local.get $$4)
       )
@@ -100504,7 +100660,7 @@
       (local.set $$2
        (local.get $$109)
       )
-      ;;@ parser.c:1392:0
+      ;;@ parser.c:1404:0
       (local.set $$221
        (local.get $$2)
       )
@@ -100516,7 +100672,7 @@
       )
      )
     )
-    ;;@ parser.c:1337:0
+    ;;@ parser.c:1349:0
     (local.set $$110
      (i32.add
       (local.get $$107)
@@ -100554,7 +100710,7 @@
     (if
      (local.get $$115)
      (block
-      ;;@ parser.c:1338:0
+      ;;@ parser.c:1350:0
       (local.set $$116
        (local.get $$3)
       )
@@ -100570,7 +100726,7 @@
       (local.set $$2
        (local.get $$118)
       )
-      ;;@ parser.c:1392:0
+      ;;@ parser.c:1404:0
       (local.set $$221
        (local.get $$2)
       )
@@ -100584,7 +100740,7 @@
     )
    )
    (block
-    ;;@ parser.c:1341:0
+    ;;@ parser.c:1353:0
     (local.set $$119
      (i32.load
       (local.get $$39)
@@ -100599,12 +100755,12 @@
     (if
      (local.get $$120)
      (block
-      ;;@ parser.c:1346:0
+      ;;@ parser.c:1358:0
       (i32.store
        (local.get $$9)
        (i32.const 0)
       )
-      ;;@ parser.c:1347:0
+      ;;@ parser.c:1359:0
       (local.set $$121
        (local.get $$3)
       )
@@ -100618,7 +100774,7 @@
         (local.get $$9)
        )
       )
-      ;;@ parser.c:1348:0
+      ;;@ parser.c:1360:0
       (local.set $$123
        (local.get $$3)
       )
@@ -100642,7 +100798,7 @@
       (local.set $$8
        (local.get $$126)
       )
-      ;;@ parser.c:1350:0
+      ;;@ parser.c:1362:0
       (local.set $$127
        (i32.load
         (local.get $$9)
@@ -100685,7 +100841,7 @@
         (if
          (local.get $$133)
          (block
-          ;;@ parser.c:1351:0
+          ;;@ parser.c:1363:0
           (local.set $$134
            (local.get $$8)
           )
@@ -100734,7 +100890,7 @@
           (if
            (local.get $$139)
            (block
-            ;;@ parser.c:1352:0
+            ;;@ parser.c:1364:0
             (local.set $$143
              (call $_parse_procedure_declaration
               (local.get $$140)
@@ -100745,7 +100901,7 @@
             (local.set $$2
              (local.get $$143)
             )
-            ;;@ parser.c:1392:0
+            ;;@ parser.c:1404:0
             (local.set $$221
              (local.get $$2)
             )
@@ -100757,7 +100913,7 @@
             )
            )
            (block
-            ;;@ parser.c:1355:0
+            ;;@ parser.c:1367:0
             (local.set $$144
              (call $_parse_declaration_precomputed_type
               (local.get $$140)
@@ -100768,7 +100924,7 @@
             (local.set $$2
              (local.get $$144)
             )
-            ;;@ parser.c:1392:0
+            ;;@ parser.c:1404:0
             (local.set $$221
              (local.get $$2)
             )
@@ -100788,7 +100944,7 @@
     )
    )
   )
-  ;;@ parser.c:1359:0
+  ;;@ parser.c:1371:0
   (local.set $$145
    (local.get $$3)
   )
@@ -100804,7 +100960,7 @@
   (local.set $$10
    (local.get $$147)
   )
-  ;;@ parser.c:1360:0
+  ;;@ parser.c:1372:0
   (local.set $$148
    (local.get $$10)
   )
@@ -100818,7 +100974,7 @@
    (if
     (local.get $$149)
     (block
-     ;;@ parser.c:1361:0
+     ;;@ parser.c:1373:0
      (local.set $$150
       (local.get $$3)
      )
@@ -100849,14 +101005,14 @@
        (local.get $$154)
       )
       (block
-       ;;@ parser.c:1388:0
+       ;;@ parser.c:1400:0
        (local.set $$217
         (local.get $$10)
        )
        (local.set $$2
         (local.get $$217)
        )
-       ;;@ parser.c:1392:0
+       ;;@ parser.c:1404:0
        (local.set $$221
         (local.get $$2)
        )
@@ -100868,7 +101024,7 @@
        )
       )
      )
-     ;;@ parser.c:1362:0
+     ;;@ parser.c:1374:0
      (local.set $$155
       (local.get $$3)
      )
@@ -100912,7 +101068,7 @@
      (if
       (local.get $$161)
       (block
-       ;;@ parser.c:1363:0
+       ;;@ parser.c:1375:0
        (local.set $$163
         (local.get $$4)
        )
@@ -100925,7 +101081,7 @@
        (local.set $$2
         (local.get $$164)
        )
-       ;;@ parser.c:1392:0
+       ;;@ parser.c:1404:0
        (local.set $$221
         (local.get $$2)
        )
@@ -100937,7 +101093,7 @@
        )
       )
      )
-     ;;@ parser.c:1365:0
+     ;;@ parser.c:1377:0
      (local.set $$165
       (i32.add
        (local.get $$162)
@@ -100978,7 +101134,7 @@
      (if
       (local.get $$170)
       (block
-       ;;@ parser.c:1366:0
+       ;;@ parser.c:1378:0
        (local.set $$172
         (local.get $$4)
        )
@@ -100991,7 +101147,7 @@
        (local.set $$2
         (local.get $$173)
        )
-       ;;@ parser.c:1392:0
+       ;;@ parser.c:1404:0
        (local.set $$221
         (local.get $$2)
        )
@@ -101003,7 +101159,7 @@
        )
       )
      )
-     ;;@ parser.c:1368:0
+     ;;@ parser.c:1380:0
      (local.set $$174
       (i32.add
        (local.get $$171)
@@ -101044,7 +101200,7 @@
      (if
       (local.get $$179)
       (block
-       ;;@ parser.c:1369:0
+       ;;@ parser.c:1381:0
        (local.set $$181
         (local.get $$4)
        )
@@ -101057,7 +101213,7 @@
        (local.set $$2
         (local.get $$182)
        )
-       ;;@ parser.c:1392:0
+       ;;@ parser.c:1404:0
        (local.set $$221
         (local.get $$2)
        )
@@ -101069,7 +101225,7 @@
        )
       )
      )
-     ;;@ parser.c:1371:0
+     ;;@ parser.c:1383:0
      (local.set $$183
       (i32.add
        (local.get $$180)
@@ -101106,7 +101262,7 @@
      (if
       (local.get $$188)
       (block
-       ;;@ parser.c:1375:0
+       ;;@ parser.c:1387:0
        (local.set $$189
         (local.get $$5)
        )
@@ -101123,7 +101279,7 @@
         (local.get $$191)
         (local.get $$189)
        )
-       ;;@ parser.c:1376:0
+       ;;@ parser.c:1388:0
        (local.set $$192
         (local.get $$6)
        )
@@ -101134,7 +101290,7 @@
         (local.get $$193)
         (local.get $$192)
        )
-       ;;@ parser.c:1377:0
+       ;;@ parser.c:1389:0
        (local.set $$194
         (local.get $$7)
        )
@@ -101154,7 +101310,7 @@
        (br $do-once)
       )
      )
-     ;;@ parser.c:1379:0
+     ;;@ parser.c:1391:0
      (local.set $$197
       (local.get $$3)
      )
@@ -101245,7 +101401,7 @@
      (if
       (local.get $$212)
       (block
-       ;;@ parser.c:1380:0
+       ;;@ parser.c:1392:0
        (local.set $$213
         (local.get $$3)
        )
@@ -101261,7 +101417,7 @@
        (local.set $$2
         (local.get $$215)
        )
-       ;;@ parser.c:1392:0
+       ;;@ parser.c:1404:0
        (local.set $$221
         (local.get $$2)
        )
@@ -101273,14 +101429,14 @@
        )
       )
       (block
-       ;;@ parser.c:1384:0
+       ;;@ parser.c:1396:0
        (local.set $$216
         (local.get $$10)
        )
        (local.set $$2
         (local.get $$216)
        )
-       ;;@ parser.c:1392:0
+       ;;@ parser.c:1404:0
        (local.set $$221
         (local.get $$2)
        )
@@ -101295,7 +101451,7 @@
     )
    )
   )
-  ;;@ parser.c:1391:0
+  ;;@ parser.c:1403:0
   (local.set $$218
    (local.get $$3)
   )
@@ -101311,7 +101467,7 @@
   (local.set $$2
    (local.get $$220)
   )
-  ;;@ parser.c:1392:0
+  ;;@ parser.c:1404:0
   (local.set $$221
    (local.get $$2)
   )
@@ -101322,7 +101478,7 @@
    (local.get $$221)
   )
  )
- (func $_parse_block (; 269 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_block (; 273 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -101371,7 +101527,7 @@
   (local.set $$3
    (local.get $$1)
   )
-  ;;@ parser.c:1789:0
+  ;;@ parser.c:1801:0
   (local.set $$6
    (call $_malloc
     (i32.const 20)
@@ -101380,7 +101536,7 @@
   (local.set $$4
    (local.get $$6)
   )
-  ;;@ parser.c:1790:0
+  ;;@ parser.c:1802:0
   (local.set $$7
    (local.get $$4)
   )
@@ -101389,7 +101545,7 @@
    (i32.const 4)
    (i32.const 10)
   )
-  ;;@ parser.c:1791:0
+  ;;@ parser.c:1803:0
   (local.set $$8
    (local.get $$3)
   )
@@ -101405,10 +101561,10 @@
   (local.set $$5
    (local.get $$10)
   )
-  ;;@ parser.c:1792:0
+  ;;@ parser.c:1804:0
   (local.set $$11
    (i32.load
-    (i32.const 9268)
+    (i32.const 9540)
    )
   )
   (local.set $$12
@@ -101430,15 +101586,15 @@
    (local.get $$14)
    (local.get $$11)
   )
-  ;;@ parser.c:1793:0
+  ;;@ parser.c:1805:0
   (local.set $$15
    (local.get $$5)
   )
   (i32.store
-   (i32.const 9268)
+   (i32.const 9540)
    (local.get $$15)
   )
-  ;;@ parser.c:1794:0
+  ;;@ parser.c:1806:0
   (local.set $$16
    (local.get $$4)
   )
@@ -101457,7 +101613,7 @@
    (local.get $$17)
    (local.get $$18)
   )
-  ;;@ parser.c:1795:0
+  ;;@ parser.c:1807:0
   (local.set $$19
    (local.get $$5)
   )
@@ -101479,10 +101635,10 @@
    )
   )
   (i32.store
-   (i32.const 9268)
+   (i32.const 9540)
    (local.get $$22)
   )
-  ;;@ parser.c:1796:0
+  ;;@ parser.c:1808:0
   (local.set $$23
    (local.get $$5)
   )
@@ -101493,7 +101649,7 @@
    (local.get $$23)
   )
  )
- (func $_parse_if (; 270 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_if (; 274 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -101553,7 +101709,7 @@
   (local.set $$3
    (local.get $$1)
   )
-  ;;@ parser.c:1632:0
+  ;;@ parser.c:1644:0
   (local.set $$6
    (local.get $$2)
   )
@@ -101578,7 +101734,7 @@
    (local.get $$7)
    (local.get $$9)
   )
-  ;;@ parser.c:1633:0
+  ;;@ parser.c:1645:0
   (local.set $$10
    (local.get $$2)
   )
@@ -101603,7 +101759,7 @@
    (local.get $$11)
    (local.get $$13)
   )
-  ;;@ parser.c:1634:0
+  ;;@ parser.c:1646:0
   (local.set $$14
    (local.get $$2)
   )
@@ -101619,7 +101775,7 @@
   (local.set $$4
    (local.get $$16)
   )
-  ;;@ parser.c:1635:0
+  ;;@ parser.c:1647:0
   (local.set $$17
    (local.get $$2)
   )
@@ -101660,7 +101816,7 @@
   (if
    (local.get $$23)
    (block
-    ;;@ parser.c:1636:0
+    ;;@ parser.c:1648:0
     (local.set $$24
      (local.get $$2)
     )
@@ -101685,7 +101841,7 @@
      (local.get $$25)
      (local.get $$27)
     )
-    ;;@ parser.c:1639:0
+    ;;@ parser.c:1651:0
     (local.set $$28
      (local.get $$2)
     )
@@ -101701,7 +101857,7 @@
     (local.set $$5
      (local.get $$30)
     )
-    ;;@ parser.c:1640:0
+    ;;@ parser.c:1652:0
     (local.set $$31
      (local.get $$3)
     )
@@ -101725,14 +101881,14 @@
      (local.get $$34)
     )
    )
-   ;;@ parser.c:1638:0
+   ;;@ parser.c:1650:0
    (call $_abort)
   )
   (return
    (i32.const 0)
   )
  )
- (func $_parse_else (; 271 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_else (; 275 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -101801,7 +101957,7 @@
   (local.set $$3
    (local.get $$1)
   )
-  ;;@ parser.c:1646:0
+  ;;@ parser.c:1658:0
   (local.set $$8
    (local.get $$3)
   )
@@ -101819,7 +101975,7 @@
   (local.set $$5
    (local.get $$10)
   )
-  ;;@ parser.c:1647:0
+  ;;@ parser.c:1659:0
   (local.set $$11
    (local.get $$5)
   )
@@ -101840,12 +101996,12 @@
   (block $do-once
    (if
     (local.get $$13)
-    ;;@ parser.c:1648:0
+    ;;@ parser.c:1660:0
     (local.set $$4
      (local.get $$14)
     )
     (block
-     ;;@ parser.c:1650:0
+     ;;@ parser.c:1662:0
      (local.set $$15
       (i32.load
        (local.get $$14)
@@ -101862,18 +102018,18 @@
        (local.get $$16)
       )
       (block
-       ;;@ parser.c:1656:0
+       ;;@ parser.c:1668:0
        (drop
         (call $_printf
          (i32.const 5293)
          (local.get $$vararg_buffer)
         )
        )
-       ;;@ parser.c:1657:0
+       ;;@ parser.c:1669:0
        (call $_abort)
       )
      )
-     ;;@ parser.c:1651:0
+     ;;@ parser.c:1663:0
      (local.set $$17
       (local.get $$5)
      )
@@ -101902,7 +102058,7 @@
      (if
       (local.get $$21)
       (block
-       ;;@ parser.c:1653:0
+       ;;@ parser.c:1665:0
        (local.set $$22
         (local.get $$5)
        )
@@ -101923,21 +102079,21 @@
        (br $do-once)
       )
       (block
-       ;;@ parser.c:1656:0
+       ;;@ parser.c:1668:0
        (drop
         (call $_printf
          (i32.const 5293)
          (local.get $$vararg_buffer)
         )
        )
-       ;;@ parser.c:1657:0
+       ;;@ parser.c:1669:0
        (call $_abort)
       )
      )
     )
    )
   )
-  ;;@ parser.c:1660:0
+  ;;@ parser.c:1672:0
   (local.set $$25
    (local.get $$2)
   )
@@ -101962,7 +102118,7 @@
    (local.get $$26)
    (local.get $$28)
   )
-  ;;@ parser.c:1661:0
+  ;;@ parser.c:1673:0
   (local.set $$29
    (local.get $$2)
   )
@@ -101978,7 +102134,7 @@
   (local.set $$6
    (local.get $$31)
   )
-  ;;@ parser.c:1662:0
+  ;;@ parser.c:1674:0
   (local.set $$32
    (local.get $$3)
   )
@@ -101994,7 +102150,7 @@
   (local.set $$7
    (local.get $$34)
   )
-  ;;@ parser.c:1663:0
+  ;;@ parser.c:1675:0
   (local.set $$35
    (local.get $$4)
   )
@@ -102017,7 +102173,7 @@
    (local.get $$38)
    (local.get $$35)
   )
-  ;;@ parser.c:1664:0
+  ;;@ parser.c:1676:0
   (local.set $$39
    (local.get $$7)
   )
@@ -102028,7 +102184,7 @@
    (local.get $$39)
   )
  )
- (func $_parse_while (; 272 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_while (; 276 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -102089,7 +102245,7 @@
   (local.set $$3
    (local.get $$1)
   )
-  ;;@ parser.c:1669:0
+  ;;@ parser.c:1681:0
   (local.set $$6
    (local.get $$2)
   )
@@ -102114,7 +102270,7 @@
    (local.get $$7)
    (local.get $$9)
   )
-  ;;@ parser.c:1670:0
+  ;;@ parser.c:1682:0
   (local.set $$10
    (local.get $$2)
   )
@@ -102139,7 +102295,7 @@
    (local.get $$11)
    (local.get $$13)
   )
-  ;;@ parser.c:1671:0
+  ;;@ parser.c:1683:0
   (local.set $$14
    (local.get $$2)
   )
@@ -102155,7 +102311,7 @@
   (local.set $$4
    (local.get $$16)
   )
-  ;;@ parser.c:1672:0
+  ;;@ parser.c:1684:0
   (local.set $$17
    (local.get $$2)
   )
@@ -102204,7 +102360,7 @@
   (if
    (local.get $$24)
    (block
-    ;;@ parser.c:1673:0
+    ;;@ parser.c:1685:0
     (local.set $$25
      (local.get $$2)
     )
@@ -102229,7 +102385,7 @@
      (local.get $$26)
      (local.get $$28)
     )
-    ;;@ parser.c:1676:0
+    ;;@ parser.c:1688:0
     (local.set $$29
      (local.get $$2)
     )
@@ -102245,7 +102401,7 @@
     (local.set $$5
      (local.get $$31)
     )
-    ;;@ parser.c:1677:0
+    ;;@ parser.c:1689:0
     (local.set $$32
      (local.get $$3)
     )
@@ -102269,14 +102425,14 @@
      (local.get $$35)
     )
    )
-   ;;@ parser.c:1675:0
+   ;;@ parser.c:1687:0
    (call $_abort)
   )
   (return
    (i32.const 0)
   )
  )
- (func $_parse_do_while (; 273 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_do_while (; 277 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -102356,7 +102512,7 @@
   (local.set $$3
    (local.get $$1)
   )
-  ;;@ parser.c:1682:0
+  ;;@ parser.c:1694:0
   (local.set $$6
    (local.get $$2)
   )
@@ -102381,7 +102537,7 @@
    (local.get $$7)
    (local.get $$9)
   )
-  ;;@ parser.c:1683:0
+  ;;@ parser.c:1695:0
   (local.set $$10
    (local.get $$2)
   )
@@ -102397,7 +102553,7 @@
   (local.set $$4
    (local.get $$12)
   )
-  ;;@ parser.c:1684:0
+  ;;@ parser.c:1696:0
   (local.set $$13
    (local.get $$2)
   )
@@ -102439,10 +102595,10 @@
    (i32.eqz
     (local.get $$19)
    )
-   ;;@ parser.c:1687:0
+   ;;@ parser.c:1699:0
    (call $_abort)
   )
-  ;;@ parser.c:1685:0
+  ;;@ parser.c:1697:0
   (local.set $$20
    (local.get $$2)
   )
@@ -102467,7 +102623,7 @@
    (local.get $$21)
    (local.get $$23)
   )
-  ;;@ parser.c:1688:0
+  ;;@ parser.c:1700:0
   (local.set $$24
    (local.get $$2)
   )
@@ -102517,10 +102673,10 @@
    (i32.eqz
     (local.get $$31)
    )
-   ;;@ parser.c:1691:0
+   ;;@ parser.c:1703:0
    (call $_abort)
   )
-  ;;@ parser.c:1689:0
+  ;;@ parser.c:1701:0
   (local.set $$32
    (local.get $$2)
   )
@@ -102545,7 +102701,7 @@
    (local.get $$33)
    (local.get $$35)
   )
-  ;;@ parser.c:1692:0
+  ;;@ parser.c:1704:0
   (local.set $$36
    (local.get $$2)
   )
@@ -102561,7 +102717,7 @@
   (local.set $$5
    (local.get $$38)
   )
-  ;;@ parser.c:1693:0
+  ;;@ parser.c:1705:0
   (local.set $$39
    (local.get $$2)
   )
@@ -102610,7 +102766,7 @@
   (if
    (local.get $$46)
    (block
-    ;;@ parser.c:1694:0
+    ;;@ parser.c:1706:0
     (local.set $$47
      (local.get $$2)
     )
@@ -102635,7 +102791,7 @@
      (local.get $$48)
      (local.get $$50)
     )
-    ;;@ parser.c:1697:0
+    ;;@ parser.c:1709:0
     (local.set $$51
      (local.get $$3)
     )
@@ -102659,14 +102815,14 @@
      (local.get $$54)
     )
    )
-   ;;@ parser.c:1696:0
+   ;;@ parser.c:1708:0
    (call $_abort)
   )
   (return
    (i32.const 0)
   )
  )
- (func $_parse_for (; 274 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_for (; 278 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -102836,19 +102992,19 @@
   (local.set $$3
    (local.get $$1)
   )
-  ;;@ parser.c:1702:0
+  ;;@ parser.c:1714:0
   (local.set $$4
    (i32.const 0)
   )
-  ;;@ parser.c:1703:0
+  ;;@ parser.c:1715:0
   (local.set $$5
    (i32.const 0)
   )
-  ;;@ parser.c:1704:0
+  ;;@ parser.c:1716:0
   (local.set $$6
    (i32.const 0)
   )
-  ;;@ parser.c:1705:0
+  ;;@ parser.c:1717:0
   (local.set $$10
    (local.get $$3)
   )
@@ -102861,10 +103017,10 @@
   (local.set $$7
    (local.get $$11)
   )
-  ;;@ parser.c:1706:0
+  ;;@ parser.c:1718:0
   (local.set $$12
    (i32.load
-    (i32.const 9268)
+    (i32.const 9540)
    )
   )
   (local.set $$13
@@ -102886,24 +103042,24 @@
    (local.get $$15)
    (local.get $$12)
   )
-  ;;@ parser.c:1707:0
+  ;;@ parser.c:1719:0
   (local.set $$16
    (i32.load
-    (i32.const 9268)
+    (i32.const 9540)
    )
   )
   (local.set $$8
    (local.get $$16)
   )
-  ;;@ parser.c:1708:0
+  ;;@ parser.c:1720:0
   (local.set $$17
    (local.get $$7)
   )
   (i32.store
-   (i32.const 9268)
+   (i32.const 9540)
    (local.get $$17)
   )
-  ;;@ parser.c:1709:0
+  ;;@ parser.c:1721:0
   (local.set $$18
    (local.get $$2)
   )
@@ -102928,7 +103084,7 @@
    (local.get $$19)
    (local.get $$21)
   )
-  ;;@ parser.c:1710:0
+  ;;@ parser.c:1722:0
   (local.set $$22
    (local.get $$2)
   )
@@ -102979,18 +103135,18 @@
     (local.get $$29)
    )
    (block
-    ;;@ parser.c:1714:0
+    ;;@ parser.c:1726:0
     (drop
      (call $_printf
       (i32.const 5212)
       (local.get $$vararg_buffer)
      )
     )
-    ;;@ parser.c:1715:0
+    ;;@ parser.c:1727:0
     (call $_abort)
    )
   )
-  ;;@ parser.c:1711:0
+  ;;@ parser.c:1723:0
   (local.set $$30
    (local.get $$2)
   )
@@ -103015,7 +103171,7 @@
    (local.get $$31)
    (local.get $$33)
   )
-  ;;@ parser.c:1717:0
+  ;;@ parser.c:1729:0
   (local.set $$34
    (local.get $$2)
   )
@@ -103068,7 +103224,7 @@
    (if
     (local.get $$41)
     (block
-     ;;@ parser.c:1718:0
+     ;;@ parser.c:1730:0
      (local.set $$43
       (local.get $$3)
      )
@@ -103081,7 +103237,7 @@
      (local.set $$4
       (local.get $$44)
      )
-     ;;@ parser.c:1719:0
+     ;;@ parser.c:1731:0
      (local.set $$45
       (local.get $$4)
      )
@@ -103095,10 +103251,10 @@
       (i32.eqz
        (local.get $$46)
       )
-      ;;@ parser.c:1725:0
+      ;;@ parser.c:1737:0
       (call $_abort)
      )
-     ;;@ parser.c:1720:0
+     ;;@ parser.c:1732:0
      (local.set $$47
       (local.get $$2)
      )
@@ -103147,7 +103303,7 @@
      (if
       (local.get $$54)
       (block
-       ;;@ parser.c:1721:0
+       ;;@ parser.c:1733:0
        (local.set $$55
         (local.get $$2)
        )
@@ -103174,12 +103330,12 @@
        )
        (br $do-once)
       )
-      ;;@ parser.c:1723:0
+      ;;@ parser.c:1735:0
       (call $_abort)
      )
     )
     (block
-     ;;@ parser.c:1728:0
+     ;;@ parser.c:1740:0
      (local.set $$59
       (i32.add
        (local.get $$42)
@@ -103204,7 +103360,7 @@
     )
    )
   )
-  ;;@ parser.c:1730:0
+  ;;@ parser.c:1742:0
   (local.set $$62
    (local.get $$2)
   )
@@ -103257,7 +103413,7 @@
    (if
     (local.get $$69)
     (block
-     ;;@ parser.c:1731:0
+     ;;@ parser.c:1743:0
      (local.set $$71
       (local.get $$3)
      )
@@ -103270,7 +103426,7 @@
      (local.set $$5
       (local.get $$72)
      )
-     ;;@ parser.c:1732:0
+     ;;@ parser.c:1744:0
      (local.set $$73
       (local.get $$5)
      )
@@ -103284,10 +103440,10 @@
       (i32.eqz
        (local.get $$74)
       )
-      ;;@ parser.c:1738:0
+      ;;@ parser.c:1750:0
       (call $_abort)
      )
-     ;;@ parser.c:1733:0
+     ;;@ parser.c:1745:0
      (local.set $$75
       (local.get $$2)
      )
@@ -103336,7 +103492,7 @@
      (if
       (local.get $$82)
       (block
-       ;;@ parser.c:1734:0
+       ;;@ parser.c:1746:0
        (local.set $$83
         (local.get $$2)
        )
@@ -103363,12 +103519,12 @@
        )
        (br $do-once0)
       )
-      ;;@ parser.c:1736:0
+      ;;@ parser.c:1748:0
       (call $_abort)
      )
     )
     (block
-     ;;@ parser.c:1741:0
+     ;;@ parser.c:1753:0
      (local.set $$87
       (i32.add
        (local.get $$70)
@@ -103393,7 +103549,7 @@
     )
    )
   )
-  ;;@ parser.c:1743:0
+  ;;@ parser.c:1755:0
   (local.set $$90
    (local.get $$2)
   )
@@ -103442,7 +103598,7 @@
   (if
    (local.get $$97)
    (block
-    ;;@ parser.c:1744:0
+    ;;@ parser.c:1756:0
     (local.set $$98
      (local.get $$2)
     )
@@ -103458,7 +103614,7 @@
     (local.set $$6
      (local.get $$100)
     )
-    ;;@ parser.c:1745:0
+    ;;@ parser.c:1757:0
     (local.set $$101
      (local.get $$6)
     )
@@ -103472,12 +103628,12 @@
      (i32.eqz
       (local.get $$102)
      )
-     ;;@ parser.c:1747:0
+     ;;@ parser.c:1759:0
      (call $_abort)
     )
    )
   )
-  ;;@ parser.c:1749:0
+  ;;@ parser.c:1761:0
   (local.set $$103
    (local.get $$2)
   )
@@ -103528,18 +103684,18 @@
     (local.get $$110)
    )
    (block
-    ;;@ parser.c:1753:0
+    ;;@ parser.c:1765:0
     (drop
      (call $_printf
       (i32.const 5241)
       (local.get $$vararg_buffer1)
      )
     )
-    ;;@ parser.c:1754:0
+    ;;@ parser.c:1766:0
     (call $_abort)
    )
   )
-  ;;@ parser.c:1750:0
+  ;;@ parser.c:1762:0
   (local.set $$111
    (local.get $$2)
   )
@@ -103564,7 +103720,7 @@
    (local.get $$112)
    (local.get $$114)
   )
-  ;;@ parser.c:1756:0
+  ;;@ parser.c:1768:0
   (local.set $$115
    (local.get $$2)
   )
@@ -103580,7 +103736,7 @@
   (local.set $$9
    (local.get $$117)
   )
-  ;;@ parser.c:1757:0
+  ;;@ parser.c:1769:0
   (local.set $$118
    (local.get $$9)
   )
@@ -103593,26 +103749,26 @@
   (if
    (local.get $$119)
    (block
-    ;;@ parser.c:1758:0
+    ;;@ parser.c:1770:0
     (drop
      (call $_printf
       (i32.const 5268)
       (local.get $$vararg_buffer3)
      )
     )
-    ;;@ parser.c:1759:0
+    ;;@ parser.c:1771:0
     (call $_abort)
    )
    (block
-    ;;@ parser.c:1761:0
+    ;;@ parser.c:1773:0
     (local.set $$120
      (local.get $$8)
     )
     (i32.store
-     (i32.const 9268)
+     (i32.const 9540)
      (local.get $$120)
     )
-    ;;@ parser.c:1762:0
+    ;;@ parser.c:1774:0
     (local.set $$121
      (local.get $$3)
     )
@@ -103649,7 +103805,7 @@
    (i32.const 0)
   )
  )
- (func $_parse_continue (; 275 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_continue (; 279 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$2 i32)
   (local $$3 i32)
   (local $$4 i32)
@@ -103684,7 +103840,7 @@
   (local.set $$3
    (local.get $$1)
   )
-  ;;@ parser.c:1767:0
+  ;;@ parser.c:1779:0
   (local.set $$4
    (local.get $$2)
   )
@@ -103709,7 +103865,7 @@
    (local.get $$5)
    (local.get $$7)
   )
-  ;;@ parser.c:1768:0
+  ;;@ parser.c:1780:0
   (local.set $$8
    (local.get $$3)
   )
@@ -103725,7 +103881,7 @@
    (local.get $$9)
   )
  )
- (func $_parse_break (; 276 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_break (; 280 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$2 i32)
   (local $$3 i32)
   (local $$4 i32)
@@ -103760,7 +103916,7 @@
   (local.set $$3
    (local.get $$1)
   )
-  ;;@ parser.c:1773:0
+  ;;@ parser.c:1785:0
   (local.set $$4
    (local.get $$2)
   )
@@ -103785,7 +103941,7 @@
    (local.get $$5)
    (local.get $$7)
   )
-  ;;@ parser.c:1774:0
+  ;;@ parser.c:1786:0
   (local.set $$8
    (local.get $$3)
   )
@@ -103801,7 +103957,7 @@
    (local.get $$9)
   )
  )
- (func $_parse_return (; 277 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_return (; 281 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -103849,7 +104005,7 @@
   (local.set $$3
    (local.get $$1)
   )
-  ;;@ parser.c:1779:0
+  ;;@ parser.c:1791:0
   (local.set $$5
    (local.get $$2)
   )
@@ -103874,11 +104030,11 @@
    (local.get $$6)
    (local.get $$8)
   )
-  ;;@ parser.c:1780:0
+  ;;@ parser.c:1792:0
   (local.set $$4
    (i32.const 0)
   )
-  ;;@ parser.c:1781:0
+  ;;@ parser.c:1793:0
   (local.set $$9
    (local.get $$2)
   )
@@ -103929,7 +104085,7 @@
     (local.get $$16)
    )
    (block
-    ;;@ parser.c:1784:0
+    ;;@ parser.c:1796:0
     (local.set $$20
      (local.get $$3)
     )
@@ -103951,7 +104107,7 @@
     )
    )
   )
-  ;;@ parser.c:1782:0
+  ;;@ parser.c:1794:0
   (local.set $$17
    (local.get $$2)
   )
@@ -103967,7 +104123,7 @@
   (local.set $$4
    (local.get $$19)
   )
-  ;;@ parser.c:1784:0
+  ;;@ parser.c:1796:0
   (local.set $$20
    (local.get $$3)
   )
@@ -103988,7 +104144,7 @@
    (local.get $$22)
   )
  )
- (func $_parse_struct_declaration (; 278 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_struct_declaration (; 282 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -104064,7 +104220,7 @@
   (local.set $$3
    (local.get $$1)
   )
-  ;;@ parser.c:2004:0
+  ;;@ parser.c:2016:0
   (local.set $$10
    (local.get $$2)
   )
@@ -104089,7 +104245,7 @@
    (local.get $$11)
    (local.get $$13)
   )
-  ;;@ parser.c:2005:0
+  ;;@ parser.c:2017:0
   (local.set $$14
    (local.get $$2)
   )
@@ -104105,14 +104261,14 @@
   (local.set $$4
    (local.get $$16)
   )
-  ;;@ parser.c:2006:0
+  ;;@ parser.c:2018:0
   (local.set $$17
    (call $_make_type_info_struct_dummy)
   )
   (local.set $$5
    (local.get $$17)
   )
-  ;;@ parser.c:2007:0
+  ;;@ parser.c:2019:0
   (local.set $$18
    (local.get $$4)
   )
@@ -104139,7 +104295,7 @@
   (local.set $$6
    (local.get $$22)
   )
-  ;;@ parser.c:2008:0
+  ;;@ parser.c:2020:0
   (local.set $$23
    (local.get $$3)
   )
@@ -104152,7 +104308,7 @@
   (local.set $$7
    (local.get $$24)
   )
-  ;;@ parser.c:2010:0
+  ;;@ parser.c:2022:0
   (local.set $$25
    (local.get $$3)
   )
@@ -104177,10 +104333,10 @@
    (local.get $$8)
    (local.get $$29)
   )
-  ;;@ parser.c:2011:0
+  ;;@ parser.c:2023:0
   (local.set $$30
    (i32.load
-    (i32.const 9268)
+    (i32.const 9540)
    )
   )
   (local.set $$31
@@ -104206,7 +104362,7 @@
     (local.get $$8)
    )
   )
-  ;;@ parser.c:2012:0
+  ;;@ parser.c:2024:0
   (local.set $$34
    (local.get $$2)
   )
@@ -104222,7 +104378,7 @@
   (local.set $$9
    (local.get $$36)
   )
-  ;;@ parser.c:2013:0
+  ;;@ parser.c:2025:0
   (local.set $$37
    (local.get $$5)
   )
@@ -104239,7 +104395,7 @@
    (local.get $$39)
    (local.get $$37)
   )
-  ;;@ parser.c:2014:0
+  ;;@ parser.c:2026:0
   (local.set $$40
    (local.get $$9)
   )
@@ -104256,7 +104412,7 @@
    (local.get $$42)
    (local.get $$40)
   )
-  ;;@ parser.c:2015:0
+  ;;@ parser.c:2027:0
   (local.set $$43
    (local.get $$7)
   )
@@ -104265,7 +104421,7 @@
     (local.get $$43)
    )
   )
-  ;;@ parser.c:2016:0
+  ;;@ parser.c:2028:0
   (local.set $$44
    (i32.load
     (local.get $$8)
@@ -104278,7 +104434,7 @@
    (local.get $$44)
   )
  )
- (func $_parse_type (; 279 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_parse_type (; 283 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -104392,7 +104548,7 @@
   (local.set $$6
    (local.get $$2)
   )
-  ;;@ parser.c:1873:0
+  ;;@ parser.c:1885:0
   (local.set $$14
    (local.get $$5)
   )
@@ -104410,7 +104566,7 @@
   (local.set $$7
    (local.get $$16)
   )
-  ;;@ parser.c:1874:0
+  ;;@ parser.c:1886:0
   (local.set $$17
    (local.get $$5)
   )
@@ -104422,7 +104578,7 @@
   (local.set $$8
    (local.get $$18)
   )
-  ;;@ parser.c:1875:0
+  ;;@ parser.c:1887:0
   (local.set $$19
    (local.get $$4)
   )
@@ -104440,7 +104596,7 @@
   (local.set $$9
    (local.get $$21)
   )
-  ;;@ parser.c:1877:0
+  ;;@ parser.c:1889:0
   (local.set $$22
    (local.get $$4)
   )
@@ -104456,7 +104612,7 @@
   (local.set $$10
    (local.get $$24)
   )
-  ;;@ parser.c:1878:0
+  ;;@ parser.c:1890:0
   (local.set $$25
    (local.get $$10)
   )
@@ -104469,11 +104625,11 @@
   (if
    (local.get $$26)
    (block
-    ;;@ parser.c:1879:0
+    ;;@ parser.c:1891:0
     (local.set $$3
      (i32.const 0)
     )
-    ;;@ parser.c:1911:0
+    ;;@ parser.c:1923:0
     (local.set $$80
      (local.get $$3)
     )
@@ -104485,7 +104641,7 @@
     )
    )
   )
-  ;;@ parser.c:1881:0
+  ;;@ parser.c:1893:0
   (local.set $$27
    (local.get $$10)
   )
@@ -104503,7 +104659,7 @@
   (local.set $$11
    (local.get $$29)
   )
-  ;;@ parser.c:1882:0
+  ;;@ parser.c:1894:0
   (local.set $$30
    (local.get $$5)
   )
@@ -104522,7 +104678,7 @@
    (local.get $$30)
    (local.get $$32)
   )
-  ;;@ parser.c:1883:0
+  ;;@ parser.c:1895:0
   (local.set $$33
    (local.get $$5)
   )
@@ -104547,7 +104703,7 @@
    (local.get $$34)
    (local.get $$36)
   )
-  ;;@ parser.c:1884:0
+  ;;@ parser.c:1896:0
   (local.set $$37
    (local.get $$11)
   )
@@ -104560,7 +104716,7 @@
    (local.get $$12)
    (local.get $$38)
   )
-  ;;@ parser.c:1885:0
+  ;;@ parser.c:1897:0
   (local.set $$39
    (i32.load
     (local.get $$12)
@@ -104575,7 +104731,7 @@
   (if
    (local.get $$40)
    (block
-    ;;@ parser.c:1888:0
+    ;;@ parser.c:1900:0
     (local.set $$41
      (local.get $$7)
     )
@@ -104592,7 +104748,7 @@
      (local.get $$43)
      (local.get $$41)
     )
-    ;;@ parser.c:1889:0
+    ;;@ parser.c:1901:0
     (local.set $$44
      (local.get $$8)
     )
@@ -104603,7 +104759,7 @@
      (local.get $$45)
      (local.get $$44)
     )
-    ;;@ parser.c:1890:0
+    ;;@ parser.c:1902:0
     (local.set $$46
      (local.get $$9)
     )
@@ -104620,11 +104776,11 @@
      (local.get $$48)
      (local.get $$46)
     )
-    ;;@ parser.c:1891:0
+    ;;@ parser.c:1903:0
     (local.set $$3
      (i32.const 0)
     )
-    ;;@ parser.c:1911:0
+    ;;@ parser.c:1923:0
     (local.set $$80
      (local.get $$3)
     )
@@ -104636,13 +104792,13 @@
     )
    )
   )
-  ;;@ parser.c:1894:0
+  ;;@ parser.c:1906:0
   (local.set $$13
    (i32.const 0)
   )
   (loop $while-in
    (block $while-out
-    ;;@ parser.c:1896:0
+    ;;@ parser.c:1908:0
     (local.set $$49
      (local.get $$4)
     )
@@ -104660,7 +104816,7 @@
     (local.set $$9
      (local.get $$51)
     )
-    ;;@ parser.c:1897:0
+    ;;@ parser.c:1909:0
     (local.set $$52
      (local.get $$4)
     )
@@ -104678,7 +104834,7 @@
     (local.set $$13
      (local.get $$54)
     )
-    ;;@ parser.c:1899:0
+    ;;@ parser.c:1911:0
     (local.set $$55
      (local.get $$4)
     )
@@ -104703,7 +104859,7 @@
     (if
      (local.get $$58)
      (block
-      ;;@ parser.c:1900:0
+      ;;@ parser.c:1912:0
       (local.set $$59
        (local.get $$13)
       )
@@ -104722,7 +104878,7 @@
       )
      )
     )
-    ;;@ parser.c:1903:0
+    ;;@ parser.c:1915:0
     (local.set $$62
      (local.get $$4)
     )
@@ -104740,7 +104896,7 @@
     (local.set $$13
      (local.get $$64)
     )
-    ;;@ parser.c:1904:0
+    ;;@ parser.c:1916:0
     (local.set $$65
      (local.get $$4)
     )
@@ -104765,7 +104921,7 @@
     (if
      (local.get $$68)
      (block
-      ;;@ parser.c:1905:0
+      ;;@ parser.c:1917:0
       (local.set $$69
        (local.get $$13)
       )
@@ -104784,7 +104940,7 @@
       )
      )
     )
-    ;;@ parser.c:1907:0
+    ;;@ parser.c:1919:0
     (local.set $$72
      (local.get $$9)
     )
@@ -104817,7 +104973,7 @@
     (br $while-in)
    )
   )
-  ;;@ parser.c:1909:0
+  ;;@ parser.c:1921:0
   (local.set $$77
    (i32.load
     (local.get $$12)
@@ -104830,7 +104986,7 @@
    (local.get $$78)
    (local.get $$77)
   )
-  ;;@ parser.c:1910:0
+  ;;@ parser.c:1922:0
   (local.set $$79
    (i32.load
     (local.get $$12)
@@ -104839,7 +104995,7 @@
   (local.set $$3
    (local.get $$79)
   )
-  ;;@ parser.c:1911:0
+  ;;@ parser.c:1923:0
   (local.set $$80
    (local.get $$3)
   )
@@ -104850,7 +105006,7 @@
    (local.get $$80)
   )
  )
- (func $_parse_procedure_declaration (; 280 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_parse_procedure_declaration (; 284 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -104950,7 +105106,7 @@
   (local.set $$5
    (local.get $$2)
   )
-  ;;@ parser.c:1844:0
+  ;;@ parser.c:1856:0
   (local.set $$12
    (local.get $$3)
   )
@@ -104966,7 +105122,7 @@
   (local.set $$6
    (local.get $$14)
   )
-  ;;@ parser.c:1846:0
+  ;;@ parser.c:1858:0
   (local.set $$15
    (local.get $$4)
   )
@@ -104979,7 +105135,7 @@
   (local.set $$7
    (local.get $$16)
   )
-  ;;@ parser.c:1847:0
+  ;;@ parser.c:1859:0
   (local.set $$17
    (call $_malloc
     (i32.const 20)
@@ -104988,7 +105144,7 @@
   (local.set $$8
    (local.get $$17)
   )
-  ;;@ parser.c:1848:0
+  ;;@ parser.c:1860:0
   (local.set $$18
    (local.get $$8)
   )
@@ -104997,10 +105153,10 @@
    (i32.const 4)
    (i32.const 10)
   )
-  ;;@ parser.c:1849:0
+  ;;@ parser.c:1861:0
   (local.set $$19
    (i32.load
-    (i32.const 9268)
+    (i32.const 9540)
    )
   )
   (local.set $$20
@@ -105022,15 +105178,15 @@
    (local.get $$22)
    (local.get $$19)
   )
-  ;;@ parser.c:1850:0
+  ;;@ parser.c:1862:0
   (local.set $$23
    (local.get $$7)
   )
   (i32.store
-   (i32.const 9268)
+   (i32.const 9540)
    (local.get $$23)
   )
-  ;;@ parser.c:1851:0
+  ;;@ parser.c:1863:0
   (local.set $$24
    (local.get $$8)
   )
@@ -105049,7 +105205,7 @@
    (local.get $$25)
    (local.get $$26)
   )
-  ;;@ parser.c:1852:0
+  ;;@ parser.c:1864:0
   (local.set $$27
    (local.get $$7)
   )
@@ -105071,14 +105227,14 @@
    )
   )
   (i32.store
-   (i32.const 9268)
+   (i32.const 9540)
    (local.get $$30)
   )
-  ;;@ parser.c:1853:0
+  ;;@ parser.c:1865:0
   (local.set $$9
    (i32.const 0)
   )
-  ;;@ parser.c:1854:0
+  ;;@ parser.c:1866:0
   (local.set $$31
    (local.get $$3)
   )
@@ -105119,11 +105275,11 @@
   (if
    (local.get $$37)
    (block
-    ;;@ parser.c:1855:0
+    ;;@ parser.c:1867:0
     (local.set $$9
      (i32.const 1)
     )
-    ;;@ parser.c:1856:0
+    ;;@ parser.c:1868:0
     (local.set $$38
      (local.get $$3)
     )
@@ -105150,7 +105306,7 @@
     )
    )
   )
-  ;;@ parser.c:1858:0
+  ;;@ parser.c:1870:0
   (local.set $$42
    (local.get $$4)
   )
@@ -105178,7 +105334,7 @@
   (local.set $$10
    (local.get $$47)
   )
-  ;;@ parser.c:1861:0
+  ;;@ parser.c:1873:0
   (local.set $$48
    (local.get $$4)
   )
@@ -105200,10 +105356,10 @@
    (local.get $$11)
    (local.get $$51)
   )
-  ;;@ parser.c:1862:0
+  ;;@ parser.c:1874:0
   (local.set $$52
    (i32.load
-    (i32.const 9268)
+    (i32.const 9540)
    )
   )
   (local.set $$53
@@ -105229,10 +105385,10 @@
     (local.get $$11)
    )
   )
-  ;;@ parser.c:1863:0
+  ;;@ parser.c:1875:0
   (local.set $$56
    (i32.load
-    (i32.const 9268)
+    (i32.const 9540)
    )
   )
   (local.set $$57
@@ -105254,15 +105410,15 @@
    (local.get $$59)
    (local.get $$56)
   )
-  ;;@ parser.c:1864:0
+  ;;@ parser.c:1876:0
   (local.set $$60
    (local.get $$7)
   )
   (i32.store
-   (i32.const 9268)
+   (i32.const 9540)
    (local.get $$60)
   )
-  ;;@ parser.c:1865:0
+  ;;@ parser.c:1877:0
   (local.set $$61
    (local.get $$3)
   )
@@ -105282,7 +105438,7 @@
   (local.set $$7
    (local.get $$64)
   )
-  ;;@ parser.c:1866:0
+  ;;@ parser.c:1878:0
   (local.set $$65
    (local.get $$7)
   )
@@ -105304,10 +105460,10 @@
    )
   )
   (i32.store
-   (i32.const 9268)
+   (i32.const 9540)
    (local.get $$68)
   )
-  ;;@ parser.c:1867:0
+  ;;@ parser.c:1879:0
   (local.set $$69
    (i32.load
     (local.get $$11)
@@ -105320,7 +105476,7 @@
    (local.get $$69)
   )
  )
- (func $_parse_declaration_precomputed_type (; 281 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_parse_declaration_precomputed_type (; 285 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -105405,7 +105561,7 @@
   (local.set $$5
    (local.get $$2)
   )
-  ;;@ parser.c:1983:0
+  ;;@ parser.c:1995:0
   (local.set $$10
    (local.get $$3)
   )
@@ -105421,7 +105577,7 @@
   (local.set $$6
    (local.get $$12)
   )
-  ;;@ parser.c:1984:0
+  ;;@ parser.c:1996:0
   (local.set $$13
    (local.get $$6)
   )
@@ -105433,10 +105589,10 @@
   )
   (if
    (local.get $$14)
-   ;;@ parser.c:1985:0
+   ;;@ parser.c:1997:0
    (call $_abort)
   )
-  ;;@ parser.c:1987:0
+  ;;@ parser.c:1999:0
   (local.set $$15
    (local.get $$6)
   )
@@ -105459,7 +105615,7 @@
   (local.set $$7
    (local.get $$18)
   )
-  ;;@ parser.c:1988:0
+  ;;@ parser.c:2000:0
   (local.set $$19
    (local.get $$7)
   )
@@ -105472,7 +105628,7 @@
   (if
    (local.get $$20)
    (block
-    ;;@ parser.c:1989:0
+    ;;@ parser.c:2001:0
     (local.set $$21
      (local.get $$6)
     )
@@ -105497,11 +105653,11 @@
       (local.get $$vararg_buffer)
      )
     )
-    ;;@ parser.c:1990:0
+    ;;@ parser.c:2002:0
     (call $_abort)
    )
   )
-  ;;@ parser.c:1993:0
+  ;;@ parser.c:2005:0
   (local.set $$24
    (local.get $$3)
   )
@@ -105542,7 +105698,7 @@
   (if
    (local.get $$30)
    (block
-    ;;@ parser.c:1994:0
+    ;;@ parser.c:2006:0
     (local.set $$31
      (local.get $$3)
     )
@@ -105567,7 +105723,7 @@
      (local.get $$32)
      (local.get $$34)
     )
-    ;;@ parser.c:1995:0
+    ;;@ parser.c:2007:0
     (local.set $$35
      (local.get $$3)
     )
@@ -105585,7 +105741,7 @@
     )
    )
   )
-  ;;@ parser.c:1997:0
+  ;;@ parser.c:2009:0
   (local.set $$38
    (local.get $$4)
   )
@@ -105610,10 +105766,10 @@
    (local.get $$9)
    (local.get $$42)
   )
-  ;;@ parser.c:1998:0
+  ;;@ parser.c:2010:0
   (local.set $$43
    (i32.load
-    (i32.const 9268)
+    (i32.const 9540)
    )
   )
   (local.set $$44
@@ -105639,7 +105795,7 @@
     (local.get $$9)
    )
   )
-  ;;@ parser.c:1999:0
+  ;;@ parser.c:2011:0
   (local.set $$47
    (i32.load
     (local.get $$9)
@@ -105652,7 +105808,7 @@
    (local.get $$47)
   )
  )
- (func $_parse_increment (; 282 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_increment (; 286 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -105692,7 +105848,7 @@
   (local.set $$3
    (local.get $$1)
   )
-  ;;@ parser.c:1809:0
+  ;;@ parser.c:1821:0
   (local.set $$5
    (local.get $$3)
   )
@@ -105710,7 +105866,7 @@
   (local.set $$4
    (local.get $$7)
   )
-  ;;@ parser.c:1810:0
+  ;;@ parser.c:1822:0
   (local.set $$8
    (local.get $$2)
   )
@@ -105735,7 +105891,7 @@
    (local.get $$9)
    (local.get $$11)
   )
-  ;;@ parser.c:1811:0
+  ;;@ parser.c:1823:0
   (local.set $$12
    (local.get $$3)
   )
@@ -105755,7 +105911,7 @@
    (local.get $$14)
   )
  )
- (func $_parse_decrement (; 283 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_decrement (; 287 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -105795,7 +105951,7 @@
   (local.set $$3
    (local.get $$1)
   )
-  ;;@ parser.c:1816:0
+  ;;@ parser.c:1828:0
   (local.set $$5
    (local.get $$3)
   )
@@ -105813,7 +105969,7 @@
   (local.set $$4
    (local.get $$7)
   )
-  ;;@ parser.c:1817:0
+  ;;@ parser.c:1829:0
   (local.set $$8
    (local.get $$2)
   )
@@ -105838,7 +105994,7 @@
    (local.get $$9)
    (local.get $$11)
   )
-  ;;@ parser.c:1818:0
+  ;;@ parser.c:1830:0
   (local.set $$12
    (local.get $$3)
   )
@@ -105858,7 +106014,7 @@
    (local.get $$14)
   )
  )
- (func $_parse_assign (; 284 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_assign (; 288 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -105903,7 +106059,7 @@
   (local.set $$3
    (local.get $$1)
   )
-  ;;@ parser.c:1823:0
+  ;;@ parser.c:1835:0
   (local.set $$6
    (local.get $$3)
   )
@@ -105921,7 +106077,7 @@
   (local.set $$4
    (local.get $$8)
   )
-  ;;@ parser.c:1824:0
+  ;;@ parser.c:1836:0
   (local.set $$9
    (local.get $$2)
   )
@@ -105946,7 +106102,7 @@
    (local.get $$10)
    (local.get $$12)
   )
-  ;;@ parser.c:1825:0
+  ;;@ parser.c:1837:0
   (local.set $$13
    (local.get $$2)
   )
@@ -105962,7 +106118,7 @@
   (local.set $$5
    (local.get $$15)
   )
-  ;;@ parser.c:1826:0
+  ;;@ parser.c:1838:0
   (local.set $$16
    (local.get $$3)
   )
@@ -105986,7 +106142,7 @@
    (local.get $$19)
   )
  )
- (func $_parse_opassign (; 285 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_opassign (; 289 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -106054,7 +106210,7 @@
   (local.set $$3
    (local.get $$1)
   )
-  ;;@ parser.c:1831:0
+  ;;@ parser.c:1843:0
   (local.set $$8
    (local.get $$3)
   )
@@ -106072,7 +106228,7 @@
   (local.set $$4
    (local.get $$10)
   )
-  ;;@ parser.c:1832:0
+  ;;@ parser.c:1844:0
   (local.set $$11
    (local.get $$2)
   )
@@ -106112,7 +106268,7 @@
   (local.set $$5
    (local.get $$17)
   )
-  ;;@ parser.c:1833:0
+  ;;@ parser.c:1845:0
   (local.set $$18
    (local.get $$5)
   )
@@ -106127,7 +106283,7 @@
   (local.set $$6
    (local.get $$20)
   )
-  ;;@ parser.c:1834:0
+  ;;@ parser.c:1846:0
   (local.set $$21
    (local.get $$6)
   )
@@ -106166,7 +106322,7 @@
     (local.get $$27)
    )
   )
-  ;;@ parser.c:1835:0
+  ;;@ parser.c:1847:0
   (local.set $$28
    (local.get $$6)
   )
@@ -106183,7 +106339,7 @@
    (local.get $$30)
    (i32.const 0)
   )
-  ;;@ parser.c:1836:0
+  ;;@ parser.c:1848:0
   (local.set $$31
    (local.get $$2)
   )
@@ -106208,7 +106364,7 @@
    (local.get $$32)
    (local.get $$34)
   )
-  ;;@ parser.c:1837:0
+  ;;@ parser.c:1849:0
   (local.set $$35
    (local.get $$2)
   )
@@ -106224,7 +106380,7 @@
   (local.set $$7
    (local.get $$37)
   )
-  ;;@ parser.c:1838:0
+  ;;@ parser.c:1850:0
   (local.set $$38
    (local.get $$3)
   )
@@ -106252,7 +106408,7 @@
    (local.get $$42)
   )
  )
- (func $_parse_param (; 286 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_parse_param (; 290 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -106300,7 +106456,7 @@
   (local.set $$4
    (local.get $$1)
   )
-  ;;@ parser.c:1965:0
+  ;;@ parser.c:1977:0
   (local.set $$6
    (local.get $$3)
   )
@@ -106341,11 +106497,11 @@
   (if
    (local.get $$12)
    (block
-    ;;@ parser.c:1966:0
+    ;;@ parser.c:1978:0
     (local.set $$2
      (i32.const 0)
     )
-    ;;@ parser.c:1971:0
+    ;;@ parser.c:1983:0
     (local.set $$19
      (local.get $$2)
     )
@@ -106357,7 +106513,7 @@
     )
    )
    (block
-    ;;@ parser.c:1969:0
+    ;;@ parser.c:1981:0
     (local.set $$13
      (local.get $$3)
     )
@@ -106371,7 +106527,7 @@
       (local.get $$5)
      )
     )
-    ;;@ parser.c:1970:0
+    ;;@ parser.c:1982:0
     (local.set $$15
      (local.get $$3)
     )
@@ -106393,7 +106549,7 @@
     (local.set $$2
      (local.get $$18)
     )
-    ;;@ parser.c:1971:0
+    ;;@ parser.c:1983:0
     (local.set $$19
      (local.get $$2)
     )
@@ -106406,7 +106562,7 @@
    )
   )
  )
- (func $_parse_block_preinit (; 287 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_parse_block_preinit (; 291 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -106447,7 +106603,7 @@
   (local.set $$5
    (local.get $$2)
   )
-  ;;@ parser.c:1802:0
+  ;;@ parser.c:1814:0
   (local.set $$7
    (local.get $$5)
   )
@@ -106465,7 +106621,7 @@
   (local.set $$6
    (local.get $$9)
   )
-  ;;@ parser.c:1803:0
+  ;;@ parser.c:1815:0
   (local.set $$10
    (local.get $$6)
   )
@@ -106484,7 +106640,7 @@
    (local.get $$11)
    (local.get $$12)
   )
-  ;;@ parser.c:1804:0
+  ;;@ parser.c:1816:0
   (local.set $$13
    (local.get $$5)
   )
@@ -106495,7 +106651,7 @@
    (local.get $$13)
   )
  )
- (func $_parse_pointer_type (; 288 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_parse_pointer_type (; 292 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -106570,7 +106726,7 @@
   (local.set $$6
    (local.get $$2)
   )
-  ;;@ parser.c:1945:0
+  ;;@ parser.c:1957:0
   (local.set $$9
    (local.get $$4)
   )
@@ -106619,11 +106775,11 @@
   (if
    (local.get $$16)
    (block
-    ;;@ parser.c:1946:0
+    ;;@ parser.c:1958:0
     (local.set $$3
      (i32.const 0)
     )
-    ;;@ parser.c:1960:0
+    ;;@ parser.c:1972:0
     (local.set $$47
      (local.get $$3)
     )
@@ -106635,7 +106791,7 @@
     )
    )
   )
-  ;;@ parser.c:1949:0
+  ;;@ parser.c:1961:0
   (local.set $$17
    (local.get $$4)
   )
@@ -106669,7 +106825,7 @@
   (local.set $$7
    (local.get $$22)
   )
-  ;;@ parser.c:1950:0
+  ;;@ parser.c:1962:0
   (local.set $$8
    (i32.const 0)
   )
@@ -106693,7 +106849,7 @@
      )
      (br $while-out)
     )
-    ;;@ parser.c:1951:0
+    ;;@ parser.c:1963:0
     (local.set $$26
      (local.get $$4)
     )
@@ -106759,7 +106915,7 @@
       (br $while-out)
      )
     )
-    ;;@ parser.c:1952:0
+    ;;@ parser.c:1964:0
     (local.set $$36
      (local.get $$5)
     )
@@ -106771,7 +106927,7 @@
     (local.set $$5
      (local.get $$37)
     )
-    ;;@ parser.c:1950:0
+    ;;@ parser.c:1962:0
     (local.set $$38
      (local.get $$8)
     )
@@ -106792,10 +106948,10 @@
     (local.get $label)
     (i32.const 7)
    )
-   ;;@ parser.c:1954:0
+   ;;@ parser.c:1966:0
    (call $_abort)
   )
-  ;;@ parser.c:1956:0
+  ;;@ parser.c:1968:0
   (local.set $$40
    (local.get $$5)
   )
@@ -106806,7 +106962,7 @@
    (local.get $$41)
    (local.get $$40)
   )
-  ;;@ parser.c:1957:0
+  ;;@ parser.c:1969:0
   (local.set $$42
    (local.get $$4)
   )
@@ -106831,14 +106987,14 @@
    (local.get $$43)
    (local.get $$45)
   )
-  ;;@ parser.c:1958:0
+  ;;@ parser.c:1970:0
   (local.set $$46
    (local.get $$5)
   )
   (local.set $$3
    (local.get $$46)
   )
-  ;;@ parser.c:1960:0
+  ;;@ parser.c:1972:0
   (local.set $$47
    (local.get $$3)
   )
@@ -106849,7 +107005,7 @@
    (local.get $$47)
   )
  )
- (func $_parse_array_type (; 289 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_parse_array_type (; 293 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -106945,7 +107101,7 @@
   (local.set $$6
    (local.get $$2)
   )
-  ;;@ parser.c:1916:0
+  ;;@ parser.c:1928:0
   (local.set $$7
    (local.get $$4)
   )
@@ -106994,11 +107150,11 @@
   (if
    (local.get $$14)
    (block
-    ;;@ parser.c:1917:0
+    ;;@ parser.c:1929:0
     (local.set $$3
      (i32.const 0)
     )
-    ;;@ parser.c:1940:0
+    ;;@ parser.c:1952:0
     (local.set $$64
      (local.get $$3)
     )
@@ -107010,7 +107166,7 @@
     )
    )
   )
-  ;;@ parser.c:1920:0
+  ;;@ parser.c:1932:0
   (local.set $$15
    (local.get $$4)
   )
@@ -107035,7 +107191,7 @@
    (local.get $$16)
    (local.get $$18)
   )
-  ;;@ parser.c:1921:0
+  ;;@ parser.c:1933:0
   (local.set $$19
    (local.get $$4)
   )
@@ -107066,7 +107222,7 @@
     (local.get $$23)
    )
    (block
-    ;;@ parser.c:1930:0
+    ;;@ parser.c:1942:0
     (local.set $$56
      (local.get $$4)
     )
@@ -107115,22 +107271,22 @@
     (if
      (local.get $$63)
      (block
-      ;;@ parser.c:1931:0
+      ;;@ parser.c:1943:0
       (drop
        (call $_printf
         (i32.const 5175)
         (local.get $$vararg_buffer)
        )
       )
-      ;;@ parser.c:1932:0
+      ;;@ parser.c:1944:0
       (call $_abort)
      )
-     ;;@ parser.c:1937:0
+     ;;@ parser.c:1949:0
      (call $_abort)
     )
    )
   )
-  ;;@ parser.c:1922:0
+  ;;@ parser.c:1934:0
   (local.set $$24
    (local.get $$5)
   )
@@ -107203,7 +107359,7 @@
    (local.get $$37)
    (local.get $$36)
   )
-  ;;@ parser.c:1923:0
+  ;;@ parser.c:1935:0
   (local.set $$38
    (local.get $$4)
   )
@@ -107228,7 +107384,7 @@
    (local.get $$39)
    (local.get $$41)
   )
-  ;;@ parser.c:1924:0
+  ;;@ parser.c:1936:0
   (local.set $$42
    (local.get $$4)
   )
@@ -107278,10 +107434,10 @@
    (i32.eqz
     (local.get $$49)
    )
-   ;;@ parser.c:1927:0
+   ;;@ parser.c:1939:0
    (call $_abort)
   )
-  ;;@ parser.c:1925:0
+  ;;@ parser.c:1937:0
   (local.set $$50
    (local.get $$4)
   )
@@ -107306,7 +107462,7 @@
    (local.get $$51)
    (local.get $$53)
   )
-  ;;@ parser.c:1928:0
+  ;;@ parser.c:1940:0
   (local.set $$54
    (local.get $$6)
   )
@@ -107318,7 +107474,7 @@
   (local.set $$3
    (local.get $$55)
   )
-  ;;@ parser.c:1940:0
+  ;;@ parser.c:1952:0
   (local.set $$64
    (local.get $$3)
   )
@@ -107329,7 +107485,7 @@
    (local.get $$64)
   )
  )
- (func $_tokenize (; 290 ;) (param $$0 i32) (result i32)
+ (func $_tokenize (; 294 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -107406,7 +107562,7 @@
    (local.get $$1)
    (local.get $$0)
   )
-  ;;@ parser.c:2080:0
+  ;;@ parser.c:2092:0
   (local.set $$6
    (i32.load
     (local.get $$1)
@@ -107420,7 +107576,7 @@
   (local.set $$2
    (local.get $$7)
   )
-  ;;@ parser.c:2082:0
+  ;;@ parser.c:2094:0
   (local.set $$8
    (call $_malloc
     (i32.const 24)
@@ -107429,7 +107585,7 @@
   (local.set $$3
    (local.get $$8)
   )
-  ;;@ parser.c:2083:0
+  ;;@ parser.c:2095:0
   (local.set $$9
    (local.get $$3)
   )
@@ -107438,7 +107594,7 @@
    (i32.const 8)
    (i32.const 100)
   )
-  ;;@ parser.c:2086:0
+  ;;@ parser.c:2098:0
   (local.set $$10
    (i32.load
     (local.get $$1)
@@ -107447,7 +107603,7 @@
   (local.set $$4
    (local.get $$10)
   )
-  ;;@ parser.c:2087:0
+  ;;@ parser.c:2099:0
   (local.set $$5
    (i32.const 0)
   )
@@ -107481,7 +107637,7 @@
      )
      (br $while-out)
     )
-    ;;@ parser.c:2088:0
+    ;;@ parser.c:2100:0
     (local.set $$14
      (local.get $$3)
     )
@@ -107490,7 +107646,7 @@
       (local.get $$14)
      )
     )
-    ;;@ parser.c:2089:0
+    ;;@ parser.c:2101:0
     (local.set $$15
      (local.get $$3)
     )
@@ -107509,7 +107665,7 @@
      (local.get $$17)
      (local.get $$1)
     )
-    ;;@ parser.c:2090:0
+    ;;@ parser.c:2102:0
     (local.set $$18
      (i32.load
       (local.get $$1)
@@ -107533,7 +107689,7 @@
       (br $while-out)
      )
     )
-    ;;@ parser.c:2095:0
+    ;;@ parser.c:2107:0
     (local.set $$21
      (local.get $$3)
     )
@@ -107564,7 +107720,7 @@
       (local.get $$25)
      )
      (block
-      ;;@ parser.c:2096:0
+      ;;@ parser.c:2108:0
       (local.set $$26
        (local.get $$3)
       )
@@ -107595,7 +107751,7 @@
         (local.get $$30)
        )
        (block
-        ;;@ parser.c:2100:0
+        ;;@ parser.c:2112:0
         (local.set $$31
          (i32.load
           (local.get $$1)
@@ -107608,7 +107764,7 @@
       )
      )
     )
-    ;;@ parser.c:2087:0
+    ;;@ parser.c:2099:0
     (local.set $$32
      (local.get $$5)
     )
@@ -107629,7 +107785,7 @@
     (local.get $label)
     (i32.const 4)
    )
-   ;;@ parser.c:2091:0
+   ;;@ parser.c:2103:0
    (drop
     (call $_printf
      (i32.const 5341)
@@ -107637,7 +107793,7 @@
     )
    )
   )
-  ;;@ parser.c:2106:0
+  ;;@ parser.c:2118:0
   (local.set $$34
    (local.get $$3)
   )
@@ -107662,7 +107818,7 @@
    (local.get $$35)
    (local.get $$37)
   )
-  ;;@ parser.c:2107:0
+  ;;@ parser.c:2119:0
   (local.set $$38
    (local.get $$3)
   )
@@ -107687,7 +107843,7 @@
    (local.get $$39)
    (local.get $$41)
   )
-  ;;@ parser.c:2109:0
+  ;;@ parser.c:2121:0
   (local.set $$42
    (local.get $$3)
   )
@@ -107698,7 +107854,7 @@
    (local.get $$42)
   )
  )
- (func $_read_token (; 291 ;) (param $$0 i32) (param $$1 i32)
+ (func $_read_token (; 295 ;) (param $$0 i32) (param $$1 i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -107899,7 +108055,7 @@
   (local.set $$3
    (local.get $$1)
   )
-  ;;@ parser.c:2114:0
+  ;;@ parser.c:2126:0
   (local.set $$7
    (local.get $$3)
   )
@@ -107909,7 +108065,7 @@
     (local.get $$7)
    )
   )
-  ;;@ parser.c:2115:0
+  ;;@ parser.c:2127:0
   (local.set $$8
    (local.get $$3)
   )
@@ -107944,11 +108100,11 @@
     (global.set $STACKTOP
      (local.get $sp)
     )
-    ;;@ parser.c:2209:0
+    ;;@ parser.c:2221:0
     (return)
    )
   )
-  ;;@ parser.c:2118:0
+  ;;@ parser.c:2130:0
   (local.set $$13
    (local.get $$3)
   )
@@ -107967,7 +108123,7 @@
   )
   (loop $while-in
    (block $while-out
-    ;;@ parser.c:2119:0
+    ;;@ parser.c:2131:0
     (local.set $$16
      (local.get $$4)
     )
@@ -107992,7 +108148,7 @@
      )
      (br $while-out)
     )
-    ;;@ parser.c:2120:0
+    ;;@ parser.c:2132:0
     (local.set $$19
      (local.get $$3)
     )
@@ -108015,7 +108171,7 @@
     (local.set $$5
      (local.get $$22)
     )
-    ;;@ parser.c:2121:0
+    ;;@ parser.c:2133:0
     (local.set $$23
      (local.get $$5)
     )
@@ -108037,7 +108193,7 @@
     (if
      (local.get $$25)
      (block
-      ;;@ parser.c:2123:0
+      ;;@ parser.c:2135:0
       (local.set $$26
        (local.get $$3)
       )
@@ -108056,7 +108212,7 @@
        (local.get $$26)
        (local.get $$28)
       )
-      ;;@ parser.c:2124:0
+      ;;@ parser.c:2136:0
       (local.set $$29
        (local.get $$3)
       )
@@ -108075,7 +108231,7 @@
        (local.get $$29)
        (local.get $$31)
       )
-      ;;@ parser.c:2125:0
+      ;;@ parser.c:2137:0
       (local.set $$32
        (local.get $$2)
       )
@@ -108083,7 +108239,7 @@
        (local.get $$32)
        (i32.const 6)
       )
-      ;;@ parser.c:2129:0
+      ;;@ parser.c:2141:0
       (local.set $$33
        (local.get $$3)
       )
@@ -108093,7 +108249,7 @@
         (local.get $$33)
        )
       )
-      ;;@ parser.c:2130:0
+      ;;@ parser.c:2142:0
       (local.set $$34
        (local.get $$3)
       )
@@ -108125,7 +108281,7 @@
       (if
        (local.get $$38)
        (block
-        ;;@ parser.c:2131:0
+        ;;@ parser.c:2143:0
         (local.set $$39
          (local.get $$3)
         )
@@ -108148,7 +108304,7 @@
       )
      )
      (block
-      ;;@ parser.c:2134:0
+      ;;@ parser.c:2146:0
       (local.set $$42
        (local.get $$5)
       )
@@ -108173,7 +108329,7 @@
        )
        (br $while-out)
       )
-      ;;@ parser.c:2136:0
+      ;;@ parser.c:2148:0
       (local.set $$45
        (local.get $$3)
       )
@@ -108192,7 +108348,7 @@
        (local.get $$45)
        (local.get $$47)
       )
-      ;;@ parser.c:2137:0
+      ;;@ parser.c:2149:0
       (local.set $$48
        (local.get $$3)
       )
@@ -108211,7 +108367,7 @@
        (local.get $$48)
        (local.get $$50)
       )
-      ;;@ parser.c:2138:0
+      ;;@ parser.c:2150:0
       (local.set $$51
        (local.get $$2)
       )
@@ -108219,7 +108375,7 @@
        (local.get $$51)
        (i32.const 7)
       )
-      ;;@ parser.c:2142:0
+      ;;@ parser.c:2154:0
       (local.set $$52
        (local.get $$3)
       )
@@ -108229,7 +108385,7 @@
         (local.get $$52)
        )
       )
-      ;;@ parser.c:2143:0
+      ;;@ parser.c:2155:0
       (local.set $$53
        (local.get $$3)
       )
@@ -108248,7 +108404,7 @@
        (local.get $$53)
        (local.get $$55)
       )
-      ;;@ parser.c:2144:0
+      ;;@ parser.c:2156:0
       (local.set $$56
        (local.get $$3)
       )
@@ -108267,7 +108423,7 @@
        (local.get $$56)
        (local.get $$58)
       )
-      ;;@ parser.c:2145:0
+      ;;@ parser.c:2157:0
       (local.set $$59
        (local.get $$3)
       )
@@ -108299,7 +108455,7 @@
       (if
        (local.get $$63)
        (block
-        ;;@ parser.c:2146:0
+        ;;@ parser.c:2158:0
         (local.set $$64
          (local.get $$3)
         )
@@ -108322,7 +108478,7 @@
       )
      )
     )
-    ;;@ parser.c:2154:0
+    ;;@ parser.c:2166:0
     (local.set $$67
      (local.get $$3)
     )
@@ -108332,7 +108488,7 @@
       (local.get $$67)
      )
     )
-    ;;@ parser.c:2155:0
+    ;;@ parser.c:2167:0
     (local.set $$68
      (local.get $$3)
     )
@@ -108349,7 +108505,7 @@
     (local.set $$4
      (local.get $$70)
     )
-    ;;@ parser.c:2156:0
+    ;;@ parser.c:2168:0
     (local.set $$71
      (local.get $$3)
     )
@@ -108399,11 +108555,11 @@
     (global.set $STACKTOP
      (local.get $sp)
     )
-    ;;@ parser.c:2209:0
+    ;;@ parser.c:2221:0
     (return)
    )
   )
-  ;;@ parser.c:2160:0
+  ;;@ parser.c:2172:0
   (local.set $$76
    (local.get $$3)
   )
@@ -108438,11 +108594,11 @@
     (global.set $STACKTOP
      (local.get $sp)
     )
-    ;;@ parser.c:2209:0
+    ;;@ parser.c:2221:0
     (return)
    )
   )
-  ;;@ parser.c:2163:0
+  ;;@ parser.c:2175:0
   (local.set $$81
    (local.get $$4)
   )
@@ -108466,7 +108622,7 @@
   (if
    (local.get $$83)
    (block
-    ;;@ parser.c:2164:0
+    ;;@ parser.c:2176:0
     (local.set $$84
      (local.get $$3)
     )
@@ -108489,7 +108645,7 @@
      (local.get $$87)
      (local.get $$85)
     )
-    ;;@ parser.c:2165:0
+    ;;@ parser.c:2177:0
     (local.set $$88
      (local.get $$2)
     )
@@ -108529,7 +108685,7 @@
     (if
      (local.get $$92)
      (block
-      ;;@ parser.c:2166:0
+      ;;@ parser.c:2178:0
       (i32.store
        (local.get $$93)
        (i32.const 0)
@@ -108537,11 +108693,11 @@
       (global.set $STACKTOP
        (local.get $sp)
       )
-      ;;@ parser.c:2209:0
+      ;;@ parser.c:2221:0
       (return)
      )
      (block
-      ;;@ parser.c:2169:0
+      ;;@ parser.c:2181:0
       (i32.store
        (local.get $$93)
        (i32.const 1)
@@ -108549,13 +108705,13 @@
       (global.set $STACKTOP
        (local.get $sp)
       )
-      ;;@ parser.c:2209:0
+      ;;@ parser.c:2221:0
       (return)
      )
     )
    )
   )
-  ;;@ parser.c:2172:0
+  ;;@ parser.c:2184:0
   (local.set $$94
    (local.get $$4)
   )
@@ -108579,7 +108735,7 @@
   (if
    (local.get $$96)
    (block
-    ;;@ parser.c:2173:0
+    ;;@ parser.c:2185:0
     (local.set $$97
      (local.get $$3)
     )
@@ -108598,7 +108754,7 @@
      (local.get $$97)
      (local.get $$99)
     )
-    ;;@ parser.c:2174:0
+    ;;@ parser.c:2186:0
     (local.set $$100
      (local.get $$2)
     )
@@ -108606,7 +108762,7 @@
      (local.get $$100)
      (i32.const 2)
     )
-    ;;@ parser.c:2175:0
+    ;;@ parser.c:2187:0
     (local.set $$101
      (local.get $$3)
     )
@@ -108629,7 +108785,7 @@
      (local.get $$104)
      (local.get $$102)
     )
-    ;;@ parser.c:2176:0
+    ;;@ parser.c:2188:0
     (local.set $$105
      (local.get $$2)
     )
@@ -108662,7 +108818,7 @@
      (local.get $$110)
      (local.get $$108)
     )
-    ;;@ parser.c:2177:0
+    ;;@ parser.c:2189:0
     (local.set $$111
      (local.get $$3)
     )
@@ -108684,11 +108840,11 @@
     (global.set $STACKTOP
      (local.get $sp)
     )
-    ;;@ parser.c:2209:0
+    ;;@ parser.c:2221:0
     (return)
    )
   )
-  ;;@ parser.c:2179:0
+  ;;@ parser.c:2191:0
   (local.set $$114
    (local.get $$4)
   )
@@ -108715,7 +108871,7 @@
   (if
    (local.get $$116)
    (block
-    ;;@ parser.c:2181:0
+    ;;@ parser.c:2193:0
     (local.set $$118
      (i32.shr_s
       (i32.shl
@@ -108802,7 +108958,7 @@
         (if
          (local.get $$130)
          (block
-          ;;@ parser.c:2182:0
+          ;;@ parser.c:2194:0
           (local.set $$131
            (local.get $$3)
           )
@@ -108821,7 +108977,7 @@
            (local.get $$131)
            (local.get $$133)
           )
-          ;;@ parser.c:2183:0
+          ;;@ parser.c:2195:0
           (local.set $$134
            (local.get $$3)
           )
@@ -108840,7 +108996,7 @@
            (local.get $$134)
            (local.get $$136)
           )
-          ;;@ parser.c:2184:0
+          ;;@ parser.c:2196:0
           (local.set $$137
            (local.get $$3)
           )
@@ -108859,7 +109015,7 @@
            (local.get $$137)
            (local.get $$139)
           )
-          ;;@ parser.c:2185:0
+          ;;@ parser.c:2197:0
           (local.set $$140
            (local.get $$2)
           )
@@ -108867,7 +109023,7 @@
            (local.get $$140)
            (i32.const 3)
           )
-          ;;@ parser.c:2186:0
+          ;;@ parser.c:2198:0
           (local.set $$141
            (local.get $$2)
           )
@@ -108884,7 +109040,7 @@
           (global.set $STACKTOP
            (local.get $sp)
           )
-          ;;@ parser.c:2209:0
+          ;;@ parser.c:2221:0
           (return)
          )
         )
@@ -108892,7 +109048,7 @@
       )
      )
     )
-    ;;@ parser.c:2189:0
+    ;;@ parser.c:2201:0
     (local.set $$143
      (local.get $$3)
     )
@@ -108911,7 +109067,7 @@
      (local.get $$143)
      (local.get $$145)
     )
-    ;;@ parser.c:2190:0
+    ;;@ parser.c:2202:0
     (local.set $$146
      (local.get $$2)
     )
@@ -108919,7 +109075,7 @@
      (local.get $$146)
      (i32.const 3)
     )
-    ;;@ parser.c:2191:0
+    ;;@ parser.c:2203:0
     (local.set $$147
      (call $_malloc
       (i32.const 2)
@@ -108928,7 +109084,7 @@
     (local.set $$6
      (local.get $$147)
     )
-    ;;@ parser.c:2192:0
+    ;;@ parser.c:2204:0
     (local.set $$148
      (local.get $$4)
     )
@@ -108939,7 +109095,7 @@
      (local.get $$149)
      (local.get $$148)
     )
-    ;;@ parser.c:2193:0
+    ;;@ parser.c:2205:0
     (local.set $$150
      (local.get $$6)
     )
@@ -108953,7 +109109,7 @@
      (local.get $$151)
      (i32.const 0)
     )
-    ;;@ parser.c:2194:0
+    ;;@ parser.c:2206:0
     (local.set $$152
      (local.get $$6)
     )
@@ -108973,11 +109129,11 @@
     (global.set $STACKTOP
      (local.get $sp)
     )
-    ;;@ parser.c:2209:0
+    ;;@ parser.c:2221:0
     (return)
    )
   )
-  ;;@ parser.c:2197:0
+  ;;@ parser.c:2209:0
   (local.set $$155
    (call $_is_op_char
     (local.get $$117)
@@ -108998,7 +109154,7 @@
   (if
    (local.get $$156)
    (block
-    ;;@ parser.c:2198:0
+    ;;@ parser.c:2210:0
     (local.set $$157
      (local.get $$2)
     )
@@ -109006,7 +109162,7 @@
      (local.get $$157)
      (i32.const 4)
     )
-    ;;@ parser.c:2199:0
+    ;;@ parser.c:2211:0
     (local.set $$158
      (local.get $$3)
     )
@@ -109032,11 +109188,11 @@
     (global.set $STACKTOP
      (local.get $sp)
     )
-    ;;@ parser.c:2209:0
+    ;;@ parser.c:2221:0
     (return)
    )
   )
-  ;;@ parser.c:2201:0
+  ;;@ parser.c:2213:0
   (local.set $$162
    (local.get $$4)
   )
@@ -109060,7 +109216,7 @@
   (if
    (local.get $$164)
    (block
-    ;;@ parser.c:2202:0
+    ;;@ parser.c:2214:0
     (local.set $$165
      (local.get $$2)
     )
@@ -109068,7 +109224,7 @@
      (local.get $$165)
      (i32.const 5)
     )
-    ;;@ parser.c:2203:0
+    ;;@ parser.c:2215:0
     (local.set $$166
      (local.get $$3)
     )
@@ -109094,11 +109250,11 @@
     (global.set $STACKTOP
      (local.get $sp)
     )
-    ;;@ parser.c:2209:0
+    ;;@ parser.c:2221:0
     (return)
    )
    (block
-    ;;@ parser.c:2206:0
+    ;;@ parser.c:2218:0
     (local.set $$170
      (local.get $$4)
     )
@@ -109124,12 +109280,12 @@
     (global.set $STACKTOP
      (local.get $sp)
     )
-    ;;@ parser.c:2209:0
+    ;;@ parser.c:2221:0
     (return)
    )
   )
  )
- (func $_is_whitespace (; 292 ;) (param $$0 i32) (result i32)
+ (func $_is_whitespace (; 296 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -109165,7 +109321,7 @@
   (local.set $$1
    (local.get $$0)
   )
-  ;;@ parser.c:2304:0
+  ;;@ parser.c:2316:0
   (local.set $$2
    (local.get $$1)
   )
@@ -109239,7 +109395,7 @@
    (local.get $$12)
   )
  )
- (func $_read_while (; 293 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_read_while (; 297 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -109315,11 +109471,11 @@
   (local.set $$3
    (local.get $$1)
   )
-  ;;@ parser.c:2212:0
+  ;;@ parser.c:2224:0
   (local.set $$4
    (i32.const 100)
   )
-  ;;@ parser.c:2213:0
+  ;;@ parser.c:2225:0
   (local.set $$7
    (local.get $$4)
   )
@@ -109334,13 +109490,13 @@
   (local.set $$5
    (local.get $$9)
   )
-  ;;@ parser.c:2214:0
+  ;;@ parser.c:2226:0
   (local.set $$6
    (i32.const 0)
   )
   (loop $while-in
    (block $while-out
-    ;;@ parser.c:2215:0
+    ;;@ parser.c:2227:0
     (local.set $$10
      (local.get $$3)
     )
@@ -109421,7 +109577,7 @@
      )
      (br $while-out)
     )
-    ;;@ parser.c:2216:0
+    ;;@ parser.c:2228:0
     (local.set $$22
      (local.get $$3)
     )
@@ -109451,7 +109607,7 @@
      (local.get $$27)
      (local.get $$24)
     )
-    ;;@ parser.c:2217:0
+    ;;@ parser.c:2229:0
     (local.set $$28
      (local.get $$3)
     )
@@ -109470,7 +109626,7 @@
      (local.get $$28)
      (local.get $$30)
     )
-    ;;@ parser.c:2218:0
+    ;;@ parser.c:2230:0
     (local.set $$31
      (local.get $$6)
     )
@@ -109483,7 +109639,7 @@
     (local.set $$6
      (local.get $$32)
     )
-    ;;@ parser.c:2219:0
+    ;;@ parser.c:2231:0
     (local.set $$33
      (local.get $$6)
     )
@@ -109499,7 +109655,7 @@
     (if
      (local.get $$35)
      (block
-      ;;@ parser.c:2220:0
+      ;;@ parser.c:2232:0
       (local.set $$36
        (local.get $$4)
       )
@@ -109512,7 +109668,7 @@
       (local.set $$4
        (local.get $$37)
       )
-      ;;@ parser.c:2221:0
+      ;;@ parser.c:2233:0
       (local.set $$38
        (local.get $$5)
       )
@@ -109536,7 +109692,7 @@
     (br $while-in)
    )
   )
-  ;;@ parser.c:2224:0
+  ;;@ parser.c:2236:0
   (local.set $$42
    (local.get $$5)
   )
@@ -109553,7 +109709,7 @@
    (local.get $$44)
    (i32.const 0)
   )
-  ;;@ parser.c:2225:0
+  ;;@ parser.c:2237:0
   (local.set $$45
    (local.get $$5)
   )
@@ -109578,7 +109734,7 @@
   (local.set $$5
    (local.get $$49)
   )
-  ;;@ parser.c:2226:0
+  ;;@ parser.c:2238:0
   (local.set $$50
    (local.get $$5)
   )
@@ -109589,7 +109745,7 @@
    (local.get $$50)
   )
  )
- (func $_is_not_newline (; 294 ;) (param $$0 i32) (result i32)
+ (func $_is_not_newline (; 298 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -109619,7 +109775,7 @@
   (local.set $$1
    (local.get $$0)
   )
-  ;;@ parser.c:2308:0
+  ;;@ parser.c:2320:0
   (local.set $$2
    (local.get $$1)
   )
@@ -109657,7 +109813,7 @@
    (local.get $$6)
   )
  )
- (func $_is_not_mlc_end (; 295 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_is_not_mlc_end (; 299 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -109696,7 +109852,7 @@
   (local.set $$3
    (local.get $$1)
   )
-  ;;@ parser.c:2312:0
+  ;;@ parser.c:2324:0
   (local.set $$4
    (local.get $$2)
   )
@@ -109769,7 +109925,7 @@
    (local.get $$13)
   )
  )
- (func $_read_while_lookahead (; 296 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_read_while_lookahead (; 300 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -109848,11 +110004,11 @@
   (local.set $$3
    (local.get $$1)
   )
-  ;;@ parser.c:2229:0
+  ;;@ parser.c:2241:0
   (local.set $$4
    (i32.const 100)
   )
-  ;;@ parser.c:2230:0
+  ;;@ parser.c:2242:0
   (local.set $$7
    (local.get $$4)
   )
@@ -109867,13 +110023,13 @@
   (local.set $$5
    (local.get $$9)
   )
-  ;;@ parser.c:2231:0
+  ;;@ parser.c:2243:0
   (local.set $$6
    (i32.const 0)
   )
   (loop $while-in
    (block $while-out
-    ;;@ parser.c:2232:0
+    ;;@ parser.c:2244:0
     (local.set $$10
      (local.get $$3)
     )
@@ -109984,7 +110140,7 @@
       (br $while-out)
      )
     )
-    ;;@ parser.c:2233:0
+    ;;@ parser.c:2245:0
     (local.set $$26
      (local.get $$3)
     )
@@ -110014,7 +110170,7 @@
      (local.get $$31)
      (local.get $$28)
     )
-    ;;@ parser.c:2234:0
+    ;;@ parser.c:2246:0
     (local.set $$32
      (local.get $$3)
     )
@@ -110033,7 +110189,7 @@
      (local.get $$32)
      (local.get $$34)
     )
-    ;;@ parser.c:2235:0
+    ;;@ parser.c:2247:0
     (local.set $$35
      (local.get $$6)
     )
@@ -110046,7 +110202,7 @@
     (local.set $$6
      (local.get $$36)
     )
-    ;;@ parser.c:2236:0
+    ;;@ parser.c:2248:0
     (local.set $$37
      (local.get $$6)
     )
@@ -110062,7 +110218,7 @@
     (if
      (local.get $$39)
      (block
-      ;;@ parser.c:2237:0
+      ;;@ parser.c:2249:0
       (local.set $$40
        (local.get $$4)
       )
@@ -110075,7 +110231,7 @@
       (local.set $$4
        (local.get $$41)
       )
-      ;;@ parser.c:2238:0
+      ;;@ parser.c:2250:0
       (local.set $$42
        (local.get $$5)
       )
@@ -110105,7 +110261,7 @@
     (i32.const 7)
    )
    (block
-    ;;@ parser.c:2241:0
+    ;;@ parser.c:2253:0
     (local.set $$46
      (local.get $$5)
     )
@@ -110122,7 +110278,7 @@
      (local.get $$48)
      (i32.const 0)
     )
-    ;;@ parser.c:2242:0
+    ;;@ parser.c:2254:0
     (local.set $$49
      (local.get $$5)
     )
@@ -110141,7 +110297,7 @@
     (local.set $$5
      (local.get $$52)
     )
-    ;;@ parser.c:2243:0
+    ;;@ parser.c:2255:0
     (local.set $$53
      (local.get $$5)
     )
@@ -110157,7 +110313,7 @@
    (i32.const 0)
   )
  )
- (func $_is_ident_start (; 297 ;) (param $$0 i32) (result i32)
+ (func $_is_ident_start (; 301 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -110196,7 +110352,7 @@
   (local.set $$1
    (local.get $$0)
   )
-  ;;@ parser.c:2327:0
+  ;;@ parser.c:2339:0
   (local.set $$2
    (local.get $$1)
   )
@@ -110297,7 +110453,7 @@
    (local.get $$15)
   )
  )
- (func $_is_ident_char (; 298 ;) (param $$0 i32) (result i32)
+ (func $_is_ident_char (; 302 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -110333,7 +110489,7 @@
   (local.set $$1
    (local.get $$0)
   )
-  ;;@ parser.c:2331:0
+  ;;@ parser.c:2343:0
   (local.set $$2
    (local.get $$1)
   )
@@ -110404,7 +110560,7 @@
    (local.get $$12)
   )
  )
- (func $_is_one_of_strings (; 299 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_is_one_of_strings (; 303 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -110452,7 +110608,7 @@
   (local.set $$6
    (local.get $$2)
   )
-  ;;@ parser.c:2291:0
+  ;;@ parser.c:2303:0
   (local.set $$7
    (i32.const 0)
   )
@@ -110481,7 +110637,7 @@
       (br $while-out)
      )
     )
-    ;;@ parser.c:2292:0
+    ;;@ parser.c:2304:0
     (local.set $$11
      (local.get $$4)
     )
@@ -110526,7 +110682,7 @@
       (br $while-out)
      )
     )
-    ;;@ parser.c:2291:0
+    ;;@ parser.c:2303:0
     (local.set $$18
      (local.get $$7)
     )
@@ -110548,11 +110704,11 @@
     (i32.const 4)
    )
    (block
-    ;;@ parser.c:2293:0
+    ;;@ parser.c:2305:0
     (local.set $$3
      (i32.const 1)
     )
-    ;;@ parser.c:2297:0
+    ;;@ parser.c:2309:0
     (local.set $$20
      (local.get $$3)
     )
@@ -110569,11 +110725,11 @@
      (i32.const 6)
     )
     (block
-     ;;@ parser.c:2296:0
+     ;;@ parser.c:2308:0
      (local.set $$3
       (i32.const 0)
      )
-     ;;@ parser.c:2297:0
+     ;;@ parser.c:2309:0
      (local.set $$20
       (local.get $$3)
      )
@@ -110590,7 +110746,7 @@
    (i32.const 0)
   )
  )
- (func $_is_string_start (; 300 ;) (param $$0 i32) (result i32)
+ (func $_is_string_start (; 304 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -110620,7 +110776,7 @@
   (local.set $$1
    (local.get $$0)
   )
-  ;;@ parser.c:2316:0
+  ;;@ parser.c:2328:0
   (local.set $$2
    (local.get $$1)
   )
@@ -110658,7 +110814,7 @@
    (local.get $$6)
   )
  )
- (func $_is_not_string_end (; 301 ;) (param $$0 i32) (result i32)
+ (func $_is_not_string_end (; 305 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -110688,7 +110844,7 @@
   (local.set $$1
    (local.get $$0)
   )
-  ;;@ parser.c:2319:0
+  ;;@ parser.c:2331:0
   (local.set $$2
    (local.get $$1)
   )
@@ -110726,7 +110882,7 @@
    (local.get $$6)
   )
  )
- (func $_escape_string (; 302 ;) (param $$0 i32) (result i32)
+ (func $_escape_string (; 306 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -110815,11 +110971,11 @@
   (local.set $$1
    (local.get $$0)
   )
-  ;;@ parser.c:2247:0
+  ;;@ parser.c:2259:0
   (local.set $$2
    (i32.const 10)
   )
-  ;;@ parser.c:2248:0
+  ;;@ parser.c:2260:0
   (local.set $$5
    (local.get $$2)
   )
@@ -110834,13 +110990,13 @@
   (local.set $$3
    (local.get $$7)
   )
-  ;;@ parser.c:2249:0
+  ;;@ parser.c:2261:0
   (local.set $$4
    (i32.const 0)
   )
   (loop $while-in
    (block $while-out
-    ;;@ parser.c:2250:0
+    ;;@ parser.c:2262:0
     (local.set $$8
      (local.get $$1)
     )
@@ -110867,7 +111023,7 @@
      )
      (br $while-out)
     )
-    ;;@ parser.c:2251:0
+    ;;@ parser.c:2263:0
     (local.set $$11
      (local.get $$1)
     )
@@ -110895,7 +111051,7 @@
      (if
       (local.get $$14)
       (block
-       ;;@ parser.c:2252:0
+       ;;@ parser.c:2264:0
        (local.set $$15
         (local.get $$3)
        )
@@ -110912,7 +111068,7 @@
         (local.get $$17)
         (i32.const 92)
        )
-       ;;@ parser.c:2253:0
+       ;;@ parser.c:2265:0
        (local.set $$18
         (local.get $$4)
        )
@@ -110925,7 +111081,7 @@
        (local.set $$4
         (local.get $$19)
        )
-       ;;@ parser.c:2254:0
+       ;;@ parser.c:2266:0
        (local.set $$20
         (local.get $$3)
        )
@@ -110942,7 +111098,7 @@
         (local.get $$22)
         (i32.const 110)
        )
-       ;;@ parser.c:2255:0
+       ;;@ parser.c:2267:0
        (local.set $$23
         (local.get $$4)
        )
@@ -110957,7 +111113,7 @@
        )
       )
       (block
-       ;;@ parser.c:2257:0
+       ;;@ parser.c:2269:0
        (local.set $$25
         (local.get $$1)
        )
@@ -110984,7 +111140,7 @@
        (if
         (local.get $$28)
         (block
-         ;;@ parser.c:2258:0
+         ;;@ parser.c:2270:0
          (local.set $$29
           (local.get $$3)
          )
@@ -111001,7 +111157,7 @@
           (local.get $$31)
           (i32.const 92)
          )
-         ;;@ parser.c:2259:0
+         ;;@ parser.c:2271:0
          (local.set $$32
           (local.get $$4)
          )
@@ -111014,7 +111170,7 @@
          (local.set $$4
           (local.get $$33)
          )
-         ;;@ parser.c:2260:0
+         ;;@ parser.c:2272:0
          (local.set $$34
           (local.get $$3)
          )
@@ -111031,7 +111187,7 @@
           (local.get $$36)
           (i32.const 114)
          )
-         ;;@ parser.c:2261:0
+         ;;@ parser.c:2273:0
          (local.set $$37
           (local.get $$4)
          )
@@ -111047,7 +111203,7 @@
          (br $do-once)
         )
         (block
-         ;;@ parser.c:2266:0
+         ;;@ parser.c:2278:0
          (local.set $$39
           (local.get $$1)
          )
@@ -111072,7 +111228,7 @@
           (local.get $$43)
           (local.get $$40)
          )
-         ;;@ parser.c:2267:0
+         ;;@ parser.c:2279:0
          (local.set $$44
           (local.get $$4)
          )
@@ -111091,7 +111247,7 @@
       )
      )
     )
-    ;;@ parser.c:2269:0
+    ;;@ parser.c:2281:0
     (local.set $$46
      (local.get $$4)
     )
@@ -111113,7 +111269,7 @@
     (if
      (local.get $$49)
      (block
-      ;;@ parser.c:2270:0
+      ;;@ parser.c:2282:0
       (local.set $$50
        (local.get $$2)
       )
@@ -111126,7 +111282,7 @@
       (local.set $$2
        (local.get $$51)
       )
-      ;;@ parser.c:2271:0
+      ;;@ parser.c:2283:0
       (local.set $$52
        (local.get $$3)
       )
@@ -111147,7 +111303,7 @@
       )
      )
     )
-    ;;@ parser.c:2273:0
+    ;;@ parser.c:2285:0
     (local.set $$56
      (local.get $$1)
     )
@@ -111163,7 +111319,7 @@
     (br $while-in)
    )
   )
-  ;;@ parser.c:2275:0
+  ;;@ parser.c:2287:0
   (local.set $$58
    (local.get $$3)
   )
@@ -111180,7 +111336,7 @@
    (local.get $$60)
    (i32.const 0)
   )
-  ;;@ parser.c:2276:0
+  ;;@ parser.c:2288:0
   (local.set $$61
    (local.get $$3)
   )
@@ -111199,7 +111355,7 @@
   (local.set $$3
    (local.get $$64)
   )
-  ;;@ parser.c:2277:0
+  ;;@ parser.c:2289:0
   (local.set $$65
    (local.get $$3)
   )
@@ -111210,95 +111366,7 @@
    (local.get $$65)
   )
  )
- (func $_is_punc (; 303 ;) (param $$0 i32) (result i32)
-  (local $$1 i32)
-  (local $$2 i32)
-  (local $$3 i32)
-  (local $label i32)
-  (local $sp i32)
-  (local.set $sp
-   (global.get $STACKTOP)
-  )
-  (global.set $STACKTOP
-   (i32.add
-    (global.get $STACKTOP)
-    (i32.const 16)
-   )
-  )
-  (if
-   (i32.ge_s
-    (global.get $STACKTOP)
-    (global.get $STACK_MAX)
-   )
-   (call $abortStackOverflow
-    (i32.const 16)
-   )
-  )
-  (local.set $$1
-   (local.get $$0)
-  )
-  ;;@ parser.c:2323:0
-  (local.set $$2
-   (local.get $$1)
-  )
-  (local.set $$3
-   (call $_is_one_of
-    (i32.const 5426)
-    (local.get $$2)
-   )
-  )
-  (global.set $STACKTOP
-   (local.get $sp)
-  )
-  (return
-   (local.get $$3)
-  )
- )
- (func $_is_op_char (; 304 ;) (param $$0 i32) (result i32)
-  (local $$1 i32)
-  (local $$2 i32)
-  (local $$3 i32)
-  (local $label i32)
-  (local $sp i32)
-  (local.set $sp
-   (global.get $STACKTOP)
-  )
-  (global.set $STACKTOP
-   (i32.add
-    (global.get $STACKTOP)
-    (i32.const 16)
-   )
-  )
-  (if
-   (i32.ge_s
-    (global.get $STACKTOP)
-    (global.get $STACK_MAX)
-   )
-   (call $abortStackOverflow
-    (i32.const 16)
-   )
-  )
-  (local.set $$1
-   (local.get $$0)
-  )
-  ;;@ parser.c:2343:0
-  (local.set $$2
-   (local.get $$1)
-  )
-  (local.set $$3
-   (call $_is_one_of
-    (i32.const 5414)
-    (local.get $$2)
-   )
-  )
-  (global.set $STACKTOP
-   (local.get $sp)
-  )
-  (return
-   (local.get $$3)
-  )
- )
- (func $_is_digit (; 305 ;) (param $$0 i32) (result i32)
+ (func $_is_punc (; 307 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -111330,6 +111398,94 @@
    (local.get $$1)
   )
   (local.set $$3
+   (call $_is_one_of
+    (i32.const 5426)
+    (local.get $$2)
+   )
+  )
+  (global.set $STACKTOP
+   (local.get $sp)
+  )
+  (return
+   (local.get $$3)
+  )
+ )
+ (func $_is_op_char (; 308 ;) (param $$0 i32) (result i32)
+  (local $$1 i32)
+  (local $$2 i32)
+  (local $$3 i32)
+  (local $label i32)
+  (local $sp i32)
+  (local.set $sp
+   (global.get $STACKTOP)
+  )
+  (global.set $STACKTOP
+   (i32.add
+    (global.get $STACKTOP)
+    (i32.const 16)
+   )
+  )
+  (if
+   (i32.ge_s
+    (global.get $STACKTOP)
+    (global.get $STACK_MAX)
+   )
+   (call $abortStackOverflow
+    (i32.const 16)
+   )
+  )
+  (local.set $$1
+   (local.get $$0)
+  )
+  ;;@ parser.c:2355:0
+  (local.set $$2
+   (local.get $$1)
+  )
+  (local.set $$3
+   (call $_is_one_of
+    (i32.const 5414)
+    (local.get $$2)
+   )
+  )
+  (global.set $STACKTOP
+   (local.get $sp)
+  )
+  (return
+   (local.get $$3)
+  )
+ )
+ (func $_is_digit (; 309 ;) (param $$0 i32) (result i32)
+  (local $$1 i32)
+  (local $$2 i32)
+  (local $$3 i32)
+  (local $label i32)
+  (local $sp i32)
+  (local.set $sp
+   (global.get $STACKTOP)
+  )
+  (global.set $STACKTOP
+   (i32.add
+    (global.get $STACKTOP)
+    (i32.const 16)
+   )
+  )
+  (if
+   (i32.ge_s
+    (global.get $STACKTOP)
+    (global.get $STACK_MAX)
+   )
+   (call $abortStackOverflow
+    (i32.const 16)
+   )
+  )
+  (local.set $$1
+   (local.get $$0)
+  )
+  ;;@ parser.c:2347:0
+  (local.set $$2
+   (local.get $$1)
+  )
+  (local.set $$3
    (call $_is_in_range
     (i32.const 48)
     (i32.const 57)
@@ -111343,7 +111499,7 @@
    (local.get $$3)
   )
  )
- (func $_is_digit_or_dot (; 306 ;) (param $$0 i32) (result i32)
+ (func $_is_digit_or_dot (; 310 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -111378,7 +111534,7 @@
   (local.set $$1
    (local.get $$0)
   )
-  ;;@ parser.c:2339:0
+  ;;@ parser.c:2351:0
   (local.set $$2
    (local.get $$1)
   )
@@ -111447,7 +111603,7 @@
    (local.get $$11)
   )
  )
- (func $_is_in_range (; 307 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_is_in_range (; 311 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -111493,7 +111649,7 @@
   (local.set $$5
    (local.get $$2)
   )
-  ;;@ parser.c:2300:0
+  ;;@ parser.c:2312:0
   (local.set $$6
    (local.get $$3)
   )
@@ -111584,7 +111740,7 @@
    (local.get $$18)
   )
  )
- (func $_init_run (; 308 ;) (param $$0 i32)
+ (func $_init_run (; 312 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -111666,32 +111822,32 @@
    (local.get $$1)
   )
   (i32.store
-   (i32.const 9272)
+   (i32.const 8684)
    (local.get $$2)
   )
   ;;@ run.c:8:0
   (i32.store8
-   (i32.const 9328)
+   (i32.const 8740)
    (i32.const 0)
   )
   ;;@ run.c:9:0
   (i32.store
-   (i32.const 9308)
+   (i32.const 8720)
    (i32.const 0)
   )
   ;;@ run.c:10:0
   (i32.store
-   (i32.const 9312)
+   (i32.const 8724)
    (i32.const 0)
   )
   ;;@ run.c:11:0
   (i32.store
-   (i32.const 9316)
+   (i32.const 8728)
    (i32.const 0)
   )
   ;;@ run.c:12:0
   (i32.store
-   (i32.const 9324)
+   (i32.const 8736)
    (i32.const 0)
   )
   ;;@ run.c:14:0
@@ -111701,13 +111857,13 @@
    )
   )
   (i32.store
-   (i32.const 9276)
+   (i32.const 8688)
    (local.get $$3)
   )
   ;;@ run.c:15:0
   (local.set $$4
    (i32.load
-    (i32.const 9276)
+    (i32.const 8688)
    )
   )
   (call $_array_init
@@ -111722,13 +111878,13 @@
    )
   )
   (i32.store
-   (i32.const 9280)
+   (i32.const 8692)
    (local.get $$5)
   )
   ;;@ run.c:18:0
   (local.set $$6
    (i32.load
-    (i32.const 9280)
+    (i32.const 8692)
    )
   )
   (i32.store
@@ -111758,13 +111914,13 @@
    )
   )
   (i32.store
-   (i32.const 9284)
+   (i32.const 8696)
    (local.get $$7)
   )
   ;;@ run.c:21:0
   (local.set $$8
    (i32.load
-    (i32.const 9284)
+    (i32.const 8696)
    )
   )
   (i32.store
@@ -111794,13 +111950,13 @@
    )
   )
   (i32.store
-   (i32.const 9288)
+   (i32.const 8700)
    (local.get $$9)
   )
   ;;@ run.c:24:0
   (local.set $$10
    (i32.load
-    (i32.const 9288)
+    (i32.const 8700)
    )
   )
   (i32.store
@@ -111830,13 +111986,13 @@
    )
   )
   (i32.store
-   (i32.const 9292)
+   (i32.const 8704)
    (local.get $$11)
   )
   ;;@ run.c:27:0
   (local.set $$12
    (i32.load
-    (i32.const 9292)
+    (i32.const 8704)
    )
   )
   (i32.store
@@ -111861,7 +112017,7 @@
   )
   ;;@ run.c:29:0
   (i32.store8
-   (i32.const 9332)
+   (i32.const 8900)
    (i32.const 1)
   )
   ;;@ run.c:30:0
@@ -111871,13 +112027,13 @@
    )
   )
   (i32.store
-   (i32.const 9336)
+   (i32.const 8904)
    (local.get $$13)
   )
   ;;@ run.c:31:0
   (local.set $$14
    (i32.load
-    (i32.const 9336)
+    (i32.const 8904)
    )
   )
   (i32.store
@@ -111902,13 +112058,13 @@
   )
   ;;@ run.c:33:0
   (i32.store
-   (i32.const 9300)
+   (i32.const 8712)
    (i32.const 1000)
   )
   ;;@ run.c:34:0
   (local.set $$15
    (i32.load
-    (i32.const 9300)
+    (i32.const 8712)
    )
   )
   (local.set $$16
@@ -111917,12 +112073,12 @@
    )
   )
   (i32.store
-   (i32.const 9296)
+   (i32.const 8708)
    (local.get $$16)
   )
   ;;@ run.c:35:0
   (i32.store
-   (i32.const 9304)
+   (i32.const 8716)
    (i32.const 0)
   )
   (global.set $STACKTOP
@@ -111931,7 +112087,7 @@
   ;;@ run.c:36:0
   (return)
  )
- (func $_add_memory_use (; 309 ;) (param $$0 i32) (param $$1 i32)
+ (func $_add_memory_use (; 313 ;) (param $$0 i32) (param $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -112044,7 +112200,7 @@
     ;;@ run.c:43:0
     (local.set $$13
      (i32.load
-      (i32.const 9288)
+      (i32.const 8700)
      )
     )
     (local.set $$14
@@ -112189,7 +112345,7 @@
   ;;@ run.c:58:0
   (return)
  )
- (func $_map_uses_to_indices (; 310 ;) (param $$0 i32) (result i32)
+ (func $_map_uses_to_indices (; 314 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -112248,7 +112404,7 @@
     )
     (local.set $$5
      (i32.load
-      (i32.const 9288)
+      (i32.const 8700)
      )
     )
     (local.set $$6
@@ -112276,7 +112432,7 @@
     ;;@ run.c:94:0
     (local.set $$8
      (i32.load
-      (i32.const 9288)
+      (i32.const 8700)
      )
     )
     (local.set $$9
@@ -112350,7 +112506,7 @@
     ;;@ run.c:95:0
     (local.set $$16
      (i32.load
-      (i32.const 9288)
+      (i32.const 8700)
      )
     )
     (local.set $$17
@@ -112422,7 +112578,7 @@
    (i32.const 0)
   )
  )
- (func $_add_memory_change (; 311 ;) (param $$0 i32) (param $$1 i32)
+ (func $_add_memory_change (; 315 ;) (param $$0 i32) (param $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -112539,7 +112695,7 @@
   ;;@ run.c:64:0
   (local.set $$11
    (i32.load
-    (i32.const 9292)
+    (i32.const 8704)
    )
   )
   (local.set $$12
@@ -112584,7 +112740,7 @@
   ;;@ run.c:67:0
   (return)
  )
- (func $_map_changes_to_indices (; 312 ;) (param $$0 i32) (result i32)
+ (func $_map_changes_to_indices (; 316 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -112643,7 +112799,7 @@
     )
     (local.set $$5
      (i32.load
-      (i32.const 9292)
+      (i32.const 8704)
      )
     )
     (local.set $$6
@@ -112671,7 +112827,7 @@
     ;;@ run.c:103:0
     (local.set $$8
      (i32.load
-      (i32.const 9292)
+      (i32.const 8704)
      )
     )
     (local.set $$9
@@ -112745,7 +112901,7 @@
     ;;@ run.c:104:0
     (local.set $$16
      (i32.load
-      (i32.const 9292)
+      (i32.const 8704)
      )
     )
     (local.set $$17
@@ -112817,7 +112973,7 @@
    (i32.const 0)
   )
  )
- (func $_get_memory (; 313 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_get_memory (; 317 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -112880,7 +113036,7 @@
   )
   (local.set $$7
    (i32.load
-    (i32.const 9300)
+    (i32.const 8712)
    )
   )
   (local.set $$8
@@ -112910,7 +113066,7 @@
     )
     (local.set $$13
      (i32.load
-      (i32.const 9300)
+      (i32.const 8712)
      )
     )
     (i32.store
@@ -112950,7 +113106,7 @@
     ;;@ run.c:74:0
     (local.set $$14
      (i32.load
-      (i32.const 9296)
+      (i32.const 8708)
      )
     )
     (local.set $$15
@@ -112974,7 +113130,7 @@
    (i32.const 0)
   )
  )
- (func $_set_memory (; 314 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
+ (func $_set_memory (; 318 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -113037,7 +113193,7 @@
   )
   (local.set $$9
    (i32.load
-    (i32.const 9300)
+    (i32.const 8712)
    )
   )
   (local.set $$10
@@ -113052,7 +113208,7 @@
     ;;@ run.c:82:0
     (local.set $$11
      (i32.load
-      (i32.const 9300)
+      (i32.const 8712)
      )
     )
     (local.set $$12
@@ -113062,18 +113218,18 @@
      )
     )
     (i32.store
-     (i32.const 9300)
+     (i32.const 8712)
      (local.get $$12)
     )
     ;;@ run.c:83:0
     (local.set $$13
      (i32.load
-      (i32.const 9296)
+      (i32.const 8708)
      )
     )
     (local.set $$14
      (i32.load
-      (i32.const 9300)
+      (i32.const 8712)
      )
     )
     (local.set $$15
@@ -113083,7 +113239,7 @@
      )
     )
     (i32.store
-     (i32.const 9296)
+     (i32.const 8708)
      (local.get $$15)
     )
    )
@@ -113091,7 +113247,7 @@
   ;;@ run.c:85:0
   (local.set $$16
    (i32.load
-    (i32.const 9296)
+    (i32.const 8708)
    )
   )
   (local.set $$17
@@ -113122,7 +113278,7 @@
   ;;@ run.c:86:0
   (return)
  )
- (func $_map_original_to_indices (; 315 ;) (param $$0 i32) (result i32)
+ (func $_map_original_to_indices (; 319 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -113181,7 +113337,7 @@
     )
     (local.set $$5
      (i32.load
-      (i32.const 9284)
+      (i32.const 8696)
      )
     )
     (local.set $$6
@@ -113209,7 +113365,7 @@
     ;;@ run.c:112:0
     (local.set $$8
      (i32.load
-      (i32.const 9284)
+      (i32.const 8696)
      )
     )
     (local.set $$9
@@ -113283,7 +113439,7 @@
     ;;@ run.c:113:0
     (local.set $$16
      (i32.load
-      (i32.const 9284)
+      (i32.const 8696)
      )
     )
     (local.set $$17
@@ -113355,7 +113511,7 @@
    (i32.const 0)
   )
  )
- (func $_add_node_to_execution_stack (; 316 ;) (param $$0 i32)
+ (func $_add_node_to_execution_stack (; 320 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -113420,7 +113576,7 @@
   ;;@ run.c:120:0
   (local.set $$3
    (i32.load
-    (i32.const 9276)
+    (i32.const 8688)
    )
   )
   (local.set $$4
@@ -113429,10 +113585,10 @@
    )
   )
   (i32.store
-   (i32.const 9324)
+   (i32.const 8736)
    (local.get $$4)
   )
-  ;;@ run.c:121:0
+  ;;@ run.c:122:0
   (local.set $$5
    (i32.load
     (local.get $$1)
@@ -113448,10 +113604,10 @@
    (local.get $$6)
    (i32.const 1)
   )
-  ;;@ run.c:122:0
+  ;;@ run.c:123:0
   (local.set $$7
    (i32.load
-    (i32.const 9324)
+    (i32.const 8736)
    )
   )
   (local.set $$8
@@ -113469,10 +113625,10 @@
    (local.get $$9)
    (local.get $$7)
   )
-  ;;@ run.c:123:0
+  ;;@ run.c:124:0
   (local.set $$10
    (i32.load
-    (i32.const 9276)
+    (i32.const 8688)
    )
   )
   (drop
@@ -113481,7 +113637,7 @@
     (local.get $$1)
    )
   )
-  ;;@ run.c:125:0
+  ;;@ run.c:126:0
   (local.set $$11
    (i32.load
     (local.get $$1)
@@ -113506,7 +113662,7 @@
   (local.set $$2
    (local.get $$14)
   )
-  ;;@ run.c:126:0
+  ;;@ run.c:127:0
   (local.set $$15
    (local.get $$2)
   )
@@ -113521,7 +113677,7 @@
     (local.get $$16)
    )
    (block
-    ;;@ run.c:131:0
+    ;;@ run.c:132:0
     (local.set $$24
      (local.get $$2)
     )
@@ -113545,11 +113701,11 @@
     (global.set $STACKTOP
      (local.get $sp)
     )
-    ;;@ run.c:132:0
+    ;;@ run.c:133:0
     (return)
    )
   )
-  ;;@ run.c:127:0
+  ;;@ run.c:128:0
   (local.set $$17
    (call $_malloc
     (i32.const 20)
@@ -113558,7 +113714,7 @@
   (local.set $$2
    (local.get $$17)
   )
-  ;;@ run.c:128:0
+  ;;@ run.c:129:0
   (local.set $$18
    (local.get $$2)
   )
@@ -113567,10 +113723,10 @@
    (i32.const 4)
    (i32.const 100)
   )
-  ;;@ run.c:129:0
+  ;;@ run.c:130:0
   (local.set $$19
    (i32.load
-    (i32.const 9284)
+    (i32.const 8696)
    )
   )
   (local.set $$20
@@ -113612,7 +113768,7 @@
     (local.get $$vararg_buffer)
    )
   )
-  ;;@ run.c:131:0
+  ;;@ run.c:132:0
   (local.set $$24
    (local.get $$2)
   )
@@ -113636,10 +113792,10 @@
   (global.set $STACKTOP
    (local.get $sp)
   )
-  ;;@ run.c:132:0
+  ;;@ run.c:133:0
   (return)
  )
- (func $_add_name_use (; 317 ;) (param $$0 i32)
+ (func $_add_name_use (; 321 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -113693,7 +113849,7 @@
   (local.set $$1
    (local.get $$0)
   )
-  ;;@ run.c:135:0
+  ;;@ run.c:136:0
   (local.set $$2
    (i32.const 0)
   )
@@ -113704,7 +113860,7 @@
     )
     (local.set $$4
      (i32.load
-      (i32.const 9336)
+      (i32.const 8904)
      )
     )
     (local.set $$5
@@ -113720,7 +113876,7 @@
     )
     (local.set $$7
      (i32.load
-      (i32.const 9336)
+      (i32.const 8904)
      )
     )
     (if
@@ -113734,7 +113890,7 @@
       (br $while-out)
      )
     )
-    ;;@ run.c:136:0
+    ;;@ run.c:137:0
     (local.set $$8
      (i32.add
       (local.get $$7)
@@ -113787,7 +113943,7 @@
       (br $while-out)
      )
     )
-    ;;@ run.c:135:0
+    ;;@ run.c:136:0
     (local.set $$23
      (local.get $$2)
     )
@@ -113809,10 +113965,10 @@
     (i32.const 4)
    )
    (block
-    ;;@ run.c:137:0
+    ;;@ run.c:138:0
     (local.set $$16
      (i32.load
-      (i32.const 9336)
+      (i32.const 8904)
      )
     )
     (local.set $$17
@@ -113856,7 +114012,7 @@
     (global.set $STACKTOP
      (local.get $sp)
     )
-    ;;@ run.c:142:0
+    ;;@ run.c:143:0
     (return)
    )
    (if
@@ -113865,7 +114021,7 @@
      (i32.const 6)
     )
     (block
-     ;;@ run.c:141:0
+     ;;@ run.c:142:0
      (local.set $$25
       (local.get $$1)
      )
@@ -113892,13 +114048,13 @@
      (global.set $STACKTOP
       (local.get $sp)
      )
-     ;;@ run.c:142:0
+     ;;@ run.c:143:0
      (return)
     )
    )
   )
  )
- (func $_get_name_uses (; 318 ;) (param $$0 i32) (result i32)
+ (func $_get_name_uses (; 322 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -113947,7 +114103,7 @@
   (local.set $$2
    (local.get $$0)
   )
-  ;;@ run.c:144:0
+  ;;@ run.c:145:0
   (local.set $$3
    (i32.const 0)
   )
@@ -113958,7 +114114,7 @@
     )
     (local.set $$5
      (i32.load
-      (i32.const 9336)
+      (i32.const 8904)
      )
     )
     (local.set $$6
@@ -113983,10 +114139,10 @@
       (br $while-out)
      )
     )
-    ;;@ run.c:145:0
+    ;;@ run.c:146:0
     (local.set $$8
      (i32.load
-      (i32.const 9336)
+      (i32.const 8904)
      )
     )
     (local.set $$9
@@ -114041,7 +114197,7 @@
       (br $while-out)
      )
     )
-    ;;@ run.c:144:0
+    ;;@ run.c:145:0
     (local.set $$23
      (local.get $$3)
     )
@@ -114063,10 +114219,10 @@
     (i32.const 4)
    )
    (block
-    ;;@ run.c:146:0
+    ;;@ run.c:147:0
     (local.set $$17
      (i32.load
-      (i32.const 9336)
+      (i32.const 8904)
      )
     )
     (local.set $$18
@@ -114100,7 +114256,7 @@
     (local.set $$1
      (local.get $$22)
     )
-    ;;@ run.c:150:0
+    ;;@ run.c:151:0
     (local.set $$25
      (local.get $$1)
     )
@@ -114117,11 +114273,11 @@
      (i32.const 6)
     )
     (block
-     ;;@ run.c:149:0
+     ;;@ run.c:150:0
      (local.set $$1
       (i32.const 0)
      )
-     ;;@ run.c:150:0
+     ;;@ run.c:151:0
      (local.set $$25
       (local.get $$1)
      )
@@ -114138,7 +114294,7 @@
    (i32.const 0)
   )
  )
- (func $_math_binop (; 319 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_math_binop (; 323 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -114844,7 +115000,7 @@
   (local.set $$6
    (local.get $$2)
   )
-  ;;@ run.c:156:0
+  ;;@ run.c:157:0
   (local.set $$28
    (local.get $$4)
   )
@@ -114862,7 +115018,7 @@
   (local.set $$7
    (local.get $$30)
   )
-  ;;@ run.c:157:0
+  ;;@ run.c:158:0
   (local.set $$31
    (local.get $$7)
   )
@@ -114880,7 +115036,7 @@
   (if
    (local.get $$33)
    (block
-    ;;@ run.c:158:0
+    ;;@ run.c:159:0
     (local.set $$34
      (local.get $$7)
     )
@@ -114906,7 +115062,7 @@
     )
    )
   )
-  ;;@ run.c:160:0
+  ;;@ run.c:161:0
   (local.set $$38
    (local.get $$6)
   )
@@ -114924,7 +115080,7 @@
   (local.set $$8
    (local.get $$40)
   )
-  ;;@ run.c:161:0
+  ;;@ run.c:162:0
   (local.set $$41
    (local.get $$8)
   )
@@ -114942,7 +115098,7 @@
   (if
    (local.get $$43)
    (block
-    ;;@ run.c:162:0
+    ;;@ run.c:163:0
     (local.set $$44
      (local.get $$8)
     )
@@ -114968,17 +115124,17 @@
     )
    )
   )
-  ;;@ run.c:165:0
+  ;;@ run.c:166:0
   (local.set $$9
    (i32.const 0)
   )
-  ;;@ run.c:166:0
+  ;;@ run.c:167:0
   (local.set $$48
    (local.get $$7)
   )
   (local.set $$49
    (i32.load
-    (i32.const 8396)
+    (i32.const 8444)
    )
   )
   (local.set $$50
@@ -114990,12 +115146,12 @@
   (block $do-once
    (if
     (local.get $$50)
-    ;;@ run.c:167:0
+    ;;@ run.c:168:0
     (local.set $$9
      (i32.const 1)
     )
     (block
-     ;;@ run.c:169:0
+     ;;@ run.c:170:0
      (local.set $$51
       (local.get $$7)
      )
@@ -115016,7 +115172,7 @@
      (if
       (local.get $$53)
       (block
-       ;;@ run.c:170:0
+       ;;@ run.c:171:0
        (local.set $$55
         (i32.add
          (local.get $$54)
@@ -115043,14 +115199,14 @@
        (if
         (local.get $$57)
         (block
-         ;;@ run.c:171:0
+         ;;@ run.c:172:0
          (local.set $$9
           (i32.const 2)
          )
          (br $do-once)
         )
         (block
-         ;;@ run.c:174:0
+         ;;@ run.c:175:0
          (local.set $$9
           (i32.const 3)
          )
@@ -115059,7 +115215,7 @@
        )
       )
      )
-     ;;@ run.c:177:0
+     ;;@ run.c:178:0
      (local.set $$58
       (i32.load
        (local.get $$54)
@@ -115074,14 +115230,14 @@
      (if
       (local.get $$59)
       (block
-       ;;@ run.c:178:0
+       ;;@ run.c:179:0
        (local.set $$9
         (i32.const 4)
        )
        (br $do-once)
       )
      )
-     ;;@ run.c:180:0
+     ;;@ run.c:181:0
      (local.set $$60
       (local.get $$7)
      )
@@ -115098,7 +115254,7 @@
      )
      (if
       (local.get $$62)
-      ;;@ run.c:181:0
+      ;;@ run.c:182:0
       (local.set $$9
        (i32.const 5)
       )
@@ -115106,7 +115262,7 @@
     )
    )
   )
-  ;;@ run.c:186:0
+  ;;@ run.c:187:0
   (local.set $$63
    (local.get $$9)
   )
@@ -115128,7 +115284,7 @@
   (if
    (local.get $$65)
    (block
-    ;;@ run.c:188:0
+    ;;@ run.c:189:0
     (local.set $$66
      (local.get $$4)
     )
@@ -115146,7 +115302,7 @@
     (local.set $$10
      (local.get $$68)
     )
-    ;;@ run.c:189:0
+    ;;@ run.c:190:0
     (local.set $$69
      (local.get $$6)
     )
@@ -115164,7 +115320,7 @@
     (local.set $$11
      (local.get $$71)
     )
-    ;;@ run.c:192:0
+    ;;@ run.c:193:0
     (local.set $$72
      (local.get $$5)
     )
@@ -115184,7 +115340,7 @@
      (if
       (local.get $$74)
       (block
-       ;;@ run.c:193:0
+       ;;@ run.c:194:0
        (local.set $$75
         (local.get $$10)
        )
@@ -115220,7 +115376,7 @@
        )
       )
       (block
-       ;;@ run.c:195:0
+       ;;@ run.c:196:0
        (local.set $$81
         (local.get $$5)
        )
@@ -115239,7 +115395,7 @@
        (if
         (local.get $$83)
         (block
-         ;;@ run.c:196:0
+         ;;@ run.c:197:0
          (local.set $$84
           (local.get $$10)
          )
@@ -115276,7 +115432,7 @@
          (br $do-once0)
         )
        )
-       ;;@ run.c:198:0
+       ;;@ run.c:199:0
        (local.set $$90
         (local.get $$5)
        )
@@ -115295,7 +115451,7 @@
        (if
         (local.get $$92)
         (block
-         ;;@ run.c:199:0
+         ;;@ run.c:200:0
          (local.set $$93
           (local.get $$10)
          )
@@ -115332,7 +115488,7 @@
          (br $do-once0)
         )
        )
-       ;;@ run.c:201:0
+       ;;@ run.c:202:0
        (local.set $$99
         (local.get $$5)
        )
@@ -115351,7 +115507,7 @@
        (if
         (local.get $$101)
         (block
-         ;;@ run.c:202:0
+         ;;@ run.c:203:0
          (local.set $$102
           (local.get $$10)
          )
@@ -115391,7 +115547,7 @@
          (br $do-once0)
         )
        )
-       ;;@ run.c:204:0
+       ;;@ run.c:205:0
        (local.set $$108
         (local.get $$5)
        )
@@ -115410,7 +115566,7 @@
        (if
         (local.get $$110)
         (block
-         ;;@ run.c:205:0
+         ;;@ run.c:206:0
          (local.set $$111
           (local.get $$10)
          )
@@ -115450,7 +115606,7 @@
          (br $do-once0)
         )
        )
-       ;;@ run.c:207:0
+       ;;@ run.c:208:0
        (local.set $$117
         (local.get $$5)
        )
@@ -115469,7 +115625,7 @@
        (if
         (local.get $$119)
         (block
-         ;;@ run.c:208:0
+         ;;@ run.c:209:0
          (local.set $$120
           (local.get $$10)
          )
@@ -115512,7 +115668,7 @@
          (br $do-once0)
         )
        )
-       ;;@ run.c:210:0
+       ;;@ run.c:211:0
        (local.set $$127
         (local.get $$5)
        )
@@ -115531,7 +115687,7 @@
        (if
         (local.get $$129)
         (block
-         ;;@ run.c:211:0
+         ;;@ run.c:212:0
          (local.set $$130
           (local.get $$10)
          )
@@ -115574,7 +115730,7 @@
          (br $do-once0)
         )
        )
-       ;;@ run.c:213:0
+       ;;@ run.c:214:0
        (local.set $$137
         (local.get $$5)
        )
@@ -115593,7 +115749,7 @@
        (if
         (local.get $$139)
         (block
-         ;;@ run.c:214:0
+         ;;@ run.c:215:0
          (local.set $$140
           (local.get $$10)
          )
@@ -115636,7 +115792,7 @@
          (br $do-once0)
         )
        )
-       ;;@ run.c:216:0
+       ;;@ run.c:217:0
        (local.set $$147
         (local.get $$5)
        )
@@ -115655,7 +115811,7 @@
        (if
         (local.get $$149)
         (block
-         ;;@ run.c:217:0
+         ;;@ run.c:218:0
          (local.set $$150
           (local.get $$10)
          )
@@ -115698,7 +115854,7 @@
          (br $do-once0)
         )
        )
-       ;;@ run.c:219:0
+       ;;@ run.c:220:0
        (local.set $$157
         (local.get $$5)
        )
@@ -115717,7 +115873,7 @@
        (if
         (local.get $$159)
         (block
-         ;;@ run.c:220:0
+         ;;@ run.c:221:0
          (local.set $$160
           (local.get $$10)
          )
@@ -115760,7 +115916,7 @@
          (br $do-once0)
         )
        )
-       ;;@ run.c:222:0
+       ;;@ run.c:223:0
        (local.set $$167
         (local.get $$5)
        )
@@ -115779,7 +115935,7 @@
        (if
         (local.get $$169)
         (block
-         ;;@ run.c:223:0
+         ;;@ run.c:224:0
          (local.set $$170
           (local.get $$10)
          )
@@ -115822,7 +115978,7 @@
          (br $do-once0)
         )
        )
-       ;;@ run.c:225:0
+       ;;@ run.c:226:0
        (local.set $$177
         (local.get $$5)
        )
@@ -115841,7 +115997,7 @@
        (if
         (local.get $$179)
         (block
-         ;;@ run.c:226:0
+         ;;@ run.c:227:0
          (local.set $$180
           (local.get $$10)
          )
@@ -115878,7 +116034,7 @@
          (br $do-once0)
         )
        )
-       ;;@ run.c:228:0
+       ;;@ run.c:229:0
        (local.set $$186
         (local.get $$5)
        )
@@ -115897,7 +116053,7 @@
        (if
         (local.get $$188)
         (block
-         ;;@ run.c:229:0
+         ;;@ run.c:230:0
          (local.set $$189
           (local.get $$10)
          )
@@ -115934,7 +116090,7 @@
          (br $do-once0)
         )
        )
-       ;;@ run.c:231:0
+       ;;@ run.c:232:0
        (local.set $$195
         (local.get $$5)
        )
@@ -115953,7 +116109,7 @@
        (if
         (local.get $$197)
         (block
-         ;;@ run.c:232:0
+         ;;@ run.c:233:0
          (local.set $$198
           (local.get $$10)
          )
@@ -115990,7 +116146,7 @@
          (br $do-once0)
         )
        )
-       ;;@ run.c:234:0
+       ;;@ run.c:235:0
        (local.set $$204
         (local.get $$5)
        )
@@ -116009,7 +116165,7 @@
        (if
         (local.get $$206)
         (block
-         ;;@ run.c:235:0
+         ;;@ run.c:236:0
          (local.set $$207
           (local.get $$10)
          )
@@ -116069,7 +116225,7 @@
          (br $do-once0)
         )
        )
-       ;;@ run.c:237:0
+       ;;@ run.c:238:0
        (local.set $$216
         (local.get $$5)
        )
@@ -116090,7 +116246,7 @@
          (local.get $$218)
         )
         (block
-         ;;@ run.c:241:0
+         ;;@ run.c:242:0
          (local.set $$228
           (local.get $$5)
          )
@@ -116104,11 +116260,11 @@
            (local.get $$vararg_buffer)
           )
          )
-         ;;@ run.c:242:0
+         ;;@ run.c:243:0
          (call $_abort)
         )
        )
-       ;;@ run.c:238:0
+       ;;@ run.c:239:0
        (local.set $$219
         (local.get $$10)
        )
@@ -116168,10 +116324,10 @@
       )
      )
     )
-    ;;@ run.c:244:0
+    ;;@ run.c:245:0
     (local.set $$229
      (i32.load
-      (i32.const 9272)
+      (i32.const 8684)
      )
     )
     (local.set $$230
@@ -116186,7 +116342,7 @@
     (local.set $$3
      (local.get $$231)
     )
-    ;;@ run.c:468:0
+    ;;@ run.c:469:0
     (local.set $$636
      (local.get $$3)
     )
@@ -116198,7 +116354,7 @@
     )
    )
   )
-  ;;@ run.c:246:0
+  ;;@ run.c:247:0
   (local.set $$232
    (local.get $$9)
   )
@@ -116220,7 +116376,7 @@
   (if
    (local.get $$234)
    (block
-    ;;@ run.c:250:0
+    ;;@ run.c:251:0
     (local.set $$235
      (local.get $$4)
     )
@@ -116238,7 +116394,7 @@
     (local.set $$13
      (local.get $$237)
     )
-    ;;@ run.c:251:0
+    ;;@ run.c:252:0
     (local.set $$238
      (local.get $$6)
     )
@@ -116256,19 +116412,19 @@
     (local.set $$14
      (local.get $$240)
     )
-    ;;@ run.c:253:0
+    ;;@ run.c:254:0
     (local.set $$241
      (local.get $$5)
     )
     (local.set $$242
-     (call $_is_operator_boolean
+     (call $_is_operator_result_boolean
       (local.get $$241)
      )
     )
     (local.set $$16
      (local.get $$242)
     )
-    ;;@ run.c:255:0
+    ;;@ run.c:256:0
     (local.set $$243
      (local.get $$5)
     )
@@ -116288,7 +116444,7 @@
      (if
       (local.get $$245)
       (block
-       ;;@ run.c:256:0
+       ;;@ run.c:257:0
        (local.set $$246
         (local.get $$13)
        )
@@ -116306,7 +116462,7 @@
        )
       )
       (block
-       ;;@ run.c:258:0
+       ;;@ run.c:259:0
        (local.set $$249
         (local.get $$5)
        )
@@ -116325,7 +116481,7 @@
        (if
         (local.get $$251)
         (block
-         ;;@ run.c:259:0
+         ;;@ run.c:260:0
          (local.set $$252
           (local.get $$13)
          )
@@ -116344,7 +116500,7 @@
          (br $do-once2)
         )
        )
-       ;;@ run.c:261:0
+       ;;@ run.c:262:0
        (local.set $$255
         (local.get $$5)
        )
@@ -116363,7 +116519,7 @@
        (if
         (local.get $$257)
         (block
-         ;;@ run.c:262:0
+         ;;@ run.c:263:0
          (local.set $$258
           (local.get $$13)
          )
@@ -116382,7 +116538,7 @@
          (br $do-once2)
         )
        )
-       ;;@ run.c:264:0
+       ;;@ run.c:265:0
        (local.set $$261
         (local.get $$5)
        )
@@ -116401,7 +116557,7 @@
        (if
         (local.get $$263)
         (block
-         ;;@ run.c:265:0
+         ;;@ run.c:266:0
          (local.set $$264
           (local.get $$13)
          )
@@ -116423,7 +116579,7 @@
          (br $do-once2)
         )
        )
-       ;;@ run.c:267:0
+       ;;@ run.c:268:0
        (local.set $$267
         (local.get $$5)
        )
@@ -116442,7 +116598,7 @@
        (if
         (local.get $$269)
         (block
-         ;;@ run.c:268:0
+         ;;@ run.c:269:0
          (local.set $$270
           (local.get $$13)
          )
@@ -116464,7 +116620,7 @@
          (br $do-once2)
         )
        )
-       ;;@ run.c:270:0
+       ;;@ run.c:271:0
        (local.set $$273
         (local.get $$5)
        )
@@ -116483,7 +116639,7 @@
        (if
         (local.get $$275)
         (block
-         ;;@ run.c:271:0
+         ;;@ run.c:272:0
          (local.set $$276
           (local.get $$13)
          )
@@ -116502,7 +116658,7 @@
          (br $do-once2)
         )
        )
-       ;;@ run.c:273:0
+       ;;@ run.c:274:0
        (local.set $$279
         (local.get $$5)
        )
@@ -116521,7 +116677,7 @@
        (if
         (local.get $$281)
         (block
-         ;;@ run.c:274:0
+         ;;@ run.c:275:0
          (local.set $$282
           (local.get $$13)
          )
@@ -116540,7 +116696,7 @@
          (br $do-once2)
         )
        )
-       ;;@ run.c:276:0
+       ;;@ run.c:277:0
        (local.set $$285
         (local.get $$5)
        )
@@ -116559,7 +116715,7 @@
        (if
         (local.get $$287)
         (block
-         ;;@ run.c:277:0
+         ;;@ run.c:278:0
          (local.set $$288
           (local.get $$13)
          )
@@ -116578,7 +116734,7 @@
          (br $do-once2)
         )
        )
-       ;;@ run.c:279:0
+       ;;@ run.c:280:0
        (local.set $$291
         (local.get $$5)
        )
@@ -116597,7 +116753,7 @@
        (if
         (local.get $$293)
         (block
-         ;;@ run.c:280:0
+         ;;@ run.c:281:0
          (local.set $$294
           (local.get $$13)
          )
@@ -116622,7 +116778,7 @@
          (br $do-once2)
         )
        )
-       ;;@ run.c:282:0
+       ;;@ run.c:283:0
        (local.set $$298
         (local.get $$5)
        )
@@ -116641,7 +116797,7 @@
        (if
         (local.get $$300)
         (block
-         ;;@ run.c:283:0
+         ;;@ run.c:284:0
          (local.set $$301
           (local.get $$13)
          )
@@ -116666,7 +116822,7 @@
          (br $do-once2)
         )
        )
-       ;;@ run.c:285:0
+       ;;@ run.c:286:0
        (local.set $$305
         (local.get $$5)
        )
@@ -116685,7 +116841,7 @@
        (if
         (local.get $$307)
         (block
-         ;;@ run.c:286:0
+         ;;@ run.c:287:0
          (local.set $$308
           (local.get $$13)
          )
@@ -116710,7 +116866,7 @@
          (br $do-once2)
         )
        )
-       ;;@ run.c:288:0
+       ;;@ run.c:289:0
        (local.set $$312
         (local.get $$5)
        )
@@ -116729,7 +116885,7 @@
        (if
         (local.get $$314)
         (block
-         ;;@ run.c:289:0
+         ;;@ run.c:290:0
          (local.set $$315
           (local.get $$13)
          )
@@ -116754,7 +116910,7 @@
          (br $do-once2)
         )
        )
-       ;;@ run.c:291:0
+       ;;@ run.c:292:0
        (local.set $$319
         (local.get $$5)
        )
@@ -116773,7 +116929,7 @@
        (if
         (local.get $$321)
         (block
-         ;;@ run.c:292:0
+         ;;@ run.c:293:0
          (local.set $$322
           (local.get $$13)
          )
@@ -116798,7 +116954,7 @@
          (br $do-once2)
         )
        )
-       ;;@ run.c:294:0
+       ;;@ run.c:295:0
        (local.set $$326
         (local.get $$5)
        )
@@ -116817,7 +116973,7 @@
        (if
         (local.get $$328)
         (block
-         ;;@ run.c:295:0
+         ;;@ run.c:296:0
          (local.set $$329
           (local.get $$13)
          )
@@ -116842,7 +116998,7 @@
          (br $do-once2)
         )
        )
-       ;;@ run.c:297:0
+       ;;@ run.c:298:0
        (local.set $$333
         (local.get $$5)
        )
@@ -116861,7 +117017,7 @@
        (if
         (local.get $$335)
         (block
-         ;;@ run.c:298:0
+         ;;@ run.c:299:0
          (local.set $$336
           (local.get $$13)
          )
@@ -116899,7 +117055,7 @@
          (br $do-once2)
         )
        )
-       ;;@ run.c:300:0
+       ;;@ run.c:301:0
        (local.set $$342
         (local.get $$5)
        )
@@ -116918,7 +117074,7 @@
        (if
         (local.get $$344)
         (block
-         ;;@ run.c:301:0
+         ;;@ run.c:302:0
          (local.set $$345
           (local.get $$13)
          )
@@ -116956,7 +117112,7 @@
          (br $do-once2)
         )
         (block
-         ;;@ run.c:304:0
+         ;;@ run.c:305:0
          (local.set $$351
           (local.get $$5)
          )
@@ -116970,14 +117126,14 @@
            (local.get $$vararg_buffer1)
           )
          )
-         ;;@ run.c:305:0
+         ;;@ run.c:306:0
          (call $_abort)
         )
        )
       )
      )
     )
-    ;;@ run.c:307:0
+    ;;@ run.c:308:0
     (local.set $$352
      (local.get $$16)
     )
@@ -116995,7 +117151,7 @@
     )
     (local.set $$354
      (i32.load
-      (i32.const 9272)
+      (i32.const 8684)
      )
     )
     (local.set $$355
@@ -117004,7 +117160,7 @@
     (if
      (local.get $$353)
      (block
-      ;;@ run.c:308:0
+      ;;@ run.c:309:0
       (local.set $$356
        (i32.and
         (local.get $$355)
@@ -117020,7 +117176,7 @@
       (local.set $$3
        (local.get $$357)
       )
-      ;;@ run.c:468:0
+      ;;@ run.c:469:0
       (local.set $$636
        (local.get $$3)
       )
@@ -117032,7 +117188,7 @@
       )
      )
      (block
-      ;;@ run.c:311:0
+      ;;@ run.c:312:0
       (local.set $$358
        (call $_make_literal_int
         (local.get $$354)
@@ -117042,7 +117198,7 @@
       (local.set $$3
        (local.get $$358)
       )
-      ;;@ run.c:468:0
+      ;;@ run.c:469:0
       (local.set $$636
        (local.get $$3)
       )
@@ -117056,7 +117212,7 @@
     )
    )
   )
-  ;;@ run.c:314:0
+  ;;@ run.c:315:0
   (local.set $$359
    (local.get $$9)
   )
@@ -117078,7 +117234,7 @@
   (if
    (local.get $$361)
    (block
-    ;;@ run.c:318:0
+    ;;@ run.c:319:0
     (local.set $$362
      (local.get $$4)
     )
@@ -117096,7 +117252,7 @@
     (local.set $$17
      (local.get $$364)
     )
-    ;;@ run.c:319:0
+    ;;@ run.c:320:0
     (local.set $$365
      (local.get $$6)
     )
@@ -117114,19 +117270,19 @@
     (local.set $$18
      (local.get $$367)
     )
-    ;;@ run.c:321:0
+    ;;@ run.c:322:0
     (local.set $$368
      (local.get $$5)
     )
     (local.set $$369
-     (call $_is_operator_boolean
+     (call $_is_operator_result_boolean
       (local.get $$368)
      )
     )
     (local.set $$20
      (local.get $$369)
     )
-    ;;@ run.c:323:0
+    ;;@ run.c:324:0
     (local.set $$370
      (local.get $$5)
     )
@@ -117146,7 +117302,7 @@
      (if
       (local.get $$372)
       (block
-       ;;@ run.c:324:0
+       ;;@ run.c:325:0
        (local.set $$373
         (local.get $$17)
        )
@@ -117164,7 +117320,7 @@
        )
       )
       (block
-       ;;@ run.c:326:0
+       ;;@ run.c:327:0
        (local.set $$376
         (local.get $$5)
        )
@@ -117183,7 +117339,7 @@
        (if
         (local.get $$378)
         (block
-         ;;@ run.c:327:0
+         ;;@ run.c:328:0
          (local.set $$379
           (local.get $$17)
          )
@@ -117202,7 +117358,7 @@
          (br $do-once4)
         )
        )
-       ;;@ run.c:329:0
+       ;;@ run.c:330:0
        (local.set $$382
         (local.get $$5)
        )
@@ -117221,7 +117377,7 @@
        (if
         (local.get $$384)
         (block
-         ;;@ run.c:330:0
+         ;;@ run.c:331:0
          (local.set $$385
           (local.get $$17)
          )
@@ -117240,7 +117396,7 @@
          (br $do-once4)
         )
        )
-       ;;@ run.c:332:0
+       ;;@ run.c:333:0
        (local.set $$388
         (local.get $$5)
        )
@@ -117259,7 +117415,7 @@
        (if
         (local.get $$390)
         (block
-         ;;@ run.c:333:0
+         ;;@ run.c:334:0
          (local.set $$391
           (local.get $$17)
          )
@@ -117281,7 +117437,7 @@
          (br $do-once4)
         )
        )
-       ;;@ run.c:335:0
+       ;;@ run.c:336:0
        (local.set $$394
         (local.get $$5)
        )
@@ -117300,7 +117456,7 @@
        (if
         (local.get $$396)
         (block
-         ;;@ run.c:336:0
+         ;;@ run.c:337:0
          (local.set $$397
           (local.get $$17)
          )
@@ -117322,7 +117478,7 @@
          (br $do-once4)
         )
        )
-       ;;@ run.c:338:0
+       ;;@ run.c:339:0
        (local.set $$400
         (local.get $$5)
        )
@@ -117341,7 +117497,7 @@
        (if
         (local.get $$402)
         (block
-         ;;@ run.c:339:0
+         ;;@ run.c:340:0
          (local.set $$403
           (local.get $$17)
          )
@@ -117360,7 +117516,7 @@
          (br $do-once4)
         )
        )
-       ;;@ run.c:341:0
+       ;;@ run.c:342:0
        (local.set $$406
         (local.get $$5)
        )
@@ -117379,7 +117535,7 @@
        (if
         (local.get $$408)
         (block
-         ;;@ run.c:342:0
+         ;;@ run.c:343:0
          (local.set $$409
           (local.get $$17)
          )
@@ -117398,7 +117554,7 @@
          (br $do-once4)
         )
        )
-       ;;@ run.c:344:0
+       ;;@ run.c:345:0
        (local.set $$412
         (local.get $$5)
        )
@@ -117417,7 +117573,7 @@
        (if
         (local.get $$414)
         (block
-         ;;@ run.c:345:0
+         ;;@ run.c:346:0
          (local.set $$415
           (local.get $$17)
          )
@@ -117436,7 +117592,7 @@
          (br $do-once4)
         )
        )
-       ;;@ run.c:347:0
+       ;;@ run.c:348:0
        (local.set $$418
         (local.get $$5)
        )
@@ -117455,7 +117611,7 @@
        (if
         (local.get $$420)
         (block
-         ;;@ run.c:348:0
+         ;;@ run.c:349:0
          (local.set $$421
           (local.get $$17)
          )
@@ -117480,7 +117636,7 @@
          (br $do-once4)
         )
        )
-       ;;@ run.c:350:0
+       ;;@ run.c:351:0
        (local.set $$425
         (local.get $$5)
        )
@@ -117499,7 +117655,7 @@
        (if
         (local.get $$427)
         (block
-         ;;@ run.c:351:0
+         ;;@ run.c:352:0
          (local.set $$428
           (local.get $$17)
          )
@@ -117524,7 +117680,7 @@
          (br $do-once4)
         )
        )
-       ;;@ run.c:353:0
+       ;;@ run.c:354:0
        (local.set $$432
         (local.get $$5)
        )
@@ -117543,7 +117699,7 @@
        (if
         (local.get $$434)
         (block
-         ;;@ run.c:354:0
+         ;;@ run.c:355:0
          (local.set $$435
           (local.get $$17)
          )
@@ -117568,7 +117724,7 @@
          (br $do-once4)
         )
        )
-       ;;@ run.c:356:0
+       ;;@ run.c:357:0
        (local.set $$439
         (local.get $$5)
        )
@@ -117587,7 +117743,7 @@
        (if
         (local.get $$441)
         (block
-         ;;@ run.c:357:0
+         ;;@ run.c:358:0
          (local.set $$442
           (local.get $$17)
          )
@@ -117612,7 +117768,7 @@
          (br $do-once4)
         )
        )
-       ;;@ run.c:359:0
+       ;;@ run.c:360:0
        (local.set $$446
         (local.get $$5)
        )
@@ -117631,7 +117787,7 @@
        (if
         (local.get $$448)
         (block
-         ;;@ run.c:360:0
+         ;;@ run.c:361:0
          (local.set $$449
           (local.get $$17)
          )
@@ -117656,7 +117812,7 @@
          (br $do-once4)
         )
        )
-       ;;@ run.c:362:0
+       ;;@ run.c:363:0
        (local.set $$453
         (local.get $$5)
        )
@@ -117675,7 +117831,7 @@
        (if
         (local.get $$455)
         (block
-         ;;@ run.c:363:0
+         ;;@ run.c:364:0
          (local.set $$456
           (local.get $$17)
          )
@@ -117700,7 +117856,7 @@
          (br $do-once4)
         )
        )
-       ;;@ run.c:365:0
+       ;;@ run.c:366:0
        (local.set $$460
         (local.get $$5)
        )
@@ -117719,7 +117875,7 @@
        (if
         (local.get $$462)
         (block
-         ;;@ run.c:366:0
+         ;;@ run.c:367:0
          (local.set $$463
           (local.get $$17)
          )
@@ -117757,7 +117913,7 @@
          (br $do-once4)
         )
        )
-       ;;@ run.c:368:0
+       ;;@ run.c:369:0
        (local.set $$469
         (local.get $$5)
        )
@@ -117776,7 +117932,7 @@
        (if
         (local.get $$471)
         (block
-         ;;@ run.c:369:0
+         ;;@ run.c:370:0
          (local.set $$472
           (local.get $$17)
          )
@@ -117814,7 +117970,7 @@
          (br $do-once4)
         )
         (block
-         ;;@ run.c:372:0
+         ;;@ run.c:373:0
          (local.set $$478
           (local.get $$5)
          )
@@ -117828,14 +117984,14 @@
            (local.get $$vararg_buffer4)
           )
          )
-         ;;@ run.c:373:0
+         ;;@ run.c:374:0
          (call $_abort)
         )
        )
       )
      )
     )
-    ;;@ run.c:375:0
+    ;;@ run.c:376:0
     (local.set $$479
      (local.get $$20)
     )
@@ -117853,7 +118009,7 @@
     )
     (local.set $$481
      (i32.load
-      (i32.const 9272)
+      (i32.const 8684)
      )
     )
     (local.set $$482
@@ -117862,7 +118018,7 @@
     (if
      (local.get $$480)
      (block
-      ;;@ run.c:376:0
+      ;;@ run.c:377:0
       (local.set $$483
        (i32.and
         (local.get $$482)
@@ -117878,7 +118034,7 @@
       (local.set $$3
        (local.get $$484)
       )
-      ;;@ run.c:468:0
+      ;;@ run.c:469:0
       (local.set $$636
        (local.get $$3)
       )
@@ -117890,7 +118046,7 @@
       )
      )
      (block
-      ;;@ run.c:379:0
+      ;;@ run.c:380:0
       (local.set $$485
        (call $_make_literal_uint
         (local.get $$481)
@@ -117900,7 +118056,7 @@
       (local.set $$3
        (local.get $$485)
       )
-      ;;@ run.c:468:0
+      ;;@ run.c:469:0
       (local.set $$636
        (local.get $$3)
       )
@@ -117914,7 +118070,7 @@
     )
    )
   )
-  ;;@ run.c:382:0
+  ;;@ run.c:383:0
   (local.set $$486
    (local.get $$9)
   )
@@ -117938,7 +118094,7 @@
     (local.get $$488)
    )
    (block
-    ;;@ run.c:449:0
+    ;;@ run.c:450:0
     (local.set $$599
      (local.get $$9)
     )
@@ -117962,7 +118118,7 @@
       (local.get $$601)
      )
      (block
-      ;;@ run.c:464:0
+      ;;@ run.c:465:0
       (local.set $$632
        (local.get $$4)
       )
@@ -117992,11 +118148,11 @@
         (local.get $$vararg_buffer13)
        )
       )
-      ;;@ run.c:465:0
+      ;;@ run.c:466:0
       (call $_abort)
      )
     )
-    ;;@ run.c:452:0
+    ;;@ run.c:453:0
     (local.set $$602
      (local.get $$5)
     )
@@ -118016,7 +118172,7 @@
      (if
       (local.get $$604)
       (block
-       ;;@ run.c:453:0
+       ;;@ run.c:454:0
        (local.set $$605
         (local.get $$4)
        )
@@ -118074,7 +118230,7 @@
        )
       )
       (block
-       ;;@ run.c:455:0
+       ;;@ run.c:456:0
        (local.set $$615
         (local.get $$5)
        )
@@ -118093,7 +118249,7 @@
        (if
         (local.get $$617)
         (block
-         ;;@ run.c:456:0
+         ;;@ run.c:457:0
          (local.set $$618
           (local.get $$4)
          )
@@ -118152,7 +118308,7 @@
          (br $do-once6)
         )
         (block
-         ;;@ run.c:459:0
+         ;;@ run.c:460:0
          (local.set $$628
           (local.get $$5)
          )
@@ -118172,10 +118328,10 @@
       )
      )
     )
-    ;;@ run.c:461:0
+    ;;@ run.c:462:0
     (local.set $$629
      (i32.load
-      (i32.const 9272)
+      (i32.const 8684)
      )
     )
     (local.set $$630
@@ -118190,7 +118346,7 @@
     (local.set $$3
      (local.get $$631)
     )
-    ;;@ run.c:468:0
+    ;;@ run.c:469:0
     (local.set $$636
      (local.get $$3)
     )
@@ -118202,7 +118358,7 @@
     )
    )
   )
-  ;;@ run.c:383:0
+  ;;@ run.c:384:0
   (local.set $$489
    (local.get $$4)
   )
@@ -118220,7 +118376,7 @@
   (local.set $$21
    (local.get $$491)
   )
-  ;;@ run.c:384:0
+  ;;@ run.c:385:0
   (local.set $$492
    (local.get $$6)
   )
@@ -118238,11 +118394,11 @@
   (local.set $$22
    (local.get $$494)
   )
-  ;;@ run.c:385:0
+  ;;@ run.c:386:0
   (local.set $$23
    (f64.const 1e-07)
   )
-  ;;@ run.c:386:0
+  ;;@ run.c:387:0
   (local.set $$495
    (local.get $$21)
   )
@@ -118311,19 +118467,19 @@
   (local.set $$24
    (local.get $$507)
   )
-  ;;@ run.c:388:0
+  ;;@ run.c:389:0
   (local.set $$508
    (local.get $$5)
   )
   (local.set $$509
-   (call $_is_operator_boolean
+   (call $_is_operator_result_boolean
     (local.get $$508)
    )
   )
   (local.set $$26
    (local.get $$509)
   )
-  ;;@ run.c:390:0
+  ;;@ run.c:391:0
   (local.set $$510
    (local.get $$5)
   )
@@ -118343,7 +118499,7 @@
    (if
     (local.get $$512)
     (block
-     ;;@ run.c:391:0
+     ;;@ run.c:392:0
      (local.set $$513
       (local.get $$21)
      )
@@ -118361,7 +118517,7 @@
      )
     )
     (block
-     ;;@ run.c:393:0
+     ;;@ run.c:394:0
      (local.set $$516
       (local.get $$5)
      )
@@ -118380,7 +118536,7 @@
      (if
       (local.get $$518)
       (block
-       ;;@ run.c:394:0
+       ;;@ run.c:395:0
        (local.set $$519
         (local.get $$21)
        )
@@ -118399,7 +118555,7 @@
        (br $do-once8)
       )
      )
-     ;;@ run.c:396:0
+     ;;@ run.c:397:0
      (local.set $$522
       (local.get $$5)
      )
@@ -118418,7 +118574,7 @@
      (if
       (local.get $$524)
       (block
-       ;;@ run.c:397:0
+       ;;@ run.c:398:0
        (local.set $$525
         (local.get $$21)
        )
@@ -118437,7 +118593,7 @@
        (br $do-once8)
       )
      )
-     ;;@ run.c:399:0
+     ;;@ run.c:400:0
      (local.set $$528
       (local.get $$5)
      )
@@ -118456,7 +118612,7 @@
      (if
       (local.get $$530)
       (block
-       ;;@ run.c:400:0
+       ;;@ run.c:401:0
        (local.set $$531
         (local.get $$21)
        )
@@ -118475,7 +118631,7 @@
        (br $do-once8)
       )
      )
-     ;;@ run.c:402:0
+     ;;@ run.c:403:0
      (local.set $$534
       (local.get $$5)
      )
@@ -118494,7 +118650,7 @@
      (if
       (local.get $$536)
       (block
-       ;;@ run.c:403:0
+       ;;@ run.c:404:0
        (local.set $$537
         (local.get $$21)
        )
@@ -118524,7 +118680,7 @@
        (br $do-once8)
       )
      )
-     ;;@ run.c:405:0
+     ;;@ run.c:406:0
      (local.set $$542
       (local.get $$5)
      )
@@ -118543,7 +118699,7 @@
      (if
       (local.get $$544)
       (block
-       ;;@ run.c:407:0
+       ;;@ run.c:408:0
        (local.set $$545
         (local.get $$24)
        )
@@ -118565,14 +118721,14 @@
         )
         (br $do-once8)
        )
-       ;;@ run.c:408:0
+       ;;@ run.c:409:0
        (local.set $$25
         (f64.const 1)
        )
        (br $do-once8)
       )
      )
-     ;;@ run.c:411:0
+     ;;@ run.c:412:0
      (local.set $$547
       (local.get $$5)
      )
@@ -118591,7 +118747,7 @@
      (if
       (local.get $$549)
       (block
-       ;;@ run.c:412:0
+       ;;@ run.c:413:0
        (local.set $$550
         (local.get $$21)
        )
@@ -118621,7 +118777,7 @@
        (br $do-once8)
       )
      )
-     ;;@ run.c:414:0
+     ;;@ run.c:415:0
      (local.set $$555
       (local.get $$5)
      )
@@ -118640,7 +118796,7 @@
      (if
       (local.get $$557)
       (block
-       ;;@ run.c:416:0
+       ;;@ run.c:417:0
        (local.set $$558
         (local.get $$24)
        )
@@ -118662,14 +118818,14 @@
         )
         (br $do-once8)
        )
-       ;;@ run.c:417:0
+       ;;@ run.c:418:0
        (local.set $$25
         (f64.const 1)
        )
        (br $do-once8)
       )
      )
-     ;;@ run.c:420:0
+     ;;@ run.c:421:0
      (local.set $$560
       (local.get $$5)
      )
@@ -118688,7 +118844,7 @@
      (if
       (local.get $$562)
       (block
-       ;;@ run.c:422:0
+       ;;@ run.c:423:0
        (local.set $$563
         (local.get $$24)
        )
@@ -118710,14 +118866,14 @@
         )
         (br $do-once8)
        )
-       ;;@ run.c:423:0
+       ;;@ run.c:424:0
        (local.set $$25
         (f64.const 1)
        )
        (br $do-once8)
       )
      )
-     ;;@ run.c:426:0
+     ;;@ run.c:427:0
      (local.set $$566
       (local.get $$5)
      )
@@ -118736,7 +118892,7 @@
      (if
       (local.get $$568)
       (block
-       ;;@ run.c:428:0
+       ;;@ run.c:429:0
        (local.set $$569
         (local.get $$24)
        )
@@ -118758,14 +118914,14 @@
         )
         (br $do-once8)
        )
-       ;;@ run.c:429:0
+       ;;@ run.c:430:0
        (local.set $$25
         (f64.const 1)
        )
        (br $do-once8)
       )
      )
-     ;;@ run.c:432:0
+     ;;@ run.c:433:0
      (local.set $$571
       (local.get $$5)
      )
@@ -118784,7 +118940,7 @@
      (if
       (local.get $$573)
       (block
-       ;;@ run.c:433:0
+       ;;@ run.c:434:0
        (local.set $$574
         (local.get $$21)
        )
@@ -118827,7 +118983,7 @@
        (br $do-once8)
       )
      )
-     ;;@ run.c:435:0
+     ;;@ run.c:436:0
      (local.set $$581
       (local.get $$5)
      )
@@ -118846,7 +119002,7 @@
      (if
       (local.get $$583)
       (block
-       ;;@ run.c:436:0
+       ;;@ run.c:437:0
        (local.set $$584
         (local.get $$21)
        )
@@ -118889,7 +119045,7 @@
        (br $do-once8)
       )
       (block
-       ;;@ run.c:439:0
+       ;;@ run.c:440:0
        (local.set $$591
         (local.get $$5)
        )
@@ -118903,14 +119059,14 @@
          (local.get $$vararg_buffer7)
         )
        )
-       ;;@ run.c:440:0
+       ;;@ run.c:441:0
        (call $_abort)
       )
      )
     )
    )
   )
-  ;;@ run.c:442:0
+  ;;@ run.c:443:0
   (local.set $$592
    (local.get $$26)
   )
@@ -118928,7 +119084,7 @@
   )
   (local.set $$594
    (i32.load
-    (i32.const 9272)
+    (i32.const 8684)
    )
   )
   (local.set $$595
@@ -118937,7 +119093,7 @@
   (if
    (local.get $$593)
    (block
-    ;;@ run.c:443:0
+    ;;@ run.c:444:0
     (local.set $$596
      (i32.and
       (i32.trunc_f64_s
@@ -118955,7 +119111,7 @@
     (local.set $$3
      (local.get $$597)
     )
-    ;;@ run.c:468:0
+    ;;@ run.c:469:0
     (local.set $$636
      (local.get $$3)
     )
@@ -118967,7 +119123,7 @@
     )
    )
    (block
-    ;;@ run.c:446:0
+    ;;@ run.c:447:0
     (local.set $$598
      (call $_make_literal_float
       (local.get $$594)
@@ -118977,7 +119133,7 @@
     (local.set $$3
      (local.get $$598)
     )
-    ;;@ run.c:468:0
+    ;;@ run.c:469:0
     (local.set $$636
      (local.get $$3)
     )
@@ -118990,7 +119146,7 @@
    )
   )
  )
- (func $_math_solve (; 320 ;) (param $$0 i32) (result i32)
+ (func $_math_solve (; 324 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$100 i32)
@@ -119184,11 +119340,11 @@
   (local.set $$1
    (local.get $$0)
   )
-  ;;@ run.c:471:0
+  ;;@ run.c:472:0
   (local.set $$2
    (i32.const 0)
   )
-  ;;@ run.c:472:0
+  ;;@ run.c:473:0
   (local.set $$9
    (local.get $$1)
   )
@@ -119211,7 +119367,7 @@
     (local.get $$cond)
    )
    (block
-    ;;@ run.c:535:0
+    ;;@ run.c:536:0
     (local.set $$150
      (i32.load
       (local.get $$11)
@@ -119232,11 +119388,11 @@
       (local.get $$vararg_buffer3)
      )
     )
-    ;;@ run.c:536:0
+    ;;@ run.c:537:0
     (call $_abort)
    )
   )
-  ;;@ run.c:474:0
+  ;;@ run.c:475:0
   (local.set $$12
    (i32.add
     (local.get $$11)
@@ -119257,7 +119413,7 @@
   (local.set $$3
    (local.get $$14)
   )
-  ;;@ run.c:475:0
+  ;;@ run.c:476:0
   (local.set $$15
    (local.get $$1)
   )
@@ -119277,7 +119433,7 @@
     (local.get $$17)
    )
   )
-  ;;@ run.c:476:0
+  ;;@ run.c:477:0
   (local.set $$18
    (local.get $$1)
   )
@@ -119303,7 +119459,7 @@
     (local.get $$21)
    )
   )
-  ;;@ run.c:477:0
+  ;;@ run.c:478:0
   (local.set $$22
    (local.get $$1)
   )
@@ -119396,7 +119552,7 @@
    (local.get $$38)
    (local.get $$33)
   )
-  ;;@ run.c:478:0
+  ;;@ run.c:479:0
   (local.set $$39
    (local.get $$1)
   )
@@ -119425,7 +119581,7 @@
   (local.set $$4
    (local.get $$43)
   )
-  ;;@ run.c:479:0
+  ;;@ run.c:480:0
   (local.set $$44
    (local.get $$1)
   )
@@ -119460,15 +119616,15 @@
   (local.set $$5
    (local.get $$49)
   )
-  ;;@ run.c:480:0
+  ;;@ run.c:481:0
   (local.set $$6
    (i32.const 0)
   )
-  ;;@ run.c:481:0
+  ;;@ run.c:482:0
   (local.set $$7
    (i32.const 0)
   )
-  ;;@ run.c:483:0
+  ;;@ run.c:484:0
   (local.set $$50
    (local.get $$1)
   )
@@ -119508,7 +119664,7 @@
   (if
    (local.get $$56)
    (block
-    ;;@ run.c:484:0
+    ;;@ run.c:485:0
     (local.set $$57
      (local.get $$1)
     )
@@ -119554,21 +119710,21 @@
     (if
      (local.get $$64)
      (block
-      ;;@ run.c:486:0
+      ;;@ run.c:487:0
       (local.set $$65
        (local.get $$4)
       )
       (local.set $$6
        (local.get $$65)
       )
-      ;;@ run.c:487:0
+      ;;@ run.c:488:0
       (local.set $$66
        (local.get $$5)
       )
       (local.set $$7
        (local.get $$66)
       )
-      ;;@ run.c:488:0
+      ;;@ run.c:489:0
       (local.set $$67
        (local.get $$1)
       )
@@ -119636,7 +119792,7 @@
      (i32.const 5)
     )
     (block
-     ;;@ run.c:490:0
+     ;;@ run.c:491:0
      (local.set $$76
       (local.get $$1)
      )
@@ -119676,7 +119832,7 @@
      (if
       (local.get $$82)
       (block
-       ;;@ run.c:491:0
+       ;;@ run.c:492:0
        (local.set $$83
         (local.get $$1)
        )
@@ -119722,21 +119878,21 @@
        (if
         (local.get $$90)
         (block
-         ;;@ run.c:493:0
+         ;;@ run.c:494:0
          (local.set $$91
           (local.get $$5)
          )
          (local.set $$6
           (local.get $$91)
          )
-         ;;@ run.c:494:0
+         ;;@ run.c:495:0
          (local.set $$92
           (local.get $$4)
          )
          (local.set $$7
           (local.get $$92)
          )
-         ;;@ run.c:495:0
+         ;;@ run.c:496:0
          (local.set $$93
           (local.get $$1)
          )
@@ -119798,7 +119954,7 @@
        )
       )
      )
-     ;;@ run.c:497:0
+     ;;@ run.c:498:0
      (local.set $$103
       (local.get $$1)
      )
@@ -119838,7 +119994,7 @@
      (if
       (local.get $$109)
       (block
-       ;;@ run.c:498:0
+       ;;@ run.c:499:0
        (local.set $$110
         (local.get $$1)
        )
@@ -119884,14 +120040,14 @@
        (if
         (local.get $$117)
         (block
-         ;;@ run.c:500:0
+         ;;@ run.c:501:0
          (drop
           (call $_printf
            (i32.const 5862)
            (local.get $$vararg_buffer)
           )
          )
-         ;;@ run.c:501:0
+         ;;@ run.c:502:0
          (call $_abort)
         )
        )
@@ -119900,7 +120056,7 @@
     )
    )
   )
-  ;;@ run.c:503:0
+  ;;@ run.c:504:0
   (local.set $$118
    (local.get $$6)
   )
@@ -119915,7 +120071,7 @@
     (local.get $$119)
    )
    (block
-    ;;@ run.c:531:0
+    ;;@ run.c:532:0
     (local.set $$145
      (local.get $$4)
     )
@@ -119935,7 +120091,7 @@
     (local.set $$2
      (local.get $$148)
     )
-    ;;@ run.c:540:0
+    ;;@ run.c:541:0
     (local.set $$149
      (local.get $$2)
     )
@@ -119947,7 +120103,7 @@
     )
    )
   )
-  ;;@ run.c:504:0
+  ;;@ run.c:505:0
   (local.set $$120
    (local.get $$3)
   )
@@ -119972,7 +120128,7 @@
      (local.get $$3)
     )
     (local.set $$124
-     (call $_is_operator_boolean
+     (call $_is_operator_result_boolean
       (local.get $$123)
      )
     )
@@ -119993,7 +120149,7 @@
       (local.get $$126)
      )
      (block
-      ;;@ run.c:505:0
+      ;;@ run.c:506:0
       (local.set $$127
        (local.get $$3)
       )
@@ -120014,7 +120170,7 @@
         (local.get $$129)
        )
        (block
-        ;;@ run.c:508:0
+        ;;@ run.c:509:0
         (local.set $$130
          (local.get $$3)
         )
@@ -120028,7 +120184,7 @@
           (local.get $$vararg_buffer1)
          )
         )
-        ;;@ run.c:509:0
+        ;;@ run.c:510:0
         (call $_abort)
        )
       )
@@ -120036,7 +120192,7 @@
     )
    )
   )
-  ;;@ run.c:511:0
+  ;;@ run.c:512:0
   (local.set $$131
    (local.get $$8)
   )
@@ -120048,12 +120204,12 @@
   )
   (if
    (local.get $$132)
-   ;;@ run.c:512:0
+   ;;@ run.c:513:0
    (local.set $$8
     (i32.const 1)
    )
   )
-  ;;@ run.c:517:0
+  ;;@ run.c:518:0
   (local.set $$133
    (local.get $$7)
   )
@@ -120074,7 +120230,7 @@
       )
      )
      (block
-      ;;@ run.c:519:0
+      ;;@ run.c:520:0
       (local.set $$135
        (local.get $$8)
       )
@@ -120102,7 +120258,7 @@
        (local.get $$137)
        (local.get $$139)
       )
-      ;;@ run.c:531:0
+      ;;@ run.c:532:0
       (local.set $$145
        (local.get $$4)
       )
@@ -120122,7 +120278,7 @@
       (local.set $$2
        (local.get $$148)
       )
-      ;;@ run.c:540:0
+      ;;@ run.c:541:0
       (local.set $$149
        (local.get $$2)
       )
@@ -120135,7 +120291,7 @@
      )
     )
     (block
-     ;;@ run.c:523:0
+     ;;@ run.c:524:0
      (local.set $$140
       (local.get $$8)
      )
@@ -120163,7 +120319,7 @@
       (local.get $$142)
       (local.get $$144)
      )
-     ;;@ run.c:531:0
+     ;;@ run.c:532:0
      (local.set $$145
       (local.get $$4)
      )
@@ -120183,7 +120339,7 @@
      (local.set $$2
       (local.get $$148)
      )
-     ;;@ run.c:540:0
+     ;;@ run.c:541:0
      (local.set $$149
       (local.get $$2)
      )
@@ -120196,7 +120352,7 @@
     )
    )
    (block
-    ;;@ run.c:531:0
+    ;;@ run.c:532:0
     (local.set $$145
      (local.get $$4)
     )
@@ -120216,7 +120372,7 @@
     (local.set $$2
      (local.get $$148)
     )
-    ;;@ run.c:540:0
+    ;;@ run.c:541:0
     (local.set $$149
      (local.get $$2)
     )
@@ -120229,7 +120385,7 @@
    )
   )
  )
- (func $_run_rvalue (; 321 ;) (param $$0 i32) (result i32)
+ (func $_run_rvalue (; 325 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$100 i32)
@@ -120507,7 +120663,13 @@
   (local $$346 i32)
   (local $$347 i32)
   (local $$348 i32)
+  (local $$349 i32)
   (local $$35 i32)
+  (local $$350 i32)
+  (local $$351 i32)
+  (local $$352 i32)
+  (local $$353 i32)
+  (local $$354 i32)
   (local $$36 i32)
   (local $$37 i32)
   (local $$38 i32)
@@ -120580,6 +120742,8 @@
   (local $$99 i32)
   (local $$vararg_buffer i32)
   (local $$vararg_buffer1 i32)
+  (local $$vararg_buffer4 i32)
+  (local $$vararg_ptr7 i32)
   (local $label i32)
   (local $sp i32)
   (local.set $sp
@@ -120588,7 +120752,7 @@
   (global.set $STACKTOP
    (i32.add
     (global.get $STACKTOP)
-    (i32.const 96)
+    (i32.const 112)
    )
   )
   (if
@@ -120597,7 +120761,13 @@
     (global.get $STACK_MAX)
    )
    (call $abortStackOverflow
-    (i32.const 96)
+    (i32.const 112)
+   )
+  )
+  (local.set $$vararg_buffer4
+   (i32.add
+    (local.get $sp)
+    (i32.const 16)
    )
   )
   (local.set $$vararg_buffer1
@@ -120612,7 +120782,7 @@
   (local.set $$2
    (local.get $$0)
   )
-  ;;@ run.c:905:0
+  ;;@ run.c:920:0
   (local.set $$20
    (local.get $$2)
   )
@@ -120626,11 +120796,11 @@
    (local.get $$21)
    (i32.const 1)
   )
-  ;;@ run.c:906:0
+  ;;@ run.c:921:0
   (local.set $$3
    (i32.const 0)
   )
-  ;;@ run.c:907:0
+  ;;@ run.c:922:0
   (local.set $$22
    (local.get $$2)
   )
@@ -120669,14 +120839,14 @@
                 )
                )
                (block
-                ;;@ run.c:913:0
+                ;;@ run.c:928:0
                 (local.set $$24
                  (local.get $$2)
                 )
                 (call $_add_node_to_execution_stack
                  (local.get $$24)
                 )
-                ;;@ run.c:914:0
+                ;;@ run.c:929:0
                 (local.set $$25
                  (local.get $$2)
                 )
@@ -120693,27 +120863,27 @@
                  (local.get $$27)
                  (local.get $$25)
                 )
-                ;;@ run.c:915:0
+                ;;@ run.c:930:0
                 (local.set $$28
                  (local.get $$2)
                 )
                 (local.set $$1
                  (local.get $$28)
                 )
-                ;;@ run.c:1082:0
-                (local.set $$348
+                ;;@ run.c:1098:0
+                (local.set $$354
                  (local.get $$1)
                 )
                 (global.set $STACKTOP
                  (local.get $sp)
                 )
                 (return
-                 (local.get $$348)
+                 (local.get $$354)
                 )
                )
               )
               (block
-               ;;@ run.c:918:0
+               ;;@ run.c:933:0
                (local.set $$29
                 (local.get $$2)
                )
@@ -120736,10 +120906,10 @@
                (local.set $$4
                 (local.get $$32)
                )
-               ;;@ run.c:919:0
+               ;;@ run.c:934:0
                (local.set $$33
                 (i32.load
-                 (i32.const 9296)
+                 (i32.const 8708)
                 )
                )
                (local.set $$34
@@ -120754,7 +120924,7 @@
                (local.set $$5
                 (local.get $$35)
                )
-               ;;@ run.c:920:0
+               ;;@ run.c:935:0
                (local.set $$36
                 (local.get $$5)
                )
@@ -120781,11 +120951,11 @@
                (local.set $$6
                 (local.get $$40)
                )
-               ;;@ run.c:921:0
+               ;;@ run.c:936:0
                (local.set $$7
                 (i32.const 1)
                )
-               ;;@ run.c:922:0
+               ;;@ run.c:937:0
                (local.set $$41
                 (local.get $$2)
                )
@@ -120814,7 +120984,7 @@
                (if
                 (local.get $$45)
                 (block
-                 ;;@ run.c:923:0
+                 ;;@ run.c:938:0
                  (local.set $$46
                   (local.get $$2)
                  )
@@ -120856,7 +121026,7 @@
                  )
                 )
                )
-               ;;@ run.c:925:0
+               ;;@ run.c:940:0
                (local.set $$53
                 (local.get $$6)
                )
@@ -120879,7 +121049,7 @@
                      )
                     )
                     (block
-                     ;;@ run.c:927:0
+                     ;;@ run.c:942:0
                      (local.set $$55
                       (local.get $$7)
                      )
@@ -120911,7 +121081,7 @@
                     )
                    )
                    (block
-                    ;;@ run.c:931:0
+                    ;;@ run.c:946:0
                     (local.set $$60
                      (local.get $$7)
                     )
@@ -120943,7 +121113,7 @@
                    )
                   )
                   (block
-                   ;;@ run.c:935:0
+                   ;;@ run.c:950:0
                    (local.set $$65
                     (local.get $$7)
                    )
@@ -120976,7 +121146,7 @@
                     (local.get $$68)
                     (local.get $$70)
                    )
-                   ;;@ run.c:936:0
+                   ;;@ run.c:951:0
                    (local.set $$71
                     (local.get $$6)
                    )
@@ -121019,7 +121189,7 @@
                   )
                  )
                  (block
-                  ;;@ run.c:940:0
+                  ;;@ run.c:955:0
                   (local.set $$78
                    (local.get $$6)
                   )
@@ -121075,7 +121245,7 @@
                  )
                 )
                 (block
-                 ;;@ run.c:944:0
+                 ;;@ run.c:959:0
                  (local.set $$87
                   (local.get $$6)
                  )
@@ -121099,11 +121269,11 @@
                    (local.get $$vararg_buffer)
                   )
                  )
-                 ;;@ run.c:945:0
+                 ;;@ run.c:960:0
                  (call $_abort)
                 )
                )
-               ;;@ run.c:949:0
+               ;;@ run.c:964:0
                (local.set $$90
                 (local.get $$6)
                )
@@ -121120,7 +121290,7 @@
                 (local.get $$92)
                 (local.get $$90)
                )
-               ;;@ run.c:950:0
+               ;;@ run.c:965:0
                (local.set $$93
                 (local.get $$2)
                )
@@ -121145,7 +121315,7 @@
                 (local.get $$96)
                 (i32.const 0)
                )
-               ;;@ run.c:951:0
+               ;;@ run.c:966:0
                (local.set $$97
                 (local.get $$4)
                )
@@ -121162,7 +121332,7 @@
                 (local.get $$99)
                 (local.get $$97)
                )
-               ;;@ run.c:952:0
+               ;;@ run.c:967:0
                (local.set $$100
                 (local.get $$2)
                )
@@ -121180,7 +121350,7 @@
                (call $_add_node_to_execution_stack
                 (local.get $$102)
                )
-               ;;@ run.c:953:0
+               ;;@ run.c:968:0
                (local.set $$103
                 (local.get $$4)
                )
@@ -121222,7 +121392,7 @@
                 (local.get $$105)
                 (local.get $$110)
                )
-               ;;@ run.c:954:0
+               ;;@ run.c:969:0
                (local.set $$111
                 (local.get $$4)
                )
@@ -121255,14 +121425,14 @@
                 (local.get $$111)
                 (local.get $$116)
                )
-               ;;@ run.c:955:0
+               ;;@ run.c:970:0
                (local.set $$117
                 (local.get $$2)
                )
                (call $_add_node_to_execution_stack
                 (local.get $$117)
                )
-               ;;@ run.c:956:0
+               ;;@ run.c:971:0
                (local.set $$118
                 (local.get $$6)
                )
@@ -121273,7 +121443,7 @@
               )
              )
              (block
-              ;;@ run.c:960:0
+              ;;@ run.c:975:0
               (local.set $$119
                (local.get $$2)
               )
@@ -121296,10 +121466,10 @@
               (local.set $$8
                (local.get $$122)
               )
-              ;;@ run.c:961:0
+              ;;@ run.c:976:0
               (local.set $$123
                (i32.load
-                (i32.const 9296)
+                (i32.const 8708)
                )
               )
               (local.set $$124
@@ -121314,7 +121484,7 @@
               (local.set $$9
                (local.get $$125)
               )
-              ;;@ run.c:962:0
+              ;;@ run.c:977:0
               (local.set $$126
                (local.get $$9)
               )
@@ -121341,11 +121511,11 @@
               (local.set $$10
                (local.get $$130)
               )
-              ;;@ run.c:963:0
+              ;;@ run.c:978:0
               (local.set $$11
                (i32.const 1)
               )
-              ;;@ run.c:964:0
+              ;;@ run.c:979:0
               (local.set $$131
                (local.get $$2)
               )
@@ -121374,7 +121544,7 @@
               (if
                (local.get $$135)
                (block
-                ;;@ run.c:965:0
+                ;;@ run.c:980:0
                 (local.set $$136
                  (local.get $$2)
                 )
@@ -121416,7 +121586,7 @@
                 )
                )
               )
-              ;;@ run.c:967:0
+              ;;@ run.c:982:0
               (local.set $$143
                (local.get $$10)
               )
@@ -121439,7 +121609,7 @@
                     )
                    )
                    (block
-                    ;;@ run.c:969:0
+                    ;;@ run.c:984:0
                     (local.set $$145
                      (local.get $$11)
                     )
@@ -121471,7 +121641,7 @@
                    )
                   )
                   (block
-                   ;;@ run.c:973:0
+                   ;;@ run.c:988:0
                    (local.set $$150
                     (local.get $$11)
                    )
@@ -121503,7 +121673,7 @@
                   )
                  )
                  (block
-                  ;;@ run.c:977:0
+                  ;;@ run.c:992:0
                   (local.set $$155
                    (local.get $$11)
                   )
@@ -121536,7 +121706,7 @@
                    (local.get $$158)
                    (local.get $$160)
                   )
-                  ;;@ run.c:978:0
+                  ;;@ run.c:993:0
                   (local.set $$161
                    (local.get $$10)
                   )
@@ -121579,7 +121749,7 @@
                  )
                 )
                 (block
-                 ;;@ run.c:984:0
+                 ;;@ run.c:999:0
                  (local.set $$168
                   (local.get $$10)
                  )
@@ -121635,7 +121805,7 @@
                 )
                )
                (block
-                ;;@ run.c:988:0
+                ;;@ run.c:1003:0
                 (local.set $$177
                  (local.get $$10)
                 )
@@ -121659,11 +121829,11 @@
                   (local.get $$vararg_buffer1)
                  )
                 )
-                ;;@ run.c:989:0
+                ;;@ run.c:1004:0
                 (call $_abort)
                )
               )
-              ;;@ run.c:993:0
+              ;;@ run.c:1008:0
               (local.set $$180
                (local.get $$10)
               )
@@ -121680,7 +121850,7 @@
                (local.get $$182)
                (local.get $$180)
               )
-              ;;@ run.c:994:0
+              ;;@ run.c:1009:0
               (local.set $$183
                (local.get $$2)
               )
@@ -121705,7 +121875,7 @@
                (local.get $$186)
                (i32.const 0)
               )
-              ;;@ run.c:995:0
+              ;;@ run.c:1010:0
               (local.set $$187
                (local.get $$8)
               )
@@ -121722,7 +121892,7 @@
                (local.get $$189)
                (local.get $$187)
               )
-              ;;@ run.c:996:0
+              ;;@ run.c:1011:0
               (local.set $$190
                (local.get $$2)
               )
@@ -121740,7 +121910,7 @@
               (call $_add_node_to_execution_stack
                (local.get $$192)
               )
-              ;;@ run.c:997:0
+              ;;@ run.c:1012:0
               (local.set $$193
                (local.get $$8)
               )
@@ -121782,7 +121952,7 @@
                (local.get $$195)
                (local.get $$200)
               )
-              ;;@ run.c:998:0
+              ;;@ run.c:1013:0
               (local.set $$201
                (local.get $$8)
               )
@@ -121815,14 +121985,14 @@
                (local.get $$201)
                (local.get $$206)
               )
-              ;;@ run.c:999:0
+              ;;@ run.c:1014:0
               (local.set $$207
                (local.get $$2)
               )
               (call $_add_node_to_execution_stack
                (local.get $$207)
               )
-              ;;@ run.c:1000:0
+              ;;@ run.c:1015:0
               (local.set $$208
                (local.get $$10)
               )
@@ -121833,7 +122003,7 @@
              )
             )
             (block
-             ;;@ run.c:1004:0
+             ;;@ run.c:1019:0
              (local.set $$209
               (local.get $$2)
              )
@@ -121845,7 +122015,7 @@
              (local.set $$3
               (local.get $$210)
              )
-             ;;@ run.c:1005:0
+             ;;@ run.c:1020:0
              (local.set $$211
               (local.get $$2)
              )
@@ -121856,7 +122026,7 @@
             )
            )
            (block
-            ;;@ run.c:1009:0
+            ;;@ run.c:1024:0
             (local.set $$212
              (local.get $$2)
             )
@@ -121865,7 +122035,7 @@
               (local.get $$212)
              )
             )
-            ;;@ run.c:1010:0
+            ;;@ run.c:1025:0
             (local.set $$213
              (local.get $$2)
             )
@@ -121883,359 +122053,408 @@
             (local.set $$3
              (local.get $$215)
             )
-            ;;@ run.c:1011:0
+            ;;@ run.c:1026:0
             (local.set $$216
              (local.get $$2)
             )
-            (call $_add_node_to_execution_stack
-             (local.get $$216)
-            )
-            ;;@ run.c:1012:0
             (local.set $$217
-             (local.get $$2)
+             (i32.add
+              (local.get $$216)
+              (i32.const 48)
+             )
             )
             (local.set $$218
-             (i32.add
+             (i32.load
               (local.get $$217)
-              (i32.const 24)
              )
             )
             (local.set $$219
-             (i32.load
-              (local.get $$218)
-             )
+             (local.get $$3)
             )
             (local.set $$220
-             (local.get $$2)
+             (i32.add
+              (local.get $$219)
+              (i32.const 44)
+             )
             )
             (local.set $$221
-             (i32.add
+             (i32.load
               (local.get $$220)
+             )
+            )
+            (i32.store
+             (local.get $$vararg_buffer4)
+             (local.get $$218)
+            )
+            (local.set $$vararg_ptr7
+             (i32.add
+              (local.get $$vararg_buffer4)
+              (i32.const 4)
+             )
+            )
+            (i32.store
+             (local.get $$vararg_ptr7)
+             (local.get $$221)
+            )
+            (drop
+             (call $_printf
+              (i32.const 6137)
+              (local.get $$vararg_buffer4)
+             )
+            )
+            ;;@ run.c:1027:0
+            (local.set $$222
+             (local.get $$2)
+            )
+            (call $_add_node_to_execution_stack
+             (local.get $$222)
+            )
+            ;;@ run.c:1028:0
+            (local.set $$223
+             (local.get $$2)
+            )
+            (local.set $$224
+             (i32.add
+              (local.get $$223)
+              (i32.const 24)
+             )
+            )
+            (local.set $$225
+             (i32.load
+              (local.get $$224)
+             )
+            )
+            (local.set $$226
+             (local.get $$2)
+            )
+            (local.set $$227
+             (i32.add
+              (local.get $$226)
               (i32.const 20)
              )
             )
-            (local.set $$222
+            (local.set $$228
              (i32.load
-              (local.get $$221)
+              (local.get $$227)
              )
             )
             (call $_add_memory_use
-             (local.get $$219)
-             (local.get $$222)
+             (local.get $$225)
+             (local.get $$228)
             )
             (br $switch)
            )
           )
           (block
-           ;;@ run.c:1016:0
-           (local.set $$223
+           ;;@ run.c:1032:0
+           (local.set $$229
             (local.get $$2)
            )
            (call $_run_call
-            (local.get $$223)
+            (local.get $$229)
            )
-           ;;@ run.c:1017:0
-           (local.set $$224
+           ;;@ run.c:1033:0
+           (local.set $$230
             (local.get $$2)
            )
-           (local.set $$225
+           (local.set $$231
             (i32.add
-             (local.get $$224)
+             (local.get $$230)
              (i32.const 32)
             )
            )
-           (local.set $$226
+           (local.set $$232
             (i32.load
-             (local.get $$225)
+             (local.get $$231)
             )
            )
            (local.set $$3
-            (local.get $$226)
+            (local.get $$232)
            )
            (br $switch)
           )
          )
          (block
-          ;;@ run.c:1021:0
-          (local.set $$227
-           (i32.load
-            (i32.const 9296)
-           )
-          )
-          (local.set $$228
-           (local.get $$2)
-          )
-          (local.set $$229
-           (call $_run_lvalue
-            (local.get $$228)
-           )
-          )
-          (local.set $$230
-           (i32.add
-            (local.get $$227)
-            (local.get $$229)
-           )
-          )
-          (local.set $$12
-           (local.get $$230)
-          )
-          ;;@ run.c:1022:0
-          (local.set $$231
-           (local.get $$12)
-          )
-          (local.set $$232
-           (local.get $$2)
-          )
+          ;;@ run.c:1037:0
           (local.set $$233
-           (i32.add
-            (local.get $$232)
-            (i32.const 4)
+           (i32.load
+            (i32.const 8708)
            )
           )
           (local.set $$234
-           (i32.load
-            (local.get $$233)
-           )
+           (local.get $$2)
           )
           (local.set $$235
-           (call $_get_result
-            (local.get $$231)
+           (call $_run_lvalue
             (local.get $$234)
            )
           )
+          (local.set $$236
+           (i32.add
+            (local.get $$233)
+            (local.get $$235)
+           )
+          )
+          (local.set $$12
+           (local.get $$236)
+          )
+          ;;@ run.c:1038:0
+          (local.set $$237
+           (local.get $$12)
+          )
+          (local.set $$238
+           (local.get $$2)
+          )
+          (local.set $$239
+           (i32.add
+            (local.get $$238)
+            (i32.const 4)
+           )
+          )
+          (local.set $$240
+           (i32.load
+            (local.get $$239)
+           )
+          )
+          (local.set $$241
+           (call $_get_result
+            (local.get $$237)
+            (local.get $$240)
+           )
+          )
           (local.set $$3
-           (local.get $$235)
+           (local.get $$241)
           )
           (br $switch)
          )
         )
         (block
-         ;;@ run.c:1026:0
-         (local.set $$236
+         ;;@ run.c:1042:0
+         (local.set $$242
           (local.get $$2)
          )
-         (local.set $$237
+         (local.set $$243
           (i32.add
-           (local.get $$236)
+           (local.get $$242)
            (i32.const 48)
           )
          )
-         (local.set $$238
+         (local.set $$244
           (i32.load
-           (local.get $$237)
+           (local.get $$243)
           )
          )
          (local.set $$13
-          (local.get $$238)
+          (local.get $$244)
          )
-         ;;@ run.c:1027:0
-         (local.set $$239
+         ;;@ run.c:1043:0
+         (local.set $$245
           (local.get $$2)
          )
-         (local.set $$240
+         (local.set $$246
           (i32.add
-           (local.get $$239)
+           (local.get $$245)
            (i32.const 48)
           )
          )
-         (local.set $$241
+         (local.set $$247
           (i32.add
-           (local.get $$240)
+           (local.get $$246)
            (i32.const 4)
           )
          )
-         (local.set $$242
+         (local.set $$248
           (i32.load
-           (local.get $$241)
+           (local.get $$247)
           )
          )
          (local.set $$14
-          (local.get $$242)
+          (local.get $$248)
          )
-         ;;@ run.c:1028:0
-         (local.set $$243
+         ;;@ run.c:1044:0
+         (local.set $$249
           (local.get $$13)
          )
-         (local.set $$244
+         (local.set $$250
           (i32.add
-           (local.get $$243)
+           (local.get $$249)
            (i32.const 4)
           )
          )
-         (local.set $$245
+         (local.set $$251
           (i32.load
-           (local.get $$244)
+           (local.get $$250)
           )
          )
-         (local.set $$246
+         (local.set $$252
           (i32.load
-           (local.get $$245)
+           (local.get $$251)
           )
          )
-         (local.set $$247
+         (local.set $$253
           (i32.eq
-           (local.get $$246)
+           (local.get $$252)
            (i32.const 3)
           )
          )
          (if
-          (local.get $$247)
+          (local.get $$253)
           (block
-           ;;@ run.c:1029:0
-           (local.set $$248
+           ;;@ run.c:1045:0
+           (local.set $$254
             (local.get $$14)
            )
-           (local.set $$249
+           (local.set $$255
             (i32.load
-             (local.get $$248)
+             (local.get $$254)
             )
            )
-           (local.set $$250
+           (local.set $$256
             (i32.eq
-             (local.get $$249)
+             (local.get $$255)
              (i32.const 8)
             )
            )
            (if
-            (local.get $$250)
+            (local.get $$256)
             (block
-             (local.set $$251
+             (local.set $$257
               (local.get $$14)
              )
-             (local.set $$252
+             (local.set $$258
               (i32.add
-               (local.get $$251)
+               (local.get $$257)
                (i32.const 48)
               )
              )
-             (local.set $$253
+             (local.set $$259
               (i32.load
-               (local.get $$252)
+               (local.get $$258)
               )
              )
-             (local.set $$254
+             (local.set $$260
               (call $_strcmp
-               (local.get $$253)
-               (i32.const 6137)
+               (local.get $$259)
+               (i32.const 6149)
               )
              )
-             (local.set $$255
+             (local.set $$261
               (i32.eq
-               (local.get $$254)
+               (local.get $$260)
                (i32.const 0)
               )
              )
              (if
-              (local.get $$255)
+              (local.get $$261)
               (block
-               ;;@ run.c:1031:0
-               (local.set $$256
-                (local.get $$2)
-               )
-               (local.set $$257
-                (i32.add
-                 (local.get $$256)
-                 (i32.const 15)
-                )
-               )
-               (local.set $$258
-                (i32.load8_s
-                 (local.get $$257)
-                )
-               )
-               (local.set $$259
-                (local.get $$13)
-               )
-               (local.set $$260
-                (i32.add
-                 (local.get $$259)
-                 (i32.const 15)
-                )
-               )
-               (i32.store8
-                (local.get $$260)
-                (local.get $$258)
-               )
-               ;;@ run.c:1032:0
-               (local.set $$261
-                (local.get $$2)
-               )
+               ;;@ run.c:1047:0
                (local.set $$262
-                (i32.add
-                 (local.get $$261)
-                 (i32.const 15)
-                )
+                (local.get $$2)
                )
                (local.set $$263
-                (i32.load8_s
+                (i32.add
                  (local.get $$262)
+                 (i32.const 15)
                 )
                )
                (local.set $$264
-                (local.get $$14)
+                (i32.load8_s
+                 (local.get $$263)
+                )
                )
                (local.set $$265
+                (local.get $$13)
+               )
+               (local.set $$266
                 (i32.add
-                 (local.get $$264)
+                 (local.get $$265)
                  (i32.const 15)
                 )
                )
                (i32.store8
-                (local.get $$265)
-                (local.get $$263)
+                (local.get $$266)
+                (local.get $$264)
                )
-               ;;@ run.c:1033:0
-               (local.set $$266
+               ;;@ run.c:1048:0
+               (local.set $$267
                 (local.get $$2)
                )
-               (call $_add_node_to_execution_stack
-                (local.get $$266)
-               )
-               ;;@ run.c:1034:0
-               (local.set $$267
-                (i32.load
-                 (i32.const 9272)
+               (local.set $$268
+                (i32.add
+                 (local.get $$267)
+                 (i32.const 15)
                 )
                )
-               (local.set $$268
-                (local.get $$13)
-               )
                (local.set $$269
-                (i32.add
+                (i32.load8_s
                  (local.get $$268)
-                 (i32.const 4)
                 )
                )
                (local.set $$270
-                (i32.load
-                 (local.get $$269)
-                )
+                (local.get $$14)
                )
                (local.set $$271
                 (i32.add
                  (local.get $$270)
-                 (i32.const 8)
+                 (i32.const 15)
                 )
                )
+               (i32.store8
+                (local.get $$271)
+                (local.get $$269)
+               )
+               ;;@ run.c:1049:0
                (local.set $$272
-                (i32.add
-                 (local.get $$271)
-                 (i32.const 4)
-                )
+                (local.get $$2)
                )
+               (call $_add_node_to_execution_stack
+                (local.get $$272)
+               )
+               ;;@ run.c:1050:0
                (local.set $$273
                 (i32.load
-                 (local.get $$272)
+                 (i32.const 8684)
                 )
                )
                (local.set $$274
+                (local.get $$13)
+               )
+               (local.set $$275
+                (i32.add
+                 (local.get $$274)
+                 (i32.const 4)
+                )
+               )
+               (local.set $$276
+                (i32.load
+                 (local.get $$275)
+                )
+               )
+               (local.set $$277
+                (i32.add
+                 (local.get $$276)
+                 (i32.const 8)
+                )
+               )
+               (local.set $$278
+                (i32.add
+                 (local.get $$277)
+                 (i32.const 4)
+                )
+               )
+               (local.set $$279
+                (i32.load
+                 (local.get $$278)
+                )
+               )
+               (local.set $$280
                 (call $_make_literal_uint
-                 (local.get $$267)
                  (local.get $$273)
+                 (local.get $$279)
                 )
                )
                (local.set $$3
-                (local.get $$274)
+                (local.get $$280)
                )
                (br $label$break$L1)
               )
@@ -122244,93 +122463,59 @@
            )
           )
          )
-         ;;@ run.c:1037:0
-         (local.set $$275
-          (local.get $$2)
-         )
-         (local.set $$276
-          (call $_run_lvalue
-           (local.get $$275)
-          )
-         )
-         (local.set $$15
-          (local.get $$276)
-         )
-         ;;@ run.c:1038:0
-         (local.set $$277
-          (local.get $$15)
-         )
-         (local.set $$278
-          (local.get $$2)
-         )
-         (local.set $$279
-          (i32.add
-           (local.get $$278)
-           (i32.const 4)
-          )
-         )
-         (local.set $$280
-          (i32.load
-           (local.get $$279)
-          )
-         )
+         ;;@ run.c:1053:0
          (local.set $$281
-          (i32.add
-           (local.get $$280)
-           (i32.const 4)
-          )
+          (local.get $$2)
          )
          (local.set $$282
-          (i32.load
+          (call $_run_lvalue
            (local.get $$281)
           )
          )
+         (local.set $$15
+          (local.get $$282)
+         )
+         ;;@ run.c:1054:0
          (local.set $$283
-          (call $_get_memory
-           (local.get $$277)
-           (local.get $$282)
-          )
+          (local.get $$15)
          )
-         (local.set $$16
-          (local.get $$283)
-         )
-         ;;@ run.c:1039:0
          (local.set $$284
-          (local.get $$16)
-         )
-         (local.set $$285
           (local.get $$2)
          )
-         (local.set $$286
+         (local.set $$285
           (i32.add
-           (local.get $$285)
+           (local.get $$284)
            (i32.const 4)
           )
          )
-         (local.set $$287
+         (local.set $$286
           (i32.load
+           (local.get $$285)
+          )
+         )
+         (local.set $$287
+          (i32.add
            (local.get $$286)
+           (i32.const 4)
           )
          )
          (local.set $$288
-          (call $_get_result
-           (local.get $$284)
+          (i32.load
            (local.get $$287)
           )
          )
-         (local.set $$3
-          (local.get $$288)
-         )
-         ;;@ run.c:1040:0
          (local.set $$289
-          (local.get $$2)
+          (call $_get_memory
+           (local.get $$283)
+           (local.get $$288)
+          )
          )
-         (call $_add_node_to_execution_stack
+         (local.set $$16
           (local.get $$289)
          )
-         ;;@ run.c:1041:0
+         ;;@ run.c:1055:0
          (local.set $$290
-          (local.get $$15)
+          (local.get $$16)
          )
          (local.set $$291
           (local.get $$2)
@@ -122338,7 +122523,7 @@
          (local.set $$292
           (i32.add
            (local.get $$291)
-           (i32.const 20)
+           (i32.const 4)
           )
          )
          (local.set $$293
@@ -122346,186 +122531,188 @@
            (local.get $$292)
           )
          )
+         (local.set $$294
+          (call $_get_result
+           (local.get $$290)
+           (local.get $$293)
+          )
+         )
+         (local.set $$3
+          (local.get $$294)
+         )
+         ;;@ run.c:1056:0
+         (local.set $$295
+          (local.get $$2)
+         )
+         (call $_add_node_to_execution_stack
+          (local.get $$295)
+         )
+         ;;@ run.c:1057:0
+         (local.set $$296
+          (local.get $$15)
+         )
+         (local.set $$297
+          (local.get $$2)
+         )
+         (local.set $$298
+          (i32.add
+           (local.get $$297)
+           (i32.const 20)
+          )
+         )
+         (local.set $$299
+          (i32.load
+           (local.get $$298)
+          )
+         )
          (call $_add_memory_use
-          (local.get $$290)
-          (local.get $$293)
+          (local.get $$296)
+          (local.get $$299)
          )
          (br $switch)
         )
        )
        (block
-        ;;@ run.c:1053:0
-        (local.set $$294
-         (local.get $$2)
-        )
-        (call $_add_node_to_execution_stack
-         (local.get $$294)
-        )
-        ;;@ run.c:1054:0
-        (local.set $$295
-         (local.get $$2)
-        )
-        (local.set $$296
-         (i32.add
-          (local.get $$295)
-          (i32.const 48)
-         )
-        )
-        (local.set $$297
-         (i32.load
-          (local.get $$296)
-         )
-        )
-        (call $_add_node_to_execution_stack
-         (local.get $$297)
-        )
-        ;;@ run.c:1055:0
-        (local.set $$298
-         (i32.load
-          (i32.const 9272)
-         )
-        )
-        (local.set $$299
-         (local.get $$2)
-        )
+        ;;@ run.c:1069:0
         (local.set $$300
-         (i32.add
-          (local.get $$299)
-          (i32.const 48)
-         )
+         (local.get $$2)
         )
+        (call $_add_node_to_execution_stack
+         (local.get $$300)
+        )
+        ;;@ run.c:1070:0
         (local.set $$301
-         (i32.load
-          (local.get $$300)
-         )
+         (local.get $$2)
         )
         (local.set $$302
-         (call $_run_lvalue
+         (i32.add
           (local.get $$301)
+          (i32.const 48)
          )
         )
         (local.set $$303
-         (call $_make_literal_uint
-          (local.get $$298)
+         (i32.load
           (local.get $$302)
          )
         )
-        (local.set $$3
+        (call $_add_node_to_execution_stack
          (local.get $$303)
+        )
+        ;;@ run.c:1071:0
+        (local.set $$304
+         (i32.load
+          (i32.const 8684)
+         )
+        )
+        (local.set $$305
+         (local.get $$2)
+        )
+        (local.set $$306
+         (i32.add
+          (local.get $$305)
+          (i32.const 48)
+         )
+        )
+        (local.set $$307
+         (i32.load
+          (local.get $$306)
+         )
+        )
+        (local.set $$308
+         (call $_run_lvalue
+          (local.get $$307)
+         )
+        )
+        (local.set $$309
+         (call $_make_literal_uint
+          (local.get $$304)
+          (local.get $$308)
+         )
+        )
+        (local.set $$3
+         (local.get $$309)
         )
         (br $switch)
        )
       )
       (block
-       ;;@ run.c:1059:0
-       (local.set $$304
+       ;;@ run.c:1075:0
+       (local.set $$310
         (local.get $$2)
        )
        (call $_add_node_to_execution_stack
-        (local.get $$304)
+        (local.get $$310)
        )
-       ;;@ run.c:1060:0
-       (local.set $$305
-        (local.get $$2)
-       )
-       (local.set $$306
-        (i32.add
-         (local.get $$305)
-         (i32.const 15)
-        )
-       )
-       (local.set $$307
-        (i32.load8_s
-         (local.get $$306)
-        )
-       )
-       (local.set $$308
-        (local.get $$2)
-       )
-       (local.set $$309
-        (i32.add
-         (local.get $$308)
-         (i32.const 48)
-        )
-       )
-       (local.set $$310
-        (i32.load
-         (local.get $$309)
-        )
-       )
+       ;;@ run.c:1076:0
        (local.set $$311
+        (local.get $$2)
+       )
+       (local.set $$312
         (i32.add
-         (local.get $$310)
+         (local.get $$311)
          (i32.const 15)
         )
-       )
-       (i32.store8
-        (local.get $$311)
-        (local.get $$307)
-       )
-       ;;@ run.c:1061:0
-       (local.set $$312
-        (local.get $$2)
        )
        (local.set $$313
-        (i32.add
+        (i32.load8_s
          (local.get $$312)
-         (i32.const 48)
         )
        )
        (local.set $$314
-        (i32.load
-         (local.get $$313)
-        )
+        (local.get $$2)
        )
        (local.set $$315
-        (call $_run_rvalue
+        (i32.add
          (local.get $$314)
+         (i32.const 48)
         )
        )
-       (local.set $$17
-        (local.get $$315)
-       )
-       ;;@ run.c:1062:0
        (local.set $$316
-        (local.get $$17)
+        (i32.load
+         (local.get $$315)
+        )
        )
        (local.set $$317
         (i32.add
          (local.get $$316)
+         (i32.const 15)
+        )
+       )
+       (i32.store8
+        (local.get $$317)
+        (local.get $$313)
+       )
+       ;;@ run.c:1077:0
+       (local.set $$318
+        (local.get $$2)
+       )
+       (local.set $$319
+        (i32.add
+         (local.get $$318)
          (i32.const 48)
         )
        )
-       (local.set $$318
-        (i32.load
-         (local.get $$317)
-        )
-       )
-       (local.set $$18
-        (local.get $$318)
-       )
-       ;;@ run.c:1063:0
-       (local.set $$319
-        (local.get $$18)
-       )
        (local.set $$320
-        (local.get $$2)
+        (i32.load
+         (local.get $$319)
+        )
        )
        (local.set $$321
-        (i32.add
+        (call $_run_rvalue
          (local.get $$320)
-         (i32.const 4)
         )
        )
+       (local.set $$17
+        (local.get $$321)
+       )
+       ;;@ run.c:1078:0
        (local.set $$322
-        (i32.load
-         (local.get $$321)
-        )
+        (local.get $$17)
        )
        (local.set $$323
         (i32.add
          (local.get $$322)
-         (i32.const 4)
+         (i32.const 48)
         )
        )
        (local.set $$324
@@ -122533,164 +122720,196 @@
          (local.get $$323)
         )
        )
+       (local.set $$18
+        (local.get $$324)
+       )
+       ;;@ run.c:1079:0
        (local.set $$325
-        (call $_get_memory
-         (local.get $$319)
-         (local.get $$324)
-        )
-       )
-       (local.set $$19
-        (local.get $$325)
-       )
-       ;;@ run.c:1064:0
-       (local.set $$326
         (local.get $$18)
        )
+       (local.set $$326
+        (local.get $$2)
+       )
        (local.set $$327
-        (local.get $$2)
-       )
-       (local.set $$328
         (i32.add
-         (local.get $$327)
-         (i32.const 20)
-        )
-       )
-       (local.set $$329
-        (i32.load
-         (local.get $$328)
-        )
-       )
-       (call $_add_memory_use
-        (local.get $$326)
-        (local.get $$329)
-       )
-       ;;@ run.c:1065:0
-       (local.set $$330
-        (local.get $$19)
-       )
-       (local.set $$331
-        (local.get $$2)
-       )
-       (local.set $$332
-        (i32.add
-         (local.get $$331)
+         (local.get $$326)
          (i32.const 4)
         )
        )
-       (local.set $$333
+       (local.set $$328
         (i32.load
-         (local.get $$332)
+         (local.get $$327)
         )
        )
-       (local.set $$334
-        (call $_get_result
+       (local.set $$329
+        (i32.add
+         (local.get $$328)
+         (i32.const 4)
+        )
+       )
+       (local.set $$330
+        (i32.load
+         (local.get $$329)
+        )
+       )
+       (local.set $$331
+        (call $_get_memory
+         (local.get $$325)
          (local.get $$330)
+        )
+       )
+       (local.set $$19
+        (local.get $$331)
+       )
+       ;;@ run.c:1080:0
+       (local.set $$332
+        (local.get $$18)
+       )
+       (local.set $$333
+        (local.get $$2)
+       )
+       (local.set $$334
+        (i32.add
          (local.get $$333)
+         (i32.const 20)
+        )
+       )
+       (local.set $$335
+        (i32.load
+         (local.get $$334)
+        )
+       )
+       (call $_add_memory_use
+        (local.get $$332)
+        (local.get $$335)
+       )
+       ;;@ run.c:1081:0
+       (local.set $$336
+        (local.get $$19)
+       )
+       (local.set $$337
+        (local.get $$2)
+       )
+       (local.set $$338
+        (i32.add
+         (local.get $$337)
+         (i32.const 4)
+        )
+       )
+       (local.set $$339
+        (i32.load
+         (local.get $$338)
+        )
+       )
+       (local.set $$340
+        (call $_get_result
+         (local.get $$336)
+         (local.get $$339)
         )
        )
        (local.set $$3
-        (local.get $$334)
+        (local.get $$340)
        )
        (br $switch)
       )
      )
      (block
-      ;;@ run.c:1069:0
-      (local.set $$335
+      ;;@ run.c:1085:0
+      (local.set $$341
        (local.get $$2)
       )
-      (local.set $$336
+      (local.set $$342
        (i32.add
-        (local.get $$335)
+        (local.get $$341)
         (i32.const 48)
        )
       )
-      (local.set $$337
+      (local.set $$343
        (i32.load
-        (local.get $$336)
+        (local.get $$342)
        )
       )
-      (local.set $$338
+      (local.set $$344
        (call $_run_rvalue
-        (local.get $$337)
+        (local.get $$343)
        )
       )
       (local.set $$3
-       (local.get $$338)
+       (local.get $$344)
       )
       (br $switch)
      )
     )
     (block
-     ;;@ run.c:1073:0
-     (local.set $$339
+     ;;@ run.c:1089:0
+     (local.set $$345
       (i32.load
-       (i32.const 9272)
+       (i32.const 8684)
       )
      )
-     (local.set $$340
+     (local.set $$346
       (local.get $$2)
      )
-     (local.set $$341
+     (local.set $$347
       (call $_run_lvalue
-       (local.get $$340)
+       (local.get $$346)
       )
      )
-     (local.set $$342
+     (local.set $$348
       (call $_make_literal_uint
-       (local.get $$339)
-       (local.get $$341)
+       (local.get $$345)
+       (local.get $$347)
       )
      )
      (local.set $$3
-      (local.get $$342)
+      (local.get $$348)
      )
     )
    )
   )
-  ;;@ run.c:1078:0
-  (local.set $$343
+  ;;@ run.c:1094:0
+  (local.set $$349
    (local.get $$3)
   )
-  (local.set $$344
+  (local.set $$350
    (local.get $$2)
   )
-  (local.set $$345
+  (local.set $$351
    (i32.add
-    (local.get $$344)
+    (local.get $$350)
     (i32.const 32)
    )
   )
   (i32.store
-   (local.get $$345)
-   (local.get $$343)
+   (local.get $$351)
+   (local.get $$349)
   )
-  ;;@ run.c:1079:0
-  (local.set $$346
+  ;;@ run.c:1095:0
+  (local.set $$352
    (local.get $$3)
   )
   (call $_fill_result_str
-   (local.get $$346)
+   (local.get $$352)
   )
-  ;;@ run.c:1081:0
-  (local.set $$347
+  ;;@ run.c:1097:0
+  (local.set $$353
    (local.get $$3)
   )
   (local.set $$1
-   (local.get $$347)
+   (local.get $$353)
   )
-  ;;@ run.c:1082:0
-  (local.set $$348
+  ;;@ run.c:1098:0
+  (local.set $$354
    (local.get $$1)
   )
   (global.set $STACKTOP
    (local.get $sp)
   )
   (return
-   (local.get $$348)
+   (local.get $$354)
   )
  )
- (func $_maybe_cast (; 322 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_maybe_cast (; 326 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -122783,7 +123002,7 @@
   (local.set $$3
    (local.get $$1)
   )
-  ;;@ run.c:748:0
+  ;;@ run.c:758:0
   (local.set $$8
    (local.get $$2)
   )
@@ -122801,7 +123020,7 @@
   (local.set $$4
    (local.get $$10)
   )
-  ;;@ run.c:749:0
+  ;;@ run.c:759:0
   (local.set $$11
    (local.get $$4)
   )
@@ -122819,7 +123038,7 @@
   (if
    (local.get $$13)
    (block
-    ;;@ run.c:750:0
+    ;;@ run.c:760:0
     (local.set $$14
      (local.get $$4)
     )
@@ -122845,7 +123064,7 @@
     )
    )
   )
-  ;;@ run.c:752:0
+  ;;@ run.c:762:0
   (local.set $$18
    (local.get $$3)
   )
@@ -122863,7 +123082,7 @@
   (local.set $$5
    (local.get $$20)
   )
-  ;;@ run.c:753:0
+  ;;@ run.c:763:0
   (local.set $$21
    (local.get $$5)
   )
@@ -122881,7 +123100,7 @@
   (if
    (local.get $$23)
    (block
-    ;;@ run.c:754:0
+    ;;@ run.c:764:0
     (local.set $$24
      (local.get $$5)
     )
@@ -122907,7 +123126,7 @@
     )
    )
   )
-  ;;@ run.c:756:0
+  ;;@ run.c:766:0
   (local.set $$28
    (local.get $$4)
   )
@@ -122943,7 +123162,7 @@
      (if
       (local.get $$33)
       (block
-       ;;@ run.c:757:0
+       ;;@ run.c:767:0
        (local.set $$34
         (local.get $$4)
        )
@@ -123002,7 +123221,7 @@
          (if
           (local.get $$43)
           (block
-           ;;@ run.c:758:0
+           ;;@ run.c:768:0
            (local.set $$44
             (local.get $$3)
            )
@@ -123020,10 +123239,10 @@
            (local.set $$6
             (local.get $$46)
            )
-           ;;@ run.c:759:0
+           ;;@ run.c:769:0
            (local.set $$47
             (i32.load
-             (i32.const 9272)
+             (i32.const 8684)
             )
            )
            (local.set $$48
@@ -123043,7 +123262,7 @@
          )
         )
        )
-       ;;@ run.c:761:0
+       ;;@ run.c:771:0
        (local.set $$50
         (local.get $$4)
        )
@@ -123102,7 +123321,7 @@
          (if
           (local.get $$59)
           (block
-           ;;@ run.c:762:0
+           ;;@ run.c:772:0
            (local.set $$60
             (local.get $$3)
            )
@@ -123120,10 +123339,10 @@
            (local.set $$7
             (local.get $$62)
            )
-           ;;@ run.c:763:0
+           ;;@ run.c:773:0
            (local.set $$63
             (i32.load
-             (i32.const 9272)
+             (i32.const 8684)
             )
            )
            (local.set $$64
@@ -123147,14 +123366,14 @@
     )
    )
   )
-  ;;@ run.c:768:0
+  ;;@ run.c:778:0
   (local.set $$66
    (local.get $$3)
   )
   (call $_fill_result_str
    (local.get $$66)
   )
-  ;;@ run.c:769:0
+  ;;@ run.c:779:0
   (local.set $$67
    (local.get $$3)
   )
@@ -123165,7 +123384,7 @@
    (local.get $$67)
   )
  )
- (func $_fill_result_str (; 323 ;) (param $$0 i32)
+ (func $_fill_result_str (; 327 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -123302,7 +123521,7 @@
   (local.set $$1
    (local.get $$0)
   )
-  ;;@ run.c:582:0
+  ;;@ run.c:583:0
   (local.set $$12
    (local.get $$1)
   )
@@ -123318,11 +123537,11 @@
     (global.set $STACKTOP
      (local.get $sp)
     )
-    ;;@ run.c:629:0
+    ;;@ run.c:630:0
     (return)
    )
   )
-  ;;@ run.c:582:0
+  ;;@ run.c:583:0
   (local.set $$14
    (local.get $$1)
   )
@@ -123349,11 +123568,11 @@
     (global.set $STACKTOP
      (local.get $sp)
     )
-    ;;@ run.c:629:0
+    ;;@ run.c:630:0
     (return)
    )
   )
-  ;;@ run.c:585:0
+  ;;@ run.c:586:0
   (local.set $$18
    (local.get $$1)
   )
@@ -123377,7 +123596,7 @@
          )
         )
         (block
-         ;;@ run.c:590:0
+         ;;@ run.c:591:0
          (local.set $$20
           (local.get $$1)
          )
@@ -123395,7 +123614,7 @@
          (local.set $$2
           (local.get $$22)
          )
-         ;;@ run.c:591:0
+         ;;@ run.c:592:0
          (local.set $$23
           (local.get $$2)
          )
@@ -123420,7 +123639,7 @@
          (local.set $$3
           (local.get $$25)
          )
-         ;;@ run.c:592:0
+         ;;@ run.c:593:0
          (local.set $$26
           (local.get $$3)
          )
@@ -123435,7 +123654,7 @@
          (local.set $$4
           (local.get $$28)
          )
-         ;;@ run.c:593:0
+         ;;@ run.c:594:0
          (local.set $$29
           (local.get $$4)
          )
@@ -123457,7 +123676,7 @@
            (local.get $$vararg_buffer1)
           )
          )
-         ;;@ run.c:594:0
+         ;;@ run.c:595:0
          (local.set $$32
           (local.get $$4)
          )
@@ -123477,12 +123696,12 @@
          (global.set $STACKTOP
           (local.get $sp)
          )
-         ;;@ run.c:629:0
+         ;;@ run.c:630:0
          (return)
         )
        )
        (block
-        ;;@ run.c:598:0
+        ;;@ run.c:599:0
         (local.set $$35
          (local.get $$1)
         )
@@ -123500,7 +123719,7 @@
         (local.set $$5
          (local.get $$37)
         )
-        ;;@ run.c:599:0
+        ;;@ run.c:600:0
         (local.set $$38
          (local.get $$5)
         )
@@ -123525,7 +123744,7 @@
         (local.set $$6
          (local.get $$40)
         )
-        ;;@ run.c:600:0
+        ;;@ run.c:601:0
         (local.set $$41
          (local.get $$6)
         )
@@ -123540,7 +123759,7 @@
         (local.set $$7
          (local.get $$43)
         )
-        ;;@ run.c:601:0
+        ;;@ run.c:602:0
         (local.set $$44
          (local.get $$7)
         )
@@ -123562,7 +123781,7 @@
           (local.get $$vararg_buffer7)
          )
         )
-        ;;@ run.c:602:0
+        ;;@ run.c:603:0
         (local.set $$47
          (local.get $$7)
         )
@@ -123582,12 +123801,12 @@
         (global.set $STACKTOP
          (local.get $sp)
         )
-        ;;@ run.c:629:0
+        ;;@ run.c:630:0
         (return)
        )
       )
       (block
-       ;;@ run.c:606:0
+       ;;@ run.c:607:0
        (local.set $$50
         (local.get $$1)
        )
@@ -123605,11 +123824,11 @@
        (local.set $$8
         (local.get $$52)
        )
-       ;;@ run.c:607:0
+       ;;@ run.c:608:0
        (local.set $$9
         (i32.const 20)
        )
-       ;;@ run.c:608:0
+       ;;@ run.c:609:0
        (local.set $$53
         (local.get $$9)
        )
@@ -123624,7 +123843,7 @@
        (local.set $$10
         (local.get $$55)
        )
-       ;;@ run.c:609:0
+       ;;@ run.c:610:0
        (local.set $$56
         (local.get $$10)
        )
@@ -123646,7 +123865,7 @@
          (local.get $$vararg_buffer10)
         )
        )
-       ;;@ run.c:610:0
+       ;;@ run.c:611:0
        (local.set $$59
         (local.get $$10)
        )
@@ -123666,12 +123885,12 @@
        (global.set $STACKTOP
         (local.get $sp)
        )
-       ;;@ run.c:629:0
+       ;;@ run.c:630:0
        (return)
       )
      )
      (block
-      ;;@ run.c:614:0
+      ;;@ run.c:615:0
       (local.set $$62
        (local.get $$1)
       )
@@ -123689,7 +123908,7 @@
       (local.set $$11
        (local.get $$64)
       )
-      ;;@ run.c:615:0
+      ;;@ run.c:616:0
       (local.set $$65
        (local.get $$11)
       )
@@ -123717,7 +123936,7 @@
       (if
        (local.get $$66)
        (block
-        ;;@ run.c:616:0
+        ;;@ run.c:617:0
         (i32.store
          (local.get $$68)
          (i32.const 6023)
@@ -123725,11 +123944,11 @@
         (global.set $STACKTOP
          (local.get $sp)
         )
-        ;;@ run.c:629:0
+        ;;@ run.c:630:0
         (return)
        )
        (block
-        ;;@ run.c:619:0
+        ;;@ run.c:620:0
         (i32.store
          (local.get $$68)
          (i32.const 6028)
@@ -123737,7 +123956,7 @@
         (global.set $STACKTOP
          (local.get $sp)
         )
-        ;;@ run.c:629:0
+        ;;@ run.c:630:0
         (return)
        )
       )
@@ -123751,7 +123970,7 @@
     )
    )
    (block
-    ;;@ run.c:624:0
+    ;;@ run.c:625:0
     (local.set $$69
      (local.get $$1)
     )
@@ -123775,12 +123994,12 @@
       (local.get $$vararg_buffer13)
      )
     )
-    ;;@ run.c:625:0
+    ;;@ run.c:626:0
     (call $_abort)
    )
   )
  )
- (func $_run_lvalue (; 324 ;) (param $$0 i32) (result i32)
+ (func $_run_lvalue (; 328 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$100 i32)
@@ -124155,7 +124374,7 @@
   (local.set $$1
    (local.get $$0)
   )
-  ;;@ run.c:773:0
+  ;;@ run.c:783:0
   (local.set $$25
    (local.get $$1)
   )
@@ -124169,11 +124388,11 @@
    (local.get $$26)
    (i32.const 1)
   )
-  ;;@ run.c:774:0
+  ;;@ run.c:784:0
   (local.set $$2
    (i32.const 0)
   )
-  ;;@ run.c:775:0
+  ;;@ run.c:785:0
   (local.set $$27
    (local.get $$1)
   )
@@ -124200,7 +124419,7 @@
             )
            )
            (block
-            ;;@ run.c:778:0
+            ;;@ run.c:788:0
             (local.set $$29
              (local.get $$1)
             )
@@ -124262,7 +124481,7 @@
              (local.get $$39)
              (local.get $$37)
             )
-            ;;@ run.c:779:0
+            ;;@ run.c:790:0
             (local.set $$40
              (local.get $$1)
             )
@@ -124313,7 +124532,7 @@
              (local.get $$48)
              (local.get $$46)
             )
-            ;;@ run.c:780:0
+            ;;@ run.c:791:0
             (local.set $$49
              (local.get $$1)
             )
@@ -124331,7 +124550,7 @@
             (local.set $$2
              (local.get $$51)
             )
-            ;;@ run.c:783:0
+            ;;@ run.c:794:0
             (local.set $$52
              (local.get $$1)
             )
@@ -124362,7 +124581,7 @@
               (local.get $$56)
              )
              (block
-              ;;@ run.c:900:0
+              ;;@ run.c:915:0
               (local.set $$322
                (local.get $$2)
               )
@@ -124379,7 +124598,7 @@
                (local.get $$324)
                (local.get $$322)
               )
-              ;;@ run.c:901:0
+              ;;@ run.c:916:0
               (local.set $$325
                (local.get $$2)
               )
@@ -124391,7 +124610,7 @@
               )
              )
             )
-            ;;@ run.c:784:0
+            ;;@ run.c:795:0
             (local.set $$57
              (local.get $$1)
             )
@@ -124413,7 +124632,7 @@
              (local.get $$60)
              (local.get $$58)
             )
-            ;;@ run.c:900:0
+            ;;@ run.c:915:0
             (local.set $$322
              (local.get $$2)
             )
@@ -124430,7 +124649,7 @@
              (local.get $$324)
              (local.get $$322)
             )
-            ;;@ run.c:901:0
+            ;;@ run.c:916:0
             (local.set $$325
              (local.get $$2)
             )
@@ -124443,7 +124662,7 @@
            )
           )
           (block
-           ;;@ run.c:790:0
+           ;;@ run.c:801:0
            (local.set $$61
             (local.get $$1)
            )
@@ -124461,7 +124680,7 @@
            (local.set $$3
             (local.get $$63)
            )
-           ;;@ run.c:791:0
+           ;;@ run.c:802:0
            (local.set $$64
             (local.get $$1)
            )
@@ -124485,7 +124704,7 @@
            (local.set $$4
             (local.get $$67)
            )
-           ;;@ run.c:792:0
+           ;;@ run.c:803:0
            (local.set $$68
             (local.get $$3)
            )
@@ -124499,7 +124718,7 @@
             (local.get $$69)
             (i32.const 1)
            )
-           ;;@ run.c:793:0
+           ;;@ run.c:804:0
            (local.set $$70
             (local.get $$3)
            )
@@ -124511,14 +124730,14 @@
            (local.set $$5
             (local.get $$71)
            )
-           ;;@ run.c:794:0
+           ;;@ run.c:805:0
            (local.set $$72
             (local.get $$3)
            )
            (call $_add_node_to_execution_stack
             (local.get $$72)
            )
-           ;;@ run.c:795:0
+           ;;@ run.c:806:0
            (local.set $$73
             (local.get $$5)
            )
@@ -124556,7 +124775,7 @@
            (local.set $$6
             (local.get $$79)
            )
-           ;;@ run.c:796:0
+           ;;@ run.c:807:0
            (local.set $$80
             (local.get $$3)
            )
@@ -124585,7 +124804,7 @@
            (if
             (local.get $$84)
             (block
-             ;;@ run.c:797:0
+             ;;@ run.c:808:0
              (local.set $$85
               (local.get $$6)
              )
@@ -124624,7 +124843,7 @@
              )
             )
            )
-           ;;@ run.c:799:0
+           ;;@ run.c:810:0
            (local.set $$92
             (local.get $$4)
            )
@@ -124633,7 +124852,7 @@
              (local.get $$92)
             )
            )
-           ;;@ run.c:800:0
+           ;;@ run.c:811:0
            (local.set $$93
             (local.get $$3)
            )
@@ -124670,7 +124889,7 @@
             (local.get $$99)
             (local.get $$97)
            )
-           ;;@ run.c:801:0
+           ;;@ run.c:812:0
            (local.set $$100
             (local.get $$4)
            )
@@ -124698,7 +124917,7 @@
             (local.get $$104)
             (local.get $$102)
            )
-           ;;@ run.c:802:0
+           ;;@ run.c:813:0
            (local.set $$105
             (local.get $$5)
            )
@@ -124740,7 +124959,7 @@
             (local.get $$107)
             (local.get $$112)
            )
-           ;;@ run.c:803:0
+           ;;@ run.c:814:0
            (local.set $$113
             (local.get $$5)
            )
@@ -124762,7 +124981,7 @@
             (local.get $$113)
             (local.get $$116)
            )
-           ;;@ run.c:900:0
+           ;;@ run.c:915:0
            (local.set $$322
             (local.get $$2)
            )
@@ -124779,7 +124998,7 @@
             (local.get $$324)
             (local.get $$322)
            )
-           ;;@ run.c:901:0
+           ;;@ run.c:916:0
            (local.set $$325
             (local.get $$2)
            )
@@ -124792,7 +125011,7 @@
           )
          )
          (block
-          ;;@ run.c:807:0
+          ;;@ run.c:818:0
           (local.set $$117
            (local.get $$1)
           )
@@ -124810,7 +125029,7 @@
           (local.set $$7
            (local.get $$119)
           )
-          ;;@ run.c:808:0
+          ;;@ run.c:819:0
           (local.set $$120
            (local.get $$1)
           )
@@ -124834,7 +125053,7 @@
           (local.set $$8
            (local.get $$123)
           )
-          ;;@ run.c:809:0
+          ;;@ run.c:820:0
           (local.set $$124
            (local.get $$7)
           )
@@ -124848,7 +125067,7 @@
            (local.get $$125)
            (i32.const 1)
           )
-          ;;@ run.c:810:0
+          ;;@ run.c:821:0
           (local.set $$126
            (local.get $$7)
           )
@@ -124860,10 +125079,10 @@
           (local.set $$9
            (local.get $$127)
           )
-          ;;@ run.c:811:0
+          ;;@ run.c:822:0
           (local.set $$128
            (i32.load
-            (i32.const 9272)
+            (i32.const 8684)
            )
           )
           (local.set $$129
@@ -124903,7 +125122,7 @@
           (local.set $$10
            (local.get $$135)
           )
-          ;;@ run.c:812:0
+          ;;@ run.c:823:0
           (local.set $$136
            (local.get $$10)
           )
@@ -124925,7 +125144,7 @@
            (local.get $$139)
            (local.get $$137)
           )
-          ;;@ run.c:813:0
+          ;;@ run.c:824:0
           (local.set $$140
            (local.get $$9)
           )
@@ -124967,7 +125186,7 @@
            (local.get $$142)
            (local.get $$147)
           )
-          ;;@ run.c:814:0
+          ;;@ run.c:825:0
           (local.set $$148
            (local.get $$9)
           )
@@ -124989,7 +125208,7 @@
            (local.get $$148)
            (local.get $$151)
           )
-          ;;@ run.c:900:0
+          ;;@ run.c:915:0
           (local.set $$322
            (local.get $$2)
           )
@@ -125006,7 +125225,7 @@
            (local.get $$324)
            (local.get $$322)
           )
-          ;;@ run.c:901:0
+          ;;@ run.c:916:0
           (local.set $$325
            (local.get $$2)
           )
@@ -125019,36 +125238,36 @@
          )
         )
         (block
-         ;;@ run.c:818:0
+         ;;@ run.c:829:0
          (local.set $$152
           (i32.load
-           (i32.const 9316)
+           (i32.const 8728)
           )
          )
          (local.set $$11
           (local.get $$152)
          )
-         ;;@ run.c:819:0
+         ;;@ run.c:830:0
          (i32.store
-          (i32.const 9316)
+          (i32.const 8728)
           (i32.const 0)
          )
-         ;;@ run.c:820:0
+         ;;@ run.c:831:0
          (local.set $$153
           (local.get $$1)
          )
          (call $_run_call
           (local.get $$153)
          )
-         ;;@ run.c:821:0
+         ;;@ run.c:832:0
          (local.set $$154
           (local.get $$11)
          )
          (i32.store
-          (i32.const 9316)
+          (i32.const 8728)
           (local.get $$154)
          )
-         ;;@ run.c:822:0
+         ;;@ run.c:833:0
          (local.set $$155
           (local.get $$1)
          )
@@ -125065,7 +125284,7 @@
          (local.set $$2
           (local.get $$157)
          )
-         ;;@ run.c:900:0
+         ;;@ run.c:915:0
          (local.set $$322
           (local.get $$2)
          )
@@ -125082,7 +125301,7 @@
           (local.get $$324)
           (local.get $$322)
          )
-         ;;@ run.c:901:0
+         ;;@ run.c:916:0
          (local.set $$325
           (local.get $$2)
          )
@@ -125095,7 +125314,7 @@
         )
        )
        (block
-        ;;@ run.c:826:0
+        ;;@ run.c:837:0
         (local.set $$158
          (local.get $$1)
         )
@@ -125113,7 +125332,7 @@
         (local.set $$12
          (local.get $$160)
         )
-        ;;@ run.c:827:0
+        ;;@ run.c:838:0
         (local.set $$161
          (local.get $$12)
         )
@@ -125125,7 +125344,7 @@
         (local.set $$13
          (local.get $$162)
         )
-        ;;@ run.c:828:0
+        ;;@ run.c:839:0
         (local.set $$163
          (local.get $$1)
         )
@@ -125151,7 +125370,7 @@
           (local.get $$166)
          )
         )
-        ;;@ run.c:831:0
+        ;;@ run.c:842:0
         (local.set $$167
          (local.get $$1)
         )
@@ -125185,7 +125404,7 @@
         (local.set $$14
          (local.get $$172)
         )
-        ;;@ run.c:832:0
+        ;;@ run.c:843:0
         (local.set $$173
          (local.get $$12)
         )
@@ -125229,7 +125448,7 @@
          (if
           (local.get $$177)
           (block
-           ;;@ run.c:834:0
+           ;;@ run.c:845:0
            (local.set $$181
             (i32.add
              (local.get $$180)
@@ -125250,7 +125469,7 @@
            (local.set $$15
             (local.get $$183)
            )
-           ;;@ run.c:835:0
+           ;;@ run.c:846:0
            (local.set $$184
             (local.get $$14)
            )
@@ -125266,7 +125485,7 @@
            (if
             (local.get $$186)
             (block
-             ;;@ run.c:836:0
+             ;;@ run.c:847:0
              (local.set $$187
               (local.get $$14)
              )
@@ -125289,17 +125508,17 @@
              )
              (drop
               (call $_printf
-               (i32.const 6635)
+               (i32.const 6687)
                (local.get $$vararg_buffer)
               )
              )
-             ;;@ run.c:837:0
+             ;;@ run.c:848:0
              (call $_abort)
             )
            )
           )
           (block
-           ;;@ run.c:840:0
+           ;;@ run.c:851:0
            (local.set $$189
             (i32.load
              (local.get $$180)
@@ -125314,7 +125533,7 @@
            (if
             (local.get $$190)
             (block
-             ;;@ run.c:841:0
+             ;;@ run.c:852:0
              (local.set $$191
               (local.get $$13)
              )
@@ -125352,7 +125571,7 @@
              (local.set $$16
               (local.get $$197)
              )
-             ;;@ run.c:842:0
+             ;;@ run.c:853:0
              (local.set $$198
               (local.get $$16)
              )
@@ -125367,7 +125586,7 @@
              (br $do-once)
             )
             (block
-             ;;@ run.c:845:0
+             ;;@ run.c:856:0
              (local.set $$200
               (local.get $$12)
              )
@@ -125398,18 +125617,18 @@
              )
              (drop
               (call $_printf
-               (i32.const 6690)
+               (i32.const 6742)
                (local.get $$vararg_buffer2)
               )
              )
-             ;;@ run.c:846:0
+             ;;@ run.c:857:0
              (call $_abort)
             )
            )
           )
          )
         )
-        ;;@ run.c:848:0
+        ;;@ run.c:859:0
         (local.set $$205
          (local.get $$13)
         )
@@ -125456,7 +125675,7 @@
         (local.set $$2
          (local.get $$213)
         )
-        ;;@ run.c:849:0
+        ;;@ run.c:860:0
         (local.set $$214
          (local.get $$13)
         )
@@ -125473,7 +125692,7 @@
          (local.get $$216)
          (local.get $$214)
         )
-        ;;@ run.c:850:0
+        ;;@ run.c:861:0
         (local.set $$217
          (local.get $$2)
         )
@@ -125490,7 +125709,7 @@
          (local.get $$219)
          (local.get $$217)
         )
-        ;;@ run.c:900:0
+        ;;@ run.c:915:0
         (local.set $$322
          (local.get $$2)
         )
@@ -125507,7 +125726,7 @@
          (local.get $$324)
          (local.get $$322)
         )
-        ;;@ run.c:901:0
+        ;;@ run.c:916:0
         (local.set $$325
          (local.get $$2)
         )
@@ -125520,7 +125739,7 @@
        )
       )
       (block
-       ;;@ run.c:854:0
+       ;;@ run.c:865:0
        (local.set $$220
         (local.get $$1)
        )
@@ -125538,7 +125757,7 @@
        (local.set $$17
         (local.get $$222)
        )
-       ;;@ run.c:855:0
+       ;;@ run.c:866:0
        (local.set $$223
         (local.get $$1)
        )
@@ -125562,7 +125781,7 @@
        (local.set $$18
         (local.get $$226)
        )
-       ;;@ run.c:856:0
+       ;;@ run.c:867:0
        (local.set $$227
         (local.get $$17)
        )
@@ -125580,7 +125799,7 @@
        (local.set $$19
         (local.get $$229)
        )
-       ;;@ run.c:859:0
+       ;;@ run.c:870:0
        (local.set $$230
         (local.get $$19)
        )
@@ -125598,7 +125817,7 @@
        (if
         (local.get $$232)
         (block
-         ;;@ run.c:860:0
+         ;;@ run.c:871:0
          (local.set $$233
           (local.get $$19)
          )
@@ -125618,7 +125837,7 @@
          )
         )
        )
-       ;;@ run.c:862:0
+       ;;@ run.c:873:0
        (local.set $$236
         (local.get $$19)
        )
@@ -125636,7 +125855,7 @@
        (if
         (local.get $$238)
         (block
-         ;;@ run.c:863:0
+         ;;@ run.c:874:0
          (local.set $$239
           (local.get $$19)
          )
@@ -125662,7 +125881,7 @@
          )
         )
        )
-       ;;@ run.c:865:0
+       ;;@ run.c:876:0
        (local.set $$243
         (local.get $$19)
        )
@@ -125680,18 +125899,18 @@
        (if
         (local.get $$245)
         (block
-         ;;@ run.c:866:0
+         ;;@ run.c:877:0
          (drop
           (call $_printf
-           (i32.const 6755)
+           (i32.const 6807)
            (local.get $$vararg_buffer5)
           )
          )
-         ;;@ run.c:867:0
+         ;;@ run.c:878:0
          (call $_abort)
         )
        )
-       ;;@ run.c:869:0
+       ;;@ run.c:880:0
        (local.set $$246
         (local.get $$17)
        )
@@ -125703,7 +125922,7 @@
        (local.set $$20
         (local.get $$247)
        )
-       ;;@ run.c:870:0
+       ;;@ run.c:881:0
        (local.set $$248
         (local.get $$17)
        )
@@ -125732,7 +125951,7 @@
        (if
         (local.get $$252)
         (block
-         ;;@ run.c:871:0
+         ;;@ run.c:885:0
          (local.set $$253
           (local.get $$20)
          )
@@ -125777,7 +125996,7 @@
          )
         )
        )
-       ;;@ run.c:873:0
+       ;;@ run.c:888:0
        (local.set $$261
         (local.get $$1)
        )
@@ -125805,7 +126024,7 @@
         (local.get $$265)
         (local.get $$263)
        )
-       ;;@ run.c:874:0
+       ;;@ run.c:889:0
        (local.set $$266
         (local.get $$1)
        )
@@ -125833,7 +126052,7 @@
         (local.get $$270)
         (local.get $$268)
        )
-       ;;@ run.c:875:0
+       ;;@ run.c:890:0
        (local.set $$271
         (local.get $$19)
        )
@@ -125846,7 +126065,7 @@
        (local.set $$21
         (local.get $$272)
        )
-       ;;@ run.c:876:0
+       ;;@ run.c:891:0
        (local.set $$273
         (local.get $$18)
        )
@@ -125899,7 +126118,7 @@
        (local.set $$22
         (local.get $$282)
        )
-       ;;@ run.c:877:0
+       ;;@ run.c:892:0
        (local.set $$283
         (local.get $$20)
        )
@@ -125943,7 +126162,7 @@
        (local.set $$2
         (local.get $$290)
        )
-       ;;@ run.c:878:0
+       ;;@ run.c:893:0
        (local.set $$291
         (local.get $$2)
        )
@@ -125960,7 +126179,7 @@
         (local.get $$293)
         (local.get $$291)
        )
-       ;;@ run.c:879:0
+       ;;@ run.c:894:0
        (local.set $$294
         (local.get $$2)
        )
@@ -125977,7 +126196,7 @@
         (local.get $$296)
         (local.get $$294)
        )
-       ;;@ run.c:900:0
+       ;;@ run.c:915:0
        (local.set $$322
         (local.get $$2)
        )
@@ -125994,7 +126213,7 @@
         (local.get $$324)
         (local.get $$322)
        )
-       ;;@ run.c:901:0
+       ;;@ run.c:916:0
        (local.set $$325
         (local.get $$2)
        )
@@ -126007,7 +126226,7 @@
       )
      )
      (block
-      ;;@ run.c:883:0
+      ;;@ run.c:898:0
       (local.set $$297
        (local.get $$1)
       )
@@ -126046,7 +126265,7 @@
        (local.get $$303)
        (local.get $$299)
       )
-      ;;@ run.c:884:0
+      ;;@ run.c:899:0
       (local.set $$304
        (local.get $$1)
       )
@@ -126069,7 +126288,7 @@
       (local.set $$23
        (local.get $$307)
       )
-      ;;@ run.c:885:0
+      ;;@ run.c:900:0
       (local.set $$308
        (local.get $$23)
       )
@@ -126087,7 +126306,7 @@
       (local.set $$24
        (local.get $$310)
       )
-      ;;@ run.c:886:0
+      ;;@ run.c:901:0
       (local.set $$311
        (local.get $$23)
       )
@@ -126104,14 +126323,14 @@
        (local.get $$313)
        (local.get $$311)
       )
-      ;;@ run.c:887:0
+      ;;@ run.c:902:0
       (local.set $$314
        (local.get $$24)
       )
       (local.set $$2
        (local.get $$314)
       )
-      ;;@ run.c:900:0
+      ;;@ run.c:915:0
       (local.set $$322
        (local.get $$2)
       )
@@ -126128,7 +126347,7 @@
        (local.get $$324)
        (local.get $$322)
       )
-      ;;@ run.c:901:0
+      ;;@ run.c:916:0
       (local.set $$325
        (local.get $$2)
       )
@@ -126141,7 +126360,7 @@
      )
     )
     (block
-     ;;@ run.c:891:0
+     ;;@ run.c:906:0
      (local.set $$315
       (local.get $$1)
      )
@@ -126164,7 +126383,7 @@
      (local.set $$2
       (local.get $$318)
      )
-     ;;@ run.c:900:0
+     ;;@ run.c:915:0
      (local.set $$322
       (local.get $$2)
      )
@@ -126181,7 +126400,7 @@
       (local.get $$324)
       (local.get $$322)
      )
-     ;;@ run.c:901:0
+     ;;@ run.c:916:0
      (local.set $$325
       (local.get $$2)
      )
@@ -126194,7 +126413,7 @@
     )
    )
    (block
-    ;;@ run.c:895:0
+    ;;@ run.c:910:0
     (local.set $$319
      (local.get $$1)
     )
@@ -126214,11 +126433,11 @@
     )
     (drop
      (call $_printf
-      (i32.const 6807)
+      (i32.const 6859)
       (local.get $$vararg_buffer7)
      )
     )
-    ;;@ run.c:896:0
+    ;;@ run.c:911:0
     (call $_abort)
    )
   )
@@ -126226,7 +126445,7 @@
    (i32.const 0)
   )
  )
- (func $_get_result (; 325 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_get_result (; 329 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -126367,11 +126586,11 @@
   (local.set $$4
    (local.get $$1)
   )
-  ;;@ run.c:657:0
+  ;;@ run.c:658:0
   (local.set $$5
    (i32.const 0)
   )
-  ;;@ run.c:658:0
+  ;;@ run.c:659:0
   (local.set $$8
    (local.get $$4)
   )
@@ -126397,7 +126616,7 @@
            )
           )
           (block
-           ;;@ run.c:660:0
+           ;;@ run.c:661:0
            (local.set $$10
             (local.get $$3)
            )
@@ -126430,7 +126649,7 @@
            (local.set $$2
             (local.get $$15)
            )
-           ;;@ run.c:715:0
+           ;;@ run.c:716:0
            (local.set $$92
             (local.get $$2)
            )
@@ -126443,13 +126662,13 @@
           )
          )
          (block
-          ;;@ run.c:663:0
+          ;;@ run.c:664:0
           (local.set $$16
            (local.get $$4)
           )
           (local.set $$17
            (i32.load
-            (i32.const 8396)
+            (i32.const 8444)
            )
           )
           (local.set $$18
@@ -126478,10 +126697,10 @@
           (if
            (local.get $$21)
            (block
-            ;;@ run.c:664:0
+            ;;@ run.c:665:0
             (local.set $$22
              (i32.load
-              (i32.const 9272)
+              (i32.const 8684)
              )
             )
             (local.set $$23
@@ -126504,7 +126723,7 @@
             (br $label$break$L1)
            )
           )
-          ;;@ run.c:666:0
+          ;;@ run.c:667:0
           (local.set $$26
            (local.get $$4)
           )
@@ -126533,13 +126752,13 @@
           )
           (local.set $$30
            (i32.load
-            (i32.const 9272)
+            (i32.const 8684)
            )
           )
           (if
            (local.get $$29)
            (block
-            ;;@ run.c:667:0
+            ;;@ run.c:668:0
             (local.set $$31
              (call $_make_literal_int
               (local.get $$30)
@@ -126549,7 +126768,7 @@
             (local.set $$5
              (local.get $$31)
             )
-            ;;@ run.c:668:0
+            ;;@ run.c:669:0
             (local.set $$32
              (local.get $$5)
             )
@@ -126586,7 +126805,7 @@
             (br $label$break$L1)
            )
            (block
-            ;;@ run.c:671:0
+            ;;@ run.c:672:0
             (local.set $$38
              (call $_make_literal_uint
               (local.get $$30)
@@ -126596,7 +126815,7 @@
             (local.set $$5
              (local.get $$38)
             )
-            ;;@ run.c:672:0
+            ;;@ run.c:673:0
             (local.set $$39
              (local.get $$5)
             )
@@ -126636,10 +126855,10 @@
          )
         )
         (block
-         ;;@ run.c:677:0
+         ;;@ run.c:678:0
          (local.set $$45
           (i32.load
-           (i32.const 9272)
+           (i32.const 8684)
           )
          )
          (local.set $$46
@@ -126651,7 +126870,7 @@
          (local.set $$5
           (local.get $$46)
          )
-         ;;@ run.c:678:0
+         ;;@ run.c:679:0
          (local.set $$47
           (local.get $$4)
          )
@@ -126675,7 +126894,7 @@
          (if
           (local.get $$50)
           (block
-           ;;@ run.c:679:0
+           ;;@ run.c:680:0
            (local.set $$51
             (local.get $$3)
            )
@@ -126693,7 +126912,7 @@
             (local.get $$6)
             (local.get $$53)
            )
-           ;;@ run.c:680:0
+           ;;@ run.c:681:0
            (local.set $$54
             (local.get $$5)
            )
@@ -126709,7 +126928,7 @@
              (local.get $$6)
             )
            )
-           ;;@ run.c:681:0
+           ;;@ run.c:682:0
            (local.set $$56
             (local.get $$5)
            )
@@ -126737,7 +126956,7 @@
            (br $label$break$L1)
           )
          )
-         ;;@ run.c:683:0
+         ;;@ run.c:684:0
          (local.set $$60
           (local.get $$4)
          )
@@ -126761,7 +126980,7 @@
          (if
           (local.get $$63)
           (block
-           ;;@ run.c:684:0
+           ;;@ run.c:685:0
            (local.set $$64
             (local.get $$3)
            )
@@ -126779,7 +126998,7 @@
             (local.get $$7)
             (local.get $$66)
            )
-           ;;@ run.c:685:0
+           ;;@ run.c:686:0
            (local.set $$67
             (local.get $$5)
            )
@@ -126798,7 +127017,7 @@
              (local.get $$69)
             )
            )
-           ;;@ run.c:686:0
+           ;;@ run.c:687:0
            (local.set $$70
             (local.get $$5)
            )
@@ -126823,7 +127042,7 @@
            (br $label$break$L1)
           )
           (block
-           ;;@ run.c:689:0
+           ;;@ run.c:690:0
            (local.set $$73
             (local.get $$4)
            )
@@ -126844,11 +127063,11 @@
            )
            (drop
             (call $_printf
-             (i32.const 6487)
+             (i32.const 6539)
              (local.get $$vararg_buffer)
             )
            )
-           ;;@ run.c:690:0
+           ;;@ run.c:691:0
            (call $_abort)
           )
          )
@@ -126856,10 +127075,10 @@
         )
        )
        (block
-        ;;@ run.c:695:0
+        ;;@ run.c:696:0
         (local.set $$76
          (i32.load
-          (i32.const 9272)
+          (i32.const 8684)
          )
         )
         (local.set $$77
@@ -126871,7 +127090,7 @@
         (local.set $$5
          (local.get $$77)
         )
-        ;;@ run.c:696:0
+        ;;@ run.c:697:0
         (local.set $$78
          (local.get $$5)
         )
@@ -126909,11 +127128,11 @@
        )
       )
       (block
-       ;;@ run.c:700:0
+       ;;@ run.c:701:0
        (local.set $$2
         (i32.const 0)
        )
-       ;;@ run.c:715:0
+       ;;@ run.c:716:0
        (local.set $$92
         (local.get $$2)
        )
@@ -126926,10 +127145,10 @@
       )
      )
      (block
-      ;;@ run.c:703:0
+      ;;@ run.c:704:0
       (local.set $$84
        (i32.load
-        (i32.const 9272)
+        (i32.const 8684)
        )
       )
       (local.set $$85
@@ -126953,7 +127172,7 @@
      )
     )
     (block
-     ;;@ run.c:707:0
+     ;;@ run.c:708:0
      (local.set $$88
       (local.get $$4)
      )
@@ -126968,30 +127187,30 @@
      )
      (drop
       (call $_printf
-       (i32.const 6590)
+       (i32.const 6642)
        (local.get $$vararg_buffer1)
       )
      )
-     ;;@ run.c:708:0
+     ;;@ run.c:709:0
      (call $_abort)
     )
    )
   )
-  ;;@ run.c:713:0
+  ;;@ run.c:714:0
   (local.set $$90
    (local.get $$5)
   )
   (call $_fill_result_str
    (local.get $$90)
   )
-  ;;@ run.c:714:0
+  ;;@ run.c:715:0
   (local.set $$91
    (local.get $$5)
   )
   (local.set $$2
    (local.get $$91)
   )
-  ;;@ run.c:715:0
+  ;;@ run.c:716:0
   (local.set $$92
    (local.get $$2)
   )
@@ -127002,7 +127221,7 @@
    (local.get $$92)
   )
  )
- (func $_get_result_ptr (; 326 ;) (param $$0 i32) (result i32)
+ (func $_get_result_ptr (; 330 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -127089,7 +127308,7 @@
   (local.set $$2
    (local.get $$0)
   )
-  ;;@ run.c:544:0
+  ;;@ run.c:545:0
   (local.set $$3
    (local.get $$2)
   )
@@ -127124,7 +127343,7 @@
          )
         )
         (block
-         ;;@ run.c:546:0
+         ;;@ run.c:547:0
          (local.set $$7
           (local.get $$2)
          )
@@ -127148,7 +127367,7 @@
          (local.set $$1
           (local.get $$10)
          )
-         ;;@ run.c:580:0
+         ;;@ run.c:581:0
          (local.set $$52
           (local.get $$1)
          )
@@ -127161,7 +127380,7 @@
         )
        )
        (block
-        ;;@ run.c:550:0
+        ;;@ run.c:551:0
         (local.set $$11
          (local.get $$2)
         )
@@ -127185,7 +127404,7 @@
         (local.set $$1
          (local.get $$14)
         )
-        ;;@ run.c:580:0
+        ;;@ run.c:581:0
         (local.set $$52
          (local.get $$1)
         )
@@ -127198,7 +127417,7 @@
        )
       )
       (block
-       ;;@ run.c:554:0
+       ;;@ run.c:555:0
        (local.set $$15
         (local.get $$2)
        )
@@ -127258,7 +127477,7 @@
        (if
         (local.get $$22)
         (block
-         ;;@ run.c:555:0
+         ;;@ run.c:556:0
          (local.set $$26
           (i32.add
            (local.get $$25)
@@ -127274,7 +127493,7 @@
          (local.set $$1
           (local.get $$27)
          )
-         ;;@ run.c:580:0
+         ;;@ run.c:581:0
          (local.set $$52
           (local.get $$1)
          )
@@ -127286,7 +127505,7 @@
          )
         )
        )
-       ;;@ run.c:557:0
+       ;;@ run.c:558:0
        (local.set $$28
         (i32.add
          (local.get $$25)
@@ -127334,7 +127553,7 @@
          (local.get $$32)
         )
         (block
-         ;;@ run.c:561:0
+         ;;@ run.c:562:0
          (local.set $$37
           (i32.add
            (local.get $$35)
@@ -127363,15 +127582,15 @@
          )
          (drop
           (call $_printf
-           (i32.const 6487)
+           (i32.const 6539)
            (local.get $$vararg_buffer)
           )
          )
-         ;;@ run.c:562:0
+         ;;@ run.c:563:0
          (call $_abort)
         )
        )
-       ;;@ run.c:558:0
+       ;;@ run.c:559:0
        (local.set $$36
         (i32.add
          (local.get $$35)
@@ -127381,7 +127600,7 @@
        (local.set $$1
         (local.get $$36)
        )
-       ;;@ run.c:580:0
+       ;;@ run.c:581:0
        (local.set $$52
         (local.get $$1)
        )
@@ -127394,7 +127613,7 @@
       )
      )
      (block
-      ;;@ run.c:567:0
+      ;;@ run.c:568:0
       (local.set $$41
        (local.get $$2)
       )
@@ -127418,7 +127637,7 @@
       (local.set $$1
        (local.get $$44)
       )
-      ;;@ run.c:580:0
+      ;;@ run.c:581:0
       (local.set $$52
        (local.get $$1)
       )
@@ -127431,7 +127650,7 @@
      )
     )
     (block
-     ;;@ run.c:571:0
+     ;;@ run.c:572:0
      (local.set $$45
       (local.get $$2)
      )
@@ -127455,7 +127674,7 @@
      (local.set $$1
       (local.get $$48)
      )
-     ;;@ run.c:580:0
+     ;;@ run.c:581:0
      (local.set $$52
       (local.get $$1)
      )
@@ -127468,7 +127687,7 @@
     )
    )
    (block
-    ;;@ run.c:575:0
+    ;;@ run.c:576:0
     (local.set $$49
      (local.get $$2)
     )
@@ -127488,11 +127707,11 @@
     )
     (drop
      (call $_printf
-      (i32.const 6538)
+      (i32.const 6590)
       (local.get $$vararg_buffer1)
      )
     )
-    ;;@ run.c:576:0
+    ;;@ run.c:577:0
     (call $_abort)
    )
   )
@@ -127500,9 +127719,12 @@
    (i32.const 0)
   )
  )
- (func $_run_call (; 327 ;) (param $$0 i32)
+ (func $_run_call (; 331 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
+  (local $$100 i32)
+  (local $$101 i32)
+  (local $$102 i32)
   (local $$11 i32)
   (local $$12 i32)
   (local $$13 i32)
@@ -127587,7 +127809,22 @@
   (local $$85 i32)
   (local $$86 i32)
   (local $$87 i32)
+  (local $$88 i32)
+  (local $$89 i32)
   (local $$9 i32)
+  (local $$90 i32)
+  (local $$91 i32)
+  (local $$92 i32)
+  (local $$93 i32)
+  (local $$94 i32)
+  (local $$95 i32)
+  (local $$96 i32)
+  (local $$97 i32)
+  (local $$98 i32)
+  (local $$99 i32)
+  (local $$vararg_buffer i32)
+  (local $$vararg_buffer1 i32)
+  (local $$vararg_buffer4 i32)
   (local $label i32)
   (local $sp i32)
   (local.set $sp
@@ -127596,7 +127833,7 @@
   (global.set $STACKTOP
    (i32.add
     (global.get $STACKTOP)
-    (i32.const 32)
+    (i32.const 48)
    )
   )
   (if
@@ -127605,46 +127842,58 @@
     (global.get $STACK_MAX)
    )
    (call $abortStackOverflow
-    (i32.const 32)
+    (i32.const 48)
    )
+  )
+  (local.set $$vararg_buffer4
+   (i32.add
+    (local.get $sp)
+    (i32.const 16)
+   )
+  )
+  (local.set $$vararg_buffer1
+   (i32.add
+    (local.get $sp)
+    (i32.const 8)
+   )
+  )
+  (local.set $$vararg_buffer
+   (local.get $sp)
   )
   (local.set $$1
    (local.get $$0)
   )
-  ;;@ run.c:721:0
-  (local.set $$6
-   (local.get $$1)
-  )
-  (local.set $$7
-   (i32.add
-    (local.get $$6)
-    (i32.const 12)
-   )
-  )
-  (i32.store8
-   (local.get $$7)
-   (i32.const 1)
-  )
   ;;@ run.c:722:0
-  (local.set $$8
+  (local.set $$6
    (i32.load
-    (i32.const 9312)
+    (i32.const 8724)
    )
   )
   (local.set $$2
-   (local.get $$8)
+   (local.get $$6)
   )
   ;;@ run.c:723:0
-  (local.set $$9
+  (local.set $$7
    (local.get $$1)
   )
   (i32.store
-   (i32.const 9312)
-   (local.get $$9)
+   (i32.const 8724)
+   (local.get $$7)
   )
   ;;@ run.c:724:0
-  (local.set $$10
+  (local.set $$8
    (local.get $$1)
+  )
+  (local.set $$9
+   (i32.add
+    (local.get $$8)
+    (i32.const 48)
+   )
+  )
+  (local.set $$10
+   (i32.load
+    (local.get $$9)
+   )
   )
   (local.set $$11
    (i32.add
@@ -127653,220 +127902,231 @@
    )
   )
   (local.set $$12
-   (i32.load
+   (i32.add
     (local.get $$11)
+    (i32.const 4)
    )
   )
   (local.set $$13
-   (i32.add
+   (i32.load
     (local.get $$12)
-    (i32.const 48)
    )
   )
   (local.set $$14
    (i32.add
     (local.get $$13)
-    (i32.const 4)
+    (i32.const 48)
    )
   )
   (local.set $$15
-   (i32.load
+   (i32.add
     (local.get $$14)
-   )
-  )
-  (local.set $$16
-   (i32.add
-    (local.get $$15)
-    (i32.const 48)
-   )
-  )
-  (local.set $$17
-   (i32.add
-    (local.get $$16)
     (i32.const 8)
    )
   )
-  (local.set $$18
+  (local.set $$16
    (i32.load
-    (local.get $$17)
+    (local.get $$15)
    )
   )
   (local.set $$3
-   (local.get $$18)
+   (local.get $$16)
   )
   ;;@ run.c:725:0
-  (local.set $$19
+  (local.set $$17
    (local.get $$3)
   )
-  (local.set $$20
+  (local.set $$18
    (i32.add
-    (local.get $$19)
+    (local.get $$17)
     (i32.const 48)
    )
   )
-  (local.set $$21
+  (local.set $$19
    (i32.add
-    (local.get $$20)
+    (local.get $$18)
     (i32.const 12)
    )
   )
+  (local.set $$20
+   (i32.load
+    (local.get $$19)
+   )
+  )
+  (local.set $$21
+   (i32.load
+    (local.get $$20)
+   )
+  )
   (local.set $$22
-   (i32.load
-    (local.get $$21)
-   )
-  )
-  (local.set $$23
-   (i32.load
-    (local.get $$22)
-   )
-  )
-  (local.set $$24
    (i32.eq
-    (local.get $$23)
+    (local.get $$21)
     (i32.const 15)
    )
   )
   (if
-   (local.get $$24)
+   (local.get $$22)
    (block
-    ;;@ run.c:727:0
-    (local.set $$25
+    ;;@ run.c:726:0
+    (local.set $$23
      (local.get $$1)
     )
-    (call $_transform
-     (local.get $$25)
-    )
-    ;;@ run.c:728:0
-    (local.set $$26
-     (i32.load
-      (i32.const 9308)
-     )
-    )
-    (local.set $$27
+    (local.set $$24
      (i32.add
-      (local.get $$26)
+      (local.get $$23)
       (i32.const 48)
      )
     )
-    (local.set $$28
-     (i32.add
-      (local.get $$27)
-      (i32.const 16)
+    (local.set $$25
+     (i32.load
+      (local.get $$24)
      )
     )
+    (local.set $$26
+     (i32.add
+      (local.get $$25)
+      (i32.const 48)
+     )
+    )
+    (local.set $$27
+     (i32.load
+      (local.get $$26)
+     )
+    )
+    (i32.store
+     (local.get $$vararg_buffer)
+     (local.get $$27)
+    )
+    (drop
+     (call $_printf
+      (i32.const 6156)
+      (local.get $$vararg_buffer)
+     )
+    )
+    ;;@ run.c:727:0
+    (local.set $$28
+     (local.get $$1)
+    )
+    (call $_transform
+     (local.get $$28)
+    )
+    ;;@ run.c:728:0
     (local.set $$29
      (i32.load
-      (local.get $$28)
+      (i32.const 8720)
      )
     )
     (local.set $$30
      (i32.add
       (local.get $$29)
-      (i32.const 12)
+      (i32.const 48)
      )
     )
     (local.set $$31
-     (i32.load
+     (i32.add
       (local.get $$30)
+      (i32.const 16)
      )
     )
     (local.set $$32
      (i32.load
-      (i32.const 9320)
+      (local.get $$31)
      )
     )
     (local.set $$33
      (i32.add
-      (local.get $$31)
+      (local.get $$32)
+      (i32.const 12)
+     )
+    )
+    (local.set $$34
+     (i32.load
+      (local.get $$33)
+     )
+    )
+    (local.set $$35
+     (i32.load
+      (i32.const 8732)
+     )
+    )
+    (local.set $$36
+     (i32.add
+      (local.get $$34)
       (i32.mul
-       (local.get $$32)
+       (local.get $$35)
        (i32.const 20)
       )
      )
     )
     (local.set $$4
-     (local.get $$33)
+     (local.get $$36)
     )
     ;;@ run.c:729:0
-    (local.set $$34
+    (local.set $$37
      (local.get $$4)
     )
-    (local.set $$35
+    (local.set $$38
      (local.get $$1)
     )
-    (local.set $$36
+    (local.set $$39
      (i32.add
-      (local.get $$35)
+      (local.get $$38)
       (i32.const 36)
      )
     )
     (drop
      (call $_array_push
-      (local.get $$34)
-      (local.get $$36)
+      (local.get $$37)
+      (local.get $$39)
      )
     )
     ;;@ run.c:730:0
-    (local.set $$37
+    (local.set $$40
      (local.get $$1)
     )
-    (local.set $$38
+    (local.set $$41
      (i32.add
-      (local.get $$37)
+      (local.get $$40)
       (i32.const 36)
      )
     )
-    (local.set $$39
+    (local.set $$42
      (i32.load
-      (local.get $$38)
+      (local.get $$41)
      )
     )
     (drop
      (call $_run_statement
-      (local.get $$39)
+      (local.get $$42)
      )
     )
     ;;@ run.c:731:0
-    (local.set $$40
+    (local.set $$43
      (local.get $$1)
     )
     (call $_add_node_to_execution_stack
-     (local.get $$40)
+     (local.get $$43)
     )
     ;;@ run.c:732:0
-    (local.set $$41
-     (local.get $$1)
-    )
-    (local.set $$42
-     (i32.add
-      (local.get $$41)
-      (i32.const 48)
-     )
-    )
-    (local.set $$43
-     (i32.add
-      (local.get $$42)
-      (i32.const 12)
-     )
-    )
     (local.set $$44
-     (i32.load
-      (local.get $$43)
-     )
+     (local.get $$1)
     )
     (local.set $$45
      (i32.add
       (local.get $$44)
-      (i32.const 24)
+      (i32.const 48)
      )
     )
     (local.set $$46
-     (i32.load
+     (i32.add
       (local.get $$45)
+      (i32.const 12)
      )
     )
     (local.set $$47
-     (local.get $$1)
+     (i32.load
+      (local.get $$46)
+     )
     )
     (local.set $$48
      (i32.add
@@ -127874,32 +128134,32 @@
       (i32.const 24)
      )
     )
-    (i32.store
-     (local.get $$48)
-     (local.get $$46)
-    )
-    ;;@ run.c:733:0
     (local.set $$49
-     (local.get $$1)
+     (i32.load
+      (local.get $$48)
+     )
     )
     (local.set $$50
+     (local.get $$1)
+    )
+    (local.set $$51
      (i32.add
-      (local.get $$49)
+      (local.get $$50)
       (i32.const 24)
      )
     )
-    (local.set $$51
-     (i32.load
-      (local.get $$50)
-     )
+    (i32.store
+     (local.get $$51)
+     (local.get $$49)
     )
+    ;;@ run.c:733:0
     (local.set $$52
      (local.get $$1)
     )
     (local.set $$53
      (i32.add
       (local.get $$52)
-      (i32.const 20)
+      (i32.const 24)
      )
     )
     (local.set $$54
@@ -127907,119 +128167,169 @@
       (local.get $$53)
      )
     )
-    (call $_add_memory_use
-     (local.get $$51)
-     (local.get $$54)
-    )
-    ;;@ run.c:734:0
     (local.set $$55
      (local.get $$1)
     )
     (local.set $$56
      (i32.add
       (local.get $$55)
-      (i32.const 48)
+      (i32.const 20)
      )
     )
     (local.set $$57
-     (i32.add
-      (local.get $$56)
-      (i32.const 12)
-     )
-    )
-    (local.set $$58
      (i32.load
-      (local.get $$57)
+      (local.get $$56)
      )
     )
-    (local.set $$59
-     (call $_clone
-      (local.get $$58)
-     )
+    (call $_add_memory_use
+     (local.get $$54)
+     (local.get $$57)
     )
-    (local.set $$60
+    ;;@ run.c:734:0
+    (local.set $$58
      (local.get $$1)
     )
-    (local.set $$61
+    (local.set $$59
      (i32.add
-      (local.get $$60)
+      (local.get $$58)
       (i32.const 48)
      )
     )
-    (local.set $$62
+    (local.set $$60
      (i32.add
+      (local.get $$59)
+      (i32.const 12)
+     )
+    )
+    (local.set $$61
+     (i32.load
+      (local.get $$60)
+     )
+    )
+    (local.set $$62
+     (call $_clone
       (local.get $$61)
+     )
+    )
+    (local.set $$63
+     (local.get $$1)
+    )
+    (local.set $$64
+     (i32.add
+      (local.get $$63)
+      (i32.const 48)
+     )
+    )
+    (local.set $$65
+     (i32.add
+      (local.get $$64)
       (i32.const 12)
      )
     )
     (i32.store
+     (local.get $$65)
      (local.get $$62)
-     (local.get $$59)
     )
-    ;;@ run.c:745:0
-    (local.set $$87
+    ;;@ run.c:735:0
+    (local.set $$66
+     (local.get $$1)
+    )
+    (local.set $$67
+     (i32.add
+      (local.get $$66)
+      (i32.const 48)
+     )
+    )
+    (local.set $$68
+     (i32.load
+      (local.get $$67)
+     )
+    )
+    (local.set $$69
+     (i32.add
+      (local.get $$68)
+      (i32.const 48)
+     )
+    )
+    (local.set $$70
+     (i32.load
+      (local.get $$69)
+     )
+    )
+    (i32.store
+     (local.get $$vararg_buffer1)
+     (local.get $$70)
+    )
+    (drop
+     (call $_printf
+      (i32.const 6169)
+      (local.get $$vararg_buffer1)
+     )
+    )
+    ;;@ run.c:755:0
+    (local.set $$102
      (local.get $$2)
     )
     (i32.store
-     (i32.const 9312)
-     (local.get $$87)
+     (i32.const 8724)
+     (local.get $$102)
     )
     (global.set $STACKTOP
      (local.get $sp)
     )
-    ;;@ run.c:746:0
+    ;;@ run.c:756:0
     (return)
    )
   )
   ;;@ run.c:737:0
-  (local.set $$63
+  (local.set $$71
    (local.get $$3)
   )
-  (local.set $$64
+  (local.set $$72
    (i32.add
-    (local.get $$63)
+    (local.get $$71)
     (i32.const 48)
    )
   )
-  (local.set $$65
+  (local.set $$73
    (i32.add
-    (local.get $$64)
+    (local.get $$72)
     (i32.const 12)
    )
   )
-  (local.set $$66
+  (local.set $$74
    (i32.load
-    (local.get $$65)
+    (local.get $$73)
    )
   )
-  (local.set $$67
+  (local.set $$75
    (i32.load
-    (local.get $$66)
+    (local.get $$74)
    )
   )
-  (local.set $$68
+  (local.set $$76
    (i32.eq
-    (local.get $$67)
+    (local.get $$75)
     (i32.const 32)
    )
   )
   (if
    (i32.eqz
-    (local.get $$68)
+    (local.get $$76)
    )
    (block
-    ;;@ run.c:745:0
-    (local.set $$87
+    ;;@ run.c:755:0
+    (local.set $$102
      (local.get $$2)
     )
     (i32.store
-     (i32.const 9312)
-     (local.get $$87)
+     (i32.const 8724)
+     (local.get $$102)
     )
     (global.set $STACKTOP
      (local.get $sp)
     )
-    ;;@ run.c:746:0
+    ;;@ run.c:756:0
     (return)
    )
   )
@@ -128029,71 +128339,22 @@
   )
   (loop $while-in
    (block $while-out
-    (local.set $$69
+    (local.set $$77
      (local.get $$5)
     )
-    (local.set $$70
-     (local.get $$1)
-    )
-    (local.set $$71
-     (i32.add
-      (local.get $$70)
-      (i32.const 48)
-     )
-    )
-    (local.set $$72
-     (i32.add
-      (local.get $$71)
-      (i32.const 4)
-     )
-    )
-    (local.set $$73
-     (i32.load
-      (local.get $$72)
-     )
-    )
-    (local.set $$74
-     (i32.load
-      (local.get $$73)
-     )
-    )
-    (local.set $$75
-     (i32.lt_u
-      (local.get $$69)
-      (local.get $$74)
-     )
-    )
-    (if
-     (i32.eqz
-      (local.get $$75)
-     )
-     (br $while-out)
-    )
-    ;;@ run.c:740:0
-    (local.set $$76
-     (local.get $$1)
-    )
-    (local.set $$77
-     (i32.add
-      (local.get $$76)
-      (i32.const 48)
-     )
-    )
     (local.set $$78
-     (i32.add
-      (local.get $$77)
-      (i32.const 4)
-     )
+     (local.get $$1)
     )
     (local.set $$79
-     (i32.load
+     (i32.add
       (local.get $$78)
+      (i32.const 48)
      )
     )
     (local.set $$80
      (i32.add
       (local.get $$79)
-      (i32.const 12)
+      (i32.const 4)
      )
     )
     (local.set $$81
@@ -128102,58 +128363,167 @@
      )
     )
     (local.set $$82
-     (local.get $$5)
+     (i32.load
+      (local.get $$81)
+     )
     )
     (local.set $$83
+     (i32.lt_u
+      (local.get $$77)
+      (local.get $$82)
+     )
+    )
+    (local.set $$84
+     (local.get $$1)
+    )
+    (local.set $$85
      (i32.add
-      (local.get $$81)
+      (local.get $$84)
+      (i32.const 48)
+     )
+    )
+    (if
+     (i32.eqz
+      (local.get $$83)
+     )
+     (br $while-out)
+    )
+    ;;@ run.c:740:0
+    (local.set $$86
+     (i32.add
+      (local.get $$85)
+      (i32.const 4)
+     )
+    )
+    (local.set $$87
+     (i32.load
+      (local.get $$86)
+     )
+    )
+    (local.set $$88
+     (i32.add
+      (local.get $$87)
+      (i32.const 12)
+     )
+    )
+    (local.set $$89
+     (i32.load
+      (local.get $$88)
+     )
+    )
+    (local.set $$90
+     (local.get $$5)
+    )
+    (local.set $$91
+     (i32.add
+      (local.get $$89)
       (i32.shl
-       (local.get $$82)
+       (local.get $$90)
        (i32.const 2)
       )
      )
     )
-    (local.set $$84
+    (local.set $$92
      (i32.load
-      (local.get $$83)
+      (local.get $$91)
      )
     )
     (drop
      (call $_run_rvalue
-      (local.get $$84)
+      (local.get $$92)
      )
     )
     ;;@ run.c:739:0
-    (local.set $$85
+    (local.set $$93
      (local.get $$5)
     )
-    (local.set $$86
+    (local.set $$94
      (i32.add
-      (local.get $$85)
+      (local.get $$93)
       (i32.const 1)
      )
     )
     (local.set $$5
-     (local.get $$86)
+     (local.get $$94)
     )
     (br $while-in)
    )
   )
-  ;;@ run.c:745:0
-  (local.set $$87
+  ;;@ run.c:742:0
+  (local.set $$95
+   (i32.load
+    (local.get $$85)
+   )
+  )
+  (local.set $$96
+   (i32.add
+    (local.get $$95)
+    (i32.const 48)
+   )
+  )
+  (local.set $$97
+   (i32.load
+    (local.get $$96)
+   )
+  )
+  (local.set $$98
+   (call $_strcmp
+    (local.get $$97)
+    (i32.const 6181)
+   )
+  )
+  (local.set $$99
+   (i32.eq
+    (local.get $$98)
+    (i32.const 0)
+   )
+  )
+  (if
+   (local.get $$99)
+   (block
+    ;;@ run.c:743:0
+    (drop
+     (call $_printf
+      (i32.const 6187)
+      (local.get $$vararg_buffer4)
+     )
+    )
+    ;;@ run.c:744:0
+    (local.set $$100
+     (local.get $$1)
+    )
+    (call $_add_node_to_execution_stack
+     (local.get $$100)
+    )
+    ;;@ run.c:747:0
+    (call $_longjmp
+     (i32.const 8744)
+     (i32.const 1)
+    )
+   )
+  )
+  ;;@ run.c:750:0
+  (local.set $$101
+   (local.get $$1)
+  )
+  (call $_add_node_to_execution_stack
+   (local.get $$101)
+  )
+  ;;@ run.c:755:0
+  (local.set $$102
    (local.get $$2)
   )
   (i32.store
-   (i32.const 9312)
-   (local.get $$87)
+   (i32.const 8724)
+   (local.get $$102)
   )
   (global.set $STACKTOP
    (local.get $sp)
   )
-  ;;@ run.c:746:0
+  ;;@ run.c:756:0
   (return)
  )
- (func $_transform (; 328 ;) (param $$0 i32)
+ (func $_transform (; 332 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$100 i32)
@@ -128443,7 +128813,7 @@
   (local.set $$1
    (local.get $$0)
   )
-  ;;@ run.c:1643:0
+  ;;@ run.c:1661:0
   (local.set $$17
    (local.get $$1)
   )
@@ -128465,7 +128835,7 @@
        )
       )
       (block
-       ;;@ run.c:1645:0
+       ;;@ run.c:1663:0
        (local.set $$19
         (local.get $$1)
        )
@@ -128517,7 +128887,7 @@
        (local.set $$2
         (local.get $$27)
        )
-       ;;@ run.c:1646:0
+       ;;@ run.c:1664:0
        (local.set $$28
         (local.get $$2)
        )
@@ -128542,10 +128912,10 @@
         (if
          (local.get $$31)
          (block
-          ;;@ run.c:1647:0
+          ;;@ run.c:1665:0
           (local.set $$32
            (i32.load
-            (i32.const 9272)
+            (i32.const 8684)
            )
           )
           (local.set $$33
@@ -128567,7 +128937,7 @@
            (local.get $$35)
            (local.get $$33)
           )
-          ;;@ run.c:1648:0
+          ;;@ run.c:1666:0
           (local.set $$36
            (local.get $$2)
           )
@@ -128598,7 +128968,7 @@
            (local.get $$40)
            (i32.const 1)
           )
-          ;;@ run.c:1649:0
+          ;;@ run.c:1667:0
           (local.set $$41
            (local.get $$1)
           )
@@ -128627,7 +128997,7 @@
           (local.set $$3
            (local.get $$45)
           )
-          ;;@ run.c:1650:0
+          ;;@ run.c:1668:0
           (local.set $$46
            (local.get $$3)
           )
@@ -128639,7 +129009,7 @@
           (local.set $$4
            (local.get $$47)
           )
-          ;;@ run.c:1651:0
+          ;;@ run.c:1669:0
           (local.set $$48
            (local.get $$4)
           )
@@ -128660,14 +129030,14 @@
           (local.set $$5
            (local.get $$51)
           )
-          ;;@ run.c:1652:0
+          ;;@ run.c:1670:0
           (local.set $$52
            (local.get $$5)
           )
           (i32.store align=1
            (local.get $$52)
            (i32.load align=1
-            (i32.const 6432)
+            (i32.const 6484)
            )
           )
           (i32.store16 align=1
@@ -128677,7 +129047,7 @@
            )
            (i32.load16_s align=1
             (i32.add
-             (i32.const 6432)
+             (i32.const 6484)
              (i32.const 4)
             )
            )
@@ -128689,12 +129059,12 @@
            )
            (i32.load8_s
             (i32.add
-             (i32.const 6432)
+             (i32.const 6484)
              (i32.const 6)
             )
            )
           )
-          ;;@ run.c:1653:0
+          ;;@ run.c:1671:0
           (local.set $$53
            (local.get $$5)
           )
@@ -128720,7 +129090,7 @@
             (local.get $$57)
            )
           )
-          ;;@ run.c:1654:0
+          ;;@ run.c:1672:0
           (local.set $$58
            (local.get $$5)
           )
@@ -128743,10 +129113,10 @@
            (local.get $$61)
            (i32.const 0)
           )
-          ;;@ run.c:1655:0
+          ;;@ run.c:1673:0
           (local.set $$62
            (i32.load
-            (i32.const 9272)
+            (i32.const 8684)
            )
           )
           (local.set $$63
@@ -128762,7 +129132,7 @@
           (local.set $$6
            (local.get $$64)
           )
-          ;;@ run.c:1656:0
+          ;;@ run.c:1674:0
           (local.set $$65
            (local.get $$6)
           )
@@ -128785,10 +129155,10 @@
            (local.get $$68)
            (local.get $$65)
           )
-          ;;@ run.c:1657:0
+          ;;@ run.c:1675:0
           (local.set $$69
            (i32.load
-            (i32.const 9272)
+            (i32.const 8684)
            )
           )
           (local.set $$70
@@ -128826,7 +129196,7 @@
            (local.get $$7)
            (local.get $$75)
           )
-          ;;@ run.c:1658:0
+          ;;@ run.c:1676:0
           (local.set $$76
            (local.get $$2)
           )
@@ -128858,7 +129228,7 @@
             (local.get $$7)
            )
           )
-          ;;@ run.c:1660:0
+          ;;@ run.c:1678:0
           (local.set $$8
            (i32.const 0)
           )
@@ -128898,7 +129268,7 @@
              )
              (br $while-out)
             )
-            ;;@ run.c:1661:0
+            ;;@ run.c:1679:0
             (local.set $$87
              (local.get $$2)
             )
@@ -128945,7 +129315,7 @@
              (local.get $$9)
              (local.get $$94)
             )
-            ;;@ run.c:1662:0
+            ;;@ run.c:1680:0
             (local.set $$95
              (local.get $$2)
             )
@@ -128977,7 +129347,7 @@
               (local.get $$9)
              )
             )
-            ;;@ run.c:1660:0
+            ;;@ run.c:1678:0
             (local.set $$100
              (local.get $$8)
             )
@@ -128993,7 +129363,7 @@
             (br $while-in)
            )
           )
-          ;;@ run.c:1664:0
+          ;;@ run.c:1682:0
           (local.set $$10
            (i32.const 0)
           )
@@ -129050,7 +129420,7 @@
              )
              (br $label$break$L5)
             )
-            ;;@ run.c:1665:0
+            ;;@ run.c:1683:0
             (local.set $$111
              (local.get $$2)
             )
@@ -129114,7 +129484,7 @@
              (local.get $$11)
              (local.get $$121)
             )
-            ;;@ run.c:1666:0
+            ;;@ run.c:1684:0
             (local.set $$122
              (local.get $$2)
             )
@@ -129146,7 +129516,7 @@
               (local.get $$11)
              )
             )
-            ;;@ run.c:1664:0
+            ;;@ run.c:1682:0
             (local.set $$127
              (local.get $$10)
             )
@@ -129165,7 +129535,7 @@
          )
         )
        )
-       ;;@ run.c:1670:0
+       ;;@ run.c:1688:0
        (local.set $$129
         (local.get $$2)
        )
@@ -129198,7 +129568,7 @@
         (local.get $$134)
         (local.get $$132)
        )
-       ;;@ run.c:1671:0
+       ;;@ run.c:1689:0
        (local.set $$135
         (local.get $$1)
        )
@@ -129232,7 +129602,7 @@
         (local.get $$140)
         (local.get $$135)
        )
-       ;;@ run.c:1672:0
+       ;;@ run.c:1690:0
        (local.set $$141
         (local.get $$1)
        )
@@ -129277,7 +129647,7 @@
        (local.set $$12
         (local.get $$148)
        )
-       ;;@ run.c:1673:0
+       ;;@ run.c:1691:0
        (local.set $$149
         (local.get $$12)
        )
@@ -129317,7 +129687,7 @@
         (local.get $$155)
         (local.get $$152)
        )
-       ;;@ run.c:1675:0
+       ;;@ run.c:1693:0
        (local.set $$13
         (i32.const 0)
        )
@@ -129357,7 +129727,7 @@
           )
           (br $while-out2)
          )
-         ;;@ run.c:1676:0
+         ;;@ run.c:1694:0
          (local.set $$162
           (local.get $$1)
          )
@@ -129420,7 +129790,7 @@
          (local.set $$14
           (local.get $$172)
          )
-         ;;@ run.c:1677:0
+         ;;@ run.c:1695:0
          (local.set $$173
           (local.get $$1)
          )
@@ -129472,7 +129842,7 @@
          (local.set $$15
           (local.get $$181)
          )
-         ;;@ run.c:1678:0
+         ;;@ run.c:1696:0
          (local.set $$182
           (local.get $$15)
          )
@@ -129495,7 +129865,7 @@
           (local.get $$185)
           (local.get $$182)
          )
-         ;;@ run.c:1675:0
+         ;;@ run.c:1693:0
          (local.set $$186
           (local.get $$13)
          )
@@ -129514,15 +129884,15 @@
        (global.set $STACKTOP
         (local.get $sp)
        )
-       ;;@ run.c:1704:0
+       ;;@ run.c:1722:0
        (return)
       )
      )
      (block
-      ;;@ run.c:1684:0
+      ;;@ run.c:1702:0
       (local.set $$188
        (i32.load
-        (i32.const 9312)
+        (i32.const 8724)
        )
       )
       (local.set $$189
@@ -129545,7 +129915,7 @@
       (local.set $$16
        (local.get $$191)
       )
-      ;;@ run.c:1685:0
+      ;;@ run.c:1703:0
       (local.set $$192
        (local.get $$16)
       )
@@ -129590,7 +129960,7 @@
        (local.get $$199)
        (local.get $$194)
       )
-      ;;@ run.c:1686:0
+      ;;@ run.c:1704:0
       (local.set $$200
        (local.get $$16)
       )
@@ -129647,7 +130017,7 @@
        (local.get $$209)
        (local.get $$203)
       )
-      ;;@ run.c:1687:0
+      ;;@ run.c:1705:0
       (local.set $$210
        (local.get $$16)
       )
@@ -129692,7 +130062,7 @@
        (local.get $$217)
        (local.get $$212)
       )
-      ;;@ run.c:1688:0
+      ;;@ run.c:1706:0
       (local.set $$218
        (local.get $$16)
       )
@@ -129709,7 +130079,7 @@
       )
       (local.set $$221
        (i32.load
-        (i32.const 8436)
+        (i32.const 8484)
        )
       )
       (local.set $$222
@@ -129721,7 +130091,7 @@
       (if
        (local.get $$222)
        (block
-        ;;@ run.c:1689:0
+        ;;@ run.c:1707:0
         (local.set $$223
          (local.get $$1)
         )
@@ -129763,14 +130133,14 @@
         (global.set $STACKTOP
          (local.get $sp)
         )
-        ;;@ run.c:1704:0
+        ;;@ run.c:1722:0
         (return)
        )
        (block
-        ;;@ run.c:1692:0
+        ;;@ run.c:1710:0
         (local.set $$230
          (i32.load
-          (i32.const 9272)
+          (i32.const 8684)
          )
         )
         (local.set $$231
@@ -129835,7 +130205,7 @@
         (global.set $STACKTOP
          (local.get $sp)
         )
-        ;;@ run.c:1704:0
+        ;;@ run.c:1722:0
         (return)
        )
       )
@@ -129849,7 +130219,7 @@
     )
    )
    (block
-    ;;@ run.c:1700:0
+    ;;@ run.c:1718:0
     (local.set $$242
      (local.get $$1)
     )
@@ -129869,19 +130239,19 @@
     )
     (drop
      (call $_printf
-      (i32.const 6440)
+      (i32.const 6492)
       (local.get $$vararg_buffer)
      )
     )
     (global.set $STACKTOP
      (local.get $sp)
     )
-    ;;@ run.c:1704:0
+    ;;@ run.c:1722:0
     (return)
    )
   )
  )
- (func $_run_statement (; 329 ;) (param $$0 i32) (result i32)
+ (func $_run_statement (; 333 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$100 i32)
@@ -130734,7 +131104,7 @@
    (local.get $$2)
    (local.get $$0)
   )
-  ;;@ run.c:1102:0
+  ;;@ run.c:1118:0
   (local.set $$49
    (i32.load
     (local.get $$2)
@@ -130771,11 +131141,11 @@
   (if
    (local.get $$52)
    (block
-    ;;@ run.c:1103:0
+    ;;@ run.c:1122:0
     (local.set $$1
      (local.get $$53)
     )
-    ;;@ run.c:1429:0
+    ;;@ run.c:1447:0
     (local.set $$728
      (local.get $$1)
     )
@@ -130787,7 +131157,7 @@
     )
    )
   )
-  ;;@ run.c:1105:0
+  ;;@ run.c:1124:0
   (local.set $$54
    (i32.add
     (local.get $$53)
@@ -130798,7 +131168,7 @@
    (local.get $$54)
    (i32.const 1)
   )
-  ;;@ run.c:1106:0
+  ;;@ run.c:1125:0
   (local.set $$55
    (i32.load
     (local.get $$2)
@@ -130830,26 +131200,26 @@
                )
               )
               (block
-               ;;@ run.c:1108:0
+               ;;@ run.c:1127:0
                (local.set $$57
                 (i32.load
-                 (i32.const 9308)
+                 (i32.const 8720)
                 )
                )
                (local.set $$3
                 (local.get $$57)
                )
-               ;;@ run.c:1109:0
+               ;;@ run.c:1128:0
                (local.set $$58
                 (i32.load
                  (local.get $$2)
                 )
                )
                (i32.store
-                (i32.const 9308)
+                (i32.const 8720)
                 (local.get $$58)
                )
-               ;;@ run.c:1110:0
+               ;;@ run.c:1129:0
                (local.set $$59
                 (i32.load
                  (local.get $$2)
@@ -130858,7 +131228,7 @@
                (call $_run_start_block
                 (local.get $$59)
                )
-               ;;@ run.c:1111:0
+               ;;@ run.c:1130:0
                (local.set $$60
                 (i32.load
                  (local.get $$2)
@@ -130883,7 +131253,7 @@
                (local.set $$4
                 (local.get $$63)
                )
-               ;;@ run.c:1112:0
+               ;;@ run.c:1131:0
                (local.set $$5
                 (i32.const 0)
                )
@@ -130925,7 +131295,7 @@
                   )
                   (br $while-out)
                  )
-                 ;;@ run.c:1113:0
+                 ;;@ run.c:1132:0
                  (local.set $$70
                   (call $_malloc
                    (i32.const 20)
@@ -130934,7 +131304,7 @@
                  (local.set $$6
                   (local.get $$70)
                  )
-                 ;;@ run.c:1114:0
+                 ;;@ run.c:1133:0
                  (local.set $$71
                   (local.get $$6)
                  )
@@ -130943,7 +131313,7 @@
                   (i32.const 4)
                   (i32.const 2)
                  )
-                 ;;@ run.c:1115:0
+                 ;;@ run.c:1134:0
                  (local.set $$72
                   (i32.load
                    (local.get $$2)
@@ -130975,15 +131345,15 @@
                    (local.get $$76)
                   )
                  )
-                 ;;@ run.c:1116:0
+                 ;;@ run.c:1135:0
                  (local.set $$77
                   (local.get $$5)
                  )
                  (i32.store
-                  (i32.const 9320)
+                  (i32.const 8732)
                   (local.get $$77)
                  )
-                 ;;@ run.c:1117:0
+                 ;;@ run.c:1136:0
                  (local.set $$78
                   (i32.load
                    (local.get $$2)
@@ -131033,10 +131403,10 @@
                    (local.get $$85)
                   )
                  )
-                 ;;@ run.c:1118:0
+                 ;;@ run.c:1137:0
                  (local.set $$86
                   (i32.load
-                   (i32.const 9312)
+                   (i32.const 8724)
                   )
                  )
                  (local.set $$87
@@ -131050,7 +131420,7 @@
                   (block
                    (local.set $$88
                     (i32.load
-                     (i32.const 9312)
+                     (i32.const 8724)
                     )
                    )
                    (local.set $$89
@@ -131088,10 +131458,10 @@
                    )
                   )
                  )
-                 ;;@ run.c:1119:0
+                 ;;@ run.c:1138:0
                  (local.set $$94
                   (i32.load
-                   (i32.const 9316)
+                   (i32.const 8728)
                   )
                  )
                  (local.set $$95
@@ -131103,10 +131473,9 @@
                  (if
                   (local.get $$95)
                   (block
-                   ;;@ run.c:1120:0
                    (local.set $$96
                     (i32.load
-                     (i32.const 9316)
+                     (i32.const 8728)
                     )
                    )
                    (local.set $$97
@@ -131138,7 +131507,7 @@
                    )
                    (local.set $$101
                     (i32.load
-                     (i32.const 9316)
+                     (i32.const 8728)
                     )
                    )
                    (local.set $$102
@@ -131170,7 +131539,7 @@
                    )
                   )
                  )
-                 ;;@ run.c:1112:0
+                 ;;@ run.c:1131:0
                  (local.set $$106
                   (local.get $$5)
                  )
@@ -131186,7 +131555,7 @@
                  (br $while-in)
                 )
                )
-               ;;@ run.c:1125:0
+               ;;@ run.c:1143:0
                (local.set $$108
                 (i32.load
                  (local.get $$2)
@@ -131195,19 +131564,19 @@
                (call $_run_end_block
                 (local.get $$108)
                )
-               ;;@ run.c:1126:0
+               ;;@ run.c:1144:0
                (local.set $$109
                 (local.get $$3)
                )
                (i32.store
-                (i32.const 9308)
+                (i32.const 8720)
                 (local.get $$109)
                )
                (br $switch)
               )
              )
              (block
-              ;;@ run.c:1130:0
+              ;;@ run.c:1148:0
               (local.set $$110
                (i32.load
                 (local.get $$2)
@@ -131227,7 +131596,7 @@
               (local.set $$7
                (local.get $$112)
               )
-              ;;@ run.c:1131:0
+              ;;@ run.c:1149:0
               (local.set $$113
                (i32.load
                 (local.get $$2)
@@ -131253,7 +131622,7 @@
               (local.set $$8
                (local.get $$116)
               )
-              ;;@ run.c:1133:0
+              ;;@ run.c:1151:0
               (local.set $$117
                (i32.load
                 (local.get $$2)
@@ -131290,14 +131659,14 @@
               (local.set $$9
                (local.get $$122)
               )
-              ;;@ run.c:1134:0
+              ;;@ run.c:1152:0
               (local.set $$123
                (local.get $$9)
               )
               (local.set $$10
                (local.get $$123)
               )
-              ;;@ run.c:1135:0
+              ;;@ run.c:1153:0
               (local.set $$124
                (local.get $$9)
               )
@@ -131315,7 +131684,7 @@
               (local.set $$11
                (local.get $$126)
               )
-              ;;@ run.c:1136:0
+              ;;@ run.c:1154:0
               (local.set $$127
                (local.get $$11)
               )
@@ -131328,7 +131697,7 @@
               (if
                (local.get $$128)
                (block
-                ;;@ run.c:1137:0
+                ;;@ run.c:1155:0
                 (local.set $$129
                  (local.get $$9)
                 )
@@ -131353,7 +131722,7 @@
                  (call $_snprintf
                   (i32.const 0)
                   (i32.const 0)
-                  (i32.const 6189)
+                  (i32.const 6241)
                   (local.get $$vararg_buffer)
                  )
                 )
@@ -131366,7 +131735,7 @@
                 (local.set $$12
                  (local.get $$132)
                 )
-                ;;@ run.c:1138:0
+                ;;@ run.c:1156:0
                 (local.set $$133
                  (local.get $$12)
                 )
@@ -131381,7 +131750,7 @@
                 (local.set $$10
                  (local.get $$135)
                 )
-                ;;@ run.c:1139:0
+                ;;@ run.c:1157:0
                 (local.set $$136
                  (local.get $$10)
                 )
@@ -131412,14 +131781,14 @@
                  (call $_snprintf
                   (local.get $$136)
                   (local.get $$137)
-                  (i32.const 6189)
+                  (i32.const 6241)
                   (local.get $$vararg_buffer2)
                  )
                 )
                 (local.set $$13
                  (local.get $$140)
                 )
-                ;;@ run.c:1140:0
+                ;;@ run.c:1158:0
                 (local.set $$141
                  (local.get $$10)
                 )
@@ -131457,10 +131826,10 @@
                 )
                )
               )
-              ;;@ run.c:1142:0
+              ;;@ run.c:1160:0
               (local.set $$147
                (i32.load8_s
-                (i32.const 9332)
+                (i32.const 8900)
                )
               )
               (local.set $$148
@@ -131511,7 +131880,7 @@
                    )
                   )
                  )
-                 ;;@ run.c:1143:0
+                 ;;@ run.c:1161:0
                  (local.set $$155
                   (local.get $$9)
                  )
@@ -131521,14 +131890,14 @@
                 )
                )
               )
-              ;;@ run.c:1145:0
+              ;;@ run.c:1163:0
               (local.set $$156
                (local.get $$10)
               )
               (local.set $$9
                (local.get $$156)
               )
-              ;;@ run.c:1146:0
+              ;;@ run.c:1164:0
               (local.set $$157
                (local.get $$8)
               )
@@ -131541,7 +131910,7 @@
               (if
                (local.get $$158)
                (block
-                ;;@ run.c:1147:0
+                ;;@ run.c:1165:0
                 (local.set $$159
                  (local.get $$8)
                 )
@@ -131560,7 +131929,7 @@
                  (local.get $$161)
                  (br $label$break$L5)
                 )
-                ;;@ run.c:1150:0
+                ;;@ run.c:1168:0
                 (local.set $$162
                  (local.get $$8)
                 )
@@ -131578,12 +131947,12 @@
                 (if
                  (local.get $$164)
                  (block
-                  ;;@ run.c:1153:0
+                  ;;@ run.c:1171:0
                   (i32.store8
-                   (i32.const 9332)
+                   (i32.const 8900)
                    (i32.const 0)
                   )
-                  ;;@ run.c:1154:0
+                  ;;@ run.c:1172:0
                   (local.set $$165
                    (local.get $$8)
                   )
@@ -131603,12 +131972,12 @@
                     (local.get $$167)
                    )
                   )
-                  ;;@ run.c:1155:0
+                  ;;@ run.c:1173:0
                   (i32.store8
-                   (i32.const 9332)
+                   (i32.const 8900)
                    (i32.const 1)
                   )
-                  ;;@ run.c:1156:0
+                  ;;@ run.c:1174:0
                   (local.set $$168
                    (local.get $$7)
                   )
@@ -131626,7 +131995,7 @@
                   (if
                    (local.get $$170)
                    (block
-                    ;;@ run.c:1157:0
+                    ;;@ run.c:1175:0
                     (local.set $$171
                      (local.get $$9)
                     )
@@ -131646,10 +132015,10 @@
                     (br $label$break$L5)
                    )
                    (block
-                    ;;@ run.c:1160:0
+                    ;;@ run.c:1178:0
                     (drop
                      (call $_printf
-                      (i32.const 6196)
+                      (i32.const 6248)
                       (local.get $$vararg_buffer6)
                      )
                     )
@@ -131660,7 +132029,7 @@
                 )
                )
               )
-              ;;@ run.c:1165:0
+              ;;@ run.c:1183:0
               (local.set $$174
                (local.get $$7)
               )
@@ -131673,7 +132042,7 @@
               (if
                (local.get $$175)
                (block
-                ;;@ run.c:1166:0
+                ;;@ run.c:1184:0
                 (local.set $$176
                  (local.get $$9)
                 )
@@ -131683,14 +132052,14 @@
                 )
                 (drop
                  (call $_printf
-                  (i32.const 6244)
+                  (i32.const 6296)
                   (local.get $$vararg_buffer8)
                  )
                 )
                 (br $label$break$L5)
                )
               )
-              ;;@ run.c:1169:0
+              ;;@ run.c:1187:0
               (local.set $$177
                (local.get $$7)
               )
@@ -131708,7 +132077,7 @@
               (if
                (local.get $$179)
                (block
-                ;;@ run.c:1170:0
+                ;;@ run.c:1188:0
                 (local.set $$180
                  (local.get $$7)
                 )
@@ -131734,7 +132103,7 @@
                 )
                )
               )
-              ;;@ run.c:1172:0
+              ;;@ run.c:1190:0
               (local.set $$184
                (i32.load
                 (local.get $$2)
@@ -131760,7 +132129,7 @@
               (call $_add_node_to_execution_stack
                (local.get $$187)
               )
-              ;;@ run.c:1173:0
+              ;;@ run.c:1191:0
               (local.set $$188
                (local.get $$7)
               )
@@ -131780,15 +132149,15 @@
                 (local.get $$190)
                )
                (block
-                ;;@ run.c:1176:0
+                ;;@ run.c:1194:0
                 (local.set $$14
                  (i32.const 0)
                 )
-                ;;@ run.c:1177:0
+                ;;@ run.c:1195:0
                 (local.set $$15
                  (i32.const 4)
                 )
-                ;;@ run.c:1178:0
+                ;;@ run.c:1196:0
                 (local.set $$191
                  (local.get $$7)
                 )
@@ -131807,7 +132176,7 @@
                  (if
                   (local.get $$193)
                   (block
-                   ;;@ run.c:1179:0
+                   ;;@ run.c:1197:0
                    (local.set $$194
                     (local.get $$15)
                    )
@@ -131816,7 +132185,7 @@
                    )
                   )
                   (block
-                   ;;@ run.c:1181:0
+                   ;;@ run.c:1199:0
                    (local.set $$195
                     (local.get $$7)
                    )
@@ -131834,7 +132203,7 @@
                    (if
                     (local.get $$197)
                     (block
-                     ;;@ run.c:1182:0
+                     ;;@ run.c:1200:0
                      (local.set $$198
                       (local.get $$15)
                      )
@@ -131844,7 +132213,7 @@
                      (br $do-once1)
                     )
                     (block
-                     ;;@ run.c:1185:0
+                     ;;@ run.c:1203:0
                      (local.set $$199
                       (local.get $$7)
                      )
@@ -131868,7 +132237,7 @@
                   )
                  )
                 )
-                ;;@ run.c:1187:0
+                ;;@ run.c:1205:0
                 (local.set $$202
                  (local.get $$14)
                 )
@@ -131881,24 +132250,24 @@
                 (if
                  (local.get $$203)
                  (block
-                  ;;@ run.c:1188:0
+                  ;;@ run.c:1206:0
                   (drop
                    (call $_printf
-                    (i32.const 6277)
+                    (i32.const 6329)
                     (local.get $$vararg_buffer11)
                    )
                   )
-                  ;;@ run.c:1189:0
+                  ;;@ run.c:1207:0
                   (call $_abort)
                  )
                 )
-                ;;@ run.c:1191:0
+                ;;@ run.c:1209:0
                 (local.set $$204
                  (local.get $$14)
                 )
                 (local.set $$205
                  (i32.load
-                  (i32.const 9304)
+                  (i32.const 8716)
                  )
                 )
                 (local.set $$206
@@ -131934,10 +132303,10 @@
                 (local.set $$16
                  (local.get $$210)
                 )
-                ;;@ run.c:1192:0
+                ;;@ run.c:1210:0
                 (local.set $$211
                  (i32.load
-                  (i32.const 9304)
+                  (i32.const 8716)
                  )
                 )
                 (local.set $$212
@@ -131952,7 +132321,7 @@
                 (local.set $$17
                  (local.get $$213)
                 )
-                ;;@ run.c:1193:0
+                ;;@ run.c:1211:0
                 (local.set $$214
                  (local.get $$17)
                 )
@@ -131977,7 +132346,7 @@
                  (local.get $$217)
                  (local.get $$214)
                 )
-                ;;@ run.c:1194:0
+                ;;@ run.c:1212:0
                 (local.set $$218
                  (local.get $$17)
                 )
@@ -132013,7 +132382,7 @@
                  (local.get $$223)
                  (local.get $$218)
                 )
-                ;;@ run.c:1195:0
+                ;;@ run.c:1213:0
                 (local.set $$224
                  (local.get $$16)
                 )
@@ -132038,7 +132407,7 @@
                  (local.get $$227)
                  (local.get $$224)
                 )
-                ;;@ run.c:1199:0
+                ;;@ run.c:1217:0
                 (local.set $$228
                  (local.get $$17)
                 )
@@ -132079,7 +132448,7 @@
                  (local.get $$228)
                  (local.get $$234)
                 )
-                ;;@ run.c:1200:0
+                ;;@ run.c:1218:0
                 (local.set $$235
                  (local.get $$7)
                 )
@@ -132103,14 +132472,14 @@
                 (if
                  (local.get $$238)
                  (block
-                  ;;@ run.c:1201:0
+                  ;;@ run.c:1219:0
                   (drop
                    (call $_printf
-                    (i32.const 6297)
+                    (i32.const 6349)
                     (local.get $$vararg_buffer13)
                    )
                   )
-                  ;;@ run.c:1202:0
+                  ;;@ run.c:1220:0
                   (local.set $$239
                    (local.get $$7)
                   )
@@ -132125,11 +132494,11 @@
                   )
                   (drop
                    (call $_printf
-                    (i32.const 6309)
+                    (i32.const 6361)
                     (local.get $$vararg_buffer15)
                    )
                   )
-                  ;;@ run.c:1203:0
+                  ;;@ run.c:1221:0
                   (local.set $$241
                    (local.get $$7)
                   )
@@ -132155,11 +132524,11 @@
                   )
                   (drop
                    (call $_printf
-                    (i32.const 6319)
+                    (i32.const 6371)
                     (local.get $$vararg_buffer18)
                    )
                   )
-                  ;;@ run.c:1204:0
+                  ;;@ run.c:1222:0
                   (local.set $$245
                    (local.get $$7)
                   )
@@ -132208,13 +132577,13 @@
                   )
                   (drop
                    (call $_printf
-                    (i32.const 6330)
+                    (i32.const 6382)
                     (local.get $$vararg_buffer21)
                    )
                   )
                  )
                 )
-                ;;@ run.c:1206:0
+                ;;@ run.c:1224:0
                 (local.set $$253
                  (local.get $$16)
                 )
@@ -132240,7 +132609,7 @@
                 )
                 (local.set $$258
                  (i32.load
-                  (i32.const 9304)
+                  (i32.const 8716)
                  )
                 )
                 (local.set $$259
@@ -132250,13 +132619,13 @@
                  )
                 )
                 (i32.store
-                 (i32.const 9304)
+                 (i32.const 8716)
                  (local.get $$259)
                 )
-                ;;@ run.c:1207:0
+                ;;@ run.c:1225:0
                 (local.set $$260
                  (i32.load
-                  (i32.const 9308)
+                  (i32.const 8720)
                  )
                 )
                 (local.set $$261
@@ -132282,7 +132651,7 @@
                   (local.get $$2)
                  )
                 )
-                ;;@ run.c:1210:0
+                ;;@ run.c:1228:0
                 (local.set $$264
                  (local.get $$8)
                 )
@@ -132295,7 +132664,7 @@
                 (if
                  (local.get $$265)
                  (block
-                  ;;@ run.c:1211:0
+                  ;;@ run.c:1229:0
                   (local.set $$266
                    (local.get $$8)
                   )
@@ -132304,7 +132673,7 @@
                     (local.get $$266)
                    )
                   )
-                  ;;@ run.c:1212:0
+                  ;;@ run.c:1230:0
                   (local.set $$267
                    (i32.load
                     (local.get $$2)
@@ -132360,7 +132729,7 @@
                    (local.get $$276)
                    (local.get $$274)
                   )
-                  ;;@ run.c:1213:0
+                  ;;@ run.c:1231:0
                   (local.set $$277
                    (i32.load
                     (local.get $$2)
@@ -132418,7 +132787,7 @@
              )
             )
             (block
-             ;;@ run.c:1218:0
+             ;;@ run.c:1236:0
              (local.set $$286
               (i32.load
                (local.get $$2)
@@ -132427,7 +132796,7 @@
              (call $_transform
               (local.get $$286)
              )
-             ;;@ run.c:1219:0
+             ;;@ run.c:1237:0
              (local.set $$287
               (i32.load
                (local.get $$2)
@@ -132449,10 +132818,10 @@
                (local.get $$289)
               )
              )
-             ;;@ run.c:1220:0
+             ;;@ run.c:1238:0
              (local.set $$290
               (i32.load
-               (i32.const 9312)
+               (i32.const 8724)
               )
              )
              (local.set $$291
@@ -132471,7 +132840,7 @@
               (local.get $$292)
               (i32.const 1)
              )
-             ;;@ run.c:1221:0
+             ;;@ run.c:1239:0
              (local.set $$293
               (i32.load
                (local.get $$2)
@@ -132501,7 +132870,7 @@
              )
              (local.set $$298
               (i32.load
-               (i32.const 9312)
+               (i32.const 8724)
               )
              )
              (local.set $$299
@@ -132518,7 +132887,7 @@
             )
            )
            (block
-            ;;@ run.c:1225:0
+            ;;@ run.c:1243:0
             (local.set $$300
              (i32.load
               (local.get $$2)
@@ -132540,7 +132909,7 @@
               (local.get $$302)
              )
             )
-            ;;@ run.c:1226:0
+            ;;@ run.c:1244:0
             (local.set $$303
              (i32.load
               (local.get $$2)
@@ -132598,7 +132967,7 @@
             (local.set $$18
              (local.get $$312)
             )
-            ;;@ run.c:1227:0
+            ;;@ run.c:1245:0
             (local.set $$313
              (local.get $$18)
             )
@@ -132617,7 +132986,7 @@
             (if
              (local.get $$314)
              (block
-              ;;@ run.c:1228:0
+              ;;@ run.c:1246:0
               (local.set $$315
                (i32.load
                 (local.get $$2)
@@ -132651,7 +133020,7 @@
            )
           )
           (block
-           ;;@ run.c:1233:0
+           ;;@ run.c:1251:0
            (local.set $$319
             (i32.load
              (local.get $$2)
@@ -132683,7 +133052,7 @@
            (if
             (local.get $$323)
             (block
-             ;;@ run.c:1234:0
+             ;;@ run.c:1252:0
              (local.set $$324
               (i32.load
                (local.get $$2)
@@ -132743,7 +133112,7 @@
              (if
               (local.get $$333)
               (block
-               ;;@ run.c:1235:0
+               ;;@ run.c:1253:0
                (local.set $$334
                 (i32.load
                  (local.get $$2)
@@ -132809,7 +133178,7 @@
                (if
                 (local.get $$344)
                 (block
-                 ;;@ run.c:1237:0
+                 ;;@ run.c:1255:0
                  (local.set $$345
                   (i32.load
                    (local.get $$2)
@@ -132838,7 +133207,7 @@
              )
             )
            )
-           ;;@ run.c:1240:0
+           ;;@ run.c:1258:0
            (local.set $$348
             (i32.load
              (local.get $$2)
@@ -132858,29 +133227,29 @@
           )
          )
          (block
-          ;;@ run.c:1245:0
+          ;;@ run.c:1263:0
           (local.set $$350
            (i32.load
-            (i32.const 9316)
+            (i32.const 8728)
            )
           )
           (local.set $$19
            (local.get $$350)
           )
-          ;;@ run.c:1246:0
+          ;;@ run.c:1264:0
           (local.set $$351
            (i32.load
             (local.get $$2)
            )
           )
           (i32.store
-           (i32.const 9316)
+           (i32.const 8728)
            (local.get $$351)
           )
-          ;;@ run.c:1247:0
+          ;;@ run.c:1265:0
           (local.set $$352
            (i32.load
-            (i32.const 9272)
+            (i32.const 8684)
            )
           )
           (local.set $$353
@@ -132904,7 +133273,7 @@
            (local.get $$355)
            (local.get $$353)
           )
-          ;;@ run.c:1248:0
+          ;;@ run.c:1266:0
           (local.set $$356
            (i32.load
             (local.get $$2)
@@ -132937,7 +133306,7 @@
            (local.get $$360)
            (i32.const 1)
           )
-          ;;@ run.c:1249:0
+          ;;@ run.c:1267:0
           (local.set $$361
            (i32.load
             (local.get $$2)
@@ -132959,10 +133328,10 @@
             (local.get $$363)
            )
           )
-          ;;@ run.c:1250:0
+          ;;@ run.c:1268:0
           (local.set $$364
            (i32.load
-            (i32.const 9308)
+            (i32.const 8720)
            )
           )
           (local.set $$365
@@ -132995,7 +133364,7 @@
           )
           (local.set $$370
            (i32.load
-            (i32.const 9320)
+            (i32.const 8732)
            )
           )
           (local.set $$371
@@ -133010,7 +133379,7 @@
           (local.set $$20
            (local.get $$371)
           )
-          ;;@ run.c:1251:0
+          ;;@ run.c:1269:0
           (local.set $$372
            (local.get $$20)
           )
@@ -133031,16 +133400,16 @@
             (local.get $$374)
            )
           )
-          ;;@ run.c:1252:0
+          ;;@ run.c:1270:0
           (local.set $$375
            (i32.load
-            (i32.const 9308)
+            (i32.const 8720)
            )
           )
           (local.set $$21
            (local.get $$375)
           )
-          ;;@ run.c:1253:0
+          ;;@ run.c:1271:0
           (local.set $$376
            (i32.load
             (local.get $$2)
@@ -133058,15 +133427,15 @@
            )
           )
           (i32.store
-           (i32.const 9308)
+           (i32.const 8720)
            (local.get $$378)
           )
-          ;;@ run.c:1254:0
+          ;;@ run.c:1272:0
           (i32.store
-           (i32.const 9320)
+           (i32.const 8732)
            (i32.const 0)
           )
-          ;;@ run.c:1255:0
+          ;;@ run.c:1273:0
           (local.set $$379
            (i32.load
             (local.get $$2)
@@ -133086,17 +133455,17 @@
           (call $_run_start_block
            (local.get $$381)
           )
-          ;;@ run.c:1256:0
+          ;;@ run.c:1274:0
           (local.set $$22
            (i32.const 1)
           )
-          ;;@ run.c:1257:0
+          ;;@ run.c:1275:0
           (local.set $$23
            (i32.const 0)
           )
           (loop $while-in8
            (block $while-out7
-            ;;@ run.c:1258:0
+            ;;@ run.c:1276:0
             (local.set $$382
              (local.get $$22)
             )
@@ -133118,10 +133487,10 @@
              )
              (br $while-out7)
             )
-            ;;@ run.c:1259:0
+            ;;@ run.c:1277:0
             (local.set $$384
              (i32.load
-              (i32.const 9316)
+              (i32.const 8728)
              )
             )
             (local.set $$385
@@ -133134,10 +133503,10 @@
              (local.get $$385)
              (i32.const 0)
             )
-            ;;@ run.c:1260:0
+            ;;@ run.c:1278:0
             (local.set $$386
              (i32.load
-              (i32.const 9316)
+              (i32.const 8728)
              )
             )
             (local.set $$387
@@ -133150,15 +133519,15 @@
              (local.get $$387)
              (i32.const 0)
             )
-            ;;@ run.c:1261:0
+            ;;@ run.c:1279:0
             (local.set $$388
              (local.get $$23)
             )
             (i32.store
-             (i32.const 9320)
+             (i32.const 8732)
              (local.get $$388)
             )
-            ;;@ run.c:1262:0
+            ;;@ run.c:1280:0
             (local.set $$389
              (call $_malloc
               (i32.const 20)
@@ -133167,7 +133536,7 @@
             (local.set $$24
              (local.get $$389)
             )
-            ;;@ run.c:1263:0
+            ;;@ run.c:1281:0
             (local.set $$390
              (local.get $$24)
             )
@@ -133176,7 +133545,7 @@
              (i32.const 4)
              (i32.const 2)
             )
-            ;;@ run.c:1264:0
+            ;;@ run.c:1282:0
             (local.set $$391
              (i32.load
               (local.get $$2)
@@ -133219,7 +133588,7 @@
               (local.get $$397)
              )
             )
-            ;;@ run.c:1265:0
+            ;;@ run.c:1283:0
             (local.set $$398
              (i32.load
               (local.get $$2)
@@ -133244,7 +133613,7 @@
             (local.set $$25
              (local.get $$401)
             )
-            ;;@ run.c:1266:0
+            ;;@ run.c:1284:0
             (local.set $$402
              (i32.load
               (local.get $$2)
@@ -133275,10 +133644,10 @@
             (local.set $$26
              (local.get $$406)
             )
-            ;;@ run.c:1267:0
+            ;;@ run.c:1285:0
             (local.set $$407
              (i32.load
-              (i32.const 9272)
+              (i32.const 8684)
              )
             )
             (local.set $$408
@@ -133298,7 +133667,7 @@
              (local.get $$27)
              (local.get $$410)
             )
-            ;;@ run.c:1268:0
+            ;;@ run.c:1286:0
             (local.set $$411
              (i32.load
               (local.get $$27)
@@ -133314,7 +133683,7 @@
              (local.get $$412)
              (i32.const 1)
             )
-            ;;@ run.c:1269:0
+            ;;@ run.c:1287:0
             (local.set $$413
              (local.get $$25)
             )
@@ -133323,7 +133692,7 @@
               (local.get $$413)
              )
             )
-            ;;@ run.c:1270:0
+            ;;@ run.c:1288:0
             (local.set $$414
              (local.get $$25)
             )
@@ -133355,7 +133724,7 @@
             (local.set $$22
              (local.get $$419)
             )
-            ;;@ run.c:1271:0
+            ;;@ run.c:1289:0
             (local.set $$420
              (local.get $$22)
             )
@@ -133374,7 +133743,7 @@
             (if
              (local.get $$421)
              (block
-              ;;@ run.c:1272:0
+              ;;@ run.c:1290:0
               (local.set $$422
                (local.get $$26)
               )
@@ -133385,7 +133754,7 @@
               )
              )
             )
-            ;;@ run.c:1274:0
+            ;;@ run.c:1292:0
             (local.set $$423
              (i32.load
               (local.get $$2)
@@ -133419,10 +133788,10 @@
               (local.get $$27)
              )
             )
-            ;;@ run.c:1275:0
+            ;;@ run.c:1293:0
             (local.set $$428
              (i32.load
-              (i32.const 9312)
+              (i32.const 8724)
              )
             )
             (local.set $$429
@@ -133436,7 +133805,7 @@
              (block
               (local.set $$430
                (i32.load
-                (i32.const 9312)
+                (i32.const 8724)
                )
               )
               (local.set $$431
@@ -133474,10 +133843,10 @@
               )
              )
             )
-            ;;@ run.c:1276:0
+            ;;@ run.c:1294:0
             (local.set $$436
              (i32.load
-              (i32.const 9316)
+              (i32.const 8728)
              )
             )
             (local.set $$437
@@ -133491,7 +133860,7 @@
              (block
               (local.set $$438
                (i32.load
-                (i32.const 9316)
+                (i32.const 8728)
                )
               )
               (local.set $$439
@@ -133523,7 +133892,7 @@
               )
              )
             )
-            ;;@ run.c:1280:0
+            ;;@ run.c:1298:0
             (local.set $$443
              (local.get $$23)
             )
@@ -133539,7 +133908,7 @@
             (br $while-in8)
            )
           )
-          ;;@ run.c:1282:0
+          ;;@ run.c:1300:0
           (local.set $$445
            (i32.load
             (local.get $$2)
@@ -133559,49 +133928,49 @@
           (call $_run_end_block
            (local.get $$447)
           )
-          ;;@ run.c:1283:0
+          ;;@ run.c:1301:0
           (local.set $$448
            (local.get $$21)
           )
           (i32.store
-           (i32.const 9308)
+           (i32.const 8720)
            (local.get $$448)
           )
-          ;;@ run.c:1284:0
+          ;;@ run.c:1302:0
           (local.set $$449
            (local.get $$19)
           )
           (i32.store
-           (i32.const 9316)
+           (i32.const 8728)
            (local.get $$449)
           )
           (br $switch)
          )
         )
         (block
-         ;;@ run.c:1288:0
+         ;;@ run.c:1306:0
          (local.set $$450
           (i32.load
-           (i32.const 9316)
+           (i32.const 8728)
           )
          )
          (local.set $$28
           (local.get $$450)
          )
-         ;;@ run.c:1289:0
+         ;;@ run.c:1307:0
          (local.set $$451
           (i32.load
            (local.get $$2)
           )
          )
          (i32.store
-          (i32.const 9316)
+          (i32.const 8728)
           (local.get $$451)
          )
-         ;;@ run.c:1290:0
+         ;;@ run.c:1308:0
          (local.set $$452
           (i32.load
-           (i32.const 9272)
+           (i32.const 8684)
           )
          )
          (local.set $$453
@@ -133625,7 +133994,7 @@
           (local.get $$455)
           (local.get $$453)
          )
-         ;;@ run.c:1291:0
+         ;;@ run.c:1309:0
          (local.set $$456
           (i32.load
            (local.get $$2)
@@ -133658,7 +134027,7 @@
           (local.get $$460)
           (i32.const 1)
          )
-         ;;@ run.c:1292:0
+         ;;@ run.c:1310:0
          (local.set $$461
           (i32.load
            (local.get $$2)
@@ -133680,10 +134049,10 @@
            (local.get $$463)
           )
          )
-         ;;@ run.c:1293:0
+         ;;@ run.c:1311:0
          (local.set $$464
           (i32.load
-           (i32.const 9308)
+           (i32.const 8720)
           )
          )
          (local.set $$465
@@ -133716,7 +134085,7 @@
          )
          (local.set $$470
           (i32.load
-           (i32.const 9320)
+           (i32.const 8732)
           )
          )
          (local.set $$471
@@ -133731,7 +134100,7 @@
          (local.set $$29
           (local.get $$471)
          )
-         ;;@ run.c:1294:0
+         ;;@ run.c:1312:0
          (local.set $$472
           (local.get $$29)
          )
@@ -133752,16 +134121,16 @@
            (local.get $$474)
           )
          )
-         ;;@ run.c:1295:0
+         ;;@ run.c:1313:0
          (local.set $$475
           (i32.load
-           (i32.const 9308)
+           (i32.const 8720)
           )
          )
          (local.set $$30
           (local.get $$475)
          )
-         ;;@ run.c:1296:0
+         ;;@ run.c:1314:0
          (local.set $$476
           (i32.load
            (local.get $$2)
@@ -133779,15 +134148,15 @@
           )
          )
          (i32.store
-          (i32.const 9308)
+          (i32.const 8720)
           (local.get $$478)
          )
-         ;;@ run.c:1297:0
+         ;;@ run.c:1315:0
          (i32.store
-          (i32.const 9320)
+          (i32.const 8732)
           (i32.const 0)
          )
-         ;;@ run.c:1298:0
+         ;;@ run.c:1316:0
          (local.set $$479
           (i32.load
            (local.get $$2)
@@ -133807,21 +134176,21 @@
          (call $_run_start_block
           (local.get $$481)
          )
-         ;;@ run.c:1299:0
+         ;;@ run.c:1317:0
          (local.set $$31
           (i32.const 1)
          )
-         ;;@ run.c:1300:0
+         ;;@ run.c:1318:0
          (local.set $$32
           (i32.const 1)
          )
-         ;;@ run.c:1301:0
+         ;;@ run.c:1319:0
          (local.set $$33
           (i32.const 0)
          )
          (loop $while-in11
           (block $while-out10
-           ;;@ run.c:1302:0
+           ;;@ run.c:1320:0
            (local.set $$482
             (local.get $$32)
            )
@@ -133843,10 +134212,10 @@
             )
             (br $while-out10)
            )
-           ;;@ run.c:1303:0
+           ;;@ run.c:1321:0
            (local.set $$484
             (i32.load
-             (i32.const 9316)
+             (i32.const 8728)
             )
            )
            (local.set $$485
@@ -133859,10 +134228,10 @@
             (local.get $$485)
             (i32.const 0)
            )
-           ;;@ run.c:1304:0
+           ;;@ run.c:1322:0
            (local.set $$486
             (i32.load
-             (i32.const 9316)
+             (i32.const 8728)
             )
            )
            (local.set $$487
@@ -133875,15 +134244,15 @@
             (local.get $$487)
             (i32.const 0)
            )
-           ;;@ run.c:1305:0
+           ;;@ run.c:1323:0
            (local.set $$488
             (local.get $$33)
            )
            (i32.store
-            (i32.const 9320)
+            (i32.const 8732)
             (local.get $$488)
            )
-           ;;@ run.c:1306:0
+           ;;@ run.c:1324:0
            (local.set $$489
             (call $_malloc
              (i32.const 20)
@@ -133892,7 +134261,7 @@
            (local.set $$34
             (local.get $$489)
            )
-           ;;@ run.c:1307:0
+           ;;@ run.c:1325:0
            (local.set $$490
             (local.get $$34)
            )
@@ -133901,7 +134270,7 @@
             (i32.const 4)
             (i32.const 2)
            )
-           ;;@ run.c:1308:0
+           ;;@ run.c:1326:0
            (local.set $$491
             (i32.load
              (local.get $$2)
@@ -133944,7 +134313,7 @@
              (local.get $$497)
             )
            )
-           ;;@ run.c:1310:0
+           ;;@ run.c:1328:0
            (local.set $$498
             (local.get $$31)
            )
@@ -133963,14 +134332,14 @@
            (if
             (local.get $$499)
             (block
-             ;;@ run.c:1311:0
+             ;;@ run.c:1329:0
              (local.set $$31
               (i32.const 0)
              )
-             ;;@ run.c:1312:0
+             ;;@ run.c:1330:0
              (local.set $$500
               (i32.load
-               (i32.const 9272)
+               (i32.const 8684)
               )
              )
              (local.set $$501
@@ -133984,7 +134353,7 @@
              )
             )
             (block
-             ;;@ run.c:1315:0
+             ;;@ run.c:1333:0
              (local.set $$502
               (i32.load
                (local.get $$2)
@@ -134011,7 +134380,7 @@
              )
             )
            )
-           ;;@ run.c:1317:0
+           ;;@ run.c:1335:0
            (local.set $$506
             (i32.load
              (local.get $$2)
@@ -134042,10 +134411,10 @@
            (local.set $$36
             (local.get $$510)
            )
-           ;;@ run.c:1318:0
+           ;;@ run.c:1336:0
            (local.set $$511
             (i32.load
-             (i32.const 9272)
+             (i32.const 8684)
             )
            )
            (local.set $$512
@@ -134065,7 +134434,7 @@
             (local.get $$37)
             (local.get $$514)
            )
-           ;;@ run.c:1319:0
+           ;;@ run.c:1337:0
            (local.set $$515
             (i32.load
              (local.get $$37)
@@ -134081,7 +134450,7 @@
             (local.get $$516)
             (i32.const 1)
            )
-           ;;@ run.c:1320:0
+           ;;@ run.c:1338:0
            (local.set $$517
             (local.get $$35)
            )
@@ -134090,7 +134459,7 @@
              (local.get $$517)
             )
            )
-           ;;@ run.c:1321:0
+           ;;@ run.c:1339:0
            (local.set $$518
             (local.get $$35)
            )
@@ -134122,7 +134491,7 @@
            (local.set $$32
             (local.get $$523)
            )
-           ;;@ run.c:1322:0
+           ;;@ run.c:1340:0
            (local.set $$524
             (local.get $$32)
            )
@@ -134141,7 +134510,7 @@
            (if
             (local.get $$525)
             (block
-             ;;@ run.c:1323:0
+             ;;@ run.c:1341:0
              (local.set $$526
               (local.get $$36)
              )
@@ -134152,7 +134521,7 @@
              )
             )
            )
-           ;;@ run.c:1325:0
+           ;;@ run.c:1343:0
            (local.set $$527
             (i32.load
              (local.get $$2)
@@ -134186,10 +134555,10 @@
              (local.get $$37)
             )
            )
-           ;;@ run.c:1326:0
+           ;;@ run.c:1344:0
            (local.set $$532
             (i32.load
-             (i32.const 9312)
+             (i32.const 8724)
             )
            )
            (local.set $$533
@@ -134203,7 +134572,7 @@
             (block
              (local.set $$534
               (i32.load
-               (i32.const 9312)
+               (i32.const 8724)
               )
              )
              (local.set $$535
@@ -134241,10 +134610,10 @@
              )
             )
            )
-           ;;@ run.c:1327:0
+           ;;@ run.c:1345:0
            (local.set $$540
             (i32.load
-             (i32.const 9316)
+             (i32.const 8728)
             )
            )
            (local.set $$541
@@ -134258,7 +134627,7 @@
             (block
              (local.set $$542
               (i32.load
-               (i32.const 9316)
+               (i32.const 8728)
               )
              )
              (local.set $$543
@@ -134290,7 +134659,7 @@
              )
             )
            )
-           ;;@ run.c:1331:0
+           ;;@ run.c:1349:0
            (local.set $$547
             (local.get $$33)
            )
@@ -134306,7 +134675,7 @@
            (br $while-in11)
           )
          )
-         ;;@ run.c:1333:0
+         ;;@ run.c:1351:0
          (local.set $$549
           (i32.load
            (local.get $$2)
@@ -134326,49 +134695,49 @@
          (call $_run_end_block
           (local.get $$551)
          )
-         ;;@ run.c:1334:0
+         ;;@ run.c:1352:0
          (local.set $$552
           (local.get $$30)
          )
          (i32.store
-          (i32.const 9308)
+          (i32.const 8720)
           (local.get $$552)
          )
-         ;;@ run.c:1335:0
+         ;;@ run.c:1353:0
          (local.set $$553
           (local.get $$28)
          )
          (i32.store
-          (i32.const 9316)
+          (i32.const 8728)
           (local.get $$553)
          )
          (br $switch)
         )
        )
        (block
-        ;;@ run.c:1339:0
+        ;;@ run.c:1357:0
         (local.set $$554
          (i32.load
-          (i32.const 9316)
+          (i32.const 8728)
          )
         )
         (local.set $$38
          (local.get $$554)
         )
-        ;;@ run.c:1340:0
+        ;;@ run.c:1358:0
         (local.set $$555
          (i32.load
           (local.get $$2)
          )
         )
         (i32.store
-         (i32.const 9316)
+         (i32.const 8728)
          (local.get $$555)
         )
-        ;;@ run.c:1341:0
+        ;;@ run.c:1359:0
         (local.set $$556
          (i32.load
-          (i32.const 9272)
+          (i32.const 8684)
          )
         )
         (local.set $$557
@@ -134392,7 +134761,7 @@
          (local.get $$559)
          (local.get $$557)
         )
-        ;;@ run.c:1342:0
+        ;;@ run.c:1360:0
         (local.set $$560
          (i32.load
           (local.get $$2)
@@ -134425,10 +134794,10 @@
          (local.get $$564)
          (i32.const 1)
         )
-        ;;@ run.c:1343:0
+        ;;@ run.c:1361:0
         (local.set $$565
          (i32.load
-          (i32.const 9308)
+          (i32.const 8720)
          )
         )
         (local.set $$566
@@ -134461,7 +134830,7 @@
         )
         (local.set $$571
          (i32.load
-          (i32.const 9320)
+          (i32.const 8732)
          )
         )
         (local.set $$572
@@ -134476,7 +134845,7 @@
         (local.set $$39
          (local.get $$572)
         )
-        ;;@ run.c:1344:0
+        ;;@ run.c:1362:0
         (local.set $$573
          (local.get $$39)
         )
@@ -134497,16 +134866,16 @@
           (local.get $$575)
          )
         )
-        ;;@ run.c:1345:0
+        ;;@ run.c:1363:0
         (local.set $$576
          (i32.load
-          (i32.const 9308)
+          (i32.const 8720)
          )
         )
         (local.set $$40
          (local.get $$576)
         )
-        ;;@ run.c:1346:0
+        ;;@ run.c:1364:0
         (local.set $$577
          (i32.load
           (local.get $$2)
@@ -134524,15 +134893,15 @@
          )
         )
         (i32.store
-         (i32.const 9308)
+         (i32.const 8720)
          (local.get $$579)
         )
-        ;;@ run.c:1347:0
+        ;;@ run.c:1365:0
         (i32.store
-         (i32.const 9320)
+         (i32.const 8732)
          (i32.const 0)
         )
-        ;;@ run.c:1348:0
+        ;;@ run.c:1366:0
         (local.set $$580
          (i32.load
           (local.get $$2)
@@ -134552,7 +134921,7 @@
         (call $_run_start_block
          (local.get $$582)
         )
-        ;;@ run.c:1349:0
+        ;;@ run.c:1367:0
         (local.set $$583
          (i32.load
           (local.get $$2)
@@ -134578,7 +134947,7 @@
         (if
          (local.get $$586)
          (block
-          ;;@ run.c:1350:0
+          ;;@ run.c:1368:0
           (local.set $$587
            (call $_malloc
             (i32.const 20)
@@ -134587,7 +134956,7 @@
           (local.set $$41
            (local.get $$587)
           )
-          ;;@ run.c:1351:0
+          ;;@ run.c:1369:0
           (local.set $$588
            (local.get $$41)
           )
@@ -134596,7 +134965,7 @@
            (i32.const 4)
            (i32.const 2)
           )
-          ;;@ run.c:1352:0
+          ;;@ run.c:1370:0
           (local.set $$589
            (i32.load
             (local.get $$2)
@@ -134639,7 +135008,7 @@
             (local.get $$595)
            )
           )
-          ;;@ run.c:1353:0
+          ;;@ run.c:1371:0
           (local.set $$596
            (i32.load
             (local.get $$2)
@@ -134684,7 +135053,7 @@
             (local.get $$602)
            )
           )
-          ;;@ run.c:1354:0
+          ;;@ run.c:1372:0
           (local.set $$603
            (i32.load
             (local.get $$2)
@@ -134706,10 +135075,10 @@
             (local.get $$605)
            )
           )
-          ;;@ run.c:1355:0
+          ;;@ run.c:1373:0
           (local.set $$606
            (i32.load
-            (i32.const 9320)
+            (i32.const 8732)
            )
           )
           (local.set $$607
@@ -134719,12 +135088,12 @@
            )
           )
           (i32.store
-           (i32.const 9320)
+           (i32.const 8732)
            (local.get $$607)
           )
          )
         )
-        ;;@ run.c:1357:0
+        ;;@ run.c:1375:0
         (local.set $$608
          (i32.load
           (local.get $$2)
@@ -134761,10 +135130,10 @@
         (if
          (local.get $$613)
          (block
-          ;;@ run.c:1358:0
+          ;;@ run.c:1376:0
           (local.set $$614
            (i32.load
-            (i32.const 9272)
+            (i32.const 8684)
            )
           )
           (local.set $$615
@@ -134776,7 +135145,7 @@
           (local.set $$42
            (local.get $$615)
           )
-          ;;@ run.c:1359:0
+          ;;@ run.c:1377:0
           (local.set $$616
            (local.get $$42)
           )
@@ -134814,7 +135183,7 @@
             (local.get $$621)
            )
           )
-          ;;@ run.c:1360:0
+          ;;@ run.c:1378:0
           (local.set $$622
            (local.get $$42)
           )
@@ -134841,7 +135210,7 @@
           )
          )
         )
-        ;;@ run.c:1362:0
+        ;;@ run.c:1380:0
         (local.set $$626
          (i32.load
           (local.get $$2)
@@ -134873,7 +135242,7 @@
         (if
          (local.get $$630)
          (block
-          ;;@ run.c:1363:0
+          ;;@ run.c:1381:0
           (local.set $$631
            (i32.load
             (local.get $$2)
@@ -134932,17 +135301,17 @@
           )
          )
         )
-        ;;@ run.c:1365:0
+        ;;@ run.c:1383:0
         (local.set $$43
          (i32.const 1)
         )
-        ;;@ run.c:1366:0
+        ;;@ run.c:1384:0
         (local.set $$44
          (i32.const 0)
         )
         (loop $while-in14
          (block $while-out13
-          ;;@ run.c:1367:0
+          ;;@ run.c:1385:0
           (local.set $$640
            (local.get $$43)
           )
@@ -134964,10 +135333,10 @@
            )
            (br $while-out13)
           )
-          ;;@ run.c:1368:0
+          ;;@ run.c:1386:0
           (local.set $$642
            (i32.load
-            (i32.const 9316)
+            (i32.const 8728)
            )
           )
           (local.set $$643
@@ -134980,10 +135349,10 @@
            (local.get $$643)
            (i32.const 0)
           )
-          ;;@ run.c:1369:0
+          ;;@ run.c:1387:0
           (local.set $$644
            (i32.load
-            (i32.const 9316)
+            (i32.const 8728)
            )
           )
           (local.set $$645
@@ -134996,15 +135365,15 @@
            (local.get $$645)
            (i32.const 0)
           )
-          ;;@ run.c:1370:0
+          ;;@ run.c:1388:0
           (local.set $$646
            (local.get $$44)
           )
           (i32.store
-           (i32.const 9320)
+           (i32.const 8732)
            (local.get $$646)
           )
-          ;;@ run.c:1371:0
+          ;;@ run.c:1389:0
           (local.set $$647
            (call $_malloc
             (i32.const 20)
@@ -135013,7 +135382,7 @@
           (local.set $$45
            (local.get $$647)
           )
-          ;;@ run.c:1372:0
+          ;;@ run.c:1390:0
           (local.set $$648
            (local.get $$45)
           )
@@ -135022,7 +135391,7 @@
            (i32.const 4)
            (i32.const 2)
           )
-          ;;@ run.c:1373:0
+          ;;@ run.c:1391:0
           (local.set $$649
            (i32.load
             (local.get $$2)
@@ -135065,7 +135434,7 @@
             (local.get $$655)
            )
           )
-          ;;@ run.c:1375:0
+          ;;@ run.c:1393:0
           (local.set $$656
            (i32.load
             (local.get $$2)
@@ -135097,7 +135466,7 @@
           (if
            (local.get $$660)
            (block
-            ;;@ run.c:1376:0
+            ;;@ run.c:1394:0
             (local.set $$661
              (i32.load
               (local.get $$2)
@@ -135130,10 +135499,10 @@
             )
            )
            (block
-            ;;@ run.c:1379:0
+            ;;@ run.c:1397:0
             (local.set $$666
              (i32.load
-              (i32.const 9272)
+              (i32.const 8684)
              )
             )
             (local.set $$667
@@ -135147,7 +135516,7 @@
             )
            )
           )
-          ;;@ run.c:1381:0
+          ;;@ run.c:1399:0
           (local.set $$668
            (i32.load
             (local.get $$2)
@@ -135178,10 +135547,10 @@
           (local.set $$47
            (local.get $$672)
           )
-          ;;@ run.c:1382:0
+          ;;@ run.c:1400:0
           (local.set $$673
            (i32.load
-            (i32.const 9272)
+            (i32.const 8684)
            )
           )
           (local.set $$674
@@ -135201,7 +135570,7 @@
            (local.get $$48)
            (local.get $$676)
           )
-          ;;@ run.c:1383:0
+          ;;@ run.c:1401:0
           (local.set $$677
            (i32.load
             (local.get $$48)
@@ -135217,7 +135586,7 @@
            (local.get $$678)
            (i32.const 1)
           )
-          ;;@ run.c:1384:0
+          ;;@ run.c:1402:0
           (local.set $$679
            (local.get $$46)
           )
@@ -135226,7 +135595,7 @@
             (local.get $$679)
            )
           )
-          ;;@ run.c:1385:0
+          ;;@ run.c:1403:0
           (local.set $$680
            (local.get $$46)
           )
@@ -135258,7 +135627,7 @@
           (local.set $$43
            (local.get $$685)
           )
-          ;;@ run.c:1386:0
+          ;;@ run.c:1404:0
           (local.set $$686
            (local.get $$43)
           )
@@ -135277,7 +135646,7 @@
           (if
            (local.get $$687)
            (block
-            ;;@ run.c:1387:0
+            ;;@ run.c:1405:0
             (local.set $$688
              (local.get $$47)
             )
@@ -135288,7 +135657,7 @@
             )
            )
           )
-          ;;@ run.c:1389:0
+          ;;@ run.c:1407:0
           (local.set $$689
            (i32.load
             (local.get $$2)
@@ -135322,10 +135691,10 @@
             (local.get $$48)
            )
           )
-          ;;@ run.c:1390:0
+          ;;@ run.c:1408:0
           (local.set $$694
            (i32.load
-            (i32.const 9312)
+            (i32.const 8724)
            )
           )
           (local.set $$695
@@ -135339,7 +135708,7 @@
            (block
             (local.set $$696
              (i32.load
-              (i32.const 9312)
+              (i32.const 8724)
              )
             )
             (local.set $$697
@@ -135377,10 +135746,10 @@
             )
            )
           )
-          ;;@ run.c:1391:0
+          ;;@ run.c:1409:0
           (local.set $$702
            (i32.load
-            (i32.const 9316)
+            (i32.const 8728)
            )
           )
           (local.set $$703
@@ -135394,7 +135763,7 @@
            (block
             (local.set $$704
              (i32.load
-              (i32.const 9316)
+              (i32.const 8728)
              )
             )
             (local.set $$705
@@ -135426,7 +135795,7 @@
             )
            )
           )
-          ;;@ run.c:1395:0
+          ;;@ run.c:1413:0
           (local.set $$709
            (local.get $$44)
           )
@@ -135442,7 +135811,7 @@
           (br $while-in14)
          )
         )
-        ;;@ run.c:1397:0
+        ;;@ run.c:1415:0
         (local.set $$711
          (i32.load
           (local.get $$2)
@@ -135462,30 +135831,30 @@
         (call $_run_end_block
          (local.get $$713)
         )
-        ;;@ run.c:1398:0
+        ;;@ run.c:1416:0
         (local.set $$714
          (local.get $$40)
         )
         (i32.store
-         (i32.const 9308)
+         (i32.const 8720)
          (local.get $$714)
         )
-        ;;@ run.c:1399:0
+        ;;@ run.c:1417:0
         (local.set $$715
          (local.get $$38)
         )
         (i32.store
-         (i32.const 9316)
+         (i32.const 8728)
          (local.get $$715)
         )
         (br $switch)
        )
       )
       (block
-       ;;@ run.c:1403:0
+       ;;@ run.c:1421:0
        (local.set $$716
         (i32.load
-         (i32.const 9316)
+         (i32.const 8728)
         )
        )
        (local.set $$717
@@ -135497,21 +135866,21 @@
        (if
         (local.get $$717)
         (block
-         ;;@ run.c:1404:0
+         ;;@ run.c:1422:0
          (drop
           (call $_printf
-           (i32.const 6346)
+           (i32.const 6398)
            (local.get $$vararg_buffer24)
           )
          )
-         ;;@ run.c:1405:0
+         ;;@ run.c:1423:0
          (call $_abort)
         )
         (block
-         ;;@ run.c:1408:0
+         ;;@ run.c:1426:0
          (local.set $$718
           (i32.load
-           (i32.const 9316)
+           (i32.const 8728)
           )
          )
          (local.set $$719
@@ -135524,7 +135893,7 @@
           (local.get $$719)
           (i32.const 1)
          )
-         ;;@ run.c:1409:0
+         ;;@ run.c:1427:0
          (local.set $$720
           (i32.load
            (local.get $$2)
@@ -135540,10 +135909,10 @@
       )
      )
      (block
-      ;;@ run.c:1413:0
+      ;;@ run.c:1431:0
       (local.set $$721
        (i32.load
-        (i32.const 9316)
+        (i32.const 8728)
        )
       )
       (local.set $$722
@@ -135555,21 +135924,21 @@
       (if
        (local.get $$722)
        (block
-        ;;@ run.c:1414:0
+        ;;@ run.c:1432:0
         (drop
          (call $_printf
-          (i32.const 6391)
+          (i32.const 6443)
           (local.get $$vararg_buffer26)
          )
         )
-        ;;@ run.c:1415:0
+        ;;@ run.c:1433:0
         (call $_abort)
        )
        (block
-        ;;@ run.c:1418:0
+        ;;@ run.c:1436:0
         (local.set $$723
          (i32.load
-          (i32.const 9316)
+          (i32.const 8728)
          )
         )
         (local.set $$724
@@ -135582,7 +135951,7 @@
          (local.get $$724)
          (i32.const 1)
         )
-        ;;@ run.c:1419:0
+        ;;@ run.c:1437:0
         (local.set $$725
          (i32.load
           (local.get $$2)
@@ -135598,7 +135967,7 @@
      )
     )
     (block
-     ;;@ run.c:1423:0
+     ;;@ run.c:1441:0
      (local.set $$726
       (i32.load
        (local.get $$2)
@@ -135612,7 +135981,7 @@
     )
    )
   )
-  ;;@ run.c:1428:0
+  ;;@ run.c:1446:0
   (local.set $$727
    (i32.load
     (local.get $$2)
@@ -135621,7 +135990,7 @@
   (local.set $$1
    (local.get $$727)
   )
-  ;;@ run.c:1429:0
+  ;;@ run.c:1447:0
   (local.set $$728
    (local.get $$1)
   )
@@ -135632,7 +136001,7 @@
    (local.get $$728)
   )
  )
- (func $_clone (; 330 ;) (param $$0 i32) (result i32)
+ (func $_clone (; 334 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$100 i32)
@@ -136103,11 +136472,11 @@
   (local.set $$2
    (local.get $$0)
   )
-  ;;@ run.c:1453:0
+  ;;@ run.c:1471:0
   (local.set $$3
    (i32.const 0)
   )
-  ;;@ run.c:1454:0
+  ;;@ run.c:1472:0
   (local.set $$16
    (local.get $$2)
   )
@@ -136158,10 +136527,10 @@
                                     )
                                    )
                                    (block
-                                    ;;@ run.c:1456:0
+                                    ;;@ run.c:1474:0
                                     (local.set $$18
                                      (i32.load
-                                      (i32.const 9272)
+                                      (i32.const 8684)
                                      )
                                     )
                                     (local.set $$19
@@ -136173,7 +136542,7 @@
                                     (local.set $$3
                                      (local.get $$19)
                                     )
-                                    ;;@ run.c:1457:0
+                                    ;;@ run.c:1475:0
                                     (local.set $$20
                                      (local.get $$2)
                                     )
@@ -136213,7 +136582,7 @@
                                      (local.get $$26)
                                      (local.get $$23)
                                     )
-                                    ;;@ run.c:1458:0
+                                    ;;@ run.c:1476:0
                                     (local.set $$4
                                      (i32.const 0)
                                     )
@@ -136253,7 +136622,7 @@
                                        )
                                        (br $label$break$L1)
                                       )
-                                      ;;@ run.c:1459:0
+                                      ;;@ run.c:1477:0
                                       (local.set $$33
                                        (local.get $$2)
                                       )
@@ -136305,7 +136674,7 @@
                                        (local.get $$5)
                                        (local.get $$41)
                                       )
-                                      ;;@ run.c:1460:0
+                                      ;;@ run.c:1478:0
                                       (local.set $$42
                                        (local.get $$3)
                                       )
@@ -136326,7 +136695,7 @@
                                         (local.get $$5)
                                        )
                                       )
-                                      ;;@ run.c:1458:0
+                                      ;;@ run.c:1476:0
                                       (local.set $$45
                                        (local.get $$4)
                                       )
@@ -136345,10 +136714,10 @@
                                    )
                                   )
                                   (block
-                                   ;;@ run.c:1465:0
+                                   ;;@ run.c:1483:0
                                    (local.set $$47
                                     (i32.load
-                                     (i32.const 9272)
+                                     (i32.const 8684)
                                     )
                                    )
                                    (local.set $$48
@@ -136403,12 +136772,12 @@
                                    (local.set $$3
                                     (local.get $$56)
                                    )
-                                   ;;@ run.c:1466:0
+                                   ;;@ run.c:1484:0
                                    (i32.store8
-                                    (i32.const 9332)
+                                    (i32.const 8900)
                                     (i32.const 0)
                                    )
-                                   ;;@ run.c:1467:0
+                                   ;;@ run.c:1485:0
                                    (local.set $$6
                                     (i32.const 0)
                                    )
@@ -136448,7 +136817,7 @@
                                       )
                                       (br $while-out0)
                                      )
-                                     ;;@ run.c:1468:0
+                                     ;;@ run.c:1486:0
                                      (local.set $$63
                                       (local.get $$2)
                                      )
@@ -136500,7 +136869,7 @@
                                       (local.get $$7)
                                       (local.get $$71)
                                      )
-                                     ;;@ run.c:1469:0
+                                     ;;@ run.c:1487:0
                                      (local.set $$72
                                       (local.get $$3)
                                      )
@@ -136521,7 +136890,7 @@
                                        (local.get $$7)
                                       )
                                      )
-                                     ;;@ run.c:1467:0
+                                     ;;@ run.c:1485:0
                                      (local.set $$75
                                       (local.get $$6)
                                      )
@@ -136537,19 +136906,19 @@
                                      (br $while-in1)
                                     )
                                    )
-                                   ;;@ run.c:1471:0
+                                   ;;@ run.c:1489:0
                                    (i32.store8
-                                    (i32.const 9332)
+                                    (i32.const 8900)
                                     (i32.const 1)
                                    )
                                    (br $switch)
                                   )
                                  )
                                  (block
-                                  ;;@ run.c:1475:0
+                                  ;;@ run.c:1493:0
                                   (local.set $$77
                                    (i32.load
-                                    (i32.const 9272)
+                                    (i32.const 8684)
                                    )
                                   )
                                   (local.set $$78
@@ -136576,7 +136945,7 @@
                                   (local.set $$3
                                    (local.get $$81)
                                   )
-                                  ;;@ run.c:1476:0
+                                  ;;@ run.c:1494:0
                                   (local.set $$8
                                    (i32.const 0)
                                   )
@@ -136622,7 +136991,7 @@
                                      )
                                      (br $label$break$L1)
                                     )
-                                    ;;@ run.c:1477:0
+                                    ;;@ run.c:1495:0
                                     (local.set $$89
                                      (local.get $$2)
                                     )
@@ -136680,7 +137049,7 @@
                                      (local.get $$9)
                                      (local.get $$98)
                                     )
-                                    ;;@ run.c:1478:0
+                                    ;;@ run.c:1496:0
                                     (local.set $$99
                                      (local.get $$3)
                                     )
@@ -136707,7 +137076,7 @@
                                       (local.get $$9)
                                      )
                                     )
-                                    ;;@ run.c:1476:0
+                                    ;;@ run.c:1494:0
                                     (local.set $$103
                                      (local.get $$8)
                                     )
@@ -136726,7 +137095,7 @@
                                  )
                                 )
                                 (block
-                                 ;;@ run.c:1483:0
+                                 ;;@ run.c:1501:0
                                  (local.set $$105
                                   (local.get $$2)
                                  )
@@ -136756,7 +137125,7 @@
                                  (if
                                   (local.get $$109)
                                   (block
-                                   ;;@ run.c:1484:0
+                                   ;;@ run.c:1502:0
                                    (local.set $$110
                                     (local.get $$2)
                                    )
@@ -136791,14 +137160,14 @@
                                    (if
                                     (local.get $$115)
                                     (block
-                                     ;;@ run.c:1486:0
+                                     ;;@ run.c:1504:0
                                      (local.set $$116
                                       (local.get $$2)
                                      )
                                      (local.set $$1
                                       (local.get $$116)
                                      )
-                                     ;;@ run.c:1640:0
+                                     ;;@ run.c:1658:0
                                      (local.set $$425
                                       (local.get $$1)
                                      )
@@ -136812,11 +137181,11 @@
                                    )
                                   )
                                  )
-                                 ;;@ run.c:1488:0
+                                 ;;@ run.c:1506:0
                                  (local.set $$10
                                   (i32.const 0)
                                  )
-                                 ;;@ run.c:1489:0
+                                 ;;@ run.c:1507:0
                                  (local.set $$117
                                   (local.get $$2)
                                  )
@@ -136846,7 +137215,7 @@
                                  (if
                                   (local.get $$121)
                                   (block
-                                   ;;@ run.c:1490:0
+                                   ;;@ run.c:1508:0
                                    (local.set $$122
                                     (local.get $$2)
                                    )
@@ -136877,10 +137246,10 @@
                                    )
                                   )
                                  )
-                                 ;;@ run.c:1492:0
+                                 ;;@ run.c:1510:0
                                  (local.set $$127
                                   (i32.load
-                                   (i32.const 9272)
+                                   (i32.const 8684)
                                   )
                                  )
                                  (local.set $$128
@@ -136936,7 +137305,7 @@
                                  (local.set $$3
                                   (local.get $$137)
                                  )
-                                 ;;@ run.c:1493:0
+                                 ;;@ run.c:1511:0
                                  (local.set $$138
                                   (local.get $$3)
                                  )
@@ -136976,7 +137345,7 @@
                                   (local.get $$144)
                                   (local.get $$138)
                                  )
-                                 ;;@ run.c:1495:0
+                                 ;;@ run.c:1513:0
                                  (local.set $$145
                                   (local.get $$2)
                                  )
@@ -136993,10 +137362,10 @@
                                 )
                                )
                                (block
-                                ;;@ run.c:1499:0
+                                ;;@ run.c:1517:0
                                 (local.set $$147
                                  (i32.load
-                                  (i32.const 9272)
+                                  (i32.const 8684)
                                  )
                                 )
                                 (local.set $$148
@@ -137043,7 +137412,7 @@
                                 (local.set $$3
                                  (local.get $$155)
                                 )
-                                ;;@ run.c:1500:0
+                                ;;@ run.c:1518:0
                                 (local.set $$156
                                  (local.get $$2)
                                 )
@@ -137072,7 +137441,7 @@
                                 (local.set $$11
                                  (local.get $$160)
                                 )
-                                ;;@ run.c:1501:0
+                                ;;@ run.c:1519:0
                                 (local.set $$161
                                  (local.get $$11)
                                 )
@@ -137085,7 +137454,7 @@
                                 (if
                                  (local.get $$162)
                                  (block
-                                  ;;@ run.c:1502:0
+                                  ;;@ run.c:1520:0
                                   (local.set $$163
                                    (local.get $$11)
                                   )
@@ -137114,10 +137483,10 @@
                                )
                               )
                               (block
-                               ;;@ run.c:1507:0
+                               ;;@ run.c:1525:0
                                (local.set $$167
                                 (i32.load
-                                 (i32.const 9272)
+                                 (i32.const 8684)
                                 )
                                )
                                (local.set $$168
@@ -137178,10 +137547,10 @@
                               )
                              )
                              (block
-                              ;;@ run.c:1511:0
+                              ;;@ run.c:1529:0
                               (local.set $$178
                                (i32.load
-                                (i32.const 9272)
+                                (i32.const 8684)
                                )
                               )
                               (local.set $$179
@@ -137242,10 +137611,10 @@
                              )
                             )
                             (block
-                             ;;@ run.c:1515:0
+                             ;;@ run.c:1533:0
                              (local.set $$189
                               (i32.load
-                               (i32.const 9272)
+                               (i32.const 8684)
                               )
                              )
                              (local.set $$190
@@ -137302,7 +137671,7 @@
                              (local.set $$3
                               (local.get $$199)
                              )
-                             ;;@ run.c:1516:0
+                             ;;@ run.c:1534:0
                              (local.set $$200
                               (local.get $$2)
                              )
@@ -137319,10 +137688,10 @@
                             )
                            )
                            (block
-                            ;;@ run.c:1520:0
+                            ;;@ run.c:1538:0
                             (local.set $$202
                              (i32.load
-                              (i32.const 9272)
+                              (i32.const 8684)
                              )
                             )
                             (local.set $$203
@@ -137353,7 +137722,7 @@
                             (local.set $$3
                              (local.get $$207)
                             )
-                            ;;@ run.c:1521:0
+                            ;;@ run.c:1539:0
                             (local.set $$208
                              (local.get $$2)
                             )
@@ -137402,10 +137771,10 @@
                            )
                           )
                           (block
-                           ;;@ run.c:1525:0
+                           ;;@ run.c:1543:0
                            (local.set $$216
                             (i32.load
-                             (i32.const 9272)
+                             (i32.const 8684)
                             )
                            )
                            (local.set $$217
@@ -137466,10 +137835,10 @@
                           )
                          )
                          (block
-                          ;;@ run.c:1529:0
+                          ;;@ run.c:1547:0
                           (local.set $$227
                            (i32.load
-                            (i32.const 9272)
+                            (i32.const 8684)
                            )
                           )
                           (local.set $$228
@@ -137530,19 +137899,19 @@
                          )
                         )
                         (block
-                         ;;@ run.c:1533:0
+                         ;;@ run.c:1551:0
                          (local.set $$12
                           (i32.const 0)
                          )
-                         ;;@ run.c:1534:0
+                         ;;@ run.c:1552:0
                          (local.set $$13
                           (i32.const 0)
                          )
-                         ;;@ run.c:1535:0
+                         ;;@ run.c:1553:0
                          (local.set $$14
                           (i32.const 0)
                          )
-                         ;;@ run.c:1536:0
+                         ;;@ run.c:1554:0
                          (local.set $$238
                           (local.get $$2)
                          )
@@ -137566,7 +137935,7 @@
                          (if
                           (local.get $$241)
                           (block
-                           ;;@ run.c:1537:0
+                           ;;@ run.c:1555:0
                            (local.set $$242
                             (local.get $$2)
                            )
@@ -137591,7 +137960,7 @@
                            )
                           )
                          )
-                         ;;@ run.c:1539:0
+                         ;;@ run.c:1557:0
                          (local.set $$246
                           (local.get $$2)
                          )
@@ -137621,7 +137990,7 @@
                          (if
                           (local.get $$250)
                           (block
-                           ;;@ run.c:1540:0
+                           ;;@ run.c:1558:0
                            (local.set $$251
                             (local.get $$2)
                            )
@@ -137652,7 +138021,7 @@
                            )
                           )
                          )
-                         ;;@ run.c:1542:0
+                         ;;@ run.c:1560:0
                          (local.set $$256
                           (local.get $$2)
                          )
@@ -137682,7 +138051,7 @@
                          (if
                           (local.get $$260)
                           (block
-                           ;;@ run.c:1543:0
+                           ;;@ run.c:1561:0
                            (local.set $$261
                             (local.get $$2)
                            )
@@ -137713,10 +138082,10 @@
                            )
                           )
                          )
-                         ;;@ run.c:1545:0
+                         ;;@ run.c:1563:0
                          (local.set $$266
                           (i32.load
-                           (i32.const 9272)
+                           (i32.const 8684)
                           )
                          )
                          (local.set $$267
@@ -137769,10 +138138,10 @@
                         )
                        )
                        (block
-                        ;;@ run.c:1549:0
+                        ;;@ run.c:1567:0
                         (local.set $$276
                          (i32.load
-                          (i32.const 9272)
+                          (i32.const 8684)
                          )
                         )
                         (local.set $$277
@@ -137787,10 +138156,10 @@
                        )
                       )
                       (block
-                       ;;@ run.c:1553:0
+                       ;;@ run.c:1571:0
                        (local.set $$278
                         (i32.load
-                         (i32.const 9272)
+                         (i32.const 8684)
                         )
                        )
                        (local.set $$279
@@ -137805,10 +138174,10 @@
                       )
                      )
                      (block
-                      ;;@ run.c:1557:0
+                      ;;@ run.c:1575:0
                       (local.set $$280
                        (i32.load
-                        (i32.const 9272)
+                        (i32.const 8684)
                        )
                       )
                       (local.set $$281
@@ -137864,10 +138233,10 @@
                      )
                     )
                     (block
-                     ;;@ run.c:1561:0
+                     ;;@ run.c:1579:0
                      (local.set $$290
                       (i32.load
-                       (i32.const 9272)
+                       (i32.const 8684)
                       )
                      )
                      (local.set $$291
@@ -137902,10 +138271,10 @@
                     )
                    )
                    (block
-                    ;;@ run.c:1565:0
+                    ;;@ run.c:1583:0
                     (local.set $$296
                      (i32.load
-                      (i32.const 9272)
+                      (i32.const 8684)
                      )
                     )
                     (local.set $$297
@@ -137940,10 +138309,10 @@
                    )
                   )
                   (block
-                   ;;@ run.c:1569:0
+                   ;;@ run.c:1587:0
                    (local.set $$302
                     (i32.load
-                     (i32.const 9272)
+                     (i32.const 8684)
                     )
                    )
                    (local.set $$303
@@ -138004,10 +138373,10 @@
                   )
                  )
                  (block
-                  ;;@ run.c:1573:0
+                  ;;@ run.c:1591:0
                   (local.set $$313
                    (i32.load
-                    (i32.const 9272)
+                    (i32.const 8684)
                    )
                   )
                   (local.set $$314
@@ -138089,10 +138458,10 @@
                  )
                 )
                 (block
-                 ;;@ run.c:1577:0
+                 ;;@ run.c:1595:0
                  (local.set $$328
                   (i32.load
-                   (i32.const 9272)
+                   (i32.const 8684)
                   )
                  )
                  (local.set $$329
@@ -138127,10 +138496,10 @@
                 )
                )
                (block
-                ;;@ run.c:1581:0
+                ;;@ run.c:1599:0
                 (local.set $$334
                  (i32.load
-                  (i32.const 9272)
+                  (i32.const 8684)
                  )
                 )
                 (local.set $$335
@@ -138212,10 +138581,10 @@
                )
               )
               (block
-               ;;@ run.c:1585:0
+               ;;@ run.c:1603:0
                (local.set $$349
                 (i32.load
-                 (i32.const 9272)
+                 (i32.const 8684)
                 )
                )
                (local.set $$350
@@ -138250,10 +138619,10 @@
               )
              )
              (block
-              ;;@ run.c:1589:0
+              ;;@ run.c:1607:0
               (local.set $$355
                (i32.load
-                (i32.const 9272)
+                (i32.const 8684)
                )
               )
               (local.set $$356
@@ -138291,12 +138660,12 @@
            (br $switch)
           )
           (block
-           ;;@ run.c:1599:0
+           ;;@ run.c:1617:0
            (i32.store8
-            (i32.const 9332)
+            (i32.const 8900)
             (i32.const 0)
            )
-           ;;@ run.c:1600:0
+           ;;@ run.c:1618:0
            (local.set $$361
             (local.get $$2)
            )
@@ -138319,15 +138688,15 @@
            (local.set $$15
             (local.get $$364)
            )
-           ;;@ run.c:1601:0
+           ;;@ run.c:1619:0
            (i32.store8
-            (i32.const 9332)
+            (i32.const 8900)
             (i32.const 1)
            )
-           ;;@ run.c:1602:0
+           ;;@ run.c:1620:0
            (local.set $$365
             (i32.load
-             (i32.const 9272)
+             (i32.const 8684)
             )
            )
            (local.set $$366
@@ -138346,10 +138715,10 @@
           )
          )
          (block
-          ;;@ run.c:1606:0
+          ;;@ run.c:1624:0
           (local.set $$368
            (i32.load
-            (i32.const 9272)
+            (i32.const 8684)
            )
           )
           (local.set $$369
@@ -138375,7 +138744,7 @@
           (local.set $$3
            (local.get $$372)
           )
-          ;;@ run.c:1607:0
+          ;;@ run.c:1625:0
           (local.set $$373
            (local.get $$2)
           )
@@ -138407,10 +138776,10 @@
          )
         )
         (block
-         ;;@ run.c:1611:0
+         ;;@ run.c:1629:0
          (local.set $$378
           (i32.load
-           (i32.const 9272)
+           (i32.const 8684)
           )
          )
          (local.set $$379
@@ -138436,7 +138805,7 @@
          (local.set $$3
           (local.get $$382)
          )
-         ;;@ run.c:1612:0
+         ;;@ run.c:1630:0
          (local.set $$383
           (local.get $$2)
          )
@@ -138468,10 +138837,10 @@
         )
        )
        (block
-        ;;@ run.c:1616:0
+        ;;@ run.c:1634:0
         (local.set $$388
          (i32.load
-          (i32.const 9272)
+          (i32.const 8684)
          )
         )
         (local.set $$389
@@ -138497,7 +138866,7 @@
         (local.set $$3
          (local.get $$392)
         )
-        ;;@ run.c:1617:0
+        ;;@ run.c:1635:0
         (local.set $$393
          (local.get $$2)
         )
@@ -138529,10 +138898,10 @@
        )
       )
       (block
-       ;;@ run.c:1621:0
+       ;;@ run.c:1639:0
        (local.set $$398
         (i32.load
-         (i32.const 9272)
+         (i32.const 8684)
         )
        )
        (local.set $$399
@@ -138558,7 +138927,7 @@
        (local.set $$3
         (local.get $$402)
        )
-       ;;@ run.c:1622:0
+       ;;@ run.c:1640:0
        (local.set $$403
         (local.get $$2)
        )
@@ -138590,10 +138959,10 @@
       )
      )
      (block
-      ;;@ run.c:1626:0
+      ;;@ run.c:1644:0
       (local.set $$408
        (i32.load
-        (i32.const 9272)
+        (i32.const 8684)
        )
       )
       (local.set $$409
@@ -138623,7 +138992,7 @@
      )
     )
     (block
-     ;;@ run.c:1630:0
+     ;;@ run.c:1648:0
      (local.set $$413
       (local.get $$2)
      )
@@ -138643,16 +139012,16 @@
      )
      (drop
       (call $_printf
-       (i32.const 6144)
+       (i32.const 6196)
        (local.get $$vararg_buffer)
       )
      )
-     ;;@ run.c:1631:0
+     ;;@ run.c:1649:0
      (call $_abort)
     )
    )
   )
-  ;;@ run.c:1636:0
+  ;;@ run.c:1654:0
   (local.set $$416
    (local.get $$2)
   )
@@ -138680,7 +139049,7 @@
    (local.get $$420)
    (local.get $$418)
   )
-  ;;@ run.c:1637:0
+  ;;@ run.c:1655:0
   (local.set $$421
    (local.get $$2)
   )
@@ -138697,14 +139066,14 @@
    (local.get $$423)
    (local.get $$421)
   )
-  ;;@ run.c:1639:0
+  ;;@ run.c:1657:0
   (local.set $$424
    (local.get $$3)
   )
   (local.set $$1
    (local.get $$424)
   )
-  ;;@ run.c:1640:0
+  ;;@ run.c:1658:0
   (local.set $$425
    (local.get $$1)
   )
@@ -138715,7 +139084,7 @@
    (local.get $$425)
   )
  )
- (func $_add_or_replace_original_to_clone (; 331 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_add_or_replace_original_to_clone (; 335 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -138774,7 +139143,7 @@
   (local.set $$4
    (local.get $$1)
   )
-  ;;@ run.c:1441:0
+  ;;@ run.c:1459:0
   (local.set $$5
    (i32.const 0)
   )
@@ -138785,7 +139154,7 @@
     )
     (local.set $$7
      (i32.load
-      (i32.const 9280)
+      (i32.const 8692)
      )
     )
     (local.set $$8
@@ -138801,7 +139170,7 @@
     )
     (local.set $$10
      (i32.load
-      (i32.const 9280)
+      (i32.const 8692)
      )
     )
     (if
@@ -138815,7 +139184,7 @@
       (br $while-out)
      )
     )
-    ;;@ run.c:1442:0
+    ;;@ run.c:1460:0
     (local.set $$11
      (i32.add
       (local.get $$10)
@@ -138862,7 +139231,7 @@
       (br $while-out)
      )
     )
-    ;;@ run.c:1441:0
+    ;;@ run.c:1459:0
     (local.set $$24
      (local.get $$5)
     )
@@ -138884,13 +139253,13 @@
     (i32.const 4)
    )
    (block
-    ;;@ run.c:1443:0
+    ;;@ run.c:1461:0
     (local.set $$18
      (local.get $$4)
     )
     (local.set $$19
      (i32.load
-      (i32.const 9280)
+      (i32.const 8692)
      )
     )
     (local.set $$20
@@ -138920,11 +139289,11 @@
      (local.get $$23)
      (local.get $$18)
     )
-    ;;@ run.c:1444:0
+    ;;@ run.c:1462:0
     (local.set $$2
      (i32.const 1)
     )
-    ;;@ run.c:1449:0
+    ;;@ run.c:1467:0
     (local.set $$28
      (local.get $$2)
     )
@@ -138941,7 +139310,7 @@
      (i32.const 6)
     )
     (block
-     ;;@ run.c:1447:0
+     ;;@ run.c:1465:0
      (local.set $$26
       (local.get $$3)
      )
@@ -138968,11 +139337,11 @@
        (local.get $$vararg_buffer)
       )
      )
-     ;;@ run.c:1448:0
+     ;;@ run.c:1466:0
      (local.set $$2
       (i32.const 0)
      )
-     ;;@ run.c:1449:0
+     ;;@ run.c:1467:0
      (local.set $$28
       (local.get $$2)
      )
@@ -138989,7 +139358,7 @@
    (i32.const 0)
   )
  )
- (func $_map_original_to_clone (; 332 ;) (param $$0 i32) (result i32)
+ (func $_map_original_to_clone (; 336 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -139037,7 +139406,7 @@
   (local.set $$2
    (local.get $$0)
   )
-  ;;@ run.c:1432:0
+  ;;@ run.c:1450:0
   (local.set $$3
    (i32.const 0)
   )
@@ -139048,7 +139417,7 @@
     )
     (local.set $$5
      (i32.load
-      (i32.const 9280)
+      (i32.const 8692)
      )
     )
     (local.set $$6
@@ -139073,10 +139442,10 @@
       (br $while-out)
      )
     )
-    ;;@ run.c:1433:0
+    ;;@ run.c:1451:0
     (local.set $$8
      (i32.load
-      (i32.const 9280)
+      (i32.const 8692)
      )
     )
     (local.set $$9
@@ -139125,7 +139494,7 @@
       (br $while-out)
      )
     )
-    ;;@ run.c:1432:0
+    ;;@ run.c:1450:0
     (local.set $$22
      (local.get $$3)
     )
@@ -139147,10 +139516,10 @@
     (i32.const 4)
    )
    (block
-    ;;@ run.c:1434:0
+    ;;@ run.c:1452:0
     (local.set $$16
      (i32.load
-      (i32.const 9280)
+      (i32.const 8692)
      )
     )
     (local.set $$17
@@ -139184,7 +139553,7 @@
     (local.set $$1
      (local.get $$21)
     )
-    ;;@ run.c:1438:0
+    ;;@ run.c:1456:0
     (local.set $$24
      (local.get $$1)
     )
@@ -139201,11 +139570,11 @@
      (i32.const 6)
     )
     (block
-     ;;@ run.c:1437:0
+     ;;@ run.c:1455:0
      (local.set $$1
       (i32.const 0)
      )
-     ;;@ run.c:1438:0
+     ;;@ run.c:1456:0
      (local.set $$24
       (local.get $$1)
      )
@@ -139222,7 +139591,7 @@
    (i32.const 0)
   )
  )
- (func $_run_start_block (; 333 ;) (param $$0 i32)
+ (func $_run_start_block (; 337 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -139272,7 +139641,7 @@
   (local.set $$1
    (local.get $$0)
   )
-  ;;@ run.c:1084:0
+  ;;@ run.c:1100:0
   (local.set $$2
    (call $_malloc
     (i32.const 20)
@@ -139297,7 +139666,7 @@
    (local.get $$5)
    (local.get $$2)
   )
-  ;;@ run.c:1085:0
+  ;;@ run.c:1101:0
   (local.set $$6
    (local.get $$1)
   )
@@ -139323,7 +139692,7 @@
    (i32.const 4)
    (i32.const 10)
   )
-  ;;@ run.c:1086:0
+  ;;@ run.c:1102:0
   (local.set $$10
    (call $_malloc
     (i32.const 20)
@@ -139348,7 +139717,7 @@
    (local.get $$13)
    (local.get $$10)
   )
-  ;;@ run.c:1087:0
+  ;;@ run.c:1103:0
   (local.set $$14
    (local.get $$1)
   )
@@ -139397,7 +139766,7 @@
   (if
    (local.get $$18)
    (block
-    ;;@ run.c:1088:0
+    ;;@ run.c:1104:0
     (call $_array_init
      (local.get $$22)
      (i32.const 20)
@@ -139406,11 +139775,11 @@
     (global.set $STACKTOP
      (local.get $sp)
     )
-    ;;@ run.c:1093:0
+    ;;@ run.c:1109:0
     (return)
    )
    (block
-    ;;@ run.c:1091:0
+    ;;@ run.c:1107:0
     (local.set $$23
      (local.get $$1)
     )
@@ -139438,12 +139807,12 @@
     (global.set $STACKTOP
      (local.get $sp)
     )
-    ;;@ run.c:1093:0
+    ;;@ run.c:1109:0
     (return)
    )
   )
  )
- (func $_run_end_block (; 334 ;) (param $$0 i32)
+ (func $_run_end_block (; 338 ;) (param $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -139500,7 +139869,7 @@
   (local.set $$1
    (local.get $$0)
   )
-  ;;@ run.c:1095:0
+  ;;@ run.c:1111:0
   (local.set $$2
    (i32.const 0)
   )
@@ -139546,7 +139915,7 @@
      )
      (br $while-out)
     )
-    ;;@ run.c:1096:0
+    ;;@ run.c:1112:0
     (local.set $$11
      (local.get $$1)
     )
@@ -139598,7 +139967,7 @@
     (local.set $$3
      (local.get $$19)
     )
-    ;;@ run.c:1097:0
+    ;;@ run.c:1113:0
     (local.set $$20
      (local.get $$3)
     )
@@ -139652,7 +140021,7 @@
     )
     (local.set $$30
      (i32.load
-      (i32.const 9304)
+      (i32.const 8716)
      )
     )
     (local.set $$31
@@ -139662,10 +140031,10 @@
      )
     )
     (i32.store
-     (i32.const 9304)
+     (i32.const 8716)
      (local.get $$31)
     )
-    ;;@ run.c:1095:0
+    ;;@ run.c:1111:0
     (local.set $$32
      (local.get $$2)
     )
@@ -139684,10 +140053,10 @@
   (global.set $STACKTOP
    (local.get $sp)
   )
-  ;;@ run.c:1099:0
+  ;;@ run.c:1115:0
   (return)
  )
- (func $_convert_to_bool (; 335 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_convert_to_bool (; 339 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -139746,7 +140115,7 @@
   (local.set $$4
    (local.get $$1)
   )
-  ;;@ run.c:631:0
+  ;;@ run.c:632:0
   (local.set $$5
    (local.get $$4)
   )
@@ -139769,7 +140138,7 @@
         )
        )
        (block
-        ;;@ run.c:633:0
+        ;;@ run.c:634:0
         (local.set $$7
          (local.get $$3)
         )
@@ -139806,13 +140175,13 @@
        )
       )
       (block
-       ;;@ run.c:637:0
+       ;;@ run.c:638:0
        (local.set $$13
         (local.get $$4)
        )
        (local.set $$14
         (i32.load
-         (i32.const 8396)
+         (i32.const 8444)
         )
        )
        (local.set $$15
@@ -139841,7 +140210,7 @@
        (if
         (local.get $$18)
         (block
-         ;;@ run.c:638:0
+         ;;@ run.c:639:0
          (local.set $$19
           (local.get $$3)
          )
@@ -139856,7 +140225,7 @@
          (br $label$break$L1)
         )
        )
-       ;;@ run.c:640:0
+       ;;@ run.c:641:0
        (local.set $$21
         (local.get $$4)
        )
@@ -139894,7 +140263,7 @@
        (if
         (local.get $$24)
         (block
-         ;;@ run.c:641:0
+         ;;@ run.c:642:0
          (local.set $$27
           (i32.gt_s
            (local.get $$26)
@@ -139919,7 +140288,7 @@
          (br $label$break$L1)
         )
         (block
-         ;;@ run.c:644:0
+         ;;@ run.c:645:0
          (local.set $$30
           (i32.gt_u
            (local.get $$26)
@@ -139947,18 +140316,18 @@
       )
      )
      (block
-      ;;@ run.c:648:0
+      ;;@ run.c:649:0
       (local.set $$2
        (i32.const 1)
       )
       (br $switch)
      )
     )
-    ;;@ run.c:651:0
+    ;;@ run.c:652:0
     (call $_abort)
    )
   )
-  ;;@ run.c:655:0
+  ;;@ run.c:656:0
   (local.set $$33
    (local.get $$2)
   )
@@ -139969,7 +140338,7 @@
    (local.get $$33)
   )
  )
- (func $_get_ident_result (; 336 ;) (param $$0 i32) (result i32)
+ (func $_get_ident_result (; 340 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -140013,7 +140382,7 @@
   (local.set $$1
    (local.get $$0)
   )
-  ;;@ run.c:717:0
+  ;;@ run.c:718:0
   (local.set $$3
    (local.get $$1)
   )
@@ -140085,7 +140454,7 @@
   (local.set $$2
    (local.get $$15)
   )
-  ;;@ run.c:718:0
+  ;;@ run.c:719:0
   (local.set $$16
    (local.get $$2)
   )
@@ -140116,7 +140485,7 @@
    (local.get $$20)
   )
  )
- (func $_init (; 337 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_init (; 341 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$2 i32)
   (local $$3 i32)
   (local $$4 i32)
@@ -140167,7 +140536,7 @@
   ;;@ debugger.c:404:0
   (drop
    (call $_emscripten_set_keydown_callback_on_thread
-    (i32.const 6855)
+    (i32.const 6907)
     (i32.const 0)
     (i32.const 0)
     (i32.const 18)
@@ -140182,7 +140551,7 @@
   )
   ;;@ debugger.c:407:0
   (i32.store8
-   (i32.const 9350)
+   (i32.const 9554)
    (i32.const 1)
   )
   (global.set $STACKTOP
@@ -140193,7 +140562,7 @@
    (i32.const 1)
   )
  )
- (func $_deinit (; 338 ;) (result i32)
+ (func $_deinit (; 342 ;) (result i32)
   (local $$0 i32)
   (local $label i32)
   (local $sp i32)
@@ -140203,7 +140572,7 @@
   ;;@ debugger.c:414:0
   (local.set $$0
    (i32.load
-    (i32.const 8444)
+    (i32.const 8492)
    )
   )
   (drop
@@ -140215,7 +140584,7 @@
   (call $_emscripten_cancel_main_loop)
   ;;@ debugger.c:417:0
   (i32.store8
-   (i32.const 9350)
+   (i32.const 9554)
    (i32.const 0)
   )
   ;;@ debugger.c:419:0
@@ -140223,7 +140592,7 @@
    (i32.const 1)
   )
  )
- (func $_step (; 339 ;)
+ (func $_step (; 343 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$2 i32)
@@ -140237,7 +140606,7 @@
   ;;@ debugger.c:424:0
   (local.set $$0
    (i32.load
-    (i32.const 8640)
+    (i32.const 8912)
    )
   )
   (local.set $$1
@@ -140256,7 +140625,7 @@
   ;;@ debugger.c:425:0
   (local.set $$2
    (i32.load
-    (i32.const 8640)
+    (i32.const 8912)
    )
   )
   (local.set $$3
@@ -140276,7 +140645,7 @@
   ;;@ debugger.c:427:0
   (return)
  )
- (func $_resize (; 340 ;) (param $$0 i32) (param $$1 i32)
+ (func $_resize (; 344 ;) (param $$0 i32) (param $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
   (local $$4 i32)
@@ -140319,7 +140688,7 @@
    )
   )
   (f32.store
-   (i32.const 8452)
+   (i32.const 8500)
    (local.get $$5)
   )
   ;;@ debugger.c:432:0
@@ -140332,7 +140701,7 @@
    )
   )
   (f32.store
-   (i32.const 8456)
+   (i32.const 8504)
    (local.get $$7)
   )
   (global.set $STACKTOP
@@ -140341,7 +140710,10 @@
   ;;@ debugger.c:433:0
   (return)
  )
- (func $_set_text (; 341 ;) (param $$0 i32)
+ (func $_set_text (; 345 ;) (param $$0 i32)
+  (local $$$0 i32)
+  (local $$$0$phi i32)
+  (local $$$reg2mem20$0 i32)
   (local $$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -140363,47 +140735,54 @@
   (local $$26 i32)
   (local $$27 i32)
   (local $$28 i32)
+  (local $$29 i32)
   (local $$3 i32)
+  (local $$30 i32)
+  (local $$31 i32)
+  (local $$32 i32)
+  (local $$33 i32)
+  (local $$34 i32)
+  (local $$35 i32)
+  (local $$36 i32)
+  (local $$37 i32)
+  (local $$38 i32)
+  (local $$39 i32)
   (local $$4 i32)
   (local $$5 i32)
   (local $$6 i32)
   (local $$7 i32)
   (local $$8 i32)
   (local $$9 i32)
+  (local $_setjmpTable i32)
+  (local $_setjmpTableSize i32)
   (local $label i32)
   (local $sp i32)
   (local.set $sp
    (global.get $STACKTOP)
   )
-  (global.set $STACKTOP
-   (i32.add
-    (global.get $STACKTOP)
-    (i32.const 16)
+  (local.set $_setjmpTableSize
+   (i32.const 4)
+  )
+  (local.set $_setjmpTable
+   (call $_malloc
+    (i32.const 40)
    )
   )
-  (if
-   (i32.ge_s
-    (global.get $STACKTOP)
-    (global.get $STACK_MAX)
-   )
-   (call $abortStackOverflow
-    (i32.const 16)
-   )
-  )
-  (local.set $$1
-   (local.get $$0)
+  (i32.store
+   (local.get $_setjmpTable)
+   (i32.const 0)
   )
   ;;@ debugger.c:437:0
-  (local.set $$4
+  (local.set $$1
    (i32.load8_s
-    (i32.const 9350)
+    (i32.const 9554)
    )
   )
-  (local.set $$5
+  (local.set $$2
    (i32.ne
     (i32.shr_s
      (i32.shl
-      (local.get $$4)
+      (local.get $$1)
       (i32.const 24)
      )
      (i32.const 24)
@@ -140411,175 +140790,747 @@
     (i32.const 0)
    )
   )
-  (if
-   (local.get $$5)
-   (block
-    ;;@ debugger.c:438:0
-    (local.set $$6
-     (i32.load
-      (i32.const 8644)
+  (block $label$break$L1
+   (if
+    (local.get $$2)
+    (block
+     ;;@ debugger.c:438:0
+     (local.set $$3
+      (i32.load
+       (i32.const 8916)
+      )
+     )
+     (global.set $__THREW__
+      (i32.const 0)
+     )
+     (call $invoke_vi
+      (i32.const 7)
+      (local.get $$3)
+     )
+     (local.set $$4
+      (global.get $__THREW__)
+     )
+     (global.set $__THREW__
+      (i32.const 0)
+     )
+     (if
+      (i32.and
+       (i32.ne
+        (local.get $$4)
+        (i32.const 0)
+       )
+       (i32.ne
+        (global.get $threwValue)
+        (i32.const 0)
+       )
+      )
+      (block
+       (local.set $$5
+        (call $_testSetjmp
+         (i32.load
+          (local.get $$4)
+         )
+         (local.get $_setjmpTable)
+         (local.get $_setjmpTableSize)
+        )
+       )
+       (if
+        (i32.eq
+         (local.get $$5)
+         (i32.const 0)
+        )
+        (call $_longjmp
+         (local.get $$4)
+         (global.get $threwValue)
+        )
+       )
+       (call $setTempRet0
+        (global.get $threwValue)
+       )
+      )
+      (local.set $$5
+       (i32.const -1)
+      )
+     )
+     (local.set $$6
+      (call $getTempRet0)
+     )
+     (block $switch-default
+      (block $switch-case
+       (br_table $switch-case $switch-default
+        (i32.sub
+         (local.get $$5)
+         (i32.const 1)
+        )
+       )
+      )
+      (block
+       (local.set $$$0
+        (i32.const 0)
+       )
+       (local.set $$$reg2mem20$0
+        (local.get $$6)
+       )
+       (br $label$break$L1)
+      )
+     )
+     (local.set $label
+      (i32.const 4)
      )
     )
-    (call $_free
-     (local.get $$6)
+    (local.set $label
+     (i32.const 4)
     )
    )
   )
-  ;;@ debugger.c:440:0
-  (local.set $$7
-   (local.get $$1)
-  )
-  (i32.store
-   (i32.const 8644)
-   (local.get $$7)
-  )
-  ;;@ debugger.c:442:0
-  (local.set $$8
-   (i32.load
-    (i32.const 8644)
+  (block $label$break$L4
+   (if
+    (i32.eq
+     (local.get $label)
+     (i32.const 4)
+    )
+    (block
+     ;;@ debugger.c:440:0
+     (i32.store
+      (i32.const 8916)
+      (local.get $$0)
+     )
+     ;;@ debugger.c:442:0
+     (local.set $$7
+      (i32.load
+       (i32.const 8916)
+      )
+     )
+     (global.set $__THREW__
+      (i32.const 0)
+     )
+     (local.set $$8
+      (call $invoke_ii
+       (i32.const 20)
+       (local.get $$7)
+      )
+     )
+     (local.set $$9
+      (global.get $__THREW__)
+     )
+     (global.set $__THREW__
+      (i32.const 0)
+     )
+     (if
+      (i32.and
+       (i32.ne
+        (local.get $$9)
+        (i32.const 0)
+       )
+       (i32.ne
+        (global.get $threwValue)
+        (i32.const 0)
+       )
+      )
+      (block
+       (local.set $$10
+        (call $_testSetjmp
+         (i32.load
+          (local.get $$9)
+         )
+         (local.get $_setjmpTable)
+         (local.get $_setjmpTableSize)
+        )
+       )
+       (if
+        (i32.eq
+         (local.get $$10)
+         (i32.const 0)
+        )
+        (call $_longjmp
+         (local.get $$9)
+         (global.get $threwValue)
+        )
+       )
+       (call $setTempRet0
+        (global.get $threwValue)
+       )
+      )
+      (local.set $$10
+       (i32.const -1)
+      )
+     )
+     (local.set $$11
+      (call $getTempRet0)
+     )
+     (block $switch-default3
+      (block $switch-case2
+       (br_table $switch-case2 $switch-default3
+        (i32.sub
+         (local.get $$10)
+         (i32.const 1)
+        )
+       )
+      )
+      (block
+       (local.set $$$0
+        (i32.const 0)
+       )
+       (local.set $$$reg2mem20$0
+        (local.get $$11)
+       )
+       (br $label$break$L4)
+      )
+     )
+     ;;@ debugger.c:444:0
+     (local.set $$12
+      (i32.add
+       (local.get $$8)
+       (i32.const 12)
+      )
+     )
+     (local.set $$13
+      (i32.load
+       (local.get $$12)
+      )
+     )
+     (local.set $$14
+      (i32.add
+       (local.get $$8)
+       (i32.const 20)
+      )
+     )
+     (i32.store
+      (local.get $$14)
+      (local.get $$13)
+     )
+     (global.set $__THREW__
+      (i32.const 0)
+     )
+     ;;@ debugger.c:446:0
+     (local.set $$15
+      (call $invoke_ii
+       (i32.const 21)
+       (local.get $$8)
+      )
+     )
+     (local.set $$16
+      (global.get $__THREW__)
+     )
+     (global.set $__THREW__
+      (i32.const 0)
+     )
+     (if
+      (i32.and
+       (i32.ne
+        (local.get $$16)
+        (i32.const 0)
+       )
+       (i32.ne
+        (global.get $threwValue)
+        (i32.const 0)
+       )
+      )
+      (block
+       (local.set $$17
+        (call $_testSetjmp
+         (i32.load
+          (local.get $$16)
+         )
+         (local.get $_setjmpTable)
+         (local.get $_setjmpTableSize)
+        )
+       )
+       (if
+        (i32.eq
+         (local.get $$17)
+         (i32.const 0)
+        )
+        (call $_longjmp
+         (local.get $$16)
+         (global.get $threwValue)
+        )
+       )
+       (call $setTempRet0
+        (global.get $threwValue)
+       )
+      )
+      (local.set $$17
+       (i32.const -1)
+      )
+     )
+     (local.set $$18
+      (call $getTempRet0)
+     )
+     (block $switch-default6
+      (block $switch-case5
+       (br_table $switch-case5 $switch-default6
+        (i32.sub
+         (local.get $$17)
+         (i32.const 1)
+        )
+       )
+      )
+      (block
+       (local.set $$$0
+        (i32.const 0)
+       )
+       (local.set $$$reg2mem20$0
+        (local.get $$18)
+       )
+       (br $label$break$L4)
+      )
+     )
+     ;;@ debugger.c:448:0
+     (local.set $$19
+      (i32.add
+       (local.get $$15)
+       (i32.const 12)
+      )
+     )
+     (local.set $$20
+      (i32.load
+       (local.get $$19)
+      )
+     )
+     (global.set $__THREW__
+      (i32.const 0)
+     )
+     (drop
+      (call $invoke_ii
+       (i32.const 22)
+       (local.get $$20)
+      )
+     )
+     (local.set $$21
+      (global.get $__THREW__)
+     )
+     (global.set $__THREW__
+      (i32.const 0)
+     )
+     (if
+      (i32.and
+       (i32.ne
+        (local.get $$21)
+        (i32.const 0)
+       )
+       (i32.ne
+        (global.get $threwValue)
+        (i32.const 0)
+       )
+      )
+      (block
+       (local.set $$22
+        (call $_testSetjmp
+         (i32.load
+          (local.get $$21)
+         )
+         (local.get $_setjmpTable)
+         (local.get $_setjmpTableSize)
+        )
+       )
+       (if
+        (i32.eq
+         (local.get $$22)
+         (i32.const 0)
+        )
+        (call $_longjmp
+         (local.get $$21)
+         (global.get $threwValue)
+        )
+       )
+       (call $setTempRet0
+        (global.get $threwValue)
+       )
+      )
+      (local.set $$22
+       (i32.const -1)
+      )
+     )
+     (local.set $$23
+      (call $getTempRet0)
+     )
+     (block $switch-default9
+      (block $switch-case8
+       (br_table $switch-case8 $switch-default9
+        (i32.sub
+         (local.get $$22)
+         (i32.const 1)
+        )
+       )
+      )
+      (block
+       (local.set $$$0
+        (local.get $$15)
+       )
+       (local.set $$$reg2mem20$0
+        (local.get $$23)
+       )
+       (br $label$break$L4)
+      )
+     )
+     ;;@ debugger.c:450:0
+     (i32.store
+      (i32.const 8912)
+      (local.get $$15)
+     )
+     (global.set $__THREW__
+      (i32.const 0)
+     )
+     ;;@ debugger.c:452:0
+     (call $invoke_vi
+      (i32.const 23)
+      (local.get $$15)
+     )
+     (local.set $$24
+      (global.get $__THREW__)
+     )
+     (global.set $__THREW__
+      (i32.const 0)
+     )
+     (if
+      (i32.and
+       (i32.ne
+        (local.get $$24)
+        (i32.const 0)
+       )
+       (i32.ne
+        (global.get $threwValue)
+        (i32.const 0)
+       )
+      )
+      (block
+       (local.set $$25
+        (call $_testSetjmp
+         (i32.load
+          (local.get $$24)
+         )
+         (local.get $_setjmpTable)
+         (local.get $_setjmpTableSize)
+        )
+       )
+       (if
+        (i32.eq
+         (local.get $$25)
+         (i32.const 0)
+        )
+        (call $_longjmp
+         (local.get $$24)
+         (global.get $threwValue)
+        )
+       )
+       (call $setTempRet0
+        (global.get $threwValue)
+       )
+      )
+      (local.set $$25
+       (i32.const -1)
+      )
+     )
+     (local.set $$26
+      (call $getTempRet0)
+     )
+     (block $switch-default12
+      (block $switch-case11
+       (br_table $switch-case11 $switch-default12
+        (i32.sub
+         (local.get $$25)
+         (i32.const 1)
+        )
+       )
+      )
+      (block
+       (local.set $$$0
+        (local.get $$15)
+       )
+       (local.set $$$reg2mem20$0
+        (local.get $$26)
+       )
+       (br $label$break$L4)
+      )
+     )
+     (local.set $_setjmpTable
+      (call $_saveSetjmp
+       (i32.const 8744)
+       (i32.const 1)
+       (local.get $_setjmpTable)
+       (local.get $_setjmpTableSize)
+      )
+     )
+     (local.set $_setjmpTableSize
+      (call $getTempRet0)
+     )
+     (global.set $__THREW__
+      (i32.const 0)
+     )
+     (local.set $$27
+      (global.get $__THREW__)
+     )
+     (global.set $__THREW__
+      (i32.const 0)
+     )
+     (if
+      (i32.and
+       (i32.ne
+        (local.get $$27)
+        (i32.const 0)
+       )
+       (i32.ne
+        (global.get $threwValue)
+        (i32.const 0)
+       )
+      )
+      (block
+       (local.set $$28
+        (call $_testSetjmp
+         (i32.load
+          (local.get $$27)
+         )
+         (local.get $_setjmpTable)
+         (local.get $_setjmpTableSize)
+        )
+       )
+       (if
+        (i32.eq
+         (local.get $$28)
+         (i32.const 0)
+        )
+        (call $_longjmp
+         (local.get $$27)
+         (global.get $threwValue)
+        )
+       )
+       (call $setTempRet0
+        (global.get $threwValue)
+       )
+      )
+      (local.set $$28
+       (i32.const -1)
+      )
+     )
+     (local.set $$29
+      (call $getTempRet0)
+     )
+     (block $switch-default15
+      (block $switch-case14
+       (br_table $switch-case14 $switch-default15
+        (i32.sub
+         (local.get $$28)
+         (i32.const 1)
+        )
+       )
+      )
+      (block
+       (local.set $$$0
+        (local.get $$15)
+       )
+       (local.set $$$reg2mem20$0
+        (local.get $$29)
+       )
+       (br $label$break$L4)
+      )
+     )
+     (local.set $$$0
+      (local.get $$15)
+     )
+     (local.set $$$reg2mem20$0
+      (i32.const 0)
+     )
+    )
    )
   )
-  (local.set $$9
-   (call $_tokenize
-    (local.get $$8)
+  (loop $label$continue$L11
+   (block $label$break$L11
+    ;;@ debugger.c:454:0
+    (local.set $$30
+     (i32.ne
+      (local.get $$$reg2mem20$0)
+      (i32.const 0)
+     )
+    )
+    (if
+     (local.get $$30)
+     (block
+      (local.set $label
+       (i32.const 13)
+      )
+      (br $label$break$L11)
+     )
+    )
+    ;;@ debugger.c:458:0
+    (local.set $$31
+     (i32.add
+      (local.get $$$0)
+      (i32.const 12)
+     )
+    )
+    (local.set $$32
+     (i32.load
+      (local.get $$31)
+     )
+    )
+    (global.set $__THREW__
+     (i32.const 0)
+    )
+    (drop
+     (call $invoke_ii
+      (i32.const 24)
+      (local.get $$32)
+     )
+    )
+    (local.set $$33
+     (global.get $__THREW__)
+    )
+    (global.set $__THREW__
+     (i32.const 0)
+    )
+    (if
+     (i32.and
+      (i32.ne
+       (local.get $$33)
+       (i32.const 0)
+      )
+      (i32.ne
+       (global.get $threwValue)
+       (i32.const 0)
+      )
+     )
+     (block
+      (local.set $$34
+       (call $_testSetjmp
+        (i32.load
+         (local.get $$33)
+        )
+        (local.get $_setjmpTable)
+        (local.get $_setjmpTableSize)
+       )
+      )
+      (if
+       (i32.eq
+        (local.get $$34)
+        (i32.const 0)
+       )
+       (call $_longjmp
+        (local.get $$33)
+        (global.get $threwValue)
+       )
+      )
+      (call $setTempRet0
+       (global.get $threwValue)
+      )
+     )
+     (local.set $$34
+      (i32.const -1)
+     )
+    )
+    (local.set $$35
+     (call $getTempRet0)
+    )
+    (block $switch16
+     (block $switch-default18
+      (block $switch-case17
+       (br_table $switch-case17 $switch-default18
+        (i32.sub
+         (local.get $$34)
+         (i32.const 1)
+        )
+       )
+      )
+      (block
+       (local.set $$$0$phi
+        (local.get $$$0)
+       )
+       (local.set $$$reg2mem20$0
+        (local.get $$35)
+       )
+       (local.set $$$0
+        (local.get $$$0$phi)
+       )
+       (br $switch16)
+      )
+     )
+     (br $label$break$L11)
+    )
+    (br $label$continue$L11)
    )
   )
-  (local.set $$2
-   (local.get $$9)
-  )
-  ;;@ debugger.c:444:0
-  (local.set $$10
-   (local.get $$2)
-  )
-  (local.set $$11
-   (i32.add
-    (local.get $$10)
-    (i32.const 12)
+  (if
+   (i32.eq
+    (local.get $label)
+    (i32.const 13)
+   )
+   (block
+    ;;@ debugger.c:460:0
+    (i32.store8
+     (i32.const 8740)
+     (i32.const 1)
+    )
+    ;;@ debugger.c:461:0
+    (local.set $$36
+     (i32.load
+      (i32.const 8688)
+     )
+    )
+    (local.set $$37
+     (i32.add
+      (local.get $$36)
+      (i32.const 12)
+     )
+    )
+    (local.set $$38
+     (i32.load
+      (local.get $$37)
+     )
+    )
+    (local.set $$39
+     (i32.load
+      (local.get $$38)
+     )
+    )
+    (i32.store
+     (i32.const 9528)
+     (local.get $$39)
+    )
+    (call $_free
+     (local.get $_setjmpTable)
+    )
+    ;;@ debugger.c:462:0
+    (return)
    )
   )
-  (local.set $$12
-   (i32.load
-    (local.get $$11)
-   )
-  )
-  (local.set $$13
-   (local.get $$2)
-  )
-  (local.set $$14
-   (i32.add
-    (local.get $$13)
-    (i32.const 20)
-   )
-  )
-  (i32.store
-   (local.get $$14)
-   (local.get $$12)
-  )
-  ;;@ debugger.c:446:0
-  (local.set $$15
-   (local.get $$2)
-  )
-  (local.set $$16
-   (call $_parse
-    (local.get $$15)
-   )
-  )
-  (local.set $$3
-   (local.get $$16)
-  )
-  ;;@ debugger.c:448:0
-  (local.set $$17
-   (local.get $$3)
-  )
-  (local.set $$18
-   (i32.add
-    (local.get $$17)
-    (i32.const 12)
-   )
-  )
-  (local.set $$19
-   (i32.load
-    (local.get $$18)
-   )
-  )
-  (drop
-   (call $_infer
-    (local.get $$19)
-   )
-  )
-  ;;@ debugger.c:450:0
-  (local.set $$20
-   (local.get $$3)
-  )
-  (i32.store
-   (i32.const 8640)
-   (local.get $$20)
-  )
-  ;;@ debugger.c:452:0
-  (local.set $$21
-   (local.get $$3)
-  )
-  (call $_init_run
-   (local.get $$21)
-  )
-  ;;@ debugger.c:454:0
-  (local.set $$22
-   (local.get $$3)
-  )
-  (local.set $$23
-   (i32.add
-    (local.get $$22)
-    (i32.const 12)
-   )
-  )
-  (local.set $$24
-   (i32.load
-    (local.get $$23)
-   )
-  )
-  (drop
-   (call $_run_statement
-    (local.get $$24)
-   )
-  )
-  ;;@ debugger.c:455:0
+  ;;@ debugger.c:460:0
   (i32.store8
-   (i32.const 9328)
+   (i32.const 8740)
    (i32.const 1)
   )
-  ;;@ debugger.c:456:0
-  (local.set $$25
+  ;;@ debugger.c:461:0
+  (local.set $$36
    (i32.load
-    (i32.const 9276)
+    (i32.const 8688)
    )
   )
-  (local.set $$26
+  (local.set $$37
    (i32.add
-    (local.get $$25)
+    (local.get $$36)
     (i32.const 12)
    )
   )
-  (local.set $$27
+  (local.set $$38
    (i32.load
-    (local.get $$26)
+    (local.get $$37)
    )
   )
-  (local.set $$28
+  (local.set $$39
    (i32.load
-    (local.get $$27)
+    (local.get $$38)
    )
   )
   (i32.store
-   (i32.const 9256)
-   (local.get $$28)
+   (i32.const 9528)
+   (local.get $$39)
   )
-  (global.set $STACKTOP
-   (local.get $sp)
+  (call $_free
+   (local.get $_setjmpTable)
   )
-  ;;@ debugger.c:457:0
+  ;;@ debugger.c:462:0
   (return)
  )
- (func $_keydown (; 342 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_keydown (; 346 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$100 i32)
   (local $$101 i32)
@@ -140803,7 +141754,7 @@
   (local.set $$8
    (call $_strcmp
     (local.get $$7)
-    (i32.const 6863)
+    (i32.const 6915)
    )
   )
   (local.set $$9
@@ -140819,7 +141770,7 @@
      ;;@ debugger.c:13:0
      (local.set $$10
       (i32.load8_s
-       (i32.const 9224)
+       (i32.const 9496)
       )
      )
      (local.set $$11
@@ -140847,7 +141798,7 @@
       )
      )
      (i32.store8
-      (i32.const 9224)
+      (i32.const 9496)
       (local.get $$14)
      )
      ;;@ debugger.c:14:0
@@ -140863,7 +141814,7 @@
      (local.set $$16
       (call $_strcmp
        (local.get $$15)
-       (i32.const 6865)
+       (i32.const 6917)
       )
      )
      (local.set $$17
@@ -140878,7 +141829,7 @@
        ;;@ debugger.c:17:0
        (local.set $$18
         (i32.load8_s
-         (i32.const 9228)
+         (i32.const 9500)
         )
        )
        (local.set $$19
@@ -140906,7 +141857,7 @@
         )
        )
        (i32.store8
-        (i32.const 9228)
+        (i32.const 9500)
         (local.get $$22)
        )
        ;;@ debugger.c:18:0
@@ -140923,7 +141874,7 @@
      (local.set $$24
       (call $_strcmp
        (local.get $$23)
-       (i32.const 6867)
+       (i32.const 6919)
       )
      )
      (local.set $$25
@@ -140938,7 +141889,7 @@
        ;;@ debugger.c:21:0
        (local.set $$26
         (i32.load8_s
-         (i32.const 9232)
+         (i32.const 9504)
         )
        )
        (local.set $$27
@@ -140966,7 +141917,7 @@
         )
        )
        (i32.store8
-        (i32.const 9232)
+        (i32.const 9504)
         (local.get $$30)
        )
        ;;@ debugger.c:22:0
@@ -140983,7 +141934,7 @@
      (local.set $$32
       (call $_strcmp
        (local.get $$31)
-       (i32.const 6869)
+       (i32.const 6921)
       )
      )
      (local.set $$33
@@ -140998,7 +141949,7 @@
        ;;@ debugger.c:25:0
        (local.set $$34
         (i32.load8_s
-         (i32.const 9236)
+         (i32.const 9508)
         )
        )
        (local.set $$35
@@ -141026,7 +141977,7 @@
         )
        )
        (i32.store8
-        (i32.const 9236)
+        (i32.const 9508)
         (local.get $$38)
        )
        ;;@ debugger.c:26:0
@@ -141043,7 +141994,7 @@
      (local.set $$40
       (call $_strcmp
        (local.get $$39)
-       (i32.const 6871)
+       (i32.const 6923)
       )
      )
      (local.set $$41
@@ -141058,7 +142009,7 @@
        ;;@ debugger.c:29:0
        (local.set $$42
         (i32.load8_s
-         (i32.const 9348)
+         (i32.const 9552)
         )
        )
        (local.set $$43
@@ -141086,7 +142037,7 @@
         )
        )
        (i32.store8
-        (i32.const 9348)
+        (i32.const 9552)
         (local.get $$46)
        )
        ;;@ debugger.c:30:0
@@ -141103,7 +142054,7 @@
      (local.set $$48
       (call $_strcmp
        (local.get $$47)
-       (i32.const 6873)
+       (i32.const 6925)
       )
      )
      (local.set $$49
@@ -141118,7 +142069,7 @@
        ;;@ debugger.c:39:0
        (local.set $$50
         (i32.load
-         (i32.const 9240)
+         (i32.const 9512)
         )
        )
        (local.set $$51
@@ -141133,7 +142084,7 @@
          ;;@ debugger.c:40:0
          (local.set $$52
           (i32.load
-           (i32.const 9240)
+           (i32.const 9512)
           )
          )
          (local.set $$53
@@ -141143,13 +142094,13 @@
           )
          )
          (i32.store
-          (i32.const 9240)
+          (i32.const 9512)
           (local.get $$53)
          )
          ;;@ debugger.c:41:0
          (local.set $$54
           (i32.load
-           (i32.const 9276)
+           (i32.const 8688)
           )
          )
          (local.set $$55
@@ -141165,7 +142116,7 @@
          )
          (local.set $$57
           (i32.load
-           (i32.const 9240)
+           (i32.const 9512)
           )
          )
          (local.set $$58
@@ -141183,7 +142134,7 @@
           )
          )
          (i32.store
-          (i32.const 9256)
+          (i32.const 9528)
           (local.get $$59)
          )
         )
@@ -141202,7 +142153,7 @@
      (local.set $$61
       (call $_strcmp
        (local.get $$60)
-       (i32.const 6875)
+       (i32.const 6927)
       )
      )
      (local.set $$62
@@ -141217,12 +142168,12 @@
        ;;@ debugger.c:46:0
        (local.set $$63
         (i32.load
-         (i32.const 9240)
+         (i32.const 9512)
         )
        )
        (local.set $$64
         (i32.load
-         (i32.const 9276)
+         (i32.const 8688)
         )
        )
        (local.set $$65
@@ -141248,7 +142199,7 @@
          ;;@ debugger.c:47:0
          (local.set $$68
           (i32.load
-           (i32.const 9240)
+           (i32.const 9512)
           )
          )
          (local.set $$69
@@ -141258,13 +142209,13 @@
           )
          )
          (i32.store
-          (i32.const 9240)
+          (i32.const 9512)
           (local.get $$69)
          )
          ;;@ debugger.c:48:0
          (local.set $$70
           (i32.load
-           (i32.const 9276)
+           (i32.const 8688)
           )
          )
          (local.set $$71
@@ -141280,7 +142231,7 @@
          )
          (local.set $$73
           (i32.load
-           (i32.const 9240)
+           (i32.const 9512)
           )
          )
          (local.set $$74
@@ -141298,7 +142249,7 @@
           )
          )
          (i32.store
-          (i32.const 9256)
+          (i32.const 9528)
           (local.get $$75)
          )
         )
@@ -141317,7 +142268,7 @@
      (local.set $$77
       (call $_strcmp
        (local.get $$76)
-       (i32.const 6877)
+       (i32.const 6929)
       )
      )
      (local.set $$78
@@ -141345,7 +142296,7 @@
      (local.set $$80
       (call $_strcmp
        (local.get $$79)
-       (i32.const 6879)
+       (i32.const 6931)
       )
      )
      (local.set $$81
@@ -141373,7 +142324,7 @@
      (local.set $$83
       (call $_strcmp
        (local.get $$82)
-       (i32.const 6881)
+       (i32.const 6933)
       )
      )
      (local.set $$84
@@ -141401,7 +142352,7 @@
      (local.set $$86
       (call $_strcmp
        (local.get $$85)
-       (i32.const 6883)
+       (i32.const 6935)
       )
      )
      (local.set $$87
@@ -141429,7 +142380,7 @@
      (local.set $$89
       (call $_strcmp
        (local.get $$88)
-       (i32.const 6885)
+       (i32.const 6937)
       )
      )
      (local.set $$90
@@ -141457,7 +142408,7 @@
      (local.set $$92
       (call $_strcmp
        (local.get $$91)
-       (i32.const 6887)
+       (i32.const 6939)
       )
      )
      (local.set $$93
@@ -141485,7 +142436,7 @@
      (local.set $$95
       (call $_strcmp
        (local.get $$94)
-       (i32.const 6889)
+       (i32.const 6941)
       )
      )
      (local.set $$96
@@ -141513,7 +142464,7 @@
      (local.set $$98
       (call $_strcmp
        (local.get $$97)
-       (i32.const 6891)
+       (i32.const 6943)
       )
      )
      (local.set $$99
@@ -141541,7 +142492,7 @@
      (local.set $$101
       (call $_strcmp
        (local.get $$100)
-       (i32.const 6893)
+       (i32.const 6945)
       )
      )
      (local.set $$102
@@ -141569,7 +142520,7 @@
      (local.set $$104
       (call $_strcmp
        (local.get $$103)
-       (i32.const 6895)
+       (i32.const 6947)
       )
      )
      (local.set $$105
@@ -141597,7 +142548,7 @@
      (local.set $$107
       (call $_strcmp
        (local.get $$106)
-       (i32.const 6897)
+       (i32.const 6949)
       )
      )
      (local.set $$108
@@ -141625,7 +142576,7 @@
      (local.set $$110
       (call $_strcmp
        (local.get $$109)
-       (i32.const 6899)
+       (i32.const 6951)
       )
      )
      (local.set $$111
@@ -141653,7 +142604,7 @@
      (local.set $$113
       (call $_strcmp
        (local.get $$112)
-       (i32.const 6901)
+       (i32.const 6953)
       )
      )
      (local.set $$114
@@ -141681,7 +142632,7 @@
      (local.set $$116
       (call $_strcmp
        (local.get $$115)
-       (i32.const 6903)
+       (i32.const 6955)
       )
      )
      (local.set $$117
@@ -141709,7 +142660,7 @@
      (local.set $$119
       (call $_strcmp
        (local.get $$118)
-       (i32.const 6905)
+       (i32.const 6957)
       )
      )
      (local.set $$120
@@ -141723,7 +142674,7 @@
       (block
        ;;@ debugger.c:109:0
        (i32.store
-        (i32.const 9248)
+        (i32.const 9520)
         (i32.const 0)
        )
        ;;@ debugger.c:110:0
@@ -141740,7 +142691,7 @@
      (local.set $$122
       (call $_strcmp
        (local.get $$121)
-       (i32.const 6907)
+       (i32.const 6959)
       )
      )
      (local.set $$123
@@ -141754,7 +142705,7 @@
       (block
        ;;@ debugger.c:113:0
        (i32.store
-        (i32.const 9248)
+        (i32.const 9520)
         (i32.const 1)
        )
        ;;@ debugger.c:114:0
@@ -141771,7 +142722,7 @@
      (local.set $$125
       (call $_strcmp
        (local.get $$124)
-       (i32.const 6909)
+       (i32.const 6961)
       )
      )
      (local.set $$126
@@ -141785,7 +142736,7 @@
       (block
        ;;@ debugger.c:117:0
        (i32.store
-        (i32.const 9248)
+        (i32.const 9520)
         (i32.const 2)
        )
        ;;@ debugger.c:118:0
@@ -141802,7 +142753,7 @@
      (local.set $$128
       (call $_strcmp
        (local.get $$127)
-       (i32.const 6911)
+       (i32.const 6963)
       )
      )
      (local.set $$129
@@ -141816,7 +142767,7 @@
       (block
        ;;@ debugger.c:121:0
        (i32.store
-        (i32.const 9248)
+        (i32.const 9520)
         (i32.const 3)
        )
        ;;@ debugger.c:122:0
@@ -141833,7 +142784,7 @@
      (local.set $$131
       (call $_strcmp
        (local.get $$130)
-       (i32.const 6913)
+       (i32.const 6965)
       )
      )
      (local.set $$132
@@ -141847,7 +142798,7 @@
       (block
        ;;@ debugger.c:125:0
        (i32.store
-        (i32.const 9248)
+        (i32.const 9520)
         (i32.const 4)
        )
        ;;@ debugger.c:126:0
@@ -141864,7 +142815,7 @@
      (local.set $$134
       (call $_strcmp
        (local.get $$133)
-       (i32.const 6915)
+       (i32.const 6967)
       )
      )
      (local.set $$135
@@ -141878,7 +142829,7 @@
       (block
        ;;@ debugger.c:129:0
        (i32.store
-        (i32.const 9248)
+        (i32.const 9520)
         (i32.const 5)
        )
        ;;@ debugger.c:130:0
@@ -141895,7 +142846,7 @@
      (local.set $$137
       (call $_strcmp
        (local.get $$136)
-       (i32.const 6917)
+       (i32.const 6969)
       )
      )
      (local.set $$138
@@ -141909,7 +142860,7 @@
       (block
        ;;@ debugger.c:133:0
        (i32.store
-        (i32.const 9248)
+        (i32.const 9520)
         (i32.const 6)
        )
        ;;@ debugger.c:134:0
@@ -141926,7 +142877,7 @@
      (local.set $$140
       (call $_strcmp
        (local.get $$139)
-       (i32.const 6919)
+       (i32.const 6971)
       )
      )
      (local.set $$141
@@ -141940,7 +142891,7 @@
       (block
        ;;@ debugger.c:137:0
        (i32.store
-        (i32.const 9248)
+        (i32.const 9520)
         (i32.const 7)
        )
        ;;@ debugger.c:138:0
@@ -141957,7 +142908,7 @@
      (local.set $$143
       (call $_strcmp
        (local.get $$142)
-       (i32.const 6921)
+       (i32.const 6973)
       )
      )
      (local.set $$144
@@ -141971,7 +142922,7 @@
       (block
        ;;@ debugger.c:141:0
        (i32.store
-        (i32.const 9248)
+        (i32.const 9520)
         (i32.const 8)
        )
        ;;@ debugger.c:142:0
@@ -141988,7 +142939,7 @@
      (local.set $$146
       (call $_strcmp
        (local.get $$145)
-       (i32.const 6923)
+       (i32.const 6975)
       )
      )
      (local.set $$147
@@ -142002,7 +142953,7 @@
       (block
        ;;@ debugger.c:145:0
        (i32.store
-        (i32.const 9248)
+        (i32.const 9520)
         (i32.const 9)
        )
        ;;@ debugger.c:146:0
@@ -142019,7 +142970,7 @@
      (local.set $$149
       (call $_strcmp
        (local.get $$148)
-       (i32.const 6925)
+       (i32.const 6977)
       )
      )
      (local.set $$150
@@ -142037,7 +142988,7 @@
      ;;@ debugger.c:150:0
      (local.set $$151
       (i32.load
-       (i32.const 9256)
+       (i32.const 9528)
       )
      )
      (local.set $$152
@@ -142057,14 +143008,14 @@
      )
      (drop
       (call $_printf
-       (i32.const 6927)
+       (i32.const 6979)
        (local.get $$vararg_buffer)
       )
      )
      ;;@ debugger.c:151:0
      (local.set $$154
       (i32.load
-       (i32.const 9256)
+       (i32.const 9528)
       )
      )
      (local.set $$155
@@ -142084,14 +143035,14 @@
      )
      (drop
       (call $_printf
-       (i32.const 6941)
+       (i32.const 6993)
        (local.get $$vararg_buffer1)
       )
      )
      ;;@ debugger.c:152:0
      (local.set $$157
       (i32.load
-       (i32.const 9256)
+       (i32.const 9528)
       )
      )
      (local.set $$158
@@ -142111,14 +143062,14 @@
      )
      (drop
       (call $_printf
-       (i32.const 6955)
+       (i32.const 7007)
        (local.get $$vararg_buffer4)
       )
      )
      ;;@ debugger.c:153:0
      (drop
       (call $_printf
-       (i32.const 6969)
+       (i32.const 7021)
        (local.get $$vararg_buffer7)
       )
      )
@@ -142140,7 +143091,7 @@
    (local.get $$160)
   )
  )
- (func $_move_up_line (; 343 ;)
+ (func $_move_up_line (; 347 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -142203,7 +143154,7 @@
   ;;@ debugger.c:162:0
   (local.set $$4
    (i32.load
-    (i32.const 8548)
+    (i32.const 8596)
    )
   )
   (local.set $$5
@@ -142231,7 +143182,7 @@
   ;;@ debugger.c:164:0
   (local.set $$6
    (i32.load
-    (i32.const 8548)
+    (i32.const 8596)
    )
   )
   (local.set $$7
@@ -142264,7 +143215,7 @@
     ;;@ debugger.c:166:0
     (local.set $$10
      (i32.load
-      (i32.const 8540)
+      (i32.const 8588)
      )
     )
     (local.set $$11
@@ -142381,7 +143332,7 @@
   ;;@ debugger.c:176:0
   (local.set $$25
    (i32.load
-    (i32.const 9244)
+    (i32.const 9516)
    )
   )
   (local.set $$26
@@ -142401,7 +143352,7 @@
      (local.get $$2)
     )
     (i32.store
-     (i32.const 9244)
+     (i32.const 9516)
      (local.get $$28)
     )
    )
@@ -142423,7 +143374,7 @@
   )
   (local.set $$32
    (i32.load
-    (i32.const 9244)
+    (i32.const 9516)
    )
   )
   (local.set $$33
@@ -142448,7 +143399,7 @@
    (local.get $$3)
   )
   (i32.store
-   (i32.const 9256)
+   (i32.const 9528)
    (local.get $$35)
   )
   ;;@ debugger.c:181:0
@@ -142467,7 +143418,7 @@
    )
   )
   (i32.store
-   (i32.const 9240)
+   (i32.const 9512)
    (local.get $$38)
   )
   (global.set $STACKTOP
@@ -142476,7 +143427,7 @@
   ;;@ debugger.c:183:0
   (return)
  )
- (func $_move_down_line (; 344 ;)
+ (func $_move_down_line (; 348 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -142545,7 +143496,7 @@
   ;;@ debugger.c:185:0
   (local.set $$5
    (i32.load
-    (i32.const 8544)
+    (i32.const 8592)
    )
   )
   (local.set $$6
@@ -142560,7 +143511,7 @@
   ;;@ debugger.c:186:0
   (local.set $$7
    (i32.load
-    (i32.const 8548)
+    (i32.const 8596)
    )
   )
   (local.set $$8
@@ -142591,7 +143542,7 @@
   ;;@ debugger.c:188:0
   (local.set $$10
    (i32.load
-    (i32.const 8548)
+    (i32.const 8596)
    )
   )
   (local.set $$11
@@ -142627,7 +143578,7 @@
     ;;@ debugger.c:190:0
     (local.set $$15
      (i32.load
-      (i32.const 8540)
+      (i32.const 8588)
      )
     )
     (local.set $$16
@@ -142747,7 +143698,7 @@
   ;;@ debugger.c:200:0
   (local.set $$31
    (i32.load
-    (i32.const 9244)
+    (i32.const 9516)
    )
   )
   (local.set $$32
@@ -142767,7 +143718,7 @@
      (local.get $$3)
     )
     (i32.store
-     (i32.const 9244)
+     (i32.const 9516)
      (local.get $$34)
     )
    )
@@ -142789,7 +143740,7 @@
   )
   (local.set $$38
    (i32.load
-    (i32.const 9244)
+    (i32.const 9516)
    )
   )
   (local.set $$39
@@ -142814,7 +143765,7 @@
    (local.get $$4)
   )
   (i32.store
-   (i32.const 9256)
+   (i32.const 9528)
    (local.get $$41)
   )
   ;;@ debugger.c:205:0
@@ -142833,7 +143784,7 @@
    )
   )
   (i32.store
-   (i32.const 9240)
+   (i32.const 9512)
    (local.get $$44)
   )
   (global.set $STACKTOP
@@ -142842,7 +143793,7 @@
   ;;@ debugger.c:207:0
   (return)
  )
- (func $_move_left_line (; 345 ;)
+ (func $_move_left_line (; 349 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -142887,7 +143838,7 @@
   ;;@ debugger.c:209:0
   (local.set $$2
    (i32.load
-    (i32.const 8540)
+    (i32.const 8588)
    )
   )
   (local.set $$3
@@ -142903,7 +143854,7 @@
   )
   (local.set $$5
    (i32.load
-    (i32.const 8548)
+    (i32.const 8596)
    )
   )
   (local.set $$6
@@ -142921,7 +143872,7 @@
   ;;@ debugger.c:210:0
   (local.set $$7
    (i32.load
-    (i32.const 9244)
+    (i32.const 9516)
    )
   )
   (local.set $$8
@@ -142945,7 +143896,7 @@
   ;;@ debugger.c:211:0
   (local.set $$9
    (i32.load
-    (i32.const 9244)
+    (i32.const 9516)
    )
   )
   (local.set $$10
@@ -142955,7 +143906,7 @@
    )
   )
   (i32.store
-   (i32.const 9244)
+   (i32.const 9516)
    (local.get $$10)
   )
   ;;@ debugger.c:212:0
@@ -142975,7 +143926,7 @@
   )
   (local.set $$14
    (i32.load
-    (i32.const 9244)
+    (i32.const 9516)
    )
   )
   (local.set $$15
@@ -143000,7 +143951,7 @@
    (local.get $$1)
   )
   (i32.store
-   (i32.const 9256)
+   (i32.const 9528)
    (local.get $$17)
   )
   ;;@ debugger.c:214:0
@@ -143019,7 +143970,7 @@
    )
   )
   (i32.store
-   (i32.const 9240)
+   (i32.const 9512)
    (local.get $$20)
   )
   (global.set $STACKTOP
@@ -143028,7 +143979,7 @@
   ;;@ debugger.c:216:0
   (return)
  )
- (func $_move_right_line (; 346 ;)
+ (func $_move_right_line (; 350 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -143076,7 +144027,7 @@
   ;;@ debugger.c:218:0
   (local.set $$2
    (i32.load
-    (i32.const 8540)
+    (i32.const 8588)
    )
   )
   (local.set $$3
@@ -143092,7 +144043,7 @@
   )
   (local.set $$5
    (i32.load
-    (i32.const 8548)
+    (i32.const 8596)
    )
   )
   (local.set $$6
@@ -143110,7 +144061,7 @@
   ;;@ debugger.c:219:0
   (local.set $$7
    (i32.load
-    (i32.const 9244)
+    (i32.const 9516)
    )
   )
   (local.set $$8
@@ -143148,7 +144099,7 @@
   ;;@ debugger.c:220:0
   (local.set $$12
    (i32.load
-    (i32.const 9244)
+    (i32.const 9516)
    )
   )
   (local.set $$13
@@ -143158,7 +144109,7 @@
    )
   )
   (i32.store
-   (i32.const 9244)
+   (i32.const 9516)
    (local.get $$13)
   )
   ;;@ debugger.c:221:0
@@ -143178,7 +144129,7 @@
   )
   (local.set $$17
    (i32.load
-    (i32.const 9244)
+    (i32.const 9516)
    )
   )
   (local.set $$18
@@ -143203,7 +144154,7 @@
    (local.get $$1)
   )
   (i32.store
-   (i32.const 9256)
+   (i32.const 9528)
    (local.get $$20)
   )
   ;;@ debugger.c:223:0
@@ -143222,7 +144173,7 @@
    )
   )
   (i32.store
-   (i32.const 9240)
+   (i32.const 9512)
    (local.get $$23)
   )
   (global.set $STACKTOP
@@ -143231,7 +144182,7 @@
   ;;@ debugger.c:225:0
   (return)
  )
- (func $_prev_clone (; 347 ;)
+ (func $_prev_clone (; 351 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -143277,7 +144228,7 @@
   ;;@ debugger.c:228:0
   (local.set $$4
    (i32.load
-    (i32.const 9256)
+    (i32.const 9528)
    )
   )
   (local.set $$5
@@ -143302,7 +144253,7 @@
   ;;@ debugger.c:229:0
   (local.set $$8
    (i32.load
-    (i32.const 9240)
+    (i32.const 9512)
    )
   )
   (local.set $$1
@@ -143327,7 +144278,7 @@
   ;;@ debugger.c:231:0
   (local.set $$12
    (i32.load
-    (i32.const 9276)
+    (i32.const 8688)
    )
   )
   (local.set $$13
@@ -143366,7 +144317,7 @@
    (local.get $$3)
   )
   (i32.store
-   (i32.const 9256)
+   (i32.const 9528)
    (local.get $$18)
   )
   ;;@ debugger.c:233:0
@@ -143385,7 +144336,7 @@
    )
   )
   (i32.store
-   (i32.const 9240)
+   (i32.const 9512)
    (local.get $$21)
   )
   (global.set $STACKTOP
@@ -143394,7 +144345,7 @@
   ;;@ debugger.c:234:0
   (return)
  )
- (func $_next_clone (; 348 ;)
+ (func $_next_clone (; 352 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -143440,7 +144391,7 @@
   ;;@ debugger.c:236:0
   (local.set $$4
    (i32.load
-    (i32.const 9256)
+    (i32.const 9528)
    )
   )
   (local.set $$5
@@ -143465,7 +144416,7 @@
   ;;@ debugger.c:237:0
   (local.set $$8
    (i32.load
-    (i32.const 9240)
+    (i32.const 9512)
    )
   )
   (local.set $$1
@@ -143490,7 +144441,7 @@
   ;;@ debugger.c:239:0
   (local.set $$12
    (i32.load
-    (i32.const 9276)
+    (i32.const 8688)
    )
   )
   (local.set $$13
@@ -143529,7 +144480,7 @@
    (local.get $$3)
   )
   (i32.store
-   (i32.const 9256)
+   (i32.const 9528)
    (local.get $$18)
   )
   ;;@ debugger.c:241:0
@@ -143548,7 +144499,7 @@
    )
   )
   (i32.store
-   (i32.const 9240)
+   (i32.const 9512)
    (local.get $$21)
   )
   (global.set $STACKTOP
@@ -143557,7 +144508,7 @@
   ;;@ debugger.c:242:0
   (return)
  )
- (func $_prev_use (; 349 ;)
+ (func $_prev_use (; 353 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -143613,7 +144564,7 @@
   ;;@ debugger.c:245:0
   (local.set $$4
    (i32.load
-    (i32.const 9256)
+    (i32.const 9528)
    )
   )
   (local.set $$5
@@ -143646,7 +144597,7 @@
   ;;@ debugger.c:248:0
   (local.set $$8
    (i32.load
-    (i32.const 9256)
+    (i32.const 9528)
    )
   )
   (local.set $$9
@@ -143684,7 +144635,7 @@
     ;;@ debugger.c:250:0
     (drop
      (call $_printf
-      (i32.const 7239)
+      (i32.const 7291)
       (local.get $$vararg_buffer)
      )
     )
@@ -143698,7 +144649,7 @@
     ;;@ debugger.c:253:0
     (local.set $$14
      (i32.load
-      (i32.const 9240)
+      (i32.const 9512)
      )
     )
     (local.set $$1
@@ -143723,7 +144674,7 @@
     ;;@ debugger.c:255:0
     (local.set $$18
      (i32.load
-      (i32.const 9276)
+      (i32.const 8688)
      )
     )
     (local.set $$19
@@ -143762,7 +144713,7 @@
      (local.get $$3)
     )
     (i32.store
-     (i32.const 9256)
+     (i32.const 9528)
      (local.get $$24)
     )
     ;;@ debugger.c:257:0
@@ -143781,7 +144732,7 @@
      )
     )
     (i32.store
-     (i32.const 9240)
+     (i32.const 9512)
      (local.get $$27)
     )
     (global.set $STACKTOP
@@ -143792,7 +144743,7 @@
    )
   )
  )
- (func $_next_use (; 350 ;)
+ (func $_next_use (; 354 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -143848,7 +144799,7 @@
   ;;@ debugger.c:260:0
   (local.set $$4
    (i32.load
-    (i32.const 9256)
+    (i32.const 9528)
    )
   )
   (local.set $$5
@@ -143881,7 +144832,7 @@
   ;;@ debugger.c:263:0
   (local.set $$8
    (i32.load
-    (i32.const 9256)
+    (i32.const 9528)
    )
   )
   (local.set $$9
@@ -143919,7 +144870,7 @@
     ;;@ debugger.c:265:0
     (drop
      (call $_printf
-      (i32.const 7239)
+      (i32.const 7291)
       (local.get $$vararg_buffer)
      )
     )
@@ -143933,7 +144884,7 @@
     ;;@ debugger.c:268:0
     (local.set $$14
      (i32.load
-      (i32.const 9240)
+      (i32.const 9512)
      )
     )
     (local.set $$1
@@ -143958,7 +144909,7 @@
     ;;@ debugger.c:270:0
     (local.set $$18
      (i32.load
-      (i32.const 9276)
+      (i32.const 8688)
      )
     )
     (local.set $$19
@@ -143997,7 +144948,7 @@
      (local.get $$3)
     )
     (i32.store
-     (i32.const 9256)
+     (i32.const 9528)
      (local.get $$24)
     )
     ;;@ debugger.c:272:0
@@ -144016,7 +144967,7 @@
      )
     )
     (i32.store
-     (i32.const 9240)
+     (i32.const 9512)
      (local.get $$27)
     )
     (global.set $STACKTOP
@@ -144027,7 +144978,7 @@
    )
   )
  )
- (func $_prev_change (; 351 ;)
+ (func $_prev_change (; 355 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -144083,7 +145034,7 @@
   ;;@ debugger.c:276:0
   (local.set $$4
    (i32.load
-    (i32.const 9256)
+    (i32.const 9528)
    )
   )
   (local.set $$5
@@ -144116,7 +145067,7 @@
   ;;@ debugger.c:279:0
   (local.set $$8
    (i32.load
-    (i32.const 9256)
+    (i32.const 9528)
    )
   )
   (local.set $$9
@@ -144154,7 +145105,7 @@
     ;;@ debugger.c:281:0
     (drop
      (call $_printf
-      (i32.const 7212)
+      (i32.const 7264)
       (local.get $$vararg_buffer)
      )
     )
@@ -144168,7 +145119,7 @@
     ;;@ debugger.c:284:0
     (local.set $$14
      (i32.load
-      (i32.const 9240)
+      (i32.const 9512)
      )
     )
     (local.set $$1
@@ -144193,7 +145144,7 @@
     ;;@ debugger.c:286:0
     (local.set $$18
      (i32.load
-      (i32.const 9276)
+      (i32.const 8688)
      )
     )
     (local.set $$19
@@ -144232,7 +145183,7 @@
      (local.get $$3)
     )
     (i32.store
-     (i32.const 9256)
+     (i32.const 9528)
      (local.get $$24)
     )
     ;;@ debugger.c:288:0
@@ -144251,7 +145202,7 @@
      )
     )
     (i32.store
-     (i32.const 9240)
+     (i32.const 9512)
      (local.get $$27)
     )
     (global.set $STACKTOP
@@ -144262,7 +145213,7 @@
    )
   )
  )
- (func $_next_change (; 352 ;)
+ (func $_next_change (; 356 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -144318,7 +145269,7 @@
   ;;@ debugger.c:291:0
   (local.set $$4
    (i32.load
-    (i32.const 9256)
+    (i32.const 9528)
    )
   )
   (local.set $$5
@@ -144351,7 +145302,7 @@
   ;;@ debugger.c:294:0
   (local.set $$8
    (i32.load
-    (i32.const 9256)
+    (i32.const 9528)
    )
   )
   (local.set $$9
@@ -144389,7 +145340,7 @@
     ;;@ debugger.c:296:0
     (drop
      (call $_printf
-      (i32.const 7212)
+      (i32.const 7264)
       (local.get $$vararg_buffer)
      )
     )
@@ -144403,7 +145354,7 @@
     ;;@ debugger.c:299:0
     (local.set $$14
      (i32.load
-      (i32.const 9240)
+      (i32.const 9512)
      )
     )
     (local.set $$1
@@ -144428,7 +145379,7 @@
     ;;@ debugger.c:301:0
     (local.set $$18
      (i32.load
-      (i32.const 9276)
+      (i32.const 8688)
      )
     )
     (local.set $$19
@@ -144467,7 +145418,7 @@
      (local.get $$3)
     )
     (i32.store
-     (i32.const 9256)
+     (i32.const 9528)
      (local.get $$24)
     )
     ;;@ debugger.c:303:0
@@ -144486,7 +145437,7 @@
      )
     )
     (i32.store
-     (i32.const 9240)
+     (i32.const 9512)
      (local.get $$27)
     )
     (global.set $STACKTOP
@@ -144497,7 +145448,7 @@
    )
   )
  )
- (func $_add_flowpoint (; 353 ;)
+ (func $_add_flowpoint (; 357 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -144559,12 +145510,12 @@
   ;;@ debugger.c:307:0
   (local.set $$3
    (i32.load
-    (i32.const 9248)
+    (i32.const 9520)
    )
   )
   (local.set $$4
    (i32.load
-    (i32.const 9252)
+    (i32.const 9524)
    )
   )
   (local.set $$5
@@ -144584,7 +145535,7 @@
     ;;@ debugger.c:308:0
     (drop
      (call $_printf
-      (i32.const 7156)
+      (i32.const 7208)
       (local.get $$vararg_buffer)
      )
     )
@@ -144598,7 +145549,7 @@
   ;;@ debugger.c:311:0
   (local.set $$7
    (i32.load
-    (i32.const 9252)
+    (i32.const 9524)
    )
   )
   (local.set $$8
@@ -144614,7 +145565,7 @@
   )
   (local.set $$10
    (i32.load
-    (i32.const 9248)
+    (i32.const 9520)
    )
   )
   (local.set $$11
@@ -144632,7 +145583,7 @@
   ;;@ debugger.c:312:0
   (local.set $$12
    (i32.load
-    (i32.const 9240)
+    (i32.const 9512)
    )
   )
   (i32.store
@@ -144647,7 +145598,7 @@
    (call $_find_next_index
     (local.get $$13)
     (local.get $$1)
-    (i32.const 20)
+    (i32.const 25)
    )
   )
   (local.set $$2
@@ -144752,7 +145703,7 @@
   ;;@ debugger.c:322:0
   (return)
  )
- (func $_remove_flowpoint (; 354 ;)
+ (func $_remove_flowpoint (; 358 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -144807,12 +145758,12 @@
   ;;@ debugger.c:324:0
   (local.set $$3
    (i32.load
-    (i32.const 9248)
+    (i32.const 9520)
    )
   )
   (local.set $$4
    (i32.load
-    (i32.const 9252)
+    (i32.const 9524)
    )
   )
   (local.set $$5
@@ -144832,7 +145783,7 @@
     ;;@ debugger.c:325:0
     (drop
      (call $_printf
-      (i32.const 7097)
+      (i32.const 7149)
       (local.get $$vararg_buffer)
      )
     )
@@ -144846,7 +145797,7 @@
   ;;@ debugger.c:328:0
   (local.set $$7
    (i32.load
-    (i32.const 9252)
+    (i32.const 9524)
    )
   )
   (local.set $$8
@@ -144862,7 +145813,7 @@
   )
   (local.set $$10
    (i32.load
-    (i32.const 9248)
+    (i32.const 9520)
    )
   )
   (local.set $$11
@@ -144880,7 +145831,7 @@
   ;;@ debugger.c:329:0
   (local.set $$12
    (i32.load
-    (i32.const 9240)
+    (i32.const 9512)
    )
   )
   (i32.store
@@ -144952,7 +145903,7 @@
   ;;@ debugger.c:334:0
   (return)
  )
- (func $_prev_flowpoint (; 355 ;)
+ (func $_prev_flowpoint (; 359 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -145007,12 +145958,12 @@
   ;;@ debugger.c:337:0
   (local.set $$5
    (i32.load
-    (i32.const 9248)
+    (i32.const 9520)
    )
   )
   (local.set $$6
    (i32.load
-    (i32.const 9252)
+    (i32.const 9524)
    )
   )
   (local.set $$7
@@ -145032,7 +145983,7 @@
     ;;@ debugger.c:338:0
     (drop
      (call $_printf
-      (i32.const 7034)
+      (i32.const 7086)
       (local.get $$vararg_buffer)
      )
     )
@@ -145046,7 +145997,7 @@
     ;;@ debugger.c:341:0
     (local.set $$9
      (i32.load
-      (i32.const 9252)
+      (i32.const 9524)
      )
     )
     (local.set $$10
@@ -145062,7 +146013,7 @@
     )
     (local.set $$12
      (i32.load
-      (i32.const 9248)
+      (i32.const 9520)
      )
     )
     (local.set $$13
@@ -145080,7 +146031,7 @@
     ;;@ debugger.c:342:0
     (local.set $$14
      (i32.load
-      (i32.const 9240)
+      (i32.const 9512)
      )
     )
     (local.set $$1
@@ -145112,7 +146063,7 @@
     ;;@ debugger.c:346:0
     (local.set $$19
      (i32.load
-      (i32.const 9276)
+      (i32.const 8688)
      )
     )
     (local.set $$20
@@ -145151,7 +146102,7 @@
      (local.get $$4)
     )
     (i32.store
-     (i32.const 9256)
+     (i32.const 9528)
      (local.get $$25)
     )
     ;;@ debugger.c:348:0
@@ -145159,7 +146110,7 @@
      (local.get $$2)
     )
     (i32.store
-     (i32.const 9240)
+     (i32.const 9512)
      (local.get $$26)
     )
     (global.set $STACKTOP
@@ -145170,7 +146121,7 @@
    )
   )
  )
- (func $_next_flowpoint (; 356 ;)
+ (func $_next_flowpoint (; 360 ;)
   (local $$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -145223,12 +146174,12 @@
   ;;@ debugger.c:351:0
   (local.set $$4
    (i32.load
-    (i32.const 9248)
+    (i32.const 9520)
    )
   )
   (local.set $$5
    (i32.load
-    (i32.const 9252)
+    (i32.const 9524)
    )
   )
   (local.set $$6
@@ -145248,7 +146199,7 @@
     ;;@ debugger.c:352:0
     (drop
      (call $_printf
-      (i32.const 6971)
+      (i32.const 7023)
       (local.get $$vararg_buffer)
      )
     )
@@ -145262,7 +146213,7 @@
     ;;@ debugger.c:355:0
     (local.set $$8
      (i32.load
-      (i32.const 9252)
+      (i32.const 9524)
      )
     )
     (local.set $$9
@@ -145278,7 +146229,7 @@
     )
     (local.set $$11
      (i32.load
-      (i32.const 9248)
+      (i32.const 9520)
      )
     )
     (local.set $$12
@@ -145296,7 +146247,7 @@
     ;;@ debugger.c:356:0
     (local.set $$13
      (i32.load
-      (i32.const 9240)
+      (i32.const 9512)
      )
     )
     (local.set $$1
@@ -145321,7 +146272,7 @@
     ;;@ debugger.c:358:0
     (local.set $$17
      (i32.load
-      (i32.const 9276)
+      (i32.const 8688)
      )
     )
     (local.set $$18
@@ -145360,7 +146311,7 @@
      (local.get $$3)
     )
     (i32.store
-     (i32.const 9256)
+     (i32.const 9528)
      (local.get $$23)
     )
     ;;@ debugger.c:360:0
@@ -145368,7 +146319,7 @@
      (local.get $$2)
     )
     (i32.store
-     (i32.const 9240)
+     (i32.const 9512)
      (local.get $$24)
     )
     (global.set $STACKTOP
@@ -145379,7 +146330,7 @@
    )
   )
  )
- (func $_find_next_elem_in_indices_array (; 357 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_find_next_elem_in_indices_array (; 361 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -145439,7 +146390,7 @@
    (call $_find_next_index
     (local.get $$6)
     (local.get $$4)
-    (i32.const 20)
+    (i32.const 25)
    )
   )
   (local.set $$5
@@ -145535,7 +146486,7 @@
    )
   )
  )
- (func $_compare_indices (; 358 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_compare_indices (; 362 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -145667,7 +146618,7 @@
    (local.get $$17)
   )
  )
- (func $_find_prev_elem_in_indices_array (; 359 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_find_prev_elem_in_indices_array (; 363 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -145727,7 +146678,7 @@
    (call $_find_prev_index
     (local.get $$6)
     (local.get $$4)
-    (i32.const 20)
+    (i32.const 25)
    )
   )
   (local.set $$5
@@ -145823,7 +146774,7 @@
    )
   )
  )
- (func $_main (; 360 ;) (result i32)
+ (func $_main (; 364 ;) (result i32)
   (local $$0 i32)
   (local $label i32)
   (local $sp i32)
@@ -145851,12 +146802,12 @@
   (global.set $STACKTOP
    (local.get $sp)
   )
-  ;;@ debugger.c:460:0
+  ;;@ debugger.c:465:0
   (return
    (i32.const 0)
   )
  )
- (func $_malloc (; 361 ;) (param $$0 i32) (result i32)
+ (func $_malloc (; 365 ;) (param $$0 i32) (result i32)
   (local $$$0 i32)
   (local $$$0$i$i i32)
   (local $$$0$i$i$i i32)
@@ -147110,7 +148061,7 @@
      )
      (local.set $$8
       (i32.load
-       (i32.const 8648)
+       (i32.const 8920)
       )
      )
      (local.set $$9
@@ -147162,7 +148113,7 @@
        )
        (local.set $$16
         (i32.add
-         (i32.const 8688)
+         (i32.const 8960)
          (i32.shl
           (local.get $$15)
           (i32.const 2)
@@ -147220,14 +148171,14 @@
            )
           )
           (i32.store
-           (i32.const 8648)
+           (i32.const 8920)
            (local.get $$24)
           )
          )
          (block
           (local.set $$25
            (i32.load
-            (i32.const 8664)
+            (i32.const 8936)
            )
           )
           (local.set $$26
@@ -147337,7 +148288,7 @@
      )
      (local.set $$37
       (i32.load
-       (i32.const 8656)
+       (i32.const 8928)
       )
      )
      (local.set $$38
@@ -147536,7 +148487,7 @@
          )
          (local.set $$69
           (i32.add
-           (i32.const 8688)
+           (i32.const 8960)
            (i32.shl
             (local.get $$68)
             (i32.const 2)
@@ -147594,7 +148545,7 @@
              )
             )
             (i32.store
-             (i32.const 8648)
+             (i32.const 8920)
              (local.get $$77)
             )
             (local.set $$98
@@ -147604,7 +148555,7 @@
            (block
             (local.set $$78
              (i32.load
-              (i32.const 8664)
+              (i32.const 8936)
              )
             )
             (local.set $$79
@@ -147728,7 +148679,7 @@
           (block
            (local.set $$92
             (i32.load
-             (i32.const 8668)
+             (i32.const 8940)
             )
            )
            (local.set $$93
@@ -147745,7 +148696,7 @@
            )
            (local.set $$95
             (i32.add
-             (i32.const 8688)
+             (i32.const 8960)
              (i32.shl
               (local.get $$94)
               (i32.const 2)
@@ -147780,7 +148731,7 @@
               )
              )
              (i32.store
-              (i32.const 8648)
+              (i32.const 8920)
               (local.get $$100)
              )
              (local.set $$$pre
@@ -147810,7 +148761,7 @@
              )
              (local.set $$103
               (i32.load
-               (i32.const 8664)
+               (i32.const 8936)
               )
              )
              (local.set $$104
@@ -147870,11 +148821,11 @@
           )
          )
          (i32.store
-          (i32.const 8656)
+          (i32.const 8928)
           (local.get $$84)
          )
          (i32.store
-          (i32.const 8668)
+          (i32.const 8940)
           (local.get $$87)
          )
          (local.set $$$0
@@ -147890,7 +148841,7 @@
        )
        (local.set $$108
         (i32.load
-         (i32.const 8652)
+         (i32.const 8924)
         )
        )
        (local.set $$109
@@ -148045,7 +148996,7 @@
          )
          (local.set $$133
           (i32.add
-           (i32.const 8952)
+           (i32.const 9224)
            (i32.shl
             (local.get $$132)
             (i32.const 2)
@@ -148197,7 +149148,7 @@
          )
          (local.set $$151
           (i32.load
-           (i32.const 8664)
+           (i32.const 8936)
           )
          )
          (local.set $$152
@@ -148529,7 +149480,7 @@
             )
             (local.set $$185
              (i32.add
-              (i32.const 8952)
+              (i32.const 9224)
               (i32.shl
                (local.get $$184)
                (i32.const 2)
@@ -148583,7 +149534,7 @@
                   )
                  )
                  (i32.store
-                  (i32.const 8652)
+                  (i32.const 8924)
                   (local.get $$190)
                  )
                  (br $label$break$L78)
@@ -148593,7 +149544,7 @@
               (block
                (local.set $$191
                 (i32.load
-                 (i32.const 8664)
+                 (i32.const 8936)
                 )
                )
                (local.set $$192
@@ -148658,7 +149609,7 @@
             )
             (local.set $$198
              (i32.load
-              (i32.const 8664)
+              (i32.const 8936)
              )
             )
             (local.set $$199
@@ -148764,7 +149715,7 @@
              (block
               (local.set $$210
                (i32.load
-                (i32.const 8664)
+                (i32.const 8936)
                )
               )
               (local.set $$211
@@ -148920,7 +149871,7 @@
             (block
              (local.set $$228
               (i32.load
-               (i32.const 8668)
+               (i32.const 8940)
               )
              )
              (local.set $$229
@@ -148937,7 +149888,7 @@
              )
              (local.set $$231
               (i32.add
-               (i32.const 8688)
+               (i32.const 8960)
                (i32.shl
                 (local.get $$230)
                 (i32.const 2)
@@ -148972,7 +149923,7 @@
                 )
                )
                (i32.store
-                (i32.const 8648)
+                (i32.const 8920)
                 (local.get $$235)
                )
                (local.set $$$pre$i
@@ -149002,7 +149953,7 @@
                )
                (local.set $$238
                 (i32.load
-                 (i32.const 8664)
+                 (i32.const 8936)
                 )
                )
                (local.set $$239
@@ -149062,11 +150013,11 @@
             )
            )
            (i32.store
-            (i32.const 8656)
+            (i32.const 8928)
             (local.get $$$0191$i)
            )
            (i32.store
-            (i32.const 8668)
+            (i32.const 8940)
             (local.get $$153)
            )
           )
@@ -149121,7 +150072,7 @@
        )
        (local.set $$247
         (i32.load
-         (i32.const 8652)
+         (i32.const 8924)
         )
        )
        (local.set $$248
@@ -149313,7 +150264,7 @@
          )
          (local.set $$275
           (i32.add
-           (i32.const 8952)
+           (i32.const 9224)
            (i32.shl
             (local.get $$$0357$i)
             (i32.const 2)
@@ -149789,7 +150740,7 @@
              )
              (local.set $$327
               (i32.add
-               (i32.const 8952)
+               (i32.const 9224)
                (i32.shl
                 (local.get $$326)
                 (i32.const 2)
@@ -149997,7 +150948,7 @@
           (block
            (local.set $$343
             (i32.load
-             (i32.const 8656)
+             (i32.const 8928)
             )
            )
            (local.set $$344
@@ -150017,7 +150968,7 @@
             (block
              (local.set $$346
               (i32.load
-               (i32.const 8664)
+               (i32.const 8936)
               )
              )
              (local.set $$347
@@ -150350,7 +151301,7 @@
                 )
                 (local.set $$380
                  (i32.add
-                  (i32.const 8952)
+                  (i32.const 9224)
                   (i32.shl
                    (local.get $$379)
                    (i32.const 2)
@@ -150404,7 +151355,7 @@
                       )
                      )
                      (i32.store
-                      (i32.const 8652)
+                      (i32.const 8924)
                       (local.get $$385)
                      )
                      (local.set $$469
@@ -150417,7 +151368,7 @@
                   (block
                    (local.set $$386
                     (i32.load
-                     (i32.const 8664)
+                     (i32.const 8936)
                     )
                    )
                    (local.set $$387
@@ -150487,7 +151438,7 @@
                 )
                 (local.set $$393
                  (i32.load
-                  (i32.const 8664)
+                  (i32.const 8936)
                  )
                 )
                 (local.set $$394
@@ -150594,7 +151545,7 @@
                  (block
                   (local.set $$405
                    (i32.load
-                    (i32.const 8664)
+                    (i32.const 8936)
                    )
                   )
                   (local.set $$406
@@ -150764,7 +151715,7 @@
                   )
                   (local.set $$425
                    (i32.add
-                    (i32.const 8688)
+                    (i32.const 8960)
                     (i32.shl
                      (local.get $$424)
                      (i32.const 2)
@@ -150773,7 +151724,7 @@
                   )
                   (local.set $$426
                    (i32.load
-                    (i32.const 8648)
+                    (i32.const 8920)
                    )
                   )
                   (local.set $$427
@@ -150804,7 +151755,7 @@
                      )
                     )
                     (i32.store
-                     (i32.const 8648)
+                     (i32.const 8920)
                      (local.get $$430)
                     )
                     (local.set $$$pre$i208
@@ -150834,7 +151785,7 @@
                     )
                     (local.set $$433
                      (i32.load
-                      (i32.const 8664)
+                      (i32.const 8936)
                      )
                     )
                     (local.set $$434
@@ -151065,7 +152016,7 @@
                 )
                 (local.set $$463
                  (i32.add
-                  (i32.const 8952)
+                  (i32.const 9224)
                   (i32.shl
                    (local.get $$$0360$i)
                    (i32.const 2)
@@ -151130,7 +152081,7 @@
                    )
                   )
                   (i32.store
-                   (i32.const 8652)
+                   (i32.const 8924)
                    (local.get $$471)
                   )
                   (i32.store
@@ -151328,7 +152279,7 @@
                    )
                    (local.set $$494
                     (i32.load
-                     (i32.const 8664)
+                     (i32.const 8936)
                     )
                    )
                    (local.set $$495
@@ -151394,7 +152345,7 @@
                 )
                 (local.set $$501
                  (i32.load
-                  (i32.const 8664)
+                  (i32.const 8936)
                  )
                 )
                 (local.set $$502
@@ -151500,7 +152451,7 @@
   )
   (local.set $$510
    (i32.load
-    (i32.const 8656)
+    (i32.const 8928)
    )
   )
   (local.set $$511
@@ -151522,7 +152473,7 @@
     )
     (local.set $$513
      (i32.load
-      (i32.const 8668)
+      (i32.const 8940)
      )
     )
     (local.set $$514
@@ -151541,11 +152492,11 @@
        )
       )
       (i32.store
-       (i32.const 8668)
+       (i32.const 8940)
        (local.get $$515)
       )
       (i32.store
-       (i32.const 8656)
+       (i32.const 8928)
        (local.get $$512)
       )
       (local.set $$516
@@ -151593,11 +152544,11 @@
      )
      (block
       (i32.store
-       (i32.const 8656)
+       (i32.const 8928)
        (i32.const 0)
       )
       (i32.store
-       (i32.const 8668)
+       (i32.const 8940)
        (i32.const 0)
       )
       (local.set $$521
@@ -151664,7 +152615,7 @@
   )
   (local.set $$528
    (i32.load
-    (i32.const 8660)
+    (i32.const 8932)
    )
   )
   (local.set $$529
@@ -151683,12 +152634,12 @@
      )
     )
     (i32.store
-     (i32.const 8660)
+     (i32.const 8932)
      (local.get $$530)
     )
     (local.set $$531
      (i32.load
-      (i32.const 8672)
+      (i32.const 8944)
      )
     )
     (local.set $$532
@@ -151698,7 +152649,7 @@
      )
     )
     (i32.store
-     (i32.const 8672)
+     (i32.const 8944)
      (local.get $$532)
     )
     (local.set $$533
@@ -151752,7 +152703,7 @@
   )
   (local.set $$538
    (i32.load
-    (i32.const 9120)
+    (i32.const 9392)
    )
   )
   (local.set $$539
@@ -151765,27 +152716,27 @@
    (local.get $$539)
    (block
     (i32.store
-     (i32.const 9128)
+     (i32.const 9400)
      (i32.const 4096)
     )
     (i32.store
-     (i32.const 9124)
+     (i32.const 9396)
      (i32.const 4096)
     )
     (i32.store
-     (i32.const 9132)
+     (i32.const 9404)
      (i32.const -1)
     )
     (i32.store
-     (i32.const 9136)
+     (i32.const 9408)
      (i32.const -1)
     )
     (i32.store
-     (i32.const 9140)
+     (i32.const 9412)
      (i32.const 0)
     )
     (i32.store
-     (i32.const 9092)
+     (i32.const 9364)
      (i32.const 0)
     )
     (local.set $$540
@@ -151804,7 +152755,7 @@
      )
     )
     (i32.store
-     (i32.const 9120)
+     (i32.const 9392)
      (local.get $$542)
     )
     (local.set $$546
@@ -151814,7 +152765,7 @@
    (block
     (local.set $$$pre$i210
      (i32.load
-      (i32.const 9128)
+      (i32.const 9400)
      )
     )
     (local.set $$546
@@ -151876,7 +152827,7 @@
   )
   (local.set $$550
    (i32.load
-    (i32.const 9088)
+    (i32.const 9360)
    )
   )
   (local.set $$551
@@ -151892,7 +152843,7 @@
    (block
     (local.set $$552
      (i32.load
-      (i32.const 9080)
+      (i32.const 9352)
      )
     )
     (local.set $$553
@@ -151937,7 +152888,7 @@
   )
   (local.set $$556
    (i32.load
-    (i32.const 9092)
+    (i32.const 9364)
    )
   )
   (local.set $$557
@@ -151958,7 +152909,7 @@
     (block
      (local.set $$559
       (i32.load
-       (i32.const 8672)
+       (i32.const 8944)
       )
      )
      (local.set $$560
@@ -151975,7 +152926,7 @@
        )
        (block
         (local.set $$$0$i$i
-         (i32.const 9096)
+         (i32.const 9368)
         )
         (loop $while-in34
          (block $while-out33
@@ -152187,7 +153138,7 @@
           )
           (local.set $$573
            (i32.load
-            (i32.const 9124)
+            (i32.const 9396)
            )
           )
           (local.set $$574
@@ -152247,7 +153198,7 @@
           )
           (local.set $$582
            (i32.load
-            (i32.const 9080)
+            (i32.const 9352)
            )
           )
           (local.set $$583
@@ -152279,7 +153230,7 @@
            (block
             (local.set $$586
              (i32.load
-              (i32.const 9088)
+              (i32.const 9360)
              )
             )
             (local.set $$587
@@ -152448,7 +153399,7 @@
         )
         (local.set $$606
          (i32.load
-          (i32.const 9128)
+          (i32.const 9400)
          )
         )
         (local.set $$607
@@ -152546,7 +153497,7 @@
      )
      (local.set $$616
       (i32.load
-       (i32.const 9092)
+       (i32.const 9364)
       )
      )
      (local.set $$617
@@ -152556,7 +153507,7 @@
       )
      )
      (i32.store
-      (i32.const 9092)
+      (i32.const 9364)
       (local.get $$617)
      )
      (local.set $$$4236$i
@@ -152720,7 +153671,7 @@
    (block
     (local.set $$631
      (i32.load
-      (i32.const 9080)
+      (i32.const 9352)
      )
     )
     (local.set $$632
@@ -152730,12 +153681,12 @@
      )
     )
     (i32.store
-     (i32.const 9080)
+     (i32.const 9352)
      (local.get $$632)
     )
     (local.set $$633
      (i32.load
-      (i32.const 9084)
+      (i32.const 9356)
      )
     )
     (local.set $$634
@@ -152747,13 +153698,13 @@
     (if
      (local.get $$634)
      (i32.store
-      (i32.const 9084)
+      (i32.const 9356)
       (local.get $$632)
      )
     )
     (local.set $$635
      (i32.load
-      (i32.const 8672)
+      (i32.const 8944)
      )
     )
     (local.set $$636
@@ -152768,7 +153719,7 @@
       (block
        (local.set $$637
         (i32.load
-         (i32.const 8664)
+         (i32.const 8936)
         )
        )
        (local.set $$638
@@ -152792,290 +153743,290 @@
        (if
         (local.get $$or$cond11$i)
         (i32.store
-         (i32.const 8664)
+         (i32.const 8936)
          (local.get $$$748$i)
         )
        )
        (i32.store
-        (i32.const 9096)
+        (i32.const 9368)
         (local.get $$$748$i)
        )
        (i32.store
-        (i32.const 9100)
+        (i32.const 9372)
         (local.get $$$723947$i)
        )
        (i32.store
-        (i32.const 9108)
+        (i32.const 9380)
         (i32.const 0)
        )
        (local.set $$640
         (i32.load
-         (i32.const 9120)
+         (i32.const 9392)
         )
        )
        (i32.store
-        (i32.const 8684)
+        (i32.const 8956)
         (local.get $$640)
        )
        (i32.store
-        (i32.const 8680)
+        (i32.const 8952)
         (i32.const -1)
        )
        (i32.store
-        (i32.const 8700)
-        (i32.const 8688)
+        (i32.const 8972)
+        (i32.const 8960)
        )
        (i32.store
-        (i32.const 8696)
-        (i32.const 8688)
+        (i32.const 8968)
+        (i32.const 8960)
        )
        (i32.store
-        (i32.const 8708)
-        (i32.const 8696)
+        (i32.const 8980)
+        (i32.const 8968)
        )
        (i32.store
-        (i32.const 8704)
-        (i32.const 8696)
+        (i32.const 8976)
+        (i32.const 8968)
        )
        (i32.store
-        (i32.const 8716)
-        (i32.const 8704)
+        (i32.const 8988)
+        (i32.const 8976)
        )
        (i32.store
-        (i32.const 8712)
-        (i32.const 8704)
+        (i32.const 8984)
+        (i32.const 8976)
        )
        (i32.store
-        (i32.const 8724)
-        (i32.const 8712)
+        (i32.const 8996)
+        (i32.const 8984)
        )
        (i32.store
-        (i32.const 8720)
-        (i32.const 8712)
+        (i32.const 8992)
+        (i32.const 8984)
        )
        (i32.store
-        (i32.const 8732)
-        (i32.const 8720)
+        (i32.const 9004)
+        (i32.const 8992)
        )
        (i32.store
-        (i32.const 8728)
-        (i32.const 8720)
+        (i32.const 9000)
+        (i32.const 8992)
        )
        (i32.store
-        (i32.const 8740)
-        (i32.const 8728)
+        (i32.const 9012)
+        (i32.const 9000)
        )
        (i32.store
-        (i32.const 8736)
-        (i32.const 8728)
+        (i32.const 9008)
+        (i32.const 9000)
        )
        (i32.store
-        (i32.const 8748)
-        (i32.const 8736)
+        (i32.const 9020)
+        (i32.const 9008)
        )
        (i32.store
-        (i32.const 8744)
-        (i32.const 8736)
+        (i32.const 9016)
+        (i32.const 9008)
        )
        (i32.store
-        (i32.const 8756)
-        (i32.const 8744)
+        (i32.const 9028)
+        (i32.const 9016)
        )
        (i32.store
-        (i32.const 8752)
-        (i32.const 8744)
+        (i32.const 9024)
+        (i32.const 9016)
        )
        (i32.store
-        (i32.const 8764)
-        (i32.const 8752)
+        (i32.const 9036)
+        (i32.const 9024)
        )
        (i32.store
-        (i32.const 8760)
-        (i32.const 8752)
+        (i32.const 9032)
+        (i32.const 9024)
        )
        (i32.store
-        (i32.const 8772)
-        (i32.const 8760)
+        (i32.const 9044)
+        (i32.const 9032)
        )
        (i32.store
-        (i32.const 8768)
-        (i32.const 8760)
+        (i32.const 9040)
+        (i32.const 9032)
        )
        (i32.store
-        (i32.const 8780)
-        (i32.const 8768)
+        (i32.const 9052)
+        (i32.const 9040)
        )
        (i32.store
-        (i32.const 8776)
-        (i32.const 8768)
+        (i32.const 9048)
+        (i32.const 9040)
        )
        (i32.store
-        (i32.const 8788)
-        (i32.const 8776)
+        (i32.const 9060)
+        (i32.const 9048)
        )
        (i32.store
-        (i32.const 8784)
-        (i32.const 8776)
+        (i32.const 9056)
+        (i32.const 9048)
        )
        (i32.store
-        (i32.const 8796)
-        (i32.const 8784)
+        (i32.const 9068)
+        (i32.const 9056)
        )
        (i32.store
-        (i32.const 8792)
-        (i32.const 8784)
+        (i32.const 9064)
+        (i32.const 9056)
        )
        (i32.store
-        (i32.const 8804)
-        (i32.const 8792)
+        (i32.const 9076)
+        (i32.const 9064)
        )
        (i32.store
-        (i32.const 8800)
-        (i32.const 8792)
+        (i32.const 9072)
+        (i32.const 9064)
        )
        (i32.store
-        (i32.const 8812)
-        (i32.const 8800)
+        (i32.const 9084)
+        (i32.const 9072)
        )
        (i32.store
-        (i32.const 8808)
-        (i32.const 8800)
+        (i32.const 9080)
+        (i32.const 9072)
        )
        (i32.store
-        (i32.const 8820)
-        (i32.const 8808)
+        (i32.const 9092)
+        (i32.const 9080)
        )
        (i32.store
-        (i32.const 8816)
-        (i32.const 8808)
+        (i32.const 9088)
+        (i32.const 9080)
        )
        (i32.store
-        (i32.const 8828)
-        (i32.const 8816)
+        (i32.const 9100)
+        (i32.const 9088)
        )
        (i32.store
-        (i32.const 8824)
-        (i32.const 8816)
+        (i32.const 9096)
+        (i32.const 9088)
        )
        (i32.store
-        (i32.const 8836)
-        (i32.const 8824)
+        (i32.const 9108)
+        (i32.const 9096)
        )
        (i32.store
-        (i32.const 8832)
-        (i32.const 8824)
+        (i32.const 9104)
+        (i32.const 9096)
        )
        (i32.store
-        (i32.const 8844)
-        (i32.const 8832)
+        (i32.const 9116)
+        (i32.const 9104)
        )
        (i32.store
-        (i32.const 8840)
-        (i32.const 8832)
+        (i32.const 9112)
+        (i32.const 9104)
        )
        (i32.store
-        (i32.const 8852)
-        (i32.const 8840)
+        (i32.const 9124)
+        (i32.const 9112)
        )
        (i32.store
-        (i32.const 8848)
-        (i32.const 8840)
+        (i32.const 9120)
+        (i32.const 9112)
        )
        (i32.store
-        (i32.const 8860)
-        (i32.const 8848)
+        (i32.const 9132)
+        (i32.const 9120)
        )
        (i32.store
-        (i32.const 8856)
-        (i32.const 8848)
+        (i32.const 9128)
+        (i32.const 9120)
        )
        (i32.store
-        (i32.const 8868)
-        (i32.const 8856)
+        (i32.const 9140)
+        (i32.const 9128)
        )
        (i32.store
-        (i32.const 8864)
-        (i32.const 8856)
+        (i32.const 9136)
+        (i32.const 9128)
        )
        (i32.store
-        (i32.const 8876)
-        (i32.const 8864)
+        (i32.const 9148)
+        (i32.const 9136)
        )
        (i32.store
-        (i32.const 8872)
-        (i32.const 8864)
+        (i32.const 9144)
+        (i32.const 9136)
        )
        (i32.store
-        (i32.const 8884)
-        (i32.const 8872)
+        (i32.const 9156)
+        (i32.const 9144)
        )
        (i32.store
-        (i32.const 8880)
-        (i32.const 8872)
+        (i32.const 9152)
+        (i32.const 9144)
        )
        (i32.store
-        (i32.const 8892)
-        (i32.const 8880)
+        (i32.const 9164)
+        (i32.const 9152)
        )
        (i32.store
-        (i32.const 8888)
-        (i32.const 8880)
+        (i32.const 9160)
+        (i32.const 9152)
        )
        (i32.store
-        (i32.const 8900)
-        (i32.const 8888)
+        (i32.const 9172)
+        (i32.const 9160)
        )
        (i32.store
-        (i32.const 8896)
-        (i32.const 8888)
+        (i32.const 9168)
+        (i32.const 9160)
        )
        (i32.store
-        (i32.const 8908)
-        (i32.const 8896)
+        (i32.const 9180)
+        (i32.const 9168)
        )
        (i32.store
-        (i32.const 8904)
-        (i32.const 8896)
+        (i32.const 9176)
+        (i32.const 9168)
        )
        (i32.store
-        (i32.const 8916)
-        (i32.const 8904)
+        (i32.const 9188)
+        (i32.const 9176)
        )
        (i32.store
-        (i32.const 8912)
-        (i32.const 8904)
+        (i32.const 9184)
+        (i32.const 9176)
        )
        (i32.store
-        (i32.const 8924)
-        (i32.const 8912)
+        (i32.const 9196)
+        (i32.const 9184)
        )
        (i32.store
-        (i32.const 8920)
-        (i32.const 8912)
+        (i32.const 9192)
+        (i32.const 9184)
        )
        (i32.store
-        (i32.const 8932)
-        (i32.const 8920)
+        (i32.const 9204)
+        (i32.const 9192)
        )
        (i32.store
-        (i32.const 8928)
-        (i32.const 8920)
+        (i32.const 9200)
+        (i32.const 9192)
        )
        (i32.store
-        (i32.const 8940)
-        (i32.const 8928)
+        (i32.const 9212)
+        (i32.const 9200)
        )
        (i32.store
-        (i32.const 8936)
-        (i32.const 8928)
+        (i32.const 9208)
+        (i32.const 9200)
        )
        (i32.store
-        (i32.const 8948)
-        (i32.const 8936)
+        (i32.const 9220)
+        (i32.const 9208)
        )
        (i32.store
-        (i32.const 8944)
-        (i32.const 8936)
+        (i32.const 9216)
+        (i32.const 9208)
        )
        (local.set $$641
         (i32.add
@@ -153136,11 +154087,11 @@
         )
        )
        (i32.store
-        (i32.const 8672)
+        (i32.const 8944)
         (local.get $$649)
        )
        (i32.store
-        (i32.const 8660)
+        (i32.const 8932)
         (local.get $$650)
        )
        (local.set $$651
@@ -153177,17 +154128,17 @@
        )
        (local.set $$655
         (i32.load
-         (i32.const 9136)
+         (i32.const 9408)
         )
        )
        (i32.store
-        (i32.const 8676)
+        (i32.const 8948)
         (local.get $$655)
        )
       )
       (block
        (local.set $$$024372$i
-        (i32.const 9096)
+        (i32.const 9368)
        )
        (loop $while-in41
         (block $while-out40
@@ -153326,7 +154277,7 @@
              )
              (local.set $$672
               (i32.load
-               (i32.const 8660)
+               (i32.const 8932)
               )
              )
              (local.set $$673
@@ -153388,11 +154339,11 @@
               )
              )
              (i32.store
-              (i32.const 8672)
+              (i32.const 8944)
               (local.get $$681)
              )
              (i32.store
-              (i32.const 8660)
+              (i32.const 8932)
               (local.get $$682)
              )
              (local.set $$683
@@ -153429,11 +154380,11 @@
              )
              (local.set $$687
               (i32.load
-               (i32.const 9136)
+               (i32.const 9408)
               )
              )
              (i32.store
-              (i32.const 8676)
+              (i32.const 8948)
               (local.get $$687)
              )
              (br $label$break$L294)
@@ -153445,7 +154396,7 @@
        )
        (local.set $$688
         (i32.load
-         (i32.const 8664)
+         (i32.const 8936)
         )
        )
        (local.set $$689
@@ -153458,7 +154409,7 @@
         (local.get $$689)
         (block
          (i32.store
-          (i32.const 8664)
+          (i32.const 8936)
           (local.get $$$748$i)
          )
          (local.set $$752
@@ -153476,7 +154427,7 @@
         )
        )
        (local.set $$$124471$i
-        (i32.const 9096)
+        (i32.const 9368)
        )
        (loop $while-in43
         (block $while-out42
@@ -153728,7 +154679,7 @@
              (block
               (local.set $$727
                (i32.load
-                (i32.const 8660)
+                (i32.const 8932)
                )
               )
               (local.set $$728
@@ -153738,11 +154689,11 @@
                )
               )
               (i32.store
-               (i32.const 8660)
+               (i32.const 8932)
                (local.get $$728)
               )
               (i32.store
-               (i32.const 8672)
+               (i32.const 8944)
                (local.get $$722)
               )
               (local.set $$729
@@ -153765,7 +154716,7 @@
              (block
               (local.set $$731
                (i32.load
-                (i32.const 8668)
+                (i32.const 8940)
                )
               )
               (local.set $$732
@@ -153779,7 +154730,7 @@
                (block
                 (local.set $$733
                  (i32.load
-                  (i32.const 8656)
+                  (i32.const 8928)
                  )
                 )
                 (local.set $$734
@@ -153789,11 +154740,11 @@
                  )
                 )
                 (i32.store
-                 (i32.const 8656)
+                 (i32.const 8928)
                  (local.get $$734)
                 )
                 (i32.store
-                 (i32.const 8668)
+                 (i32.const 8940)
                  (local.get $$722)
                 )
                 (local.set $$735
@@ -153903,7 +154854,7 @@
                    )
                    (local.set $$750
                     (i32.add
-                     (i32.const 8688)
+                     (i32.const 8960)
                      (i32.shl
                       (local.get $$749)
                       (i32.const 2)
@@ -153980,7 +154931,7 @@
                      )
                      (local.set $$760
                       (i32.load
-                       (i32.const 8648)
+                       (i32.const 8920)
                       )
                      )
                      (local.set $$761
@@ -153990,7 +154941,7 @@
                       )
                      )
                      (i32.store
-                      (i32.const 8648)
+                      (i32.const 8920)
                       (local.get $$761)
                      )
                      (br $label$break$L325)
@@ -154372,7 +155323,7 @@
                    )
                    (local.set $$798
                     (i32.add
-                     (i32.const 8952)
+                     (i32.const 9224)
                      (i32.shl
                       (local.get $$797)
                       (i32.const 2)
@@ -154424,7 +155375,7 @@
                       )
                       (local.set $$803
                        (i32.load
-                        (i32.const 8652)
+                        (i32.const 8924)
                        )
                       )
                       (local.set $$804
@@ -154434,7 +155385,7 @@
                        )
                       )
                       (i32.store
-                       (i32.const 8652)
+                       (i32.const 8924)
                        (local.get $$804)
                       )
                       (br $label$break$L325)
@@ -154442,7 +155393,7 @@
                      (block
                       (local.set $$805
                        (i32.load
-                        (i32.const 8664)
+                        (i32.const 8936)
                        )
                       )
                       (local.set $$806
@@ -154507,7 +155458,7 @@
                    )
                    (local.set $$812
                     (i32.load
-                     (i32.const 8664)
+                     (i32.const 8936)
                     )
                    )
                    (local.set $$813
@@ -154612,7 +155563,7 @@
                    )
                    (local.set $$824
                     (i32.load
-                     (i32.const 8664)
+                     (i32.const 8936)
                     )
                    )
                    (local.set $$825
@@ -154749,7 +155700,7 @@
                 )
                 (local.set $$839
                  (i32.add
-                  (i32.const 8688)
+                  (i32.const 8960)
                   (i32.shl
                    (local.get $$838)
                    (i32.const 2)
@@ -154758,7 +155709,7 @@
                 )
                 (local.set $$840
                  (i32.load
-                  (i32.const 8648)
+                  (i32.const 8920)
                  )
                 )
                 (local.set $$841
@@ -154790,7 +155741,7 @@
                     )
                    )
                    (i32.store
-                    (i32.const 8648)
+                    (i32.const 8920)
                     (local.get $$844)
                    )
                    (local.set $$$pre$i17$i
@@ -154820,7 +155771,7 @@
                    )
                    (local.set $$847
                     (i32.load
-                     (i32.const 8664)
+                     (i32.const 8936)
                     )
                    )
                    (local.set $$848
@@ -155058,7 +156009,7 @@
               )
               (local.set $$877
                (i32.add
-                (i32.const 8952)
+                (i32.const 9224)
                 (i32.shl
                  (local.get $$$0295$i$i)
                  (i32.const 2)
@@ -155097,7 +156048,7 @@
               )
               (local.set $$881
                (i32.load
-                (i32.const 8652)
+                (i32.const 8924)
                )
               )
               (local.set $$882
@@ -155128,7 +156079,7 @@
                  )
                 )
                 (i32.store
-                 (i32.const 8652)
+                 (i32.const 8924)
                  (local.get $$885)
                 )
                 (i32.store
@@ -155326,7 +156277,7 @@
                  )
                  (local.set $$908
                   (i32.load
-                   (i32.const 8664)
+                   (i32.const 8936)
                   )
                  )
                  (local.set $$909
@@ -155392,7 +156343,7 @@
               )
               (local.set $$915
                (i32.load
-                (i32.const 8664)
+                (i32.const 8936)
                )
               )
               (local.set $$916
@@ -155487,7 +156438,7 @@
         )
        )
        (local.set $$$0$i$i$i
-        (i32.const 9096)
+        (i32.const 9368)
        )
        (loop $while-in66
         (block $while-out65
@@ -155695,11 +156646,11 @@
         )
        )
        (i32.store
-        (i32.const 8672)
+        (i32.const 8944)
         (local.get $$953)
        )
        (i32.store
-        (i32.const 8660)
+        (i32.const 8932)
         (local.get $$954)
        )
        (local.set $$955
@@ -155736,11 +156687,11 @@
        )
        (local.set $$959
         (i32.load
-         (i32.const 9136)
+         (i32.const 9408)
         )
        )
        (i32.store
-        (i32.const 8676)
+        (i32.const 8948)
         (local.get $$959)
        )
        (local.set $$960
@@ -155756,7 +156707,7 @@
        (i64.store align=4
         (local.get $$943)
         (i64.load align=4
-         (i32.const 9096)
+         (i32.const 9368)
         )
        )
        (i64.store align=4
@@ -155766,25 +156717,25 @@
         )
         (i64.load align=4
          (i32.add
-          (i32.const 9096)
+          (i32.const 9368)
           (i32.const 8)
          )
         )
        )
        (i32.store
-        (i32.const 9096)
+        (i32.const 9368)
         (local.get $$$748$i)
        )
        (i32.store
-        (i32.const 9100)
+        (i32.const 9372)
         (local.get $$$723947$i)
        )
        (i32.store
-        (i32.const 9108)
+        (i32.const 9380)
         (i32.const 0)
        )
        (i32.store
-        (i32.const 9104)
+        (i32.const 9376)
         (local.get $$943)
        )
        (local.set $$962
@@ -155905,7 +156856,7 @@
            )
            (local.set $$976
             (i32.add
-             (i32.const 8688)
+             (i32.const 8960)
              (i32.shl
               (local.get $$975)
               (i32.const 2)
@@ -155914,7 +156865,7 @@
            )
            (local.set $$977
             (i32.load
-             (i32.const 8648)
+             (i32.const 8920)
             )
            )
            (local.set $$978
@@ -155945,7 +156896,7 @@
               )
              )
              (i32.store
-              (i32.const 8648)
+              (i32.const 8920)
               (local.get $$981)
              )
              (local.set $$$pre$i$i
@@ -155975,7 +156926,7 @@
              )
              (local.set $$984
               (i32.load
-               (i32.const 8664)
+               (i32.const 8936)
               )
              )
              (local.set $$985
@@ -156206,7 +157157,7 @@
          )
          (local.set $$1014
           (i32.add
-           (i32.const 8952)
+           (i32.const 9224)
            (i32.shl
             (local.get $$$0212$i$i)
             (i32.const 2)
@@ -156239,7 +157190,7 @@
          )
          (local.set $$1017
           (i32.load
-           (i32.const 8652)
+           (i32.const 8924)
           )
          )
          (local.set $$1018
@@ -156270,7 +157221,7 @@
             )
            )
            (i32.store
-            (i32.const 8652)
+            (i32.const 8924)
             (local.get $$1021)
            )
            (i32.store
@@ -156468,7 +157419,7 @@
             )
             (local.set $$1044
              (i32.load
-              (i32.const 8664)
+              (i32.const 8936)
              )
             )
             (local.set $$1045
@@ -156534,7 +157485,7 @@
          )
          (local.set $$1051
           (i32.load
-           (i32.const 8664)
+           (i32.const 8936)
           )
          )
          (local.set $$1052
@@ -156613,7 +157564,7 @@
     )
     (local.set $$1060
      (i32.load
-      (i32.const 8660)
+      (i32.const 8932)
      )
     )
     (local.set $$1061
@@ -156632,12 +157583,12 @@
        )
       )
       (i32.store
-       (i32.const 8660)
+       (i32.const 8932)
        (local.get $$1062)
       )
       (local.set $$1063
        (i32.load
-        (i32.const 8672)
+        (i32.const 8944)
        )
       )
       (local.set $$1064
@@ -156647,7 +157598,7 @@
        )
       )
       (i32.store
-       (i32.const 8672)
+       (i32.const 8944)
        (local.get $$1064)
       )
       (local.set $$1065
@@ -156718,7 +157669,7 @@
    (local.get $$$0)
   )
  )
- (func $_free (; 362 ;) (param $$0 i32)
+ (func $_free (; 366 ;) (param $$0 i32)
   (local $$$0211$i i32)
   (local $$$0211$in$i i32)
   (local $$$0381438 i32)
@@ -157102,7 +158053,7 @@
   )
   (local.set $$3
    (i32.load
-    (i32.const 8664)
+    (i32.const 8936)
    )
   )
   (local.set $$4
@@ -157215,7 +158166,7 @@
      )
      (local.set $$19
       (i32.load
-       (i32.const 8668)
+       (i32.const 8940)
       )
      )
      (local.set $$20
@@ -157292,7 +158243,7 @@
         )
        )
        (i32.store
-        (i32.const 8656)
+        (i32.const 8928)
         (local.get $$17)
        )
        (i32.store
@@ -157355,7 +158306,7 @@
        )
        (local.set $$28
         (i32.add
-         (i32.const 8688)
+         (i32.const 8960)
          (i32.shl
           (local.get $$27)
           (i32.const 2)
@@ -157431,7 +158382,7 @@
          )
          (local.set $$37
           (i32.load
-           (i32.const 8648)
+           (i32.const 8920)
           )
          )
          (local.set $$38
@@ -157441,7 +158392,7 @@
           )
          )
          (i32.store
-          (i32.const 8648)
+          (i32.const 8920)
           (local.get $$38)
          )
          (local.set $$$1
@@ -157847,7 +158798,7 @@
        )
        (local.set $$75
         (i32.add
-         (i32.const 8952)
+         (i32.const 9224)
          (i32.shl
           (local.get $$74)
           (i32.const 2)
@@ -157896,7 +158847,7 @@
             )
             (local.set $$80
              (i32.load
-              (i32.const 8652)
+              (i32.const 8924)
              )
             )
             (local.set $$81
@@ -157906,7 +158857,7 @@
              )
             )
             (i32.store
-             (i32.const 8652)
+             (i32.const 8924)
              (local.get $$81)
             )
             (local.set $$$1
@@ -157925,7 +158876,7 @@
          (block
           (local.set $$82
            (i32.load
-            (i32.const 8664)
+            (i32.const 8936)
            )
           )
           (local.set $$83
@@ -158001,7 +158952,7 @@
        )
        (local.set $$89
         (i32.load
-         (i32.const 8664)
+         (i32.const 8936)
         )
        )
        (local.set $$90
@@ -158116,7 +159067,7 @@
         (block
          (local.set $$101
           (i32.load
-           (i32.const 8664)
+           (i32.const 8936)
           )
          )
          (local.set $$102
@@ -158235,7 +159186,7 @@
    (block
     (local.set $$121
      (i32.load
-      (i32.const 8672)
+      (i32.const 8944)
      )
     )
     (local.set $$122
@@ -158249,7 +159200,7 @@
      (block
       (local.set $$123
        (i32.load
-        (i32.const 8660)
+        (i32.const 8932)
        )
       )
       (local.set $$124
@@ -158259,11 +159210,11 @@
        )
       )
       (i32.store
-       (i32.const 8660)
+       (i32.const 8932)
        (local.get $$124)
       )
       (i32.store
-       (i32.const 8672)
+       (i32.const 8944)
        (local.get $$$1)
       )
       (local.set $$125
@@ -158284,7 +159235,7 @@
       )
       (local.set $$127
        (i32.load
-        (i32.const 8668)
+        (i32.const 8940)
        )
       )
       (local.set $$128
@@ -158300,11 +159251,11 @@
        (return)
       )
       (i32.store
-       (i32.const 8668)
+       (i32.const 8940)
        (i32.const 0)
       )
       (i32.store
-       (i32.const 8656)
+       (i32.const 8928)
        (i32.const 0)
       )
       (return)
@@ -158312,7 +159263,7 @@
     )
     (local.set $$129
      (i32.load
-      (i32.const 8668)
+      (i32.const 8940)
      )
     )
     (local.set $$130
@@ -158326,7 +159277,7 @@
      (block
       (local.set $$131
        (i32.load
-        (i32.const 8656)
+        (i32.const 8928)
        )
       )
       (local.set $$132
@@ -158336,11 +159287,11 @@
        )
       )
       (i32.store
-       (i32.const 8656)
+       (i32.const 8928)
        (local.get $$132)
       )
       (i32.store
-       (i32.const 8668)
+       (i32.const 8940)
        (local.get $$113)
       )
       (local.set $$133
@@ -158430,7 +159381,7 @@
        )
        (local.set $$145
         (i32.add
-         (i32.const 8688)
+         (i32.const 8960)
          (i32.shl
           (local.get $$144)
           (i32.const 2)
@@ -158450,7 +159401,7 @@
         (block
          (local.set $$147
           (i32.load
-           (i32.const 8664)
+           (i32.const 8936)
           )
          )
          (local.set $$148
@@ -158511,7 +159462,7 @@
          )
          (local.set $$155
           (i32.load
-           (i32.const 8648)
+           (i32.const 8920)
           )
          )
          (local.set $$156
@@ -158521,7 +159472,7 @@
           )
          )
          (i32.store
-          (i32.const 8648)
+          (i32.const 8920)
           (local.get $$156)
          )
          (br $label$break$L111)
@@ -158549,7 +159500,7 @@
         (block
          (local.set $$158
           (i32.load
-           (i32.const 8664)
+           (i32.const 8936)
           )
          )
          (local.set $$159
@@ -158778,7 +159729,7 @@
           )
           (local.set $$191
            (i32.load
-            (i32.const 8664)
+            (i32.const 8936)
            )
           )
           (local.set $$192
@@ -158816,7 +159767,7 @@
           )
           (local.set $$171
            (i32.load
-            (i32.const 8664)
+            (i32.const 8936)
            )
           )
           (local.set $$172
@@ -158914,7 +159865,7 @@
          )
          (local.set $$196
           (i32.add
-           (i32.const 8952)
+           (i32.const 9224)
            (i32.shl
             (local.get $$195)
             (i32.const 2)
@@ -158963,7 +159914,7 @@
               )
               (local.set $$201
                (i32.load
-                (i32.const 8652)
+                (i32.const 8924)
                )
               )
               (local.set $$202
@@ -158973,7 +159924,7 @@
                )
               )
               (i32.store
-               (i32.const 8652)
+               (i32.const 8924)
                (local.get $$202)
               )
               (br $label$break$L111)
@@ -158983,7 +159934,7 @@
            (block
             (local.set $$203
              (i32.load
-              (i32.const 8664)
+              (i32.const 8936)
              )
             )
             (local.set $$204
@@ -159048,7 +159999,7 @@
          )
          (local.set $$210
           (i32.load
-           (i32.const 8664)
+           (i32.const 8936)
           )
          )
          (local.set $$211
@@ -159154,7 +160105,7 @@
           (block
            (local.set $$222
             (i32.load
-             (i32.const 8664)
+             (i32.const 8936)
             )
            )
            (local.set $$223
@@ -159225,7 +160176,7 @@
     )
     (local.set $$229
      (i32.load
-      (i32.const 8668)
+      (i32.const 8940)
      )
     )
     (local.set $$230
@@ -159238,7 +160189,7 @@
      (local.get $$230)
      (block
       (i32.store
-       (i32.const 8656)
+       (i32.const 8928)
        (local.get $$137)
       )
       (return)
@@ -159313,7 +160264,7 @@
     )
     (local.set $$238
      (i32.add
-      (i32.const 8688)
+      (i32.const 8960)
       (i32.shl
        (local.get $$237)
        (i32.const 2)
@@ -159322,7 +160273,7 @@
     )
     (local.set $$239
      (i32.load
-      (i32.const 8648)
+      (i32.const 8920)
      )
     )
     (local.set $$240
@@ -159353,7 +160304,7 @@
        )
       )
       (i32.store
-       (i32.const 8648)
+       (i32.const 8920)
        (local.get $$243)
       )
       (local.set $$$pre
@@ -159383,7 +160334,7 @@
       )
       (local.set $$246
        (i32.load
-        (i32.const 8664)
+        (i32.const 8936)
        )
       )
       (local.set $$247
@@ -159614,7 +160565,7 @@
   )
   (local.set $$276
    (i32.add
-    (i32.const 8952)
+    (i32.const 9224)
     (i32.shl
      (local.get $$$0394)
      (i32.const 2)
@@ -159653,7 +160604,7 @@
   )
   (local.set $$280
    (i32.load
-    (i32.const 8652)
+    (i32.const 8924)
    )
   )
   (local.set $$281
@@ -159685,7 +160636,7 @@
       )
      )
      (i32.store
-      (i32.const 8652)
+      (i32.const 8924)
       (local.get $$284)
      )
      (i32.store
@@ -159882,7 +160833,7 @@
         )
         (local.set $$307
          (i32.load
-          (i32.const 8664)
+          (i32.const 8936)
          )
         )
         (local.set $$308
@@ -159948,7 +160899,7 @@
      )
      (local.set $$314
       (i32.load
-       (i32.const 8664)
+       (i32.const 8936)
       )
      )
      (local.set $$315
@@ -160025,7 +160976,7 @@
   )
   (local.set $$322
    (i32.load
-    (i32.const 8680)
+    (i32.const 8952)
    )
   )
   (local.set $$323
@@ -160035,7 +160986,7 @@
    )
   )
   (i32.store
-   (i32.const 8680)
+   (i32.const 8952)
    (local.get $$323)
   )
   (local.set $$324
@@ -160051,7 +161002,7 @@
    (return)
   )
   (local.set $$$0211$in$i
-   (i32.const 9104)
+   (i32.const 9376)
   )
   (loop $while-in19
    (block $while-out18
@@ -160083,12 +161034,12 @@
    )
   )
   (i32.store
-   (i32.const 8680)
+   (i32.const 8952)
    (i32.const -1)
   )
   (return)
  )
- (func $_realloc (; 363 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_realloc (; 367 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$$1 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -160320,7 +161271,7 @@
    (local.get $$$1)
   )
  )
- (func $_try_realloc_chunk (; 364 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_try_realloc_chunk (; 368 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$$1271 i32)
   (local $$$1271$be i32)
   (local $$$1271$ph i32)
@@ -160543,7 +161494,7 @@
   )
   (local.set $$6
    (i32.load
-    (i32.const 8664)
+    (i32.const 8936)
    )
   )
   (local.set $$7
@@ -160666,7 +161617,7 @@
       )
       (local.set $$20
        (i32.load
-        (i32.const 9128)
+        (i32.const 9400)
        )
       )
       (local.set $$21
@@ -160813,7 +161764,7 @@
   )
   (local.set $$34
    (i32.load
-    (i32.const 8672)
+    (i32.const 8944)
    )
   )
   (local.set $$35
@@ -160827,7 +161778,7 @@
    (block
     (local.set $$36
      (i32.load
-      (i32.const 8660)
+      (i32.const 8932)
      )
     )
     (local.set $$37
@@ -160906,11 +161857,11 @@
      (local.get $$41)
     )
     (i32.store
-     (i32.const 8672)
+     (i32.const 8944)
      (local.get $$40)
     )
     (i32.store
-     (i32.const 8660)
+     (i32.const 8932)
      (local.get $$39)
     )
     (local.set $$$2
@@ -160923,7 +161874,7 @@
   )
   (local.set $$46
    (i32.load
-    (i32.const 8668)
+    (i32.const 8940)
    )
   )
   (local.set $$47
@@ -160937,7 +161888,7 @@
    (block
     (local.set $$48
      (i32.load
-      (i32.const 8656)
+      (i32.const 8928)
      )
     )
     (local.set $$49
@@ -161119,11 +162070,11 @@
      )
     )
     (i32.store
-     (i32.const 8656)
+     (i32.const 8928)
      (local.get $$storemerge3)
     )
     (i32.store
-     (i32.const 8668)
+     (i32.const 8940)
      (local.get $$storemerge)
     )
     (local.set $$$2
@@ -161240,7 +162191,7 @@
      )
      (local.set $$83
       (i32.add
-       (i32.const 8688)
+       (i32.const 8960)
        (i32.shl
         (local.get $$82)
         (i32.const 2)
@@ -161316,7 +162267,7 @@
        )
        (local.set $$92
         (i32.load
-         (i32.const 8648)
+         (i32.const 8920)
         )
        )
        (local.set $$93
@@ -161326,7 +162277,7 @@
         )
        )
        (i32.store
-        (i32.const 8648)
+        (i32.const 8920)
         (local.get $$93)
        )
        (br $label$break$L49)
@@ -161704,7 +162655,7 @@
        )
        (local.set $$130
         (i32.add
-         (i32.const 8952)
+         (i32.const 9224)
          (i32.shl
           (local.get $$129)
           (i32.const 2)
@@ -161753,7 +162704,7 @@
             )
             (local.set $$135
              (i32.load
-              (i32.const 8652)
+              (i32.const 8924)
              )
             )
             (local.set $$136
@@ -161763,7 +162714,7 @@
              )
             )
             (i32.store
-             (i32.const 8652)
+             (i32.const 8924)
              (local.get $$136)
             )
             (br $label$break$L49)
@@ -161773,7 +162724,7 @@
          (block
           (local.set $$137
            (i32.load
-            (i32.const 8664)
+            (i32.const 8936)
            )
           )
           (local.set $$138
@@ -161838,7 +162789,7 @@
        )
        (local.set $$144
         (i32.load
-         (i32.const 8664)
+         (i32.const 8936)
         )
        )
        (local.set $$145
@@ -161944,7 +162895,7 @@
         (block
          (local.set $$156
           (i32.load
-           (i32.const 8664)
+           (i32.const 8936)
           )
          )
          (local.set $$157
@@ -162137,7 +163088,7 @@
    )
   )
  )
- (func $_dispose_chunk (; 365 ;) (param $$0 i32) (param $$1 i32)
+ (func $_dispose_chunk (; 369 ;) (param $$0 i32) (param $$1 i32)
   (local $$$041722 i32)
   (local $$$0418$lcssa i32)
   (local $$$041821 i32)
@@ -162558,7 +163509,7 @@
      )
      (local.set $$13
       (i32.load
-       (i32.const 8664)
+       (i32.const 8936)
       )
      )
      (local.set $$14
@@ -162573,7 +163524,7 @@
      )
      (local.set $$15
       (i32.load
-       (i32.const 8668)
+       (i32.const 8940)
       )
      )
      (local.set $$16
@@ -162641,7 +163592,7 @@
         )
        )
        (i32.store
-        (i32.const 8656)
+        (i32.const 8928)
         (local.get $$12)
        )
        (i32.store
@@ -162704,7 +163655,7 @@
        )
        (local.set $$24
         (i32.add
-         (i32.const 8688)
+         (i32.const 8960)
          (i32.shl
           (local.get $$23)
           (i32.const 2)
@@ -162780,7 +163731,7 @@
          )
          (local.set $$33
           (i32.load
-           (i32.const 8648)
+           (i32.const 8920)
           )
          )
          (local.set $$34
@@ -162790,7 +163741,7 @@
           )
          )
          (i32.store
-          (i32.const 8648)
+          (i32.const 8920)
           (local.get $$34)
          )
          (local.set $$$1
@@ -163187,7 +164138,7 @@
        )
        (local.set $$71
         (i32.add
-         (i32.const 8952)
+         (i32.const 9224)
          (i32.shl
           (local.get $$70)
           (i32.const 2)
@@ -163236,7 +164187,7 @@
             )
             (local.set $$76
              (i32.load
-              (i32.const 8652)
+              (i32.const 8924)
              )
             )
             (local.set $$77
@@ -163246,7 +164197,7 @@
              )
             )
             (i32.store
-             (i32.const 8652)
+             (i32.const 8924)
              (local.get $$77)
             )
             (local.set $$$1
@@ -163262,7 +164213,7 @@
          (block
           (local.set $$78
            (i32.load
-            (i32.const 8664)
+            (i32.const 8936)
            )
           )
           (local.set $$79
@@ -163335,7 +164286,7 @@
        )
        (local.set $$85
         (i32.load
-         (i32.const 8664)
+         (i32.const 8936)
         )
        )
        (local.set $$86
@@ -163447,7 +164398,7 @@
         (block
          (local.set $$97
           (i32.load
-           (i32.const 8664)
+           (i32.const 8936)
           )
          )
          (local.set $$98
@@ -163506,7 +164457,7 @@
   )
   (local.set $$108
    (i32.load
-    (i32.const 8664)
+    (i32.const 8936)
    )
   )
   (local.set $$109
@@ -163547,7 +164498,7 @@
    (block
     (local.set $$114
      (i32.load
-      (i32.const 8672)
+      (i32.const 8944)
      )
     )
     (local.set $$115
@@ -163561,7 +164512,7 @@
      (block
       (local.set $$116
        (i32.load
-        (i32.const 8660)
+        (i32.const 8932)
        )
       )
       (local.set $$117
@@ -163571,11 +164522,11 @@
        )
       )
       (i32.store
-       (i32.const 8660)
+       (i32.const 8932)
        (local.get $$117)
       )
       (i32.store
-       (i32.const 8672)
+       (i32.const 8944)
        (local.get $$$1)
       )
       (local.set $$118
@@ -163596,7 +164547,7 @@
       )
       (local.set $$120
        (i32.load
-        (i32.const 8668)
+        (i32.const 8940)
        )
       )
       (local.set $$121
@@ -163612,11 +164563,11 @@
        (return)
       )
       (i32.store
-       (i32.const 8668)
+       (i32.const 8940)
        (i32.const 0)
       )
       (i32.store
-       (i32.const 8656)
+       (i32.const 8928)
        (i32.const 0)
       )
       (return)
@@ -163624,7 +164575,7 @@
     )
     (local.set $$122
      (i32.load
-      (i32.const 8668)
+      (i32.const 8940)
      )
     )
     (local.set $$123
@@ -163638,7 +164589,7 @@
      (block
       (local.set $$124
        (i32.load
-        (i32.const 8656)
+        (i32.const 8928)
        )
       )
       (local.set $$125
@@ -163648,11 +164599,11 @@
        )
       )
       (i32.store
-       (i32.const 8656)
+       (i32.const 8928)
        (local.get $$125)
       )
       (i32.store
-       (i32.const 8668)
+       (i32.const 8940)
        (local.get $$$1)
       )
       (local.set $$126
@@ -163742,7 +164693,7 @@
        )
        (local.set $$138
         (i32.add
-         (i32.const 8688)
+         (i32.const 8960)
          (i32.shl
           (local.get $$137)
           (i32.const 2)
@@ -163818,7 +164769,7 @@
          )
          (local.set $$147
           (i32.load
-           (i32.const 8648)
+           (i32.const 8920)
           )
          )
          (local.set $$148
@@ -163828,7 +164779,7 @@
           )
          )
          (i32.store
-          (i32.const 8648)
+          (i32.const 8920)
           (local.get $$148)
          )
          (br $label$break$L99)
@@ -164206,7 +165157,7 @@
          )
          (local.set $$185
           (i32.add
-           (i32.const 8952)
+           (i32.const 9224)
            (i32.shl
             (local.get $$184)
             (i32.const 2)
@@ -164255,7 +165206,7 @@
               )
               (local.set $$190
                (i32.load
-                (i32.const 8652)
+                (i32.const 8924)
                )
               )
               (local.set $$191
@@ -164265,7 +165216,7 @@
                )
               )
               (i32.store
-               (i32.const 8652)
+               (i32.const 8924)
                (local.get $$191)
               )
               (br $label$break$L99)
@@ -164275,7 +165226,7 @@
            (block
             (local.set $$192
              (i32.load
-              (i32.const 8664)
+              (i32.const 8936)
              )
             )
             (local.set $$193
@@ -164340,7 +165291,7 @@
          )
          (local.set $$199
           (i32.load
-           (i32.const 8664)
+           (i32.const 8936)
           )
          )
          (local.set $$200
@@ -164446,7 +165397,7 @@
           (block
            (local.set $$211
             (i32.load
-             (i32.const 8664)
+             (i32.const 8936)
             )
            )
            (local.set $$212
@@ -164517,7 +165468,7 @@
     )
     (local.set $$218
      (i32.load
-      (i32.const 8668)
+      (i32.const 8940)
      )
     )
     (local.set $$219
@@ -164530,7 +165481,7 @@
      (local.get $$219)
      (block
       (i32.store
-       (i32.const 8656)
+       (i32.const 8928)
        (local.get $$130)
       )
       (return)
@@ -164605,7 +165556,7 @@
     )
     (local.set $$227
      (i32.add
-      (i32.const 8688)
+      (i32.const 8960)
       (i32.shl
        (local.get $$226)
        (i32.const 2)
@@ -164614,7 +165565,7 @@
     )
     (local.set $$228
      (i32.load
-      (i32.const 8648)
+      (i32.const 8920)
      )
     )
     (local.set $$229
@@ -164645,7 +165596,7 @@
        )
       )
       (i32.store
-       (i32.const 8648)
+       (i32.const 8920)
        (local.get $$232)
       )
       (local.set $$$pre
@@ -164675,7 +165626,7 @@
       )
       (local.set $$235
        (i32.load
-        (i32.const 8664)
+        (i32.const 8936)
        )
       )
       (local.set $$236
@@ -164906,7 +165857,7 @@
   )
   (local.set $$265
    (i32.add
-    (i32.const 8952)
+    (i32.const 9224)
     (i32.shl
      (local.get $$$0429)
      (i32.const 2)
@@ -164945,7 +165896,7 @@
   )
   (local.set $$269
    (i32.load
-    (i32.const 8652)
+    (i32.const 8924)
    )
   )
   (local.set $$270
@@ -164976,7 +165927,7 @@
      )
     )
     (i32.store
-     (i32.const 8652)
+     (i32.const 8924)
      (local.get $$273)
     )
     (i32.store
@@ -165174,7 +166125,7 @@
      )
      (local.set $$296
       (i32.load
-       (i32.const 8664)
+       (i32.const 8936)
       )
      )
      (local.set $$297
@@ -165238,7 +166189,7 @@
   )
   (local.set $$303
    (i32.load
-    (i32.const 8664)
+    (i32.const 8936)
    )
   )
   (local.set $$304
@@ -165311,7 +166262,7 @@
   )
   (return)
  )
- (func $___stdio_close (; 366 ;) (param $$0 i32) (result i32)
+ (func $___stdio_close (; 370 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -165379,7 +166330,7 @@
    (local.get $$5)
   )
  )
- (func $___stdio_write (; 367 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $___stdio_write (; 371 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$$0 i32)
   (local $$$04756 i32)
   (local $$$04855 i32)
@@ -165943,7 +166894,7 @@
    (local.get $$$051)
   )
  )
- (func $___stdio_seek (; 368 ;) (param $$0 i32) (param $$1 i64) (param $$2 i32) (result i64)
+ (func $___stdio_seek (; 372 ;) (param $$0 i32) (param $$1 i64) (param $$2 i32) (result i64)
   (local $$$pre i64)
   (local $$10 i32)
   (local $$11 i32)
@@ -166110,7 +167061,7 @@
    (local.get $$13)
   )
  )
- (func $___syscall_ret (; 369 ;) (param $$0 i32) (result i32)
+ (func $___syscall_ret (; 373 ;) (param $$0 i32) (result i32)
   (local $$$0 i32)
   (local $$1 i32)
   (local $$2 i32)
@@ -166154,17 +167105,17 @@
    (local.get $$$0)
   )
  )
- (func $___errno_location (; 370 ;) (result i32)
+ (func $___errno_location (; 374 ;) (result i32)
   (local $label i32)
   (local $sp i32)
   (local.set $sp
    (global.get $STACKTOP)
   )
   (return
-   (i32.const 9208)
+   (i32.const 9480)
   )
  )
- (func $_dummy_731 (; 371 ;) (param $$0 i32) (result i32)
+ (func $_dummy_731 (; 375 ;) (param $$0 i32) (result i32)
   (local $label i32)
   (local $sp i32)
   (local.set $sp
@@ -166174,7 +167125,7 @@
    (local.get $$0)
   )
  )
- (func $___stdio_read (; 372 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $___stdio_read (; 376 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$$0 i32)
   (local $$$cast i32)
   (local $$10 i32)
@@ -166528,7 +167479,7 @@
    (local.get $$$0)
   )
  )
- (func $___stdout_write (; 373 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $___stdout_write (; 377 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -166581,7 +167532,7 @@
   )
   (i32.store
    (local.get $$4)
-   (i32.const 21)
+   (i32.const 26)
   )
   (local.set $$5
    (i32.load
@@ -166686,7 +167637,7 @@
    (local.get $$14)
   )
  )
- (func $_strtox_761 (; 374 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i64) (result i64)
+ (func $_strtox_761 (; 378 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i64) (result i64)
   (local $$$sink i32)
   (local $$10 i32)
   (local $$11 i64)
@@ -166871,7 +167822,7 @@
    (local.get $$11)
   )
  )
- (func $___shlim (; 375 ;) (param $$0 i32) (param $$1 i64)
+ (func $___shlim (; 379 ;) (param $$0 i32) (param $$1 i64)
   (local $$10 i32)
   (local $$11 i32)
   (local $$12 i32)
@@ -167007,7 +167958,7 @@
   )
   (return)
  )
- (func $___intscan (; 376 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i64) (result i64)
+ (func $___intscan (; 380 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i64) (result i64)
   (local $$$0 i64)
   (local $$$0153209 i64)
   (local $$$0154215 i32)
@@ -168325,7 +169276,7 @@
           )
           (local.set $$111
            (i32.add
-            (i32.const 7263)
+            (i32.const 7315)
             (local.get $$110)
            )
           )
@@ -169449,7 +170400,7 @@
    (local.get $$$0)
   )
  )
- (func $___shgetc (; 377 ;) (param $$0 i32) (result i32)
+ (func $___shgetc (; 381 ;) (param $$0 i32) (result i32)
   (local $$$0 i32)
   (local $$$phi$trans$insert i32)
   (local $$$phi$trans$insert28 i32)
@@ -169884,7 +170835,7 @@
    (local.get $$$0)
   )
  )
- (func $_isspace (; 378 ;) (param $$0 i32) (result i32)
+ (func $_isspace (; 382 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -169929,7 +170880,7 @@
    (local.get $$4)
   )
  )
- (func $___uflow (; 379 ;) (param $$0 i32) (result i32)
+ (func $___uflow (; 383 ;) (param $$0 i32) (result i32)
   (local $$$0 i32)
   (local $$1 i32)
   (local $$2 i32)
@@ -170042,7 +170993,7 @@
    (local.get $$$0)
   )
  )
- (func $___toread (; 380 ;) (param $$0 i32) (result i32)
+ (func $___toread (; 384 ;) (param $$0 i32) (result i32)
   (local $$$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -170298,7 +171249,7 @@
    (local.get $$$0)
   )
  )
- (func $_strtoll (; 381 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i64)
+ (func $_strtoll (; 385 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i64)
   (local $$3 i64)
   (local $label i32)
   (local $sp i32)
@@ -170317,7 +171268,7 @@
    (local.get $$3)
   )
  )
- (func $_strtoul (; 382 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_strtoul (; 386 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$3 i64)
   (local $$4 i32)
   (local $label i32)
@@ -170342,7 +171293,7 @@
    (local.get $$4)
   )
  )
- (func $_copysign (; 383 ;) (param $$0 f64) (param $$1 f64) (result f64)
+ (func $_copysign (; 387 ;) (param $$0 f64) (param $$1 f64) (result f64)
   (local $$2 i64)
   (local $$3 i64)
   (local $$4 i64)
@@ -170391,7 +171342,7 @@
    (local.get $$7)
   )
  )
- (func $_strcmp (; 384 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_strcmp (; 388 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$$011 i32)
   (local $$$0710 i32)
   (local $$$lcssa i32)
@@ -170586,7 +171537,7 @@
    (local.get $$14)
   )
  )
- (func $_memcmp (; 385 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_memcmp (; 389 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$$01318 i32)
   (local $$$01417 i32)
   (local $$$019 i32)
@@ -170740,7 +171691,7 @@
    (local.get $$14)
   )
  )
- (func $_isdigit (; 386 ;) (param $$0 i32) (result i32)
+ (func $_isdigit (; 390 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -170771,7 +171722,7 @@
    (local.get $$3)
   )
  )
- (func $_vsnprintf (; 387 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (result i32)
+ (func $_vsnprintf (; 391 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (result i32)
   (local $$$0 i32)
   (local $$$014 i32)
   (local $$$015 i32)
@@ -171046,7 +171997,7 @@
    (local.get $$$0)
   )
  )
- (func $_vfprintf (; 388 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_vfprintf (; 392 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$3 i32)
   (local $label i32)
   (local $sp i32)
@@ -171058,15 +172009,15 @@
     (local.get $$0)
     (local.get $$1)
     (local.get $$2)
-    (i32.const 22)
-    (i32.const 23)
+    (i32.const 27)
+    (i32.const 28)
    )
   )
   (return
    (local.get $$3)
   )
  )
- (func $_fmt_fp (; 389 ;) (param $$0 i32) (param $$1 f64) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (result i32)
+ (func $_fmt_fp (; 393 ;) (param $$0 i32) (param $$1 f64) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (result i32)
   (local $$$ i32)
   (local $$$0 i32)
   (local $$$0463$lcssa i32)
@@ -171684,7 +172635,7 @@
      (i32.const 1)
     )
     (local.set $$$0523
-     (i32.const 7289)
+     (i32.const 7341)
     )
     (local.set $$$pre$phiZ2D
      (local.get $$$pre715)
@@ -171718,15 +172669,15 @@
     (local.set $$$
      (if (result i32)
       (local.get $$18)
-      (i32.const 7290)
-      (i32.const 7295)
+      (i32.const 7342)
+      (i32.const 7347)
      )
     )
     (local.set $$spec$select565
      (if (result i32)
       (local.get $$16)
       (local.get $$$)
-      (i32.const 7292)
+      (i32.const 7344)
      )
     )
     (local.set $$19
@@ -171792,8 +172743,8 @@
      (local.set $$25
       (if (result i32)
        (local.get $$24)
-       (i32.const 7308)
-       (i32.const 7312)
+       (i32.const 7360)
+       (i32.const 7364)
       )
      )
      (local.set $$26
@@ -171811,8 +172762,8 @@
      (local.set $$27
       (if (result i32)
        (local.get $$24)
-       (i32.const 7331)
-       (i32.const 7316)
+       (i32.const 7383)
+       (i32.const 7368)
       )
      )
      (local.set $$$0512
@@ -175122,7 +176073,7 @@
         )
         (call $_out
          (local.get $$0)
-         (i32.const 7320)
+         (i32.const 7372)
          (i32.const 1)
         )
        )
@@ -175477,7 +176428,7 @@
               )
               (call $_out
                (local.get $$0)
-               (i32.const 7320)
+               (i32.const 7372)
                (i32.const 1)
               )
               (local.set $$$2
@@ -175706,7 +176657,7 @@
    (local.get $$$560)
   )
  )
- (func $_pop_arg_long_double (; 390 ;) (param $$0 i32) (param $$1 i32)
+ (func $_pop_arg_long_double (; 394 ;) (param $$0 i32) (param $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
   (local $$4 i32)
@@ -175806,7 +176757,7 @@
   )
   (return)
  )
- (func $___vfprintf_internal (; 391 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (result i32)
+ (func $___vfprintf_internal (; 395 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (result i32)
   (local $$$0 i32)
   (local $$$1 i32)
   (local $$10 i32)
@@ -176281,7 +177232,7 @@
    (local.get $$$0)
   )
  )
- (func $_printf_core (; 392 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (param $$6 i32) (result i32)
+ (func $_printf_core (; 396 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (param $$6 i32) (result i32)
   (local $$$ i32)
   (local $$$0 i32)
   (local $$$0231 i32)
@@ -178841,7 +179792,7 @@
                            (i32.const 0)
                           )
                           (local.set $$$1240
-                           (i32.const 7272)
+                           (i32.const 7324)
                           )
                           (local.set $$$2258
                            (local.get $$spec$select297)
@@ -178885,7 +179836,7 @@
                            (i32.const 1)
                           )
                           (local.set $$$0239
-                           (i32.const 7272)
+                           (i32.const 7324)
                           )
                           (local.set $$215
                            (local.get $$208)
@@ -178923,15 +179874,15 @@
                           (local.set $$$
                            (if (result i32)
                             (local.get $$212)
-                            (i32.const 7272)
-                            (i32.const 7274)
+                            (i32.const 7324)
+                            (i32.const 7326)
                            )
                           )
                           (local.set $$spec$select298
                            (if (result i32)
                             (local.get $$210)
                             (local.get $$$)
-                            (i32.const 7273)
+                            (i32.const 7325)
                            )
                           )
                           (local.set $$213
@@ -178979,7 +179930,7 @@
                         (i32.const 0)
                        )
                        (local.set $$$0239
-                        (i32.const 7272)
+                        (i32.const 7324)
                        )
                        (local.set $$215
                         (local.get $$$pre368)
@@ -179015,7 +179966,7 @@
                        (i32.const 0)
                       )
                       (local.set $$$2241
-                       (i32.const 7272)
+                       (i32.const 7324)
                       )
                       (local.set $$$5
                        (i32.const 1)
@@ -179044,7 +179995,7 @@
                      (local.set $$232
                       (if (result i32)
                        (local.get $$231)
-                       (i32.const 7282)
+                       (i32.const 7334)
                        (local.get $$230)
                       )
                      )
@@ -179103,7 +180054,7 @@
                       (i32.const 0)
                      )
                      (local.set $$$2241
-                      (i32.const 7272)
+                      (i32.const 7324)
                      )
                      (local.set $$$5
                       (local.get $$$3259)
@@ -179229,7 +180180,7 @@
            (i32.const 0)
           )
           (local.set $$$2241
-           (i32.const 7272)
+           (i32.const 7324)
           )
           (local.set $$$5
            (local.get $$$0256)
@@ -179308,14 +180259,14 @@
           )
           (local.set $$196
            (i32.add
-            (i32.const 7272)
+            (i32.const 7324)
             (local.get $$195)
            )
           )
           (local.set $$spec$select295
            (if (result i32)
             (local.get $$or$cond280)
-            (i32.const 7272)
+            (i32.const 7324)
             (local.get $$196)
            )
           )
@@ -180112,7 +181063,7 @@
    (local.get $$$0)
   )
  )
- (func $___lockfile (; 393 ;) (param $$0 i32) (result i32)
+ (func $___lockfile (; 397 ;) (param $$0 i32) (result i32)
   (local $label i32)
   (local $sp i32)
   (local.set $sp
@@ -180122,7 +181073,7 @@
    (i32.const 1)
   )
  )
- (func $___unlockfile (; 394 ;) (param $$0 i32)
+ (func $___unlockfile (; 398 ;) (param $$0 i32)
   (local $label i32)
   (local $sp i32)
   (local.set $sp
@@ -180130,7 +181081,7 @@
   )
   (return)
  )
- (func $_out (; 395 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
+ (func $_out (; 399 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32)
   (local $$3 i32)
   (local $$4 i32)
   (local $$5 i32)
@@ -180168,7 +181119,7 @@
   )
   (return)
  )
- (func $_getint (; 396 ;) (param $$0 i32) (result i32)
+ (func $_getint (; 400 ;) (param $$0 i32) (result i32)
   (local $$$0$lcssa i32)
   (local $$$04 i32)
   (local $$1 i32)
@@ -180326,7 +181277,7 @@
    (local.get $$$0$lcssa)
   )
  )
- (func $_pop_arg (; 397 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32)
+ (func $_pop_arg (; 401 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32)
   (local $$$mask i32)
   (local $$$mask31 i32)
   (local $$10 i32)
@@ -181312,7 +182263,7 @@
           (local.get $$3)
           (i32.const 31)
          )
-         (i32.const 172)
+         (i32.const 196)
         )
        )
        (br $label$break$L1)
@@ -181324,7 +182275,7 @@
   )
   (return)
  )
- (func $_fmt_x (; 398 ;) (param $$0 i64) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_fmt_x (; 402 ;) (param $$0 i64) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$$05$lcssa i32)
   (local $$$056 i32)
   (local $$$07 i64)
@@ -181452,7 +182403,7 @@
    (local.get $$$05$lcssa)
   )
  )
- (func $_fmt_o (; 399 ;) (param $$0 i64) (param $$1 i32) (result i32)
+ (func $_fmt_o (; 403 ;) (param $$0 i64) (param $$1 i32) (result i32)
   (local $$$0$lcssa i32)
   (local $$$045 i64)
   (local $$$06 i32)
@@ -181556,7 +182507,7 @@
    (local.get $$$0$lcssa)
   )
  )
- (func $_fmt_u (; 400 ;) (param $$0 i64) (param $$1 i32) (result i32)
+ (func $_fmt_u (; 404 ;) (param $$0 i64) (param $$1 i32) (result i32)
   (local $$$010$lcssa$off0 i32)
   (local $$$01013 i64)
   (local $$$012 i32)
@@ -181788,7 +182739,7 @@
    (local.get $$$1$lcssa)
   )
  )
- (func $_memchr (; 401 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_memchr (; 405 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$$0$lcssa i32)
   (local $$$035$lcssa i32)
   (local $$$035$lcssa65 i32)
@@ -182369,7 +183320,7 @@
    (local.get $$39)
   )
  )
- (func $_pad_659 (; 402 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32)
+ (func $_pad_659 (; 406 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32)
   (local $$$0$lcssa i32)
   (local $$$011 i32)
   (local $$10 i32)
@@ -182544,7 +183495,7 @@
   )
   (return)
  )
- (func $_wctomb (; 403 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_wctomb (; 407 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$$0 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -182581,7 +183532,7 @@
    (local.get $$$0)
   )
  )
- (func $_wcrtomb (; 404 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_wcrtomb (; 408 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$$0 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -183097,7 +184048,7 @@
    (local.get $$$0)
   )
  )
- (func $___pthread_self_440 (; 405 ;) (result i32)
+ (func $___pthread_self_440 (; 409 ;) (result i32)
   (local $$0 i32)
   (local $label i32)
   (local $sp i32)
@@ -183111,7 +184062,7 @@
    (local.get $$0)
   )
  )
- (func $_pthread_self (; 406 ;) (result i32)
+ (func $_pthread_self (; 410 ;) (result i32)
   (local $label i32)
   (local $sp i32)
   (local.set $sp
@@ -183121,7 +184072,7 @@
    (i32.const 2344)
   )
  )
- (func $___fwritex (; 407 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $___fwritex (; 411 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$$03846 i32)
   (local $$$042 i32)
   (local $$$1 i32)
@@ -183530,7 +184481,7 @@
    (local.get $$$1)
   )
  )
- (func $___towrite (; 408 ;) (param $$0 i32) (result i32)
+ (func $___towrite (; 412 ;) (param $$0 i32) (result i32)
   (local $$$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -183725,7 +184676,7 @@
    (local.get $$$0)
   )
  )
- (func $___DOUBLE_BITS_662 (; 409 ;) (param $$0 f64) (result i64)
+ (func $___DOUBLE_BITS_662 (; 413 ;) (param $$0 f64) (result i64)
   (local $$1 i64)
   (local $label i32)
   (local $sp i32)
@@ -183741,7 +184692,7 @@
    (local.get $$1)
   )
  )
- (func $_frexp (; 410 ;) (param $$0 f64) (param $$1 i32) (result f64)
+ (func $_frexp (; 414 ;) (param $$0 f64) (param $$1 i32) (result f64)
   (local $$$0 f64)
   (local $$$016 f64)
   (local $$10 i32)
@@ -183921,7 +184872,7 @@
    (local.get $$$0)
   )
  )
- (func $_sn_write (; 411 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
+ (func $_sn_write (; 415 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result i32)
   (local $$$cast i32)
   (local $$10 i32)
   (local $$3 i32)
@@ -184007,7 +184958,7 @@
    (local.get $$2)
   )
  )
- (func $___floatscan (; 412 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result f64)
+ (func $___floatscan (; 416 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result f64)
   (local $$$0 i32)
   (local $$$0102 i32)
   (local $$$0103 i32)
@@ -184447,7 +185398,7 @@
        )
        (local.set $$27
         (i32.add
-         (i32.const 7322)
+         (i32.const 7374)
          (local.get $$$0104122)
         )
        )
@@ -184686,7 +185637,7 @@
              )
              (local.set $$59
               (i32.add
-               (i32.const 7331)
+               (i32.const 7383)
                (local.get $$$2106120)
               )
              )
@@ -185590,7 +186541,7 @@
    (local.get $$$0111)
   )
  )
- (func $_hexfloat (; 413 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (result f64)
+ (func $_hexfloat (; 417 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (result f64)
   (local $$$0 i32)
   (local $$$0$be i32)
   (local $$$0$ph i32)
@@ -187489,7 +188440,7 @@
    (local.get $$$0169)
   )
  )
- (func $_decfloat (; 414 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (result f64)
+ (func $_decfloat (; 418 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (param $$4 i32) (param $$5 i32) (result f64)
   (local $$$0324 i32)
   (local $$$0324$be i32)
   (local $$$0327480 i32)
@@ -191644,7 +192595,7 @@
    (local.get $$$1)
   )
  )
- (func $_scanexp (; 415 ;) (param $$0 i32) (param $$1 i32) (result i64)
+ (func $_scanexp (; 419 ;) (param $$0 i32) (param $$1 i32) (result i64)
   (local $$$0 i32)
   (local $$$047$lcssa70 i64)
   (local $$$04752 i64)
@@ -192480,7 +193431,7 @@
    (local.get $$$050)
   )
  )
- (func $_scalbn (; 416 ;) (param $$0 f64) (param $$1 i32) (result f64)
+ (func $_scalbn (; 420 ;) (param $$0 f64) (param $$1 i32) (result f64)
   (local $$$0 f64)
   (local $$$020 i32)
   (local $$10 f64)
@@ -192703,7 +193654,7 @@
    (local.get $$20)
   )
  )
- (func $_copysignl (; 417 ;) (param $$0 f64) (param $$1 f64) (result f64)
+ (func $_copysignl (; 421 ;) (param $$0 f64) (param $$1 f64) (result f64)
   (local $$2 f64)
   (local $label i32)
   (local $sp i32)
@@ -192720,7 +193671,7 @@
    (local.get $$2)
   )
  )
- (func $_fmodl (; 418 ;) (param $$0 f64) (param $$1 f64) (result f64)
+ (func $_fmodl (; 422 ;) (param $$0 f64) (param $$1 f64) (result f64)
   (local $$2 f64)
   (local $label i32)
   (local $sp i32)
@@ -192737,7 +193688,7 @@
    (local.get $$2)
   )
  )
- (func $_scalbnl (; 419 ;) (param $$0 f64) (param $$1 i32) (result f64)
+ (func $_scalbnl (; 423 ;) (param $$0 f64) (param $$1 i32) (result f64)
   (local $$2 f64)
   (local $label i32)
   (local $sp i32)
@@ -192754,7 +193705,7 @@
    (local.get $$2)
   )
  )
- (func $_fmod (; 420 ;) (param $$0 f64) (param $$1 f64) (result f64)
+ (func $_fmod (; 424 ;) (param $$0 f64) (param $$1 f64) (result f64)
   (local $$$0 i64)
   (local $$$068101 i64)
   (local $$$070 f64)
@@ -193596,7 +194547,7 @@
    (local.get $$$070)
   )
  )
- (func $___DOUBLE_BITS_273 (; 421 ;) (param $$0 f64) (result i64)
+ (func $___DOUBLE_BITS_273 (; 425 ;) (param $$0 f64) (result i64)
   (local $$1 i64)
   (local $label i32)
   (local $sp i32)
@@ -193612,7 +194563,7 @@
    (local.get $$1)
   )
  )
- (func $_strlen (; 422 ;) (param $$0 i32) (result i32)
+ (func $_strlen (; 426 ;) (param $$0 i32) (result i32)
   (local $$$0 i32)
   (local $$$014 i32)
   (local $$$015$lcssa i32)
@@ -193905,7 +194856,7 @@
    (local.get $$$014)
   )
  )
- (func $_strchr (; 423 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_strchr (; 427 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$2 i32)
   (local $$3 i32)
   (local $$4 i32)
@@ -193962,7 +194913,7 @@
    (local.get $$6)
   )
  )
- (func $___strchrnul (; 424 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $___strchrnul (; 428 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$$0 i32)
   (local $$$029$lcssa i32)
   (local $$$02936 i32)
@@ -194416,7 +195367,7 @@
    (local.get $$$0)
   )
  )
- (func $_snprintf (; 425 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$varargs i32) (result i32)
+ (func $_snprintf (; 429 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$varargs i32) (result i32)
   (local $$3 i32)
   (local $$4 i32)
   (local $label i32)
@@ -194461,7 +195412,7 @@
    (local.get $$4)
   )
  )
- (func $___unlist_locked_file (; 426 ;) (param $$0 i32)
+ (func $___unlist_locked_file (; 430 ;) (param $$0 i32)
   (local $$$pre i32)
   (local $$$sink i32)
   (local $$1 i32)
@@ -194600,7 +195551,7 @@
   )
   (return)
  )
- (func $___pthread_self_599 (; 427 ;) (result i32)
+ (func $___pthread_self_599 (; 431 ;) (result i32)
   (local $$0 i32)
   (local $label i32)
   (local $sp i32)
@@ -194614,7 +195565,7 @@
    (local.get $$0)
   )
  )
- (func $_fopen (; 428 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $_fopen (; 432 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$$0 i32)
   (local $$10 i32)
   (local $$11 i32)
@@ -194689,7 +195640,7 @@
   )
   (local.set $$4
    (call $_strchr
-    (i32.const 7335)
+    (i32.const 7387)
     (local.get $$3)
    )
   )
@@ -194868,7 +195819,7 @@
    (local.get $$$0)
   )
  )
- (func $___fmodeflags (; 429 ;) (param $$0 i32) (result i32)
+ (func $___fmodeflags (; 433 ;) (param $$0 i32) (result i32)
   (local $$$ i32)
   (local $$$0 i32)
   (local $$$2 i32)
@@ -195068,7 +196019,7 @@
    (local.get $$spec$select14)
   )
  )
- (func $___fdopen (; 430 ;) (param $$0 i32) (param $$1 i32) (result i32)
+ (func $___fdopen (; 434 ;) (param $$0 i32) (param $$1 i32) (result i32)
   (local $$$0 i32)
   (local $$$pre i32)
   (local $$10 i32)
@@ -195187,7 +196138,7 @@
   )
   (local.set $$5
    (call $_strchr
-    (i32.const 7335)
+    (i32.const 7387)
     (local.get $$4)
    )
   )
@@ -195570,7 +196521,7 @@
       )
       (i32.store
        (local.get $$36)
-       (i32.const 24)
+       (i32.const 29)
       )
       (local.set $$37
        (i32.add
@@ -195580,7 +196531,7 @@
       )
       (i32.store
        (local.get $$37)
-       (i32.const 21)
+       (i32.const 26)
       )
       (local.set $$38
        (i32.add
@@ -195604,7 +196555,7 @@
       )
       (local.set $$40
        (i32.load
-        (i32.const 9148)
+        (i32.const 9420)
        )
       )
       (local.set $$41
@@ -195647,7 +196598,7 @@
    (local.get $$$0)
   )
  )
- (func $___ofl_add (; 431 ;) (param $$0 i32) (result i32)
+ (func $___ofl_add (; 435 ;) (param $$0 i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -195714,31 +196665,31 @@
    (local.get $$0)
   )
  )
- (func $___ofl_lock (; 432 ;) (result i32)
+ (func $___ofl_lock (; 436 ;) (result i32)
   (local $label i32)
   (local $sp i32)
   (local.set $sp
    (global.get $STACKTOP)
   )
   (call $___lock
-   (i32.const 9212)
+   (i32.const 9484)
   )
   (return
-   (i32.const 9220)
+   (i32.const 9492)
   )
  )
- (func $___ofl_unlock (; 433 ;)
+ (func $___ofl_unlock (; 437 ;)
   (local $label i32)
   (local $sp i32)
   (local.set $sp
    (global.get $STACKTOP)
   )
   (call $___unlock
-   (i32.const 9212)
+   (i32.const 9484)
   )
   (return)
  )
- (func $_fclose (; 434 ;) (param $$0 i32) (result i32)
+ (func $_fclose (; 438 ;) (param $$0 i32) (result i32)
   (local $$$pre i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -196021,7 +196972,7 @@
    (local.get $$25)
   )
  )
- (func $_fflush (; 435 ;) (param $$0 i32) (result i32)
+ (func $_fflush (; 439 ;) (param $$0 i32) (result i32)
   (local $$$0 i32)
   (local $$$023 i32)
   (local $$$02325 i32)
@@ -196346,7 +197297,7 @@
    (local.get $$$0)
   )
  )
- (func $___fflush_unlocked (; 436 ;) (param $$0 i32) (result i32)
+ (func $___fflush_unlocked (; 440 ;) (param $$0 i32) (result i32)
   (local $$$0 i32)
   (local $$1 i32)
   (local $$10 i32)
@@ -196571,7 +197522,7 @@
    (local.get $$$0)
   )
  )
- (func $_feof (; 437 ;) (param $$0 i32) (result i32)
+ (func $_feof (; 441 ;) (param $$0 i32) (result i32)
   (local $$$lobit i32)
   (local $$$lobit8 i32)
   (local $$$lobit9 i32)
@@ -196679,7 +197630,7 @@
    (local.get $$$lobit9)
   )
  )
- (func $_ferror (; 438 ;) (param $$0 i32) (result i32)
+ (func $_ferror (; 442 ;) (param $$0 i32) (result i32)
   (local $$$lobit i32)
   (local $$$lobit8 i32)
   (local $$$lobit9 i32)
@@ -196787,7 +197738,7 @@
    (local.get $$$lobit9)
   )
  )
- (func $_fread (; 439 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (result i32)
+ (func $_fread (; 443 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (param $$3 i32) (result i32)
   (local $$$ i32)
   (local $$$0 i32)
   (local $$$054 i32)
@@ -197221,7 +198172,7 @@
    (local.get $$$0)
   )
  )
- (func $_printf (; 440 ;) (param $$0 i32) (param $$varargs i32) (result i32)
+ (func $_printf (; 444 ;) (param $$0 i32) (param $$varargs i32) (result i32)
   (local $$1 i32)
   (local $$2 i32)
   (local $$3 i32)
@@ -197271,7 +198222,7 @@
    (local.get $$3)
   )
  )
- (func $_atof (; 441 ;) (param $$0 i32) (result f64)
+ (func $_atof (; 445 ;) (param $$0 i32) (result f64)
   (local $$1 f64)
   (local $label i32)
   (local $sp i32)
@@ -197288,7 +198239,7 @@
    (local.get $$1)
   )
  )
- (func $_strtod (; 442 ;) (param $$0 i32) (param $$1 i32) (result f64)
+ (func $_strtod (; 446 ;) (param $$0 i32) (param $$1 i32) (result f64)
   (local $$2 f64)
   (local $label i32)
   (local $sp i32)
@@ -197306,7 +198257,7 @@
    (local.get $$2)
   )
  )
- (func $_strtox (; 443 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result f64)
+ (func $_strtox (; 447 ;) (param $$0 i32) (param $$1 i32) (param $$2 i32) (result f64)
   (local $$10 i64)
   (local $$11 i32)
   (local $$12 i32)
@@ -197492,7 +198443,7 @@
    (local.get $$8)
   )
  )
- (func $_atoi (; 444 ;) (param $$0 i32) (result i32)
+ (func $_atoi (; 448 ;) (param $$0 i32) (result i32)
   (local $$$0 i32)
   (local $$$010$lcssa i32)
   (local $$$01015 i32)
@@ -197797,7 +198748,225 @@
    (local.get $$21)
   )
  )
- (func $_memcpy (; 445 ;) (param $dest i32) (param $src i32) (param $num i32) (result i32)
+ (func $_saveSetjmp (; 449 ;) (param $env i32) (param $label i32) (param $table i32) (param $size i32) (result i32)
+  (local $i i32)
+  (global.set $setjmpId
+   (i32.add
+    (global.get $setjmpId)
+    (i32.const 1)
+   )
+  )
+  (call $SAFE_HEAP_STORE
+   (local.get $env)
+   (global.get $setjmpId)
+   (i32.const 4)
+  )
+  (loop $while-in
+   (block $while-out
+    (if
+     (i32.eqz
+      (i32.lt_s
+       (local.get $i)
+       (local.get $size)
+      )
+     )
+     (br $while-out)
+    )
+    (block
+     (if
+      (i32.eq
+       (call $SAFE_HEAP_LOAD
+        (i32.add
+         (local.get $table)
+         (i32.shl
+          (local.get $i)
+          (i32.const 3)
+         )
+        )
+        (i32.const 4)
+        (i32.const 0)
+       )
+       (i32.const 0)
+      )
+      (block
+       (call $SAFE_HEAP_STORE
+        (i32.add
+         (local.get $table)
+         (i32.shl
+          (local.get $i)
+          (i32.const 3)
+         )
+        )
+        (global.get $setjmpId)
+        (i32.const 4)
+       )
+       (call $SAFE_HEAP_STORE
+        (i32.add
+         (local.get $table)
+         (i32.add
+          (i32.shl
+           (local.get $i)
+           (i32.const 3)
+          )
+          (i32.const 4)
+         )
+        )
+        (local.get $label)
+        (i32.const 4)
+       )
+       (call $SAFE_HEAP_STORE
+        (i32.add
+         (local.get $table)
+         (i32.add
+          (i32.shl
+           (local.get $i)
+           (i32.const 3)
+          )
+          (i32.const 8)
+         )
+        )
+        (i32.const 0)
+        (i32.const 4)
+       )
+       (call $setTempRet0
+        (local.get $size)
+       )
+       (return
+        (local.get $table)
+       )
+      )
+     )
+     (local.set $i
+      (i32.add
+       (local.get $i)
+       (i32.const 1)
+      )
+     )
+    )
+    (br $while-in)
+   )
+  )
+  (local.set $size
+   (i32.mul
+    (local.get $size)
+    (i32.const 2)
+   )
+  )
+  (local.set $table
+   (call $_realloc
+    (local.get $table)
+    (i32.mul
+     (i32.const 8)
+     (i32.add
+      (local.get $size)
+      (i32.const 1)
+     )
+    )
+   )
+  )
+  (local.set $table
+   (call $_saveSetjmp
+    (local.get $env)
+    (local.get $label)
+    (local.get $table)
+    (local.get $size)
+   )
+  )
+  (call $setTempRet0
+   (local.get $size)
+  )
+  (return
+   (local.get $table)
+  )
+ )
+ (func $_testSetjmp (; 450 ;) (param $id i32) (param $table i32) (param $size i32) (result i32)
+  (local $i i32)
+  (local $curr i32)
+  (loop $while-in
+   (block $while-out
+    (if
+     (i32.eqz
+      (i32.lt_s
+       (local.get $i)
+       (local.get $size)
+      )
+     )
+     (br $while-out)
+    )
+    (block
+     (local.set $curr
+      (call $SAFE_HEAP_LOAD
+       (i32.add
+        (local.get $table)
+        (i32.shl
+         (local.get $i)
+         (i32.const 3)
+        )
+       )
+       (i32.const 4)
+       (i32.const 0)
+      )
+     )
+     (if
+      (i32.eq
+       (local.get $curr)
+       (i32.const 0)
+      )
+      (br $while-out)
+     )
+     (if
+      (i32.eq
+       (local.get $curr)
+       (local.get $id)
+      )
+      (return
+       (call $SAFE_HEAP_LOAD
+        (i32.add
+         (local.get $table)
+         (i32.add
+          (i32.shl
+           (local.get $i)
+           (i32.const 3)
+          )
+          (i32.const 4)
+         )
+        )
+        (i32.const 4)
+        (i32.const 0)
+       )
+      )
+     )
+     (local.set $i
+      (i32.add
+       (local.get $i)
+       (i32.const 1)
+      )
+     )
+    )
+    (br $while-in)
+   )
+  )
+  (return
+   (i32.const 0)
+  )
+ )
+ (func $_setThrew (; 451 ;) (param $threw i32) (param $value i32)
+  (if
+   (i32.eq
+    (global.get $__THREW__)
+    (i32.const 0)
+   )
+   (block
+    (global.set $__THREW__
+     (local.get $threw)
+    )
+    (global.set $threwValue
+     (local.get $value)
+    )
+   )
+  )
+ )
+ (func $_memcpy (; 452 ;) (param $dest i32) (param $src i32) (param $num i32) (result i32)
   (local $ret i32)
   (local $aligned_dest_end i32)
   (local $block_aligned_dest_end i32)
@@ -198337,7 +199506,7 @@
    (local.get $ret)
   )
  )
- (func $_memset (; 446 ;) (param $ptr i32) (param $value i32) (param $num i32) (result i32)
+ (func $_memset (; 453 ;) (param $ptr i32) (param $value i32) (param $num i32) (result i32)
   (local $end i32)
   (local $aligned_end i32)
   (local $block_aligned_end i32)
@@ -198633,7 +199802,7 @@
    )
   )
  )
- (func $_sbrk (; 447 ;) (param $increment i32) (result i32)
+ (func $_sbrk (; 454 ;) (param $increment i32) (result i32)
   (local $oldDynamicTop i32)
   (local $oldDynamicTopOnChange i32)
   (local $newDynamicTop i32)
@@ -198712,7 +199881,7 @@
    (local.get $oldDynamicTop)
   )
  )
- (func $dynCall_ii (; 448 ;) (param $index i32) (param $a1 i32) (result i32)
+ (func $dynCall_ii (; 455 ;) (param $index i32) (param $a1 i32) (result i32)
   (return
    (call_indirect (type $FUNCSIG$ii)
     (local.get $a1)
@@ -198726,7 +199895,7 @@
    )
   )
  )
- (func $dynCall_iidiiii (; 449 ;) (param $index i32) (param $a1 i32) (param $a2 f64) (param $a3 i32) (param $a4 i32) (param $a5 i32) (param $a6 i32) (result i32)
+ (func $dynCall_iidiiii (; 456 ;) (param $index i32) (param $a1 i32) (param $a2 f64) (param $a3 i32) (param $a4 i32) (param $a5 i32) (param $a6 i32) (result i32)
   (return
    (call_indirect (type $FUNCSIG$iidiiii)
     (local.get $a1)
@@ -198745,7 +199914,7 @@
    )
   )
  )
- (func $dynCall_iii (; 450 ;) (param $index i32) (param $a1 i32) (param $a2 i32) (result i32)
+ (func $dynCall_iii (; 457 ;) (param $index i32) (param $a1 i32) (param $a2 i32) (result i32)
   (return
    (call_indirect (type $FUNCSIG$iii)
     (local.get $a1)
@@ -198760,7 +199929,7 @@
    )
   )
  )
- (func $dynCall_iiii (; 451 ;) (param $index i32) (param $a1 i32) (param $a2 i32) (param $a3 i32) (result i32)
+ (func $dynCall_iiii (; 458 ;) (param $index i32) (param $a1 i32) (param $a2 i32) (param $a3 i32) (result i32)
   (return
    (call_indirect (type $FUNCSIG$iiii)
     (local.get $a1)
@@ -198776,7 +199945,7 @@
    )
   )
  )
- (func $dynCall_jiji (; 452 ;) (param $index i32) (param $a1 i32) (param $a2 i64) (param $a3 i32) (result i64)
+ (func $dynCall_jiji (; 459 ;) (param $index i32) (param $a1 i32) (param $a2 i64) (param $a3 i32) (result i64)
   (return
    (call_indirect (type $FUNCSIG$jiji)
     (local.get $a1)
@@ -198792,7 +199961,7 @@
    )
   )
  )
- (func $dynCall_v (; 453 ;) (param $index i32)
+ (func $dynCall_v (; 460 ;) (param $index i32)
   (call_indirect (type $FUNCSIG$v)
    (i32.add
     (i32.and
@@ -198803,19 +199972,19 @@
    )
   )
  )
- (func $dynCall_vi (; 454 ;) (param $index i32) (param $a1 i32)
+ (func $dynCall_vi (; 461 ;) (param $index i32) (param $a1 i32)
   (call_indirect (type $FUNCSIG$vi)
    (local.get $a1)
    (i32.add
     (i32.and
      (local.get $index)
-     (i32.const 7)
+     (i32.const 31)
     )
     (i32.const 164)
    )
   )
  )
- (func $dynCall_vii (; 455 ;) (param $index i32) (param $a1 i32) (param $a2 i32)
+ (func $dynCall_vii (; 462 ;) (param $index i32) (param $a1 i32) (param $a2 i32)
   (call_indirect (type $FUNCSIG$vii)
    (local.get $a1)
    (local.get $a2)
@@ -198824,11 +199993,11 @@
      (local.get $index)
      (i32.const 31)
     )
-    (i32.const 172)
+    (i32.const 196)
    )
   )
  )
- (func $b0 (; 456 ;) (param $p0 i32) (result i32)
+ (func $b0 (; 463 ;) (param $p0 i32) (result i32)
   (call $nullFunc_ii
    (i32.const 0)
   )
@@ -198836,7 +200005,7 @@
    (i32.const 0)
   )
  )
- (func $b1 (; 457 ;) (param $p0 i32) (param $p1 f64) (param $p2 i32) (param $p3 i32) (param $p4 i32) (param $p5 i32) (result i32)
+ (func $b1 (; 464 ;) (param $p0 i32) (param $p1 f64) (param $p2 i32) (param $p3 i32) (param $p4 i32) (param $p5 i32) (result i32)
   (call $nullFunc_iidiiii
    (i32.const 1)
   )
@@ -198844,7 +200013,7 @@
    (i32.const 0)
   )
  )
- (func $b2 (; 458 ;) (param $p0 i32) (param $p1 i32) (result i32)
+ (func $b2 (; 465 ;) (param $p0 i32) (param $p1 i32) (result i32)
   (call $nullFunc_iii
    (i32.const 2)
   )
@@ -198852,7 +200021,7 @@
    (i32.const 0)
   )
  )
- (func $b3 (; 459 ;) (param $p0 i32) (param $p1 i32) (param $p2 i32) (result i32)
+ (func $b3 (; 466 ;) (param $p0 i32) (param $p1 i32) (param $p2 i32) (result i32)
   (call $nullFunc_iiii
    (i32.const 3)
   )
@@ -198860,7 +200029,7 @@
    (i32.const 0)
   )
  )
- (func $b4 (; 460 ;) (param $p0 i32) (param $p1 i64) (param $p2 i32) (result i64)
+ (func $b4 (; 467 ;) (param $p0 i32) (param $p1 i64) (param $p2 i32) (result i64)
   (call $nullFunc_jiji
    (i32.const 4)
   )
@@ -198868,22 +200037,22 @@
    (i64.const 0)
   )
  )
- (func $b5 (; 461 ;)
+ (func $b5 (; 468 ;)
   (call $nullFunc_v
    (i32.const 5)
   )
  )
- (func $b6 (; 462 ;) (param $p0 i32)
+ (func $b6 (; 469 ;) (param $p0 i32)
   (call $nullFunc_vi
    (i32.const 6)
   )
  )
- (func $b7 (; 463 ;) (param $p0 i32) (param $p1 i32)
+ (func $b7 (; 470 ;) (param $p0 i32) (param $p1 i32)
   (call $nullFunc_vii
    (i32.const 7)
   )
  )
- (func $legalstub$dynCall_jiji (; 464 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $legalstub$dynCall_jiji (; 471 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i64)
   (local.set $5
    (call $dynCall_jiji

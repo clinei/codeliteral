@@ -397,12 +397,6 @@ void linked_list() {
 		int value;
 		List_Item* next;
 	};
-	// don't go over the limit
-	List_Item[10] list;
-	list[0].value = 20;
-	list[1].value = 10;
-	list[0].next = &list[1];
-	list[1].next = 0;
 	uint length(List_Item* list) {
 		uint i = 1;
 		while (list.next != 0) {
@@ -410,16 +404,6 @@ void linked_list() {
 			i++;
 		}
 		return i;
-	}
-	length(&list);
-	List_Item* elem_at_index(List_Item* list, uint index) {
-		// check for name clashes
-		uint len = length(list);
-		if (index >= len) {
-			// out of bounds
-			return 0;
-		}
-		return list + index;
 	}
 	void insert(List_Item* list, int value) {
 		while (list.next != 0) {
@@ -432,47 +416,50 @@ void linked_list() {
 		list.value = value;
 		list.next = 0;
 	}
-	insert(&list, 40);
-	insert(&list, 30);
-	length(&list);
 	void print(List_Item* list) {
-		while (list.next != 0) {
+		uint length = length(list);
+		for (uint i = 0; i < length; i++) {
 			list.value;
 			list = list.next;
 		}
-		if (true) {
-			list.value;
-			list = list;
+	}
+	void swap(List_Item* list, uint index, uint with_index) {
+		int temp = list[index].value;
+		list[index].value = list[with_index].value;
+		list[with_index].value = temp;
+	}
+	uint partition(List_Item* list, uint lo, uint hi) {
+		int pivot = list[hi].value;
+		uint i = lo;
+		for (uint j = lo; j < hi; j++) {
+			if (list[j].value < pivot) {
+				swap(list, i, j);
+				i += 1;
+			}
+		}
+		swap(list, i, hi);
+		return i;
+	}
+	void quicksort(List_Item* list, uint lo, uint hi) {
+		if (lo < hi) {
+			uint part = partition(list, lo, hi);
+			if (part != 0) {
+				quicksort(list, lo, part - 1);
+			}
+			quicksort(list, part + 1, hi);
 		}
 	}
+	// don't go over the limit
+	List_Item[10] list;
+	list[0].value = 20;
+	list[0].next = &list[1];
+	list[1].value = 10;
+	list[1].next = 0;
+	insert(&list, 40);
+	insert(&list, 30);
+	uint max_index = length(&list) - 1;
 	print(&list);
-	/*
-	algorithm quicksort(A, lo, hi) is
-		if lo < hi then
-			p := partition(A, lo, hi)
-			quicksort(A, lo, p - 1)
-			quicksort(A, p + 1, hi)
-
-	algorithm partition(A, lo, hi) is
-		pivot := A[hi]
-		i := lo
-		for j := lo to hi - 1 do
-			if A[j] < pivot then
-				swap A[i] with A[j]
-				i := i + 1
-		swap A[i] with A[hi]
-		return i
-	*/
-	void quicksort(List_Item* list, uint lo, uint hi) {
-		;
-	}
-	void partition(List_Item* list, uint lo, uint hi) {
-		;
-	}
-	void sort(List_Item* list) {
-		quicksort(list, 0, length(list) - 1);
-	}
-	sort(&list);
+	quicksort(&list, 0, max_index);
 	print(&list);
 }
 int factorial(short number) {
@@ -511,6 +498,7 @@ int main() {
 	// fizzbuzz(30);
 
 	linked_list();
+
 	return local_variable;
 }
 main();
