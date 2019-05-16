@@ -1,6 +1,6 @@
 # CodeLiteral
 
-It's a game that turns the execution of your program into a procedurally generated world where the bugs are the quest items. The vast open world is a syntax tree of the executed program. You can explore that tree using intuitive keyboard controls, moving between lines, reads and writes, or different uses of the same code. The syntax tree stores the values of variables as delicious informative apples. So you debug by walking around an informative apple orchard.
+It's a game that turns the execution of your program into a procedurally generated world where the bugs are the quest items. The vast open world is a syntax tree of the executed program. You can explore that tree using intuitive keyboard controls, moving between lines, reads and writes, and different uses of the same code. The syntax tree stores the values of variables as delicious informative apples. So you debug by walking around an informative apple orchard.
 
 #### Learn
 
@@ -12,7 +12,7 @@ Find out why the value was wrong by pressing just one button. Create custom tool
 
 #### Document
 
-Mark points of interest and the intended program flow. Make your documentation interactive. Reuse debug visualizations and explain the most arcane concepts. Save it all to a file.
+Mark the points of interest and the intended program flow. Make your documentation interactive. Reuse debug visualizations and explain the most arcane concepts. Save it all to a file.
 
 #### Automate
 
@@ -34,7 +34,7 @@ Everything is scriptable. You can gather any data you want, and show it any way 
 Debugging, documenting, and testing all use the same data gathering and visualization workflows. That means you can reuse most of the code you write. You can also use the code from your actual program. And you can save it to a file and send it to your colleagues or save it for audits or private nostalgia. Or maybe wait 20 years and sell it to a museum.
 
 
-## What can I do that I couldn't before?
+## What can I do that I couldn't do before?
 
 #### Save and resume debug sessions
 
@@ -42,7 +42,7 @@ Different people can do different stages of debugging: one records the problem, 
 
 #### Rapidly debug complex problems
 
-The following situation will never happen: you step over a call, ruin the program state, and spend the next 10 minutes setting up the state to reproduce the bug again. You have as much time as you need to understand the problem. All the data is plainly visible for you to glance over and solve the problem in 5 seconds. You can jump between reads and writes and anything else you've marked as interesting. You can find the right way to visualize the problem. Moving around keeps you awake and energetic. It's a game, it keeps up your motivation so you don't have to.
+You have probably heard about the following situation: you're debugging a program, you spend 10 minutes getting the bug to trigger, and then you press the wrong button, so you have to restart the whole process and spend the next 10 minutes setting up the state again. In this debugger, that can't happen. You start recording, you trigger the bug once, and then you inspect the recording for as long as required. You can see all the data for the entire program. Sometimes you can solve the problem just by looking at the data. If that's not enough, you can jump between reads and writes. If that's still not enough, you can write a script and gather more data than you can hold in your head, and display it in a way that makes it easier to think about the problem. You can also mark certain points as interesting and move quickly between them. This workflow keeps you moving around and not thinking too hard for too long, so you remain awake and focused on the problem at hand. It's like a game, it keeps up your motivation so you don't have to.
 
 #### Inline testing
 
