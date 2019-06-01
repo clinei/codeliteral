@@ -3,7 +3,6 @@
 #include <setjmp.h>
 
 #include "parser.h"
-#include "bytecode.h"
 #include "interaction.h"
 
 void init_run();

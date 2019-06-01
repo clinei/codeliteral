@@ -1405,7 +1405,7 @@ struct Code_Node* parse_statement(struct Token_Array* token_array,
 struct Code_Node* parse_rvalue_atom(struct Token_Array* token_array,
                                     struct Code_Nodes* code_nodes) {
 
-    printf("parse_rvalue_atom: %s\n", token_array->curr_token->str);
+    // printf("parse_rvalue_atom: %s\n", token_array->curr_token->str);
     if (strcmp(token_array->curr_token->str, "&") == 0) {
         return parse_reference(token_array, code_nodes);
     }
@@ -2115,12 +2115,8 @@ struct Token_Array* tokenize(char* input) {
 
     // @Weird
     // we have to do this twice to have a valid pointer
-    // token_array->last--;
-    // token_array->last--;
-
-    array_next(token_array);
-    token_array->last->kind = TOKEN_KIND_END;
-    token_array->last->str = "";
+    token_array->last--;
+    token_array->last--;
 
     return token_array;
 }

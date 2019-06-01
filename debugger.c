@@ -438,13 +438,11 @@ void set_text(char* new_text) {
         free(my_text);
     }
     my_text = new_text;
-    my_text = "1 + 2";
     
     struct Token_Array* token_array = tokenize(my_text);
     
     token_array->curr_token = token_array->first;
 
-    /*
     struct Code_Nodes* code_nodes = parse(token_array);
 
     infer(code_nodes->first);
@@ -452,24 +450,6 @@ void set_text(char* new_text) {
     my_code_nodes = code_nodes;
     
     init_run(code_nodes);
-    */
-
-    struct Bytecode_Array* bytecode = malloc(sizeof(struct Bytecode_Array));
-    array_init(bytecode, sizeof(u8), 10000);
-
-    struct Code_Nodes* code_nodes = malloc(sizeof(struct Code_Nodes));
-    array_init(code_nodes, sizeof(struct Code_Node), 100000);
-    struct Code_Node* node = parse_statement(token_array, code_nodes);
-    infer(code_nodes->first);
-
-    ast_to_bytecode(node, bytecode);
-
-    struct Virtual_Machine* vm = malloc(sizeof(struct Virtual_Machine));
-    vm->memory_size = 1000;
-    vm->memory = malloc(vm->memory_size);
-    run_bytecode(bytecode, vm);
-
-    return;
 
     if (setjmp(run_data.abort_jmp)) {
         // aborted

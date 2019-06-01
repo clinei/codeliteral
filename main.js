@@ -18,7 +18,7 @@ function set_text(new_text) {
     writeAsciiToMemory(new_text, ptr);
     call_set_text(ptr);
 }
-/*
+
 const code = `
 bool test_floats() {
 	bool passed = true;
@@ -500,13 +500,6 @@ int main() {
 	linked_list();
 
 	return local_variable;
-}
-main();
-`;
-*/
-const code = `
-int main() {
-	return 0;
 }
 main();
 `;
