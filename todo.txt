@@ -14,6 +14,8 @@ reallocation of type_infos and code_node_array means we have to fix pointers in 
 we have to calculate the diff of the last block and then add that to every pointer
 or we can have node pointers relative to the base, that way we don't have to recalculate
 but we have to convert from relative pointers to absolute every time we traverse the tree
+OR we can use Bucket_Array and not have to copy the data on realloc and break pointers
+what changes would that require?
 
 we should use flags instead of bools
 
@@ -82,7 +84,9 @@ try font hinting
 import a libc, like musl, so we can printf
 that requires a preprocessor
 
-Ideas:
+## Ideas:
+
+transform the syntax tree into bytecode and run that. it would be faster and work a bit like the final version,as the final version has to map from machine code to syntax tree. we might be able to generate the syntax tree dynamically, so we don't use too much memory. how would finding expanded nodes work in that case?
 
 add a way to jump to the original code in the text editor, maybe as a toggle that makes the original code get selected when moving between nodes
 

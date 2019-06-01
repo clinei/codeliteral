@@ -6,11 +6,11 @@ A program was executed. It gave birth to a Temporal Logic Space, a world of conn
 
 You are a time-travelling wizard in an orange robe. You can walk around and cast spells. You can make things reveal their true nature and why it came to be. You can draw symbols and teleport between them. You can also teleport between similar locations, and cause and effect.
 
-All that will help you accomplish your heroic task of figuring out why the world is not as it should be. For really nasty problems, you can write your own spells to conjure up a more intuitive way of looking at things. By that, I mean you can write scripts to gather data and display it in custom ways. Except it feels like a game.
+All that will help you accomplish your heroic task of figuring out why the world is not as it should be. For really nasty problems, you can write your own spells to conjure up a more intuitive way of looking at things.
 
 You can combine spells and make them do more damage by writing macros. You can move around, interact with the environment, and explore a vast open world on your quest to smite the evil bug queen.
 
-Function calls and loop cycles are natural caves with memorable environments and recognizable landmarks. Self-contained blocks of code are rooms and levels. You can save your progress and revisit old areas. Every step is small and simple, so there is always something you can do to make the final task easier. You can plan out your moves, craft special abilities, and create a strategy to finish that annoying boss level. There is no leveling system, only raw skill and well-tuned mechanics.
+Function calls and loop cycles are natural caves with memorable environments and recognizable landmarks. Self-contained blocks of code are rooms and levels. You can save your progress and revisit old areas. Every step is small and simple, so there is always something you can do to make the final task easier. You can plan out your moves, craft special abilities, and create a strategy to finish that annoying boss level.
 
 Uncovering secrets and exploring the Temporal Logic Space truly feels like an adventure.
 

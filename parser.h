@@ -21,6 +21,7 @@ enum Token_Kind {
     TOKEN_KIND_LITERAL = 5,
     TOKEN_KIND_COMMENT_SINGLE = 6,
     TOKEN_KIND_COMMENT_MULTI = 7,
+    TOKEN_KIND_END = 8
 };
 struct Token {
     enum Token_Kind kind;
@@ -174,12 +175,12 @@ struct Code_Assign {
 };
 struct Code_Opassign {
     struct Code_Node* ident;
-    char* operation_type;
+    char* operation_type;         // :OperationTypeStringToEnum
     struct Code_Node* expression;
 };
 struct Code_Binary_Operation {
     struct Code_Node* left;
-    char* operation_type;
+    char* operation_type;         // :OperationTypeStringToEnum
     struct Code_Node* right;
 };
 struct Code_Ident {
