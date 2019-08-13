@@ -1,6 +1,6 @@
 # CodeLiteral
 
-It's a game that turns the execution of your program into a procedurally generated world where the bugs are the quest items. The vast open world is a syntax tree of the whole history of the program. You can explore that tree using simple keyboard controls, like WASD to move between lines of code, or other buttons for more useful things. And the syntax tree stores the values of variables as delicious informative apples. So you debug by walking around in an informative apple orchard, looking for any rotten apples, and when you find one, you can teleport straight to the original bad apple that ruined apple pie.
+It's a game that turns the execution of your program into a procedurally generated world where the bugs are the quest items. The vast open world is a syntax tree of the whole history of the program. You can explore that tree using simple keyboard controls, like WASD to move between lines of code, or other buttons for more useful things. And the syntax tree stores the values of variables as delicious informative apples. So you debug by walking around in an informative apple orchard, looking for any rotten apples, and when you find one, you can teleport straight to the original bad apple that ruined your apple pie.
 
 #### Learn
 
