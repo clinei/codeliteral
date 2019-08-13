@@ -1,14 +1,14 @@
 # CodeLiteral
 
-It's a game that turns the execution of your program into a procedurally generated world where the bugs are the quest items. The vast open world is a syntax tree of the executed program. You can explore that tree using intuitive keyboard controls, moving between lines, reads and writes, and different uses of the same code. The syntax tree stores the values of variables as delicious informative apples. So you debug by walking around an informative apple orchard.
+It's a game that turns the execution of your program into a procedurally generated world where the bugs are the quest items. The vast open world is a syntax tree of the executed program. You can explore that tree using simple keyboard controls, like WASD to move between lines of code, or other buttons for more useful things. And the syntax tree stores the values of variables as delicious informative apples. So you debug by walking around in an informative apple orchard, looking for any rotten apples, and when you find one, you can teleport straight to the original bad apple that ruined apple pie.
 
 #### Learn
 
-Move around and understand the program flow. Look at the data all at once and understand what's really going on. Never get lost.
+Move up and down the control flow. See the data all at once and understand what's really going on. Instantly recognize where you are. Never get lost.
 
 #### Debug
 
-Find out why the value was wrong by pressing just one button. Create custom tools to gather data and visualize the problem.
+When a value is wrong, and you wanna know why, you just ask it by pressing a button. And if that's not enough, you can ask why a group of values were wrong at specific times. And if that's still not enough, you can ask why a complex integration of a huge bunch of values was slightly different from what you expected, which ultimately made your program crash. Visualize the problem with audio and video.
 
 #### Document
 
@@ -16,14 +16,14 @@ Mark the points of interest and the intended program flow. Make your documentati
 
 #### Automate
 
-Use the fully scriptable user interface to make custom tools and automate the most frequent tasks, like testing.
+Use the fully scriptable user interface to make custom tools and automate the most frequent tasks, like testing if the bug is fixed or still there.
 
 
 ## What makes this so good?
 
 #### Simplicity
 
-Everything is easy. Most questions are answered by looking around or pressing one button.
+Everything is easy. Most questions are answered by looking around or pressing a button.
 
 #### Power
 
