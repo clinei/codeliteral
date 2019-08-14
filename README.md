@@ -42,11 +42,11 @@ Different people can do different stages of debugging: one records the problem, 
 
 #### Rapidly debug complex problems
 
-You have probably heard about the following situation: you're debugging a program, you spend 10 minutes getting the bug to trigger, and then you press the wrong button, so you have to restart the whole process and spend the next 10 minutes setting up the state again. In this debugger, that can't happen. You start recording, you trigger the bug once, and then you inspect the recording for as long as required. You can see all the data for the entire program. Sometimes you can solve the problem just by looking at the data. If that's not enough, you can jump between reads and writes. If that's still not enough, you can write a script and gather more data than you can hold in your head, and display it in a way that makes it easier to think about the problem. You can also mark certain points as interesting and move quickly between them. This workflow keeps you moving around and not thinking too hard for too long, so you remain awake and focused on the problem at hand. It's like a game, it keeps up your motivation so you don't have to.
+You've probably heard about the following situation: you're debugging a program, you spend 10 minutes getting the bug to trigger, and then you press the wrong button, and you have to restart the whole process and spend 10 minutes setting up the state again. In this debugger, that can't happen. You start recording, you trigger the bug once, and then you inspect the recording for as long as you need. You can see all the data for the entire program, nothing is hidden or hard to get. Sometimes you can solve the problem just by looking at the data. You can jump between reads and writes, ask some a bit more complex questions, or create custom visualizations or macros for frequently used actions. You can also mark certain points as interesting and move quickly between them. This keeps you moving around and not thinking too hard for too long, so you remain awake and focused on the problem at hand. It's like a game, it keeps up your motivation so you don't have to.
 
 #### Inline testing
 
-Instead of testing return values, you check the actual value of an expression as the code ran. Testability is no longer a problem. The whole execution is one syntax tree, easy to process.
+Instead of testing return values, you can check the actual value of an expression as the code ran. Testability is no longer a problem. The whole execution is one syntax tree, easy to process.
 
 #### Data analysis of execution
 
