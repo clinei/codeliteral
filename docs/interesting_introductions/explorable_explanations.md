@@ -1,6 +1,6 @@
 # Explorable Explanations
 
-You might have already heard about [explorable explanations](https://explorabl.es/), the idea of explaining ideas by showing how they work in an interactive toy example. Indeed, being able to interact with the example, and see how tweaking the parameters changes the results, does make understanding the concept easier. This is especially true for complex ideas with multiple levels of interaction between different emergent behaviors, like in [this example](https://ncase.me/trust/). I highly recommend checking it out if you haven't already.
+You might have already heard about [explorable explanations](https://explorabl.es/), the idea of explaining ideas by showing how they work in an interactive toy example. Indeed, being able to interact with the example, and see how tweaking the parameters changes the results, does make understanding the concept easier. This is especially true for complex ideas with multiple levels of interaction between different emergent behaviors, like in [this example](http://complexity-explorables.org/explorables/berlin-8-am/). I highly recommend checking it out if you haven't already.
 
 What's nice about explorable explanations is that they let you start slow, learning things step by step, and practice what you've learned right as you're learning it. You have enough time to explore any ideas or questions you might have, making sure that you're ready for the next level of knowledge. It also makes learning more interesting and engaging.
 
