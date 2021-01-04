@@ -34,20 +34,18 @@ To satisfy this need, the user can create [custom tools and visualizations](../c
 
 [Work in Progress]
 
+Grant Sanderson, also known as 3Blue1Brown on YouTube
+says that learning has to be based on intuitive metaphors and existing knowledge of physical processes, like sound, movement, and collision. New situations are easier to understand if we can compare them to past situations.
+https://www.youtube.com/watch?v=s_L-fp8gDzY
+
 ## Aesthetics of Play
 
-I like to feel interesting emotions.
+When playing games, there are are usually a few main reasons why people wanna keep playing the game. In this section, I show how the debugger tries to hook into each basic reason that keeps people motivated and focused on the task at hand. 
 
-I like to believe interesting stories.
+The main reason why someone would use the debugger is to figure out what the program did wrong and why. The main way to do that is to move around in the recorded program execution, which is displayed as code, and inspect different parts of the cause and effect chain. To do that, the user either moves through time using WASD or ZX, or through the uses and changes of some data using HJ and YU. The user can also use RT to move between different runs of the same code, like the cycles of a for loop, many calls of the same function, or other times when a rare conditional branch was taken. There main mode of operation is to look around, decide where to move, and then rapidly press buttons to move toward the target, and making course corrections as needed. 
 
-I like to see stories unfold.
+Humans like to feel interesting emotions. They like to be swept up in the moment, and make quick decisions based on subconscious information. Moving around in the code elements of recorded execution can, at times, be fast-paced enough to feel like an arcade game. Pressing a button to move in a certain direction while watching for the expected result happens in a tight, repeated loop. This creates a feeling of change and progress not unlike movement in a physical space. In addition, pressing F to see the value of a variable at a certain point in time and seeing it be exactly what you expected gives the user an instant feeling of superiority and expertise for correctly predicting the behavior of the system.
 
-I like to overcome challenges.
+Humans like to see interesting stories unfold, and to be a driving force in them. Figuring out why a program crashed or returned incorrect output is very much like a detective story. There is a death, or an attempted poisoning of a high-status individual, and you are the Sherlock Holmes, Hercule Poirot (or Miss Marple) who must study the crime scene, find clues, and use your power of reasoning to find the forces of evil that did the dirty deed. This also satisfies the human desire to discover new things and overcome challenges.
 
-I like to have friends.
-
-I like to discover new things.
-
-I like to create new, interesting, and beautiful things.
-
-I like to do things distract me from everyday life.
+Humans like to create new, interesting, and beautiful things. This desire is satisfied by letting the users create useful code snippets, or entire visualization systems, to help other people figure out what happened in their program, and why, in a more effective and intuitive way. Users can also create detailed walkthroughs for complex systems that explain every case that the system handles, and every design constraint and assumption that was used while creating the solution. Seeing other people use tools that you created, and thanking you for it, also creates a sense of community and friendship, which is another fundamental human desire.
