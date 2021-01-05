@@ -909,7 +909,9 @@ function infer(node) {
         node.base.type = node.ident.declaration.expression.return_type;
     }
     else if (node.base.kind == Code_Kind.RETURN) {
-        infer(node.expression);
+        if (node.expression) {
+            infer(node.expression);
+        }
     }
     else if (node.base.kind == Code_Kind.IDENT) {
         node.declaration = infer_decl_of_ident(node);

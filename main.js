@@ -1,10 +1,5 @@
 "use strict";
 
-// need to fix
-// textarea width
-// in desktop and mobile
-// and mobile in general
-
 let code = `/*  CONTROLS
 
 	W - move up        F - show values
@@ -20,117 +15,6 @@ let code = `/*  CONTROLS
 
 	K - set point      , - prev point
 	L - remove point   . - next point
-
-	I - hide zone
-	O - show zone
-
-*/
-
-/*  ABOUT THIS
-
-This here is a proof of concept, a tool that enables you to
-understand the activities of your program as it executes. You
-traverse meaningful links between code segments, utilizing
-a highly interactive and visual keyboard-only interface that
-integrates the display of valuable information such as
-the state of variables or the result of operations into
-your actual code, replacing questions with answers.
-
-No longer are you limited by one-way breakpoints and clunky
-out-of-context watch lists as used in traditional debuggers.
-You can rapidly ask both simple and complex questions and
-get quick and straight answers. You can actually engage in
-a dialogue with your program. There is very little confusion,
-your goal is always known and straightforward, and you have
-an easy time picking the right tool for the job.
-
-Okay, enough of the marketing talk.
-
-This is very far from a full implementation of an idea
-I had when reading an email written by John Carmack,
-the lead programmer of the popular game Doom, and a few
-other things. He had taken a codebase and copied the contents
-of every function into where it was called, and replaced
-the parameters with arguments so it would actually compile.
-The resulting code was big, the variable names repetitive,
-but all the assumptions that were hidden in the space
-between the different contexts were laid bare for all to see.
-He discovered redundant checks, special cases, optimizations
-and other interesting things very quickly, all because
-the contexts were now more visible and not as vague.
-
-He did it by hand, but I figured that it shouldn't be
-too hard to automate it. Since I was gonna make something
-that would help people find bugs, I thought about other
-features that would help in that regard. Having to switch
-mental contexts and look away from the code to find out
-the value of a variable is pretty tedious, right? Let's
-make it so the variable in the code gets replaced by the
-value at that point in time. The result would be the same,
-would it not? The same could be done with simple math operations.
-Two plus two is four, minus one is three, quick maths.
-This would let you look at the values of many variables at once,
-without breaking the context, and enabling more rapid interaction.
-
-If we duplicate the body of a function every time it is called,
-we could do the same for loops. Every time we run an iteration,
-we create an if statement with the loop condition, and the
-block. For loops add a beginning statement and another statement
-at the end of a cycle.
-
-I implemented function call and loop unrolling, value showing,
-moving up and down between lines, and moving left and right
-on one line, and then I realized that moving doesn't have to
-be that linear. Moving could also happen along relationships
-between code elements. An element could refer to a memory
-address whose contents are changed and used in different
-places in the code, and you could record those changes
-and uses to later be able to move between them. You could
-use that to go to where something got a bad value. This
-feature is extremely useful in solving average complexity
-bugs that would take you at least 10 times more time to do
-with a traditional forward-only debugger.
-
-There is yet another non-linear way to move between code
-elements. Functions may be called many times, and loops
-may run many times. In fact, that is their entire purpose.
-Your code needs to work in every case, so I added a way to
-move between different executions of the same code elements.
-If you have a bug in code like that, you can easily check
-the other executions for explanations why that specific
-context is broken and why the others are not. The other
-contexts will help you in the process of elimination.
-
-If we want to be as informative as possible, we have to
-eliminate the uninformative elements, like conditional
-code that did not actually run. There is a way to hide
-areas of code that did run but don't interest you. There
-is a way to mark some code as interesting so you can
-come back to it later.
-
-There are a few more advanced features that I want to add
-that would require you to use the mouse, but they would be
-very worth it. One is conditional breakpoints, and the other
-is more detailed and maybe custom analysis of the data.
-
-I am reinventing the wheel with some of the features.
-Moving between clones is just treating the cursor as a
-breakpoint. Moving between changes and uses is just a
-data breakpoint. Recording the execution is time travel
-debugging or reversible debugging. The novel idea is the
-representation and the rapid interaction. The feasability
-of using this for large desktop programs remains to be seen.
-
-The language used for this demonstration works like C.
-There is no preprocessor, not all features are supported.
-There are structs and arrays and even pointers, and also bugs.
-Only a print function is available from the standard library.
-Everything is interpreted but there is a static type system
-and virtual memory.
-
-There is a C and WebAssembly port using Emscripten in progress.
-The ultimate goal is to have a standalone program that can debug
-raw executables, and integrate more directly with languages.
 
 */
 
@@ -274,14 +158,15 @@ void linked_list() {
 }
 */
 
-int simple_code(int param, int other_param) {
+int simple_code(int ayy, int bee) {
 	"Read the code and try to guess the return value"
-	int temp = param + other_param;
-	temp *= param * 2;
-	other_param += 3;
-	temp += other_param;
-	"or press F a few times to see the values directly"
-	return temp;
+	int cee = ayy + bee;
+	cee *= ayy * 2;
+	bee += 3;
+	cee += bee;
+	"or press F to see the values directly"
+	"(and press it again to turn it off)"
+	return cee;
 }
 int complex_code(int param1, int param2, int param3) {
 	"WASD to move faster";
@@ -290,6 +175,7 @@ int complex_code(int param1, int param2, int param3) {
 	int qux = param3;
 	if (foo > 1) {
 		"Press E to see the elements of math expressions";
+		"while showing values";
 		bar = foo + qux;
 		qux -= foo;
 	}
@@ -320,8 +206,23 @@ int complex_code(int param1, int param2, int param3) {
 	return qux;
 }
 
+int func() {
+	"function return values become variables"
+	"and return statements become assignments to that variable"
+	return 4;
+}
+
+void func2(int param) {
+	"Parameters are put after the return declaration"
+	"and before the function body"
+	param = param + 2;
+	return;
+}
+
 int main() {
-	"Z to move backward";
+	"Press Z to move backward";
+	int variable = func();
+	func2(4);
 	simple_code(1, 2);
 	complex_code(2, 4, 8);
 	loops();
@@ -334,7 +235,7 @@ int main() {
 	return 0;
 }
 "Starting tutorial";
-"X to move forward";
+"Press X to move forward";
 main();
 `;
 
@@ -953,6 +854,11 @@ function prev_change() {
 		slider_element.value = execution_index;
 		inspection_cursor = execution_stack[execution_index];
 	}
+	else if (inspection_cursor.is_void_return) {
+		execution_index = inspection_cursor.declaration.ident.execution_index;
+		slider_element.value = execution_index;
+		inspection_cursor = execution_stack[execution_index];
+	}
 }
 function next_change() {
 
@@ -966,6 +872,11 @@ function next_change() {
 		if (index >= indices.length) return;
 
 		execution_index = indices[index];
+		slider_element.value = execution_index;
+		inspection_cursor = execution_stack[execution_index];
+	}
+	else if (inspection_cursor.is_void_return && inspection_cursor.next_change) {
+		execution_index = inspection_cursor.next_change.execution_index;
 		slider_element.value = execution_index;
 		inspection_cursor = execution_stack[execution_index];
 	}
@@ -994,6 +905,11 @@ function next_use() {
 		if (index >= indices.length) return;
 
 		execution_index = indices[index];
+		slider_element.value = execution_index;
+		inspection_cursor = execution_stack[execution_index];
+	}
+	else if (inspection_cursor.is_void_return) {
+		execution_index = inspection_cursor.next_use.execution_index;
 		slider_element.value = execution_index;
 		inspection_cursor = execution_stack[execution_index];
 	}
@@ -1830,8 +1746,14 @@ function run_rvalue(node, push_index = true) {
 	}
 	else if (node.base.kind == Code_Kind.IDENT) {
 
-		if (node.declaration.type.name == "void") {	
-			throw Error;
+		if (node.declaration.type.name == "void") {
+			if (node.is_void_return) {
+				add_node_to_execution_stack(node);
+				return;
+			}
+			else {
+				throw Error;
+			}
 		}
 		else if (node.declaration.type.name == "string") {
 
@@ -2028,7 +1950,10 @@ function run_statement(node, push_index = true) {
 			add_node_to_execution_stack(node.ident);
 		}
 
-		if (node.ident.base.type.base.kind != "void") {
+		if (node.ident.base.type.base.kind == "void") {
+			node.ident.is_void_return = true;
+		}
+		else {
 
 			let prev_value = get_memory(stack_pointer, node.ident.base.type, node.ident);
 			node.ident.last_return = prev_value;
@@ -2231,9 +2156,22 @@ function run_statement(node, push_index = true) {
 	else if (node.base.kind == Code_Kind.RETURN) {
 
 		let transformed = transform(node);
-		return_value = run_statement(transformed);
-		return_node = transformed.statements[0].expression.last_return_node;
-		add_memory_change(last_call.transformed.statements[0].pointer, transformed.statements[0].ident);
+		if (node.expression) {
+			return_value = run_statement(transformed);
+			return_node = transformed.statements[0].expression.last_return_node;
+			let return_decl = last_call.transformed.statements[0];
+			add_memory_change(return_decl.pointer, transformed.statements[0].ident);
+		}
+		else {
+			let void_return = transformed.statements[0];
+			void_return.is_void_return = true;
+			run_statement(void_return);
+			let return_decl = last_call.transformed.statements[0];
+			return_decl.ident.next_change = void_return;
+			return_decl.ident.next_use = last_call;
+			void_return.next_use = last_call;
+			
+		}
 		last_call.returned = true;
 		last_call.last_return = return_value;
 		last_call.last_return_node = return_node;
@@ -2498,7 +2436,11 @@ function clone(node, set_original = true) {
 	}
 	else if (node.base.kind == Code_Kind.RETURN) {
 
-		cloned = make_return(clone(node.expression));
+		let expr;
+		if (node.expression) {
+			expr = clone(node.expression);
+		}
+		cloned = make_return(expr);
 	}
 	else if (node.base.kind == Code_Kind.REFERENCE) {
 
@@ -2613,10 +2555,14 @@ function transform(node) {
 			indices = new Array();
 			map_original_to_indices.set(cloned_ident.original, indices);
 		}
+		
+		let expr = cloned_ident;
+		
+		if (node.expression) {
+			expr = make_assign(cloned_ident, node.expression);
+		}
 
-		let assign = make_assign(cloned_ident, node.expression);
-
-		replacement.statements.push(assign);
+		replacement.statements.push(expr);
 	}
 
 	if (replacement.statements.length > 0) {
@@ -2818,7 +2764,8 @@ function mark_containment(node) {
 let indent_level = 0;
 
 function should_expand(node) {
-	return node.contains_flowpoint || node.contains_inspection || node.contains_execution;
+	return node.contains_flowpoint || node.contains_inspection || node.contains_execution
+	       || node.base.kind == Code_Kind.RETURN;
 }
 
 function should_hide(node) {
@@ -2882,7 +2829,7 @@ function should_hide(node) {
 
 	// hide code that has not been run
 	if (typeof node.execution_index == "undefined" &&
-		typeof node.last_return == "undefined") {
+		typeof node.last_return_node == "undefined") {
 
 		return true;
 	}
@@ -3467,11 +3414,16 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 		if (node.transformed) {
 
-			let assign_expr = document.createElement("expr");
-			print_to_dom(node.transformed.statements[0], assign_expr, block_print_target);
-			assign_expr.children[0].children[0].classList.add("code-return");
+			let expr = document.createElement("expr");
+			print_to_dom(node.transformed.statements[0], expr, block_print_target);
+			if (node.expression) {
+				expr.children[0].children[0].classList.add("code-return");
+			}
+			else {
+				expr.children[0].classList.add("code-return");
+			}
 
-			print_target.appendChild(assign_expr);
+			print_target.appendChild(expr);
 		}
 	}
 	else if (node.base.kind == Type_Kind.POINTER) {
