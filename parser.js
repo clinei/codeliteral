@@ -1639,7 +1639,7 @@ function tokenize(input) {
         if (token) {
             tokens.push(token);
         }
-        else if (input_index >= input.length) {
+        if (input_index >= input.length) {
             break;
         }
     }

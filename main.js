@@ -1396,6 +1396,9 @@ function run_lvalue(node, push_index = true) {
 		else {
 			let transformed = transform(node);
 			let run_result = run_statement(transformed);
+			if (node.returned == false) {
+				throw Error;
+			}
 			if (push_index) {
 				add_node_to_execution_stack(node);
 			}
