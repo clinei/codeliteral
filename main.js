@@ -175,13 +175,13 @@ int complex_code(int param1, int param2, int param3) {
 	int qux = param3;
 	if (foo > 1) {
 		"Press E to see the elements of math expressions";
-		"while showing values";
+		"while showing values (F)";
 		bar = foo + qux;
 		qux -= foo;
 	}
 	if ((bar - foo) * bar - 50 > 10) {
 		"or go into the expressions with WASD and ZX";
-		"and show values and hide elements";
+		"and show values (F) and hide elements (E)";
 		"and move around with ZX";
 		"to see every step of the calculation";
 		qux += 4;
@@ -191,6 +191,7 @@ int complex_code(int param1, int param2, int param3) {
 		if (qux == 10) {
 			"Knowing what values things have is not enough";
 			"You want to know _why_";
+			"Move the cursor onto a variable name and";
 			"Press H to see where a value was changed last";
 			"Press J to see where a value was changed next";
 			qux += bar - 2;

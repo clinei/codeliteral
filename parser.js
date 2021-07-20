@@ -1108,6 +1108,23 @@ function parse(tokens) {
         if (tokens[token_index].str == "(") {
             token_index += 1;
             let expression = parse_rvalue();
+            if (expression == undefined) {
+                debugger;
+            }
+
+            // @Bug
+            // "1 + 2 * (3 + 4)"
+            // `expression` is "3"
+            // but should be "3 + 4"
+            // we did not parse the entire rvalue
+            // https://youtu.be/MnctEW1oL-E?t=3600
+            // we could just do (1 + (2 * (3 + 4)))
+            // and fix it when recursing back up
+
+            // @Bug
+            // "(1)"
+            // parsed as call with undefined ident
+            // should be math parenthesis expression
             if (tokens[token_index].str == ")") {
                 token_index += 1;
                 left = make_parens(expression);
