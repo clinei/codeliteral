@@ -99,6 +99,7 @@ void loops() {
 	}
 	"That's it for now, you can explore the extra functions in main";
 	"or write your own code in the other panel";
+	return;
 }
 
 int factorial(short number) {
@@ -1397,6 +1398,8 @@ function run_lvalue(node, push_index = true) {
 		else {
 			let transformed = transform(node);
 			let run_result = run_statement(transformed);
+			// maybe not a good idea
+			node.returned = true;
 			if (node.returned == false) {
 				throw Error;
 			}
