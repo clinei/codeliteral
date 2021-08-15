@@ -141,7 +141,7 @@ struct List_Node {
 	List_Node* next;
 };
 List_Node* index_of(List_Node* first, int value) {
-	// broken, need to autocast
+	// @Incomplete
 	first.next;
 	return first;
 }
@@ -155,7 +155,7 @@ void linked_list() {
 	first.next = &second;
 	second.next = &third;
 	third.next = 0;
-	index_of(first);
+	index_of(&first);
 }
 */
 
@@ -221,6 +221,45 @@ void func2(int param) {
 	return;
 }
 
+struct Triangle {
+    double x1;
+    double y1;
+    double x2;
+    double y2;
+    double x3;
+    double y3;
+};
+
+double sqr(double x) {
+	return x * x;
+}
+
+double distance(double x1, double y1, double x2, double y2) {
+	double d1 = x1 - x2;
+	double d2 = y1 - y2;
+	double sd1 = sqr(d1);
+	double sd2 = sqr(d1);
+	return sqrt(sd1 + sd2);
+}
+
+double triangle_circumference(Triangle* triangle) {
+	double side1 = distance(triangle.x1, triangle.y1, triangle.x2, triangle.y2);
+	double side2 = distance(triangle.x2, triangle.y2, triangle.x3, triangle.y3);
+	double side3 = distance(triangle.x3, triangle.y3, triangle.x1, triangle.y1);
+	return side1 + side2 + side3;
+}
+
+void triangle_bug() {
+    Triangle* tri = malloc(sizeof(Triangle));
+    tri.x1 = 0;
+    tri.y1 = 0;
+    tri.x2 = 3;
+    tri.y2 = 0;
+    tri.x3 = 3;
+    tri.y3 = 4;
+    triangle_circumference(tri);
+}
+
 int main() {
 	"Press Z to move backward";
 	int variable = func();
@@ -233,6 +272,7 @@ int main() {
 	fizzbuzz(15);
 	factorial(5);
 	factorial(3);
+	triangle_bug();
 	small_bug(2, 3);
 	return 0;
 }
@@ -434,6 +474,7 @@ function init_text() {
 	Global_Block = parse(tokenize(code));
 	Main_call = Global_Block.statements[Global_Block.statements.length-1];
 	Stdlib_Block.statements.push(Global_Block);
+	infer_last_block = null;
 	infer(Stdlib_Block);
 	fill_rodata();
 	code_composed = true;
@@ -1127,12 +1168,33 @@ let malloc_declaration = make_declaration(make_ident("malloc"), malloc_procedure
 
 let free_procedure = deallocate_memory;
 let free_declaration = make_declaration(make_ident("free"), free_procedure);
+
+function sqrt_procedure(arg) {
+	return Math.sqrt(arg);
+}
+let sqrt_declaration = make_declaration(make_ident("sqrt"), sqrt_procedure);
+
+function sizeof_procedure(arg) {
+	if (arg.declaration && arg.declaration.ident.base.type.base.kind == Type_Kind.STRUCT) {
+		return arg.declaration.ident.base.type.size_in_bytes;
+	}
+	else if (arg.base.kind == Code_Kind.IDENT && Types.hasOwnProperty(arg.name)) {
+		return Types[arg.name].size_in_bytes;
+	}
+	else {
+		throw Error;
+	}
+}
+let sizeof_declaration = make_declaration(make_ident("sizeof"), sizeof_procedure);
+
 let Stdlib_Block = make_block();
 Stdlib_Block.statements = [
 	print_declaration,
 	assert_declaration,
 	malloc_declaration,
 	free_declaration,
+	sqrt_declaration,
+	sizeof_declaration,
 ];
 {
     let string_code = `
@@ -1268,6 +1330,15 @@ function step_back() {
 }
 
 function add_node_to_execution_stack(node) {
+	// :DebugLimiter
+	/*
+	if (execution_index > 99999) {
+		throw Error("Execution took too long, probably an infinite loop!");
+	}
+	*/
+	if (node.execution_index) {
+		throw Error("Internal error: Adding something to the execution stack twice!");
+	}
 	node.execution_index = execution_index;
 	execution_stack.push(node);
 	execution_index += 1;
@@ -1289,6 +1360,7 @@ function run_lvalue(node, push_index = true) {
 		if (push_index) {
 			add_node_to_execution_stack(node);
 		}
+		// update the name with the auto-incrementing number
 		node.name = node.declaration.ident.name;
 		if (node.declaration.type.name != "void") {
 			return_value = node.declaration.pointer;
@@ -1479,7 +1551,18 @@ function run_lvalue(node, push_index = true) {
 					if (push_index) {
 						add_node_to_execution_stack(right);
 					}
-					pointer += left.base.type.members[right.name].offset;
+					if (left.base.type.base.kind == Type_Kind.POINTER) {
+						pointer = get_memory(pointer, left.base.type);
+						if (left.base.type.elem_type.base.kind == Type_Kind.STRUCT) {
+							pointer += left.base.type.elem_type.members[right.name].offset;
+						}
+						else {
+							throw Error("Tried to access a member of a pointer, which is only allowed for struct pointers");
+						}
+					}
+					else {
+						pointer += left.base.type.members[right.name].offset;
+					}
 					add_memory_use(pointer, right);
 					break;
 				}
@@ -1530,6 +1613,15 @@ function run_rvalue(node, push_index = true) {
 		}
 	}
 	else if (node.base.kind == Code_Kind.IDENT) {
+		if (Types.hasOwnProperty(node.name)) {
+			// native type
+			return node;
+		}
+		if (node.base.type.base.kind == Type_Kind.STRUCT) {
+			// @Incomplete
+			// is this safe?
+			return node;
+		}
 		if (node.declaration.type.name == "void") {
 			if (node.is_void_return) {
 				add_node_to_execution_stack(node);
@@ -1633,6 +1725,7 @@ function run_rvalue(node, push_index = true) {
 				if (push_index) {
 					add_node_to_execution_stack(node.left);
 					add_node_to_execution_stack(node.right);
+					add_node_to_execution_stack(node);
 				}
 				if (node.right.name == "length") {
 					return_value = node.left.base.type.length;
@@ -1646,7 +1739,6 @@ function run_rvalue(node, push_index = true) {
 			return_value = get_memory(run_lvalue(node), node.base.type);
 		}
 		return_node = make_literal(return_value);
-		add_node_to_execution_stack(node);
 	}
 	else {
 		return_value = run_lvalue(node);
@@ -1663,7 +1755,8 @@ function run_rvalue(node, push_index = true) {
 function run_statement(node, push_index = true) {
 	if (node.base.kind == Code_Kind.DECLARATION && node.expression && 
 		(typeof node.expression == "function" ||
-		 node.expression.base.kind == Code_Kind.PROCEDURE)) {
+		 node.expression.base.kind == Code_Kind.PROCEDURE ||
+		 node.expression.base.kind == Code_Kind.STRUCT)) {
 
 		return;
 	}
@@ -1981,10 +2074,12 @@ function clone(node, set_original = true) {
 	let cloned;
 	if (node.base.kind == Code_Kind.BLOCK) {
 		let statements = new Array();
+		cloned = make_block(statements, null);
+		map_original_to_clone.set(node, cloned);
+		cloned.enclosing_scope = map_original_to_clone.get(node.enclosing_scope);
 		for (let statement of node.statements) {
 			statements.push(clone(statement));
 		}
-		cloned = make_block(statements);
 	}
 	else if (node.base.kind == Code_Kind.PROCEDURE) {
 		let params = null;
@@ -2060,6 +2155,7 @@ function clone(node, set_original = true) {
 			type = node.type;
 		}
 		let decl = make_declaration(clone(node.ident), expr, type);
+		decl.enclosing_scope = map_original_to_clone.get(decl.enclosing_scope);
 		map_original_to_clone.set(node, decl);
 		cloned = decl;
 	}
@@ -2160,6 +2256,8 @@ function transform(node) {
 			procedure.transformed = make_block();
 			let return_ident = make_ident("return_"+ node.ident.name);
 			procedure.transformed.return_ident = return_ident;
+			// :BlockEnclosingScope
+			infer_last_block = node.ident.declaration.enclosing_scope;
 			let return_decl = infer(make_declaration(return_ident, null, procedure.return_type));
 			procedure.transformed.statements.push(return_decl);
 			for (let i = 0; i < procedure.parameters.length; i += 1) {
@@ -2545,7 +2643,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		}
 		else if ((node.is_lhs ? lhs_values_shown : values_shown) &&
 			node.last_return_node !== null && typeof node.last_return_node !== "undefined" &&
-			typeof node.last_return !== "undefined") {
+			typeof node.last_return !== "undefined" && should_expand_node != true) {
 
 			print_to_dom(node.last_return_node, expr, block_print_target, false, false);
 			print_target.appendChild(expr);
@@ -2640,11 +2738,13 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 			print_target.appendChild(expr);
 		}
 		else if (node.expression && node.expression.base.kind == Code_Kind.STRUCT) {
+			/*
 			// @Hack
 			force_expand = true;
 			print_to_dom(node.expression, expr);
 			force_expand = false;
 			print_target.appendChild(expr);
+			*/
 		}
 		else {
 			print_to_dom(node.type, expr);

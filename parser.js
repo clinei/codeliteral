@@ -90,7 +90,9 @@ let Code_Declaration = {
 
 	ident: null,
 	expression: null,
-	type: null
+	type: null,
+
+	enclosing_scope: null
 };
 function make_declaration(ident, expression, type) {
 
@@ -179,15 +181,17 @@ let Code_Block = {
 
 	base: null,
 
-	statements: null
+	statements: null,
+	enclosing_scope: null
 };
-function make_block(statements) {
+function make_block(statements, enclosing_scope) {
 
 	let block = Object.assign({}, Code_Block);
 	block.base = make_node();
 	block.base.kind = Code_Kind.BLOCK;
 
 	block.statements = statements;
+	block.enclosing_scope = enclosing_scope;
 
 	if (!block.statements) {
 
@@ -568,8 +572,6 @@ function make_parens(expression) {
 	return parens;
 }
 
-let infer_block_stack = new Array();
-
 let Type_Kind = {
     INTEGER: "integer",
     FLOAT: "float",
@@ -755,33 +757,57 @@ let Types = {
 };
 let User_Types = {};
 
-function infer_decl_of_ident(ident) {
-    for (let i = infer_block_stack.length-1; i >= 0; i -= 1) {
-        let block = infer_block_stack[i];
-        for (let j = 0; j < block.declarations.length; j += 1) {
-            let decl = block.declarations[j];
+let infer_last_block = null;
+function infer_decl_of_ident(ident, start_scope = null) {
+	let curr_scope = null;
+	if (start_scope) {
+		curr_scope = start_scope;
+	}
+	else {
+		curr_scope = infer_last_block;
+	}
+	while (curr_scope) {
+        for (let j = 0; j < curr_scope.declarations.length; j += 1) {
+            let decl = curr_scope.declarations[j];
             if (decl.ident.name == ident.name) {
                 return decl;
             }
         }
+		curr_scope = curr_scope.enclosing_scope;
+	}
+}
+function infer_decl_of_ident_current_scope(ident) {
+	let curr_scope = infer_last_block;
+    for (let j = 0; j < curr_scope.declarations.length; j += 1) {
+        let decl = curr_scope.declarations[j];
+        if (decl.ident.name == ident.name) {
+            return decl;
+        }
     }
 }
 function infer(node) {
-    let last_block = infer_block_stack[infer_block_stack.length-1];
     if (node.base.kind == Code_Kind.BLOCK) {
         if (!node.declarations) {
             node.declarations = new Array();
         }
-        infer_block_stack.push(node);
+        // :BlockEnclosingScope
+        node.enclosing_scope = infer_last_block;
+        infer_last_block = node;
         for (let stmt of node.statements) {
             infer(stmt);
         }
-        infer_block_stack.pop();
+        infer_last_block = node.enclosing_scope;
     }
     else if (node.base.kind == Code_Kind.DECLARATION) {
-        // should error here when ident already declared in current scope
-        if (last_block) {
-            last_block.declarations.push(node);
+    	/*
+        if (infer_decl_of_ident_current_scope(node.ident)) {
+        	throw Error("identifier \"" + node.ident.name + "\" already declared in the current scope!");
+        }
+        */
+        if (infer_last_block) {
+            infer_last_block.declarations.push(node);
+            // :BlockEnclosingScope
+            node.enclosing_scope = infer_last_block;
         }
         if (node.type) {
             node.ident.base.type = infer_type(node.type);
@@ -850,7 +876,18 @@ function infer(node) {
                 break;
             }
             else if (right.base.kind == Code_Kind.IDENT) {
-                right.base.type = left.base.type.members[right.name].type;
+            	if (left.base.type.base.kind == Type_Kind.POINTER) {
+            		if (left.base.type.elem_type.base.kind == Type_Kind.STRUCT) {
+            			right.base.type = left.base.type.elem_type.members[right.name].type;
+            		}
+            		else {
+            			debugger;
+            			throw Error;
+            		}
+            	}
+            	else {
+	                right.base.type = left.base.type.members[right.name].type;	
+            	}
                 break;
             }
         }
@@ -862,12 +899,16 @@ function infer(node) {
     else if (node.base.kind == Code_Kind.STRING) {
     }
     else if (node.base.kind == Code_Kind.PROCEDURE) {
-        infer_block_stack.push(node.block);
+    	// :BlockEnclosingScope
+    	let prev_scope = infer_last_block;
+    	node.block.enclosing_scope = infer_last_block;
+    	infer_last_block = node.block;
         node.block.declarations = new Array();
+        infer(node.return_type);
         for (let param of node.parameters) {
             infer(param);
         }
-        infer_block_stack.pop();
+        infer_last_block = prev_scope;
         infer(node.block);
     }
     else if (node.base.kind == Code_Kind.IF) {
@@ -886,8 +927,9 @@ function infer(node) {
         infer(node.condition);
     }
     else if (node.base.kind == Code_Kind.FOR) {
-        let for_scope = make_block();
-        infer_block_stack.push(for_scope);
+        let for_scope = make_block(null, infer_last_block);
+        // :BlockEnclosingScope
+        infer_last_block = for_scope;
         for_scope.declarations = new Array();
         if (node.begin) {
             infer(node.begin);
@@ -899,7 +941,7 @@ function infer(node) {
             infer(node.cycle_end);
         }
         infer(node.expression);
-        infer_block_stack.pop();
+        infer_last_block = for_scope.enclosing_scope;
     }
     else if (node.base.kind == Code_Kind.CALL) {
         infer(node.ident);
@@ -914,8 +956,15 @@ function infer(node) {
         }
     }
     else if (node.base.kind == Code_Kind.IDENT) {
-        node.declaration = infer_decl_of_ident(node);
-        node.base.type = node.declaration.ident.base.type;
+    	if (!node.declaration) {
+	        node.declaration = infer_decl_of_ident(node);
+	    }
+	    if (Types.hasOwnProperty(node.name) != true) {
+	        if (!node.declaration) {
+	        	throw Error;
+	        }
+	        node.base.type = node.declaration.ident.base.type;
+	    }
     }
 	else if (node.base.kind == Code_Kind.REFERENCE) {
         node.base.type = infer_type(node);
@@ -938,6 +987,7 @@ function infer_type(node) {
     if (node.base.kind == Code_Kind.IDENT) {
         let primitive = Types[node.name];
         if (primitive) {
+        	node.base.type = primitive;
             return primitive;
         }
         else {
@@ -946,13 +996,15 @@ function infer_type(node) {
             if (user_type.base.kind == Type_Kind.STRUCT) {
                 return user_type;
             }
-            else debugger;
+            else {
+            	throw Error;
+            }
         }
     }
     else if (node.base.kind == Code_Kind.REFERENCE) {
         infer(node.expression);
         if (node.expression.base.kind == Code_Kind.REFERENCE) {
-            debugger;
+            throw Error;
         }
         return make_type_info_pointer(node.expression.base.type);
     }
@@ -1091,6 +1143,12 @@ function parse(tokens) {
                 else if (curr_token.str[curr_token.str.length-1] == "=") {
                     return parse_opassign(left);
                 }
+                else {
+                	if (left.base.kind == Code_Kind.IDENT && curr_token.str.split("").every(x => x == "*")) {
+                		throw Error("Multiple levels of indirection are currently not supported");
+                	}
+                	throw Error;
+                }
             }
             else {
                 return left;
@@ -1100,7 +1158,7 @@ function parse(tokens) {
             left = parse_rvalue();
             return left;
         }
-        debugger;
+        throw Error("Could not parse a statement!");
     }
     function parse_rvalue() {
         let prev_index = token_index;
