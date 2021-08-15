@@ -61,7 +61,38 @@ void loops() {
 	}
 }
 
-void loops2() {
+void bookmarks() {
+	"Sometimes, code is big, really really big";
+	"Moving around with ZX and WASD is not fast enough";
+	"And HJ and RT don't help much either";
+	"Try it on this code";
+	int a = 1;
+	int b = 2;
+	int c = 3;
+	for (int iter = 0; iter < 10; iter += 1) {
+		if (iter % 3 == 0) {
+			a += b;
+			a = a;
+		}
+		else if (iter % 5 == 0) {
+			c *= a;
+			c = c;
+		}
+		else if (iter % 7 == 0) {
+			b = a + c;
+			b = b;
+		}
+	}
+	"We would like to skip most of the loops";
+	"And only move between important points of interest";
+	"Find the chain of decisions that led to the final result";
+	int final = a + b;
+	"Press K to mark a point of interest";
+	"Press , and . to move between points of interest";
+	"Press L to become disinterested";
+}
+
+void decision_chains() {
 	"Try to figure out what's happening here";
 	int[3] arr;
 	for (int i = 0; i < arr.length; i += 1) {
@@ -93,12 +124,10 @@ void loops2() {
 		if (arr[m] == 5) {
 			"Why is this value 5?";
 			"Make a chain of decision points";
-			"for each of the 3 possibilities";
-			"Press K to mark a point of interest";
-			"Press , and . to move between points of interest";
-			"Press L to become disinterested";
-			"Press 0-9 to select the active array of points";
+			"That explain how this element ended up here";
 			arr[m] = arr[m];
+			"You can have multiple decision chains";
+			"Press 0-9 to select the active array of points";
 		}
 	}
 	"That's it for the tutorial, you can explore more examples in main";
@@ -272,7 +301,8 @@ int main() {
 	simple_code(1, 2);
 	complex_code(2, 4, 8);
 	loops();
-	loops2();
+	bookmarks();
+	decision_chains();
 
 	// linked_list();
 	fizzbuzz(15);
