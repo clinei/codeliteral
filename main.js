@@ -18,7 +18,7 @@ let code = `/*  CONTROLS
 
 */
 
-int small_bug(int num, int denom) {
+int division_bug(int num, int denom) {
 	"Why is this 0?";
 	int answer = num / denom;
 	"Correct result is 0.666.. but integer division rounds to 0";
@@ -170,25 +170,65 @@ void fizzbuzz(int number) {
 
 /*
 struct List_Node {
-	int data;
+	int value;
 	List_Node* next;
 };
 List_Node* index_of(List_Node* first, int value) {
-	// @Incomplete
-	first.next;
-	return first;
+	List_Node* curr = first;
+	while (curr) {
+		if (curr.value == value) {
+			return curr;
+		}
+		curr = curr.next;
+	}
+	return 0;
+}
+void linked_list_array() {
+	List_Node[4] nodes;
+	for (int i = 0; i < nodes.length; i += 1) {
+		nodes[i].value = (i + 1) * 2;
+		if (i < nodes.length - 1) {
+			nodes[i].next = &nodes[i + 1];
+		}
+		else {
+			nodes[i].next = 0;
+		}
+	}
+	List_Node* index = index_of(&nodes[0], 4);
+	index.value == 4;
+}
+void linked_list_heap() {
+	int N = 4;
+	List_Node* nodes = malloc(sizeof(List_Node) * N);
+	for (int i = 0; i < N; i += 1) {
+		// @Incomplete
+		// pointer math is unintuitive,
+		// variables have effective values
+		// that are different from the actual ones
+		List_Node* ptr_curr = nodes + i;
+		ptr_curr.value = (i + 1) * 2;
+		if (i < N - 1) {
+			ptr_curr.next = nodes + i + 1;
+		}
+		else {
+			ptr_curr.next = 0;
+		}
+		// @Bug
+		// Parenthesis and dot operators don't play well together
+		// @Cleanup
+		// This is ugly, how does it work in C?
+		// (nodes + i).value = (i + 1) * 2;
+		// if (i < N - 1) {
+		// 	(nodes + i).next = nodes + i + 1;
+		// }
+		// else {
+		// 	(nodes + i).next = 0;
+		// }
+	}
 }
 void linked_list() {
-	List_Node first;
-	List_Node second;
-	List_Node third;
-	first.data = 1;
-	second.data = 2;
-	third.data = 3;
-	first.next = &second;
-	second.next = &third;
-	third.next = 0;
-	index_of(&first);
+	// linked_list_array();
+	linked_list_heap();
 }
 */
 
@@ -304,12 +344,13 @@ int main() {
 	bookmarks();
 	decision_chains();
 
-	// linked_list();
 	fizzbuzz(15);
 	factorial(5);
 	factorial(3);
 	triangle_bug();
-	small_bug(2, 3);
+	division_bug(2, 3);
+
+	// linked_list();
 	return 0;
 }
 "Starting tutorial";
@@ -1367,11 +1408,12 @@ function step_back() {
 
 function add_node_to_execution_stack(node) {
 	// :DebugLimiter
-	/*
+	// nocheckin
+	/**/
 	if (execution_index > 99999) {
 		throw Error("Execution took too long, probably an infinite loop!");
 	}
-	*/
+	/**/
 	if (node.execution_index) {
 		throw Error("Internal error: Adding something to the execution stack twice!");
 	}
@@ -1603,6 +1645,7 @@ function run_lvalue(node, push_index = true) {
 					break;
 				}
 			}
+			node.base.pointer = pointer;
 			return_value = pointer;
 			return_node = make_literal(return_value);
 			// :TypeNeeded
@@ -1747,7 +1790,8 @@ function run_rvalue(node, push_index = true) {
 			add_node_to_execution_stack(node);
 			add_node_to_execution_stack(node.expression);
 		}
-		let address = node.expression.declaration.pointer;
+		let address = run_lvalue(node.expression, false);
+		// let address = node.expression.declaration.pointer;
 		node.base.pointer = address;
 		add_memory_use(address, node.expression);
 		return_value = address;
@@ -2028,12 +2072,33 @@ function run_statement(node, push_index = true) {
 }
 
 function math_binop(left, operation_type, right) {
-	let is_array = left.base && (left.base.type.base.kind == Type_Kind.STRING ||
-	                             left.base.type.base.kind == Type_Kind.ARRAY) ||
-				   right.base && (right.base.type.base.kind == Type_Kind.STRING ||
-								  right.base.type.base.kind == Type_Kind.ARRAY);
-	let is_float = left.base && left.base.type.base.kind == Type_Kind.FLOAT && 
-				   right.base && right.base.type.base.kind == Type_Kind.FLOAT;
+	let is_array = left.base.type && (left.base.type.base.kind == Type_Kind.STRING ||
+	                                  left.base.type.base.kind == Type_Kind.ARRAY) ||
+				   right.base.type && (right.base.type.base.kind == Type_Kind.STRING ||
+								       right.base.type.base.kind == Type_Kind.ARRAY);
+	let is_float = left.base.type && left.base.type.base.kind == Type_Kind.FLOAT && 
+				   right.base.type && right.base.type.base.kind == Type_Kind.FLOAT;
+	// :PointerMath
+	if (left.base.type) {
+		if (left.base.type.base.kind == Type_Kind.POINTER) {
+			if (right.base.type && right.base.type.base.kind == Type_Kind.POINTER) {
+				throw Error("Pointer math requires only one pointer, not two!");
+			}
+			else {
+				right.value *= left.base.type.elem_type.size_in_bytes;
+			}
+		}
+	}
+	else if (right.base.type && right.base.type.base.kind == Type_Kind.POINTER) {
+		if (left.base.type) {
+			if (left.base.type.base.kind == Type_Kind.POINTER) {
+				throw Error("Pointer math requires only one pointer, not two!");
+			}
+			else {
+				left.value *= right.base.type.elem_type.size_in_bytes;
+			}
+		}
+	}
 	// we are piggybacking on Javascript's operations,
 	// especially string compare, need to rewrite when porting to C
 	if (operation_type == "+") {

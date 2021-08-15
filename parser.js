@@ -1140,6 +1140,11 @@ function parse(tokens) {
                 else if (curr_token.str == "=") {
                     return parse_assign(left);
                 }
+                else if (curr_token.str == "==") {
+                	// @Cleanup
+                	// accidentally parsed a binary equals
+                	return maybe_binary(left);
+                }
                 else if (curr_token.str[curr_token.str.length-1] == "=") {
                     return parse_opassign(left);
                 }
@@ -1270,7 +1275,7 @@ function parse(tokens) {
         return make_string(curr_token.str);
     }
     function parse_call(left) {
-        if (tokens[token_index].str == "(") {
+        if (left && tokens[token_index].str == "(") {
             return make_call(left, delimited("(", ")", ",", parse_rvalue));
         }
         else {
