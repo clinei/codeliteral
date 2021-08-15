@@ -47,21 +47,29 @@ int square(int n) {
 }
 
 void loops() {
-	"We fill an array with 5 ascending numbers";
-	int[5] arr;
-	"This was a for loop, but we moved the initializer";
+	"This was a for loop";
+	"but we moved out the initializer";
 	"and turned every cycle into an if statement";
-	"Press R and T to move between the cycles";
-	"or any execution of the same code";
-	for (int i = 0; i < arr.length; i += 1) {
-		arr[i] = i;
+	for (int it = 0; it < 10; it += 1) {
+		if (it == 0 || it == 9) {
+			"Press R and T to move between the cycles";
+		}
+		else if (it == 2) {
+			"Press X or Z to go inside calls";
+		}
+		int s = square(it);
 	}
-	"We square the numbers";
-	"Press X or Z to go inside calls";
+}
+
+void loops2() {
+	"Try to figure out what's happening here";
+	int[3] arr;
+	for (int i = 0; i < arr.length; i += 1) {
+		arr[i] = i + 2;
+	}
 	for (int j = 0; j < arr.length; j += 1) {
 		arr[j] = square(arr[j]);
 	}
-	"We do some processing";
 	for (int k = 0; k < arr.length; k += 1) {
 		if (arr[k] == 4) {
 			arr[k] = 50;
@@ -73,23 +81,19 @@ void loops() {
 			arr[k] = 55;
 		}
 	}
-	"Some elements are too big, so we make them smaller";
 	for (int l = 0; l < arr.length; l += 1) {
 		if (arr[l] > 50) {
-			"Second one made smaller";
-			"Both have the same value";
-			"but for different reasons";
 			arr[l] = 5;
 		}
 		else if (arr[l] == 50) {
-			"First one made smaller";
 			arr[l] = 5;
 		}
 	}
-	"The results";
 	for (int m = 0; m < arr.length; m += 1) {
 		if (arr[m] == 5) {
 			"Why is this value 5?";
+			"Make a chain of decision points";
+			"for each of the 3 possibilities";
 			"Press K to mark a point of interest";
 			"Press , and . to move between points of interest";
 			"Press L to become disinterested";
@@ -97,8 +101,8 @@ void loops() {
 			arr[m] = arr[m];
 		}
 	}
-	"That's it for now, you can explore the extra functions in main";
-	"or write your own code in the other panel";
+	"That's it for the tutorial, you can explore more examples in main";
+	"Try to solve the bugs, or write your own code in the other panel";
 	return;
 }
 
@@ -186,13 +190,13 @@ int complex_code(int param1, int param2, int param3) {
 		"and move around with ZX";
 		"to see every step of the calculation";
 		qux += 4;
-		bar += 2;
+		bar += (qux + bar) / 10;
 	}
 	if (qux) {
 		if (qux == 10) {
 			"Knowing what values things have is not enough";
 			"You want to know _why_";
-			"Move the cursor onto a variable name and";
+			"Move the cursor onto a variable name";
 			"Press H to see where a value was changed last";
 			"Press J to see where a value was changed next";
 			qux += bar - 2;
@@ -209,13 +213,14 @@ int complex_code(int param1, int param2, int param3) {
 }
 
 int func() {
-	"function return values become variables"
-	"and return statements become assignments to that variable"
+	"Function return values become variables";
+	"Return statements become assignments to that variable";
+	"like this";
 	return 4;
 }
 
 void func2(int param) {
-	"Parameters are put after the return declaration"
+	"Parameters come after the return declaration"
 	"and before the function body"
 	param = param + 2;
 	return;
@@ -267,6 +272,7 @@ int main() {
 	simple_code(1, 2);
 	complex_code(2, 4, 8);
 	loops();
+	loops2();
 
 	// linked_list();
 	fizzbuzz(15);
