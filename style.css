@@ -4,7 +4,6 @@
 }
 
 body {
-
 	margin: 1em;
 	margin-bottom: 0;
 
@@ -14,7 +13,7 @@ body {
 	margin-bottom: 0.3em;
 
 	color: rgb(200, 200, 200);
-	background: rgb(48, 48, 48);
+	background: rgb(48, 48, 52);
 }
 
 table {
@@ -35,7 +34,6 @@ tr.separator {
 }
 
 #instructions {
-
 	margin-top: 1em;
 	margin-bottom: 1em;
 	display: flex;
@@ -45,7 +43,6 @@ tr.separator {
 }
 
 .wrapper {
-
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -57,7 +54,6 @@ tr.separator {
 	height: 100%;
 }
 @media (min-aspect-ratio: 11/9) {
-
 	.wrapper {
 		width: calc(70% - 2em);
 	}
@@ -76,7 +72,6 @@ tr.separator {
 	}
 }
 @media (min-aspect-ratio: 9/16) and (max-aspect-ratio: 11/9) {
-
 	.wrapper {
 		width: calc(100% - 2em);
 	}
@@ -120,12 +115,11 @@ tr.separator {
 }
 
 #code {
-
 	position: relative;
 	white-space: pre;
 	overflow: hidden;
 	width: 100%;
-	background-color: rgb(37, 37, 37);
+	background-color: rgb(37, 37, 42);
 	box-shadow: inset 0 0 2em 0.1em rgba(0, 0, 0, 0.2);
 	border: 0.1em solid rgba(0, 0, 0, 0.2);
 	border-radius: 0.05em;
@@ -133,7 +127,6 @@ tr.separator {
 }
 
 #slider {
-
 	width: 100%;
 	margin: 1em;
 	margin-top: 0 !important;
@@ -141,14 +134,13 @@ tr.separator {
 }
 
 #source {
-	
 	min-width: 200px;
 	width: 660px;
 	min-height: calc(20 * 12pt);
 	color: rgb(200, 200, 200);
 	font-family: SourceCodePro, monospace;
 	font-size: 12pt;
-	background-color: rgb(37, 37, 37);
+	background-color: rgb(37, 37, 42);
 	border: 0.1em solid rgba(0, 0, 0, 0.2);
 }
 textarea {
@@ -158,15 +150,16 @@ textarea {
 }
 
 block {
-
 	width: 1000%;
-
 	display: flex;
 	flex-direction: column;
 }
+stmt > block {
+	box-sizing: border-box;
+	border-left: rgb(77, 77, 77) 1px dotted;
+}
 
 .block > * {
-
 	width: 100%;
 }
 
@@ -185,7 +178,6 @@ stmt {
 }
 
 .active_cursor, .active_cursor * {
-
 	background-color: rgb(120, 60, 20) !important;
 	position: relative;
 	z-index: 10;
@@ -224,13 +216,11 @@ stmt {
 }
 
 ::selection {
-
 	color: rgb(240, 240, 240);
 	background: rgb(120, 150, 120);
 }
 
 *:focus {
-
 	outline: none;
 }
 

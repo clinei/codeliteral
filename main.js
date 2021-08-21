@@ -1046,10 +1046,6 @@ function add_memory_use(offset, node) {
 	if (node.execution_index >= 0) {
 		uses.push(node.execution_index);
 	}
-	else {
-		// @Audit
-		debugger;
-	}
 }
 function add_memory_change(offset, node) {
 	let changes = map_memory_to_changes.get(offset);
@@ -1060,9 +1056,6 @@ function add_memory_change(offset, node) {
 	node.base.pointer = offset;
 	if (node.execution_index >= 0) {
 		changes.push(node.execution_index);
-	}
-	else {
-		debugger;
 	}
 }
 function get_memory(offset, type) {
@@ -1406,14 +1399,19 @@ function step_back() {
 	inspection_cursor = execution_stack[execution_index];
 }
 
+// @Cleanup
+// @Hack
+let global_disable_add_execution_node = false;
 function add_node_to_execution_stack(node) {
+	if (global_disable_add_execution_node) {
+		return;
+	}
 	// :DebugLimiter
-	// nocheckin
-	/**/
+	/*
 	if (execution_index > 99999) {
 		throw Error("Execution took too long, probably an infinite loop!");
 	}
-	/**/
+	*/
 	if (node.execution_index) {
 		throw Error("Internal error: Adding something to the execution stack twice!");
 	}
@@ -1438,6 +1436,8 @@ function run_lvalue(node, push_index = true) {
 		if (push_index) {
 			add_node_to_execution_stack(node);
 		}
+		// @Copypaste
+		// :IdentNameUpdate
 		// update the name with the auto-incrementing number
 		node.name = node.declaration.ident.name;
 		if (node.declaration.type.name != "void") {
@@ -1547,6 +1547,17 @@ function run_lvalue(node, push_index = true) {
 		}
 		else {
 			let transformed = transform(node);
+			// :IdentNameUpdate
+			// args and parameters are separate nodes for display purposes
+			// so they have to be updated separately
+			// @Cleanup
+			// @Hack
+			// maybe this can happen in one place
+			global_disable_add_execution_node = true;
+			for (let arg of node.args) {
+				run_rvalue(arg, false);
+			}
+			global_disable_add_execution_node = false;
 			let run_result = run_statement(transformed);
 			// maybe not a good idea
 			node.returned = true;
@@ -1692,6 +1703,10 @@ function run_rvalue(node, push_index = true) {
 		}
 	}
 	else if (node.base.kind == Code_Kind.IDENT) {
+		// @Copypaste
+		// :IdentNameUpdate
+		// update the name with the auto-incrementing number
+		node.name = node.declaration.ident.name;
 		if (Types.hasOwnProperty(node.name)) {
 			// native type
 			return node;
@@ -2178,6 +2193,11 @@ function clone(node, set_original = true) {
 		cloned = make_block(statements, null);
 		map_original_to_clone.set(node, cloned);
 		cloned.enclosing_scope = map_original_to_clone.get(node.enclosing_scope);
+		if (!cloned.enclosing_scope) {
+			// @Audit
+			// does this cause problems?
+			cloned.enclosing_scope = node.enclosing_scope;
+		}
 		for (let statement of node.statements) {
 			statements.push(clone(statement));
 		}
@@ -2349,26 +2369,36 @@ function get_final_name(name) {
 
 function transform(node) {
 	let replacement = make_block();
+	// @Audit
+	// does not setting replacement.enclosing_scope cause problems?
 	node.transformed = replacement;
 	let last_call = call_stack[call_stack.length-1];
 	if (node.base.kind == Code_Kind.CALL) {
 		let procedure = node.ident.declaration.expression;
 		if (typeof procedure.transformed == "undefined") {
 			procedure.transformed = make_block();
+			procedure.transformed.enclosing_scope = node.ident.declaration.enclosing_scope;
 			let return_ident = make_ident("return_"+ node.ident.name);
 			procedure.transformed.return_ident = return_ident;
-			// :BlockEnclosingScope
-			infer_last_block = node.ident.declaration.enclosing_scope;
-			let return_decl = infer(make_declaration(return_ident, null, procedure.return_type));
+			let return_decl = make_declaration(return_ident, null, procedure.return_type);
+			return_decl.enclosing_scope = procedure.transformed;
 			procedure.transformed.statements.push(return_decl);
 			for (let i = 0; i < procedure.parameters.length; i += 1) {
 				let param = procedure.parameters[i];
 				procedure.transformed.statements.push(param);
 			}
+			// the original statements go in a separate block
+			let proc_body = make_block();
+			proc_body.enclosing_scope = procedure.transformed;
 			for (let i = 0; i < procedure.block.statements.length; i += 1) {
 				let stmt = procedure.block.statements[i];
-				procedure.transformed.statements.push(stmt);
+				proc_body.statements.push(stmt);
 			}
+			procedure.transformed.statements.push(proc_body);
+			// :BlockEnclosingScope
+			infer_last_block = procedure.transformed.enclosing_scope;
+			infer(procedure.transformed);
+			infer_last_block = null;
 		}
 		call_stack.push(node);
 		for (let i = 0; i < procedure.parameters.length; i += 1) {
@@ -2390,6 +2420,7 @@ function transform(node) {
 	else if (node.base.kind == Code_Kind.RETURN) {
 		let ident = last_call.transformed.statements[0].ident;
 		// @Hack
+		// @Cleanup
 		code_composed = false;
 		let cloned_ident = clone(ident);
 		last_call.transformed.return_ident = clone(ident);
@@ -2589,6 +2620,10 @@ function should_hide(node) {
 		return true;
 	}
 	if (node.base.kind == Code_Kind.BLOCK) {
+		// the body of a transformed function call should always be shown
+		if (node.enclosing_scope.transformed_from_call) {
+			return false;
+		}
 		let should = false;
 		for (let stmt of node.statements) {
 			should = should || should_hide(stmt);
@@ -2645,10 +2680,12 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 
 	let last_expression = print_expression_stack[print_expression_stack.length-1];
 	let should_expand_node = should_expand(node) || force_expand;
+	// @Cleanup
+	// should_hide could probably be done in should_expand or computed in mark_containment
 	let should_hide_node = should_hide(node);
 	let is_blocklevel_expanded_call = node.base.kind == Code_Kind.CALL && should_expand_node &&
 	                                  last_expression && last_expression.base.kind == Code_Kind.BLOCK;
-	
+
 	if (last_expression && last_expression.base.kind == Code_Kind.BLOCK &&
 	    should_hide_node && should_expand_node != true) {
 
