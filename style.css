@@ -234,6 +234,11 @@ stmt {
 .code-ident {
 	color: hsl(0deg, 10%, 76%);
 }
+.code-usage-count {
+	color: hsl(200deg, 11%, 50%);
+	/*font-weight: bold;*/
+	display: inline;
+}
 .code-type {
 	color: hsl(208deg, 42%, 64%);
 }

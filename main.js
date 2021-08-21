@@ -1438,8 +1438,7 @@ function run_lvalue(node, push_index = true) {
 		}
 		// @Copypaste
 		// :IdentNameUpdate
-		// update the name with the auto-incrementing number
-		node.name = node.declaration.ident.name;
+		node.usage_count = node.declaration.ident.usage_count;
 		if (node.declaration.type.name != "void") {
 			return_value = node.declaration.pointer;
 		}
@@ -1705,8 +1704,7 @@ function run_rvalue(node, push_index = true) {
 	else if (node.base.kind == Code_Kind.IDENT) {
 		// @Copypaste
 		// :IdentNameUpdate
-		// update the name with the auto-incrementing number
-		node.name = node.declaration.ident.name;
+		node.usage_count = node.declaration.ident.usage_count;
 		if (Types.hasOwnProperty(node.name)) {
 			// native type
 			return node;
@@ -1920,7 +1918,8 @@ function run_statement(node, push_index = true) {
 			add_memory_use(node.pointer, node.ident);
 			add_memory_change(node.pointer, node.ident);
 		}
-		node.ident.name = get_final_name(node.ident.original.name);
+		// node.ident.name = get_final_name(node.ident.original.name);
+		set_and_increase_name_usage_count(node.ident);
 		return_value = expression_value;
 	}
 	else if (node.base.kind == Code_Kind.STRUCT) {
@@ -2353,18 +2352,19 @@ function clone(node, set_original = true) {
 	return cloned;
 }
 
-function get_final_name(name) {
-	let final_name = name;
-	let count = idents_used.get(name);
+function set_and_increase_name_usage_count(node) {
+	if (node.base.kind != Code_Kind.IDENT) {
+		throw Error("This function can only be used with idents!");
+	}
+	let count = idents_used.get(node.name);
 	if (count) {
 		count += 1;
-		final_name = name + "_" + count;
 	}
 	else {
 		count = 1;
 	}
-	idents_used.set(name, count);
-	return final_name;
+	idents_used.set(node.name, count);
+	node.usage_count = count;
 }
 
 function transform(node) {
@@ -2998,8 +2998,15 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 			}
 			else {
 				expr.classList.add("code-ident");
-			}	
+			}
 			expr.appendChild(document.createTextNode(node.name));
+			if (node.usage_count >= 2) {
+				let usage_count_elem = document.createElement("div");
+				usage_count_elem.classList.add("code-usage-count");
+				let usage_count_text = "_" + node.usage_count.toString();
+				usage_count_elem.appendChild(document.createTextNode(usage_count_text));
+				expr.appendChild(usage_count_elem);
+			}
 		}
 		print_target.appendChild(expr);
 	}

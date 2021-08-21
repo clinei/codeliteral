@@ -495,7 +495,9 @@ let Code_Ident = {
 
 	original: null,
 	name: null,
-	declaration: null
+	declaration: null,
+
+	usage_count: 1
 };
 function make_ident(name, declaration) {
 
