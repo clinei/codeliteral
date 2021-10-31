@@ -232,15 +232,15 @@ void linked_list() {
 }
 */
 
-int simple_code(int ayy, int bee) {
+int simple_code(int a, int b) {
 	"Read the code and try to guess the return value"
-	int cee = ayy + bee;
-	cee *= ayy * 2;
-	bee += 3;
-	cee += bee;
+	int c = a + b;
+	c *= a * 2;
+	b += 3;
+	c += b;
 	"or press F to see the values directly"
 	"(and press it again to turn it off)"
-	return cee;
+	return c;
 }
 int complex_code(int param1, int param2, int param3) {
 	"WASD to move faster";
@@ -282,15 +282,13 @@ int complex_code(int param1, int param2, int param3) {
 }
 
 int func() {
-	"Function return values become variables";
-	"Return statements become assignments to that variable";
-	"like this";
+	"Return values become variables";
+	"Return statements become assignments";
 	return 4;
 }
 
 void func2(int param) {
-	"Parameters come after the return declaration"
-	"and before the function body"
+	"Parameters also become variables"
 	param = param + 2;
 	return;
 }
@@ -2760,7 +2758,10 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 					stmt.base.kind != Code_Kind.ELSE    &&
 					stmt.base.kind != Code_Kind.WHILE   ) {
 
-					stmt_elem.appendChild(document.createTextNode(";"));
+					let stmt_end = document.createElement("div");
+					stmt_end.classList.add("stmt-end");
+					stmt_end.appendChild(document.createTextNode(";"));
+					stmt_elem.appendChild(stmt_end);
 				}
 				block.appendChild(stmt_elem);
 			}	

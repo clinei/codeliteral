@@ -166,6 +166,10 @@ stmt > block {
 stmt {
 	margin-bottom: 4px;
 }
+.stmt-end {
+	display: inline;
+	color: hsl(0, 0%, 50%);
+}
 
 .active_cursor, .active-cursor > * {
 	border-radius: 0.1em;
@@ -229,7 +233,7 @@ stmt {
 	color: hsl(170deg, 37%, 60%);
 }
 .code-string {
-	color: hsl(130deg, 30%, 60%);
+	color: hsl(130deg, 24%, 50%);
 }
 .code-ident {
 	color: hsl(0deg, 10%, 76%);
