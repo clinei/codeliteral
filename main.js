@@ -233,11 +233,10 @@ void linked_list() {
 */
 
 int simple_code(int a, int b) {
-	"Read the code and try to guess the return value"
+	"Read the code and guess the return value"
 	int c = a + b;
-	c *= a * 2;
-	b += 3;
-	c += b;
+	b = c * 2;
+	c = b + 4;
 	"or press F to see the values directly"
 	"(and press it again to turn it off)"
 	return c;
