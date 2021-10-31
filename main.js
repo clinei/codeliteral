@@ -1,6 +1,6 @@
 "use strict";
 
-let code = `/*  CONTROLS
+let code = `/*  KEYBOARD CONTROLS
 
 	W - move up        F - show values
 	S - move down      E - show elems
@@ -2663,7 +2663,6 @@ function should_hide(node) {
 	return false;
 }
 
-// need to use flex for block indentation
 let palette = ["250, 0, 0", "0, 200, 0", "0, 0, 200"];
 let palette_index = 0;
 let print_expression_stack = new Array();
@@ -2673,6 +2672,11 @@ let line_count = 0;
 let current_line = 0;
 let column_index = 0;
 let force_expand = false;
+
+// @Incomplete
+// Rendering everything into a DOM element after every move is expensive
+// Maybe this will improve when we start using direct text rendering,
+// but we might want to only re-render the parts of the tree that actually change
 function print_to_dom(node, print_target, block_print_target, is_transformed_block = false, push_index = true) {
 
 	let expr = document.createElement("expr");
