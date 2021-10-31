@@ -333,10 +333,11 @@ void triangle_bug() {
 
 int main() {
 	"Press Z to move backward";
-	int variable = func();
-	func2(4);
 	simple_code(1, 2);
 	complex_code(2, 4, 8);
+
+	int variable = func();
+	func2(4);
 	loops();
 	bookmarks();
 	decision_chains();
