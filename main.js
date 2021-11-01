@@ -66,27 +66,27 @@ void bookmarks() {
 	"Moving around with ZX and WASD is not fast enough";
 	"And HJ and RT don't help much either";
 	"Try it on this code";
-	int a = 1;
-	int b = 2;
-	int c = 3;
-	for (int iter = 0; iter < 10; iter += 1) {
+	int f = 1;
+	int g = 2;
+	int h = 3;
+	for (int iter = 0; iter < 8; iter += 1) {
 		if (iter % 3 == 0) {
-			a += b;
-			a = a;
+			f += g;
 		}
 		else if (iter % 5 == 0) {
-			c *= a;
-			c = c;
+			h *= f;
 		}
 		else if (iter % 7 == 0) {
-			b = a + c;
-			b = b;
+			g = f + h;
 		}
 	}
 	"We would like to skip most of the loops";
 	"And only move between important points of interest";
 	"Find the chain of decisions that led to the final result";
-	int final = a + b;
+	int final = f + g;
+	f = f;
+	g = g;
+	h = h;
 	"Press K to mark a point of interest";
 	"Press , and . to move between points of interest";
 	"Press L to become disinterested";
