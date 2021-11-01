@@ -328,6 +328,8 @@ void triangle_bug() {
     tri.y2 = 0;
     tri.x3 = 3;
     tri.y3 = 4;
+    "This is a triangle with sides of length 3, 4, 5"
+    "The circumference should be 12, but it's not. Why?"
     triangle_circumference(tri);
 }
 
