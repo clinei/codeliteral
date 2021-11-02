@@ -1558,6 +1558,8 @@ function run_lvalue(node, push_index = true) {
 			}
 			global_disable_add_execution_node = false;
 			let run_result = run_statement(transformed);
+			// update the usage count for the ident that replaces the call
+			transformed.return_ident.usage_count = transformed.return_ident.declaration.ident.usage_count;
 			// maybe not a good idea
 			node.returned = true;
 			if (node.returned == false) {
