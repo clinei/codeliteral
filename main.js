@@ -18,15 +18,14 @@ let code = `/*  KEYBOARD CONTROLS
 
 */
 
-int division_bug(int num, int denom) {
+void division_bug(int num, int denom) {
+	int result = num / denom;
 	"Why is this 0?";
-	int answer = num / denom;
 	"Correct result is 0.666.. but integer division rounds to 0";
-	float fnum = num;
-	float fdenom = denom;
-	float fanswer = fnum / fdenom;
+	float num_float = num;
+	float denom_float = denom;
+	float result_float = num_float / denom_float;
 	"We need to use floating point types to avoid this error";
-	return answer;
 }
 
 int square(int n) {
@@ -69,14 +68,14 @@ void bookmarks() {
 	int f = 1;
 	int g = 2;
 	int h = 3;
-	for (int iter = 0; iter < 8; iter += 1) {
-		if (iter % 3 == 0) {
+	for (int idx = 0; idx < 8; idx += 1) {
+		if (idx % 3 == 0) {
 			f += g;
 		}
-		else if (iter % 5 == 0) {
+		else if (idx % 5 == 0) {
 			h *= f;
 		}
-		else if (iter % 7 == 0) {
+		else if (idx % 7 == 0) {
 			g = f + h;
 		}
 	}
@@ -135,9 +134,9 @@ void decision_chains() {
 	return;
 }
 
-int factorial(int number) {
+int fact(int number) {
 	if (number > 1) {
-		return factorial(number - 1) * number;
+		return fact(number - 1) * number;
 	}
 	else {
 		"You can use R and T to jump between";
@@ -147,18 +146,46 @@ int factorial(int number) {
 		return 1;
 	}
 }
+int factorial_iterative(int number) {
+	int product = 1;
+	for (int i = 1; i <= number; i += 1) {
+		product *= i;
+	}
+	return product;
+}
+void factorial(int number) {
+	int recr = fact(number);
+	int iter = factorial_iterative(number);
+	recr == iter;
+}
 
-int fibonacci(int number) {
+int fib(int number) {
 	if (number > 1) {
-		return fibonacci(number - 2) + fibonacci(number - 1); 
+		return fib(number - 2) + fib(number - 1); 
 	}
 	else {
 		"You can use R and T to jump between";
 		"rarely accessed conditional code";
 		"like the following return statement";
-		"that terminates a recursive fibonacci sequence";
+		"that terminates a recursive fibonacci";
 		return number;
 	}
+}
+int fibonacci_iterative(int number) {
+	int first = 0;
+	int second = 1;
+	int temp = 0;
+	for (int i = 0; i < number; i += 1) {
+		temp = first;
+		first = second;
+		second = temp + second;
+	}
+	return first;
+}
+void fibonacci(int number) {
+	int recr = fib(number);
+	int iter = fibonacci_iterative(number);
+	recr == iter;
 }
 
 void fizzbuzz(int number) {
@@ -245,16 +272,16 @@ void linked_list() {
 }
 */
 
-int simple_code(int a, int b) {
+void simple_code(int a, int b) {
 	"Read the code and guess the result"
 	int c = a + b;
 	b = c * 2;
 	c = b + 4;
 	"or press F to see the values directly"
 	"(and press it again to turn it off)"
-	return c;
+	int result = c;
 }
-int complex_code(int param1, int param2, int param3) {
+void complex_code(int param1, int param2, int param3) {
 	"WASD to move faster";
 	int foo = param1;
 	int bar = param2;
@@ -290,7 +317,7 @@ int complex_code(int param1, int param2, int param3) {
 	}
 	"Use your new tricks to find out";
 	"how we got this return value";
-	return qux;
+	int result = qux;
 }
 
 int func() {
