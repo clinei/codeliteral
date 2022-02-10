@@ -135,7 +135,7 @@ void decision_chains() {
 	return;
 }
 
-int factorial(short number) {
+int factorial(int number) {
 	if (number > 1) {
 		return factorial(number - 1) * number;
 	}
@@ -145,6 +145,19 @@ int factorial(short number) {
 		"like the following return statement";
 		"that terminates a recursive factorial";
 		return 1;
+	}
+}
+
+int fibonacci(int number) {
+	if (number > 1) {
+		return fibonacci(number - 2) + fibonacci(number - 1); 
+	}
+	else {
+		"You can use R and T to jump between";
+		"rarely accessed conditional code";
+		"like the following return statement";
+		"that terminates a recursive fibonacci sequence";
+		return number;
 	}
 }
 
@@ -346,7 +359,7 @@ int main() {
 
 	fizzbuzz(15);
 	factorial(5);
-	factorial(3);
+	fibonacci(7);
 	triangle_bug();
 	division_bug(2, 3);
 

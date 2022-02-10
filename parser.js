@@ -1058,7 +1058,8 @@ function parse(tokens) {
         "+": 4, "-": 4,
         "*": 3, "/": 3, "%": 3,
     };
-    let prev_prec = 99;
+    const MAX_PRECEDENCE = 99;
+    let prev_prec = MAX_PRECEDENCE;
     const binary_ops = Object.getOwnPropertyNames(operator_precedence);
     function maybe_binary(left) {
         /*
@@ -1081,7 +1082,7 @@ function parse(tokens) {
         return left;
     }
     function parse_statement() {
-        prev_prec = 99;
+        prev_prec = MAX_PRECEDENCE;
         let curr_token = tokens[token_index];
         let next_token = tokens[token_index + 1];
         if (curr_token.str == "{") {
@@ -1142,10 +1143,9 @@ function parse(tokens) {
                 else if (curr_token.str == "=") {
                     return parse_assign(left);
                 }
-                else if (curr_token.str == "==") {
-                	// @Cleanup
-                	// accidentally parsed a binary equals
-                	return maybe_binary(left);
+                else if (binary_ops.indexOf(curr_token.str) >= 0) {
+                    // @Copypaste
+                    return maybe_binary(left);
                 }
                 else if (curr_token.str[curr_token.str.length-1] == "=") {
                     return parse_opassign(left);
@@ -1236,8 +1236,8 @@ function parse(tokens) {
             return;
         }
         else if (binary_ops.indexOf(curr_token.str) >= 0) {
-            let maybin = maybe_binary(left);
-            return maybin;
+            // @Copypaste
+            return maybe_binary(left);
         }
         else {
             return left;
@@ -1278,7 +1278,14 @@ function parse(tokens) {
     }
     function parse_call(left) {
         if (left && tokens[token_index].str == "(") {
-            return make_call(left, delimited("(", ")", ",", parse_rvalue));
+            // @Hack
+            // precedence needs to be temporarily stored and reset
+            // to correctly parse things like `f(n - 1) + f(n - 2)`
+            let temp_prec = prev_prec;
+            prev_prec = MAX_PRECEDENCE;
+            let node = make_call(left, delimited("(", ")", ",", parse_rvalue));
+            prev_prec = temp_prec;
+            return node;
         }
         else {
             return left;
