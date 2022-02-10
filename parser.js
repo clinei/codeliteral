@@ -364,15 +364,15 @@ let Code_Minus = {
 
 	base: null,
 
-	ident: null,
+	expression: null,
 };
-function make_minus(ident) {
+function make_minus(expression) {
 
 	let minus = Object.assign({}, Code_Minus);
 	minus.base = make_node();
 	minus.base.kind = Code_Kind.MINUS;
 
-	minus.ident = ident;
+	minus.expression = expression;
 
 	return minus;
 }
@@ -381,15 +381,15 @@ let Code_Not = {
 
 	base: null,
 
-	ident: null,
+	expression: null,
 };
-function make_not(ident) {
+function make_not(expression) {
 
 	let not = Object.assign({}, Code_Not);
 	not.base = make_node();
 	not.base.kind = Code_Kind.NOT;
 
-	not.ident = ident;
+	not.expression = expression;
 
 	return not;
 }
@@ -826,10 +826,13 @@ function infer(node) {
         }
     }
     else if (node.base.kind == Code_Kind.MINUS) {
-        infer(node.ident);
+        infer(node.expression);
+        node.base.type = node.expression.base.type;
+        node.base.type.signed = true;
     }
     else if (node.base.kind == Code_Kind.NOT) {
-        infer(node.ident);
+        infer(node.expression);
+        node.base.type = node.expression.base.type;
     }
     else if (node.base.kind == Code_Kind.INCREMENT) {
         infer(node.ident);
@@ -1063,9 +1066,12 @@ function parse(tokens) {
     const binary_ops = Object.getOwnPropertyNames(operator_precedence);
     function maybe_binary(left) {
         /*
-        // unary not
-        if (left.base.kind == Code_Kind.NOT) {
-            prev_prec = 
+        // unary ops
+        // @Bug
+        // unary operations should happen before binary operations, but they don't
+        if (left.base.kind == Code_Kind.NOT || left.base.kind == Code_Kind.MINUS) {
+            prev_prec = 0;
+            return left;
         }
         */
         let curr_token = tokens[token_index];
@@ -1172,31 +1178,34 @@ function parse(tokens) {
         let left;
         if (tokens[token_index].str == "(") {
             token_index += 1;
+            let temp_prec = prev_prec;
+            prev_prec = MAX_PRECEDENCE;
             let expression = parse_rvalue();
-            if (expression == undefined) {
-                debugger;
+            if (!expression) {
+                throw Error;
             }
 
-            // @Bug
-            // "1 + 2 * (3 + 4)"
-            // `expression` is "3"
-            // but should be "3 + 4"
-            // we did not parse the entire rvalue
-            // https://youtu.be/MnctEW1oL-E?t=3600
-            // we could just do (1 + (2 * (3 + 4)))
-            // and fix it when recursing back up
-
-            // @Bug
-            // "(1)"
-            // parsed as call with undefined ident
-            // should be math parenthesis expression
             if (tokens[token_index].str == ")") {
                 token_index += 1;
                 left = make_parens(expression);
             }
-            else debugger;
+            prev_prec = temp_prec;
         }
         let curr_token = tokens[token_index];
+        /*
+        if (!left) {
+            // unary op
+            if (curr_token.str == "-") {
+                token_index += 1;
+                let expr = parse_rvalue();
+                left = make_minus(expr);
+            }
+            else if (curr_token.str == "!") {
+                token_index += 1;
+                let expr = parse_rvalue();
+                left = make_not(expr);
+            }
+        }*/
         if (!left) {
             if (curr_token.kind == "literal") {
                 left = parse_literal();
@@ -1220,17 +1229,6 @@ function parse(tokens) {
             }
         }
         curr_token = tokens[token_index];
-        /*
-        // unary op
-        if (curr_token.str == "-") {
-            token_index += 1;
-            left = make_minus();
-        }
-        if (curr_token.str == "!") {
-            token_index += 1;
-            left = make_not(expression);
-        }
-        */
         if (!left) {
             token_index = prev_index;
             return;
@@ -1278,7 +1276,6 @@ function parse(tokens) {
     }
     function parse_call(left) {
         if (left && tokens[token_index].str == "(") {
-            // @Hack
             // precedence needs to be temporarily stored and reset
             // to correctly parse things like `f(n - 1) + f(n - 2)`
             let temp_prec = prev_prec;

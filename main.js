@@ -272,52 +272,76 @@ void linked_list() {
 }
 */
 
-void simple_code(int a, int b) {
+void simple_code() {
 	"Read the code and guess the result"
+	int a = 1;
+	int b = 2;
 	int c = a + b;
-	b = c * 2;
-	c = b + 4;
+	b = c * b;
+	c = a + b;
 	"or press F to see the values directly"
 	"(and press it again to turn it off)"
 	int result = c;
 }
-void complex_code(int param1, int param2, int param3) {
-	"WASD to move faster";
-	int foo = param1;
-	int bar = param2;
-	int qux = param3;
-	if (foo > 1) {
-		"Press E to see the elements of math expressions";
-		"while showing values (F)";
-		bar = foo + qux;
-		qux -= foo;
+void detailed_data() {
+	"Press WASD to move faster";
+	"Press ZX to move into calls";
+	int foo = 1;
+	int bar = 2;
+	if (foo > 0) {
+		"Press E to see every element of an expression";
+		"when values are shown (F)";
+		bar = foo + bar;
 	}
-	if ((bar - foo) * bar - 50 > 10) {
-		"or go into the expressions with WASD and ZX";
-		"and show values (F) and hide elements (E)";
-		"and move around with ZX";
+	if (bar * (bar + foo) > 10) {
+		"show values (F) and hide elements (E)";
+		"and press ZX to move around in expressions";
 		"to see every step of the calculation";
-		qux += 4;
-		bar += (qux + bar) / 10;
+		foo = (foo - bar) * (2 + 4);
 	}
-	if (qux) {
-		if (qux == 10) {
-			"Knowing what values things have is not enough";
-			"You want to know _why_";
-			"Move the cursor onto a variable name";
-			"Press H to see where a value was changed last";
-			"Press J to see where a value was changed next";
-			qux += bar - 2;
-			bar += 3;
-		}
-		if (qux == 20) {
-			"Press C to see what the value was before";
-			qux *= 2;
-		}
+	int result = foo * (0-1) + bar;
+}
+void complex_code() {
+	int shrek = 0;
+	int fiona = 0;
+	int donkey = 0;
+	int farquaad = 666;
+	int happy = 999;
+	if (donkey <= 0) {
+		donkey = 42;
+		shrek -= 3;
 	}
-	"Use your new tricks to find out";
-	"how we got this return value";
-	int result = qux;
+	if (farquaad > fiona) {
+		farquaad *= 16;
+		fiona -= 11;
+	}
+	if (shrek < happy && farquaad > 9000) {
+		shrek += 10;
+		donkey += 50;
+	}
+	if (shrek > 6 && donkey > 12) {
+		fiona += 32;
+		shrek *= 4;
+	}
+	if (shrek > 24 && fiona == 21) {
+		farquaad = 0;
+		donkey *= 2;
+	}
+	{
+		"It is not enough to know the values";
+		"We want to know how they changed and why";
+		shrek = 420;
+		fiona = 69;
+		donkey = 42;
+		farquaad = 0;
+	}
+	{
+		"Move the cursor to the name of a variable";
+		"Press H to jump to where it was changed last";
+		"Press J to jump to where it was changed next";
+		happy = true;
+		"Press C to see what the value was before the change";
+	}
 }
 
 int func() {
@@ -375,8 +399,9 @@ void triangle_bug() {
 
 int main() {
 	"Press Z to move backward";
-	simple_code(1, 2);
-	complex_code(2, 4, 8);
+	simple_code();
+	detailed_data();
+	complex_code();
 
 	int variable = func();
 	func2(4);
@@ -397,6 +422,14 @@ int main() {
 "Press X to move forward";
 main();
 `;
+/*
+code = `
+int main() {
+	return 0;
+}
+main();
+`;
+*/
 
 const old_code = `
 bool test_nested_loop() {
@@ -516,14 +549,12 @@ bool test_inc_dec() {
 	passed &= m == 0;
 	return passed;
 }
-/*
 bool test_unary() {
 	bool passed = true;
 	int n = 1;
 	passed &= -n == -1;
 	return passed;
 }
-*/
 bool test_string() {
 	bool passed = true;
 	string str = "Hello, World!";
@@ -1787,11 +1818,17 @@ function run_rvalue(node, push_index = true) {
 		}
 	}
 	else if (node.base.kind == Code_Kind.MINUS) {
-		return_value = -run_rvalue(node.ident);
+		if (push_index) {
+			add_node_to_execution_stack(node);
+		}
+		return_value = -run_rvalue(node.expression);
 		return_node = make_literal(return_value);
 	}
 	else if (node.base.kind == Code_Kind.NOT) {
-		return_value = !run_rvalue(node.ident);
+		if (push_index) {
+			add_node_to_execution_stack(node);
+		}
+		return_value = !run_rvalue(node.expression);
 		return_node = make_literal(return_value);
 	}
 	else if (node.base.kind == Code_Kind.INCREMENT) {
@@ -2335,11 +2372,10 @@ function clone(node, set_original = true) {
 		cloned = ident;
 	}
 	else if (node.base.kind == Code_Kind.MINUS) {
-
-		cloned = make_minus(clone(node.ident));
+		cloned = make_minus(clone(node.expression));
 	}
 	else if (node.base.kind == Code_Kind.NOT) {
-		cloned = make_not(clone(node.ident));
+		cloned = make_not(clone(node.expression));
 	}
 	else if (node.base.kind == Code_Kind.INCREMENT) {
 		cloned = make_increment(clone(node.ident));
@@ -2592,6 +2628,18 @@ function mark_containment(node) {
 		node.contains_execution = node.ident.contains_execution || node.ident.is_execution;
 	}
 	else if (node.base.kind == Code_Kind.PARENS) {
+		mark_containment(node.expression);
+		node.contains_flowpoint = node.expression.contains_flowpoint || node.expression.is_flowpoint;
+		node.contains_inspection = node.expression.contains_inspection || node.expression.is_inspection;
+		node.contains_execution = node.expression.contains_execution || node.expression.is_execution;
+	}
+	else if (node.base.kind == Code_Kind.MINUS) {
+		mark_containment(node.expression);
+		node.contains_flowpoint = node.expression.contains_flowpoint || node.expression.is_flowpoint;
+		node.contains_inspection = node.expression.contains_inspection || node.expression.is_inspection;
+		node.contains_execution = node.expression.contains_execution || node.expression.is_execution;
+	}
+	else if (node.base.kind == Code_Kind.NOT) {
 		mark_containment(node.expression);
 		node.contains_flowpoint = node.expression.contains_flowpoint || node.expression.is_flowpoint;
 		node.contains_inspection = node.expression.contains_inspection || node.expression.is_inspection;
@@ -2885,6 +2933,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		throw Error;
 	}
 	else if (node.base.kind == Code_Kind.BINARY_OPERATION) {
+		// @Copypaste
 		if (values_shown && binop_values_shown && should_expand_node != true) {
 			// @Incomplete
 			if (true) {
@@ -2959,11 +3008,24 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		print_target.appendChild(expr);
 	}
 	else if (node.base.kind == Code_Kind.MINUS) {
-		let op = document.createElement("expr");
-		op.appendChild(document.createTextNode("-"));
-		op.classList.add("code-op");
-		expr.appendChild(op);
-		print_to_dom(node.ident, expr, block_print_target);
+		// @Copypaste
+		if (values_shown && binop_values_shown && should_expand_node != true) {
+			// @Incomplete
+			if (true) {
+				print_to_dom(node.last_return_node, expr, block_print_target, false, false);
+			}
+			if (expand_all) {
+				let temp_expr = document.createElement("expr");
+				print_to_dom(node.expression, temp_expr, block_print_target, false, false);
+			}
+		}
+		else {
+			let op = document.createElement("expr");
+			op.appendChild(document.createTextNode("-"));
+			op.classList.add("code-op");
+			expr.appendChild(op);
+			print_to_dom(node.expression, expr, block_print_target);
+		}
 		print_target.appendChild(expr);
 	}
 	else if (node.base.kind == Code_Kind.NOT) {
@@ -2971,7 +3033,7 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		op.appendChild(document.createTextNode("!"));
 		op.classList.add("code-op");
 		expr.appendChild(op);
-		print_to_dom(node.ident, expr, block_print_target);
+		print_to_dom(node.expression, expr, block_print_target);
 		print_target.appendChild(expr);
 	}
 	else if (node.base.kind == Code_Kind.INCREMENT) {
