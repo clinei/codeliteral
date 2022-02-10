@@ -54,45 +54,44 @@ void loops() {
 			"Press R and T to move between the cycles";
 		}
 		else if (it == 2) {
-			"Press X or Z to go inside calls";
+			"Press X and Z to move into calls";
 		}
 		int s = square(it);
 	}
 }
 
-void bookmarks() {
+void decision_chains() {
 	"Sometimes, code is big, really really big";
 	"Moving around with ZX and WASD is not fast enough";
-	"And HJ and RT don't help much either";
-	"Try it on this code";
+	"RT and HJ don't help much either";
 	int f = 1;
-	int g = 2;
-	int h = 3;
-	for (int idx = 0; idx < 8; idx += 1) {
-		if (idx % 3 == 0) {
+	"Jumping to where a variable was changed is useful, but";
+	"it can also be useful to jump to where a variable was used";
+	int g = f + f;
+	"Move the cursor to the name of a variable";
+	"Press Y to jump to where it was used last";
+	"Press U to jump to where it was used next";
+	for (int idx = 0; idx < 10; idx += 1) {
+		if (idx % 4 == 0) {
 			f += g;
 		}
-		else if (idx % 5 == 0) {
-			h *= f;
-		}
-		else if (idx % 7 == 0) {
-			g = f + h;
+		if (idx % 4 == 1) {
+			g += f;
 		}
 	}
 	"We would like to skip most of the loops";
 	"And only move between important points of interest";
 	"Find the chain of decisions that led to the final result";
-	int final = f + g;
-	f = f;
-	g = g;
-	h = h;
+	int final = g;
 	"Press K to mark a point of interest";
 	"Press , and . to move between points of interest";
 	"Press L to become disinterested";
 }
 
-void decision_chains() {
-	"Try to figure out what's happening here";
+void array_processing() {
+	"Often, we want to track many chains of logic at the same time";
+	"Press numbers 1 to 9 to select which chain of points is active";
+	"Use 3 chains to mark the path of each element of this array";
 	int[3] arr;
 	for (int i = 0; i < arr.length; i += 1) {
 		arr[i] = i + 2;
@@ -122,15 +121,14 @@ void decision_chains() {
 	for (int m = 0; m < arr.length; m += 1) {
 		if (arr[m] == 5) {
 			"Why is this value 5?";
-			"Make a chain of decision points";
-			"That explain how this element ended up here";
+			"Can you make a chain of decision points to explain?";
 			arr[m] = arr[m];
-			"You can have multiple decision chains";
-			"Press 0-9 to select the active array of points";
+			"Press numbers 1 to 9 to select which chain of points is active";
 		}
 	}
-	"That's it for the tutorial, you can explore more examples in main";
-	"Try to solve the bugs, or write your own code in the other panel";
+	"Congratulations, you made it to the end of the tutorial!";
+	"You can explore more examples in the main function";
+	"Try to solve the bugs, or write your own code in the side panel";
 	return;
 }
 
@@ -285,7 +283,6 @@ void simple_code() {
 }
 void detailed_data() {
 	"Press WASD to move faster";
-	"Press ZX to move into calls";
 	int foo = 1;
 	int bar = 2;
 	if (foo > 0) {
@@ -406,8 +403,8 @@ int main() {
 	int variable = func();
 	func2(4);
 	loops();
-	bookmarks();
 	decision_chains();
+	array_processing();
 
 	fizzbuzz(15);
 	factorial(5);
@@ -420,6 +417,8 @@ int main() {
 }
 "Starting tutorial";
 "Press X to move forward";
+// this call is important, do not remove
+// it has to be the last thing in the code
 main();
 `;
 /*
