@@ -523,8 +523,6 @@ function make_literal(value) {
 	let literal = Object.assign({}, Code_Literal);
 	literal.base = make_node();
     literal.base.kind = Code_Kind.LITERAL;
-    // should get inferred from left hand side
-    literal.base.type = Types.size_t;
 
 	literal.value = value;
 
@@ -749,10 +747,10 @@ let Types = {
     "int": make_type_info_integer(4, true),
     "uint": make_type_info_integer(4, false),
     // no native int64 in Javascript, need to fake
-    "long": make_type_info_integer(8, true),
-    "ulong": make_type_info_integer(8, false),
+    // "long": make_type_info_integer(8, true),
+    // "ulong": make_type_info_integer(8, false),
     "float": make_type_info_float(4),
-    "double": make_type_info_float(8),
+    // "double": make_type_info_float(8),
     "void": make_type_info_void(),
     // 32bit pointer
     "size_t": make_type_info_integer(4, false),
@@ -953,7 +951,16 @@ function infer(node) {
         for (let arg of node.args) {
             infer(arg);
         }
-        node.base.type = node.ident.declaration.expression.return_type;
+        // :TypeNeeded
+        let proc = node.ident.declaration.expression;
+		if (typeof proc == "function") {
+			if (node.ident.name == "malloc") {
+		    	node.base.type = Types.size_t;
+			}
+	    }
+	    else {
+	        node.base.type = node.ident.declaration.expression.return_type;
+	    }
     }
     else if (node.base.kind == Code_Kind.RETURN) {
         if (node.expression) {
@@ -1261,13 +1268,17 @@ function parse(tokens) {
         let curr_token = tokens[token_index];
         token_index += 1;
         let value;
+        let node = make_literal();
         if (curr_token.str.indexOf(".") >= 1) {
             value = parseFloat(curr_token.str);
+            node.base.type = Types.float;
         }
         else {
             value = parseInt(curr_token.str);
+            node.base.type = Types.size_t;
         }
-        return make_literal(value);
+        node.value = value;
+        return node;
     }
     function parse_string() {
         let curr_token = tokens[token_index];

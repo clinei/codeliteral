@@ -18,16 +18,6 @@ let code = `/*  KEYBOARD CONTROLS
 
 */
 
-void division_bug(int num, int denom) {
-	int result = num / denom;
-	"Why is this 0?";
-	"Correct result is 0.666.. but integer division rounds to 0";
-	float num_float = num;
-	float denom_float = denom;
-	float result_float = num_float / denom_float;
-	"We need to use floating point types to avoid this error";
-}
-
 int square(int n) {
 	if (n == 1) {
 		"When a variable name has already occurred";
@@ -354,44 +344,73 @@ void func2(int param) {
 }
 
 struct Triangle {
-    double x1;
-    double y1;
-    double x2;
-    double y2;
-    double x3;
-    double y3;
+    float x1;
+    float y1;
+    float x2;
+    float y2;
+    float x3;
+    float y3;
 };
 
-double sqr(double x) {
+float sqr(float x) {
 	return x * x;
 }
 
-double distance(double x1, double y1, double x2, double y2) {
-	double d1 = x1 - x2;
-	double d2 = y1 - y2;
-	double sd1 = sqr(d1);
-	double sd2 = sqr(d1);
+float distance(float x1, float y1, float x2, float y2) {
+	float d1 = x1 - x2;
+	float d2 = y1 - y2;
+	float sd1 = sqr(d1);
+	float sd2 = sqr(d1);
 	return sqrt(sd1 + sd2);
 }
 
-double triangle_circumference(Triangle* triangle) {
-	double side1 = distance(triangle.x1, triangle.y1, triangle.x2, triangle.y2);
-	double side2 = distance(triangle.x2, triangle.y2, triangle.x3, triangle.y3);
-	double side3 = distance(triangle.x3, triangle.y3, triangle.x1, triangle.y1);
+float triangle_circumference(Triangle* triangle) {
+	float side1 = distance(triangle.x1, triangle.y1, triangle.x2, triangle.y2);
+	float side2 = distance(triangle.x2, triangle.y2, triangle.x3, triangle.y3);
+	float side3 = distance(triangle.x3, triangle.y3, triangle.x1, triangle.y1);
 	return side1 + side2 + side3;
 }
 
 void triangle_bug() {
+	"Heap allocation";
     Triangle* tri = malloc(sizeof(Triangle));
+    "First point";
     tri.x1 = 0;
     tri.y1 = 0;
+    "Second point";
     tri.x2 = 3;
     tri.y2 = 0;
+    "Third point";
     tri.x3 = 3;
     tri.y3 = 4;
     "This is a triangle with sides of length 3, 4, 5"
     "The circumference should be 12, but it's not. Why?"
     triangle_circumference(tri);
+}
+
+void subtle_bug_bad() {
+	float sum = 0;
+	for (int i = 1; i < 7; i += 1) {
+		sum += 10 / i;
+	}
+	"Should be 24.5";
+	float result = sum;
+}
+void subtle_bug_fix() {
+	float sum = 0;
+	"By adding a decimal point to the literal";
+	"we turn the result of the division into a float";
+	for (int i = 1; i < 7; i += 1) {
+		sum += 10.0 / i;
+	}
+	"Bugs like these can be hard to notice";
+	"when the problem is not in the logic";
+	"but in how it's applied to real values";
+	float result = sum;
+}
+void subtle_bug() {
+	subtle_bug_bad();
+	subtle_bug_fix();
 }
 
 int main() {
@@ -409,8 +428,9 @@ int main() {
 	fizzbuzz(15);
 	factorial(5);
 	fibonacci(7);
+
+	subtle_bug();
 	triangle_bug();
-	division_bug(2, 3);
 
 	// linked_list();
 	return 0;
@@ -1607,7 +1627,9 @@ function run_lvalue(node, push_index = true) {
 			if (return_value) {
 				return_node = make_literal(return_value);
 				// :TypeNeeded
-				return_node.type;
+				if (node.ident.name == "malloc") {
+					return_node.base.type = Types.size_t;
+				}
 			}
 			node.returned = true;
 			if (push_index) {
@@ -2168,8 +2190,8 @@ function math_binop(left, operation_type, right) {
 	                                  left.base.type.base.kind == Type_Kind.ARRAY) ||
 				   right.base.type && (right.base.type.base.kind == Type_Kind.STRING ||
 								       right.base.type.base.kind == Type_Kind.ARRAY);
-	let is_float = left.base.type && left.base.type.base.kind == Type_Kind.FLOAT && 
-				   right.base.type && right.base.type.base.kind == Type_Kind.FLOAT;
+	let is_float = (left.base.type && left.base.type.base.kind == Type_Kind.FLOAT) ||
+				   (right.base.type && right.base.type.base.kind == Type_Kind.FLOAT);
 	// :PointerMath
 	if (left.base.type) {
 		if (left.base.type.base.kind == Type_Kind.POINTER) {
@@ -3185,7 +3207,13 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 	}
 	else if (node.base.kind == Code_Kind.LITERAL) {
 		expr.classList.add("code-literal");
-		expr.appendChild(document.createTextNode(node.value));
+		let text = document.createTextNode(node.value);
+		if (node.base.type.base.kind == Type_Kind.FLOAT) {
+			if (text.data.length > 9) {
+				text.data = text.data.substr(0, 9);
+			}
+		}
+		expr.appendChild(text);
 		print_target.appendChild(expr);
 	}
 	else if (node.base.kind == Code_Kind.STRING) {
