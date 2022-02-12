@@ -61,7 +61,7 @@ void decision_chains() {
 	"Move the cursor to the name of a variable";
 	"Press Y to jump to where it was used last";
 	"Press U to jump to where it was used next";
-	for (int idx = 0; idx < 10; idx += 1) {
+	for (int idx = 0; idx < 7; idx += 1) {
 		if (idx % 4 == 0) {
 			f += g;
 		}
