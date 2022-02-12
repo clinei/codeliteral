@@ -39,11 +39,11 @@ void loops() {
 	"This was a for loop";
 	"but we moved out the initializer";
 	"and turned every cycle into an if statement";
-	for (int it = 0; it < 10; it += 1) {
-		if (it == 0 || it == 9) {
+	for (int it = 0; it < 4; it += 1) {
+		if (it == 0 || it == 3) {
 			"Press R and T to move between the cycles";
 		}
-		else if (it == 2) {
+		else if (it == 1) {
 			"Press X and Z to move into calls";
 		}
 		int s = square(it);
