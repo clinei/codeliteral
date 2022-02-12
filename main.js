@@ -425,12 +425,12 @@ int main() {
 	decision_chains();
 	array_processing();
 
+	subtle_bug();
+	triangle_bug();
+
 	fizzbuzz(15);
 	factorial(5);
 	fibonacci(7);
-
-	subtle_bug();
-	triangle_bug();
 
 	// linked_list();
 	return 0;
@@ -3211,6 +3211,9 @@ function print_to_dom(node, print_target, block_print_target, is_transformed_blo
 		if (node.base.type.base.kind == Type_Kind.FLOAT) {
 			if (text.data.length > 9) {
 				text.data = text.data.substr(0, 9);
+			}
+			if (text.data.indexOf(".") < 0) {
+				text.data += ".0";
 			}
 		}
 		expr.appendChild(text);

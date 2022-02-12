@@ -1,112 +1,112 @@
 let Code_Kind = {
-	IF: "if",
-	ELSE: "else",
-	WHILE: "while",
-	DO_WHILE: "do while",
-	FOR: "for",
-	BREAK: "break",
-	CONTINUE: "continue",
+    IF: "if",
+    ELSE: "else",
+    WHILE: "while",
+    DO_WHILE: "do while",
+    FOR: "for",
+    BREAK: "break",
+    CONTINUE: "continue",
     IDENT: "ident",
     INCREMENT: "increment",
     DECREMENT: "decrement",
     MINUS: "minus",
     NOT: "NOT",
-	ASSIGN: "assign",
-	OPASSIGN: "opassign",
-	BLOCK: "block",
-	PROCEDURE: "procedure",
+    ASSIGN: "assign",
+    OPASSIGN: "opassign",
+    BLOCK: "block",
+    PROCEDURE: "procedure",
     STRUCT: "struct",
     DECLARATION: "declaration",
     REFERENCE: "reference",
     DEREFERENCE: "dereference",
     ARRAY_INDEX: "array index",
     DOT_OPERATOR: "dot operator",
-	CALL: "call",
-	RETURN: "return",
-	BINARY_OPERATION: "binop",
+    CALL: "call",
+    RETURN: "return",
+    BINARY_OPERATION: "binop",
     LITERAL: "literal",
     STRING: "string",
     PARENS: "parens",
 };
 
 let Code_Node = {
-	kind: null,
-	type: null,
-	serial: null
+    kind: null,
+    type: null,
+    serial: null
 };
 let next_serial = 0;
 function make_node() {
 
-	let node = Object.assign({}, Code_Node);
-	node.serial = next_serial;
+    let node = Object.assign({}, Code_Node);
+    node.serial = next_serial;
 
-	next_serial += 1;
+    next_serial += 1;
 
-	return node;
+    return node;
 }
 
 let Code_Procedure = {
 
-	base: null,
+    base: null,
 
-	parameters: null,
-	return_type: null,
+    parameters: null,
+    return_type: null,
 };
 function make_procedure(parameters, return_type, block) {
 
-	let procedure = Object.assign({}, Code_Procedure);
-	procedure.base = make_node();
-	procedure.base.kind = Code_Kind.PROCEDURE;
+    let procedure = Object.assign({}, Code_Procedure);
+    procedure.base = make_node();
+    procedure.base.kind = Code_Kind.PROCEDURE;
 
-	procedure.parameters = parameters ? parameters : [];
-	procedure.return_type = return_type ? return_type : Types.void;
-	procedure.block = block;
+    procedure.parameters = parameters ? parameters : [];
+    procedure.return_type = return_type ? return_type : Types.void;
+    procedure.block = block;
 
-	return procedure;
+    return procedure;
 }
 
 let Code_Call = {
 
-	base: null,
+    base: null,
 
     ident: null,
-	args: null,
+    args: null,
 };
 function make_call(ident, args) {
 
-	let call = Object.assign({}, Code_Call);
-	call.base = make_node();
-	call.base.kind = Code_Kind.CALL;
+    let call = Object.assign({}, Code_Call);
+    call.base = make_node();
+    call.base.kind = Code_Kind.CALL;
 
-	call.ident = ident;
-	call.args = args ? args : [];
+    call.ident = ident;
+    call.args = args ? args : [];
 
-	return call;
+    return call;
 }
 
 let Code_Declaration = {
 
-	base: null,
+    base: null,
 
-	ident: null,
-	expression: null,
-	type: null,
+    ident: null,
+    expression: null,
+    type: null,
 
-	enclosing_scope: null
+    enclosing_scope: null
 };
 function make_declaration(ident, expression, type) {
 
-	let declaration = Object.assign({}, Code_Declaration);
-	declaration.base = make_node();
-	declaration.base.kind = Code_Kind.DECLARATION;
+    let declaration = Object.assign({}, Code_Declaration);
+    declaration.base = make_node();
+    declaration.base.kind = Code_Kind.DECLARATION;
 
-	ident.declaration = declaration;
+    ident.declaration = declaration;
 
-	declaration.ident = ident;
-	declaration.expression = expression;
-	declaration.type = type;
+    declaration.ident = ident;
+    declaration.expression = expression;
+    declaration.type = type;
 
-	return declaration;
+    return declaration;
 }
 
 let Code_Reference = {
@@ -179,359 +179,359 @@ function make_dot_operator(left, right) {
 
 let Code_Block = {
 
-	base: null,
+    base: null,
 
-	statements: null,
-	enclosing_scope: null
+    statements: null,
+    enclosing_scope: null
 };
 function make_block(statements, enclosing_scope) {
 
-	let block = Object.assign({}, Code_Block);
-	block.base = make_node();
-	block.base.kind = Code_Kind.BLOCK;
+    let block = Object.assign({}, Code_Block);
+    block.base = make_node();
+    block.base.kind = Code_Kind.BLOCK;
 
-	block.statements = statements;
-	block.enclosing_scope = enclosing_scope;
+    block.statements = statements;
+    block.enclosing_scope = enclosing_scope;
 
-	if (!block.statements) {
+    if (!block.statements) {
 
-		block.statements = new Array();
-	}
+        block.statements = new Array();
+    }
 
-	return block;
+    return block;
 }
 
 let Code_Return = {
 
-	base: null,
+    base: null,
 
     expression: null,
     original: null,
 };
 function make_return(expression) {
 
-	let return_ = Object.assign({}, Code_Return);
-	return_.base = make_node();
-	return_.base.kind = Code_Kind.RETURN;
+    let return_ = Object.assign({}, Code_Return);
+    return_.base = make_node();
+    return_.base.kind = Code_Kind.RETURN;
 
     return_.expression = expression;
     return_.original = return_;
 
-	return return_;
+    return return_;
 }
 
 let Code_Struct = {
 
-	base: null,
+    base: null,
 
     block: null,
 };
 function make_struct(block) {
 
-	let struct = Object.assign({}, Code_Struct);
-	struct.base = make_node();
-	struct.base.kind = Code_Kind.STRUCT;
+    let struct = Object.assign({}, Code_Struct);
+    struct.base = make_node();
+    struct.base.kind = Code_Kind.STRUCT;
 
-	struct.block = block;
+    struct.block = block;
 
-	return struct;
+    return struct;
 }
 
 let Code_If = {
 
-	base: null,
+    base: null,
 
-	condition: null,
-	expression: null
+    condition: null,
+    expression: null
 };
 function make_if(condition, expression) {
 
-	let if_ = Object.assign({}, Code_If);
-	if_.base = make_node();
-	if_.base.kind = Code_Kind.IF;
+    let if_ = Object.assign({}, Code_If);
+    if_.base = make_node();
+    if_.base.kind = Code_Kind.IF;
 
-	if_.condition = condition;
-	if_.expression = expression;
+    if_.condition = condition;
+    if_.expression = expression;
 
-	return if_;
+    return if_;
 }
 
 let Code_Else = {
 
-	base: null,
+    base: null,
 
-	expression: null
+    expression: null
 };
 function make_else(expression) {
 
-	let else_ = Object.assign({}, Code_Else);
-	else_.base = make_node();
-	else_.base.kind = Code_Kind.ELSE;
+    let else_ = Object.assign({}, Code_Else);
+    else_.base = make_node();
+    else_.base.kind = Code_Kind.ELSE;
 
-	else_.expression = expression;
+    else_.expression = expression;
 
-	return else_;
+    return else_;
 }
 
 let Code_While = {
 
-	base: null,
+    base: null,
 
-	condition: null,
-	expression: null
+    condition: null,
+    expression: null
 };
 function make_while(condition, expression) {
 
-	let while_ = Object.assign({}, Code_While);
-	while_.base = make_node();
-	while_.base.kind = Code_Kind.WHILE;
+    let while_ = Object.assign({}, Code_While);
+    while_.base = make_node();
+    while_.base.kind = Code_Kind.WHILE;
 
-	while_.condition = condition;
-	while_.expression = expression;
+    while_.condition = condition;
+    while_.expression = expression;
 
-	return while_;
+    return while_;
 }
 
 let Code_Do_While = {
 
-	base: null,
+    base: null,
 
-	expression: null,
-	condition: null,
+    expression: null,
+    condition: null,
 };
 function make_do_while(expression, condition) {
 
-	let while_ = Object.assign({}, Code_Do_While);
-	while_.base = make_node();
-	while_.base.kind = Code_Kind.DO_WHILE;
+    let while_ = Object.assign({}, Code_Do_While);
+    while_.base = make_node();
+    while_.base.kind = Code_Kind.DO_WHILE;
 
-	while_.expression = expression;
-	while_.condition = condition;
+    while_.expression = expression;
+    while_.condition = condition;
 
-	return while_;
+    return while_;
 }
 
 let Code_For = {
 
-	base: null,
+    base: null,
 
-	begin: null,
-	condition: null,
-	cycle_end: null,
-	expression: null
+    begin: null,
+    condition: null,
+    cycle_end: null,
+    expression: null
 };
 function make_for(begin, condition, cycle_end, expression) {
 
-	let for_ = Object.assign({}, Code_For);
-	for_.base = make_node();
-	for_.base.kind = Code_Kind.FOR;
+    let for_ = Object.assign({}, Code_For);
+    for_.base = make_node();
+    for_.base.kind = Code_Kind.FOR;
 
-	for_.begin = begin;
-	for_.condition = condition;
-	for_.cycle_end = cycle_end;
-	for_.expression = expression;
+    for_.begin = begin;
+    for_.condition = condition;
+    for_.cycle_end = cycle_end;
+    for_.expression = expression;
 
-	return for_;
+    return for_;
 }
 
 let Code_Break = {
 
-	base: null,
+    base: null,
 };
 function make_break() {
 
-	let break_ = Object.assign({}, Code_Break);
-	break_.base = make_node();
-	break_.base.kind = Code_Kind.BREAK;
+    let break_ = Object.assign({}, Code_Break);
+    break_.base = make_node();
+    break_.base.kind = Code_Kind.BREAK;
 
-	return break_;
+    return break_;
 }
 
 let Code_Continue = {
 
-	base: null,
+    base: null,
 };
 function make_continue() {
 
-	let continue_ = Object.assign({}, Code_Continue);
-	continue_.base = make_node();
-	continue_.base.kind = Code_Kind.CONTINUE;
+    let continue_ = Object.assign({}, Code_Continue);
+    continue_.base = make_node();
+    continue_.base.kind = Code_Kind.CONTINUE;
 
-	return continue_;
+    return continue_;
 }
 
 let Code_Minus = {
 
-	base: null,
+    base: null,
 
-	expression: null,
+    expression: null,
 };
 function make_minus(expression) {
 
-	let minus = Object.assign({}, Code_Minus);
-	minus.base = make_node();
-	minus.base.kind = Code_Kind.MINUS;
+    let minus = Object.assign({}, Code_Minus);
+    minus.base = make_node();
+    minus.base.kind = Code_Kind.MINUS;
 
-	minus.expression = expression;
+    minus.expression = expression;
 
-	return minus;
+    return minus;
 }
 
 let Code_Not = {
 
-	base: null,
+    base: null,
 
-	expression: null,
+    expression: null,
 };
 function make_not(expression) {
 
-	let not = Object.assign({}, Code_Not);
-	not.base = make_node();
-	not.base.kind = Code_Kind.NOT;
+    let not = Object.assign({}, Code_Not);
+    not.base = make_node();
+    not.base.kind = Code_Kind.NOT;
 
-	not.expression = expression;
+    not.expression = expression;
 
-	return not;
+    return not;
 }
 
 let Code_Increment = {
 
-	base: null,
+    base: null,
 
-	ident: null,
+    ident: null,
 };
 function make_increment(ident) {
 
-	let increment = Object.assign({}, Code_Increment);
-	increment.base = make_node();
-	increment.base.kind = Code_Kind.INCREMENT;
+    let increment = Object.assign({}, Code_Increment);
+    increment.base = make_node();
+    increment.base.kind = Code_Kind.INCREMENT;
 
-	increment.ident = ident;
+    increment.ident = ident;
 
-	return increment;
+    return increment;
 }
 
 let Code_Decrement = {
 
-	base: null,
+    base: null,
 
-	ident: null,
+    ident: null,
 };
 function make_decrement(ident) {
 
-	let decrement = Object.assign({}, Code_Decrement);
-	decrement.base = make_node();
-	decrement.base.kind = Code_Kind.DECREMENT;
+    let decrement = Object.assign({}, Code_Decrement);
+    decrement.base = make_node();
+    decrement.base.kind = Code_Kind.DECREMENT;
 
-	decrement.ident = ident;
+    decrement.ident = ident;
 
-	return decrement;
+    return decrement;
 }
 
 let Code_Assign = {
 
-	base: null,
+    base: null,
 
-	ident: null,
-	expression: null
+    ident: null,
+    expression: null
 };
 function make_assign(ident, expression) {
 
-	let assign = Object.assign({}, Code_Assign);
-	assign.base = make_node();
-	assign.base.kind = Code_Kind.ASSIGN;
+    let assign = Object.assign({}, Code_Assign);
+    assign.base = make_node();
+    assign.base.kind = Code_Kind.ASSIGN;
 
-	assign.ident = ident;
-	assign.expression = expression;
+    assign.ident = ident;
+    assign.expression = expression;
 
-	return assign;
+    return assign;
 }
 
 let Code_OpAssign = {
 
-	base: null,
+    base: null,
 
-	ident: null,
-	operation_type: null,
-	expression: null
+    ident: null,
+    operation_type: null,
+    expression: null
 };
 function make_opassign(ident, operation_type, expression) {
 
-	let opassign = Object.assign({}, Code_OpAssign);
-	opassign.base = make_node();
-	opassign.base.kind = Code_Kind.OPASSIGN;
+    let opassign = Object.assign({}, Code_OpAssign);
+    opassign.base = make_node();
+    opassign.base.kind = Code_Kind.OPASSIGN;
 
-	opassign.ident = ident;
-	opassign.operation_type = operation_type;
-	opassign.expression = expression;
+    opassign.ident = ident;
+    opassign.operation_type = operation_type;
+    opassign.expression = expression;
 
-	return opassign;
+    return opassign;
 }
 
 let Code_Binary_Operation = {
 
-	base: null,
+    base: null,
 
-	operation_type: null,
-	left: null,
-	right: null
+    operation_type: null,
+    left: null,
+    right: null
 };
 function make_binary_operation(left, operation_type, right) {
 
-	let binary_operation = Object.assign({}, Code_Binary_Operation);
-	binary_operation.base = make_node();
-	binary_operation.base.kind = Code_Kind.BINARY_OPERATION;
+    let binary_operation = Object.assign({}, Code_Binary_Operation);
+    binary_operation.base = make_node();
+    binary_operation.base.kind = Code_Kind.BINARY_OPERATION;
 
-	binary_operation.left = left;
-	binary_operation.operation_type = operation_type;
-	binary_operation.right = right;
+    binary_operation.left = left;
+    binary_operation.operation_type = operation_type;
+    binary_operation.right = right;
 
-	return binary_operation;
+    return binary_operation;
 }
 
 let Code_Ident = {
 
-	base: null,
+    base: null,
 
-	original: null,
-	name: null,
-	declaration: null,
+    original: null,
+    name: null,
+    declaration: null,
 
-	usage_count: 1
+    usage_count: 1
 };
 function make_ident(name, declaration) {
 
-	let ident = Object.assign({}, Code_Ident);
-	ident.base = make_node();
-	ident.base.kind = Code_Kind.IDENT;
+    let ident = Object.assign({}, Code_Ident);
+    ident.base = make_node();
+    ident.base.kind = Code_Kind.IDENT;
 
-	ident.original = ident;
-	ident.name = name;
-	ident.declaration = declaration;
+    ident.original = ident;
+    ident.name = name;
+    ident.declaration = declaration;
 
-	return ident;
+    return ident;
 }
 
 let Code_Literal = {
 
-	base: null,
+    base: null,
 
-	value: null
+    value: null
 };
 function make_literal(value) {
 
-	let literal = Object.assign({}, Code_Literal);
-	literal.base = make_node();
+    let literal = Object.assign({}, Code_Literal);
+    literal.base = make_node();
     literal.base.kind = Code_Kind.LITERAL;
 
-	literal.value = value;
+    literal.value = value;
 
-	return literal;
+    return literal;
 }
 
 let Code_String = {
 
-	base: null,
+    base: null,
 
     pointer: null,
     length: null,
@@ -540,8 +540,8 @@ let Code_String = {
 let strings = [];
 function make_string(str) {
 
-	let string = Object.assign({}, Code_String);
-	string.base = make_node();
+    let string = Object.assign({}, Code_String);
+    string.base = make_node();
     string.base.kind = Code_Kind.STRING;
     string.base.type = Type_Info_String;
 
@@ -552,24 +552,24 @@ function make_string(str) {
         strings.push(string);
     }
 
-	return string;
+    return string;
 }
 
 let Code_Parens = {
 
-	base: null,
+    base: null,
 
-	expression: null,
+    expression: null,
 };
 function make_parens(expression) {
 
-	let parens = Object.assign({}, Code_Parens);
-	parens.base = make_node();
-	parens.base.kind = Code_Kind.PARENS;
+    let parens = Object.assign({}, Code_Parens);
+    parens.base = make_node();
+    parens.base.kind = Code_Kind.PARENS;
 
-	parens.expression = expression;
+    parens.expression = expression;
 
-	return parens;
+    return parens;
 }
 
 let Type_Kind = {
@@ -759,25 +759,25 @@ let User_Types = {};
 
 let infer_last_block = null;
 function infer_decl_of_ident(ident, start_scope = null) {
-	let curr_scope = null;
-	if (start_scope) {
-		curr_scope = start_scope;
-	}
-	else {
-		curr_scope = infer_last_block;
-	}
-	while (curr_scope) {
+    let curr_scope = null;
+    if (start_scope) {
+        curr_scope = start_scope;
+    }
+    else {
+        curr_scope = infer_last_block;
+    }
+    while (curr_scope) {
         for (let j = 0; j < curr_scope.declarations.length; j += 1) {
             let decl = curr_scope.declarations[j];
             if (decl.ident.name == ident.name) {
                 return decl;
             }
         }
-		curr_scope = curr_scope.enclosing_scope;
-	}
+        curr_scope = curr_scope.enclosing_scope;
+    }
 }
 function infer_decl_of_ident_current_scope(ident) {
-	let curr_scope = infer_last_block;
+    let curr_scope = infer_last_block;
     for (let j = 0; j < curr_scope.declarations.length; j += 1) {
         let decl = curr_scope.declarations[j];
         if (decl.ident.name == ident.name) {
@@ -799,9 +799,9 @@ function infer(node) {
         infer_last_block = node.enclosing_scope;
     }
     else if (node.base.kind == Code_Kind.DECLARATION) {
-    	/*
+        /*
         if (infer_decl_of_ident_current_scope(node.ident)) {
-        	throw Error("identifier \"" + node.ident.name + "\" already declared in the current scope!");
+            throw Error("identifier \"" + node.ident.name + "\" already declared in the current scope!");
         }
         */
         if (infer_last_block) {
@@ -846,10 +846,10 @@ function infer(node) {
         infer(node.ident);
         infer(node.expression);
     }
-	else if (node.base.kind == Code_Kind.PARENS) {
+    else if (node.base.kind == Code_Kind.PARENS) {
         infer(node.expression);
         node.base.type = node.expression.base.type;
-	}
+    }
     else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
         infer(node.array);
         infer(node.index);
@@ -879,18 +879,18 @@ function infer(node) {
                 break;
             }
             else if (right.base.kind == Code_Kind.IDENT) {
-            	if (left.base.type.base.kind == Type_Kind.POINTER) {
-            		if (left.base.type.elem_type.base.kind == Type_Kind.STRUCT) {
-            			right.base.type = left.base.type.elem_type.members[right.name].type;
-            		}
-            		else {
-            			debugger;
-            			throw Error;
-            		}
-            	}
-            	else {
-	                right.base.type = left.base.type.members[right.name].type;	
-            	}
+                if (left.base.type.base.kind == Type_Kind.POINTER) {
+                    if (left.base.type.elem_type.base.kind == Type_Kind.STRUCT) {
+                        right.base.type = left.base.type.elem_type.members[right.name].type;
+                    }
+                    else {
+                        debugger;
+                        throw Error;
+                    }
+                }
+                else {
+                    right.base.type = left.base.type.members[right.name].type;  
+                }
                 break;
             }
         }
@@ -902,10 +902,10 @@ function infer(node) {
     else if (node.base.kind == Code_Kind.STRING) {
     }
     else if (node.base.kind == Code_Kind.PROCEDURE) {
-    	// :BlockEnclosingScope
-    	let prev_scope = infer_last_block;
-    	node.block.enclosing_scope = infer_last_block;
-    	infer_last_block = node.block;
+        // :BlockEnclosingScope
+        let prev_scope = infer_last_block;
+        node.block.enclosing_scope = infer_last_block;
+        infer_last_block = node.block;
         node.block.declarations = new Array();
         infer(node.return_type);
         for (let param of node.parameters) {
@@ -953,14 +953,14 @@ function infer(node) {
         }
         // :TypeNeeded
         let proc = node.ident.declaration.expression;
-		if (typeof proc == "function") {
-			if (node.ident.name == "malloc") {
-		    	node.base.type = Types.size_t;
-			}
-	    }
-	    else {
-	        node.base.type = node.ident.declaration.expression.return_type;
-	    }
+        if (typeof proc == "function") {
+            if (node.ident.name == "malloc") {
+                node.base.type = Types.size_t;
+            }
+        }
+        else {
+            node.base.type = node.ident.declaration.expression.return_type;
+        }
     }
     else if (node.base.kind == Code_Kind.RETURN) {
         if (node.expression) {
@@ -968,30 +968,41 @@ function infer(node) {
         }
     }
     else if (node.base.kind == Code_Kind.IDENT) {
-    	if (!node.declaration) {
-	        node.declaration = infer_decl_of_ident(node);
-	    }
-	    if (Types.hasOwnProperty(node.name) != true) {
-	        if (!node.declaration) {
-	        	throw Error;
-	        }
-	        node.base.type = node.declaration.ident.base.type;
-	    }
+        if (!node.declaration) {
+            node.declaration = infer_decl_of_ident(node);
+        }
+        if (Types.hasOwnProperty(node.name) == false && !node.base.type) {
+            if (!node.declaration) {
+                throw Error;
+            }
+            node.base.type = node.declaration.ident.base.type;
+        }
     }
-	else if (node.base.kind == Code_Kind.REFERENCE) {
+    else if (node.base.kind == Code_Kind.REFERENCE) {
         node.base.type = infer_type(node);
         infer(node.expression);
-	}
-	else if (node.base.kind == Code_Kind.DEREFERENCE) {
+    }
+    else if (node.base.kind == Code_Kind.DEREFERENCE) {
         node.base.type = infer_type(node);
         infer(node.expression);
-	}
+    }
     else if (node.base.kind == Code_Kind.BINARY_OPERATION) {
         infer(node.left);
         infer(node.right);
-        // @Incomplete
-        // should compromise between left and right
-        node.base.type = node.left.base.type;
+        const operation_type = node.operation_type;
+        let is_bool = false;
+        if (operation_type == "<" || operation_type == ">" ||
+            operation_type == "<=" || operation_type == ">=" ||
+            operation_type == "==" || operation_type == "!=" ||
+            operation_type == "&&" || operation_type == "||") {
+
+            node.base.type = Types.bool;
+        }
+        else {
+            // @Incomplete
+            // should compromise between left and right
+            node.base.type = node.left.base.type;
+        }
     }
     return node;
 }
@@ -999,7 +1010,7 @@ function infer_type(node) {
     if (node.base.kind == Code_Kind.IDENT) {
         let primitive = Types[node.name];
         if (primitive) {
-        	node.base.type = primitive;
+            node.base.type = primitive;
             return primitive;
         }
         else {
@@ -1009,7 +1020,7 @@ function infer_type(node) {
                 return user_type;
             }
             else {
-            	throw Error;
+                throw Error;
             }
         }
     }
@@ -1164,10 +1175,10 @@ function parse(tokens) {
                     return parse_opassign(left);
                 }
                 else {
-                	if (left.base.kind == Code_Kind.IDENT && curr_token.str.split("").every(x => x == "*")) {
-                		throw Error("Multiple levels of indirection are currently not supported");
-                	}
-                	throw Error;
+                    if (left.base.kind == Code_Kind.IDENT && curr_token.str.split("").every(x => x == "*")) {
+                        throw Error("Multiple levels of indirection are currently not supported");
+                    }
+                    throw Error;
                 }
             }
             else {
@@ -1225,10 +1236,12 @@ function parse(tokens) {
             }
             else if (curr_token.str == "true") {
                 left = make_literal(true);
+                left.base.type = Types.bool;
                 token_index += 1;
             }
             else if (curr_token.str == "false") {
                 left = make_literal(false);
+                left.base.type = Types.bool;
                 token_index += 1;
             }
             else {
@@ -1433,7 +1446,7 @@ function parse(tokens) {
     }
     function parse_ident(last) {
         let curr_token = tokens[token_index];
-        if (curr_token.kind == "ident") {
+        if (curr_token.kind == "ident" && curr_token.str != "true" && curr_token.str != "false") {
             token_index += 1;
             return make_ident(curr_token.str);
         }
