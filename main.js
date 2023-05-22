@@ -1088,6 +1088,9 @@ bookmarks :: () {
 		farquaad = 0;
 	}
 }
+the_end :: () {
+	fin :: true;
+}
 main :: () {
 	movement();
 	help :: 42;
@@ -1096,6 +1099,7 @@ main :: () {
 	ifs();
 	loops(3);
 	bookmarks();
+	the_end();
 }
 `;
 code = temp_code;
@@ -1196,7 +1200,7 @@ function init_user_progress() {
 }
 
 let ab_test = false;
-let developer_controls_shown = true;
+let developer_controls_shown = false;
 let visible_token_nodes = null;
 
 // nocheckin
@@ -1295,12 +1299,25 @@ function set_status(str) {
 }
 
 function init_text() {
+	let in_tutorial = false;
 	let stored_code = window.localStorage.getItem("code");
 	if (!stored_code) {
 		window.localStorage.setItem("code", code);
+		in_tutorial = true;
 	}
 	else {
+		if (code == stored_code) {
+			in_tutorial = true;
+		}
 		code = stored_code;
+	}
+	if (in_tutorial) {
+		populate_tutorial_bookmarks();
+	}
+	else {
+		god_mode = true;
+		bookmark_layers[0] = new Array();
+		save_user_progress();
 	}
 	source_gui_elem.value = code;
 	let file = parse_text(code);
@@ -1333,6 +1350,154 @@ function save_code(text) {
 }
 function reset_code() {
 	window.localStorage.removeItem("code");
+}
+function populate_tutorial_bookmarks() {
+	{
+		let dummy_bookmark = make_bookmark(0, 0, "Press X to move forward\nand Z to move backward");
+		// nocheckin
+		// @Incomplete
+		// check this to step_prev and step_next
+		dummy_bookmark.unlocks = ["move_basic"];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(2, 0, "Follow the red blinking lights, Neo");
+		dummy_bookmark.unlocks = [];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(6, 0, "Press WASD to move between lines");
+		dummy_bookmark.unlocks = ["move_line"];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(11, 0, "Press X two times to enter the next call");
+		dummy_bookmark.unlocks = [];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(20, 0, "Press F to replace variable names with their values");
+		dummy_bookmark.unlocks = ["show_values"];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(24, 0, "Make sure you find all the blinking lights \nSome of them are well hidden");
+		dummy_bookmark.unlocks = ["show_values"];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(28, 0, "Press E to show math results\n(if it doesn't work, press F to show values and then press E)");
+		dummy_bookmark.unlocks = ["show_elements"];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(48, 0, "Press X to move through the math \nand see the result of every step");
+		dummy_bookmark.unlocks = [];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(63, 0, "Press H to jump to previous change\nPress J to jump to next change");
+		dummy_bookmark.unlocks = ["move_change"];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(72, 0, "Press Y to jump to previous use\nPress U to jump to next use");
+		dummy_bookmark.unlocks = ["move_use"];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(74, 0, "Only the code that was actually executed is shown\nThe code that didn't run is hidden");
+		dummy_bookmark.unlocks = [];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(82, 0, "Press Q to expand a loop and see all the iterations\n");
+		dummy_bookmark.unlocks = ["expand_loop"];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(87, 0, "Move into this call by pressing X\n");
+		dummy_bookmark.unlocks = [];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(94, 0, "Press M to jump to the next time this code ran\n");
+		dummy_bookmark.unlocks = ["move_clone"];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(113, 0, "Press N to jump to the previous time this code was executed\n");
+		dummy_bookmark.unlocks = [];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(116, 0, "Press M to jump to the third iteration\n");
+		dummy_bookmark.unlocks = [];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(125, 0, "Press Q to collapse the loop and show only the current iteration \nand then press NM to move between all the iterations");
+		dummy_bookmark.unlocks = ["expand_loop"];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(153, 0, "Press Q until the loop is not expanded, \nand then press W to skip all the iterations\n");
+		dummy_bookmark.unlocks = ["expand_loop"];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(157, 0, "Congratulations on getting this far! \nNow you will see how all this is useful!");
+		dummy_bookmark.unlocks = ["bookmark"];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(165, 0, "Press J to find out where this variable changes\n");
+		dummy_bookmark.unlocks = [];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(206, 0, "Just bookmark all the changes and uses of `shrek` first\nand then deal with `fiona`");
+		dummy_bookmark.unlocks = [];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(208, 0, "Press K to create your own blinking lights, also known as \"bookmarks\"\nand then press IO to move between them");
+		dummy_bookmark.unlocks = [];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(210, 0, "Okay nice, we are happy. But why?\nMove onto `shrek` and use HJ / YU to find out");
+		dummy_bookmark.unlocks = [];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(223, 0, "You have reached The End. Press G to activate God Mode (no restrictions) \nPress Ctrl + Q to open Developer Mode, and write your own code, if you dare");
+		dummy_bookmark.unlocks = [];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
 }
 
 function map_controls() {
@@ -1701,6 +1866,10 @@ function toggle_elements_shown() {
 	}
 }
 function toggle_loop_cycles_shown() {
+	if (user_has_unlocked_ability("expand_loop") == false) {
+		trigger_cursor_error();
+		return;
+	}
 	tree_view_modes.loop_cycles_shown = !tree_view_modes.loop_cycles_shown;
 	need_update = true;
 }
@@ -3054,150 +3223,8 @@ function make_bookmark(cursor_index, layer_index, text = null, unlocks = null) {
 	return bookmark;
 }
 
-{
-let dummy_bookmark = make_bookmark(0, 0, "Press X to move forward\nand Z to move backward");
-// nocheckin
-// @Incomplete
-// check this to step_prev and step_next
-dummy_bookmark.unlocks = ["move_basic"];
-bookmark_layers[0].push(dummy_bookmark);
-}
-
-{
-let dummy_bookmark = make_bookmark(2, 0, "Follow the red blinking lights, Neo");
-dummy_bookmark.unlocks = [];
-bookmark_layers[0].push(dummy_bookmark);
-}
-
-{
-let dummy_bookmark = make_bookmark(6, 0, "Press WASD to move between lines");
-dummy_bookmark.unlocks = ["move_line"];
-bookmark_layers[0].push(dummy_bookmark);
-}
-
-{
-let dummy_bookmark = make_bookmark(11, 0, "Press X two times to enter the next call");
-dummy_bookmark.unlocks = [];
-bookmark_layers[0].push(dummy_bookmark);
-}
-
-{
-let dummy_bookmark = make_bookmark(20, 0, "Press F to replace variable names with their values");
-dummy_bookmark.unlocks = ["show_values"];
-bookmark_layers[0].push(dummy_bookmark);
-}
-
-{
-let dummy_bookmark = make_bookmark(24, 0, "Make sure you find all the blinking lights \nSome of them are well hidden");
-dummy_bookmark.unlocks = ["show_values"];
-bookmark_layers[0].push(dummy_bookmark);
-}
-
-{
-let dummy_bookmark = make_bookmark(28, 0, "Press E to show math results\n(if it doesn't work, press F to show values and then press E)");
-dummy_bookmark.unlocks = ["show_elements"];
-bookmark_layers[0].push(dummy_bookmark);
-}
-
-{
-let dummy_bookmark = make_bookmark(48, 0, "Press X to move through the math \nand see the result of every step");
-dummy_bookmark.unlocks = [];
-bookmark_layers[0].push(dummy_bookmark);
-}
-
-{
-let dummy_bookmark = make_bookmark(63, 0, "Press H to jump to previous change\nPress J to jump to next change");
-dummy_bookmark.unlocks = ["move_change"];
-bookmark_layers[0].push(dummy_bookmark);
-}
-
-{
-let dummy_bookmark = make_bookmark(72, 0, "Press Y to jump to previous use\nPress U to jump to next use");
-dummy_bookmark.unlocks = ["move_use"];
-bookmark_layers[0].push(dummy_bookmark);
-}
-
-{
-let dummy_bookmark = make_bookmark(74, 0, "Only the code that was actually executed is shown\nThe code that didn't run is hidden");
-dummy_bookmark.unlocks = [];
-bookmark_layers[0].push(dummy_bookmark);
-}
-
-{
-let dummy_bookmark = make_bookmark(82, 0, "Press Q to expand a loop and see all the iterations\n");
-dummy_bookmark.unlocks = [];
-bookmark_layers[0].push(dummy_bookmark);
-}
-
-{
-let dummy_bookmark = make_bookmark(87, 0, "Move into this call by pressing X\n");
-dummy_bookmark.unlocks = [];
-bookmark_layers[0].push(dummy_bookmark);
-}
-
-{
-let dummy_bookmark = make_bookmark(94, 0, "Press M to jump to the next time this code ran\n");
-dummy_bookmark.unlocks = ["move_clone"];
-bookmark_layers[0].push(dummy_bookmark);
-}
-
-{
-let dummy_bookmark = make_bookmark(113, 0, "Press N to jump to the previous time this code was executed\n");
-dummy_bookmark.unlocks = [];
-bookmark_layers[0].push(dummy_bookmark);
-}
-
-{
-let dummy_bookmark = make_bookmark(116, 0, "Press M to jump to the third iteration\n");
-dummy_bookmark.unlocks = [];
-bookmark_layers[0].push(dummy_bookmark);
-}
-
-{
-let dummy_bookmark = make_bookmark(125, 0, "Press Q to collapse the loop and show only the current iteration \nand then press NM to move between all the iterations");
-dummy_bookmark.unlocks = [];
-bookmark_layers[0].push(dummy_bookmark);
-}
-
-{
-let dummy_bookmark = make_bookmark(153, 0, "Press Q until the loop is not expanded, \nand then press W to skip all the iterations\n");
-dummy_bookmark.unlocks = [];
-bookmark_layers[0].push(dummy_bookmark);
-}
-
-{
-let dummy_bookmark = make_bookmark(157, 0, "Congratulations on getting this far! \nNow you will see how all this is useful!");
-dummy_bookmark.unlocks = ["bookmark"];
-bookmark_layers[0].push(dummy_bookmark);
-}
-
-{
-let dummy_bookmark = make_bookmark(165, 0, "Press J to find out where this variable changes\n");
-dummy_bookmark.unlocks = [];
-bookmark_layers[0].push(dummy_bookmark);
-}
-
-{
-let dummy_bookmark = make_bookmark(206, 0, "Just bookmark all the changes and uses of `shrek` first\nand then deal with `fiona`");
-dummy_bookmark.unlocks = [];
-bookmark_layers[0].push(dummy_bookmark);
-}
-
-{
-let dummy_bookmark = make_bookmark(208, 0, "Press K to create your own blinking lights, also known as \"bookmarks\"\nand then press IO to move between them");
-dummy_bookmark.unlocks = [];
-bookmark_layers[0].push(dummy_bookmark);
-}
-
-{
-let dummy_bookmark = make_bookmark(210, 0, "Okay nice, we are happy. But why?\nMove onto `shrek` and use HJ / YU to find out");
-dummy_bookmark.unlocks = [];
-bookmark_layers[0].push(dummy_bookmark);
-}
-
 let active_bookmarks = new Array(bookmark_layer_count);
 for (let i = 0; i < active_bookmarks.length; i += 1) {
-	// active_bookmarks[i] = false;
 	active_bookmarks[i] = true;
 }
 active_bookmarks[0] = true;
@@ -3955,6 +3982,9 @@ function draw_bookmarks(ctx) {
 	let cursor_stack = context.view_state.cursor_stack;
 	for (let i = 0; i < bookmarks.length; i += 1) {
 		let bookmark = bookmarks[i];
+		if (bookmark.cursor_index >= context.view_state.cursor_stack.length) {
+			continue;
+		}
 		let node = context.view_state.cursor_stack[bookmark.cursor_index];
 		let find = find_visible_token_begin_and_end(node.token_begin, node.token_end);
 		if (find.begin_token_node == null || find.end_token_node == null) {
