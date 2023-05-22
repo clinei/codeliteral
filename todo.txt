@@ -1,3 +1,788 @@
+// Motivation (why the demo must be ready before 2024):
+// get an experience advisor from Estonian Gamedev Discord
+// get a stable job and negotiate a suitable work environment and method
+// leetcode every Saturday (with Skynet)
+// learn interesting algorithms (like raytracing)
+// make good tutorials (with Skynet)
+// get feedback from other developers
+// (Avzqn, Nimda on DC, really wants debugging to be like this, and is hyped for the demo, his own words)
+// get the debugger bundled with the compiler before public release
+// grow social network and become well-known in gamedev circles
+// get funding for future projects
+// make good games
+// change how people learn, interact, and work
+
+// Demo:
+// @Incomplete
+// add node.cursor_index_at_begin to everything
+// right now, the call is added to the cursor stack after it is finished
+// so you have to move onto the call and step back to enter it
+// but we want to enter it by stepping forward and when stepping backward
+// so we need the call to be in the cursor stack twice
+// so there is no simple cursor_index, or we just handle calls differently
+// do we need two cursor stacks for index_at_begin and index_at_end?
+// we don't want many elements having the same indexes
+// so we need to increment the index both when the code element begins and when it ends
+// we should add begin and end versions of maybe_add_node_to_cursor_stack
+// most things can just use cursor_index_at_begin
+// but the functions that deal with movement should choose one or the other
+// step_prev should use cursor_index_at_end
+// step_next should use cursor_index_at_begin
+// @Incomplete
+// Ctrl + IO moves between calls in one function
+// Shift + Ctrl + IO moves between calls of the entire program
+// @Incomplete
+// Shift + W moves to the beginning of a block, Shift + S moves to the end
+// Ctrl + W moves to the beginning of a call, Ctrl + S moves to the end
+// we want to quickly move between calls with Ctrl + IO and see the parameters and returns with Ctrl + WS
+// so that we don't have to move our left hand between Ctrl and Shift
+// @Incomplete
+// right now, when we use NM to move between loop statements
+// when we are at the first or last cycle, we can jump to a different loop
+// because of all the animations, the use can visually see that that happened
+// but we should play a different sound when that happens, just in case
+// we just need to check if the jump location is inside the current loop
+// we should probably preprocess this into a list of loop statements
+// and then use the index_at_begin and index_at_end
+// @Incomplete
+// we could have a max_column_index
+// so that when we move to a line that has less columns and then move back
+// we end up in the same place
+// @Incomplete
+// Shift + Z and Shift + X move in steps of 10, maybe increasing the longer you hold the button
+// @Incomplete
+// we could have a button that makes a crowd cheer sound when you find a bug
+// maybe this could be a quick command, or maybe a really complicated keyboard combination
+// this would be introduced at the end of the tutorial, as a way to "toot your own horn"
+// this is to motivate the user and celebrate small wins
+// it would be really nice if someone recognizes our efforts, even if it's just a program and you directly command it to do it
+// this also teaches the user to be proud of the work they are doing, which is a good tool for self-care
+// this gives a more direct sense of progress, compared to the increasing number of bookmarks, and the increasing understanding of what happened in the program
+// the sound could also be an airhorn, like the one used in football matches
+// @Incomplete
+// sound effect for bookmark text input (pen friction on paper)
+// we can also use it for cursor change
+// @Incomplete
+// bookmark_text_inline should have a blurry shadow so that it isn't mistaken for code
+// @Incomplete
+// mode change sound should have rising and falling bandpass versions
+// @Incomplete
+// if we need to draw attention to something
+// then we can animate the font weight of the text
+// or animate the font size of the text
+// or animate the opacity of the text
+// or animate the position of the text (shake it around, for example on error)
+// or animate a metal sheen effect on the text (scroll a diagonal rectangle horizontally)
+// this is less intrusive than the rounded rectangle of a cursor
+// so we can use it when we have a lot of things we want to draw attention to
+// @Incomplete
+// when setting bookmark text, everything else should be faded away, including the run tree
+// @Incomplete
+// bookmark could also look like 4 dots in the corners
+// less visual noise compared to straight lines in a right angle
+// but draws too much attention because of the higher contrast
+// we could also round the right angles with signed distance fields
+// the bookmark should start from a dot, expand into a rectangle, and then fade into corners
+// kind of like Material Design buttons
+// @Incomplete
+// bookmark corners can just be 2 right angles instead of 4
+// top left, bottom right
+// @Incomplete
+// bookmark corners should be rounded
+// @Incomplete
+// right now, showing elements instantly collapses
+// but we want a smooth animation from the center of the token
+// if there are many tokens, they should move towards the shared center
+// the tokens that fade out should end up in a point
+// from which the tokens that fade in come from
+// tokens might need to know what they will be replaced by
+// with token_begin and token_end
+// @Incomplete
+// we should have a mode that only shows statements that directly contain the cursor or a bookmark
+// we can use this to show an overview of all the bookmarks
+// we should have a mode that only shows blocks that directly contain the cursor or a bookmark
+// we can use this to abbreviate recursive calls
+// we can use this to replace the loop-specific cycle showing
+// slight problem:
+// this means that we only show the loop body and not the things that came before it
+// and when we go into another block, the loop cycle block disappears
+// also, we could show the blocks in the current block as an empty block {}
+// including if statements and loops
+// and if the block is a child of an if statement
+// then the things before the block must also be shown
+// (recurse up the tree until node.base.child_of.base.kind == Code_Kind.BLOCK)
+// loops would be collapsed by default, so it's easier to jump over them
+// press Q to cycle through the 3 options (show all, show block, show statement)
+// we could also let expand_all be an option, but that might complicate the user interface
+// use node.base.enclosing_scope
+// or maybe we should calculate contains_cursor_last_block in mark_containment
+// @Incomplete
+// node.base.child_of
+// so we can find the first block-level statement
+// or figure out if we are on the left-hand side
+// so we can get rid of node.is_lhs, just like we got rid of node.base.original and turned it into a function get_original
+// or we could just not show the previous value of a variable, and remove assign.target.base.result
+// because we can just move between the current change and the previous one
+// this would greatly reduce complexity of rendering
+// but we probably use is_lhs for more things
+// @Incomplete
+// the controls should be on the top
+// the REPL should be on the top left
+// the visualization should be on the bottom left
+// the bookmark text should be below the run tree
+// the terminal and graphics window should be below the bookmark text
+// the timeline should be below the terminal, at the very bottom
+// @Incomplete
+// Ctrl + Space to maximize current view, like in Blender
+// @Incomplete
+// tiled window system (like Blender)
+// @Incomplete
+// indentation should be a single token before a statement
+// that is rendered based on the current indentation level
+// @Incomplete
+// dashed line for indentation
+// @Incomplete
+// WebGL signed distance field rendering
+// draw cursor on canvas
+// we should seamlessly animate between circles, rectangles, and text
+// signed distance fields:
+// https://www.youtube.com/watch?v=BNZtUB7yhX4
+// rectangles:
+// https://www.youtube.com/watch?v=62-pRVZuS5c
+// circles:
+// https://www.youtube.com/watch?v=s5NGeUV2EyU
+// lines:
+// https://www.youtube.com/watch?v=PMltMdi1Wzg
+// text:
+// https://www.youtube.com/watch?v=1b5hIMqz_wM
+// practical use cases:
+// https://www.youtube.com/watch?v=mL8U8tIiRRg
+// rounded glowing rectangles:
+// https://www.rfleury.com/p/ui-part-6-rendering
+// font curve rendering:
+// https://www.smashingmagazine.com/2012/04/a-closer-look-at-font-rendering/
+// https://blog.mapbox.com/drawing-text-with-signed-distance-fields-in-mapbox-gl-b0933af6f817
+// @Incomplete
+// rename SYSCALL to INTRINSIC
+// @Incomplete
+// line movement should work like this:
+// 1 + [2 * 3] - 4
+// left_line
+// [1] + 2 * 3 - 4
+// not like this
+// 1 + [2] * 3 - 4
+// @Incomplete
+// we should clamp the column index based on barriers like equals sign
+// so that we don't end up on the right hand side when we didn't intend that
+// @Incomplete
+// arrays
+// struct with count member for both dynamic and static arrays
+// nested arrays
+// really big arrays should not be shown completely
+// [1, 2, 3, ...]
+// prev/next use/change
+// @Incomplete
+// infer is_lhs
+// could change into lhs_of, more useful
+// @Incomplete
+// left_line and right_line on array index should use token_end and token_begin
+// if array_index.base.expand then array_index.can_go = false
+// @Incomplete
+// pointers
+// function pointers
+// @Incomplete
+// for loop over integer set
+// for loop over array
+// reverse, by pointer
+// break, continue
+// named loops
+// @Cleanup
+// simplify the update_code for node.base.result and node.base.replacement
+// @Incomplete
+// :Profiler
+// add a timestamp for every node that is run
+// @Incomplete
+// defer
+// @Incomplete
+// macros
+// `return
+// `defer
+// for_expansion :: (array: *TYPE, body: Code, flags: For_Flags) #expand {}
+// @Incomplete
+// start using Code_Scope.belongs_to
+// @Incomplete
+// by default
+// loop_cycles_shown = false
+// values_shown = false
+// @Incomplete
+// mode for always keeping the cursor vertically centered
+// useful for scanning bookmarks
+// double tap it to center once
+// @Incomplete
+// block expand wobble is too big
+// we should start it from the center, or depending on cursor position
+// loop cycle change should scroll vertically
+// we could also scale the text rendering
+// @Incomplete
+// bookmark_layers should be part of context.view_state
+// @Incomplete
+// context.curr_time
+// context.drawing_context
+// @Incomplete
+// global_token_buffer needs to be part of the view_state
+// @Incomplete
+// unlock features when the user moves to specific bookmarks
+// @Incomplete
+// :MultipleReturns
+// procedure call results
+// @Incomplete
+// show bookmark text on previous line
+// @Incomplete
+// in the tutorial, the user must understand that they should have both hands on the keyboard
+// so we should give the user a reason to press a button with the right hand, as soon as possible
+// @Incomplete
+// we should have a separate tutorial for someone who doesn't know anything about programming
+// https://www.youtube.com/watch?v=VpwTPw8DQ_w&list=PLhEuCycbde-vyFoSBJbdKjw-AVTdQRE5g&index=2
+// @Incomplete
+// the first steps of the tutorial
+// press WASD to move between lines
+// press ZX to move by execution order
+// when you go too far, press I to restart the level from the last savepoint
+// actually, they are called "bookmarks", because this is not a game, even if it feels like one
+// press L to toggle whether the bookmark text is only on the top box or also in the code
+// press K to make your own bookmarks (is this the right place to teach this?)
+// press H to jump to prev change
+// press U to jump to next use (HU sounds like "who")
+// press Ctrl + Z to undo (it only restores movement)
+// press Ctrl + X to redo
+// press Ctrl + Shift + ZX to move between jumps (skip simple moves)
+// changing from constant to mutable is just one character, :: to :=
+// show values, don't show elements, and hold down ZX to hear how many loops, calls, or math is happening in a specific piece of code
+// ########################################### CONTINUE HERE ###########################################
+// @Incomplete
+// the user should not accidentally click on the timeline as the first thing and start the tutorial in the wrong place
+// or worse, start thinking that the main way to move in this debugger is by scrolling the timeline with the right hand on the mouse
+// so the timeline should start up as disabled, until the user reached a specific bookmark
+// this kind of thing should also be used to prevent the user from accidentally pressing the wrong button
+// this is especially important for O, because the user may accidentally press it and not understand what they did and how to fix it
+// use an array called "disabled_keys" in localStorage
+// also, make the bookmark text non-selectable, probably by making it a canvas
+// the text shadow could be outline with sharp edge
+// https://stackoverflow.com/questions/20909585/html5-canvas-text-shadow-equivalent
+// if (window.localStorage not contain `first_time`) then `is_first_time = true`
+// if (is_first_time) then save `timeline_disabled = true` to window.localStorage
+// and save `first_time = false` to window.localStorage
+// when the user reaches a specific bookmark, delete `timeline_disabled` from window.localStorage
+// same with the source tree, REPL, and other things
+// @Incomplete
+// the source tree can be edited as a textarea
+// and the edit mode can be toggled with Ctrl + W
+// @Incomplete
+// the source edit mode should have search with Ctrl + F and F3 and Shift + F3
+// @Incomplete
+// clean up comment handling code
+// @Incomplete
+// :Documentation
+// text in the debugger is not meant to be copied verbatim
+// especially since we have custom visualization for data structures
+// it would also be very annoying with all the animations
+// if you want to copy the code, do it by hand or use the source
+// this feature was meant to help with creating a repro case
+// but doing it by hand is better, because it reduces blind copy paste errors and unnecessary code
+// @Incomplete
+// press G for geiger counter for data change and use
+// @Incomplete
+// escaped variable names, use the extra token kind of iteration count
+// @Incomplete
+// bookmarks should have some kind of animation
+// and the sound should match the shape
+// maybe a switch with different pitches for add/remove?
+// @Incomplete
+// we should create layers that have two different colors for the vertical and horizontal lines
+// and maybe a different shape?
+// needs to be recognizable for people with colorblindness
+// also, what happens when the bookmarks overlap?
+// @Incomplete
+// make the syntax highlighting colors have different lightness values
+// Chrome DevTools -> three dots -> Rendering -> Achromatopsia
+// @Incomplete
+// error when an expression doesn't refer to a memory address
+// @Incomplete
+// press Ctrl + L to update the bookmark text
+// bookmark text is shown between the timeline and the syntax tree
+// by default, it should show the text of the last bookmark, even when run_cursor is not on the bookmark
+// if the cursor is before the first bookmark, show the text of the first bookmark
+// when the cursor is hovering the timeline, show the text of the closest bookmark in the current lane
+// when run_cursor.node.cursor_index == timeline_index
+// show the text of the current bookmark
+// @Incomplete
+// bookmark text should have an animated highlight to tell the user that it changed
+// @Incomplete
+// bookmark text can be shown in the syntax tree on the line before the bookmark, toggled by pressing L, default off
+// @Incomplete
+// maybe the cursor should stretch along the path of movement
+// so it looks more like a line from the begin position toward the end position
+// this makes it easier to understand the direction of cursor movement
+// first the line extends from the start position to the end position
+// and after the line is fully stretched out, it contracts toward the end position
+// @Incomplete
+// need to move between return declarations of many calls of the same function
+// @Incomplete
+// in the execution tree, press Alt + C to make the source cursor follow the execution cursor
+// so that when the execution cursor moves, the source cursor moves too
+// but when the source cursor moves, nothing happens (press NM to move between clones)
+// @Incomplete
+// in the execution tree, struct and function declarations are collapsed by default
+// in the source tree, struct and function declarations are always expanded
+// @Incomplete
+// in the source tree, press Alt + C to jump to source code location of current cursor
+// @Incomplete
+// in the source tree, press Ctrl + E to toggle between text mode and tree mode
+// in the source tree, you can step into struct and function declarations
+// what if the value of a data member came from the struct initializer?
+// if we press NM in the source tree, but the code node was never executed, then we should play the error sound
+// we could refactor this so that every jump with an invalid target plays the error sound
+// YU/HJ/NM/IO, play the error sound when already at the first or last node
+// @Incomplete
+// in the source tree, we render the tokens after the parse step, but how do we map back to code nodes?
+// just keep a separate array of node, token_begin, token_end?
+// @Incomplete
+// @UserInterface
+// maybe some of the buttons could be held down to do other things?
+// @Incomplete
+// @Motivation
+// to solidify the knowledge that the user has gained about the nature of the problem
+// we could auto-generate some minigames based on the timing of events, or the order of events
+// they have to press a button at the right time, or the right buttons in the right order
+// @Incomplete
+// when a byte changes, push a new element into an array
+// store the index of the first byte of the memory used to store the value of a variable
+// @Speed
+// don't draw tokens that are off the screen
+// @Incomplete
+// for bidirectional jumps, should the sounds effects be different based on the direction?
+// for example, when we jump to the previous change, we have one sound effect
+// but when we jump to the next change, it's slightly different?
+// @Incomplete
+// should jumping between changes, uses, and clones have different sounds?
+// we don't want to overwhelm beginners, so maybe they are only different enough that experts can tell them apart
+// so that beginners can learn fast, but experts can get more useful information
+// we could lower the pitch of the sound when we are going backwards, and increase it when going forwards
+// @Incomplete
+// the timeline is a canvas
+// @Incomplete
+// the timeline and other features should be locked until the user reaches a specific bookmark
+// we could show the unlock text, like in Sokoban
+// @Incomplete
+// on the timeline
+// draw the run_cursor position as a vertically stretched oval
+// or just decrease the opacity
+// @Incomplete
+// on the timeline
+// draw all the bookmarks as colored dots
+// the current lane is more visible, and the others are barely visible
+// except bookmark_lane[0], which is not visible at all
+// the bookmark dots get more opacity when the cursor is hovering over the timeline
+// @Incomplete
+// holding Ctrl and moving over the timeline snaps to the closest bookmark in the current lane
+// @Incomplete
+// make a separate function for finding the first and last shown token nodes
+// like cursor.begin_token_node
+// @Incomplete
+// ifx in expressions
+// @Incomplete
+// replace HTMLElement with Render_Node
+// @Incomplete
+// show pointer values and null
+// reference is *, dereference is <<
+// @Incomplete
+// fix strings
+// @Incomplete
+// fix arrays, both dynamic and static
+// @Incomplete
+// defer
+// @Incomplete
+// multiply number with boolean, implicit cast to int
+// @Incomplete
+// :NamedArguments
+// @Incomplete
+// enum_flags, need to jump to specific bitflag instead of the entire variable
+// @Incomplete
+// struct literals
+// show it as {...} if compound_elements_shown == false
+// color of ... is same as semicolon
+// press Shift + E to toggle_compound_elements()
+// expand when cursor goes inside
+// if it's big, divide it by the closest order of magnitude, and only show the current section
+// .{1, 2}
+// .{x = 1, x = 2}
+// v2.{y = 2, x = 1}
+// can use dynamic member
+// a := 1; b := .{x = a}
+// can use constant member
+// a :: 1; b := .{x = a}
+// call that returns a struct
+// we can't go into a struct literal result, we just show it as struct_type.{}
+// can we go into a struct literal from source code?
+// @Incomplete
+// array literals
+// maybe we should just print out the type, and not show any elements, the user has to use the REPL for that
+// show it as [...] if compound_elements_shown == false
+// color of ... is same as semicolon
+// expand when cursor goes inside
+// if it's big, divide it by the closest order of magnitude, and only show the current section
+// [1, 2, 3]
+// int.[1, 2, 3]
+// float.[1, 2, 3]
+// string.["aaa", "bbb", "ccc"]
+// @Incomplete
+// for loop array
+// break, continue, remove
+// reverse, by pointer
+// @Incomplete
+// macros
+// for_expansion
+// @Incomplete
+// ifx, if-case
+/* example switch:
+foo :: (x: int) -> int {
+	if x == {
+	case 0; return 1;
+	case 2; #through
+	case 3; return bar(x);
+	case 5; return 5;
+	case 6; return 6;
+	case 7; return 7;
+	case 100; break;
+	case;   return 4;
+	}
+	return 3;
+}
+*/
+// #if static if
+// @Incomplete
+// show variables with type Any
+// @Incomplete
+// example for lhs_values_shown
+// useful when the program accidentally overwrote a correct value with an incorrect one
+// @Incomplete
+// custom visual display for vectors (arrow or line in a circle, whichever is better) (magnitude as number)
+// press V to show custom visual display
+// @Incomplete
+// vertical dotted bars to show indentation level
+// @Incomplete
+// press R to show the REPL (works like a command palette)
+// statements entered in the REPL are added to a code block that is displayed above the text input
+// the cursor can move around in that code block
+// same keyboard interface as the syntax tree, no mouse interaction
+// can jump to prev/next use/change
+// can set bookmarks to keep stuff open
+// all code in the REPL is in the same scope, so variables declared in previous statements can be referred to in other expressions
+// parse_expression, infer(node), run_rvalue(node)
+// to do stuff with nodes in the execution tree, we refer to them with a numerical index
+// we can copy and paste the index manually, or get it with `execution_tree.cursor.index`
+// we can also set the execution cursor position with `execution_tree.cursor.index = curr_index`
+// and then we can call a bunch of functions with that index
+// for example, we can get the value, type, or memory address of the node
+// or an array of all the places where some code was executed
+// or an array of all the places where some data was changed or used
+// or get a call stack at a specific cursor index (very important, @Oakwarrior uses it a lot, though moving between uses and changes means we probably don't really need it anymore)
+// or get all the places where a function was called
+// or get all the calls that a function made
+// or evaluate an expression in the context of a specific node in the execution tree, and the result is just a plain value with type Any
+// or do arbitrary static code analysis on the source tree
+// or call functions that were declared in the source tree, with an execution tree node index for the context (0 is the initial state, anything else uses the state at a specific point in the program) (this can be used for testing code changes without recompiling the program)
+// or change the location of the execution cursor
+// or find the specific situations where certain code ran in a certain state (like a conditional breakpoint )
+// or create bookmarks for chains of cause and effect
+// or create a new visualization from a function (struct members, including pointers, jump between prev/next use/change)
+// or register a timeout or interval to run some function
+// or get the last/next node based on a timestamp
+// or play a sound
+// maybe the REPL should also have access to its own syntax tree?
+// the REPL should have a standard library with examples of how it's useful
+// should the REPL also have bookmarks?
+// @Incomplete
+// quick commands can take parameters, which the user must type into the REPL
+// the current parameter name is shown in the REPL input, with ": " coming after it
+// or maybe it should be a special menu like bookmark visibility and cursor switch
+// @Incomplete
+// use cases for the REPL:
+// find the value of an expression in the current context (default quick command, takes expression as string)
+// find the value of a memory address casted to a certain type (when you want the value of a variable that is out of scope)
+// find the place where the value of an expression was changed last (for expressions that are not used in the current scope)
+// find the places where certain variables have specific values (creates an array of bookmarks)
+// find the places where certain expressions are true (conditional breakpoint, standard library, default quick command)
+// find the places where we got to it from some other place in code, with any number of places
+// filter a list of nodes to only those that are between two indexes or timestamps
+// create a list of bookmarks for every use/change of a variable, so that it can be shown in a single vertical block of statements
+// create a list of bookmarks for a specific bug in a new recording
+// @Incomplete
+// we have four different cursors, execution tree, source tree, REPL tree, visualization
+// press C to enter cursor selection menu
+// press X to focus on the execution cursor
+// press Z to focus on the visualization
+// press S to focus on the source cursor
+// press A to focus on the REPL cursor
+// press C to exit cursor selection menu
+// @Incomplete
+// what buttons can we use in the source tree?
+// prev/next change/use
+// set a bookmark on source tree, use it in REPL
+// @Incomplete
+// watch window is a visualization
+// each watch window is evaluated in a specific scope
+// useful for detecting changes made by lower-level calls
+// REPL quick command should probably remember the last few expressions
+// @Incomplete
+// the memory view is a visualization
+// @Incomplete
+// address sanitizer is a visualization
+// @Incomplete
+// conditional code is easier to understand with decision tables:
+// https://www.youtube.com/watch?v=Eoahb29Kgh0
+// https://www.oocities.org/tablizer/cntrl1.htm
+// https://www.rfleury.com/p/table-driven-code-generation
+// the result is usually a boolean, but the inputs can be any primitive data type
+// @Incomplete
+// most of the visualizations can look and behave like spreadsheets
+// @Incomplete
+// we could add simple visualizations without scripting, like a line plot for int and float, many lines for arrays
+// and also the numerical values in boxes for string and char arrays, maybe with font size based on available width
+// flame graph for call stack
+// clicking on an element of a visualization will jump to it (@Oakwarrior wants it, current call must animate so you quickly know where you are)
+// @Incomplete
+// we could add simple audio representations, like mapping magnitude to sine wave pitch, or event frequency to geiger counter tick
+// @Incomplete
+// translate existing code to Jai syntax
+// use a separate bookmark array to explain the Jai syntax
+// we can use this as a tutorial for switching between bookmark arrays
+// @Incomplete
+// press B to show bookmark menu
+// display the state of every bookmark array
+// press 0-9 to toggle the visibility of that array (bookmark array 0 and 1 are visible by default)
+// press C to add the current settings to the history
+// press Z to move backwards in the settings history
+// press X to move forwards in the settings history
+// press R to reset the bookmark visibility to what it was when the system started up
+// if in the bookmark menu, press B again to close it
+// this is useful because we can toggle many bookmarks instead of just one
+// @Incomplete
+// grid-based fighting RPG example with equipment upgrades and simple AI
+// the goal is to show how easy, interesting, and useful it is to read the codebase using a debugger
+// questions at the end about cause and effect chains like where the wizard got the nice staff that they used to kill the goblin king, where and why a good item was dropped, or what was the best source of gold
+// @Incomplete
+// bouncing ball physics simulation, so we can show how useful the debugger is in understanding large programs
+// @Incomplete
+// UNO card game, probably just as complex as the RPG
+// clear targets for what the user should find out and understand
+// but no real reason, because the game is fully designed and implemented
+// maybe the point is that the game is not fully implemented yet, and the user should find the places where they should make changes
+// @Incomplete
+// how are visualizations initialized? in the REPL as local variables, or with a user_data pointer?
+// @Incomplete
+// tower_of_hanoi_with_three_disks
+// https://codepen.io/clinei/pen/KKeQLYp?editors=0010
+// it's probably less interesting and harder to understand than the RPG
+// but we could make a visualization to see how it helps with a more technical mathy problem
+// @Incomplete
+// WhiteBox timeline of all the states of many variables
+// the x position of a box is just the execution index
+// the width of a box is just the execution index of the next value minus the execution index of the current value
+// @Incomplete
+// visualization of the content of an array, relative to execution cursor position
+// just move the cursor onto a variable of type array, and use the index in the REPL to create the visualization
+// you can zoom in and out and pan with the mouse
+// you can also use a keyboard, with the same key combination as in a browser
+// insertion sort
+// quicksort
+// https://www.youtube.com/watch?v=KwZmAgAuIkY
+// @Incomplete
+// visualization of the content of a tree, relative to execution cursor position
+// just move the cursor onto a variable of type Tree, and use the index in the REPL to create the visualization
+// binary search tree, tree sort:
+// https://www.youtube.com/watch?v=rSlFhunlpzI&list=PLJse9iV6ReqhrZyq301AtJuC6butyhmLY&index=2
+// balancing a red-black tree
+// quadtree-based collision detection of circles
+// @Incomplete
+// visualization of complexity from shared mutable state (uses and changes)
+// @Incomplete
+// treemap of function call complexity (number of code nodes)
+// this works because calls are hierarchical
+// but because the recording is very big, we have to set an interval to make it more useful and faster to compute
+// what about the code that runs in a function between calls to other functions?
+// maybe this works for other things, too?
+// https://www.youtube.com/watch?v=BqF2SbY99B8
+// @Incomplete
+// graph algorithms
+// @Incomplete
+// A* search
+// @Incomplete
+// regex state machine visualization
+// https://handmade.network/p/369/rede/
+// https://www.debuggex.com/
+// @Incomplete
+// if we had access to the timestamp of every code node, we can do some simple profiling in the REPL
+// we are already running slower because we're logging all the data, so why not log a bit more data to make it more useful?
+// @Incomplete
+// we could make a background noise that changes based on the properties of the code near the cursor
+// @Incomplete
+// you can copy the syntax tree, but only the text under the cursor, like a struct literal result
+// @Incomplete
+// check `videos/jai/jblow/development/` and try to replicate the problems and solutions
+
+// Testers:
+// first, show it to Skynet (and do some leetcode), before making the video
+// could do it even before REPL and visualization, but after tutorial
+// make sure he doesn't show it to his professor before the video is ready
+// and that he records himself using the debugger for the first time, and once he has mastered it
+// have him solve a few leetcode problems while recording
+// then, show it to other developers on Skynet's Discord server, and restart the coding club
+// every coder on Skynet's Discord server (Skynet, diSCord, HaluaMeow, sevencedar, Kit)
+// every coder on WokeCat (sonority, unnick, Nihilum, DayDun, DarkMan, anon_guy(desu), Ru (non-programmer) if she's not too busy)
+// people on DC Cats (alexzx, Trickster, Avzqn (nimda, creator of Dark-Chat))
+// @_nicula (invited Casey to AskYourself vegan debate)
+// https://github.com/niculaionut
+// Trickster doesn't know anything about programming, useful case study
+// he should stream his first experience, and I should record it
+// maybe even Lacy, just to get a basic idea of what programs are (sequence of statements, math, conditionals, loops)
+// After initial feedback:
+// @MercernaryMage
+// @SchalaAlfina
+// @victory_coffee (probably interested)
+// @twitchdog
+// @pocketbacon
+// @TubbyCrumbles
+// @AurosVR
+// @irve (Estonian Game Developers Discord)
+// @Oakwarrior (Estonian Game Developers Discord)
+// @MikkLuige (Estonian Game Developers Discord) (@GamesbyMiLu on Twitter)
+// @roland (ChickenUnknown's DinnerGrounds)
+// @Vital Ash (ChickenUnknown's DinnerGrounds)
+// @kiwec (probably interested) (ChickenUnknown's DinnerGrounds)
+// @makai (probably interested) (ChickenUnknown's DinnerGrounds)
+// @nafonso (creator of ark-vcs.com) (Handmade Network)
+// https://www.youtube.com/watch?v=i1vbvikDiI8&list=PLhEuCycbde-vyFoSBJbdKjw-AVTdQRE5g
+// Weston Beecroft (twitter bookmark, mix of tiled text engine and Lucidity)
+// Daniel Popovic
+// Tõnu Säre
+// Silver Kits (Twitter)
+// Sven Varkel (Twitter)
+// ... more in dev_info.txt
+
+// Direction for testers:
+// take your time, you don't have to explore everything in one go
+// open a new text file and write down your thoughts as they come to you, or record your screen if you can
+// what you liked, what you didn't like, what was confusing, what seemed to be missing
+// what is your background, knowledge of programming, and current goals in self-improvement
+// if you can program, try writing your own code and explore how it works
+// for example, algorithms that you have used a lot, or some bug that was really hard to solve
+
+// @Incomplete
+// simple introduction to Jai syntax, can be skipped, right after simple ZX and WASD movement
+
+// Discussion:
+// @Incomplete
+// what should we do when there are multiple bookmarks on the same node?
+// @Incomplete
+// :ActiveBookmarks
+// which is better, moving through a single layer of bookmarks, or many at once?
+// it is disorienting to move to the next bookmark in the layer, only to end up on a different layer
+// it feels nice to move through the tutorial layer, but we have to teach the user to press Shift + 0 if they want to do that
+// having to use a menu to toggle layers manually sucks, maybe we should leave that for the full version
+
+// Handmade Network:
+// the people in there really like program visualization
+
+// Bugs and cleanup:
+// @Incomplete
+// for and while loops should probably use the same underlying structure
+// but still be different syntax elements
+// @Incomplete
+// if.else_stmt should be handled by infer, not run_statement
+// @Incomplete
+// remove Extra_Token_Kind and update_tokens_style
+// @Incomplete
+// add Code_Kind.LITERAL and wrap all the existing literals
+// @Incomplete
+// make iterative versions for all recursive functions
+// maybe use shift-reduce in the parser
+// @Incomplete
+// else if
+// @Incomplete
+// need to move between expressions in the order that they appear on the line, not the execution order
+// @Incomplete
+// same indentation and newlines as in source
+// it would be easier to notice the same pattern that is in source
+// but maybe we want to make it clear that the run of the program is different
+// but if we do it, we want it to be an option that is disabled by default
+// here is what Jonathan Blow thinks about that
+// https://youtu.be/lcF-HzlFYKE?t=2104
+// @Incomplete
+// need to add Type_Info_Procedure
+// @Incomplete
+// it is easy to confuse node.token_begin with node.base.token_begin
+// rename node.token_begin to node.display_token_begin
+// rename node.base.token_begin to node.base.file_token_begin
+
+// @Incomplete
+// better naming, call.ident becomes call.expression, array.ident becomes array.expression
+// @Incomplete
+// should a call be added to the execution stack before or after running it?
+// @Incomplete
+// in the source code editor, press Alt + Q to jump to the first instance of the code under the selection
+// if there is no selection, select the syntax tree element
+
+// @Incomplete
+// variable shadowing
+/*
+a := 50;
+b: int;
+c: int;
+{
+	b = a;
+	a := 30;
+	c = a;
+}
+b == a;
+*/
+
+// @Incomplete
+// tic-tac-toe example
+// @Incomplete
+// new example of taking two inputs as strings, forgetting to convert them to int
+// adding them together, and ending with 2 + 3 = 23
+
+// After demo:
+// @Incomplete
+// what if we had a mode that only shows control statements, and not assignments and declarations?
+// we could see the overall logic more quickly, and speed up movement between the control statements
+// @Incomplete
+// for expand/collapse, instead of animating the opacity,
+// we should have a linear gradient fade at the begin and end
+// if the code is all on one line, we should have a horizontal gradient, if not, then vertical
+// also, we should not animate the height
+// @Incomplete
+// we could create a custom visualization that uses the data from draw calls
+// to render an interactive overlay on top of the screen recording
+// so that the user can quickly find the pieces of code that deal with the GUI element
+// @Incomplete
+// Jonathan Blow parses math expressions the wrong way first, and then fixes it up when recursing back up
+// the advantage is that we don't have to track the global precedence level, and the code is easier to understand
+// https://youtu.be/MnctEW1oL-E?t=3449
+// this may make it easier to parse unary operators
+// @Incomplete
+// it would be pretty cool if we could run the entire source of the debugger inside the actual debugger
+// @Incomplete
+// the ident name to result animation could morph the first piece of text to the other, like in a 3blue1brown video
+// @Incomplete
+// interactive 3D visualization
+// maybe you can walk around a room that has 2D visualizations for a big system, method of loci
+// maybe some kind of nuclear reactor control room
+
+
+Add syntax highlighting themes with fewer colors, like (red, blue, purple) and monochrome (light gray, barely visible subconscious colors).
+
 Bugs:
 
 we should have a comment on the general design
