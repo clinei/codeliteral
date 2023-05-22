@@ -1016,7 +1016,7 @@ math :: () {
 	foo = (foo / foo) * (foo * foo - foo);
 	bar :: foo * foo * foo * foo;
 }
-ifs :: () {
+if_else :: () {
 	variable := 2;
 	if variable < 42 {
 		variable += 42 - variable;
@@ -1096,7 +1096,7 @@ main :: () {
 	help :: 42;
 	values();
 	math();
-	ifs();
+	if_else();
 	loops(3);
 	bookmarks();
 	the_end();
@@ -1398,7 +1398,7 @@ function populate_tutorial_bookmarks() {
 	}
 
 	{
-		let dummy_bookmark = make_bookmark(48, 0, "Press X to move through the math \nand see the result of every step");
+		let dummy_bookmark = make_bookmark(48, 0, "Press X to move through the math, and see the result of every step\n(if it doesn't work, press E until elements are not shown)");
 		dummy_bookmark.unlocks = [];
 		bookmark_layers[0].push(dummy_bookmark);
 	}
@@ -1416,7 +1416,13 @@ function populate_tutorial_bookmarks() {
 	}
 
 	{
-		let dummy_bookmark = make_bookmark(74, 0, "Only the code that was actually executed is shown\nThe code that didn't run is hidden");
+		let dummy_bookmark = make_bookmark(74, 0, "Only the code that was executed is shown, like the code in that else statement\nThe code that didn't run is hidden, like the content of that if statement");
+		dummy_bookmark.unlocks = [];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(78, 0, "Getting close to the end, only a few more things to learn!\n(this is all very useful, I promise)");
 		dummy_bookmark.unlocks = [];
 		bookmark_layers[0].push(dummy_bookmark);
 	}
@@ -1440,7 +1446,7 @@ function populate_tutorial_bookmarks() {
 	}
 
 	{
-		let dummy_bookmark = make_bookmark(113, 0, "Press N to jump to the previous time this code was executed\n");
+		let dummy_bookmark = make_bookmark(113, 0, "Press N to jump to the previous time this code was executed\n(you can also press F and E for fun)");
 		dummy_bookmark.unlocks = [];
 		bookmark_layers[0].push(dummy_bookmark);
 	}
@@ -1452,7 +1458,7 @@ function populate_tutorial_bookmarks() {
 	}
 
 	{
-		let dummy_bookmark = make_bookmark(125, 0, "Press Q to collapse the loop and show only the current iteration \nand then press NM to move between all the iterations");
+		let dummy_bookmark = make_bookmark(125, 0, "Press Q to collapse the loop and show only the current iteration \nand then press N and M to move between all the iterations");
 		dummy_bookmark.unlocks = ["expand_loop"];
 		bookmark_layers[0].push(dummy_bookmark);
 	}
@@ -1470,31 +1476,31 @@ function populate_tutorial_bookmarks() {
 	}
 
 	{
-		let dummy_bookmark = make_bookmark(165, 0, "Press J to find out where this variable changes\n");
+		let dummy_bookmark = make_bookmark(165, 0, "Press J to find out where this variable changes next\n");
 		dummy_bookmark.unlocks = [];
 		bookmark_layers[0].push(dummy_bookmark);
 	}
 
 	{
-		let dummy_bookmark = make_bookmark(206, 0, "Just bookmark all the changes and uses of `shrek` first\nand then deal with `fiona`");
+		let dummy_bookmark = make_bookmark(206, 0, "Check out all the changes and uses of `shrek` first (and maybe add some bookmarks)\nand then do the same with `fiona`, until you understand what makes us happy");
 		dummy_bookmark.unlocks = [];
 		bookmark_layers[0].push(dummy_bookmark);
 	}
 
 	{
-		let dummy_bookmark = make_bookmark(208, 0, "Press K to create your own blinking lights, also known as \"bookmarks\"\nand then press IO to move between them");
+		let dummy_bookmark = make_bookmark(203, 0, "Press K to create your own blinking lights (they're called bookmarks BTW)\nand then press I and O to move between them (press K again to kill the lights)");
 		dummy_bookmark.unlocks = [];
 		bookmark_layers[0].push(dummy_bookmark);
 	}
 
 	{
-		let dummy_bookmark = make_bookmark(210, 0, "Okay nice, we are happy. But why?\nMove onto `shrek` and use HJ / YU to find out");
+		let dummy_bookmark = make_bookmark(214, 0, "Okay nice, we are happy. But why?\nMove onto `shrek` and press HJ / YU to find out");
 		dummy_bookmark.unlocks = [];
 		bookmark_layers[0].push(dummy_bookmark);
 	}
 
 	{
-		let dummy_bookmark = make_bookmark(223, 0, "You have reached The End. Press G to activate God Mode (no restrictions) \nPress Ctrl + Q to open Developer Mode, and write your own code, if you dare");
+		let dummy_bookmark = make_bookmark(227, 0, "You have reached The End. Press G to activate God Mode (no restrictions) \nPress Ctrl + Q to open Developer Mode, and write your own code, if you dare");
 		dummy_bookmark.unlocks = [];
 		bookmark_layers[0].push(dummy_bookmark);
 	}

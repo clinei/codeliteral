@@ -182,14 +182,17 @@ function infer(node) {
 		node.base.type = right.base.type;
 	}
 	else if (node.base.kind == Code_Kind.INTEGER) {
+		node.base.type = primitive_type_infos.int;
 		// @Incomplete
 		// need to choose size based on value
+		/*
 		if (node.value < 0 ) {
 			node.base.type = primitive_type_infos.int;
 		}
 		else {
 			node.base.type = primitive_type_infos.size_t;
 		}
+		*/
 	}
 	else if (node.base.kind == Code_Kind.FLOAT) {
 		// @Incomplete
