@@ -1898,6 +1898,10 @@ function toggle_bookmark_text_inline() {
 	}
 }
 function toggle_expand_all() {
+	if (user_has_unlocked_ability("expand_all") == false) {
+		trigger_cursor_error();
+		return;
+	}
 	tree_view_modes.expand_all = !tree_view_modes.expand_all;
 	need_update = true;
 	if (tree_view_modes.expand_all) {
@@ -1952,6 +1956,10 @@ function step_next() {
 	}
 }
 function up_line() {
+	if (user_has_unlocked_ability("move_line") == false) {
+		trigger_cursor_error();
+		return;
+	}
 	let map_line_number_to_cursor_indexes = context.view_state.map_line_number_to_cursor_indexes;
 	let valid = false;
 	let cursor_index = -1;
@@ -1962,7 +1970,6 @@ function up_line() {
 		context.view_state.current_line -= 1;
 		let indexes = map_line_number_to_cursor_indexes[context.view_state.current_line];
 		if (indexes.length > 0) {
-			valid = user_has_unlocked_ability("move_line");
 			if (valid) {
 				if (context.view_state.current_column_index >= indexes.length) {
 					context.view_state.current_column_index = indexes.length-1;
@@ -1983,6 +1990,10 @@ function up_line() {
 	}
 }
 function down_line() {
+	if (user_has_unlocked_ability("move_line") == false) {
+		trigger_cursor_error();
+		return;
+	}
 	let map_line_number_to_cursor_indexes = context.view_state.map_line_number_to_cursor_indexes;
 	let valid = false;
 	while (true) {
@@ -1992,7 +2003,6 @@ function down_line() {
 		context.view_state.current_line += 1;
 		let indexes = map_line_number_to_cursor_indexes[context.view_state.current_line];
 		if (indexes.length > 0) {
-			valid = user_has_unlocked_ability("move_line");
 			if (valid) {
 				if (context.view_state.current_column_index >= indexes.length) {
 					context.view_state.current_column_index = indexes.length-1;
@@ -2013,8 +2023,12 @@ function down_line() {
 	}
 }
 function start_line() {
+	if (user_has_unlocked_ability("move_line") == false) {
+		trigger_cursor_error();
+		return;
+	}
 	let map_line_number_to_cursor_indexes = context.view_state.map_line_number_to_cursor_indexes;
-	let valid = user_has_unlocked_ability("move_line");
+	let valid = true;
 	if (valid) {
 		let indexes = map_line_number_to_cursor_indexes[context.view_state.current_line];
 		valid = context.view_state.current_column_index > 0;
@@ -2034,8 +2048,12 @@ function start_line() {
 	}
 }
 function end_line() {
+	if (user_has_unlocked_ability("move_line") == false) {
+		trigger_cursor_error();
+		return;
+	}
 	let map_line_number_to_cursor_indexes = context.view_state.map_line_number_to_cursor_indexes;
-	let valid = user_has_unlocked_ability("move_line");
+	let valid = true;
 	if (valid) {
 		let indexes = map_line_number_to_cursor_indexes[context.view_state.current_line];
 		valid = context.view_state.current_column_index < indexes.length-1;
@@ -2055,8 +2073,12 @@ function end_line() {
 	}
 }
 function left_line() {
+	if (user_has_unlocked_ability("move_line") == false) {
+		trigger_cursor_error();
+		return;
+	}
 	let map_line_number_to_cursor_indexes = context.view_state.map_line_number_to_cursor_indexes;
-	let valid = user_has_unlocked_ability("move_line");
+	let valid = true;
 	if (valid) {
 		let indexes = map_line_number_to_cursor_indexes[context.view_state.current_line];
 		if (context.view_state.current_column_index > 0) {
@@ -2078,8 +2100,12 @@ function left_line() {
 	}
 }
 function right_line() {
+	if (user_has_unlocked_ability("move_line") == false) {
+		trigger_cursor_error();
+		return;
+	}
 	let map_line_number_to_cursor_indexes = context.view_state.map_line_number_to_cursor_indexes;
-	let valid = user_has_unlocked_ability("move_line");
+	let valid = true;
 	if (valid) {
 		let indexes = map_line_number_to_cursor_indexes[context.view_state.current_line];
 		if (context.view_state.current_column_index < indexes.length-1) {
@@ -2419,6 +2445,10 @@ function next_clone() {
 	}
 }
 function first_bookmark() {
+	if (user_has_unlocked_ability("bookmark") == false) {
+		trigger_cursor_error();
+		return;
+	}
 	let valid = true;
 	let bookmarks = get_selected_bookmarks();
 	valid &= bookmarks.length > 0;
@@ -2441,6 +2471,10 @@ function first_bookmark() {
 	}
 }
 function last_bookmark() {
+	if (user_has_unlocked_ability("bookmark") == false) {
+		trigger_cursor_error();
+		return;
+	}
 	let valid = true;
 	let bookmarks = get_selected_bookmarks();
 	valid &= bookmarks.length > 0;
@@ -2463,6 +2497,10 @@ function last_bookmark() {
 	}
 }
 function prev_bookmark() {
+	if (user_has_unlocked_ability("bookmark") == false) {
+		trigger_cursor_error();
+		return;
+	}
 	let valid = true;
 	let bookmarks = get_selected_bookmarks();
 	valid &= bookmarks.length > 0;
@@ -2483,6 +2521,10 @@ function prev_bookmark() {
 	}
 }
 function next_bookmark() {
+	if (user_has_unlocked_ability("bookmark") == false) {
+		trigger_cursor_error();
+		return;
+	}
 	let valid = true;
 	let bookmarks = get_selected_bookmarks();
 	valid &= bookmarks.length > 0;
@@ -2503,6 +2545,10 @@ function next_bookmark() {
 	}
 }
 function prev_call() {
+	if (user_has_unlocked_ability("move_clone") == false) {
+		trigger_cursor_error();
+		return;
+	}
 	let valid = true;
 	let calls = context.run_state.procedure_calls;
 	valid &= calls.length > 0;
@@ -2524,6 +2570,10 @@ function prev_call() {
 	}
 }
 function next_call() {
+	if (user_has_unlocked_ability("move_clone") == false) {
+		trigger_cursor_error();
+		return;
+	}
 	let valid = true;
 	let calls = context.run_state.procedure_calls;
 	valid &= calls.length > 0;
