@@ -1158,6 +1158,8 @@ function save_run_tree_view_state() {
 	let temp_node = run_tree_view_state.node;
 	run_tree_view_state.node = null;
 	window.localStorage.setItem("run_tree_view_state", JSON.stringify(run_tree_view_state));
+	// @Bug
+	// when we save, reload, and move up line, then we skip a line
 	run_tree_view_state.cursor_stack = temp_cursor_stack;
 	run_tree_view_state.map_line_number_to_cursor_indexes = temp_map_line_number_to_cursor_indexes;
 	run_tree_view_state.node = temp_node;
@@ -1495,6 +1497,12 @@ function populate_tutorial_bookmarks() {
 
 	{
 		let dummy_bookmark = make_bookmark(214, 0, "Okay nice, we are happy. But why?\nMove onto `shrek` and press HJ / YU to find out");
+		dummy_bookmark.unlocks = [];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(217, 0, "You can also press Shift + F \nto see the previous value of a changed variable");
 		dummy_bookmark.unlocks = [];
 		bookmark_layers[0].push(dummy_bookmark);
 	}
