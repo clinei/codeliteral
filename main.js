@@ -1064,22 +1064,35 @@ bookmarks :: () {
 		donkey = 42;
 		shrek -= 3;
 	}
+	pointless := 600;
 	if (farquaad > fiona) {
 		farquaad *= 16;
 		fiona -= 11;
+	}
+	if (pointless > 500) {
+		pointless = pointless + pointless;
 	}
 	if (shrek < farquaad && farquaad > 9000) {
 		shrek += 10;
 		donkey += 50;
 	}
+	if (pointless < 2000 && pointless > 100) {
+		pointless -= 1000;
+	}
 	if (shrek > 6 && donkey > 12) {
 		fiona += 32;
 		shrek *= 4;
+	}
+	if (pointless == 200 && pointless != 300) {
+		pointless = 3 * 4;
 	}
 	if (shrek > 24 && fiona == 21) {
 		farquaad = 0;
 		donkey *= 2;
 		happy = true;
+	}
+	if (pointless > 11 && pointless < 13) {
+		pointless = 9000;
 	}
 	if (happy) {
 		shrek = 420;
@@ -1484,31 +1497,31 @@ function populate_tutorial_bookmarks() {
 	}
 
 	{
-		let dummy_bookmark = make_bookmark(206, 0, "Check out all the changes and uses of `shrek` first (and maybe add some bookmarks)\nand then do the same with `fiona`, until you understand what makes us happy");
+		let dummy_bookmark = make_bookmark(232, 0, "Press K to create your own blinking lights (they're called bookmarks BTW)\nand then press I and O to move between them (press K again to kill the lights)");
 		dummy_bookmark.unlocks = [];
 		bookmark_layers[0].push(dummy_bookmark);
 	}
 
 	{
-		let dummy_bookmark = make_bookmark(203, 0, "Press K to create your own blinking lights (they're called bookmarks BTW)\nand then press I and O to move between them (press K again to kill the lights)");
+		let dummy_bookmark = make_bookmark(235, 0, "Check out all the changes and uses of `shrek` first (and maybe add some bookmarks)\nand then do the same with `fiona`, until you understand what makes us happy");
 		dummy_bookmark.unlocks = [];
 		bookmark_layers[0].push(dummy_bookmark);
 	}
 
 	{
-		let dummy_bookmark = make_bookmark(214, 0, "Okay nice, we are happy. But why?\nMove onto `shrek` and press HJ / YU to find out");
+		let dummy_bookmark = make_bookmark(243, 0, "Okay nice, we are happy. But why?\nMove onto `shrek` and press HJ / YU to find out");
 		dummy_bookmark.unlocks = [];
 		bookmark_layers[0].push(dummy_bookmark);
 	}
 
 	{
-		let dummy_bookmark = make_bookmark(217, 0, "You can also press Shift + F \nto see the previous value of a changed variable");
+		let dummy_bookmark = make_bookmark(255, 0, "You can also press Shift + F \nto see the previous value of a changed variable");
 		dummy_bookmark.unlocks = [];
 		bookmark_layers[0].push(dummy_bookmark);
 	}
 
 	{
-		let dummy_bookmark = make_bookmark(227, 0, "You have reached The End. Press G to activate God Mode (no restrictions) \nPress Ctrl + Q to open Developer Mode, and write your own code, if you dare");
+		let dummy_bookmark = make_bookmark(265, 0, "You have reached The End. Press G to activate God Mode (no restrictions) \nPress Ctrl + Q to open Developer Mode, and write your own code, if you dare");
 		dummy_bookmark.unlocks = [];
 		bookmark_layers[0].push(dummy_bookmark);
 	}
@@ -1961,7 +1974,7 @@ function up_line() {
 		return;
 	}
 	let map_line_number_to_cursor_indexes = context.view_state.map_line_number_to_cursor_indexes;
-	let valid = false;
+	let valid = true;
 	let cursor_index = -1;
 	while (true) {
 		if (context.view_state.current_line == 0) {
@@ -1995,7 +2008,7 @@ function down_line() {
 		return;
 	}
 	let map_line_number_to_cursor_indexes = context.view_state.map_line_number_to_cursor_indexes;
-	let valid = false;
+	let valid = true;
 	while (true) {
 		if (context.view_state.current_line == map_line_number_to_cursor_indexes.length-1) {
 			break;
