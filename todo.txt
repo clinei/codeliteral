@@ -98,6 +98,7 @@
 // tokens might need to know what they will be replaced by
 // with token_begin and token_end
 // @Incomplete
+// :curr
 // we should have a mode that only shows statements that directly contain the cursor or a bookmark
 // we can use this to show an overview of all the bookmarks
 // we should have a mode that only shows blocks that directly contain the cursor or a bookmark

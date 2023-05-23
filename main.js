@@ -1103,6 +1103,7 @@ bookmarks :: () {
 }
 the_end :: () {
 	fin :: true;
+	fun :: fin;
 }
 main :: () {
 	movement();
@@ -1125,6 +1126,7 @@ const Tree_View_Modes = {
 	lhs_values_shown: false,
 	elements_shown: true,
 	loop_cycles_shown: false,
+	show_only_bookmark_statements: false,
 	bookmark_text_inline: false,
 	expand_all: false,
 }
@@ -1497,8 +1499,14 @@ function populate_tutorial_bookmarks() {
 	}
 
 	{
+		let dummy_bookmark = make_bookmark(197, 0, "Press Shift + Q to only show the bookmarks\n");
+		dummy_bookmark.unlocks = ["bookmark"];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
 		let dummy_bookmark = make_bookmark(232, 0, "Press K to create your own blinking lights (they're called bookmarks BTW)\nand then press I and O to move between them (press K again to kill the lights)");
-		dummy_bookmark.unlocks = [];
+		dummy_bookmark.unlocks = ["bookmark"];
 		bookmark_layers[0].push(dummy_bookmark);
 	}
 
@@ -1523,6 +1531,12 @@ function populate_tutorial_bookmarks() {
 	{
 		let dummy_bookmark = make_bookmark(265, 0, "You have reached The End. Press G to activate God Mode (no restrictions) \nPress Ctrl + Q to open Developer Mode, and write your own code, if you dare");
 		dummy_bookmark.unlocks = [];
+		bookmark_layers[0].push(dummy_bookmark);
+	}
+
+	{
+		let dummy_bookmark = make_bookmark(268, 0, "Press Shift + Q to show only the current statement\nand then hold down Z for a trip down Memory Lane\n");
+		dummy_bookmark.unlocks = ["bookmark"];
 		bookmark_layers[0].push(dummy_bookmark);
 	}
 }
@@ -1801,6 +1815,11 @@ function document_keydown(event) {
 		// toggle_sync_source_and_execution_tree();
 	}
 
+	// press Shift + Q
+	else if (event.keyCode == 81 && event.shiftKey) {
+		toggle_show_only_bookmark_statements();
+	}
+
 	// press Q
 	else if (event.keyCode == 81) {
 		toggle_loop_cycles_shown();
@@ -1898,6 +1917,14 @@ function toggle_loop_cycles_shown() {
 		return;
 	}
 	tree_view_modes.loop_cycles_shown = !tree_view_modes.loop_cycles_shown;
+	need_update = true;
+}
+function toggle_show_only_bookmark_statements() {
+	if (user_has_unlocked_ability("bookmark") == false) {
+		trigger_cursor_error();
+		return;
+	}
+	tree_view_modes.show_only_bookmark_statements = !tree_view_modes.show_only_bookmark_statements;
 	need_update = true;
 }
 function toggle_bookmark_text_inline() {
@@ -5719,6 +5746,7 @@ function math_binop(node) {
 	return result;
 }
 
+let statement_contains_bookmark = false;
 function mark_containment(node) {
 	if (node == null) {
 		return;
@@ -5728,23 +5756,27 @@ function mark_containment(node) {
 	node.is_bookmark = bookmark_array_has_index(bookmarks, node.cursor_index);
 	node.contains_bookmark = node.is_bookmark;
 	node.contains_cursor = node.is_cursor;
+	node.directly_contains_bookmark = node.is_bookmark;
 	if (node.base.kind == Code_Kind.DELIMITED) {
 		for (let elem of node.elements) {
 			mark_containment(elem);
 			node.contains_bookmark |= elem.contains_bookmark;
 			node.contains_cursor |= elem.contains_cursor;
+			node.directly_contains_bookmark |= elem.directly_contains_bookmark;
 		}
 	}
 	else if (node.base.kind == Code_Kind.BLOCK) {
 		mark_containment(node.delimited);
 		node.contains_bookmark |= node.delimited.contains_bookmark;
 		node.contains_cursor |= node.delimited.contains_cursor;
+		node.directly_contains_bookmark |= node.delimited.directly_contains_bookmark;
 	}
 	else if (node.base.kind == Code_Kind.STATEMENT) {
 		if (node.expression != null) {
 			mark_containment(node.expression);
 			node.contains_bookmark |= node.expression.contains_bookmark;
 			node.contains_cursor |= node.expression.contains_cursor;
+			node.directly_contains_bookmark |= node.expression.directly_contains_bookmark;
 		}
 	}
 	else if (node.base.kind == Code_Kind.INTEGER) {
@@ -5815,10 +5847,12 @@ function mark_containment(node) {
 		mark_containment(node.ident);
 		node.contains_bookmark |= node.ident.contains_bookmark;
 		node.contains_cursor |= node.ident.contains_cursor;
+		node.directly_contains_bookmark |= node.ident.directly_contains_bookmark;
 		if (node.expression) {
 			mark_containment(node.expression);
 			node.contains_bookmark |= node.expression.contains_bookmark;
 			node.contains_cursor |= node.expression.contains_cursor;
+			node.directly_contains_bookmark |= node.expression.directly_contains_bookmark;
 		}
 	}
 	else if (node.base.kind == Code_Kind.IDENT) {
@@ -5828,17 +5862,21 @@ function mark_containment(node) {
 		mark_containment(node.target);
 		node.contains_bookmark |= node.target.contains_bookmark;
 		node.contains_cursor |= node.target.contains_cursor;
+		node.directly_contains_bookmark |= node.target.directly_contains_bookmark;
 		mark_containment(node.expression);
 		node.contains_bookmark |= node.expression.contains_bookmark;
 		node.contains_cursor |= node.expression.contains_cursor;
+		node.directly_contains_bookmark |= node.expression.directly_contains_bookmark;
 	}
 	else if (node.base.kind == Code_Kind.OPASSIGN) {
 		mark_containment(node.target);
 		node.contains_bookmark |= node.target.contains_bookmark;
 		node.contains_cursor |= node.target.contains_cursor;
+		node.directly_contains_bookmark |= node.target.directly_contains_bookmark;
 		mark_containment(node.expression);
 		node.contains_bookmark |= node.expression.contains_bookmark;
 		node.contains_cursor |= node.expression.contains_cursor;
+		node.directly_contains_bookmark |= node.expression.directly_contains_bookmark;
 	}
 	else if (node.base.kind == Code_Kind.OPERATOR) {
 		// leaf node
@@ -5857,6 +5895,7 @@ function mark_containment(node) {
 		mark_containment(node.delimited);
 		node.contains_bookmark |= node.delimited.contains_bookmark;
 		node.contains_cursor |= node.delimited.contains_cursor;
+		node.directly_contains_bookmark |= node.delimited.directly_contains_bookmark;
 	}
 	else if (node.base.kind == Code_Kind.INCREMENT) {
 		mark_containment(node.target);
@@ -5872,9 +5911,11 @@ function mark_containment(node) {
 		mark_containment(node.left);
 		node.contains_bookmark |= node.left.contains_bookmark;
 		node.contains_cursor |= node.left.contains_cursor;
+		node.directly_contains_bookmark |= node.left.directly_contains_bookmark;
 		mark_containment(node.right);
 		node.contains_bookmark |= node.right.contains_bookmark;
 		node.contains_cursor |= node.right.contains_cursor;
+		node.directly_contains_bookmark |= node.right.directly_contains_bookmark;
 	}
 	else if (node.base.kind == Code_Kind.ARRAY_INDEX) {
 		mark_containment(node.target);
@@ -5909,32 +5950,27 @@ function mark_containment(node) {
 	}
 	else if (node.base.kind == Code_Kind.IF) {
 		mark_containment(node.keyword);
-		node.contains_bookmark |= node.keyword.contains_bookmark;
-		node.contains_cursor |= node.keyword.contains_cursor;
 		mark_containment(node.condition);
 		node.contains_bookmark |= node.condition.contains_bookmark;
 		node.contains_cursor |= node.condition.contains_cursor;
+		node.directly_contains_bookmark |= node.condition.directly_contains_bookmark;
 		if (node.then_keyword != null) {
 			mark_containment(node.then_keyword);
-			node.contains_bookmark |= node.then_keyword.contains_bookmark;
-			node.contains_cursor |= node.then_keyword.contains_cursor;
 		}
 		mark_containment(node.statement);
 		node.contains_bookmark |= node.statement.contains_bookmark;
 		node.contains_cursor |= node.statement.contains_cursor;
+		node.directly_contains_bookmark |= node.statement.directly_contains_bookmark;
 	}
 	else if (node.base.kind == Code_Kind.ELSE) {
 		mark_containment(node.keyword);
-		node.contains_bookmark |= node.keyword.contains_bookmark;
-		node.contains_cursor |= node.keyword.contains_cursor;
 		mark_containment(node.statement);
 		node.contains_bookmark |= node.statement.contains_bookmark;
 		node.contains_cursor |= node.statement.contains_cursor;
+		node.directly_contains_bookmark = node.statement.directly_contains_bookmark;
 	}
 	else if (node.base.kind == Code_Kind.WHILE) {
 		mark_containment(node.keyword);
-		node.contains_bookmark |= node.keyword.contains_bookmark;
-		node.contains_cursor |= node.keyword.contains_cursor;
 		if (node.base.replacement != null) {
 			mark_containment(node.base.replacement);
 			node.contains_bookmark |= node.base.replacement.contains_bookmark;
@@ -5943,8 +5979,6 @@ function mark_containment(node) {
 	}
 	else if (node.base.kind == Code_Kind.FOR) {
 		mark_containment(node.keyword);
-		node.contains_bookmark |= node.keyword.contains_bookmark;
-		node.contains_cursor |= node.keyword.contains_cursor;
 		if (node.base.replacement != null) {
 			mark_containment(node.base.replacement);
 			node.contains_bookmark |= node.base.replacement.contains_bookmark;
@@ -5969,6 +6003,7 @@ function mark_containment(node) {
 			mark_containment(node.base.replacement);
 			node.contains_bookmark |= node.base.replacement.contains_bookmark;
 			node.contains_cursor |= node.base.replacement.contains_cursor;
+			node.directly_contains_bookmark = node.base.replacement.directly_contains_bookmark;
 		}
 		else {
 			mark_containment(node.expression);
@@ -6069,6 +6104,18 @@ main :: () {
 }
 `;
 // code = wip_code_4;
+
+let wip_code_5 = `
+foo :: () -> int {
+	return 2 + 2;
+}
+main :: () {
+	bar :: 1;
+	foo();
+	qux :: 3;
+}
+`;
+// code = wip_code_5;
 
 const Token_Buffer = {
 	token_nodes: null,
@@ -6878,9 +6925,10 @@ function update_tokens(token_begin, token_end, show) {
 		let token_node = global_token_buffer.token_nodes[i];
 		token_node.should_show = show;
 		// nocheckin
+		// :curr
 		const token = token_node.token;
-		if (token.serial == 1072 && show == true) {
-			// debugger;
+		if (token.serial == 182 && show == true) {
+			debugger;
 		}
 	}
 }
@@ -6943,6 +6991,11 @@ function update_code(node, show = true) {
 			// hide top-level declarations
 			if (node.expression.base.kind == Code_Kind.DECLARATION) {
 				if (node.base.enclosing_scope.block == User_Block) {
+					show = false;
+				}
+			}
+			if (tree_view_modes.show_only_bookmark_statements == true) {
+				if (node.directly_contains_bookmark == false && node.contains_cursor == false) {
 					show = false;
 				}
 			}
@@ -7343,9 +7396,15 @@ function update_code(node, show = true) {
 			// @Cleanup
 			let should_expand = show && tree_view_modes.expand_all;
 			should_expand |= node.block.contains_cursor || node.block.contains_bookmark;
+			let show_block = show;
+			let show_replacement = show;
 			if (should_expand) {
-				update_code(node.block, show);
-				update_code(node.base.replacement, show);
+				if (tree_view_modes.show_only_bookmark_statements == true) {
+					show_block = true;
+					// show_replacement = false;
+				}
+				update_code(node.block, show_block);
+				update_code(node.base.replacement, show_replacement);
 				update_code(node.base.result, false);
 				update_code(node.procedure, false);
 				update_code(node.args, false);
@@ -7360,7 +7419,7 @@ function update_code(node, show = true) {
 				did_collapse_call = true;
 			}
 			if (should_expand) {
-				update_code(node.base.replacement, show);
+				update_code(node.base.replacement, show_replacement);
 			}
 			else {
 				update_code(node.base.replacement, false);
