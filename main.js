@@ -4299,8 +4299,13 @@ function debug_timeout_poll() {
 function start_debugging() {
 	{
 		let cs = window.getComputedStyle(dummy_token_node);
-		dummy_width = convert_size_string_to_float(cs.width);
-		dummy_height = convert_size_string_to_float(cs.height);
+		// nocheckin
+		// @Bug
+		// for some reason, this is sometimes wrong
+		dummy_width = 9.60938;
+		dummy_height = 20;
+		// dummy_width = convert_size_string_to_float(cs.width);
+		// dummy_height = convert_size_string_to_float(cs.height);
 	}
 	set_status("Running program...");
 	curr_time = new Date().getTime();
