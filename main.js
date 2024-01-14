@@ -4525,6 +4525,13 @@ function add_node_to_cursor_stack(node) {
 }
 
 function run_lvalue(node) {
+	debug_timeout_poll();
+	if (taking_too_long) {
+		throw Error("Execution is taking too long, probably an infinite loop");
+	}
+	if (node == null) {
+		return;
+	}
 	if (node.base.run_disable) {
 		return;
 	}
@@ -4687,10 +4694,17 @@ function run_lvalue(node) {
 	return return_value;
 }
 function run_rvalue(node) {
-	if (node.base.result != null) {
+	debug_timeout_poll();
+	if (taking_too_long) {
+		throw Error("Execution is taking too long, probably an infinite loop");
+	}
+	if (node == null) {
 		return;
 	}
 	if (node.base.run_disable) {
+		return;
+	}
+	if (node.base.result != null) {
 		return;
 	}
 	node.base.result = null;
@@ -5179,9 +5193,7 @@ function run_rvalue(node) {
 	after_run(node);
 }
 function run_statement(node) {
-	// nocheckin enable
-	// this should also be in run_rvalue and run_lvalue
-	// debug_timeout_poll();
+	debug_timeout_poll();
 	if (taking_too_long) {
 		throw Error("Execution is taking too long, probably an infinite loop");
 	}
