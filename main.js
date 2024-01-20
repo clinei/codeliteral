@@ -1692,22 +1692,22 @@ function document_keydown(event) {
 	}
 
 	// press Shift + H
-	else if (event.keyCode == 72 && event.shiftKey) {
+	else if (event.keyCode == 72 && event.shiftKey && event.ctrlKey == false) {
 		first_change();
 	}
 
 	// press Shift + J
-	else if (event.keyCode == 74 && event.shiftKey) {
+	else if (event.keyCode == 74 && event.shiftKey && event.ctrlKey == false) {
 		last_change();
 	}
 
 	// press H
-	else if (event.keyCode == 72) {
+	else if (event.keyCode == 72 && event.shiftKey == false && event.ctrlKey == false) {
 		prev_change();
 	}
 
 	// press J
-	else if (event.keyCode == 74) {
+	else if (event.keyCode == 74 && event.shiftKey == false && event.ctrlKey == false) {
 		next_change();
 	}
 
@@ -1732,32 +1732,32 @@ function document_keydown(event) {
 	}
 
 	// press Ctrl + I
-	else if (event.keyCode == 73 && event.ctrlKey) {
+	else if (event.keyCode == 73 && event.shiftKey == false && event.ctrlKey) {
 		prev_call();
 	}
 
 	// press Ctrl + O
-	else if (event.keyCode == 79 && event.ctrlKey) {
+	else if (event.keyCode == 79 && event.shiftKey == false && event.ctrlKey) {
 		next_call();
 	}
 
 	// press Shift + I
-	else if (event.keyCode == 73 && event.shiftKey) {
+	else if (event.keyCode == 73 && event.shiftKey && event.ctrlKey == false) {
 		first_bookmark();
 	}
 
 	// press Shift + O
-	else if (event.keyCode == 79 && event.shiftKey) {
+	else if (event.keyCode == 79 && event.shiftKey && event.ctrlKey == false) {
 		last_bookmark();
 	}
 
 	// press I
-	else if (event.keyCode == 73) {
+	else if (event.keyCode == 73 && event.shiftKey == false && event.ctrlKey == false) {
 		prev_bookmark();
 	}
 
 	// press O
-	else if (event.keyCode == 79) {
+	else if (event.keyCode == 79 && event.shiftKey == false && event.ctrlKey == false) {
 		next_bookmark();
 	}
 
